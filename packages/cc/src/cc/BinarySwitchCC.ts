@@ -9,13 +9,17 @@ import {
 	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
+	type WithAddress,
 	encodeMaybeBoolean,
 	maybeUnknownToString,
 	parseMaybeBoolean,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
-import type { AllOrNone } from "@zwave-js/shared";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -29,13 +33,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -101,7 +103,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 		const cc = new BinarySwitchCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<BinarySwitchCCReport>(
 			cc,
@@ -134,7 +136,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 		const cc = new BinarySwitchCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -302,7 +304,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 }
 
 // @publicAPI
-export interface BinarySwitchCCSetOptions extends CCCommandOptions {
+export interface BinarySwitchCCSetOptions {
 	targetValue: boolean;
 	duration?: Duration | string;
 }
@@ -311,19 +313,27 @@ export interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
+		options: WithAddress<BinarySwitchCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue = !!this.payload[0];
-			if (this.payload.length >= 2) {
-				this.duration = Duration.parseSet(this.payload[1]);
-			}
-		} else {
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): BinarySwitchCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const targetValue = !!raw.payload[0];
+		let duration: Duration | undefined;
+
+		if (raw.payload.length >= 2) {
+			duration = Duration.parseSet(raw.payload[1]);
 		}
+
+		return new BinarySwitchCCSet({
+			nodeId: ctx.sourceNodeId,
+			targetValue,
+			duration,
+		});
 	}
 
 	public targetValue: boolean;
@@ -363,38 +373,47 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 }
 
 // @publicAPI
-export type BinarySwitchCCReportOptions =
-	& CCCommandOptions
-	& {
-		currentValue: MaybeUnknown<boolean>;
-	}
-	& AllOrNone<{
-		targetValue: MaybeUnknown<boolean>;
-		duration: Duration | string;
-	}>;
+export interface BinarySwitchCCReportOptions {
+	currentValue?: MaybeUnknown<boolean>;
+	targetValue?: MaybeUnknown<boolean>;
+	duration?: Duration | string;
+}
 
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| BinarySwitchCCReportOptions,
+		options: WithAddress<BinarySwitchCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.currentValue = parseMaybeBoolean(this.payload[0]);
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
 
-			if (this.payload.length >= 3) {
-				this.targetValue = parseMaybeBoolean(this.payload[1]);
-				this.duration = Duration.parseReport(this.payload[2]);
-			}
-		} else {
-			this.currentValue = options.currentValue;
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): BinarySwitchCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const currentValue: MaybeUnknown<boolean> | undefined =
+			parseMaybeBoolean(
+				raw.payload[0],
+			);
+		let targetValue: MaybeUnknown<boolean> | undefined;
+		let duration: Duration | undefined;
+
+		if (raw.payload.length >= 3) {
+			targetValue = parseMaybeBoolean(raw.payload[1]);
+			duration = Duration.parseReport(raw.payload[2]);
 		}
+
+		return new BinarySwitchCCReport({
+			nodeId: ctx.sourceNodeId,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	@ccValue(BinarySwitchCCValues.currentValue)

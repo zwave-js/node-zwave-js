@@ -8,6 +8,7 @@ import {
 	CentralSceneCCSupportedReport,
 	CentralSceneCommand,
 	CentralSceneKeys,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import test from "ava";
@@ -68,11 +69,11 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 			0b1000_0000,
 		]),
 	);
-	const cc = new CentralSceneCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as CentralSceneCCConfigurationReport;
+	t.is(cc.constructor, CentralSceneCCConfigurationReport);
 
 	t.is(cc.slowRefresh, true);
 });
@@ -101,11 +102,11 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = new CentralSceneCCSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as CentralSceneCCSupportedReport;
+	t.is(cc.constructor, CentralSceneCCSupportedReport);
 
 	t.is(cc.sceneCount, 2);
 	t.true(cc.supportsSlowRefresh);
@@ -124,11 +125,11 @@ test("the Notification command should be deserialized correctly", (t) => {
 			8, // scene number
 		]),
 	);
-	const cc = new CentralSceneCCNotification({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as CentralSceneCCNotification;
+	t.is(cc.constructor, CentralSceneCCNotification);
 
 	t.is(cc.sequenceNumber, 7);
 	// slow refresh is only evaluated if the attribute is KeyHeldDown
@@ -146,11 +147,11 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 			8, // scene number
 		]),
 	);
-	const cc = new CentralSceneCCNotification({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as CentralSceneCCNotification;
+	t.is(cc.constructor, CentralSceneCCNotification);
 
 	t.is(cc.sequenceNumber, 7);
 	t.true(cc.slowRefresh);
@@ -162,11 +163,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new CentralSceneCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as CentralSceneCC;
 	t.is(cc.constructor, CentralSceneCC);
 });
 

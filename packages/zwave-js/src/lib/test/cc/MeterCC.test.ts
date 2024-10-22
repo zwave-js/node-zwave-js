@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	MeterCC,
 	MeterCCGet,
 	MeterCCReport,
@@ -146,11 +147,11 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 			55, // value
 		]),
 	);
-	const cc = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -171,11 +172,11 @@ test("the Report command (V2) should be deserialized correctly (no time delta)",
 			0,
 		]),
 	);
-	const cc = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -197,11 +198,11 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -223,11 +224,11 @@ test("the Report command (V3) should be deserialized correctly", (t) => {
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.scale, 6);
 });
@@ -245,11 +246,11 @@ test("the Report command (V4) should be deserialized correctly", (t) => {
 			0b01, // Scale2
 		]),
 	);
-	const cc = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.scale, 8);
 });
@@ -268,11 +269,11 @@ test("the Report command should validate that a known meter type is given", (t) 
 		]),
 	);
 
-	const report = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 31 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {
@@ -294,11 +295,11 @@ test("the Report command should validate that a known meter scale is given", (t)
 		]),
 	);
 
-	const report = new MeterCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 4, Scale 8 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {
@@ -327,11 +328,11 @@ test("the SupportedReport command (V2/V3) should be deserialized correctly", (t)
 			0b01101110, // supported scales
 		]),
 	);
-	const cc = new MeterCCSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCSupportedReport;
+	t.is(cc.constructor, MeterCCSupportedReport);
 
 	t.is(cc.type, 21);
 	t.true(cc.supportsReset);
@@ -350,11 +351,11 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 			1,
 		]),
 	);
-	const cc = new MeterCCSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCSupportedReport;
+	t.is(cc.constructor, MeterCCSupportedReport);
 
 	t.is(cc.type, 21);
 	t.true(cc.supportsReset);
@@ -388,11 +389,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MeterCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCC;
 	t.is(cc.constructor, MeterCC);
 });
 

@@ -3,18 +3,21 @@ import {
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -82,7 +85,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 		const cc = new ZWavePlusCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<ZWavePlusCCReport>(
 			cc,
@@ -105,7 +108,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 		const cc = new ZWavePlusCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -175,25 +178,32 @@ export interface ZWavePlusCCReportOptions {
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & ZWavePlusCCReportOptions),
+		options: WithAddress<ZWavePlusCCReportOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 7);
-			this.zwavePlusVersion = this.payload[0];
-			this.roleType = this.payload[1];
-			this.nodeType = this.payload[2];
-			this.installerIcon = this.payload.readUInt16BE(3);
-			this.userIcon = this.payload.readUInt16BE(5);
-		} else {
-			this.zwavePlusVersion = options.zwavePlusVersion;
-			this.roleType = options.roleType;
-			this.nodeType = options.nodeType;
-			this.installerIcon = options.installerIcon;
-			this.userIcon = options.userIcon;
-		}
+		this.zwavePlusVersion = options.zwavePlusVersion;
+		this.roleType = options.roleType;
+		this.nodeType = options.nodeType;
+		this.installerIcon = options.installerIcon;
+		this.userIcon = options.userIcon;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): ZWavePlusCCReport {
+		validatePayload(raw.payload.length >= 7);
+		const zwavePlusVersion = raw.payload[0];
+		const roleType: ZWavePlusRoleType = raw.payload[1];
+		const nodeType: ZWavePlusNodeType = raw.payload[2];
+		const installerIcon = raw.payload.readUInt16BE(3);
+		const userIcon = raw.payload.readUInt16BE(5);
+
+		return new ZWavePlusCCReport({
+			nodeId: ctx.sourceNodeId,
+			zwavePlusVersion,
+			roleType,
+			nodeType,
+			installerIcon,
+			userIcon,
+		});
 	}
 
 	@ccValue(ZWavePlusCCValues.zwavePlusVersion)

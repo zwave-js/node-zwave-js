@@ -6,11 +6,16 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -21,13 +26,11 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -112,7 +115,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sensorType,
 		});
 		const response = await this.host.sendCommand<BinarySensorCCReport>(
@@ -135,7 +138,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			value,
 			type: sensorType,
 		});
@@ -152,7 +155,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			BinarySensorCCSupportedReport
@@ -175,7 +178,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			supportedSensorTypes: supported,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -336,7 +339,7 @@ export class BinarySensorCC extends CommandClass {
 }
 
 // @publicAPI
-export interface BinarySensorCCReportOptions extends CCCommandOptions {
+export interface BinarySensorCCReportOptions {
 	type?: BinarySensorType;
 	value: boolean;
 }
@@ -344,23 +347,31 @@ export interface BinarySensorCCReportOptions extends CCCommandOptions {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		options:
-			| BinarySensorCCReportOptions
-			| CommandClassDeserializationOptions,
+		options: WithAddress<BinarySensorCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.value = this.payload[0] === 0xff;
-			this.type = BinarySensorType.Any;
-			if (this.payload.length >= 2) {
-				this.type = this.payload[1];
-			}
-		} else {
-			this.type = options.type ?? BinarySensorType.Any;
-			this.value = options.value;
+		this.type = options.type ?? BinarySensorType.Any;
+		this.value = options.value;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): BinarySensorCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const value = raw.payload[0] === 0xff;
+		let type: BinarySensorType = BinarySensorType.Any;
+
+		if (raw.payload.length >= 2) {
+			type = raw.payload[1];
 		}
+
+		return new BinarySensorCCReport({
+			nodeId: ctx.sourceNodeId,
+			value,
+			type,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -419,7 +430,7 @@ function testResponseForBinarySensorGet(
 }
 
 // @publicAPI
-export interface BinarySensorCCGetOptions extends CCCommandOptions {
+export interface BinarySensorCCGetOptions {
 	sensorType?: BinarySensorType;
 }
 
@@ -427,16 +438,23 @@ export interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
+		options: WithAddress<BinarySensorCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length >= 1) {
-				this.sensorType = this.payload[0];
-			}
-		} else {
-			this.sensorType = options.sensorType;
+		this.sensorType = options.sensorType;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): BinarySensorCCGet {
+		let sensorType: BinarySensorType | undefined;
+
+		if (raw.payload.length >= 1) {
+			sensorType = raw.payload[0];
 		}
+
+		return new BinarySensorCCGet({
+			nodeId: ctx.sourceNodeId,
+			sensorType,
+		});
 	}
 
 	public sensorType: BinarySensorType | undefined;
@@ -467,22 +485,32 @@ export interface BinarySensorCCSupportedReportOptions {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (BinarySensorCCSupportedReportOptions & CCCommandOptions),
+		options: WithAddress<BinarySensorCCSupportedReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			// The enumeration starts at 1, but the first (reserved) bit is included
-			// in the report
-			this.supportedSensorTypes = parseBitMask(this.payload, 0).filter(
+		this.supportedSensorTypes = options.supportedSensorTypes;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): BinarySensorCCSupportedReport {
+		validatePayload(raw.payload.length >= 1);
+		// The enumeration starts at 1, but the first (reserved) bit is included
+		// in the report
+		const supportedSensorTypes: BinarySensorType[] = parseBitMask(
+			raw.payload,
+			0,
+		)
+			.filter(
 				(t) => t !== 0,
 			);
-		} else {
-			this.supportedSensorTypes = options.supportedSensorTypes;
-		}
+
+		return new BinarySensorCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			supportedSensorTypes,
+		});
 	}
 
 	@ccValue(BinarySensorCCValues.supportedSensorTypes)

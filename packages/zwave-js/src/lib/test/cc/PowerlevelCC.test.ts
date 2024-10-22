@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
@@ -83,11 +84,11 @@ test("the Report command should be deserialized correctly (NormalPower)", (t) =>
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = new PowerlevelCCReport({
-		nodeId: 5,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 5 } as any,
+	) as PowerlevelCCReport;
+	t.is(cc.constructor, PowerlevelCCReport);
 
 	t.is(cc.powerlevel, Powerlevel["Normal Power"]);
 	t.is(cc.timeout, undefined); // timeout does not apply to NormalPower
@@ -101,11 +102,11 @@ test("the Report command should be deserialized correctly (custom power)", (t) =
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = new PowerlevelCCReport({
-		nodeId: 5,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 5 } as any,
+	) as PowerlevelCCReport;
+	t.is(cc.constructor, PowerlevelCCReport);
 
 	t.is(cc.powerlevel, Powerlevel["-3 dBm"]);
 	t.is(cc.timeout, 50); // timeout does not apply to NormalPower
@@ -115,10 +116,9 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new PowerlevelCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as PowerlevelCC;
 	t.is(cc.constructor, PowerlevelCC);
 });

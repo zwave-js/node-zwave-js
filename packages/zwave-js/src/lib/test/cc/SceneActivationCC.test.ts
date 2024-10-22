@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	SceneActivationCC,
 	SceneActivationCCSet,
 	SceneActivationCommand,
@@ -54,11 +55,11 @@ test("the Set command should be deserialized correctly", (t) => {
 			0x00, // 0 seconds
 		]),
 	);
-	const cc = new SceneActivationCCSet({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as SceneActivationCCSet;
+	t.is(cc.constructor, SceneActivationCCSet);
 
 	t.is(cc.sceneId, 15);
 	t.deepEqual(cc.dimmingDuration, new Duration(0, "seconds"));
@@ -68,11 +69,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActivationCC({
-		nodeId: 2,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 2 } as any,
+	) as SceneActivationCC;
 	t.is(cc.constructor, SceneActivationCC);
 });
 

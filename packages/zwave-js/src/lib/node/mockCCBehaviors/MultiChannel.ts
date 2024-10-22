@@ -46,8 +46,8 @@ const encapsulateMultiChannelCC: MockNodeBehavior = {
 
 			response.cc = new MultiChannelCCCommandEncapsulation({
 				nodeId: response.cc.nodeId,
+				endpointIndex: source,
 				encapsulated: response.cc,
-				endpoint: source,
 				destination,
 			});
 		}

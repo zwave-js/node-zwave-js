@@ -6,6 +6,7 @@ import {
 	BinarySensorCCSupportedReport,
 	BinarySensorCommand,
 	BinarySensorType,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import test from "ava";
@@ -48,11 +49,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0xff, // current value
 		]),
 	);
-	const cc = new BinarySensorCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as BinarySensorCCReport;
+	t.is(cc.constructor, BinarySensorCCReport);
 
 	t.is(cc.value, true);
 });
@@ -65,11 +66,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			BinarySensorType.CO2,
 		]),
 	);
-	const cc = new BinarySensorCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as BinarySensorCCReport;
+	t.is(cc.constructor, BinarySensorCCReport);
 
 	t.is(cc.value, false);
 	t.is(cc.type, BinarySensorType.CO2);
@@ -93,11 +94,11 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			0b10,
 		]),
 	);
-	const cc = new BinarySensorCCSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as BinarySensorCCSupportedReport;
+	t.is(cc.constructor, BinarySensorCCSupportedReport);
 
 	t.deepEqual(cc.supportedSensorTypes, [
 		BinarySensorType["General Purpose"],
@@ -112,11 +113,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new BinarySensorCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as BinarySensorCC;
 	t.is(cc.constructor, BinarySensorCC);
 });
 

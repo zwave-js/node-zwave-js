@@ -5,12 +5,17 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -23,12 +28,10 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -72,7 +75,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 		const cc = new LockCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<LockCCReport>(
 			cc,
@@ -91,7 +94,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 		const cc = new LockCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			locked,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -179,7 +182,7 @@ export class LockCC extends CommandClass {
 }
 
 // @publicAPI
-export interface LockCCSetOptions extends CCCommandOptions {
+export interface LockCCSetOptions {
 	locked: boolean;
 }
 
@@ -187,18 +190,22 @@ export interface LockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | LockCCSetOptions,
+		options: WithAddress<LockCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.locked = options.locked;
-		}
+		this.locked = options.locked;
+	}
+
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): LockCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new LockCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public locked: boolean;
@@ -216,14 +223,30 @@ export class LockCCSet extends LockCC {
 	}
 }
 
+// @publicAPI
+export interface LockCCReportOptions {
+	locked: boolean;
+}
+
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<LockCCReportOptions>,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		this.locked = this.payload[0] === 1;
+
+		// TODO: Check implementation:
+		this.locked = options.locked;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): LockCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const locked = raw.payload[0] === 1;
+
+		return new LockCCReport({
+			nodeId: ctx.sourceNodeId,
+			locked,
+		});
 	}
 
 	@ccValue(LockCCValues.locked)

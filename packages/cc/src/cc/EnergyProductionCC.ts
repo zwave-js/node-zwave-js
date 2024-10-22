@@ -3,12 +3,17 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
+	type WithAddress,
 	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -18,13 +23,11 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -110,7 +113,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 
 		const cc = new EnergyProductionCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -187,7 +190,7 @@ export class EnergyProductionCC extends CommandClass {
 }
 
 // @publicAPI
-export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+export interface EnergyProductionCCReportOptions {
 	parameter: EnergyProductionParameter;
 	scale: EnergyProductionScale;
 	value: number;
@@ -196,24 +199,34 @@ export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| EnergyProductionCCReportOptions,
+		options: WithAddress<EnergyProductionCCReportOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload[0];
-			const { value, scale } = parseFloatWithScale(
-				this.payload.subarray(1),
-			);
-			this.value = value;
-			this.scale = getEnergyProductionScale(this.parameter, scale);
-		} else {
-			this.parameter = options.parameter;
-			this.value = options.value;
-			this.scale = options.scale;
-		}
+		this.parameter = options.parameter;
+		this.value = options.value;
+		this.scale = options.scale;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): EnergyProductionCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const parameter: EnergyProductionParameter = raw.payload[0];
+		const { value, scale: rawScale } = parseFloatWithScale(
+			raw.payload.subarray(1),
+		);
+		const scale: EnergyProductionScale = getEnergyProductionScale(
+			parameter,
+			rawScale,
+		);
+
+		return new EnergyProductionCCReport({
+			nodeId: ctx.sourceNodeId,
+			parameter,
+			value,
+			scale,
+		});
 	}
 
 	public readonly parameter: EnergyProductionParameter;
@@ -261,7 +274,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 }
 
 // @publicAPI
-export interface EnergyProductionCCGetOptions extends CCCommandOptions {
+export interface EnergyProductionCCGetOptions {
 	parameter: EnergyProductionParameter;
 }
 
@@ -279,17 +292,23 @@ function testResponseForEnergyProductionGet(
 )
 export class EnergyProductionCCGet extends EnergyProductionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| EnergyProductionCCGetOptions,
+		options: WithAddress<EnergyProductionCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.parameter = this.payload[0];
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): EnergyProductionCCGet {
+		validatePayload(raw.payload.length >= 1);
+		const parameter: EnergyProductionParameter = raw.payload[0];
+
+		return new EnergyProductionCCGet({
+			nodeId: ctx.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: EnergyProductionParameter;

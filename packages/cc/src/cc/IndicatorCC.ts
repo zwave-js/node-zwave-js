@@ -8,6 +8,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -15,7 +16,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
@@ -30,13 +35,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -358,7 +361,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<IndicatorCCReport>(
@@ -395,7 +398,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -403,7 +406,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 	@validateArgs()
 	public async sendReport(
-		options: IndicatorCCReportSpecificOptions,
+		options: IndicatorCCReportOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
@@ -412,7 +415,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -435,7 +438,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<
@@ -469,7 +472,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 			supportedProperties,
 			nextIndicatorId,
@@ -490,7 +493,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCDescriptionReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 			description,
 		});
@@ -670,7 +673,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCDescriptionGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<
@@ -880,6 +883,7 @@ export class IndicatorCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface IndicatorObject {
 	indicatorId: number;
 	propertyId: number;
@@ -899,39 +903,49 @@ export type IndicatorCCSetOptions =
 @useSupervision()
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (IndicatorCCSetOptions & CCCommandOptions),
+		options: WithAddress<IndicatorCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-
-			const objCount = this.payload.length >= 2
-				? this.payload[1] & 0b11111
-				: 0;
-			if (objCount === 0) {
-				this.indicator0Value = this.payload[0];
-			} else {
-				validatePayload(this.payload.length >= 2 + 3 * objCount);
-				this.values = [];
-				for (let i = 0; i < objCount; i++) {
-					const offset = 2 + 3 * i;
-					const value: IndicatorObject = {
-						indicatorId: this.payload[offset],
-						propertyId: this.payload[offset + 1],
-						value: this.payload[offset + 2],
-					};
-					this.values.push(value);
-				}
-			}
+		if ("value" in options) {
+			this.indicator0Value = options.value;
 		} else {
-			if ("value" in options) {
-				this.indicator0Value = options.value;
-			} else {
-				this.values = options.values;
-			}
+			this.values = options.values;
 		}
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): IndicatorCCSet {
+		validatePayload(raw.payload.length >= 1);
+
+		const objCount = raw.payload.length >= 2
+			? raw.payload[1] & 0b11111
+			: 0;
+
+		if (objCount === 0) {
+			const indicator0Value = raw.payload[0];
+
+			return new IndicatorCCSet({
+				nodeId: ctx.sourceNodeId,
+				value: indicator0Value,
+			});
+		}
+
+		validatePayload(raw.payload.length >= 2 + 3 * objCount);
+
+		const values: IndicatorObject[] = [];
+		for (let i = 0; i < objCount; i++) {
+			const offset = 2 + 3 * i;
+			const value: IndicatorObject = {
+				indicatorId: raw.payload[offset],
+				propertyId: raw.payload[offset + 1],
+				value: raw.payload[offset + 2],
+			};
+			values.push(value);
+		}
+
+		return new IndicatorCCSet({
+			nodeId: ctx.sourceNodeId,
+			values,
+		});
 	}
 
 	public indicator0Value: number | undefined;
@@ -987,7 +1001,7 @@ export class IndicatorCCSet extends IndicatorCC {
 }
 
 // @publicAPI
-export type IndicatorCCReportSpecificOptions =
+export type IndicatorCCReportOptions =
 	| {
 		value: number;
 	}
@@ -998,72 +1012,81 @@ export type IndicatorCCReportSpecificOptions =
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (IndicatorCCReportSpecificOptions & CCCommandOptions),
+		options: WithAddress<IndicatorCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-
-			const objCount = this.payload.length >= 2
-				? this.payload[1] & 0b11111
-				: 0;
-			if (objCount === 0) {
-				this.indicator0Value = this.payload[0];
-			} else {
-				validatePayload(this.payload.length >= 2 + 3 * objCount);
-				this.values = [];
-				for (let i = 0; i < objCount; i++) {
-					const offset = 2 + 3 * i;
-					const value: IndicatorObject = {
-						indicatorId: this.payload[offset],
-						propertyId: this.payload[offset + 1],
-						value: this.payload[offset + 2],
-					};
-					this.values.push(value);
-				}
-
-				// TODO: Think if we want this:
-
-				// // If not all Property IDs are included in the command for the actual Indicator ID,
-				// // a controlling node MUST assume non-specified Property IDs values to be 0x00.
-				// const indicatorId = this.values[0].indicatorId;
-				// const supportedIndicatorProperties =
-				// 	valueDB.getValue<number[]>(
-				// 		getSupportedPropertyIDsValueID(
-				// 			this.endpointIndex,
-				// 			indicatorId,
-				// 		),
-				// 	) ?? [];
-				// // Find out which ones are missing
-				// const missingIndicatorProperties = supportedIndicatorProperties.filter(
-				// 	prop =>
-				// 		!this.values!.find(({ propertyId }) => prop === propertyId),
-				// );
-				// // And assume they are 0 (false)
-				// for (const missing of missingIndicatorProperties) {
-				// 	this.setIndicatorValue({
-				// 		indicatorId,
-				// 		propertyId: missing,
-				// 		value: 0,
-				// 	});
-				// }
+		if ("value" in options) {
+			this.indicator0Value = options.value;
+		} else if ("values" in options) {
+			if (options.values.length > MAX_INDICATOR_OBJECTS) {
+				throw new ZWaveError(
+					`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
 			}
-		} else {
-			if ("value" in options) {
-				this.indicator0Value = options.value;
-			} else if ("values" in options) {
-				if (options.values.length > MAX_INDICATOR_OBJECTS) {
-					throw new ZWaveError(
-						`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				this.values = options.values;
-			}
+			this.values = options.values;
 		}
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): IndicatorCCReport {
+		validatePayload(raw.payload.length >= 1);
+
+		const objCount = raw.payload.length >= 2
+			? raw.payload[1] & 0b11111
+			: 0;
+
+		if (objCount === 0) {
+			const indicator0Value = raw.payload[0];
+			return new IndicatorCCReport({
+				nodeId: ctx.sourceNodeId,
+				value: indicator0Value,
+			});
+		}
+
+		validatePayload(raw.payload.length >= 2 + 3 * objCount);
+
+		const values: IndicatorObject[] = [];
+		for (let i = 0; i < objCount; i++) {
+			const offset = 2 + 3 * i;
+			const value: IndicatorObject = {
+				indicatorId: raw.payload[offset],
+				propertyId: raw.payload[offset + 1],
+				value: raw.payload[offset + 2],
+			};
+			values.push(value);
+		}
+
+		return new IndicatorCCReport({
+			nodeId: ctx.sourceNodeId,
+			values,
+		});
+
+		// TODO: Think if we want this:
+
+		// // If not all Property IDs are included in the command for the actual Indicator ID,
+		// // a controlling node MUST assume non-specified Property IDs values to be 0x00.
+		// const indicatorId = this.values[0].indicatorId;
+		// const supportedIndicatorProperties =
+		// 	valueDB.getValue<number[]>(
+		// 		getSupportedPropertyIDsValueID(
+		// 			this.endpointIndex,
+		// 			indicatorId,
+		// 		),
+		// 	) ?? [];
+		// // Find out which ones are missing
+		// const missingIndicatorProperties = supportedIndicatorProperties.filter(
+		// 	prop =>
+		// 		!this.values!.find(({ propertyId }) => prop === propertyId),
+		// );
+		// // And assume they are 0 (false)
+		// for (const missing of missingIndicatorProperties) {
+		// 	this.setIndicatorValue({
+		// 		indicatorId,
+		// 		propertyId: missing,
+		// 		value: 0,
+		// 	});
+		// }
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1199,7 +1222,7 @@ export class IndicatorCCReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCGetOptions extends CCCommandOptions {
+export interface IndicatorCCGetOptions {
 	indicatorId?: number;
 }
 
@@ -1207,16 +1230,23 @@ export interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
+		options: WithAddress<IndicatorCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length > 0) {
-				this.indicatorId = this.payload[0];
-			}
-		} else {
-			this.indicatorId = options.indicatorId;
+		this.indicatorId = options.indicatorId;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): IndicatorCCGet {
+		let indicatorId: number | undefined;
+
+		if (raw.payload.length > 0) {
+			indicatorId = raw.payload[0];
 		}
+
+		return new IndicatorCCGet({
+			nodeId: ctx.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number | undefined;
@@ -1239,7 +1269,7 @@ export class IndicatorCCGet extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedReportOptions {
 	indicatorId: number;
 	nextIndicatorId: number;
 	supportedProperties: readonly number[];
@@ -1248,32 +1278,42 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCSupportedReportOptions,
+		options: WithAddress<IndicatorCCSupportedReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.indicatorId = this.payload[0];
-			this.nextIndicatorId = this.payload[1];
-			const bitMaskLength = this.payload[2] & 0b11111;
-			if (bitMaskLength === 0) {
-				this.supportedProperties = [];
-			} else {
-				validatePayload(this.payload.length >= 3 + bitMaskLength);
-				// The bit mask starts at 0, but bit 0 is not used
-				this.supportedProperties = parseBitMask(
-					this.payload.subarray(3, 3 + bitMaskLength),
-					0,
-				).filter((v) => v !== 0);
-			}
+		this.indicatorId = options.indicatorId;
+		this.nextIndicatorId = options.nextIndicatorId;
+		this.supportedProperties = options.supportedProperties;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IndicatorCCSupportedReport {
+		validatePayload(raw.payload.length >= 3);
+		const indicatorId = raw.payload[0];
+		const nextIndicatorId = raw.payload[1];
+		const bitMaskLength = raw.payload[2] & 0b11111;
+		let supportedProperties: readonly number[];
+
+		if (bitMaskLength === 0) {
+			supportedProperties = [];
 		} else {
-			this.indicatorId = options.indicatorId;
-			this.nextIndicatorId = options.nextIndicatorId;
-			this.supportedProperties = options.supportedProperties;
+			validatePayload(raw.payload.length >= 3 + bitMaskLength);
+			// The bit mask starts at 0, but bit 0 is not used
+			supportedProperties = parseBitMask(
+				raw.payload.subarray(3, 3 + bitMaskLength),
+				0,
+			).filter((v) => v !== 0);
 		}
+
+		return new IndicatorCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			indicatorId,
+			nextIndicatorId,
+			supportedProperties,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1331,7 +1371,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedGetOptions {
 	indicatorId: number;
 }
 
@@ -1349,17 +1389,23 @@ function testResponseForIndicatorSupportedGet(
 )
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCSupportedGetOptions,
+		options: WithAddress<IndicatorCCSupportedGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.indicatorId = this.payload[0];
-		} else {
-			this.indicatorId = options.indicatorId;
-		}
+		this.indicatorId = options.indicatorId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IndicatorCCSupportedGet {
+		validatePayload(raw.payload.length >= 1);
+		const indicatorId = raw.payload[0];
+
+		return new IndicatorCCSupportedGet({
+			nodeId: ctx.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number;
@@ -1388,24 +1434,31 @@ export interface IndicatorCCDescriptionReportOptions {
 @CCCommand(IndicatorCommand.DescriptionReport)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (IndicatorCCDescriptionReportOptions & CCCommandOptions),
+		options: WithAddress<IndicatorCCDescriptionReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.indicatorId = this.payload[0];
-			const descrptionLength = this.payload[1];
-			validatePayload(this.payload.length >= 2 + descrptionLength);
-			this.description = this.payload
-				.subarray(2, 2 + descrptionLength)
-				.toString("utf8");
-		} else {
-			this.indicatorId = options.indicatorId;
-			this.description = options.description;
-		}
+		this.indicatorId = options.indicatorId;
+		this.description = options.description;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IndicatorCCDescriptionReport {
+		validatePayload(raw.payload.length >= 2);
+		const indicatorId = raw.payload[0];
+		const descrptionLength = raw.payload[1];
+		validatePayload(raw.payload.length >= 2 + descrptionLength);
+		const description: string = raw.payload
+			.subarray(2, 2 + descrptionLength)
+			.toString("utf8");
+
+		return new IndicatorCCDescriptionReport({
+			nodeId: ctx.sourceNodeId,
+			indicatorId,
+			description,
+		});
 	}
 
 	public indicatorId: number;
@@ -1446,7 +1499,7 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+export interface IndicatorCCDescriptionGetOptions {
 	indicatorId: number;
 }
 
@@ -1464,23 +1517,29 @@ function testResponseForIndicatorDescriptionGet(
 )
 export class IndicatorCCDescriptionGet extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCDescriptionGetOptions,
+		options: WithAddress<IndicatorCCDescriptionGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.indicatorId = this.payload[0];
-		} else {
-			this.indicatorId = options.indicatorId;
-			if (!isManufacturerDefinedIndicator(this.indicatorId)) {
-				throw new ZWaveError(
-					"The indicator ID must be between 0x80 and 0x9f",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+		this.indicatorId = options.indicatorId;
+		if (!isManufacturerDefinedIndicator(this.indicatorId)) {
+			throw new ZWaveError(
+				"The indicator ID must be between 0x80 and 0x9f",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IndicatorCCDescriptionGet {
+		validatePayload(raw.payload.length >= 1);
+		const indicatorId = raw.payload[0];
+
+		return new IndicatorCCDescriptionGet({
+			nodeId: ctx.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number;

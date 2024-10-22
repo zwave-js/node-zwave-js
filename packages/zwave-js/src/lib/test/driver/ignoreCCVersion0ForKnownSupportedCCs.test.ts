@@ -79,8 +79,6 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -106,8 +104,6 @@ integrationTest(
 							);
 							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
-								ownNodeId: self.id,
-								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -265,6 +261,7 @@ integrationTest(
 									CommandClasses.Version,
 								],
 								controlledCCs: [],
+								reportsToFollow: 0,
 							});
 						const cc = SecurityCC.encapsulate(
 							self.id,
@@ -347,15 +344,15 @@ integrationTest(
 			const parseS0CC: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					// We don't support sequenced commands here
-					if (
-						receivedCC instanceof SecurityCCCommandEncapsulation
-					) {
-						receivedCC.mergePartialCCs(
-							[],
-							{} as any,
-						);
+					if (receivedCC instanceof SecurityCCCommandEncapsulation) {
+						receivedCC.mergePartialCCs([], {
+							sourceNodeId: controller.ownNodeId,
+							__internalIsMockNode: true,
+							...self.encodingContext,
+							...self.securityManagers,
+						});
 					}
-
+					// This just decodes - we need to call further handlers
 					return undefined;
 				},
 			};

@@ -18,7 +18,7 @@ export class NoOperationCCAPI extends PhysicalCCAPI {
 		await this.host.sendCommand(
 			new NoOperationCC({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 			}),
 			{
 				...this.commandOptions,

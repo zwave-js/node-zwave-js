@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	SceneActuatorConfigurationCC,
 	SceneActuatorConfigurationCCGet,
 	SceneActuatorConfigurationCCReport,
@@ -78,11 +79,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x05, // dimmingDuration
 		]),
 	);
-	const cc = new SceneActuatorConfigurationCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as SceneActuatorConfigurationCCReport;
+	t.is(cc.constructor, SceneActuatorConfigurationCCReport);
 
 	t.is(cc.sceneId, 55);
 	t.is(cc.level, 0x50);
@@ -93,10 +94,9 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActuatorConfigurationCC({
-		nodeId: 2,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 2 } as any,
+	) as SceneActuatorConfigurationCC;
 	t.is(cc.constructor, SceneActuatorConfigurationCC);
 });

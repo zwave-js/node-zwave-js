@@ -89,8 +89,6 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -116,8 +114,6 @@ integrationTest(
 							);
 							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
-								ownNodeId: self.id,
-								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -261,8 +257,6 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -288,8 +282,6 @@ integrationTest(
 							);
 							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
-								ownNodeId: self.id,
-								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -400,8 +392,6 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -427,8 +417,6 @@ integrationTest(
 							);
 							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
-								ownNodeId: self.id,
-								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,

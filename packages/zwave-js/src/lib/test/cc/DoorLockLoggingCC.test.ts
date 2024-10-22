@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	DoorLockLoggingCCRecordGet,
 	DoorLockLoggingCCRecordReport,
 	DoorLockLoggingCCRecordsSupportedGet,
@@ -37,11 +38,11 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = new DoorLockLoggingCCRecordsSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockLoggingCCRecordsSupportedReport;
+	t.is(cc.constructor, DoorLockLoggingCCRecordsSupportedReport);
 
 	t.is(cc.recordsCount, 20);
 });
@@ -79,11 +80,11 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 		]),
 	);
 
-	const cc = new DoorLockLoggingCCRecordReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockLoggingCCRecordReport;
+	t.is(cc.constructor, DoorLockLoggingCCRecordReport);
 
 	t.is(cc.recordNumber, 7);
 

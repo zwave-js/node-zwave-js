@@ -9,11 +9,16 @@ import {
 	NOT_KNOWN,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	maybeUnknownToString,
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -28,14 +33,12 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -230,7 +233,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSwitchCCReport
@@ -261,7 +264,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -279,7 +282,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -294,7 +297,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -308,7 +311,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSwitchCCSupportedReport
@@ -615,7 +618,7 @@ export class MultilevelSwitchCC extends CommandClass {
 }
 
 // @publicAPI
-export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
+export interface MultilevelSwitchCCSetOptions {
 	targetValue: number;
 	// Version >= 2:
 	duration?: Duration | string;
@@ -625,22 +628,30 @@ export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCSetOptions,
+		options: WithAddress<MultilevelSwitchCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue = this.payload[0];
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
 
-			if (this.payload.length >= 2) {
-				this.duration = Duration.parseReport(this.payload[1]);
-			}
-		} else {
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSwitchCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const targetValue = raw.payload[0];
+		let duration: Duration | undefined;
+
+		if (raw.payload.length >= 2) {
+			duration = Duration.parseReport(raw.payload[1]);
 		}
+
+		return new MultilevelSwitchCCSet({
+			nodeId: ctx.sourceNodeId,
+			targetValue,
+			duration,
+		});
 	}
 
 	public targetValue: number;
@@ -680,37 +691,48 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 }
 
 // @publicAPI
-export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
-	currentValue: MaybeUnknown<number>;
-	targetValue: MaybeUnknown<number>;
+export interface MultilevelSwitchCCReportOptions {
+	currentValue?: MaybeUnknown<number>;
+	targetValue?: MaybeUnknown<number>;
 	duration?: Duration | string;
 }
 
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCReportOptions,
+		options: WithAddress<MultilevelSwitchCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.currentValue =
-				// 0xff is a legacy value for 100% (99)
-				this.payload[0] === 0xff
-					? 99
-					: parseMaybeNumber(this.payload[0]);
-			if (this.payload.length >= 3) {
-				this.targetValue = parseMaybeNumber(this.payload[1]);
-				this.duration = Duration.parseReport(this.payload[2]);
-			}
-		} else {
-			this.currentValue = options.currentValue;
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSwitchCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const currentValue: MaybeUnknown<number> | undefined =
+			// 0xff is a legacy value for 100% (99)
+			raw.payload[0] === 0xff
+				? 99
+				: parseMaybeNumber(raw.payload[0]);
+		let targetValue: MaybeUnknown<number> | undefined;
+		let duration: Duration | undefined;
+
+		if (raw.payload.length >= 3) {
+			targetValue = parseMaybeNumber(raw.payload[1]);
+			duration = Duration.parseReport(raw.payload[2]);
 		}
+
+		return new MultilevelSwitchCCReport({
+			nodeId: ctx.sourceNodeId,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	@ccValue(MultilevelSwitchCCValues.targetValue)
@@ -774,29 +796,37 @@ export type MultilevelSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
+		options: WithAddress<MultilevelSwitchCCStartLevelChangeOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
-			this.ignoreStartLevel = !!ignoreStartLevel;
-			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
-			this.direction = direction ? "down" : "up";
+		this.duration = Duration.from(options.duration);
+		this.ignoreStartLevel = options.ignoreStartLevel;
+		this.startLevel = options.startLevel ?? 0;
+		this.direction = options.direction;
+	}
 
-			this.startLevel = this.payload[1];
-
-			if (this.payload.length >= 3) {
-				this.duration = Duration.parseSet(this.payload[2]);
-			}
-		} else {
-			this.duration = Duration.from(options.duration);
-			this.ignoreStartLevel = options.ignoreStartLevel;
-			this.startLevel = options.startLevel ?? 0;
-			this.direction = options.direction;
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSwitchCCStartLevelChange {
+		validatePayload(raw.payload.length >= 2);
+		const ignoreStartLevel = !!((raw.payload[0] & 0b0_0_1_00000) >>> 5);
+		const direction = ((raw.payload[0] & 0b0_1_0_00000) >>> 6)
+			? "down"
+			: "up";
+		const startLevel = raw.payload[1];
+		let duration: Duration | undefined;
+		if (raw.payload.length >= 3) {
+			duration = Duration.parseSet(raw.payload[2]);
 		}
+
+		return new MultilevelSwitchCCStartLevelChange({
+			nodeId: ctx.sourceNodeId,
+			ignoreStartLevel,
+			direction,
+			startLevel,
+			duration,
+		});
 	}
 
 	public duration: Duration | undefined;
@@ -855,19 +885,24 @@ export interface MultilevelSwitchCCSupportedReportOptions {
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & MultilevelSwitchCCSupportedReportOptions),
+		options: WithAddress<MultilevelSwitchCCSupportedReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.switchType = this.payload[0] & 0b11111;
-			// We do not support the deprecated secondary switch type
-		} else {
-			this.switchType = options.switchType;
-		}
+		this.switchType = options.switchType;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSwitchCCSupportedReport {
+		validatePayload(raw.payload.length >= 1);
+		const switchType: SwitchType = raw.payload[0] & 0b11111;
+
+		return new MultilevelSwitchCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			switchType,
+		});
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types

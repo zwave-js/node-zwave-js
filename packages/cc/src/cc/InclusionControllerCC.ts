@@ -1,18 +1,18 @@
 import {
 	CommandClasses,
 	type MessageOrCCLogEntry,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -59,7 +59,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 
 		const cc = new InclusionControllerCCInitiate({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			includedNodeId: nodeId,
 			step,
 		});
@@ -78,7 +78,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 
 		const cc = new InclusionControllerCCComplete({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			step,
 			status,
 		});
@@ -87,7 +87,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 }
 
 // @publicAPI
-export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+export interface InclusionControllerCCCompleteOptions {
 	step: InclusionControllerStep;
 	status: InclusionControllerStatus;
 }
@@ -95,22 +95,30 @@ export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Complete)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| InclusionControllerCCCompleteOptions,
+		options: WithAddress<InclusionControllerCCCompleteOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.step = this.payload[0];
-			validatePayload.withReason("Invalid inclusion controller step")(
-				this.step in InclusionControllerStep,
-			);
-			this.status = this.payload[1];
-		} else {
-			this.step = options.step;
-			this.status = options.status;
-		}
+		this.step = options.step;
+		this.status = options.status;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): InclusionControllerCCComplete {
+		validatePayload(raw.payload.length >= 2);
+		const step: InclusionControllerStep = raw.payload[0];
+
+		validatePayload.withReason("Invalid inclusion controller step")(
+			step in InclusionControllerStep,
+		);
+		const status: InclusionControllerStatus = raw.payload[1];
+
+		return new InclusionControllerCCComplete({
+			nodeId: ctx.sourceNodeId,
+			step,
+			status,
+		});
 	}
 
 	public step: InclusionControllerStep;
@@ -136,7 +144,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 }
 
 // @publicAPI
-export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+export interface InclusionControllerCCInitiateOptions {
 	includedNodeId: number;
 	step: InclusionControllerStep;
 }
@@ -144,22 +152,30 @@ export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Initiate)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| InclusionControllerCCInitiateOptions,
+		options: WithAddress<InclusionControllerCCInitiateOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.includedNodeId = this.payload[0];
-			this.step = this.payload[1];
-			validatePayload.withReason("Invalid inclusion controller step")(
-				this.step in InclusionControllerStep,
-			);
-		} else {
-			this.includedNodeId = options.includedNodeId;
-			this.step = options.step;
-		}
+		this.includedNodeId = options.includedNodeId;
+		this.step = options.step;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): InclusionControllerCCInitiate {
+		validatePayload(raw.payload.length >= 2);
+		const includedNodeId = raw.payload[0];
+		const step: InclusionControllerStep = raw.payload[1];
+
+		validatePayload.withReason("Invalid inclusion controller step")(
+			step in InclusionControllerStep,
+		);
+
+		return new InclusionControllerCCInitiate({
+			nodeId: ctx.sourceNodeId,
+			includedNodeId,
+			step,
+		});
 	}
 
 	public includedNodeId: number;

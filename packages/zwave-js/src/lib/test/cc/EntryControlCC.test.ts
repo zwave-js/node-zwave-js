@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
 	EntryControlCCConfigurationSet,
@@ -42,11 +43,11 @@ test("the Notification command should deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCNotification({
-		nodeId: 1,
+	const cc = CommandClass.parse(
 		data,
-		context: {} as any,
-	});
+		{ sourceNodeId: 1 } as any,
+	) as EntryControlCCNotification;
+	t.is(cc.constructor, EntryControlCCNotification);
 
 	t.deepEqual(cc.sequenceNumber, 1);
 	t.deepEqual(cc.dataType, EntryControlDataTypes.ASCII);
@@ -91,11 +92,11 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCConfigurationReport({
-		nodeId: 1,
+	const cc = CommandClass.parse(
 		data,
-		context: {} as any,
-	});
+		{ sourceNodeId: 1 } as any,
+	) as EntryControlCCConfigurationReport;
+	t.is(cc.constructor, EntryControlCCConfigurationReport);
 
 	t.deepEqual(cc.keyCacheSize, 1);
 	t.deepEqual(cc.keyCacheTimeout, 2);
@@ -131,11 +132,11 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 		]),
 	);
 
-	const cc = new EntryControlCCEventSupportedReport({
-		nodeId: 1,
+	const cc = CommandClass.parse(
 		data,
-		context: {} as any,
-	});
+		{ sourceNodeId: 1 } as any,
+	) as EntryControlCCEventSupportedReport;
+	t.is(cc.constructor, EntryControlCCEventSupportedReport);
 
 	t.deepEqual(cc.supportedDataTypes, [EntryControlDataTypes.ASCII]);
 	t.deepEqual(cc.supportedEventTypes, [
@@ -169,11 +170,11 @@ test("the KeySupportedReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCKeySupportedReport({
-		nodeId: 1,
+	const cc = CommandClass.parse(
 		data,
-		context: {} as any,
-	});
+		{ sourceNodeId: 1 } as any,
+	) as EntryControlCCKeySupportedReport;
+	t.is(cc.constructor, EntryControlCCKeySupportedReport);
 
 	t.deepEqual(cc.supportedKeys, [1, 3, 4, 6]);
 });

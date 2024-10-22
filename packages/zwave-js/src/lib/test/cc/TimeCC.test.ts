@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	TimeCC,
 	TimeCCDateGet,
 	TimeCCDateReport,
@@ -37,11 +38,11 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 			59,
 		]),
 	);
-	const cc = new TimeCCTimeReport({
-		nodeId: 8,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCCTimeReport;
+	t.is(cc.constructor, TimeCCTimeReport);
 
 	t.is(cc.hour, 14);
 	t.is(cc.minute, 23);
@@ -68,11 +69,11 @@ test("the DateReport command should be deserialized correctly", (t) => {
 			17,
 		]),
 	);
-	const cc = new TimeCCDateReport({
-		nodeId: 8,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCCDateReport;
+	t.is(cc.constructor, TimeCCDateReport);
 
 	t.is(cc.year, 1989);
 	t.is(cc.month, 10);
@@ -83,11 +84,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new TimeCC({
-		nodeId: 8,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCC;
 	t.is(cc.constructor, TimeCC);
 });
 

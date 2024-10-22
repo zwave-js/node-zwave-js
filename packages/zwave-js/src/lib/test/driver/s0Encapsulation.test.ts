@@ -92,6 +92,7 @@ integrationTest("Communication via Security S0 works", {
 						nodeId: controller.ownNodeId,
 						supportedCCs: [CommandClasses.Basic],
 						controlledCCs: [],
+						reportsToFollow: 0,
 					});
 					const cc = SecurityCC.encapsulate(
 						self.id,
@@ -169,7 +170,12 @@ integrationTest("Communication via Security S0 works", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs([], {} as any);
+					receivedCC.mergePartialCCs([], {
+						sourceNodeId: controller.ownNodeId,
+						__internalIsMockNode: true,
+						...self.encodingContext,
+						...self.securityManagers,
+					});
 				}
 				// This just decodes - we need to call further handlers
 				return undefined;

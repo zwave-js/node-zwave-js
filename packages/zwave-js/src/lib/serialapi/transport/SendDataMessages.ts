@@ -104,14 +104,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			);
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from({
-					nodeId,
-					data: this.payload,
-					origin: options.origin,
-					context: {
-						sourceNodeId: nodeId,
-						...options.ctx,
-					},
+				this.command = CommandClass.parse(this.payload, {
+					sourceNodeId: nodeId,
+					...options.ctx,
 				}) as SinglecastCC<CCType>;
 			} else {
 				// Little hack for testing with a network mock. This will be parsed in the next step.
@@ -396,16 +391,10 @@ export class SendDataMulticastRequest<
 			this.payload = serializedCC;
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from({
-					nodeId: this._nodeIds[0],
-					data: this.payload,
-					origin: options.origin,
-					context: {
-						sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
-						...options.ctx,
-					},
+				this.command = CommandClass.parse(this.payload, {
+					sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
+					...options.ctx,
 				}) as MulticastCC<CCType>;
-				this.command.nodeId = this._nodeIds;
 			} else {
 				// Little hack for testing with a network mock. This will be parsed in the next step.
 				this.command = undefined as any;

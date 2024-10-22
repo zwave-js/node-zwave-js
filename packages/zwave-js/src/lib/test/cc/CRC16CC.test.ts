@@ -37,11 +37,10 @@ test("serialization and deserialization should be compatible", (t) => {
 	t.is(crc16.encapsulated, basicCCSet);
 	const serialized = crc16.serialize({} as any);
 
-	const deserialized = CommandClass.from({
-		nodeId: basicCCSet.nodeId as number,
-		data: serialized,
-		context: {} as any,
-	});
+	const deserialized = CommandClass.parse(
+		serialized,
+		{ sourceNodeId: basicCCSet.nodeId as number } as any,
+	);
 	t.is(deserialized.nodeId, basicCCSet.nodeId);
 	const deserializedPayload = (deserialized as CRC16CCCommandEncapsulation)
 		.encapsulated as BasicCCSet;
@@ -61,10 +60,9 @@ test("deserializing a CC with a wrong checksum should result in an invalid CC", 
 	const serialized = crc16.serialize({} as any);
 	serialized[serialized.length - 1] ^= 0xff;
 
-	const decoded = CommandClass.from({
-		nodeId: basicCCSet.nodeId as number,
-		data: serialized,
-		context: {} as any,
-	});
-	t.true(decoded instanceof InvalidCC);
+	const deserialized = CommandClass.parse(
+		serialized,
+		{ sourceNodeId: basicCCSet.nodeId as number } as any,
+	);
+	t.true(deserialized instanceof InvalidCC);
 });

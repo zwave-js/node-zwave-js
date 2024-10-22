@@ -8,10 +8,16 @@ import type {
 	NODE_ID_BROADCAST_LR,
 } from "../consts";
 
-/** A basic abstraction of a Z-Wave Command Class providing access to the relevant functionality */
-export interface CCId {
+/** Identifies which node and/or endpoint a CC is addressed to */
+export interface CCAddress {
 	nodeId: number | MulticastDestination;
 	endpointIndex?: number;
+}
+
+export type WithAddress<T extends object> = T & CCAddress;
+
+/** Uniquely identifies a CC and its address */
+export interface CCId extends CCAddress {
 	ccId: CommandClasses;
 	ccCommand?: number;
 }

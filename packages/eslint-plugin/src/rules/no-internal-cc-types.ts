@@ -31,7 +31,6 @@ export const noInternalCCTypes = ESLintUtils.RuleCreator.withoutDocs({
 					| TSESTree.TSInterfaceDeclaration
 					| TSESTree.TSTypeAliasDeclaration,
 			) {
-				if (node.id.name === "BasicCCSetOptions") debugger;
 				let fullNode:
 					| TSESTree.TSInterfaceDeclaration
 					| TSESTree.TSTypeAliasDeclaration

@@ -5,6 +5,7 @@ import {
 	type MessageRecord,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseMaybeNumber,
@@ -12,6 +13,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
@@ -29,12 +31,11 @@ import {
 	throwWrongValueType,
 } from "../../lib/API";
 import {
-	type CCCommandOptions,
-	type CommandClassDeserializationOptions,
+	type CCRaw,
+	type CommandClassOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../../lib/CommandClass";
 import { expectedCCResponse } from "../../lib/CommandClassDecorators";
 import {
@@ -116,7 +117,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	public async fibaroVenetianBlindsGet() {
 		const cc = new FibaroVenetianBlindCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			FibaroVenetianBlindCCReport
@@ -133,7 +134,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
 		const cc = new FibaroVenetianBlindCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			position: value,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -143,7 +144,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
 		const cc = new FibaroVenetianBlindCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tilt: value,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -218,30 +219,33 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 @manufacturerId(MANUFACTURERID_FIBARO)
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: CommandClassOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.fibaroCCId = this.payload[0];
-			this.fibaroCCCommand = this.payload[1];
 
-			const FibaroConstructor = getFibaroCCCommandConstructor(
-				this.fibaroCCId,
-				this.fibaroCCCommand,
+		this.fibaroCCId = getFibaroCCId(this);
+		this.fibaroCCCommand = getFibaroCCCommand(this);
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): FibaroCC {
+		validatePayload(raw.payload.length >= 2);
+		const fibaroCCId = raw.payload[0];
+		const fibaroCCCommand = raw.payload[1];
+
+		const FibaroConstructor = getFibaroCCCommandConstructor(
+			fibaroCCId,
+			fibaroCCCommand,
+		);
+		if (FibaroConstructor) {
+			return FibaroConstructor.from(
+				raw.withPayload(raw.payload.subarray(2)),
+				ctx,
 			);
-			if (
-				FibaroConstructor
-				&& (new.target as any) !== FibaroConstructor
-			) {
-				return new FibaroConstructor(options);
-			}
-
-			this.payload = this.payload.subarray(2);
-		} else {
-			this.fibaroCCId = getFibaroCCId(this);
-			this.fibaroCCCommand = getFibaroCCCommand(this);
 		}
+
+		return new FibaroCC({
+			nodeId: ctx.sourceNodeId,
+		});
 	}
 
 	public fibaroCCId?: number;
@@ -311,19 +315,10 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
 	public constructor(
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: CommandClassOptions,
 	) {
 		super(options);
 		this.fibaroCCId = FibaroCCIDs.VenetianBlind;
-
-		if (gotDeserializationOptions(options)) {
-			if (
-				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Report
-				&& (new.target as any) !== FibaroVenetianBlindCCReport
-			) {
-				return new FibaroVenetianBlindCCReport(options);
-			}
-		}
 	}
 
 	public async interview(ctx: InterviewContext): Promise<void> {
@@ -349,7 +344,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		const resp = await ctx.sendCommand<FibaroVenetianBlindCCReport>(
 			new FibaroVenetianBlindCCGet({
 				nodeId: this.nodeId,
-				endpoint: this.endpointIndex,
+				endpointIndex: this.endpointIndex,
 			}),
 		);
 		if (resp) {
@@ -366,40 +361,38 @@ tilt:     ${resp.tilt}`;
 
 // @publicAPI
 export type FibaroVenetianBlindCCSetOptions =
-	& CCCommandOptions
-	& (
-		| {
-			position: number;
-		}
-		| {
-			tilt: number;
-		}
-		| {
-			position: number;
-			tilt: number;
-		}
-	);
+	| {
+		position: number;
+	}
+	| {
+		tilt: number;
+	}
+	| {
+		position: number;
+		tilt: number;
+	};
 
 @fibaroCCCommand(FibaroVenetianBlindCCCommand.Set)
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| FibaroVenetianBlindCCSetOptions,
+		options: WithAddress<FibaroVenetianBlindCCSetOptions>,
 	) {
 		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Set;
 
-		if (Buffer.isBuffer(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			if ("position" in options) this.position = options.position;
-			if ("tilt" in options) this.tilt = options.tilt;
-		}
+		if ("position" in options) this.position = options.position;
+		if ("tilt" in options) this.tilt = options.tilt;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): FibaroVenetianBlindCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
 	}
 
 	public position: number | undefined;
@@ -431,24 +424,47 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 }
 
+// @publicAPI
+export interface FibaroVenetianBlindCCReportOptions {
+	position?: MaybeUnknown<number>;
+	tilt?: MaybeUnknown<number>;
+}
+
 @fibaroCCCommand(FibaroVenetianBlindCCCommand.Report)
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FibaroVenetianBlindCCReportOptions>,
 	) {
 		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Report;
 
-		validatePayload(this.payload.length >= 3);
+		// TODO: Check implementation:
+		this.position = options.position;
+		this.tilt = options.tilt;
+	}
 
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FibaroVenetianBlindCCReport {
+		validatePayload(raw.payload.length >= 3);
 		// When the node sends a report, payload[0] === 0b11. This is probably a
 		// bit mask for position and tilt
-		if (!!(this.payload[0] & 0b10)) {
-			this._position = parseMaybeNumber(this.payload[1]);
+		let position: MaybeUnknown<number> | undefined;
+		if (!!(raw.payload[0] & 0b10)) {
+			position = parseMaybeNumber(raw.payload[1]);
 		}
-		if (!!(this.payload[0] & 0b01)) {
-			this._tilt = parseMaybeNumber(this.payload[2]);
+
+		let tilt: MaybeUnknown<number> | undefined;
+		if (!!(raw.payload[0] & 0b01)) {
+			tilt = parseMaybeNumber(raw.payload[2]);
 		}
+
+		return new FibaroVenetianBlindCCReport({
+			nodeId: ctx.sourceNodeId,
+			position,
+			tilt,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -479,15 +495,8 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return true;
 	}
 
-	private _position: MaybeUnknown<number> | undefined;
-	public get position(): MaybeUnknown<number> | undefined {
-		return this._position;
-	}
-
-	private _tilt: MaybeUnknown<number> | undefined;
-	public get tilt(): MaybeUnknown<number> | undefined {
-		return this._tilt;
-	}
+	public position: MaybeUnknown<number> | undefined;
+	public tilt: MaybeUnknown<number> | undefined;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
@@ -508,9 +517,18 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 @expectedCCResponse(FibaroVenetianBlindCCReport)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: CommandClassOptions,
 	) {
 		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FibaroVenetianBlindCCGet {
+		return new FibaroVenetianBlindCCGet({
+			nodeId: ctx.sourceNodeId,
+		});
 	}
 }

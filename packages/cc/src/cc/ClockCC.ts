@@ -1,6 +1,7 @@
 import type {
 	MessageOrCCLogEntry,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -10,18 +11,20 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -53,7 +56,7 @@ export class ClockCCAPI extends CCAPI {
 
 		const cc = new ClockCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<ClockCCReport>(
 			cc,
@@ -74,7 +77,7 @@ export class ClockCCAPI extends CCAPI {
 
 		const cc = new ClockCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			hour,
 			minute,
 			weekday: weekday ?? Weekday.Unknown,
@@ -140,7 +143,7 @@ export class ClockCC extends CommandClass {
 }
 
 // @publicAPI
-export interface ClockCCSetOptions extends CCCommandOptions {
+export interface ClockCCSetOptions {
 	weekday: Weekday;
 	hour: number;
 	minute: number;
@@ -150,20 +153,24 @@ export interface ClockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ClockCCSetOptions,
+		options: WithAddress<ClockCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.weekday = options.weekday;
-			this.hour = options.hour;
-			this.minute = options.minute;
-		}
+		this.weekday = options.weekday;
+		this.hour = options.hour;
+		this.minute = options.minute;
+	}
+
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): ClockCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ClockCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public weekday: Weekday;
@@ -199,22 +206,43 @@ export class ClockCCSet extends ClockCC {
 	}
 }
 
+// @publicAPI
+export interface ClockCCReportOptions {
+	weekday: Weekday;
+	hour: number;
+	minute: number;
+}
+
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ClockCCReportOptions>,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 2);
 
-		this.weekday = this.payload[0] >>> 5;
-		this.hour = this.payload[0] & 0b11111;
-		this.minute = this.payload[1];
+		// TODO: Check implementation:
+		this.weekday = options.weekday;
+		this.hour = options.hour;
+		this.minute = options.minute;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): ClockCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const weekday: Weekday = raw.payload[0] >>> 5;
+		const hour = raw.payload[0] & 0b11111;
+		const minute = raw.payload[1];
 		validatePayload(
-			this.weekday <= Weekday.Sunday,
-			this.hour <= 23,
-			this.minute <= 59,
+			weekday <= Weekday.Sunday,
+			hour <= 23,
+			minute <= 59,
 		);
+
+		return new ClockCCReport({
+			nodeId: ctx.sourceNodeId,
+			weekday,
+			hour,
+			minute,
+		});
 	}
 
 	public readonly weekday: Weekday;

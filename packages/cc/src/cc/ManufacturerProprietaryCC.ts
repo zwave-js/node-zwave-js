@@ -1,20 +1,18 @@
 import {
 	CommandClasses,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext } from "@zwave-js/host/safe";
-import { staticExtends } from "@zwave-js/shared/safe";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -70,7 +68,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			manufacturerId,
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
@@ -83,7 +81,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			manufacturerId,
 			unspecifiedExpectsResponse: true,
 		});
@@ -105,7 +103,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 }
 
 // @publicAPI
-export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+export interface ManufacturerProprietaryCCOptions {
 	manufacturerId?: number;
 	unspecifiedExpectsResponse?: boolean;
 }
@@ -134,42 +132,39 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ManufacturerProprietaryCCOptions,
+		options: WithAddress<ManufacturerProprietaryCCOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-			this.manufacturerId = ((this.ccCommand as unknown as number) << 8)
-				+ this.payload[0];
+		this.manufacturerId = options.manufacturerId
+			?? getManufacturerId(this);
+		this.unspecifiedExpectsResponse = options.unspecifiedExpectsResponse;
 
-			// Try to parse the proprietary command
-			const PCConstructor = getManufacturerProprietaryCCConstructor(
-				this.manufacturerId,
+		// To use this CC, a manufacturer ID must exist in the value DB
+		// If it doesn't, the interview procedure will throw.
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ManufacturerProprietaryCC {
+		validatePayload(raw.payload.length >= 1);
+		const manufacturerId = raw.payload.readUint16BE(0);
+		// Try to parse the proprietary command
+		const PCConstructor = getManufacturerProprietaryCCConstructor(
+			manufacturerId,
+		);
+		if (PCConstructor) {
+			return PCConstructor.from(
+				raw.withPayload(raw.payload.subarray(2)),
+				ctx,
 			);
-			if (
-				PCConstructor
-				&& new.target !== PCConstructor
-				&& !staticExtends(new.target, PCConstructor)
-			) {
-				return new PCConstructor(options);
-			}
-
-			// If the constructor is correct, update the payload for subclass deserialization
-			this.payload = this.payload.subarray(1);
-		} else {
-			this.manufacturerId = options.manufacturerId
-				?? getManufacturerId(this);
-
-			this.unspecifiedExpectsResponse =
-				options.unspecifiedExpectsResponse;
-
-			// To use this CC, a manufacturer ID must exist in the value DB
-			// If it doesn't, the interview procedure will throw.
 		}
+
+		return new ManufacturerProprietaryCC({
+			nodeId: ctx.sourceNodeId,
+			manufacturerId,
+		});
 	}
 
 	public manufacturerId?: number;

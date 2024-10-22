@@ -110,7 +110,12 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs([], {} as any);
+					receivedCC.mergePartialCCs([], {
+						sourceNodeId: controller.ownNodeId,
+						__internalIsMockNode: true,
+						...self.encodingContext,
+						...self.securityManagers,
+					});
 				}
 				return undefined;
 			},
@@ -126,8 +131,6 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					);
 					const cc = new Security2CCNonceReport({
 						nodeId: controller.ownNodeId,
-						ownNodeId: self.id,
-						securityManagers: self.securityManagers,
 						SOS: true,
 						MOS: false,
 						receiverEI: nonce,
@@ -153,8 +156,6 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,

@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	ThermostatFanMode,
 	ThermostatFanModeCCGet,
 	ThermostatFanModeCCReport,
@@ -64,11 +65,11 @@ test("the Report command should be deserialized correctly", (t) => {
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),
 	);
-	const cc = new ThermostatFanModeCCReport({
-		nodeId: 5,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 5 } as any,
+	) as ThermostatFanModeCCReport;
+	t.is(cc.constructor, ThermostatFanModeCCReport);
 
 	t.is(cc.mode, ThermostatFanMode["Auto high"]);
 	t.is(cc.off, true);

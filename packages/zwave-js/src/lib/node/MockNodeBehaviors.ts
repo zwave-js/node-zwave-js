@@ -87,7 +87,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 
 			const cc = new VersionCCCommandClassReport({
 				nodeId: self.id,
-				endpoint: "index" in endpoint ? endpoint.index : undefined,
+				endpointIndex: "index" in endpoint ? endpoint.index : undefined,
 				requestedCC: receivedCC.requestedCC,
 				ccVersion: version,
 			});

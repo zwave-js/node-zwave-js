@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	formatDate,
@@ -11,17 +12,19 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -61,7 +64,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<TimeCCTimeReport>(
 			cc,
@@ -82,7 +85,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			hour,
 			minute,
 			second,
@@ -96,7 +99,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCDateGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<TimeCCDateReport>(
 			cc,
@@ -117,7 +120,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCDateReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			year,
 			month,
 			day,
@@ -133,7 +136,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
@@ -147,7 +150,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			TimeCCTimeOffsetReport
@@ -173,7 +176,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
@@ -225,7 +228,7 @@ export class TimeCC extends CommandClass {
 }
 
 // @publicAPI
-export interface TimeCCTimeReportOptions extends CCCommandOptions {
+export interface TimeCCTimeReportOptions {
 	hour: number;
 	minute: number;
 	second: number;
@@ -234,22 +237,35 @@ export interface TimeCCTimeReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
+		options: WithAddress<TimeCCTimeReportOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.hour = this.payload[0] & 0b11111;
-			validatePayload(this.hour >= 0, this.hour <= 23);
-			this.minute = this.payload[1];
-			validatePayload(this.minute >= 0, this.minute <= 59);
-			this.second = this.payload[2];
-			validatePayload(this.second >= 0, this.second <= 59);
-		} else {
-			this.hour = options.hour;
-			this.minute = options.minute;
-			this.second = options.second;
-		}
+		this.hour = options.hour;
+		this.minute = options.minute;
+		this.second = options.second;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCTimeReport {
+		validatePayload(raw.payload.length >= 3);
+		const hour = raw.payload[0] & 0b11111;
+		const minute = raw.payload[1];
+		const second = raw.payload[2];
+
+		validatePayload(
+			hour >= 0,
+			hour <= 23,
+			minute >= 0,
+			minute <= 59,
+			second >= 0,
+			second <= 59,
+		);
+
+		return new TimeCCTimeReport({
+			nodeId: ctx.sourceNodeId,
+			hour,
+			minute,
+			second,
+		});
 	}
 
 	public hour: number;
@@ -286,7 +302,7 @@ export class TimeCCTimeReport extends TimeCC {
 export class TimeCCTimeGet extends TimeCC {}
 
 // @publicAPI
-export interface TimeCCDateReportOptions extends CCCommandOptions {
+export interface TimeCCDateReportOptions {
 	year: number;
 	month: number;
 	day: number;
@@ -295,19 +311,26 @@ export interface TimeCCDateReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
+		options: WithAddress<TimeCCDateReportOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.year = this.payload.readUInt16BE(0);
-			this.month = this.payload[2];
-			this.day = this.payload[3];
-		} else {
-			this.year = options.year;
-			this.month = options.month;
-			this.day = options.day;
-		}
+		this.year = options.year;
+		this.month = options.month;
+		this.day = options.day;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCDateReport {
+		validatePayload(raw.payload.length >= 4);
+		const year = raw.payload.readUInt16BE(0);
+		const month = raw.payload[2];
+		const day = raw.payload[3];
+
+		return new TimeCCDateReport({
+			nodeId: ctx.sourceNodeId,
+			year,
+			month,
+			day,
+		});
 	}
 
 	public year: number;
@@ -347,7 +370,7 @@ export class TimeCCDateReport extends TimeCC {
 export class TimeCCDateGet extends TimeCC {}
 
 // @publicAPI
-export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetSetOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -358,23 +381,28 @@ export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| TimeCCTimeOffsetSetOptions,
+		options: WithAddress<TimeCCTimeOffsetSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-			this.dstStartDate = options.dstStart;
-			this.dstEndDate = options.dstEnd;
-		}
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+		this.dstStartDate = options.dstStart;
+		this.dstEndDate = options.dstEnd;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): TimeCCTimeOffsetSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new TimeCCTimeOffsetSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public standardOffset: number;
@@ -414,7 +442,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 }
 
 // @publicAPI
-export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetReportOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -424,40 +452,46 @@ export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| TimeCCTimeOffsetReportOptions,
+		options: WithAddress<TimeCCTimeOffsetReportOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 9);
-			const { standardOffset, dstOffset } = parseTimezone(this.payload);
-			this.standardOffset = standardOffset;
-			this.dstOffset = dstOffset;
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+		this.dstStartDate = options.dstStart;
+		this.dstEndDate = options.dstEnd;
+	}
 
-			const currentYear = new Date().getUTCFullYear();
-			this.dstStartDate = new Date(
-				Date.UTC(
-					currentYear,
-					this.payload[3] - 1,
-					this.payload[4],
-					this.payload[5],
-				),
-			);
-			this.dstEndDate = new Date(
-				Date.UTC(
-					currentYear,
-					this.payload[6] - 1,
-					this.payload[7],
-					this.payload[8],
-				),
-			);
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-			this.dstStartDate = options.dstStart;
-			this.dstEndDate = options.dstEnd;
-		}
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): TimeCCTimeOffsetReport {
+		validatePayload(raw.payload.length >= 9);
+		const { standardOffset, dstOffset } = parseTimezone(raw.payload);
+		const currentYear = new Date().getUTCFullYear();
+		const dstStartDate: Date = new Date(
+			Date.UTC(
+				currentYear,
+				raw.payload[3] - 1,
+				raw.payload[4],
+				raw.payload[5],
+			),
+		);
+		const dstEndDate: Date = new Date(
+			Date.UTC(
+				currentYear,
+				raw.payload[6] - 1,
+				raw.payload[7],
+				raw.payload[8],
+			),
+		);
+
+		return new TimeCCTimeOffsetReport({
+			nodeId: ctx.sourceNodeId,
+			standardOffset,
+			dstOffset,
+			dstStart: dstStartDate,
+			dstEnd: dstEndDate,
+		});
 	}
 
 	public standardOffset: number;

@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -12,7 +13,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -25,13 +30,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -126,7 +129,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlModeCCReport
@@ -150,7 +153,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			mode,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -166,7 +169,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlModeCCSupportedReport
@@ -275,7 +278,7 @@ export class HumidityControlModeCC extends CommandClass {
 }
 
 // @publicAPI
-export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
+export interface HumidityControlModeCCSetOptions {
 	mode: HumidityControlMode;
 }
 
@@ -283,20 +286,25 @@ export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| HumidityControlModeCCSetOptions,
+		options: WithAddress<HumidityControlModeCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.mode = options.mode;
-		}
+		this.mode = options.mode;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): HumidityControlModeCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new HumidityControlModeCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public mode: HumidityControlMode;
@@ -316,15 +324,33 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	}
 }
 
+// @publicAPI
+export interface HumidityControlModeCCReportOptions {
+	mode: HumidityControlMode;
+}
+
 @CCCommand(HumidityControlModeCommand.Report)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<HumidityControlModeCCReportOptions>,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.mode = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.mode = options.mode;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): HumidityControlModeCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const mode: HumidityControlMode = raw.payload[0] & 0b1111;
+
+		return new HumidityControlModeCCReport({
+			nodeId: ctx.sourceNodeId,
+			mode,
+		});
 	}
 
 	@ccValue(HumidityControlModeCCValues.mode)
@@ -344,24 +370,41 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 @expectedCCResponse(HumidityControlModeCCReport)
 export class HumidityControlModeCCGet extends HumidityControlModeCC {}
 
+// @publicAPI
+export interface HumidityControlModeCCSupportedReportOptions {
+	supportedModes: HumidityControlMode[];
+}
+
 @CCCommand(HumidityControlModeCommand.SupportedReport)
 export class HumidityControlModeCCSupportedReport
 	extends HumidityControlModeCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<HumidityControlModeCCSupportedReportOptions>,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this._supportedModes = parseBitMask(
-			this.payload,
+		// TODO: Check implementation:
+		this.supportedModes = options.supportedModes;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): HumidityControlModeCCSupportedReport {
+		validatePayload(raw.payload.length >= 1);
+		const supportedModes: HumidityControlMode[] = parseBitMask(
+			raw.payload,
 			HumidityControlMode.Off,
 		);
-
-		if (!this._supportedModes.includes(HumidityControlMode.Off)) {
-			this._supportedModes.unshift(HumidityControlMode.Off);
+		if (!supportedModes.includes(HumidityControlMode.Off)) {
+			supportedModes.unshift(HumidityControlMode.Off);
 		}
+
+		return new HumidityControlModeCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			supportedModes,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -373,18 +416,15 @@ export class HumidityControlModeCCSupportedReport
 			...modeValue.meta,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,
-				this._supportedModes,
+				this.supportedModes,
 			),
 		});
 
 		return true;
 	}
 
-	private _supportedModes: HumidityControlMode[];
 	@ccValue(HumidityControlModeCCValues.supportedModes)
-	public get supportedModes(): readonly HumidityControlMode[] {
-		return this._supportedModes;
-	}
+	public supportedModes: HumidityControlMode[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {

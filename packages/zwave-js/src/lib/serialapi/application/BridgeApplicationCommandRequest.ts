@@ -72,15 +72,14 @@ export class BridgeApplicationCommandRequest extends Message
 		offset += srcNodeIdBytes;
 		// Parse the CC
 		const commandLength = this.payload[offset++];
-		this.command = CommandClass.from({
-			data: this.payload.subarray(offset, offset + commandLength),
-			nodeId: sourceNodeId,
-			origin: options.origin,
-			context: {
+		this.command = CommandClass.parse(
+			this.payload.subarray(offset, offset + commandLength),
+			{
 				sourceNodeId,
 				...options.ctx,
+				frameType: this.frameType,
 			},
-		}) as SinglecastCC<CommandClass>;
+		) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
 		// Read the correct target node id

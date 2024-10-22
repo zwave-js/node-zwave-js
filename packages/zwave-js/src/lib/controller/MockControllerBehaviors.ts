@@ -13,7 +13,6 @@ import {
 	ZWaveErrorCodes,
 	isZWaveError,
 } from "@zwave-js/core";
-import { MessageOrigin } from "@zwave-js/serial";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockController,
@@ -91,16 +90,13 @@ function createLazySendDataPayload(
 ): () => CommandClass {
 	return () => {
 		try {
-			const cmd = CommandClass.from({
-				nodeId: controller.ownNodeId,
-				data: msg.payload,
-				origin: MessageOrigin.Host,
-				context: {
-					sourceNodeId: node.id,
-					__internalIsMockNode: true,
-					...node.encodingContext,
-					...node.securityManagers,
-				},
+			const cmd = CommandClass.parse(msg.payload, {
+				sourceNodeId: controller.ownNodeId,
+				__internalIsMockNode: true,
+				...node.encodingContext,
+				...node.securityManagers,
+				// The frame type is always singlecast because the controller sends it to the node
+				frameType: "singlecast",
 			});
 			// Store the command because assertReceivedHostMessage needs it
 			// @ts-expect-error

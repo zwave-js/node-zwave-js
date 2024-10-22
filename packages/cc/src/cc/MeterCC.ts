@@ -1,6 +1,7 @@
 import {
 	type FloatParameters,
 	type MaybeUnknown,
+	type WithAddress,
 	encodeBitMask,
 	encodeFloatWithScale,
 	getFloatParameters,
@@ -31,6 +32,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
 	GetSupportedCCVersion,
@@ -58,14 +60,12 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -371,7 +371,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		const response = await this.host.sendCommand<MeterCCReport>(
@@ -401,7 +401,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -462,7 +462,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MeterCCSupportedReport
@@ -488,7 +488,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -502,7 +502,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCReset({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -898,56 +898,63 @@ export interface MeterCCReportOptions {
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MeterCCReportOptions & CCCommandOptions),
+		options: WithAddress<MeterCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			const { type, rateType, scale1, value, bytesRead } =
-				parseMeterValueAndInfo(this.payload, 0);
-			this.type = type;
-			this.rateType = rateType;
-			this.value = value;
-			let offset = bytesRead;
-			const floatSize = bytesRead - 2;
+		this.type = options.type;
+		this.scale = options.scale;
+		this.value = options.value;
+		this.previousValue = options.previousValue;
+		this.rateType = options.rateType ?? RateType.Unspecified;
+		this.deltaTime = options.deltaTime ?? UNKNOWN_STATE;
+	}
 
-			if (this.payload.length >= offset + 2) {
-				this.deltaTime = this.payload.readUInt16BE(offset);
-				offset += 2;
-				if (this.deltaTime === 0xffff) {
-					this.deltaTime = UNKNOWN_STATE;
-				}
+	public static from(raw: CCRaw, ctx: CCParsingContext): MeterCCReport {
+		const { type, rateType, scale1, value, bytesRead } =
+			parseMeterValueAndInfo(raw.payload, 0);
+		let offset = bytesRead;
+		const floatSize = bytesRead - 2;
+		let deltaTime: MaybeUnknown<number>;
+		let previousValue: MaybeNotKnown<number>;
 
-				if (
-					// Previous value is included only if delta time is not 0
-					this.deltaTime !== 0
-					&& this.payload.length >= offset + floatSize
-				) {
-					const { value: prevValue } = parseFloatWithScale(
-						// This float is split in the payload
-						Buffer.concat([
-							Buffer.from([this.payload[1]]),
-							this.payload.subarray(offset),
-						]),
-					);
-					offset += floatSize;
-					this.previousValue = prevValue;
-				}
-			} else {
-				// 0 means that no previous value is included
-				this.deltaTime = 0;
+		if (raw.payload.length >= offset + 2) {
+			deltaTime = raw.payload.readUInt16BE(offset);
+			offset += 2;
+			if (deltaTime === 0xffff) {
+				deltaTime = UNKNOWN_STATE;
 			}
-			this.scale = parseScale(scale1, this.payload, offset);
+
+			if (
+				// Previous value is included only if delta time is not 0
+				deltaTime !== 0
+				&& raw.payload.length >= offset + floatSize
+			) {
+				const { value: prevValue } = parseFloatWithScale(
+					// This float is split in the payload
+					Buffer.concat([
+						Buffer.from([raw.payload[1]]),
+						raw.payload.subarray(offset),
+					]),
+				);
+				offset += floatSize;
+				previousValue = prevValue;
+			}
 		} else {
-			this.type = options.type;
-			this.scale = options.scale;
-			this.value = options.value;
-			this.previousValue = options.previousValue;
-			this.rateType = options.rateType ?? RateType.Unspecified;
-			this.deltaTime = options.deltaTime ?? UNKNOWN_STATE;
+			// 0 means that no previous value is included
+			deltaTime = 0;
 		}
+		const scale = parseScale(scale1, raw.payload, offset);
+
+		return new MeterCCReport({
+			nodeId: ctx.sourceNodeId,
+			type,
+			rateType,
+			value,
+			deltaTime,
+			previousValue,
+			scale,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1122,24 +1129,31 @@ export interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MeterCCGetOptions & CCCommandOptions),
+		options: WithAddress<MeterCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length >= 1) {
-				this.rateType = (this.payload[0] & 0b11_000_000) >>> 6;
-				this.scale = (this.payload[0] & 0b00_111_000) >>> 3;
-				if (this.scale === 7) {
-					validatePayload(this.payload.length >= 2);
-					this.scale += this.payload[1];
-				}
+		this.rateType = options.rateType;
+		this.scale = options.scale;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): MeterCCGet {
+		let rateType: RateType | undefined;
+		let scale: number | undefined;
+
+		if (raw.payload.length >= 1) {
+			rateType = (raw.payload[0] & 0b11_000_000) >>> 6;
+			scale = (raw.payload[0] & 0b00_111_000) >>> 3;
+			if (scale === 7) {
+				validatePayload(raw.payload.length >= 2);
+				scale += raw.payload[1];
 			}
-		} else {
-			this.rateType = options.rateType;
-			this.scale = options.scale;
 		}
+
+		return new MeterCCGet({
+			nodeId: ctx.sourceNodeId,
+			rateType,
+			scale,
+		});
 	}
 
 	public rateType: RateType | undefined;
@@ -1215,49 +1229,60 @@ export interface MeterCCSupportedReportOptions {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MeterCCSupportedReportOptions & CCCommandOptions),
+		options: WithAddress<MeterCCSupportedReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.type = this.payload[0] & 0b0_00_11111;
-			this.supportsReset = !!(this.payload[0] & 0b1_00_00000);
-			const hasMoreScales = !!(this.payload[1] & 0b1_0000000);
-			if (hasMoreScales) {
-				// The bitmask is spread out
-				validatePayload(this.payload.length >= 3);
-				const extraBytes = this.payload[2];
-				validatePayload(this.payload.length >= 3 + extraBytes);
-				// The bitmask is the original payload byte plus all following bytes
-				// Since the first byte only has 7 bits, we need to reduce all following bits by 1
-				this.supportedScales = parseBitMask(
-					Buffer.concat([
-						Buffer.from([this.payload[1] & 0b0_1111111]),
-						this.payload.subarray(3, 3 + extraBytes),
-					]),
-					0,
-				).map((scale) => (scale >= 8 ? scale - 1 : scale));
-			} else {
-				// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
-				this.supportedScales = parseBitMask(
-					Buffer.from([this.payload[1]]),
-					0,
-				);
-			}
-			// This is only present in V4+
-			this.supportedRateTypes = parseBitMask(
-				Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
-				1,
-			);
+		this.type = options.type;
+		this.supportsReset = options.supportsReset;
+		this.supportedScales = options.supportedScales;
+		this.supportedRateTypes = options.supportedRateTypes;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MeterCCSupportedReport {
+		validatePayload(raw.payload.length >= 2);
+		const type = raw.payload[0] & 0b0_00_11111;
+		const supportsReset = !!(raw.payload[0] & 0b1_00_00000);
+		const hasMoreScales = !!(raw.payload[1] & 0b1_0000000);
+
+		let supportedScales: number[] | undefined;
+		if (hasMoreScales) {
+			// The bitmask is spread out
+			validatePayload(raw.payload.length >= 3);
+			const extraBytes = raw.payload[2];
+			validatePayload(raw.payload.length >= 3 + extraBytes);
+			// The bitmask is the original payload byte plus all following bytes
+			// Since the first byte only has 7 bits, we need to reduce all following bits by 1
+			supportedScales = parseBitMask(
+				Buffer.concat([
+					Buffer.from([raw.payload[1] & 0b0_1111111]),
+					raw.payload.subarray(3, 3 + extraBytes),
+				]),
+				0,
+			).map((scale) => (scale >= 8 ? scale - 1 : scale));
 		} else {
-			this.type = options.type;
-			this.supportsReset = options.supportsReset;
-			this.supportedScales = options.supportedScales;
-			this.supportedRateTypes = options.supportedRateTypes;
+			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
+			supportedScales = parseBitMask(
+				Buffer.from([raw.payload[1]]),
+				0,
+			);
 		}
+		// This is only present in V4+
+		const supportedRateTypes: RateType[] = parseBitMask(
+			Buffer.from([(raw.payload[0] & 0b0_11_00000) >>> 5]),
+			1,
+		);
+
+		return new MeterCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			type,
+			supportsReset,
+			supportedScales,
+			supportedRateTypes,
+		});
 	}
 
 	@ccValue(MeterCCValues.type)
@@ -1382,31 +1407,38 @@ export type MeterCCResetOptions = AllOrNone<{
 @useSupervision()
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MeterCCResetOptions & CCCommandOptions),
+		options: WithAddress<MeterCCResetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length > 0) {
-				const {
-					type,
-					rateType,
-					scale1,
-					value,
-					bytesRead: scale2Offset,
-				} = parseMeterValueAndInfo(this.payload, 0);
-				this.type = type;
-				this.rateType = rateType;
-				this.targetValue = value;
-				this.scale = parseScale(scale1, this.payload, scale2Offset);
-			}
-		} else {
-			this.type = options.type;
-			this.scale = options.scale;
-			this.rateType = options.rateType;
-			this.targetValue = options.targetValue;
+		this.type = options.type;
+		this.scale = options.scale;
+		this.rateType = options.rateType;
+		this.targetValue = options.targetValue;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): MeterCCReset {
+		if (raw.payload.length === 0) {
+			return new MeterCCReset({
+				nodeId: ctx.sourceNodeId,
+			});
 		}
+
+		const {
+			type,
+			rateType,
+			scale1,
+			value: targetValue,
+			bytesRead: scale2Offset,
+		} = parseMeterValueAndInfo(raw.payload, 0);
+		const scale = parseScale(scale1, raw.payload, scale2Offset);
+
+		return new MeterCCReset({
+			nodeId: ctx.sourceNodeId,
+			type,
+			rateType,
+			targetValue,
+			scale,
+		});
 	}
 
 	public type: number | undefined;

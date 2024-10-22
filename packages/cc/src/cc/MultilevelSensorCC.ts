@@ -1,4 +1,5 @@
 import {
+	type WithAddress,
 	encodeBitMask,
 	getSensor,
 	getSensorName,
@@ -31,6 +32,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
 	GetSupportedCCVersion,
@@ -38,7 +40,7 @@ import type {
 	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
-import { num2hex } from "@zwave-js/shared/safe";
+import { type AllOrNone, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -48,15 +50,13 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	type CCResponsePredicate,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -290,9 +290,9 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultilevelSensorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-			sensorType,
-			scale: scale ?? preferredScale,
+			endpointIndex: this.endpoint.index,
+			sensorType: sensorType!,
+			scale: (scale ?? preferredScale)!,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSensorCCReport
@@ -333,7 +333,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultilevelSensorCCGetSupportedSensor({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
@@ -355,7 +355,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultilevelSensorCCGetSupportedScale({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sensorType,
 		});
 		const response = await this.host.sendCommand<
@@ -380,7 +380,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultilevelSensorCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			type: sensorType,
 			scale,
 			value,
@@ -635,7 +635,7 @@ value:       ${mlsResponse.value}${
 }
 
 // @publicAPI
-export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
+export interface MultilevelSensorCCReportOptions {
 	type: number;
 	scale: number | Scale;
 	value: number;
@@ -645,28 +645,35 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCReportOptions,
+		options: WithAddress<MultilevelSensorCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.type = this.payload[0];
-			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(
-				this.payload.subarray(1),
-			);
-			this.value = value;
-			this.scale = scale;
-		} else {
-			this.type = options.type;
-			this.value = options.value;
-			this.scale = typeof options.scale === "number"
-				? options.scale
-				: options.scale.key;
-		}
+		this.type = options.type;
+		this.value = options.value;
+		this.scale = typeof options.scale === "number"
+			? options.scale
+			: options.scale.key;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSensorCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const type = raw.payload[0];
+
+		// parseFloatWithScale does its own validation
+		const { value, scale } = parseFloatWithScale(
+			raw.payload.subarray(1),
+		);
+
+		return new MultilevelSensorCCReport({
+			nodeId: ctx.sourceNodeId,
+			type,
+			value,
+			scale,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -775,14 +782,11 @@ const testResponseForMultilevelSensorGet: CCResponsePredicate<
 };
 
 // These options are supported starting in V5
-interface MultilevelSensorCCGetSpecificOptions {
+// @publicAPI
+export type MultilevelSensorCCGetOptions = AllOrNone<{
 	sensorType: number;
 	scale: number;
-}
-// @publicAPI
-export type MultilevelSensorCCGetOptions =
-	| CCCommandOptions
-	| (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
+}>;
 
 @CCCommand(MultilevelSensorCommand.Get)
 @expectedCCResponse(
@@ -791,21 +795,31 @@ export type MultilevelSensorCCGetOptions =
 )
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCGetOptions,
+		options: WithAddress<MultilevelSensorCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length >= 2) {
-				this.sensorType = this.payload[0];
-				this.scale = (this.payload[1] >> 3) & 0b11;
-			}
+		if ("sensorType" in options) {
+			this.sensorType = options.sensorType;
+			this.scale = options.scale;
+		}
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSensorCCGet {
+		if (raw.payload.length >= 2) {
+			const sensorType = raw.payload[0];
+			const scale = (raw.payload[1] >> 3) & 0b11;
+			return new MultilevelSensorCCGet({
+				nodeId: ctx.sourceNodeId,
+				sensorType,
+				scale,
+			});
 		} else {
-			if ("sensorType" in options) {
-				this.sensorType = options.sensorType;
-				this.scale = options.scale;
-			}
+			return new MultilevelSensorCCGet({
+				nodeId: ctx.sourceNodeId,
+			});
 		}
 	}
 
@@ -849,9 +863,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 }
 
 // @publicAPI
-export interface MultilevelSensorCCSupportedSensorReportOptions
-	extends CCCommandOptions
-{
+export interface MultilevelSensorCCSupportedSensorReportOptions {
 	supportedSensorTypes: readonly number[];
 }
 
@@ -860,18 +872,24 @@ export class MultilevelSensorCCSupportedSensorReport
 	extends MultilevelSensorCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCSupportedSensorReportOptions,
+		options: WithAddress<MultilevelSensorCCSupportedSensorReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.supportedSensorTypes = parseBitMask(this.payload);
-		} else {
-			this.supportedSensorTypes = options.supportedSensorTypes;
-		}
+		this.supportedSensorTypes = options.supportedSensorTypes;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSensorCCSupportedSensorReport {
+		validatePayload(raw.payload.length >= 1);
+		const supportedSensorTypes = parseBitMask(raw.payload);
+
+		return new MultilevelSensorCCSupportedSensorReport({
+			nodeId: ctx.sourceNodeId,
+			supportedSensorTypes,
+		});
 	}
 
 	// TODO: Use this during interview to precreate values
@@ -900,9 +918,7 @@ export class MultilevelSensorCCSupportedSensorReport
 export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {}
 
 // @publicAPI
-export interface MultilevelSensorCCSupportedScaleReportOptions
-	extends CCCommandOptions
-{
+export interface MultilevelSensorCCSupportedScaleReportOptions {
 	sensorType: number;
 	supportedScales: readonly number[];
 }
@@ -910,23 +926,30 @@ export interface MultilevelSensorCCSupportedScaleReportOptions
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCSupportedScaleReportOptions,
+		options: WithAddress<MultilevelSensorCCSupportedScaleReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.sensorType = this.payload[0];
-			this.supportedScales = parseBitMask(
-				Buffer.from([this.payload[1] & 0b1111]),
-				0,
-			);
-		} else {
-			this.sensorType = options.sensorType;
-			this.supportedScales = options.supportedScales;
-		}
+		this.sensorType = options.sensorType;
+		this.supportedScales = options.supportedScales;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSensorCCSupportedScaleReport {
+		validatePayload(raw.payload.length >= 2);
+		const sensorType = raw.payload[0];
+		const supportedScales = parseBitMask(
+			Buffer.from([raw.payload[1] & 0b1111]),
+			0,
+		);
+
+		return new MultilevelSensorCCSupportedScaleReport({
+			nodeId: ctx.sourceNodeId,
+			sensorType,
+			supportedScales,
+		});
 	}
 
 	public readonly sensorType: number;
@@ -966,9 +989,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 }
 
 // @publicAPI
-export interface MultilevelSensorCCGetSupportedScaleOptions
-	extends CCCommandOptions
-{
+export interface MultilevelSensorCCGetSupportedScaleOptions {
 	sensorType: number;
 }
 
@@ -976,17 +997,23 @@ export interface MultilevelSensorCCGetSupportedScaleOptions
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCGetSupportedScaleOptions,
+		options: WithAddress<MultilevelSensorCCGetSupportedScaleOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.sensorType = this.payload[0];
-		} else {
-			this.sensorType = options.sensorType;
-		}
+		this.sensorType = options.sensorType;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultilevelSensorCCGetSupportedScale {
+		validatePayload(raw.payload.length >= 1);
+		const sensorType = raw.payload[0];
+
+		return new MultilevelSensorCCGetSupportedScale({
+			nodeId: ctx.sourceNodeId,
+			sensorType,
+		});
 	}
 
 	public sensorType: number;

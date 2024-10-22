@@ -9,6 +9,7 @@ import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
 	BasicCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import test from "ava";
@@ -51,11 +52,11 @@ test("the NameReport command should be deserialized correctly", (t) => {
 			0x72,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCNameReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCNameReport;
+	t.is(cc.constructor, AssociationGroupInfoCCNameReport);
 
 	t.is(cc.groupId, 7);
 	t.is(cc.name, "foobar");
@@ -138,11 +139,11 @@ test("the Info Report command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCInfoReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCInfoReport;
+	t.is(cc.constructor, AssociationGroupInfoCCInfoReport);
 
 	t.is(cc.groups.length, 2);
 	t.is(cc.groups[0].groupId, 1);
@@ -184,11 +185,11 @@ test("the CommandListReport command should be deserialized correctly", (t) => {
 			0x05,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCCommandListReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCCommandListReport;
+	t.is(cc.constructor, AssociationGroupInfoCCCommandListReport);
 
 	t.is(cc.groupId, 7);
 	t.is(cc.commands.size, 2);
@@ -203,11 +204,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new AssociationGroupInfoCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCC;
 	t.is(cc.constructor, AssociationGroupInfoCC);
 });
 

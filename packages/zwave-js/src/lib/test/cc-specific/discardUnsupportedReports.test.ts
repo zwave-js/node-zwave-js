@@ -45,7 +45,7 @@ integrationTest(
 			});
 			cc = new MultiChannelCCCommandEncapsulation({
 				nodeId: mockController.ownNodeId,
-				endpoint: 1,
+				endpointIndex: 1,
 				destination: 0,
 				encapsulated: cc,
 			});
@@ -64,7 +64,7 @@ integrationTest(
 			});
 			cc = new MultiChannelCCCommandEncapsulation({
 				nodeId: mockController.ownNodeId,
-				endpoint: 1,
+				endpointIndex: 1,
 				destination: 0,
 				encapsulated: cc,
 			});

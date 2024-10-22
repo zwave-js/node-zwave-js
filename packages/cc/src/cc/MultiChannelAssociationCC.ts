@@ -2,6 +2,7 @@ import type {
 	EndpointId,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -24,12 +25,10 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -206,7 +205,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSupportedGroupingsGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultiChannelAssociationCCSupportedGroupingsReport
@@ -226,7 +225,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSupportedGroupingsReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupCount,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -245,7 +244,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
 		const response = await this.host.sendCommand<
@@ -270,7 +269,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -290,7 +289,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -319,7 +318,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			for (const [group, destinations] of currentDestinations) {
 				const cc = new MultiChannelAssociationCCRemove({
 					nodeId: this.endpoint.nodeId,
-					endpoint: this.endpoint.index,
+					endpointIndex: this.endpoint.index,
 					groupId: group,
 					nodeIds: destinations
 						.filter((d) => d.endpoint != undefined)
@@ -340,7 +339,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		} else {
 			const cc = new MultiChannelAssociationCCRemove({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				...options,
 			});
 			return this.host.sendCommand(cc, this.commandOptions);
@@ -623,36 +622,45 @@ export type MultiChannelAssociationCCSetOptions =
 @useSupervision()
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
+		options: WithAddress<MultiChannelAssociationCCSetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupId = this.payload[0];
-			({ nodeIds: this.nodeIds, endpoints: this.endpoints } =
-				deserializeMultiChannelAssociationDestination(
-					this.payload.subarray(1),
-				));
-		} else {
-			if (options.groupId < 1) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.groupId = options.groupId;
-			this.nodeIds = ("nodeIds" in options && options.nodeIds) || [];
-			if (this.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
-				throw new ZWaveError(
-					`All node IDs must be between 1 and ${MAX_NODES}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.endpoints = ("endpoints" in options && options.endpoints)
-				|| [];
+		if (options.groupId < 1) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.groupId = options.groupId;
+		this.nodeIds = ("nodeIds" in options && options.nodeIds) || [];
+		if (this.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
+			throw new ZWaveError(
+				`All node IDs must be between 1 and ${MAX_NODES}!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.endpoints = ("endpoints" in options && options.endpoints)
+			|| [];
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultiChannelAssociationCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const groupId = raw.payload[0];
+
+		const { nodeIds, endpoints } =
+			deserializeMultiChannelAssociationDestination(
+				raw.payload.subarray(1),
+			);
+
+		return new MultiChannelAssociationCCSet({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			nodeIds,
+			endpoints,
+		});
 	}
 
 	public groupId: number;
@@ -696,25 +704,34 @@ export interface MultiChannelAssociationCCRemoveOptions {
 @useSupervision()
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
+		options: WithAddress<MultiChannelAssociationCCRemoveOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupId = this.payload[0];
-			({ nodeIds: this.nodeIds, endpoints: this.endpoints } =
-				deserializeMultiChannelAssociationDestination(
-					this.payload.subarray(1),
-				));
-		} else {
-			// When removing associations, we allow invalid node IDs.
-			// See GH#3606 - it is possible that those exist.
-			this.groupId = options.groupId;
-			this.nodeIds = options.nodeIds;
-			this.endpoints = options.endpoints;
-		}
+		// When removing associations, we allow invalid node IDs.
+		// See GH#3606 - it is possible that those exist.
+		this.groupId = options.groupId;
+		this.nodeIds = options.nodeIds;
+		this.endpoints = options.endpoints;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultiChannelAssociationCCRemove {
+		validatePayload(raw.payload.length >= 1);
+		const groupId: number | undefined = raw.payload[0];
+
+		const { nodeIds, endpoints } =
+			deserializeMultiChannelAssociationDestination(
+				raw.payload.subarray(1),
+			);
+
+		return new MultiChannelAssociationCCRemove({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			nodeIds,
+			endpoints,
+		});
 	}
 
 	public groupId?: number;
@@ -761,28 +778,39 @@ export interface MultiChannelAssociationCCReportOptions {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (MultiChannelAssociationCCReportOptions & CCCommandOptions),
+		options: WithAddress<MultiChannelAssociationCCReportOptions>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.groupId = this.payload[0];
-			this.maxNodes = this.payload[1];
-			this.reportsToFollow = this.payload[2];
-			({ nodeIds: this.nodeIds, endpoints: this.endpoints } =
-				deserializeMultiChannelAssociationDestination(
-					this.payload.subarray(3),
-				));
-		} else {
-			this.groupId = options.groupId;
-			this.maxNodes = options.maxNodes;
-			this.nodeIds = options.nodeIds;
-			this.endpoints = options.endpoints;
-			this.reportsToFollow = options.reportsToFollow;
-		}
+		this.groupId = options.groupId;
+		this.maxNodes = options.maxNodes;
+		this.nodeIds = options.nodeIds;
+		this.endpoints = options.endpoints;
+		this.reportsToFollow = options.reportsToFollow;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultiChannelAssociationCCReport {
+		validatePayload(raw.payload.length >= 3);
+		const groupId = raw.payload[0];
+		const maxNodes = raw.payload[1];
+		const reportsToFollow = raw.payload[2];
+
+		const { nodeIds, endpoints } =
+			deserializeMultiChannelAssociationDestination(
+				raw.payload.subarray(3),
+			);
+
+		return new MultiChannelAssociationCCReport({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			maxNodes,
+			nodeIds,
+			endpoints,
+			reportsToFollow,
+		});
 	}
 
 	public readonly groupId: number;
@@ -860,7 +888,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 }
 
 // @publicAPI
-export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
+export interface MultiChannelAssociationCCGetOptions {
 	groupId: number;
 }
 
@@ -868,23 +896,29 @@ export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultiChannelAssociationCCGetOptions,
+		options: WithAddress<MultiChannelAssociationCCGetOptions>,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupId = this.payload[0];
-		} else {
-			if (options.groupId < 1) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.groupId = options.groupId;
+		if (options.groupId < 1) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.groupId = options.groupId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultiChannelAssociationCCGet {
+		validatePayload(raw.payload.length >= 1);
+		const groupId = raw.payload[0];
+
+		return new MultiChannelAssociationCCGet({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+		});
 	}
 
 	public groupId: number;
@@ -903,9 +937,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 }
 
 // @publicAPI
-export interface MultiChannelAssociationCCSupportedGroupingsReportOptions
-	extends CCCommandOptions
-{
+export interface MultiChannelAssociationCCSupportedGroupingsReportOptions {
 	groupCount: number;
 }
 
@@ -914,18 +946,26 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 	extends MultiChannelAssociationCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultiChannelAssociationCCSupportedGroupingsReportOptions,
+		options: WithAddress<
+			MultiChannelAssociationCCSupportedGroupingsReportOptions
+		>,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupCount = this.payload[0];
-		} else {
-			this.groupCount = options.groupCount;
-		}
+		this.groupCount = options.groupCount;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): MultiChannelAssociationCCSupportedGroupingsReport {
+		validatePayload(raw.payload.length >= 1);
+		const groupCount = raw.payload[0];
+
+		return new MultiChannelAssociationCCSupportedGroupingsReport({
+			nodeId: ctx.sourceNodeId,
+			groupCount,
+		});
 	}
 
 	@ccValue(MultiChannelAssociationCCValues.groupCount)

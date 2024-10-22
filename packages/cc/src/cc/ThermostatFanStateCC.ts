@@ -5,10 +5,11 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	ValueMetadata,
+	type WithAddress,
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { GetValueDB } from "@zwave-js/host/safe";
+import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -17,8 +18,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -81,7 +82,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 
 		const cc = new ThermostatFanStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatFanStateCCReport
@@ -149,15 +150,33 @@ export class ThermostatFanStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ThermostatFanStateCCReportOptions {
+	state: ThermostatFanState;
+}
+
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ThermostatFanStateCCReportOptions>,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length == 1);
-		this.state = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ThermostatFanStateCCReport {
+		validatePayload(raw.payload.length == 1);
+		const state: ThermostatFanState = raw.payload[0] & 0b1111;
+
+		return new ThermostatFanStateCCReport({
+			nodeId: ctx.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(ThermostatFanStateCCValues.fanState)

@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, WithAddress } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -7,7 +7,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { GetValueDB } from "@zwave-js/host/safe";
+import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -17,8 +17,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -87,7 +87,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 
 		const cc = new ThermostatOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatOperatingStateCCReport
@@ -158,17 +158,35 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ThermostatOperatingStateCCReportOptions {
+	state: ThermostatOperatingState;
+}
+
 @CCCommand(ThermostatOperatingStateCommand.Report)
 export class ThermostatOperatingStateCCReport
 	extends ThermostatOperatingStateCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ThermostatOperatingStateCCReportOptions>,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.state = this.payload[0];
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ThermostatOperatingStateCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const state: ThermostatOperatingState = raw.payload[0];
+
+		return new ThermostatOperatingStateCCReport({
+			nodeId: ctx.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(ThermostatOperatingStateCCValues.operatingState)

@@ -4,10 +4,11 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
+	type WithAddress,
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { GetValueDB } from "@zwave-js/host/safe";
+import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -16,8 +17,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -89,7 +90,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 
 		const cc = new HumidityControlOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlOperatingStateCCReport
@@ -160,17 +161,35 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface HumidityControlOperatingStateCCReportOptions {
+	state: HumidityControlOperatingState;
+}
+
 @CCCommand(HumidityControlOperatingStateCommand.Report)
 export class HumidityControlOperatingStateCCReport
 	extends HumidityControlOperatingStateCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<HumidityControlOperatingStateCCReportOptions>,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.state = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): HumidityControlOperatingStateCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const state: HumidityControlOperatingState = raw.payload[0] & 0b1111;
+
+		return new HumidityControlOperatingStateCCReport({
+			nodeId: ctx.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(HumidityControlOperatingStateCCValues.state)

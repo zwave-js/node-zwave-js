@@ -686,7 +686,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			},
 		};
 		this.messageEncodingContext = {
-			...this.messageParsingContext,
+			getHighestSecurityClass: (nodeId) =>
+				this.getHighestSecurityClass(nodeId),
+			hasSecurityClass: (nodeId, securityClass) =>
+				this.hasSecurityClass(nodeId, securityClass),
+			setSecurityClass: (nodeId, securityClass, granted) =>
+				this.setSecurityClass(nodeId, securityClass, granted),
+			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
+			// These are evaluated lazily, so we cannot spread messageParsingContext unfortunately
+			get securityManager() {
+				return self.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagerLR;
+			},
 			getSupportedCCVersion: (cc, nodeId, endpointIndex) =>
 				this.getSupportedCCVersion(cc, nodeId, endpointIndex),
 		};
