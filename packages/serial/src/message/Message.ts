@@ -120,87 +120,154 @@ export interface MessageEncodingContext
 	): void;
 }
 
+/** Returns the number of bytes the first message in the buffer occupies */
+function getMessageLength(data: Buffer): number {
+	const remainingLength = data[1];
+	return remainingLength + 2;
+}
+
+export class MessageRaw {
+	public constructor(
+		public readonly type: MessageType,
+		public readonly functionType: FunctionType,
+		public readonly payload: Buffer,
+	) {}
+
+	public static parse(data: Buffer): MessageRaw {
+		// SOF, length, type, commandId and checksum must be present
+		if (!data.length || data.length < 5) {
+			throw new ZWaveError(
+				"Could not deserialize the message because it was truncated",
+				ZWaveErrorCodes.PacketFormat_Truncated,
+			);
+		}
+		// the packet has to start with SOF
+		if (data[0] !== MessageHeaders.SOF) {
+			throw new ZWaveError(
+				"Could not deserialize the message because it does not start with SOF",
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
+		}
+		// check the length again, this time with the transmitted length
+		const messageLength = getMessageLength(data);
+		if (data.length < messageLength) {
+			throw new ZWaveError(
+				"Could not deserialize the message because it was truncated",
+				ZWaveErrorCodes.PacketFormat_Truncated,
+			);
+		}
+		// check the checksum
+		const expectedChecksum = computeChecksum(
+			data.subarray(0, messageLength),
+		);
+		if (data[messageLength - 1] !== expectedChecksum) {
+			throw new ZWaveError(
+				"Could not deserialize the message because the checksum didn't match",
+				ZWaveErrorCodes.PacketFormat_Checksum,
+			);
+		}
+
+		const type: MessageType = data[2];
+		const functionType: FunctionType = data[3];
+		const payloadLength = messageLength - 5;
+		const payload = data.subarray(4, 4 + payloadLength);
+
+		return new MessageRaw(type, functionType, payload);
+	}
+
+	public withPayload(payload: Buffer): MessageRaw {
+		return new MessageRaw(this.type, this.functionType, payload);
+	}
+
+	// FIXME: Use this?
+	public serialize(): Buffer {
+		const ret = Buffer.allocUnsafe(this.payload.length + 5);
+		ret[0] = MessageHeaders.SOF;
+		// length of the following data, including the checksum
+		ret[1] = this.payload.length + 3;
+		// write the remaining data
+		ret[2] = this.type;
+		ret[3] = this.functionType;
+		this.payload.copy(ret, 4);
+		// followed by the checksum
+		ret[ret.length - 1] = computeChecksum(ret);
+		return ret;
+	}
+}
+
 /**
  * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
 	public constructor(
-		public readonly options: MessageOptions = {},
+		options: MessageCreationOptions,
 	) {
-		// decide which implementation we follow
-		if (gotDeserializationOptions(options)) {
-			// #1: deserialize from payload
-			const payload = options.data;
-
-			// SOF, length, type, commandId and checksum must be present
-			if (!payload.length || payload.length < 5) {
-				throw new ZWaveError(
-					"Could not deserialize the message because it was truncated",
-					ZWaveErrorCodes.PacketFormat_Truncated,
-				);
-			}
-			// the packet has to start with SOF
-			if (payload[0] !== MessageHeaders.SOF) {
-				throw new ZWaveError(
-					"Could not deserialize the message because it does not start with SOF",
-					ZWaveErrorCodes.PacketFormat_Invalid,
-				);
-			}
-			// check the length again, this time with the transmitted length
-			const messageLength = Message.getMessageLength(payload);
-			if (payload.length < messageLength) {
-				throw new ZWaveError(
-					"Could not deserialize the message because it was truncated",
-					ZWaveErrorCodes.PacketFormat_Truncated,
-				);
-			}
-			// check the checksum
-			const expectedChecksum = computeChecksum(
-				payload.subarray(0, messageLength),
-			);
-			if (payload[messageLength - 1] !== expectedChecksum) {
-				throw new ZWaveError(
-					"Could not deserialize the message because the checksum didn't match",
-					ZWaveErrorCodes.PacketFormat_Checksum,
-				);
-			}
-
-			this.type = payload[2];
-			this.functionType = payload[3];
-			const payloadLength = messageLength - 5;
-			this.payload = payload.subarray(4, 4 + payloadLength);
-		} else {
-			// Try to determine the message type
-			if (options.type == undefined) options.type = getMessageType(this);
-			if (options.type == undefined) {
-				throw new ZWaveError(
-					"A message must have a given or predefined message type",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.type = options.type;
-
-			if (options.functionType == undefined) {
-				options.functionType = getFunctionType(this);
-			}
-			if (options.functionType == undefined) {
-				throw new ZWaveError(
-					"A message must have a given or predefined function type",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.functionType = options.functionType;
-
+		const {
+			// Try to determine the message type if none is given
+			type = getMessageType(this),
+			// Try to determine the function type if none is given
+			functionType = getFunctionType(this),
 			// Fall back to decorated response/callback types if none is given
-			this.expectedResponse = options.expectedResponse
-				?? getExpectedResponse(this);
-			this.expectedCallback = options.expectedCallback
-				?? getExpectedCallback(this);
+			expectedResponse = getExpectedResponse(this),
+			expectedCallback = getExpectedCallback(this),
+			payload = Buffer.allocUnsafe(0),
+			callbackId,
+		} = options;
 
-			this.callbackId = options.callbackId;
-
-			this.payload = options.payload || Buffer.allocUnsafe(0);
+		if (type == undefined) {
+			throw new ZWaveError(
+				"A message must have a given or predefined message type",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		if (functionType == undefined) {
+			throw new ZWaveError(
+				"A message must have a given or predefined function type",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		this.type = type;
+		this.functionType = functionType;
+		this.expectedResponse = expectedResponse;
+		this.expectedCallback = expectedCallback;
+		this.callbackId = callbackId;
+		this.payload = payload;
+	}
+
+	public static parse(
+		data: Buffer,
+		ctx: MessageParsingContext,
+		contextStore?: Map<FunctionType, Record<string, unknown>>,
+	): Message {
+		const raw = MessageRaw.parse(data);
+
+		const Constructor = getMessageConstructor(raw.type, raw.functionType)
+			?? Message;
+
+		// Take the context out of the context store if it exists
+		// FIXME: Is there a better way to do this?
+		if (contextStore) {
+			const functionType = getFunctionTypeStatic(Constructor)!;
+			if (contextStore.has(functionType)) {
+				options.context = contextStore.get(functionType)!;
+				contextStore.delete(functionType);
+			}
+		}
+
+		return Constructor.from(raw, ctx);
+	}
+
+	/** Creates an instance of the message that is serialized in the given buffer */
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): Message {
+		return new this({
+			type: raw.type,
+			functionType: raw.functionType,
+			payload: raw.payload,
+		});
 	}
 
 	public type: MessageType;
@@ -271,57 +338,16 @@ export class Message {
 		return ret;
 	}
 
-	/** Returns the number of bytes the first message in the buffer occupies */
-	public static getMessageLength(data: Buffer): number {
-		const remainingLength = data[1];
-		return remainingLength + 2;
-	}
-
 	/**
 	 * Checks if there's enough data in the buffer to deserialize
 	 */
 	public static isComplete(data?: Buffer): boolean {
 		if (!data || !data.length || data.length < 5) return false; // not yet
 
-		const messageLength = Message.getMessageLength(data);
+		const messageLength = getMessageLength(data);
 		if (data.length < messageLength) return false; // not yet
 
 		return true; // probably, but the checksum may be wrong
-	}
-
-	/**
-	 * Retrieves the correct constructor for the next message in the given Buffer.
-	 * It is assumed that the buffer has been checked beforehand
-	 */
-	public static getConstructor(data: Buffer): MessageConstructor<Message> {
-		return getMessageConstructor(data[2], data[3]) || Message;
-	}
-
-	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(
-		options: MessageDeserializationOptions,
-		contextStore?: Map<FunctionType, Record<string, unknown>>,
-	): Message {
-		const Constructor = Message.getConstructor(options.data);
-
-		// Take the context out of the context store if it exists
-		if (contextStore) {
-			const functionType = getFunctionTypeStatic(Constructor)!;
-			if (contextStore.has(functionType)) {
-				options.context = contextStore.get(functionType)!;
-				contextStore.delete(functionType);
-			}
-		}
-
-		const ret = new Constructor(options);
-		return ret;
-	}
-
-	/** Returns the slice of data which represents the message payload */
-	public static extractPayload(data: Buffer): Buffer {
-		const messageLength = Message.getMessageLength(data);
-		const payloadLength = messageLength - 5;
-		return data.subarray(4, 4 + payloadLength);
 	}
 
 	/** Generates a representation of this Message for the log */

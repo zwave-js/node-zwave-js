@@ -15,18 +15,18 @@ import {
 import type { CCEncodingContext } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -51,9 +51,9 @@ export class SendDataBridgeRequestBase extends Message {
 	}
 }
 
-interface SendDataBridgeRequestOptions<
+export interface SendDataBridgeRequestOptions<
 	CCType extends CommandClass = CommandClass,
-> extends MessageBaseOptions {
+> {
 	command: CCType;
 	sourceNodeId: number;
 	transmitOptions?: TransmitOptions;
@@ -67,7 +67,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		options: SendDataBridgeRequestOptions<CCType>,
+		options: SendDataBridgeRequestOptions<CCType> & MessageBaseOptions,
 	) {
 		super(options);
 
@@ -177,11 +177,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 }
 
-interface SendDataBridgeRequestTransmitReportOptions
-	extends MessageBaseOptions
-{
+export interface SendDataBridgeRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
+	txReport?: TXReport;
 }
 
 export class SendDataBridgeRequestTransmitReport
@@ -190,23 +188,34 @@ export class SendDataBridgeRequestTransmitReport
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| SendDataBridgeRequestTransmitReportOptions,
+			& SendDataBridgeRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this.transmitStatus = this.payload[1];
-			// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
-			this.txReport = parseTXReport(
-				this.transmitStatus !== TransmitStatus.NoAck,
-				this.payload.subarray(2),
-			);
-		} else {
-			this.callbackId = options.callbackId;
-			this.transmitStatus = options.transmitStatus;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+		this.txReport = options.txReport;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataBridgeRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
+		const txReport = parseTXReport(
+			transmitStatus !== TransmitStatus.NoAck,
+			raw.payload.subarray(2),
+		);
+
+		return new SendDataBridgeRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+			txReport,
+		});
 	}
 
 	public readonly transmitStatus: TransmitStatus;
@@ -234,25 +243,39 @@ export class SendDataBridgeRequestTransmitReport
 	}
 }
 
+export interface SendDataBridgeResponseOptions {
+	wasSent: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendDataBridge)
 export class SendDataBridgeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SendDataBridgeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._wasSent = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataBridgeResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new SendDataBridgeResponse({
+			wasSent,
+		});
 	}
 
 	isOK(): boolean {
-		return this._wasSent;
+		return this.wasSent;
 	}
 
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
-		return this._wasSent;
-	}
+	public wasSent: boolean;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
@@ -277,9 +300,9 @@ export class SendDataMulticastBridgeRequestBase extends Message {
 	}
 }
 
-interface SendDataMulticastBridgeRequestOptions<CCType extends CommandClass>
-	extends MessageBaseOptions
-{
+export interface SendDataMulticastBridgeRequestOptions<
+	CCType extends CommandClass,
+> {
 	command: CCType;
 	sourceNodeId: number;
 	transmitOptions?: TransmitOptions;
@@ -292,7 +315,9 @@ export class SendDataMulticastBridgeRequest<
 	CCType extends CommandClass = CommandClass,
 > extends SendDataMulticastBridgeRequestBase implements ICommandClassContainer {
 	public constructor(
-		options: SendDataMulticastBridgeRequestOptions<CCType>,
+		options:
+			& SendDataMulticastBridgeRequestOptions<CCType>
+			& MessageBaseOptions,
 	) {
 		super(options);
 
@@ -398,11 +423,8 @@ export class SendDataMulticastBridgeRequest<
 	}
 }
 
-interface SendDataMulticastBridgeRequestTransmitReportOptions
-	extends MessageBaseOptions
-{
+export interface SendDataMulticastBridgeRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
 }
 
 export class SendDataMulticastBridgeRequestTransmitReport
@@ -411,27 +433,32 @@ export class SendDataMulticastBridgeRequestTransmitReport
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| SendDataMulticastBridgeRequestTransmitReportOptions,
+			& SendDataMulticastBridgeRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-		} else {
-			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastBridgeRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new SendDataMulticastBridgeRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
+
+	public transmitStatus: TransmitStatus;
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -448,25 +475,39 @@ export class SendDataMulticastBridgeRequestTransmitReport
 	}
 }
 
+export interface SendDataMulticastBridgeResponseOptions {
+	wasSent: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticastBridge)
 export class SendDataMulticastBridgeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SendDataMulticastBridgeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._wasSent = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastBridgeResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new SendDataMulticastBridgeResponse({
+			wasSent,
+		});
 	}
 
 	public isOK(): boolean {
-		return this._wasSent;
+		return this.wasSent;
 	}
 
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
-		return this._wasSent;
-	}
+	public wasSent: boolean;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {

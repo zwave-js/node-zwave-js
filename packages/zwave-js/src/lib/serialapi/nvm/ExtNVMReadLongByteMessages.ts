@@ -8,17 +8,17 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 
-export interface ExtNVMReadLongByteRequestOptions extends MessageBaseOptions {
+export interface ExtNVMReadLongByteRequestOptions {
 	offset: number;
 }
 
@@ -27,25 +27,28 @@ export interface ExtNVMReadLongByteRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ExtNVMReadLongByte)
 export class ExtNVMReadLongByteRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ExtNVMReadLongByteRequestOptions,
+		options: ExtNVMReadLongByteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
+		if (options.offset < 0 || options.offset > 0xffffff) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				"The offset must be a 24-bit number!",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.offset < 0 || options.offset > 0xffffff) {
-				throw new ZWaveError(
-					"The offset must be a 24-bit number!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.offset = options.offset;
 		}
+		this.offset = options.offset;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ExtNVMReadLongByteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ExtNVMReadLongByteRequest({});
 	}
 
 	public offset: number;
@@ -64,13 +67,30 @@ export class ExtNVMReadLongByteRequest extends Message {
 	}
 }
 
+export interface ExtNVMReadLongByteResponseOptions {
+	byte: number;
+}
+
 @messageTypes(MessageType.Response, FunctionType.ExtNVMReadLongByte)
 export class ExtNVMReadLongByteResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: ExtNVMReadLongByteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.byte = this.payload[0];
+
+		// TODO: Check implementation:
+		this.byte = options.byte;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ExtNVMReadLongByteResponse {
+		const byte = raw.payload[0];
+
+		return new ExtNVMReadLongByteResponse({
+			byte,
+		});
 	}
 
 	public readonly byte: number;

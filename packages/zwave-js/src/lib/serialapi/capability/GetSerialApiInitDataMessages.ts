@@ -16,11 +16,11 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -31,78 +31,93 @@ import type { ZWaveApiVersion } from "../_Types";
 @priority(MessagePriority.Controller)
 export class GetSerialApiInitDataRequest extends Message {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GetSerialApiInitDataResponseOptions
-	extends MessageBaseOptions, SerialApiInitData
+	extends SerialApiInitData
 {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetSerialApiInitDataResponseOptions,
+		options: GetSerialApiInitDataResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			const apiVersion = this.payload[0];
-			if (apiVersion < 10) {
-				this.zwaveApiVersion = {
-					kind: "legacy",
-					version: apiVersion,
-				};
-			} else {
-				// this module uses the officially specified Host API
-				this.zwaveApiVersion = {
-					kind: "official",
-					version: apiVersion - 9,
-				};
-			}
+		this.zwaveApiVersion = options.zwaveApiVersion;
+		this.isPrimary = options.isPrimary;
+		this.nodeType = options.nodeType;
+		this.supportsTimers = options.supportsTimers;
+		this.isSIS = options.isSIS;
+		this.nodeIds = options.nodeIds;
+		this.zwaveChipType = options.zwaveChipType;
+	}
 
-			const capabilities = this.payload[1];
-			// The new "official" Host API specs incorrectly switched the meaning of some flags
-			// Apparently this was never intended, and the firmware correctly uses the "old" encoding.
-			// https://community.silabs.com/s/question/0D58Y00009qjEghSAE/bug-in-firmware-7191-get-init-data-response-does-not-match-host-api-specification?language=en_US
-			this.nodeType = capabilities & 0b0001
-				? NodeType["End Node"]
-				: NodeType.Controller;
-			this.supportsTimers = !!(capabilities & 0b0010);
-			this.isPrimary = !(capabilities & 0b0100);
-			this.isSIS = !!(capabilities & 0b1000);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetSerialApiInitDataResponse {
+		const apiVersion = raw.payload[0];
+		let zwaveApiVersion: ZWaveApiVersion;
 
-			let offset = 2;
-			this.nodeIds = [];
-			if (this.payload.length > offset) {
-				const nodeListLength = this.payload[offset];
-				// Controller Nodes MUST set this field to 29
-				if (
-					nodeListLength === NUM_NODEMASK_BYTES
-					&& this.payload.length >= offset + 1 + nodeListLength
-				) {
-					const nodeBitMask = this.payload.subarray(
-						offset + 1,
-						offset + 1 + nodeListLength,
-					);
-					this.nodeIds = parseNodeBitMask(nodeBitMask);
-				}
-				offset += 1 + nodeListLength;
-			}
-
-			// these might not be present:
-			const chipType = this.payload[offset];
-			const chipVersion = this.payload[offset + 1];
-			if (chipType != undefined && chipVersion != undefined) {
-				this.zwaveChipType = getZWaveChipType(chipType, chipVersion);
-			}
+		if (apiVersion < 10) {
+			zwaveApiVersion = {
+				kind: "legacy",
+				version: apiVersion,
+			};
 		} else {
-			this.zwaveApiVersion = options.zwaveApiVersion;
-			this.isPrimary = options.isPrimary;
-			this.nodeType = options.nodeType;
-			this.supportsTimers = options.supportsTimers;
-			this.isSIS = options.isSIS;
-			this.nodeIds = options.nodeIds;
-			this.zwaveChipType = options.zwaveChipType;
+			// this module uses the officially specified Host API
+			zwaveApiVersion = {
+				kind: "official",
+				version: apiVersion - 9,
+			};
 		}
+
+		const capabilities = raw.payload[1];
+		// The new "official" Host API specs incorrectly switched the meaning of some flags
+		// Apparently this was never intended, and the firmware correctly uses the "old" encoding.
+		// https://community.silabs.com/s/question/0D58Y00009qjEghSAE/bug-in-firmware-7191-get-init-data-response-does-not-match-host-api-specification?language=en_US
+		const nodeType: NodeType = capabilities & 0b0001
+			? NodeType["End Node"]
+			: NodeType.Controller;
+		const supportsTimers = !!(capabilities & 0b0010);
+		const isPrimary = !(capabilities & 0b0100);
+		const isSIS = !!(capabilities & 0b1000);
+		let offset = 2;
+		let nodeIds: number[] = [];
+		if (raw.payload.length > offset) {
+			const nodeListLength = raw.payload[offset];
+			// Controller Nodes MUST set this field to 29
+			if (
+				nodeListLength === NUM_NODEMASK_BYTES
+				&& raw.payload.length >= offset + 1 + nodeListLength
+			) {
+				const nodeBitMask = raw.payload.subarray(
+					offset + 1,
+					offset + 1 + nodeListLength,
+				);
+				nodeIds = parseNodeBitMask(nodeBitMask);
+			}
+			offset += 1 + nodeListLength;
+		}
+
+		// these might not be present:
+		const chipType = raw.payload[offset];
+		const chipVersion = raw.payload[offset + 1];
+		let zwaveChipType: string | UnknownZWaveChipType | undefined;
+
+		if (chipType != undefined && chipVersion != undefined) {
+			zwaveChipType = getZWaveChipType(chipType, chipVersion);
+		}
+
+		return new GetSerialApiInitDataResponse({
+			zwaveApiVersion,
+			nodeType,
+			supportsTimers,
+			isPrimary,
+			isSIS,
+			nodeIds,
+			zwaveChipType,
+		});
 	}
 
 	public zwaveApiVersion: ZWaveApiVersion;

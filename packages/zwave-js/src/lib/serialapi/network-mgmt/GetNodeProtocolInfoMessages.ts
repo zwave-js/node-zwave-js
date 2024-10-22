@@ -16,17 +16,17 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { isObject } from "alcalzone-shared/typeguards";
 
-interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
+export interface GetNodeProtocolInfoRequestOptions {
 	requestedNodeId: number;
 }
 
@@ -35,17 +35,22 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetNodeProtocolInfoRequestOptions,
+		options: GetNodeProtocolInfoRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.requestedNodeId =
-				parseNodeID(this.payload, options.ctx.nodeIdType, 0).nodeId;
-		} else {
-			this.requestedNodeId = options.requestedNodeId;
-		}
+		this.requestedNodeId = options.requestedNodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetNodeProtocolInfoRequest {
+		const requestedNodeId =
+			parseNodeID(raw.payload, ctx.nodeIdType, 0).nodeId;
+
+		return new GetNodeProtocolInfoRequest({
+			requestedNodeId,
+		});
 	}
 
 	// This must not be called nodeId or the message will be treated as a node query
@@ -58,66 +63,83 @@ export class GetNodeProtocolInfoRequest extends Message {
 	}
 }
 
-interface GetNodeProtocolInfoResponseOptions
-	extends MessageBaseOptions, NodeProtocolInfoAndDeviceClass
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface GetNodeProtocolInfoResponseOptions
+	extends NodeProtocolInfoAndDeviceClass
 {}
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetNodeProtocolInfoResponseOptions,
+		options: GetNodeProtocolInfoResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// The context should contain the node ID the protocol info was requested for.
-			// We use it here to determine whether the node is long range.
-			let isLongRange = false;
-			if (
-				isObject(options.context)
-				&& "nodeId" in options.context
-				&& typeof options.context.nodeId === "number"
-			) {
-				isLongRange = isLongRangeNodeId(options.context.nodeId);
-			}
+		this.isListening = options.isListening;
+		this.isFrequentListening = options.isFrequentListening;
+		this.isRouting = options.isRouting;
+		this.supportedDataRates = options.supportedDataRates;
+		this.protocolVersion = options.protocolVersion;
+		this.optionalFunctionality = options.optionalFunctionality;
+		this.nodeType = options.nodeType;
+		this.supportsSecurity = options.supportsSecurity;
+		this.supportsBeaming = options.supportsBeaming;
+		this.basicDeviceClass = options.basicDeviceClass;
+		this.genericDeviceClass = options.genericDeviceClass;
+		this.specificDeviceClass = options.specificDeviceClass;
+	}
 
-			const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
-				this.payload,
-				0,
-				isLongRange,
-			);
-			this.isListening = rest.isListening;
-			this.isFrequentListening = rest.isFrequentListening;
-			this.isRouting = rest.isRouting;
-			this.supportedDataRates = rest.supportedDataRates;
-			this.protocolVersion = rest.protocolVersion;
-			this.optionalFunctionality = rest.optionalFunctionality;
-			this.nodeType = rest.nodeType;
-			this.supportsSecurity = rest.supportsSecurity;
-			this.supportsBeaming = rest.supportsBeaming;
-
-			// parse the device class
-			this.basicDeviceClass = this.payload[3];
-			this.genericDeviceClass = this.payload[4];
-			this.specificDeviceClass = hasSpecificDeviceClass
-				? this.payload[5]
-				: 0x00;
-		} else {
-			this.isListening = options.isListening;
-			this.isFrequentListening = options.isFrequentListening;
-			this.isRouting = options.isRouting;
-			this.supportedDataRates = options.supportedDataRates;
-			this.protocolVersion = options.protocolVersion;
-			this.optionalFunctionality = options.optionalFunctionality;
-			this.nodeType = options.nodeType;
-			this.supportsSecurity = options.supportsSecurity;
-			this.supportsBeaming = options.supportsBeaming;
-			this.basicDeviceClass = options.basicDeviceClass;
-			this.genericDeviceClass = options.genericDeviceClass;
-			this.specificDeviceClass = options.specificDeviceClass;
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetNodeProtocolInfoResponse {
+		// The context should contain the node ID the protocol info was requested for.
+		// We use it here to determine whether the node is long range.
+		let isLongRange = false;
+		if (
+			isObject(options.context)
+			&& "nodeId" in options.context
+			&& typeof options.context.nodeId === "number"
+		) {
+			isLongRange = isLongRangeNodeId(options.context.nodeId);
 		}
+
+		const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
+			raw.payload,
+			0,
+			isLongRange,
+		);
+		const isListening: boolean = rest.isListening;
+		const isFrequentListening: FLiRS = rest.isFrequentListening;
+		const isRouting: boolean = rest.isRouting;
+		const supportedDataRates: DataRate[] = rest.supportedDataRates;
+		const protocolVersion: ProtocolVersion = rest.protocolVersion;
+		const optionalFunctionality: boolean = rest.optionalFunctionality;
+		const nodeType: NodeType = rest.nodeType;
+		const supportsSecurity: boolean = rest.supportsSecurity;
+		const supportsBeaming: boolean = rest.supportsBeaming;
+
+		// parse the device class
+		const basicDeviceClass: BasicDeviceClass = raw.payload[3];
+		const genericDeviceClass = raw.payload[4];
+		const specificDeviceClass = hasSpecificDeviceClass
+			? raw.payload[5]
+			: 0x00;
+
+		return new GetNodeProtocolInfoResponse({
+			isListening,
+			isFrequentListening,
+			isRouting,
+			supportedDataRates,
+			protocolVersion,
+			optionalFunctionality,
+			nodeType,
+			supportsSecurity,
+			supportsBeaming,
+			basicDeviceClass,
+			genericDeviceClass,
+			specificDeviceClass,
+		});
 	}
 
 	/** Whether this node is always listening or not */

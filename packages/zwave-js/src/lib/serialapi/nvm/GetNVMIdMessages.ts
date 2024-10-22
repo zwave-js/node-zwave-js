@@ -2,7 +2,9 @@ import { type MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
-	type MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -70,15 +72,38 @@ export type NVMId = Pick<
 @priority(MessagePriority.Controller)
 export class GetNVMIdRequest extends Message {}
 
+export interface GetNVMIdResponseOptions {
+	nvmManufacturerId: number;
+	memoryType: NVMType;
+	memorySize: NVMSize;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetNVMId)
 export class GetNVMIdResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetNVMIdResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.nvmManufacturerId = this.payload[1];
-		this.memoryType = this.payload[2];
-		this.memorySize = this.payload[3];
+
+		// TODO: Check implementation:
+		this.nvmManufacturerId = options.nvmManufacturerId;
+		this.memoryType = options.memoryType;
+		this.memorySize = options.memorySize;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetNVMIdResponse {
+		const nvmManufacturerId = raw.payload[1];
+		const memoryType: NVMType = raw.payload[2];
+		const memorySize: NVMSize = raw.payload[3];
+
+		return new GetNVMIdResponse({
+			nvmManufacturerId,
+			memoryType,
+			memorySize,
+		});
 	}
 
 	public readonly nvmManufacturerId: number;

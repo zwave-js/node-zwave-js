@@ -3,13 +3,13 @@ import { MessagePriority } from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedCallback,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -55,10 +55,23 @@ export class HardResetRequest extends HardResetRequestBase {
 
 export class HardResetCallback extends HardResetRequestBase {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: MessageBaseOptions,
 	) {
 		super(options);
-		this.callbackId = this.payload[0];
+
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): HardResetCallback {
+		const callbackId = raw.payload[0];
+
+		return new HardResetCallback({
+			callbackId,
+		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

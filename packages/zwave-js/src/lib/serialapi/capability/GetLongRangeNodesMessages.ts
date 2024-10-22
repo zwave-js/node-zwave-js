@@ -9,16 +9,20 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
+function getFirstNodeId(segmentNumber: number): number {
+	return 256 + NUM_LR_NODES_PER_SEGMENT * segmentNumber;
+}
+
+export interface GetLongRangeNodesRequestOptions {
 	segmentNumber: number;
 }
 
@@ -27,17 +31,22 @@ export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetLongRangeNodesRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetLongRangeNodesRequestOptions,
+		options: GetLongRangeNodesRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.segmentNumber = this.payload[0];
-		} else {
-			this.segmentNumber = options.segmentNumber;
-		}
+		this.segmentNumber = options.segmentNumber;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetLongRangeNodesRequest {
+		const segmentNumber = raw.payload[0];
+
+		return new GetLongRangeNodesRequest({
+			segmentNumber,
+		});
 	}
 
 	public segmentNumber: number;
@@ -48,7 +57,7 @@ export class GetLongRangeNodesRequest extends Message {
 	}
 }
 
-export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
+export interface GetLongRangeNodesResponseOptions {
 	moreNodes: boolean;
 	segmentNumber: number;
 	nodeIds: number[];
@@ -57,36 +66,44 @@ export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetLongRangeNodes)
 export class GetLongRangeNodesResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetLongRangeNodesResponseOptions,
+		options: GetLongRangeNodesResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.moreNodes = this.payload[0] != 0;
-			this.segmentNumber = this.payload[1];
-			const listLength = this.payload[2];
+		this.moreNodes = options.moreNodes;
+		this.segmentNumber = options.segmentNumber;
+		this.nodeIds = options.nodeIds;
+	}
 
-			const listStart = 3;
-			const listEnd = listStart + listLength;
-			if (listEnd <= this.payload.length) {
-				const nodeBitMask = this.payload.subarray(
-					listStart,
-					listEnd,
-				);
-				this.nodeIds = parseLongRangeNodeBitMask(
-					nodeBitMask,
-					this.listStartNode(),
-				);
-			} else {
-				this.nodeIds = [];
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetLongRangeNodesResponse {
+		const moreNodes: boolean = raw.payload[0] != 0;
+		const segmentNumber = raw.payload[1];
+		const listLength = raw.payload[2];
+
+		const listStart = 3;
+		const listEnd = listStart + listLength;
+		let nodeIds: number[];
+		if (listEnd <= raw.payload.length) {
+			const nodeBitMask = raw.payload.subarray(
+				listStart,
+				listEnd,
+			);
+			nodeIds = parseLongRangeNodeBitMask(
+				nodeBitMask,
+				getFirstNodeId(segmentNumber),
+			);
 		} else {
-			this.moreNodes = options.moreNodes;
-			this.segmentNumber = options.segmentNumber;
-			this.nodeIds = options.nodeIds;
+			nodeIds = [];
 		}
+
+		return new GetLongRangeNodesResponse({
+			moreNodes,
+			segmentNumber,
+			nodeIds,
+		});
 	}
 
 	public moreNodes: boolean;
@@ -104,14 +121,10 @@ export class GetLongRangeNodesResponse extends Message {
 
 		const nodeBitMask = encodeLongRangeNodeBitMask(
 			this.nodeIds,
-			this.listStartNode(),
+			getFirstNodeId(this.segmentNumber),
 		);
 		nodeBitMask.copy(this.payload, 3);
 
 		return super.serialize(ctx);
-	}
-
-	private listStartNode(): number {
-		return 256 + NUM_LR_NODES_PER_SEGMENT * this.segmentNumber;
 	}
 }

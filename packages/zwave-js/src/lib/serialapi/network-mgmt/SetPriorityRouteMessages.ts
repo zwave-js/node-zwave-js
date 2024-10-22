@@ -14,12 +14,12 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -39,39 +39,42 @@ export type SetPriorityRouteRequestOptions =
 @expectedResponse(FunctionType.SetPriorityRoute)
 export class SetPriorityRouteRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| (MessageBaseOptions & SetPriorityRouteRequestOptions),
+		options: SetPriorityRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			if (options.repeaters) {
-				if (
-					options.repeaters.length > MAX_REPEATERS
-					|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
-				) {
-					throw new ZWaveError(
-						`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				if (options.routeSpeed == undefined) {
-					throw new ZWaveError(
-						`When setting a priority route, repeaters and route speed must be set together`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				this.repeaters = options.repeaters;
-				this.routeSpeed = options.routeSpeed;
+		if (options.repeaters) {
+			if (
+				options.repeaters.length > MAX_REPEATERS
+				|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+			) {
+				throw new ZWaveError(
+					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
 			}
-
-			this.destinationNodeId = options.destinationNodeId;
+			if (options.routeSpeed == undefined) {
+				throw new ZWaveError(
+					`When setting a priority route, repeaters and route speed must be set together`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.repeaters = options.repeaters;
+			this.routeSpeed = options.routeSpeed;
 		}
+
+		this.destinationNodeId = options.destinationNodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetPriorityRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SetPriorityRouteRequest({});
 	}
 
 	public destinationNodeId: number;
@@ -126,22 +129,38 @@ export class SetPriorityRouteRequest extends Message {
 	}
 }
 
+export interface SetPriorityRouteResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetPriorityRoute)
 export class SetPriorityRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetPriorityRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetPriorityRouteResponse {
 		// Byte(s) 0/1 are the node ID - this is missing from the Host API specs
 		const { /* nodeId, */ bytesRead } = parseNodeID(
-			this.payload,
-			options.ctx.nodeIdType,
+			raw.payload,
+			ctx.nodeIdType,
 			0,
 		);
+		const success = raw.payload[bytesRead] !== 0;
 
-		this.success = this.payload[bytesRead] !== 0;
+		return new SetPriorityRouteResponse({
+			success,
+		});
 	}
 
 	isOK(): boolean {

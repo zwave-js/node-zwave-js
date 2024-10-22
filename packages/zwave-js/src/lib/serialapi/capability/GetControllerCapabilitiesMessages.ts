@@ -3,11 +3,11 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -17,9 +17,7 @@ import {
 @priority(MessagePriority.Controller)
 export class GetControllerCapabilitiesRequest extends Message {}
 
-export interface GetControllerCapabilitiesResponseOptions
-	extends MessageBaseOptions
-{
+export interface GetControllerCapabilitiesResponseOptions {
 	isSecondary: boolean;
 	isUsingHomeIdFromOtherNetwork: boolean;
 	isSISPresent: boolean;
@@ -31,41 +29,51 @@ export interface GetControllerCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetControllerCapabilitiesResponseOptions,
+		options: GetControllerCapabilitiesResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			const capabilityFlags = this.payload[0];
-			this.isSecondary = !!(
-				capabilityFlags & ControllerCapabilityFlags.Secondary
-			);
-			this.isUsingHomeIdFromOtherNetwork = !!(
-				capabilityFlags & ControllerCapabilityFlags.OnOtherNetwork
-			);
-			this.isSISPresent = !!(
-				capabilityFlags & ControllerCapabilityFlags.SISPresent
-			);
-			this.wasRealPrimary = !!(
-				capabilityFlags & ControllerCapabilityFlags.WasRealPrimary
-			);
-			this.isStaticUpdateController = !!(
-				capabilityFlags & ControllerCapabilityFlags.SUC
-			);
-			this.noNodesIncluded = !!(
-				capabilityFlags & ControllerCapabilityFlags.NoNodesIncluded
-			);
-		} else {
-			this.isSecondary = options.isSecondary;
-			this.isUsingHomeIdFromOtherNetwork =
-				options.isUsingHomeIdFromOtherNetwork;
-			this.isSISPresent = options.isSISPresent;
-			this.wasRealPrimary = options.wasRealPrimary;
-			this.isStaticUpdateController = options.isStaticUpdateController;
-			this.noNodesIncluded = options.noNodesIncluded;
-		}
+		this.isSecondary = options.isSecondary;
+		this.isUsingHomeIdFromOtherNetwork =
+			options.isUsingHomeIdFromOtherNetwork;
+		this.isSISPresent = options.isSISPresent;
+		this.wasRealPrimary = options.wasRealPrimary;
+		this.isStaticUpdateController = options.isStaticUpdateController;
+		this.noNodesIncluded = options.noNodesIncluded;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetControllerCapabilitiesResponse {
+		const capabilityFlags = raw.payload[0];
+		const isSecondary = !!(
+			capabilityFlags & ControllerCapabilityFlags.Secondary
+		);
+		const isUsingHomeIdFromOtherNetwork = !!(
+			capabilityFlags & ControllerCapabilityFlags.OnOtherNetwork
+		);
+		const isSISPresent = !!(
+			capabilityFlags & ControllerCapabilityFlags.SISPresent
+		);
+		const wasRealPrimary = !!(
+			capabilityFlags & ControllerCapabilityFlags.WasRealPrimary
+		);
+		const isStaticUpdateController = !!(
+			capabilityFlags & ControllerCapabilityFlags.SUC
+		);
+		const noNodesIncluded = !!(
+			capabilityFlags & ControllerCapabilityFlags.NoNodesIncluded
+		);
+
+		return new GetControllerCapabilitiesResponse({
+			isSecondary,
+			isUsingHomeIdFromOtherNetwork,
+			isSISPresent,
+			wasRealPrimary,
+			isStaticUpdateController,
+			noNodesIncluded,
+		});
 	}
 
 	public isSecondary: boolean;

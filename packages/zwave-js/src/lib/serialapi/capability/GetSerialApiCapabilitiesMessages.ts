@@ -3,11 +3,11 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -20,9 +20,7 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 @priority(MessagePriority.Controller)
 export class GetSerialApiCapabilitiesRequest extends Message {}
 
-export interface GetSerialApiCapabilitiesResponseOptions
-	extends MessageBaseOptions
-{
+export interface GetSerialApiCapabilitiesResponseOptions {
 	firmwareVersion: string;
 	manufacturerId: number;
 	productType: number;
@@ -33,31 +31,43 @@ export interface GetSerialApiCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetSerialApiCapabilitiesResponseOptions,
+		options: GetSerialApiCapabilitiesResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// The first 8 bytes are the api version, manufacturer id, product type and product id
-			this.firmwareVersion = `${this.payload[0]}.${this.payload[1]}`;
-			this.manufacturerId = this.payload.readUInt16BE(2);
-			this.productType = this.payload.readUInt16BE(4);
-			this.productId = this.payload.readUInt16BE(6);
-			// then a 256bit bitmask for the supported command classes follows
-			const functionBitMask = this.payload.subarray(
-				8,
-				8 + NUM_FUNCTION_BYTES,
-			);
-			this.supportedFunctionTypes = parseBitMask(functionBitMask);
-		} else {
-			this.firmwareVersion = options.firmwareVersion;
-			this.manufacturerId = options.manufacturerId;
-			this.productType = options.productType;
-			this.productId = options.productId;
-			this.supportedFunctionTypes = options.supportedFunctionTypes;
-		}
+		this.firmwareVersion = options.firmwareVersion;
+		this.manufacturerId = options.manufacturerId;
+		this.productType = options.productType;
+		this.productId = options.productId;
+		this.supportedFunctionTypes = options.supportedFunctionTypes;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetSerialApiCapabilitiesResponse {
+		// The first 8 bytes are the api version, manufacturer id, product type and product id
+		const firmwareVersion = `${raw.payload[0]}.${raw.payload[1]}`;
+		const manufacturerId = raw.payload.readUInt16BE(2);
+		const productType = raw.payload.readUInt16BE(4);
+		const productId = raw.payload.readUInt16BE(6);
+
+		// then a 256bit bitmask for the supported command classes follows
+		const functionBitMask = raw.payload.subarray(
+			8,
+			8 + NUM_FUNCTION_BYTES,
+		);
+		const supportedFunctionTypes: FunctionType[] = parseBitMask(
+			functionBitMask,
+		);
+
+		return new GetSerialApiCapabilitiesResponse({
+			firmwareVersion,
+			manufacturerId,
+			productType,
+			productId,
+			supportedFunctionTypes,
+		});
 	}
 
 	public firmwareVersion: string;

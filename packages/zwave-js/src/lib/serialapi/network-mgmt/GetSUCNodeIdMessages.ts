@@ -3,11 +3,11 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -17,26 +17,33 @@ import {
 @priority(MessagePriority.Controller)
 export class GetSUCNodeIdRequest extends Message {}
 
-export interface GetSUCNodeIdResponseOptions extends MessageBaseOptions {
+export interface GetSUCNodeIdResponseOptions {
 	sucNodeId: number;
 }
 
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions | GetSUCNodeIdResponseOptions,
+		options: GetSUCNodeIdResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.sucNodeId = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				0,
-			).nodeId;
-		} else {
-			this.sucNodeId = options.sucNodeId;
-		}
+		this.sucNodeId = options.sucNodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetSUCNodeIdResponse {
+		const sucNodeId = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			0,
+		).nodeId;
+
+		return new GetSUCNodeIdResponse({
+			sucNodeId,
+		});
 	}
 
 	/** The node id of the SUC or 0 if none is present */

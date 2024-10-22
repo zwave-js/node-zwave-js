@@ -14,10 +14,10 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -37,10 +37,13 @@ export enum ApplicationCommandStatusFlags {
 	ForeignHomeId = 0b1000_0000, // The received frame is received from a foreign HomeID. Only Controllers in Smart Start AddNode mode can receive this status.
 }
 
-interface ApplicationCommandRequestOptions extends MessageBaseOptions {
+export interface ApplicationCommandRequestOptions {
 	command: CommandClass;
 	frameType?: ApplicationCommandRequest["frameType"];
 	routedBusy?: boolean;
+	isExploreFrame?: boolean;
+	isForeignFrame?: boolean;
+	fromForeignHomeId?: boolean;
 }
 
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
@@ -50,70 +53,82 @@ export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ApplicationCommandRequestOptions,
+		options: ApplicationCommandRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// first byte is a status flag
-			const status = this.payload[0];
-			this.routedBusy = !!(
-				status & ApplicationCommandStatusFlags.RoutedBusy
+		// TODO: This logic is unsound
+		if (!options.command.isSinglecast()) {
+			throw new ZWaveError(
+				`ApplicationCommandRequest can only be used for singlecast CCs`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			switch (status & ApplicationCommandStatusFlags.TypeMask) {
-				case ApplicationCommandStatusFlags.TypeMulti:
-					this.frameType = "multicast";
-					break;
-				case ApplicationCommandStatusFlags.TypeBroad:
-					this.frameType = "broadcast";
-					break;
-				default:
-					this.frameType = "singlecast";
-			}
-			this.isExploreFrame = this.frameType === "broadcast"
-				&& !!(status & ApplicationCommandStatusFlags.Explore);
-			this.isForeignFrame = !!(
-				status & ApplicationCommandStatusFlags.ForeignFrame
-			);
-			this.fromForeignHomeId = !!(
-				status & ApplicationCommandStatusFlags.ForeignHomeId
-			);
-
-			// followed by a node ID
-			let offset = 1;
-			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				offset,
-			);
-			offset += nodeIdBytes;
-			// and a command class
-			const commandLength = this.payload[offset++];
-			this.command = CommandClass.parse(
-				this.payload.subarray(offset, offset + commandLength),
-				{
-					sourceNodeId: nodeId,
-					...options.ctx,
-					frameType: this.frameType,
-				},
-			) as SinglecastCC<CommandClass>;
-		} else {
-			// TODO: This logic is unsound
-			if (!options.command.isSinglecast()) {
-				throw new ZWaveError(
-					`ApplicationCommandRequest can only be used for singlecast CCs`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.frameType = options.frameType ?? "singlecast";
-			this.routedBusy = !!options.routedBusy;
-			this.command = options.command;
-			this.isExploreFrame = false;
-			this.isForeignFrame = false;
-			this.fromForeignHomeId = false;
 		}
+
+		this.frameType = options.frameType ?? "singlecast";
+		this.routedBusy = options.routedBusy ?? false;
+		this.command = options.command;
+		this.isExploreFrame = options.isExploreFrame ?? false;
+		this.isForeignFrame = options.isForeignFrame ?? false;
+		this.fromForeignHomeId = options.fromForeignHomeId ?? false;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationCommandRequest {
+		// first byte is a status flag
+		const status = raw.payload[0];
+		const routedBusy = !!(
+			status & ApplicationCommandStatusFlags.RoutedBusy
+		);
+		let frameType: FrameType;
+
+		switch (status & ApplicationCommandStatusFlags.TypeMask) {
+			case ApplicationCommandStatusFlags.TypeMulti:
+				frameType = "multicast";
+				break;
+			case ApplicationCommandStatusFlags.TypeBroad:
+				frameType = "broadcast";
+				break;
+			default:
+				frameType = "singlecast";
+		}
+		const isExploreFrame: boolean = frameType === "broadcast"
+			&& !!(status & ApplicationCommandStatusFlags.Explore);
+		const isForeignFrame = !!(
+			status & ApplicationCommandStatusFlags.ForeignFrame
+		);
+		const fromForeignHomeId = !!(
+			status & ApplicationCommandStatusFlags.ForeignHomeId
+		);
+
+		// followed by a node ID
+		let offset = 1;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		// and a command class
+		const commandLength = raw.payload[offset++];
+		const command: SinglecastCC<CommandClass> = CommandClass.parse(
+			raw.payload.subarray(offset, offset + commandLength),
+			{
+				sourceNodeId: nodeId,
+				...ctx,
+				frameType: frameType,
+			},
+		) as SinglecastCC<CommandClass>;
+
+		return new ApplicationCommandRequest({
+			routedBusy,
+			frameType,
+			isExploreFrame,
+			isForeignFrame,
+			fromForeignHomeId,
+			command,
+		});
 	}
 
 	public readonly routedBusy: boolean;

@@ -3,14 +3,15 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-export interface ShutdownRequestOptions extends MessageBaseOptions {
+export interface ShutdownRequestOptions {
 	someProperty: number;
 }
 
@@ -19,13 +20,30 @@ export interface ShutdownRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.Shutdown)
 export class ShutdownRequest extends Message {}
 
+export interface ShutdownResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.Shutdown)
 export class ShutdownResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: ShutdownResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.success = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ShutdownResponse {
+		const success = raw.payload[0] !== 0;
+
+		return new ShutdownResponse({
+			success,
+		});
 	}
 
 	public readonly success: boolean;

@@ -21,15 +21,15 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -66,9 +66,9 @@ export class SendDataRequestBase extends Message {
 	}
 }
 
-interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
-	extends MessageBaseOptions
-{
+export interface SendDataRequestOptions<
+	CCType extends CommandClass = CommandClass,
+> {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
@@ -210,9 +210,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 }
 
-interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
+export interface SendDataRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
 	txReport?: SerializableTXReport;
 }
 
@@ -220,28 +219,37 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| SendDataRequestTransmitReportOptions,
+		options: SendDataRequestTransmitReportOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this.transmitStatus = this.payload[1];
-			// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
-			this.txReport = parseTXReport(
-				this.transmitStatus !== TransmitStatus.NoAck,
-				this.payload.subarray(2),
-			);
-		} else {
-			this.callbackId = options.callbackId;
-			this.transmitStatus = options.transmitStatus;
-			this._txReport = options.txReport;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+		this.txReport = options.txReport;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		// TODO: Consider NOT parsing this for transmit status other than OK or NoACK
+		const txReport = parseTXReport(
+			transmitStatus !== TransmitStatus.NoAck,
+			raw.payload.subarray(2),
+		);
+
+		return new SendDataRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+			txReport,
+		});
 	}
 
 	public transmitStatus: TransmitStatus;
+	// FIXME: wat?
 	private _txReport: SerializableTXReport | undefined;
 	public txReport: TXReport | undefined;
 
@@ -283,21 +291,28 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	}
 }
 
-export interface SendDataResponseOptions extends MessageBaseOptions {
+export interface SendDataResponseOptions {
 	wasSent: boolean;
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(
-		options: MessageDeserializationOptions | SendDataResponseOptions,
+		options: SendDataResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.wasSent = this.payload[0] !== 0;
-		} else {
-			this.wasSent = options.wasSent;
-		}
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new SendDataResponse({
+			wasSent,
+		});
 	}
 
 	public wasSent: boolean;
@@ -342,9 +357,7 @@ export class SendDataMulticastRequestBase extends Message {
 	}
 }
 
-interface SendDataMulticastRequestOptions<CCType extends CommandClass>
-	extends MessageBaseOptions
-{
+export interface SendDataMulticastRequestOptions<CCType extends CommandClass> {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
@@ -495,11 +508,8 @@ export class SendDataMulticastRequest<
 	}
 }
 
-interface SendDataMulticastRequestTransmitReportOptions
-	extends MessageBaseOptions
-{
+export interface SendDataMulticastRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
 }
 
 export class SendDataMulticastRequestTransmitReport
@@ -508,34 +518,38 @@ export class SendDataMulticastRequestTransmitReport
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| SendDataMulticastRequestTransmitReportOptions,
+			& SendDataMulticastRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-			// not sure what bytes 2 and 3 mean
-		} else {
-			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new SendDataMulticastRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
+
+	public transmitStatus: TransmitStatus;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId, this._transmitStatus]);
+		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
 		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -552,7 +566,7 @@ export class SendDataMulticastRequestTransmitReport
 	}
 }
 
-export interface SendDataMulticastResponseOptions extends MessageBaseOptions {
+export interface SendDataMulticastResponseOptions {
 	wasSent: boolean;
 }
 
@@ -561,16 +575,21 @@ export class SendDataMulticastResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| SendDataMulticastResponseOptions,
+		options: SendDataMulticastResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.wasSent = this.payload[0] !== 0;
-		} else {
-			this.wasSent = options.wasSent;
-		}
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new SendDataMulticastResponse({
+			wasSent,
+		});
 	}
 
 	public wasSent: boolean;

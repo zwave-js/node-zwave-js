@@ -196,6 +196,7 @@ export class CCRaw {
 		return new CCRaw(this.ccId, this.ccCommand, payload);
 	}
 
+	// FIXME: Use this?
 	public serialize(): Buffer {
 		const ccIdLength = this.ccId >= 0xf100 ? 2 : 1;
 		const data = Buffer.allocUnsafe(ccIdLength + 1 + this.payload.length);
@@ -226,10 +227,10 @@ export class CommandClass implements CCId {
 	}
 
 	public static parse(
-		payload: Buffer,
+		data: Buffer,
 		ctx: CCParsingContext,
 	): CommandClass {
-		const raw = CCRaw.parse(payload);
+		const raw = CCRaw.parse(data);
 
 		// Find the correct subclass constructor to invoke
 		const CCConstructor = getCCConstructor(raw.ccId);

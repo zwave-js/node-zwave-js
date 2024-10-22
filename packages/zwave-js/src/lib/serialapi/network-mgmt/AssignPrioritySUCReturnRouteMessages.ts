@@ -13,14 +13,14 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
 	type MessageOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -43,9 +43,7 @@ export class AssignPrioritySUCReturnRouteRequestBase extends Message {
 	}
 }
 
-export interface AssignPrioritySUCReturnRouteRequestOptions
-	extends MessageBaseOptions
-{
+export interface AssignPrioritySUCReturnRouteRequestOptions {
 	nodeId: number;
 	repeaters: number[];
 	routeSpeed: ZWaveDataRate;
@@ -58,30 +56,35 @@ export class AssignPrioritySUCReturnRouteRequest
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| AssignPrioritySUCReturnRouteRequestOptions,
+			& AssignPrioritySUCReturnRouteRequestOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
+		if (
+			options.repeaters.length > MAX_REPEATERS
+			|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+		) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (
-				options.repeaters.length > MAX_REPEATERS
-				|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
-			) {
-				throw new ZWaveError(
-					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.nodeId = options.nodeId;
-			this.repeaters = options.repeaters;
-			this.routeSpeed = options.routeSpeed;
 		}
+
+		this.nodeId = options.nodeId;
+		this.repeaters = options.repeaters;
+		this.routeSpeed = options.routeSpeed;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPrioritySUCReturnRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new AssignPrioritySUCReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -124,15 +127,34 @@ export class AssignPrioritySUCReturnRouteRequest
 	}
 }
 
+export interface AssignPrioritySUCReturnRouteResponseOptions {
+	hasStarted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.AssignPrioritySUCReturnRoute)
 export class AssignPrioritySUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& AssignPrioritySUCReturnRouteResponseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.hasStarted = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.hasStarted = options.hasStarted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPrioritySUCReturnRouteResponse {
+		const hasStarted = raw.payload[0] !== 0;
+
+		return new AssignPrioritySUCReturnRouteResponse({
+			hasStarted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -149,17 +171,37 @@ export class AssignPrioritySUCReturnRouteResponse extends Message
 	}
 }
 
+export interface AssignPrioritySUCReturnRouteRequestTransmitReportOptions {
+	transmitStatus: TransmitStatus;
+}
+
 export class AssignPrioritySUCReturnRouteRequestTransmitReport
 	extends AssignPrioritySUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& AssignPrioritySUCReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this.transmitStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPrioritySUCReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new AssignPrioritySUCReturnRouteRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

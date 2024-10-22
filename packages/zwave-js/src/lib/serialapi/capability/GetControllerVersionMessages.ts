@@ -3,11 +3,11 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -19,9 +19,7 @@ import type { ZWaveLibraryTypes } from "../_Types";
 @priority(MessagePriority.Controller)
 export class GetControllerVersionRequest extends Message {}
 
-export interface GetControllerVersionResponseOptions
-	extends MessageBaseOptions
-{
+export interface GetControllerVersionResponseOptions {
 	controllerType: ZWaveLibraryTypes;
 	libraryVersion: string;
 }
@@ -29,20 +27,27 @@ export interface GetControllerVersionResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| GetControllerVersionResponseOptions,
+		options: GetControllerVersionResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// The payload consists of a zero-terminated string and a uint8 for the controller type
-			this.libraryVersion = cpp2js(this.payload.toString("ascii"));
-			this.controllerType = this.payload[this.libraryVersion.length + 1];
-		} else {
-			this.controllerType = options.controllerType;
-			this.libraryVersion = options.libraryVersion;
-		}
+		this.controllerType = options.controllerType;
+		this.libraryVersion = options.libraryVersion;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetControllerVersionResponse {
+		// The payload consists of a zero-terminated string and a uint8 for the controller type
+		const libraryVersion = cpp2js(raw.payload.toString("ascii"));
+		const controllerType: ZWaveLibraryTypes =
+			raw.payload[libraryVersion.length + 1];
+
+		return new GetControllerVersionResponse({
+			libraryVersion,
+			controllerType,
+		});
 	}
 
 	public controllerType: ZWaveLibraryTypes;

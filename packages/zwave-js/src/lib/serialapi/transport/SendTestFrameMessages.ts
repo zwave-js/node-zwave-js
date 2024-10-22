@@ -10,14 +10,14 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
 	type MessageOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -37,7 +37,7 @@ export class SendTestFrameRequestBase extends Message {
 	}
 }
 
-export interface SendTestFrameRequestOptions extends MessageBaseOptions {
+export interface SendTestFrameRequestOptions {
 	testNodeId: number;
 	powerlevel: Powerlevel;
 }
@@ -46,25 +46,32 @@ export interface SendTestFrameRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.SendTestFrame)
 export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public constructor(
-		options: MessageDeserializationOptions | SendTestFrameRequestOptions,
+		options: SendTestFrameRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			let offset = 0;
-			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				offset,
-			);
-			offset += nodeIdBytes;
-			this.testNodeId = nodeId;
+		this.testNodeId = options.testNodeId;
+		this.powerlevel = options.powerlevel;
+	}
 
-			this.powerlevel = this.payload[offset++];
-			this.callbackId = this.payload[offset++];
-		} else {
-			this.testNodeId = options.testNodeId;
-			this.powerlevel = options.powerlevel;
-		}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendTestFrameRequest {
+		let offset = 0;
+		const { nodeId: testNodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		const powerlevel: Powerlevel = raw.payload[offset++];
+		const callbackId = raw.payload[offset++];
+
+		return new SendTestFrameRequest({
+			testNodeId,
+			powerlevel,
+			callbackId,
+		});
 	}
 
 	public testNodeId: number;
@@ -96,13 +103,30 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	}
 }
 
+export interface SendTestFrameResponseOptions {
+	wasSent: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendTestFrame)
 export class SendTestFrameResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SendTestFrameResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.wasSent = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendTestFrameResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new SendTestFrameResponse({
+			wasSent,
+		});
 	}
 
 	public readonly wasSent: boolean;
@@ -115,16 +139,34 @@ export class SendTestFrameResponse extends Message {
 	}
 }
 
+export interface SendTestFrameTransmitReportOptions {
+	transmitStatus: TransmitStatus;
+}
+
 export class SendTestFrameTransmitReport extends SendTestFrameRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SendTestFrameTransmitReportOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this.transmitStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendTestFrameTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new SendTestFrameTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public transmitStatus: TransmitStatus;

@@ -9,18 +9,18 @@ import {
 import type {
 	INodeQuery,
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -40,7 +40,7 @@ export class DeleteReturnRouteRequestBase extends Message {
 	}
 }
 
-export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
+export interface DeleteReturnRouteRequestOptions {
 	nodeId: number;
 }
 
@@ -50,19 +50,22 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| DeleteReturnRouteRequestOptions,
+		options: DeleteReturnRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.nodeId = options.nodeId;
-		}
+		this.nodeId = options.nodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteReturnRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new DeleteReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -76,15 +79,32 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	}
 }
 
+export interface DeleteReturnRouteResponseOptions {
+	hasStarted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
 export class DeleteReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: DeleteReturnRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.hasStarted = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.hasStarted = options.hasStarted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteReturnRouteResponse {
+		const hasStarted = raw.payload[0] !== 0;
+
+		return new DeleteReturnRouteResponse({
+			hasStarted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -101,17 +121,37 @@ export class DeleteReturnRouteResponse extends Message
 	}
 }
 
+export interface DeleteReturnRouteRequestTransmitReportOptions {
+	transmitStatus: TransmitStatus;
+}
+
 export class DeleteReturnRouteRequestTransmitReport
 	extends DeleteReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& DeleteReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this.transmitStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new DeleteReturnRouteRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

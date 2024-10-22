@@ -3,7 +3,9 @@ import { MessagePriority } from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
-	type MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -15,28 +17,58 @@ import {
 @expectedResponse(FunctionType.GetProtocolVersion)
 export class GetProtocolVersionRequest extends Message {}
 
+export interface GetProtocolVersionResponseOptions {
+	protocolType: ProtocolType;
+	protocolVersion: string;
+	applicationFrameworkBuildNumber?: number;
+	gitCommitHash?: string;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetProtocolVersion)
 export class GetProtocolVersionResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetProtocolVersionResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.protocolType = this.payload[0];
-		this.protocolVersion = [
-			this.payload[1],
-			this.payload[2],
-			this.payload[3],
+
+		// TODO: Check implementation:
+		this.protocolType = options.protocolType;
+		this.protocolVersion = options.protocolVersion;
+		this.applicationFrameworkBuildNumber =
+			options.applicationFrameworkBuildNumber;
+		this.gitCommitHash = options.gitCommitHash;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetProtocolVersionResponse {
+		const protocolType: ProtocolType = raw.payload[0];
+		const protocolVersion = [
+			raw.payload[1],
+			raw.payload[2],
+			raw.payload[3],
 		].join(".");
-		if (this.payload.length >= 6) {
-			const appBuild = this.payload.readUInt16BE(4);
-			if (appBuild !== 0) this.applicationFrameworkBuildNumber = appBuild;
+		let applicationFrameworkBuildNumber: number | undefined;
+		if (raw.payload.length >= 6) {
+			const appBuild = raw.payload.readUInt16BE(4);
+			if (appBuild !== 0) applicationFrameworkBuildNumber = appBuild;
 		}
-		if (this.payload.length >= 22) {
-			const commitHash = this.payload.subarray(6, 22);
+
+		let gitCommitHash: string | undefined;
+		if (raw.payload.length >= 22) {
+			const commitHash = raw.payload.subarray(6, 22);
 			if (!commitHash.every((b) => b === 0)) {
-				this.gitCommitHash = commitHash.toString("hex");
+				gitCommitHash = commitHash.toString("hex");
 			}
 		}
+
+		return new GetProtocolVersionResponse({
+			protocolType,
+			protocolVersion,
+			applicationFrameworkBuildNumber,
+			gitCommitHash,
+		});
 	}
 
 	public readonly protocolType: ProtocolType;

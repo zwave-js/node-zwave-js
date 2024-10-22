@@ -3,15 +3,16 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
+export interface IsFailedNodeRequestOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	failedNodeId: number;
 }
@@ -20,7 +21,9 @@ export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.IsFailedNode)
 @priority(MessagePriority.Controller)
 export class IsFailedNodeRequest extends Message {
-	public constructor(options: IsFailedNodeRequestOptions) {
+	public constructor(
+		options: IsFailedNodeRequestOptions & MessageBaseOptions,
+	) {
 		super(options);
 		this.failedNodeId = options.failedNodeId;
 	}
@@ -34,13 +37,30 @@ export class IsFailedNodeRequest extends Message {
 	}
 }
 
+export interface IsFailedNodeResponseOptions {
+	result: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.IsFailedNode)
 export class IsFailedNodeResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: IsFailedNodeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.result = !!this.payload[0];
+
+		// TODO: Check implementation:
+		this.result = options.result;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): IsFailedNodeResponse {
+		const result = !!raw.payload[0];
+
+		return new IsFailedNodeResponse({
+			result,
+		});
 	}
 
 	public readonly result: boolean;

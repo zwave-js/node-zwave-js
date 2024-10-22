@@ -9,18 +9,18 @@ import {
 import type {
 	INodeQuery,
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -40,7 +40,7 @@ export class AssignReturnRouteRequestBase extends Message {
 	}
 }
 
-export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
+export interface AssignReturnRouteRequestOptions {
 	nodeId: number;
 	destinationNodeId: number;
 }
@@ -51,26 +51,29 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| AssignReturnRouteRequestOptions,
+		options: AssignReturnRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
+		if (options.nodeId === options.destinationNodeId) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`The source and destination node must not be identical`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.nodeId === options.destinationNodeId) {
-				throw new ZWaveError(
-					`The source and destination node must not be identical`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.nodeId = options.nodeId;
-			this.destinationNodeId = options.destinationNodeId;
 		}
+		this.nodeId = options.nodeId;
+		this.destinationNodeId = options.destinationNodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignReturnRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new AssignReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -94,15 +97,32 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 	}
 }
 
+export interface AssignReturnRouteResponseOptions {
+	hasStarted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.AssignReturnRoute)
 export class AssignReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: AssignReturnRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.hasStarted = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.hasStarted = options.hasStarted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignReturnRouteResponse {
+		const hasStarted = raw.payload[0] !== 0;
+
+		return new AssignReturnRouteResponse({
+			hasStarted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -119,17 +139,37 @@ export class AssignReturnRouteResponse extends Message
 	}
 }
 
+export interface AssignReturnRouteRequestTransmitReportOptions {
+	transmitStatus: TransmitStatus;
+}
+
 export class AssignReturnRouteRequestTransmitReport
 	extends AssignReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& AssignReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this.transmitStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new AssignReturnRouteRequestTransmitReport({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

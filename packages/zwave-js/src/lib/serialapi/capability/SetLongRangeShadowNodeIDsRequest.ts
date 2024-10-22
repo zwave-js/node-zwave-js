@@ -3,17 +3,15 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-export interface LongRangeShadowNodeIDsRequestOptions
-	extends MessageBaseOptions
-{
+export interface LongRangeShadowNodeIDsRequestOptions {
 	shadowNodeIds: number[];
 }
 
@@ -24,21 +22,26 @@ const NUM_LONG_RANGE_SHADOW_NODE_IDS = 4;
 @priority(MessagePriority.Controller)
 export class SetLongRangeShadowNodeIDsRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| LongRangeShadowNodeIDsRequestOptions,
+		options: LongRangeShadowNodeIDsRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.shadowNodeIds = parseBitMask(
-				this.payload.subarray(0, 1),
-				LONG_RANGE_SHADOW_NODE_IDS_START,
-				NUM_LONG_RANGE_SHADOW_NODE_IDS,
-			);
-		} else {
-			this.shadowNodeIds = options.shadowNodeIds;
-		}
+		this.shadowNodeIds = options.shadowNodeIds;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetLongRangeShadowNodeIDsRequest {
+		const shadowNodeIds = parseBitMask(
+			raw.payload.subarray(0, 1),
+			LONG_RANGE_SHADOW_NODE_IDS_START,
+			NUM_LONG_RANGE_SHADOW_NODE_IDS,
+		);
+
+		return new SetLongRangeShadowNodeIDsRequest({
+			shadowNodeIds,
+		});
 	}
 
 	public shadowNodeIds: number[];
