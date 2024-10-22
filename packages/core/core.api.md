@@ -108,7 +108,7 @@ export enum BeamingInfo {
 // Warning: (ae-missing-release-tag) "BroadcastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type BroadcastCC<T extends ICommandClass = ICommandClass> = T & {
+export type BroadcastCC<T extends CCId = CCId> = T & {
     nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
 };
 
@@ -166,6 +166,20 @@ export interface CacheMetadata extends Pick<ValueID, "endpoint" | "property" | "
 export interface CacheValue extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
     // (undocumented)
     value: SerializedValue;
+}
+
+// Warning: (ae-missing-release-tag) "CCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface CCId {
+    // (undocumented)
+    ccCommand?: number;
+    // (undocumented)
+    ccId: CommandClasses;
+    // (undocumented)
+    endpointIndex?: number;
+    // (undocumented)
+    nodeId: number | MulticastDestination;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "channelPadding" should be prefixed with an underscore because the declaration is marked as @internal
@@ -637,6 +651,14 @@ export type ControllerValueLogContext = LogContext<"controller"> & ValueLogConte
     internal?: boolean;
 };
 
+// Warning: (ae-missing-release-tag) "ControlsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ControlsCC {
+    // (undocumented)
+    controlsCC(cc: CommandClasses): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "CRC16_CCITT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -996,6 +1018,18 @@ export function encryptAES128ECB(plaintext: Buffer, key: Buffer): Buffer;
 // @public
 export const encryptAES128OFB: (input: Buffer, key: Buffer, iv: Buffer) => Buffer;
 
+// Warning: (ae-missing-release-tag) "EndpointId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface EndpointId {
+    // (undocumented)
+    readonly index: number;
+    // (undocumented)
+    readonly nodeId: number;
+    // (undocumented)
+    readonly virtual: false;
+}
+
 // Warning: (ae-missing-release-tag) "enumValuesToMetadataStates" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1108,6 +1142,14 @@ export interface GenericDeviceClassWithSpecific extends GenericDeviceClass {
 // @public
 export function getAllDeviceClasses(): readonly GenericDeviceClassWithSpecific[];
 
+// Warning: (ae-missing-release-tag) "GetAllEndpoints" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface GetAllEndpoints<T extends EndpointId | VirtualEndpointId> {
+    // (undocumented)
+    getAllEndpoints(): T[];
+}
+
 // Warning: (ae-missing-release-tag) "getAllIndicatorProperties" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1153,6 +1195,14 @@ export function getBitMaskWidth(mask: number): number;
 // @public (undocumented)
 export function getCCName(cc: number): string;
 
+// Warning: (ae-missing-release-tag) "GetCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface GetCCs {
+    // (undocumented)
+    getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
+}
+
 // Warning: (ae-missing-release-tag) "getChipTypeAndVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1175,6 +1225,18 @@ export function getDirectionPrefix(direction: DataDirection): "« " | "» " | " 
 //
 // @public
 export function getDSTInfo(now?: Date): DSTInfo;
+
+// Warning: (ae-missing-release-tag) "GetEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface GetEndpoint<T extends EndpointId | VirtualEndpointId> {
+    // (undocumented)
+    getEndpoint(index: 0): T;
+    // (undocumented)
+    getEndpoint(index: number): T | undefined;
+    // (undocumented)
+    getEndpointOrThrow(index: number): T;
+}
 
 // Warning: (ae-missing-release-tag) "getErrorSuffix" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1354,24 +1416,6 @@ export function highResTimestamp(): number;
 //
 // @public
 export const HOMEID_BYTES = 4;
-
-// Warning: (ae-missing-release-tag) "ICommandClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface ICommandClass {
-    // (undocumented)
-    ccCommand?: number;
-    // (undocumented)
-    ccId: CommandClasses;
-    // (undocumented)
-    expectsCCResponse(): boolean;
-    // (undocumented)
-    isExpectedCCResponse(received: ICommandClass): boolean;
-    // (undocumented)
-    nodeId: number | MulticastDestination;
-    // (undocumented)
-    serialize(): Buffer;
-}
 
 // Warning: (ae-missing-release-tag) "importRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1720,6 +1764,14 @@ export function isActuatorCC(cc: CommandClasses): boolean;
 // @public
 export function isApplicationCC(cc: CommandClasses): boolean;
 
+// Warning: (ae-missing-release-tag) "IsCCSecure" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface IsCCSecure {
+    // (undocumented)
+    isCCSecure(cc: CommandClasses): boolean;
+}
+
 // Warning: (ae-missing-release-tag) "isConsecutiveArray" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1830,96 +1882,6 @@ export function isValueID(param: Record<any, any>): param is ValueID;
 // @public (undocumented)
 export function isZWaveError(e: unknown): e is ZWaveError;
 
-// Warning: (ae-missing-release-tag) "IVirtualEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface IVirtualEndpoint {
-    // (undocumented)
-    getCCVersion(cc: CommandClasses): number;
-    // (undocumented)
-    readonly index: number;
-    // (undocumented)
-    readonly node: IVirtualNode;
-    // (undocumented)
-    readonly nodeId: number | MulticastDestination;
-    // (undocumented)
-    supportsCC(cc: CommandClasses): boolean;
-    // (undocumented)
-    readonly virtual: true;
-}
-
-// Warning: (ae-missing-release-tag) "IVirtualNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface IVirtualNode extends IVirtualEndpoint {
-    // (undocumented)
-    getEndpoint(index: 0): IVirtualEndpoint;
-    // (undocumented)
-    getEndpoint(index: number): IVirtualEndpoint | undefined;
-    // (undocumented)
-    getEndpointOrThrow(index: number): IVirtualEndpoint;
-    // (undocumented)
-    readonly id: number | undefined;
-    // (undocumented)
-    readonly physicalNodes: readonly IZWaveNode[];
-}
-
-// Warning: (ae-missing-release-tag) "IZWaveEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface IZWaveEndpoint {
-    // (undocumented)
-    addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
-    // (undocumented)
-    controlsCC(cc: CommandClasses): boolean;
-    // (undocumented)
-    getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
-    // (undocumented)
-    getCCVersion(cc: CommandClasses): number;
-    // (undocumented)
-    getNodeUnsafe(): IZWaveNode | undefined;
-    // (undocumented)
-    readonly index: number;
-    // (undocumented)
-    isCCSecure(cc: CommandClasses): boolean;
-    // (undocumented)
-    readonly nodeId: number;
-    // (undocumented)
-    removeCC(cc: CommandClasses): void;
-    // (undocumented)
-    supportsCC(cc: CommandClasses): boolean;
-    // (undocumented)
-    readonly virtual: false;
-}
-
-// Warning: (ae-missing-release-tag) "IZWaveNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
-    // (undocumented)
-    readonly canSleep: MaybeNotKnown<boolean>;
-    // (undocumented)
-    getAllEndpoints(): IZWaveEndpoint[];
-    // (undocumented)
-    getEndpoint(index: 0): IZWaveEndpoint;
-    // (undocumented)
-    getEndpoint(index: number): IZWaveEndpoint | undefined;
-    // (undocumented)
-    getEndpointOrThrow(index: number): IZWaveEndpoint;
-    // (undocumented)
-    readonly id: number;
-    // (undocumented)
-    interviewStage: InterviewStage;
-    // (undocumented)
-    isFrequentListening: MaybeNotKnown<FLiRS>;
-    // (undocumented)
-    isListening: MaybeNotKnown<boolean>;
-    // (undocumented)
-    readonly isSecure: MaybeNotKnown<boolean>;
-    // (undocumented)
-    readonly status: NodeStatus;
-}
-
 // Warning: (ae-missing-release-tag) "KeyPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1934,6 +1896,15 @@ export interface KeyPair {
 //
 // @public (undocumented)
 export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair;
+
+// Warning: (ae-missing-release-tag) "ListenBehavior" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ListenBehavior {
+    readonly canSleep: MaybeNotKnown<boolean>;
+    readonly isFrequentListening: MaybeNotKnown<FLiRS>;
+    readonly isListening: MaybeNotKnown<boolean>;
+}
 
 // Warning: (ae-missing-release-tag) "LOG_PREFIX_WIDTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2274,6 +2245,16 @@ export interface MeterScaleDefinition {
 // @public (undocumented)
 export type MeterScaleGroup = Record<number, MeterScaleDefinition>;
 
+// Warning: (ae-missing-release-tag) "ModifyCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ModifyCCs {
+    // (undocumented)
+    addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
+    // (undocumented)
+    removeCC(cc: CommandClasses): void;
+}
+
 // Warning: (ae-missing-release-tag) "MPANState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2312,7 +2293,7 @@ export enum MPDUHeaderType {
 // Warning: (ae-missing-release-tag) "MulticastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MulticastCC<T extends ICommandClass = ICommandClass> = T & {
+export type MulticastCC<T extends CCId = CCId> = T & {
     nodeId: MulticastDestination;
 };
 
@@ -2363,6 +2344,14 @@ export const NODE_ID_BROADCAST_LR = 4095;
 //
 // @public
 export const NODE_ID_MAX = 232;
+
+// Warning: (ae-missing-release-tag) "NodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NodeId extends EndpointId {
+    // (undocumented)
+    readonly id: number;
+}
 
 // Warning: (ae-missing-release-tag) "NodeIDType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2729,6 +2718,14 @@ export function parsePartial(value: number, bitMask: number, signed: boolean): n
 // @public
 export function parseQRCodeString(qr: string): QRProvisioningInformation;
 
+// Warning: (ae-missing-release-tag) "PhysicalNodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PhysicalNodes<T extends NodeId> {
+    // (undocumented)
+    readonly physicalNodes: readonly T[];
+}
+
 // Warning: (ae-missing-release-tag) "ProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2886,6 +2883,22 @@ export type QRProvisioningInformation = {
     securityClasses: SecurityClass[];
     dsk: string;
 } & ProvisioningInformation_ProductType & ProvisioningInformation_ProductId & Partial<ProvisioningInformation_MaxInclusionRequestInterval> & Partial<ProvisioningInformation_UUID16> & Partial<ProvisioningInformation_SupportedProtocols>;
+
+// Warning: (ae-missing-release-tag) "QueryNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface QueryNodeStatus {
+    readonly status: NodeStatus;
+}
+
+// Warning: (ae-missing-release-tag) "QuerySecurityClasses" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface QuerySecurityClasses {
+    getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
+    hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
+    readonly isSecure: MaybeNotKnown<boolean>;
+}
 
 // Warning: (ae-missing-release-tag) "ReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3118,20 +3131,6 @@ export function securityClassIsS2(secClass: SecurityClass | undefined): secClass
 // @public
 export const securityClassOrder: readonly [SecurityClass.S2_AccessControl, SecurityClass.S2_Authenticated, SecurityClass.S2_Unauthenticated, SecurityClass.S0_Legacy];
 
-// Warning: (ae-missing-release-tag) "SecurityClassOwner" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface SecurityClassOwner {
-    // (undocumented)
-    getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
-    // (undocumented)
-    hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
-    // (undocumented)
-    readonly id: number;
-    // (undocumented)
-    setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
-}
-
 // Warning: (ae-missing-release-tag) "SecurityManager" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3232,6 +3231,15 @@ export interface SecurityManagerOptions {
     ownNodeId: number;
 }
 
+// Warning: (ae-missing-release-tag) "SecurityManagers" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface SecurityManagers {
+    securityManager: SecurityManager | undefined;
+    securityManager2: SecurityManager2 | undefined;
+    securityManagerLR: SecurityManager2 | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "SendCommandOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3246,7 +3254,7 @@ export type SendCommandOptions = SendMessageOptions & SupervisionOptions & SendC
 // Warning: (ae-missing-release-tag) "SendCommandReturnType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type SendCommandReturnType<TResponse extends ICommandClass | undefined> = undefined extends TResponse ? SupervisionResult | undefined : TResponse | undefined;
+export type SendCommandReturnType<TResponse extends CCId | undefined> = undefined extends TResponse ? SupervisionResult | undefined : TResponse | undefined;
 
 // Warning: (ae-missing-release-tag) "SendCommandSecurityS2Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3349,6 +3357,14 @@ export interface SetNonceOptions {
     free?: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "SetSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface SetSecurityClass {
+    // (undocumented)
+    setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
+}
+
 // Warning: (ae-missing-release-tag) "SetValueOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3373,7 +3389,7 @@ export interface SimpleReflectionDecorator<TBase extends object, TArgs extends [
 // Warning: (ae-missing-release-tag) "SinglecastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type SinglecastCC<T extends ICommandClass = ICommandClass> = T & {
+export type SinglecastCC<T extends CCId = CCId> = T & {
     nodeId: number;
 };
 
@@ -3481,6 +3497,16 @@ export enum SupervisionStatus {
 //
 // @public (undocumented)
 export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
+
+// Warning: (ae-missing-release-tag) "SupportsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface SupportsCC {
+    // (undocumented)
+    getCCVersion(cc: CommandClasses): number;
+    // (undocumented)
+    supportsCC(cc: CommandClasses): boolean;
+}
 
 // Warning: (ae-missing-release-tag) "tagify" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4183,6 +4209,26 @@ export interface ValueUpdatedArgs extends ValueID {
     source?: "driver" | "node";
 }
 
+// Warning: (ae-missing-release-tag) "VirtualEndpointId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface VirtualEndpointId {
+    // (undocumented)
+    readonly index: number;
+    // (undocumented)
+    readonly nodeId: number | MulticastDestination;
+    // (undocumented)
+    readonly virtual: true;
+}
+
+// Warning: (ae-missing-release-tag) "VirtualNodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VirtualNodeId extends VirtualEndpointId {
+    // (undocumented)
+    readonly id: number | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "wasControllerReset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4331,11 +4377,11 @@ export function zwaveDataRateToString(rate: ZWaveDataRate): string;
 // @public
 export class ZWaveError extends Error {
     constructor(message: string, code: ZWaveErrorCodes,
-    context?: unknown | undefined,
+    context?: unknown,
     transactionSource?: string | undefined);
     // (undocumented)
     readonly code: ZWaveErrorCodes;
-    readonly context?: unknown | undefined;
+    readonly context?: unknown;
     // (undocumented)
     readonly message: string;
     readonly transactionSource?: string | undefined;

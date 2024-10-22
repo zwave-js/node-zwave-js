@@ -8,22 +8,28 @@ import type { DataDirection } from '@zwave-js/core/safe';
 import { DataDirection as DataDirection_2 } from '@zwave-js/core';
 import { Duplex } from 'node:stream';
 import { EventEmitter } from 'node:events';
-import { IZWaveNode } from '@zwave-js/core';
+import type { GetDeviceConfig } from '@zwave-js/host';
+import type { GetNode } from '@zwave-js/host';
+import type { GetSupportedCCVersion } from '@zwave-js/host';
+import type { HostIDs } from '@zwave-js/host';
 import type { JSONObject } from '@zwave-js/shared/safe';
 import type { LogContext } from '@zwave-js/core/safe';
+import { MaybeNotKnown } from '@zwave-js/core';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
 import type * as net from 'node:net';
+import { NodeId } from '@zwave-js/core';
+import { NodeIDType } from '@zwave-js/core';
 import { PassThrough } from 'node:stream';
 import { RSSI } from '@zwave-js/core';
+import { SecurityClass } from '@zwave-js/core';
+import { SecurityManagers } from '@zwave-js/core';
 import { SerialPort } from 'serialport';
 import { Transform } from 'node:stream';
 import { TransformCallback } from 'node:stream';
 import type { TypedClassDecorator } from '@zwave-js/shared/safe';
 import { UnknownZWaveChipType } from '@zwave-js/core';
 import { ZnifferProtocolDataRate } from '@zwave-js/core';
-import type { ZWaveApplicationHost } from '@zwave-js/host';
-import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLogContainer } from '@zwave-js/core';
 import { ZWaveLoggerBase } from '@zwave-js/core';
 
@@ -91,7 +97,7 @@ export class BootloaderScreenParser extends Transform {
 // Warning: (ae-missing-release-tag) "DeserializingMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type DeserializingMessageConstructor<T extends Message> = new (host: ZWaveHost, options: MessageDeserializationOptions) => T;
+export type DeserializingMessageConstructor<T extends Message> = new (options: MessageDeserializationOptions) => T;
 
 // Warning: (ae-missing-release-tag) "DeserializingZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -495,9 +501,12 @@ export function isZWaveSerialPortImplementation(obj: unknown): obj is ZWaveSeria
 //
 // @public
 export class Message {
-    constructor(host: ZWaveHost, options?: MessageOptions);
-    get callbackId(): number;
-    set callbackId(v: number | undefined);
+    constructor(options?: MessageOptions);
+    // (undocumented)
+    protected assertCallbackId(): asserts this is this & {
+        callbackId: number;
+    };
+    callbackId: number | undefined;
     // (undocumented)
     get completedTimestamp(): number | undefined;
     // (undocumented)
@@ -509,18 +518,17 @@ export class Message {
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;
     static extractPayload(data: Buffer): Buffer;
-    static from(host: ZWaveHost, options: MessageDeserializationOptions, contextStore?: Map<FunctionType, Record<string, unknown>>): Message;
+    static from(options: MessageDeserializationOptions, contextStore?: Map<FunctionType, Record<string, unknown>>): Message;
     // (undocumented)
     functionType: FunctionType;
     getCallbackTimeout(): number | undefined;
     static getConstructor(data: Buffer): MessageConstructor<Message>;
     static getMessageLength(data: Buffer): number;
     getNodeId(): number | undefined;
-    getNodeUnsafe(applHost: ZWaveApplicationHost): IZWaveNode | undefined;
     getResponseTimeout(): number | undefined;
-    hasCallbackId(): boolean;
-    // (undocumented)
-    readonly host: ZWaveHost;
+    hasCallbackId(): this is this & {
+        callbackId: number;
+    };
     static isComplete(data?: Buffer): boolean;
     isExpectedCallback(msg: Message): boolean;
     isExpectedNodeUpdate(msg: Message): boolean;
@@ -530,13 +538,16 @@ export class Message {
     needsCallbackId(): boolean;
     nodeUpdateTimeout: number | undefined;
     // (undocumented)
+    readonly options: MessageOptions;
+    // (undocumented)
     payload: Buffer;
     prematureNodeUpdate: Message | undefined;
     get rtt(): number | undefined;
-    serialize(): Buffer;
+    serialize(ctx: MessageEncodingContext): Buffer;
     toJSON(): JSONObject;
     toLogEntry(): MessageOrCCLogEntry;
     get transmissionTimestamp(): number | undefined;
+    tryGetNode<T extends NodeId>(ctx: GetNode<T>): T | undefined;
     // (undocumented)
     type: MessageType;
 }
@@ -552,7 +563,7 @@ export interface MessageBaseOptions {
 // Warning: (ae-missing-release-tag) "MessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MessageConstructor<T extends Message> = new (host: ZWaveHost, options?: MessageOptions) => T;
+export type MessageConstructor<T extends Message> = new (options?: MessageOptions) => T;
 
 // Warning: (ae-missing-release-tag) "MessageCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -576,11 +587,26 @@ export interface MessageCreationOptions extends MessageBaseOptions {
 export interface MessageDeserializationOptions {
     context?: unknown;
     // (undocumented)
+    ctx: MessageParsingContext;
+    // (undocumented)
     data: Buffer;
     // (undocumented)
     origin?: MessageOrigin;
     parseCCs?: boolean;
     sdkVersion?: string;
+}
+
+// Warning: (ae-missing-release-tag) "MessageEncodingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MessageEncodingContext extends Readonly<SecurityManagers>, HostIDs, GetSupportedCCVersion, GetDeviceConfig {
+    // (undocumented)
+    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+    // (undocumented)
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
+    nodeIdType: NodeIDType;
+    // (undocumented)
+    setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
 }
 
 // Warning: (ae-missing-release-tag) "MessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -610,6 +636,19 @@ export enum MessageOrigin {
     Controller = 0,
     // (undocumented)
     Host = 1
+}
+
+// Warning: (ae-missing-release-tag) "MessageParsingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MessageParsingContext extends Readonly<SecurityManagers>, HostIDs, GetDeviceConfig {
+    // (undocumented)
+    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+    // (undocumented)
+    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
+    nodeIdType: NodeIDType;
+    // (undocumented)
+    setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
 }
 
 // Warning: (ae-missing-release-tag) "MessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
