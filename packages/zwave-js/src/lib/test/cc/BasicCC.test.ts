@@ -35,6 +35,20 @@ test("the Get command should serialize correctly", (t) => {
 	t.deepEqual(basicCC.serialize({} as any), expected);
 });
 
+test("the Get command should be deserialized correctly", (t) => {
+	const ccData = buildCCBuffer(
+		Buffer.from([
+			BasicCommand.Get, // CC Command
+		]),
+	);
+	const basicCC = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as BasicCCGet;
+	t.is(basicCC.constructor, BasicCCGet);
+	t.is(basicCC.nodeId, 2);
+});
+
 test("the Set command should serialize correctly", (t) => {
 	const basicCC = new BasicCCSet({
 		nodeId: 2,
