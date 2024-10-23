@@ -9,15 +9,14 @@ import {
 	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	MessageOrigin,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -26,27 +25,19 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignSUCReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== AssignSUCReturnRouteRequest
-			) {
-				return new AssignSUCReturnRouteRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any)
-					!== AssignSUCReturnRouteRequestTransmitReport
-			) {
-				return new AssignSUCReturnRouteRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignSUCReturnRouteRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return AssignSUCReturnRouteRequest.from(raw, ctx);
+		} else {
+			return AssignSUCReturnRouteRequestTransmitReport.from(raw, ctx);
 		}
-
-		super(options);
 	}
 }
 
-export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
+export interface AssignSUCReturnRouteRequestOptions {
 	nodeId: number;
 	disableCallbackFunctionTypeCheck?: boolean;
 }
@@ -68,19 +59,25 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| AssignSUCReturnRouteRequestOptions,
+		options: AssignSUCReturnRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.nodeId = this.payload[0];
-			this.callbackId = this.payload[1];
-		} else {
-			this.nodeId = options.nodeId;
-			this.disableCallbackFunctionTypeCheck =
-				options.disableCallbackFunctionTypeCheck;
-		}
+		this.nodeId = options.nodeId;
+		this.disableCallbackFunctionTypeCheck =
+			options.disableCallbackFunctionTypeCheck;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignSUCReturnRouteRequest {
+		const nodeId = raw.payload[0];
+		const callbackId = raw.payload[1];
+
+		return new this({
+			nodeId,
+			callbackId,
+		});
 	}
 
 	public nodeId: number;
@@ -95,7 +92,7 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 	}
 }
 
-interface AssignSUCReturnRouteResponseOptions extends MessageBaseOptions {
+export interface AssignSUCReturnRouteResponseOptions {
 	wasExecuted: boolean;
 }
 
@@ -104,16 +101,21 @@ export class AssignSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| AssignSUCReturnRouteResponseOptions,
+		options: AssignSUCReturnRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.wasExecuted = this.payload[0] !== 0;
-		} else {
-			this.wasExecuted = options.wasExecuted;
-		}
+		this.wasExecuted = options.wasExecuted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignSUCReturnRouteResponse {
+		const wasExecuted = raw.payload[0] !== 0;
+
+		return new this({
+			wasExecuted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -135,11 +137,8 @@ export class AssignSUCReturnRouteResponse extends Message
 	}
 }
 
-interface AssignSUCReturnRouteRequestTransmitReportOptions
-	extends MessageBaseOptions
-{
+export interface AssignSUCReturnRouteRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
 }
 
 export class AssignSUCReturnRouteRequestTransmitReport
@@ -148,18 +147,26 @@ export class AssignSUCReturnRouteRequestTransmitReport
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| AssignSUCReturnRouteRequestTransmitReportOptions,
+			& AssignSUCReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this.transmitStatus = this.payload[1];
-		} else {
-			this.callbackId = options.callbackId;
-			this.transmitStatus = options.transmitStatus;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignSUCReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

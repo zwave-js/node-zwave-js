@@ -177,7 +177,6 @@ export abstract class EndpointsMixin extends NodeValuesMixin
 
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
-		// FIXME: GH#7261 we should not need to cast here
 		return nodeUtils.getAllEndpoints(this.driver, this);
 	}
 }

@@ -8,6 +8,7 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import {
+	type FunctionType,
 	Message,
 	type MessageEncodingContext,
 	MessageHeaders,
@@ -69,6 +70,7 @@ export class MockController {
 		};
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
+		const requestStorage = new Map<FunctionType, Record<string, unknown>>();
 
 		const self = this;
 		this.encodingContext = {
@@ -130,6 +132,9 @@ export class MockController {
 		};
 		this.parsingContext = {
 			...this.encodingContext,
+			// FIXME: Take from the controller capabilities
+			sdkVersion: undefined,
+			requestStorage,
 		};
 
 		void this.execute();
@@ -228,11 +233,9 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = Message.from({
-				data,
+			msg = Message.parse(data, {
+				...this.parsingContext,
 				origin: MessageOrigin.Host,
-				parseCCs: false,
-				ctx: this.parsingContext,
 			});
 			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {

@@ -39,7 +39,7 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = new Message({ data: original, ctx: {} as any });
+		const parsed = Message.parse(original, {} as any);
 		t.deepEqual(parsed.serialize({} as any), original);
 	}
 });
@@ -91,160 +91,12 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 	for (const [message, msg, code] of brokenMessages) {
 		assertZWaveError(
 			t,
-			() => new Message({ data: message, ctx: {} as any }),
+			() => Message.parse(message, {} as any),
 			{
 				messageMatches: msg,
 				errorCode: code,
 			},
 		);
-	}
-});
-
-test("isComplete() should work correctly", (t) => {
-	// actual messages from OZW
-	const okayMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
-		Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-		]),
-	];
-	for (const msg of okayMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
-	}
-
-	// truncated messages
-	const truncatedMessages = [
-		undefined,
-		Buffer.from([]),
-		Buffer.from([0x01]),
-		Buffer.from([0x01, 0x09]),
-		Buffer.from([0x01, 0x09, 0x00]),
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-		]),
-	];
-	for (const msg of truncatedMessages) {
-		t.is(Message.isComplete(msg), false); // `${msg ? msg.toString("hex") : "null"} should be detected as incomplete`
-	}
-
-	// faulty but non-truncated messages should be detected as complete
-	const faultyMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
-		Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-		]),
-	];
-	for (const msg of faultyMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
-	}
-
-	// actual messages from OZW, appended with some random data
-	const tooLongMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-			0x00,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99, 0x01, 0x02]),
-		Buffer.from([
-			0x01,
-			0x06,
-			0x00,
-			0x46,
-			0x0c,
-			0x0d,
-			0x32,
-			0x8c,
-			0xab,
-			0xcd,
-			0xef,
-		]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-			0x12,
-		]),
-	];
-	for (const msg of tooLongMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
 	}
 });
 
@@ -302,9 +154,12 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	t.deepEqual(msg4.toJSON(), json4);
 });
 
-test("getConstructor() should return `Message` for an unknown packet type", (t) => {
+test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
 	const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.is(Message.getConstructor(unknown), Message);
+	t.is(
+		Message.parse(unknown, {} as any).constructor,
+		Message,
+	);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {

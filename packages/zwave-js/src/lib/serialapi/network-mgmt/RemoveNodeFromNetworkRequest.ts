@@ -5,17 +5,16 @@ import {
 } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -43,7 +42,7 @@ enum RemoveNodeFlags {
 	NetworkWide = 0x40,
 }
 
-interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
+export interface RemoveNodeFromNetworkRequestOptions {
 	removeNodeType?: RemoveNodeType;
 	highPower?: boolean;
 	networkWide?: boolean;
@@ -53,14 +52,11 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 // no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
-		) {
-			return new RemoveNodeFromNetworkRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RemoveNodeFromNetworkRequestBase {
+		return RemoveNodeFromNetworkRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -96,7 +92,7 @@ export class RemoveNodeFromNetworkRequest
 	extends RemoveNodeFromNetworkRequestBase
 {
 	public constructor(
-		options: RemoveNodeFromNetworkRequestOptions = {},
+		options: RemoveNodeFromNetworkRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
@@ -124,17 +120,36 @@ export class RemoveNodeFromNetworkRequest
 	}
 }
 
+export interface RemoveNodeFromNetworkRequestStatusReportOptions {
+	status: RemoveNodeStatus;
+	statusContext?: RemoveNodeStatusContext;
+}
+
 export class RemoveNodeFromNetworkRequestStatusReport
 	extends RemoveNodeFromNetworkRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& RemoveNodeFromNetworkRequestStatusReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.callbackId = this.payload[0];
-		this.status = this.payload[1];
-		switch (this.status) {
+
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.status = options.status;
+		this.statusContext = options.statusContext;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RemoveNodeFromNetworkRequestStatusReport {
+		const callbackId = raw.payload[0];
+		const status: RemoveNodeStatus = raw.payload[1];
+		let statusContext: RemoveNodeStatusContext | undefined;
+		switch (status) {
 			case RemoveNodeStatus.Ready:
 			case RemoveNodeStatus.NodeFound:
 			case RemoveNodeStatus.Failed:
@@ -150,13 +165,19 @@ export class RemoveNodeFromNetworkRequestStatusReport
 			case RemoveNodeStatus.RemovingSlave: {
 				// the payload contains the node ID
 				const { nodeId } = parseNodeID(
-					this.payload.subarray(2),
-					options.ctx.nodeIdType,
+					raw.payload.subarray(2),
+					ctx.nodeIdType,
 				);
-				this.statusContext = { nodeId };
+				statusContext = { nodeId };
 				break;
 			}
 		}
+
+		return new this({
+			callbackId,
+			status,
+			statusContext,
+		});
 	}
 
 	isOK(): boolean {

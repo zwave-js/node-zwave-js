@@ -9,15 +9,16 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
+export interface GetRoutingInfoRequestOptions {
 	nodeId: number;
 	removeNonRepeaters?: boolean;
 	removeBadLinks?: boolean;
@@ -27,7 +28,9 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(options: GetRoutingInfoRequestOptions) {
+	public constructor(
+		options: GetRoutingInfoRequestOptions & MessageBaseOptions,
+	) {
 		super(options);
 		this.sourceNodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
@@ -63,30 +66,44 @@ export class GetRoutingInfoRequest extends Message {
 	}
 }
 
+export interface GetRoutingInfoResponseOptions {
+	nodeIds: number[];
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetRoutingInfoResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (this.payload.length === NUM_NODEMASK_BYTES) {
-			// the payload contains a bit mask of all neighbor nodes
-			this._nodeIds = parseNodeBitMask(this.payload);
-		} else {
-			this._nodeIds = [];
-		}
+		// TODO: Check implementation:
+		this.nodeIds = options.nodeIds;
 	}
 
-	private _nodeIds: number[];
-	public get nodeIds(): number[] {
-		return this._nodeIds;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): GetRoutingInfoResponse {
+		let nodeIds: number[];
+		if (raw.payload.length === NUM_NODEMASK_BYTES) {
+			// the payload contains a bit mask of all neighbor nodes
+			nodeIds = parseNodeBitMask(raw.payload);
+		} else {
+			nodeIds = [];
+		}
+
+		return new this({
+			nodeIds,
+		});
 	}
+
+	public nodeIds: number[];
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "node ids": `${this._nodeIds.join(", ")}` },
+			message: { "node ids": `${this.nodeIds.join(", ")}` },
 		};
 	}
 }

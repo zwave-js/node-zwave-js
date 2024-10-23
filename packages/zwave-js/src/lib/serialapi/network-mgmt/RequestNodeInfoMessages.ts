@@ -9,13 +9,13 @@ import {
 	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -24,7 +24,7 @@ import {
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../application/ApplicationUpdateRequest";
 
-interface RequestNodeInfoResponseOptions extends MessageBaseOptions {
+export interface RequestNodeInfoResponseOptions {
 	wasSent: boolean;
 }
 
@@ -33,14 +33,21 @@ export class RequestNodeInfoResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions | RequestNodeInfoResponseOptions,
+		options: RequestNodeInfoResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.wasSent = this.payload[0] !== 0;
-		} else {
-			this.wasSent = options.wasSent;
-		}
+		this.wasSent = options.wasSent;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): RequestNodeInfoResponse {
+		const wasSent = raw.payload[0] !== 0;
+
+		return new this({
+			wasSent,
+		});
 	}
 
 	public wasSent: boolean;
@@ -62,7 +69,7 @@ export class RequestNodeInfoResponse extends Message
 	}
 }
 
-interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
+export interface RequestNodeInfoRequestOptions {
 	nodeId: number;
 }
 
@@ -83,18 +90,25 @@ function testCallbackForRequestNodeInfoRequest(
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		options: RequestNodeInfoRequestOptions | MessageDeserializationOptions,
+		options: RequestNodeInfoRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.nodeId = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				0,
-			).nodeId;
-		} else {
-			this.nodeId = options.nodeId;
-		}
+		this.nodeId = options.nodeId;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RequestNodeInfoRequest {
+		const nodeId = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			0,
+		).nodeId;
+
+		return new this({
+			nodeId,
+		});
 	}
 
 	public nodeId: number;

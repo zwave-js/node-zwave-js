@@ -8,7 +8,9 @@ import {
 import {
 	FunctionType,
 	Message,
-	type MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -21,16 +23,42 @@ import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 @expectedResponse(FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIRequest extends Message {}
 
+export interface GetBackgroundRSSIResponseOptions {
+	rssiChannel0: number;
+	rssiChannel1: number;
+	rssiChannel2?: number;
+	rssiChannel3?: number;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetBackgroundRSSIResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.rssiChannel0 = parseRSSI(this.payload, 0);
-		this.rssiChannel1 = parseRSSI(this.payload, 1);
-		this.rssiChannel2 = tryParseRSSI(this.payload, 2);
-		this.rssiChannel3 = tryParseRSSI(this.payload, 3);
+
+		// TODO: Check implementation:
+		this.rssiChannel0 = options.rssiChannel0;
+		this.rssiChannel1 = options.rssiChannel1;
+		this.rssiChannel2 = options.rssiChannel2;
+		this.rssiChannel3 = options.rssiChannel3;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): GetBackgroundRSSIResponse {
+		const rssiChannel0 = parseRSSI(raw.payload, 0);
+		const rssiChannel1 = parseRSSI(raw.payload, 1);
+		const rssiChannel2 = tryParseRSSI(raw.payload, 2);
+		const rssiChannel3 = tryParseRSSI(raw.payload, 3);
+
+		return new this({
+			rssiChannel0,
+			rssiChannel1,
+			rssiChannel2,
+			rssiChannel3,
+		});
 	}
 
 	public readonly rssiChannel0: RSSI;

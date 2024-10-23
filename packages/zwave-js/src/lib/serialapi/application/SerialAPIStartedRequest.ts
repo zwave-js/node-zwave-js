@@ -9,10 +9,9 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageRaw,
 	MessageType,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -43,7 +42,7 @@ export enum SerialAPIWakeUpReason {
 	Unknown = 0xff,
 }
 
-export interface SerialAPIStartedRequestOptions extends MessageBaseOptions {
+export interface SerialAPIStartedRequestOptions {
 	wakeUpReason: SerialAPIWakeUpReason;
 	watchdogEnabled: boolean;
 	genericDeviceClass: number;
@@ -59,42 +58,54 @@ export interface SerialAPIStartedRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Normal)
 export class SerialAPIStartedRequest extends Message {
 	public constructor(
-		options: MessageDeserializationOptions | SerialAPIStartedRequestOptions,
+		options: SerialAPIStartedRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.wakeUpReason = this.payload[0];
-			this.watchdogEnabled = this.payload[1] === 0x01;
+		this.wakeUpReason = options.wakeUpReason;
+		this.watchdogEnabled = options.watchdogEnabled;
+		this.isListening = options.isListening;
+		this.genericDeviceClass = options.genericDeviceClass;
+		this.specificDeviceClass = options.specificDeviceClass;
+		this.supportedCCs = options.supportedCCs;
+		this.controlledCCs = options.controlledCCs;
+		this.supportsLongRange = options.supportsLongRange;
+	}
 
-			const deviceOption = this.payload[2];
-			this.isListening = !!(deviceOption & 0b10_000_000);
+	public static from(
+		raw: MessageRaw,
+	): SerialAPIStartedRequest {
+		const wakeUpReason: SerialAPIWakeUpReason = raw.payload[0];
+		const watchdogEnabled = raw.payload[1] === 0x01;
+		const deviceOption = raw.payload[2];
+		const isListening = !!(deviceOption & 0b10_000_000);
+		const genericDeviceClass = raw.payload[3];
+		const specificDeviceClass = raw.payload[4];
 
-			this.genericDeviceClass = this.payload[3];
-			this.specificDeviceClass = this.payload[4];
+		// Parse list of CCs
+		const numCCBytes = raw.payload[5];
+		const ccBytes = raw.payload.subarray(6, 6 + numCCBytes);
+		const ccList = parseCCList(ccBytes);
+		const supportedCCs: CommandClasses[] = ccList.supportedCCs;
+		const controlledCCs: CommandClasses[] = ccList.controlledCCs;
 
-			// Parse list of CCs
-			const numCCBytes = this.payload[5];
-			const ccBytes = this.payload.subarray(6, 6 + numCCBytes);
-			const ccList = parseCCList(ccBytes);
-			this.supportedCCs = ccList.supportedCCs;
-			this.controlledCCs = ccList.controlledCCs;
-
-			// Parse supported protocols
-			if (this.payload.length >= 6 + numCCBytes + 1) {
-				const protocols = this.payload[6 + numCCBytes];
-				this.supportsLongRange = !!(protocols & 0b1);
-			}
-		} else {
-			this.wakeUpReason = options.wakeUpReason;
-			this.watchdogEnabled = options.watchdogEnabled;
-			this.isListening = options.isListening;
-			this.genericDeviceClass = options.genericDeviceClass;
-			this.specificDeviceClass = options.specificDeviceClass;
-			this.supportedCCs = options.supportedCCs;
-			this.controlledCCs = options.controlledCCs;
-			this.supportsLongRange = options.supportsLongRange;
+		// Parse supported protocols
+		let supportsLongRange = false;
+		if (raw.payload.length >= 6 + numCCBytes + 1) {
+			const protocols = raw.payload[6 + numCCBytes];
+			supportsLongRange = !!(protocols & 0b1);
 		}
+
+		return new this({
+			wakeUpReason,
+			watchdogEnabled,
+			isListening,
+			genericDeviceClass,
+			specificDeviceClass,
+			supportedCCs,
+			controlledCCs,
+			supportsLongRange,
+		});
 	}
 
 	public wakeUpReason: SerialAPIWakeUpReason;

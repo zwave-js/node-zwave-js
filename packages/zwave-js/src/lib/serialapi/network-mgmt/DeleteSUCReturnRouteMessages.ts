@@ -7,19 +7,18 @@ import {
 import type {
 	INodeQuery,
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -28,27 +27,19 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== DeleteSUCReturnRouteRequest
-			) {
-				return new DeleteSUCReturnRouteRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any)
-					!== DeleteSUCReturnRouteRequestTransmitReport
-			) {
-				return new DeleteSUCReturnRouteRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteSUCReturnRouteRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return DeleteSUCReturnRouteRequest.from(raw, ctx);
+		} else {
+			return DeleteSUCReturnRouteRequestTransmitReport.from(raw, ctx);
 		}
-
-		super(options);
 	}
 }
 
-export interface DeleteSUCReturnRouteRequestOptions extends MessageBaseOptions {
+export interface DeleteSUCReturnRouteRequestOptions {
 	nodeId: number;
 	disableCallbackFunctionTypeCheck?: boolean;
 }
@@ -70,19 +61,25 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| DeleteSUCReturnRouteRequestOptions,
+		options: DeleteSUCReturnRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.nodeId = this.payload[0];
-			this.callbackId = this.payload[1];
-		} else {
-			this.nodeId = options.nodeId;
-			this.disableCallbackFunctionTypeCheck =
-				options.disableCallbackFunctionTypeCheck;
-		}
+		this.nodeId = options.nodeId;
+		this.disableCallbackFunctionTypeCheck =
+			options.disableCallbackFunctionTypeCheck;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): DeleteSUCReturnRouteRequest {
+		const nodeId = raw.payload[0];
+		const callbackId = raw.payload[1];
+
+		return new this({
+			nodeId,
+			callbackId,
+		});
 	}
 
 	public nodeId: number;
@@ -97,7 +94,7 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	}
 }
 
-interface DeleteSUCReturnRouteResponseOptions extends MessageBaseOptions {
+export interface DeleteSUCReturnRouteResponseOptions {
 	wasExecuted: boolean;
 }
 
@@ -106,16 +103,21 @@ export class DeleteSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| DeleteSUCReturnRouteResponseOptions,
+		options: DeleteSUCReturnRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.wasExecuted = this.payload[0] !== 0;
-		} else {
-			this.wasExecuted = options.wasExecuted;
-		}
+		this.wasExecuted = options.wasExecuted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): DeleteSUCReturnRouteResponse {
+		const wasExecuted = raw.payload[0] !== 0;
+
+		return new this({
+			wasExecuted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -137,11 +139,8 @@ export class DeleteSUCReturnRouteResponse extends Message
 	}
 }
 
-interface DeleteSUCReturnRouteRequestTransmitReportOptions
-	extends MessageBaseOptions
-{
+export interface DeleteSUCReturnRouteRequestTransmitReportOptions {
 	transmitStatus: TransmitStatus;
-	callbackId: number;
 }
 
 export class DeleteSUCReturnRouteRequestTransmitReport
@@ -150,18 +149,26 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| DeleteSUCReturnRouteRequestTransmitReportOptions,
+			& DeleteSUCReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.callbackId = this.payload[0];
-			this.transmitStatus = this.payload[1];
-		} else {
-			this.callbackId = options.callbackId;
-			this.transmitStatus = options.transmitStatus;
-		}
+		this.callbackId = options.callbackId;
+		this.transmitStatus = options.transmitStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): DeleteSUCReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

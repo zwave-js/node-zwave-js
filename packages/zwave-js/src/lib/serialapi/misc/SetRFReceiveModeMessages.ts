@@ -6,21 +6,21 @@ import {
 } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
+export interface SetRFReceiveModeRequestOptions {
 	/** Whether the stick should receive (true) or not (false) */
 	enabled: boolean;
 }
@@ -30,17 +30,22 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
+		options: SetRFReceiveModeRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.enabled = options.enabled;
-		}
+		this.enabled = options.enabled;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetRFReceiveModeRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SetRFReceiveModeRequest({});
 	}
 
 	public enabled: boolean;
@@ -61,15 +66,32 @@ export class SetRFReceiveModeRequest extends Message {
 	}
 }
 
+export interface SetRFReceiveModeResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetRFReceiveModeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.success = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetRFReceiveModeResponse {
+		const success = raw.payload[0] !== 0;
+
+		return new this({
+			success,
+		});
 	}
 
 	isOK(): boolean {

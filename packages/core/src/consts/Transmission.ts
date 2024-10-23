@@ -163,8 +163,6 @@ export function routingSchemeToString(scheme: RoutingScheme): string {
 export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
-	/** Number of repeaters used in the route to the destination, 0 for direct range */
-	numRepeaters: number;
 	/** RSSI value of the acknowledgement frame */
 	ackRSSI?: RSSI;
 	/** RSSI values of the incoming acknowledgement frame, measured by repeater 0...3 */

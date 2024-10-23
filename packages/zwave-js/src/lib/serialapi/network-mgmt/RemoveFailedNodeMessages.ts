@@ -1,18 +1,17 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -46,18 +45,15 @@ export enum RemoveFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
 @priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== RemoveFailedNodeRequestStatusReport
-		) {
-			return new RemoveFailedNodeRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RemoveFailedNodeRequestBase {
+		return RemoveFailedNodeRequestStatusReport.from(raw, ctx);
 	}
 }
 
-interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
+export interface RemoveFailedNodeRequestOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	failedNodeId: number;
 }
@@ -66,7 +62,7 @@ interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public constructor(
-		options: RemoveFailedNodeRequestOptions,
+		options: RemoveFailedNodeRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.failedNodeId = options.failedNodeId;
@@ -84,27 +80,48 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	}
 }
 
+export interface RemoveFailedNodeRequestStatusReportOptions {
+	removeStatus: RemoveFailedNodeStatus;
+}
+
 export class RemoveFailedNodeRequestStatusReport
 	extends RemoveFailedNodeRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& RemoveFailedNodeRequestStatusReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this._removeStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.removeStatus = options.removeStatus;
 	}
 
-	private _removeStatus: RemoveFailedNodeStatus;
-	public get removeStatus(): RemoveFailedNodeStatus {
-		return this._removeStatus;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): RemoveFailedNodeRequestStatusReport {
+		const callbackId = raw.payload[0];
+		const removeStatus: RemoveFailedNodeStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			removeStatus,
+		});
 	}
+
+	public removeStatus: RemoveFailedNodeStatus;
 
 	public isOK(): boolean {
-		return this._removeStatus === RemoveFailedNodeStatus.NodeRemoved;
+		return this.removeStatus === RemoveFailedNodeStatus.NodeRemoved;
 	}
+}
+
+export interface RemoveFailedNodeResponseOptions {
+	removeStatus: RemoveFailedNodeStartFlags;
 }
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
@@ -112,18 +129,28 @@ export class RemoveFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: RemoveFailedNodeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._removeStatus = this.payload[0];
+
+		// TODO: Check implementation:
+		this.removeStatus = options.removeStatus;
 	}
 
-	private _removeStatus: RemoveFailedNodeStartFlags;
-	public get removeStatus(): RemoveFailedNodeStartFlags {
-		return this._removeStatus;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): RemoveFailedNodeResponse {
+		const removeStatus: RemoveFailedNodeStartFlags = raw.payload[0];
+
+		return new this({
+			removeStatus,
+		});
 	}
+
+	public removeStatus: RemoveFailedNodeStartFlags;
 
 	public isOK(): boolean {
-		return this._removeStatus === RemoveFailedNodeStartFlags.OK;
+		return this.removeStatus === RemoveFailedNodeStartFlags.OK;
 	}
 }

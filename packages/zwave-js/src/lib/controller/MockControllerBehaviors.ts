@@ -90,7 +90,7 @@ function createLazySendDataPayload(
 ): () => CommandClass {
 	return () => {
 		try {
-			const cmd = CommandClass.parse(msg.payload, {
+			const cmd = CommandClass.parse(msg.serializedCC!, {
 				sourceNodeId: controller.ownNodeId,
 				__internalIsMockNode: true,
 				...node.encodingContext,
@@ -394,7 +394,7 @@ const handleSendDataMulticast: MockControllerBehavior = {
 			// We deferred parsing of the CC because it requires the node's host to do so.
 			// Now we can do that. Also set the CC node ID to the controller's own node ID,
 			// so CC knows it came from the controller's node ID.
-			const nodeIds = msg["_nodeIds"]!;
+			const nodeIds = msg.nodeIds;
 
 			const ackPromises = nodeIds.map((nodeId) => {
 				const node = controller.nodes.get(nodeId)!;

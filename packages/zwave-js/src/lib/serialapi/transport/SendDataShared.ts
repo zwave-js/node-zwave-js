@@ -1,5 +1,6 @@
 import {
 	type MessageRecord,
+	ProtocolDataRate,
 	type RSSI,
 	RssiError,
 	type SerializableTXReport,
@@ -89,9 +90,9 @@ export function parseTXReport(
 	payload: Buffer,
 ): TXReport | undefined {
 	if (payload.length < 17) return;
+	const numRepeaters = payload[2];
 	const ret: TXReport = {
 		txTicks: payload.readUInt16BE(0),
-		numRepeaters: payload[2],
 		ackRSSI: includeACK ? parseRSSI(payload, 3) : undefined,
 		ackRepeaterRSSI: includeACK
 			? [
@@ -125,19 +126,45 @@ export function parseTXReport(
 			: undefined,
 	};
 	// Remove unused repeaters from arrays
-	const firstMissingRepeater = ret.repeaterNodeIds.indexOf(0);
 	ret.repeaterNodeIds = ret.repeaterNodeIds.slice(
 		0,
-		firstMissingRepeater,
+		numRepeaters,
 	) as any;
 	if (ret.ackRepeaterRSSI) {
 		ret.ackRepeaterRSSI = ret.ackRepeaterRSSI.slice(
 			0,
-			firstMissingRepeater,
+			numRepeaters,
 		) as any;
 	}
 
 	return stripUndefined(ret as any) as any;
+}
+
+export function serializableTXReportToTXReport(
+	report: SerializableTXReport,
+): TXReport {
+	return {
+		txTicks: report.txTicks,
+		ackRSSI: report.ackRSSI,
+		ackRepeaterRSSI: report.ackRepeaterRSSI,
+		ackChannelNo: report.ackChannelNo,
+		txChannelNo: report.txChannelNo ?? 0,
+		routeSchemeState: report.routeSchemeState ?? 0,
+		repeaterNodeIds: report.repeaterNodeIds ?? [],
+		beam1000ms: report.beam1000ms ?? false,
+		beam250ms: report.beam250ms ?? false,
+		routeSpeed: report.routeSpeed ?? ProtocolDataRate.ZWave_100k,
+		routingAttempts: report.routingAttempts ?? 1,
+		failedRouteLastFunctionalNodeId: report.failedRouteLastFunctionalNodeId,
+		failedRouteFirstNonFunctionalNodeId:
+			report.failedRouteFirstNonFunctionalNodeId,
+		txPower: report.txPower,
+		measuredNoiseFloor: report.measuredNoiseFloor,
+		destinationAckTxPower: report.destinationAckTxPower,
+		destinationAckMeasuredRSSI: report.destinationAckMeasuredRSSI,
+		destinationAckMeasuredNoiseFloor:
+			report.destinationAckMeasuredNoiseFloor,
+	};
 }
 
 export function encodeTXReport(report: SerializableTXReport): Buffer {

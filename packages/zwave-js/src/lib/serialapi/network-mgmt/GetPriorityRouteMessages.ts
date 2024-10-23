@@ -14,17 +14,17 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 
-export interface GetPriorityRouteRequestOptions extends MessageBaseOptions {
+export interface GetPriorityRouteRequestOptions {
 	destinationNodeId: number;
 }
 
@@ -33,17 +33,22 @@ export interface GetPriorityRouteRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetPriorityRoute)
 export class GetPriorityRouteRequest extends Message {
 	public constructor(
-		options: MessageDeserializationOptions | GetPriorityRouteRequestOptions,
+		options: GetPriorityRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.destinationNodeId = options.destinationNodeId;
-		}
+		this.destinationNodeId = options.destinationNodeId;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): GetPriorityRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new GetPriorityRouteRequest({});
 	}
 
 	public destinationNodeId: number;
@@ -67,27 +72,55 @@ export class GetPriorityRouteRequest extends Message {
 	}
 }
 
+export interface GetPriorityRouteResponseOptions {
+	destinationNodeId: number;
+	routeKind: RouteKind;
+	repeaters?: number[];
+	routeSpeed?: ZWaveDataRate;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetPriorityRoute)
 export class GetPriorityRouteResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetPriorityRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
+
+		// TODO: Check implementation:
+		this.destinationNodeId = options.destinationNodeId;
+		this.routeKind = options.routeKind;
+		this.repeaters = options.repeaters;
+		this.routeSpeed = options.routeSpeed;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): GetPriorityRouteResponse {
 		let offset = 0;
 		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-			this.payload,
-			options.ctx.nodeIdType,
+			raw.payload,
+			ctx.nodeIdType,
 			offset,
 		);
 		offset += nodeIdBytes;
-		this.destinationNodeId = nodeId;
-		this.routeKind = this.payload[offset++];
-		if (this.routeKind) {
-			this.repeaters = [
-				...this.payload.subarray(offset, offset + MAX_REPEATERS),
+		const destinationNodeId = nodeId;
+		const routeKind: RouteKind = raw.payload[offset++];
+		let repeaters: number[] | undefined;
+		let routeSpeed: ZWaveDataRate | undefined;
+		if (routeKind) {
+			repeaters = [
+				...raw.payload.subarray(offset, offset + MAX_REPEATERS),
 			].filter((id) => id > 0);
-			this.routeSpeed = this.payload[offset + MAX_REPEATERS];
+			routeSpeed = raw.payload[offset + MAX_REPEATERS];
 		}
+
+		return new this({
+			destinationNodeId,
+			routeKind,
+			repeaters,
+			routeSpeed,
+		});
 	}
 
 	public readonly destinationNodeId: number;

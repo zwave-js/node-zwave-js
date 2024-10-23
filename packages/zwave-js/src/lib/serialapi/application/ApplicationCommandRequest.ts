@@ -1,26 +1,27 @@
-import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
+import { type CommandClass } from "@zwave-js/cc";
 import {
 	type FrameType,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
-	type SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
+import { type CCEncodingContext } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { type MessageWithCC } from "../utils";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application
@@ -37,83 +38,101 @@ export enum ApplicationCommandStatusFlags {
 	ForeignHomeId = 0b1000_0000, // The received frame is received from a foreign HomeID. Only Controllers in Smart Start AddNode mode can receive this status.
 }
 
-interface ApplicationCommandRequestOptions extends MessageBaseOptions {
-	command: CommandClass;
-	frameType?: ApplicationCommandRequest["frameType"];
-	routedBusy?: boolean;
-}
+export type ApplicationCommandRequestOptions =
+	& (
+		| { command: CommandClass }
+		| {
+			nodeId: number;
+			serializedCC: Buffer;
+		}
+	)
+	& {
+		frameType?: ApplicationCommandRequest["frameType"];
+		routedBusy?: boolean;
+		isExploreFrame?: boolean;
+		isForeignFrame?: boolean;
+		fromForeignHomeId?: boolean;
+	};
 
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
 export class ApplicationCommandRequest extends Message
-	implements ICommandClassContainer
+	implements MessageWithCC
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ApplicationCommandRequestOptions,
+		options: ApplicationCommandRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// first byte is a status flag
-			const status = this.payload[0];
-			this.routedBusy = !!(
-				status & ApplicationCommandStatusFlags.RoutedBusy
-			);
-			switch (status & ApplicationCommandStatusFlags.TypeMask) {
-				case ApplicationCommandStatusFlags.TypeMulti:
-					this.frameType = "multicast";
-					break;
-				case ApplicationCommandStatusFlags.TypeBroad:
-					this.frameType = "broadcast";
-					break;
-				default:
-					this.frameType = "singlecast";
-			}
-			this.isExploreFrame = this.frameType === "broadcast"
-				&& !!(status & ApplicationCommandStatusFlags.Explore);
-			this.isForeignFrame = !!(
-				status & ApplicationCommandStatusFlags.ForeignFrame
-			);
-			this.fromForeignHomeId = !!(
-				status & ApplicationCommandStatusFlags.ForeignHomeId
-			);
 
-			// followed by a node ID
-			let offset = 1;
-			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				offset,
-			);
-			offset += nodeIdBytes;
-			// and a command class
-			const commandLength = this.payload[offset++];
-			this.command = CommandClass.parse(
-				this.payload.subarray(offset, offset + commandLength),
-				{
-					sourceNodeId: nodeId,
-					...options.ctx,
-					frameType: this.frameType,
-				},
-			) as SinglecastCC<CommandClass>;
-		} else {
-			// TODO: This logic is unsound
-			if (!options.command.isSinglecast()) {
-				throw new ZWaveError(
-					`ApplicationCommandRequest can only be used for singlecast CCs`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.frameType = options.frameType ?? "singlecast";
-			this.routedBusy = !!options.routedBusy;
+		if ("command" in options) {
 			this.command = options.command;
-			this.isExploreFrame = false;
-			this.isForeignFrame = false;
-			this.fromForeignHomeId = false;
+		} else {
+			this._nodeId = options.nodeId;
+			this.serializedCC = options.serializedCC;
 		}
+
+		this.frameType = options.frameType ?? "singlecast";
+		this.routedBusy = options.routedBusy ?? false;
+		this.isExploreFrame = options.isExploreFrame ?? false;
+		this.isForeignFrame = options.isForeignFrame ?? false;
+		this.fromForeignHomeId = options.fromForeignHomeId ?? false;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationCommandRequest {
+		// first byte is a status flag
+		const status = raw.payload[0];
+		const routedBusy = !!(
+			status & ApplicationCommandStatusFlags.RoutedBusy
+		);
+		let frameType: FrameType;
+
+		switch (status & ApplicationCommandStatusFlags.TypeMask) {
+			case ApplicationCommandStatusFlags.TypeMulti:
+				frameType = "multicast";
+				break;
+			case ApplicationCommandStatusFlags.TypeBroad:
+				frameType = "broadcast";
+				break;
+			default:
+				frameType = "singlecast";
+		}
+		const isExploreFrame: boolean = frameType === "broadcast"
+			&& !!(status & ApplicationCommandStatusFlags.Explore);
+		const isForeignFrame = !!(
+			status & ApplicationCommandStatusFlags.ForeignFrame
+		);
+		const fromForeignHomeId = !!(
+			status & ApplicationCommandStatusFlags.ForeignHomeId
+		);
+
+		// followed by a node ID
+		let offset = 1;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		// and a command class
+		const commandLength = raw.payload[offset++];
+		const serializedCC = raw.payload.subarray(
+			offset,
+			offset + commandLength,
+		);
+
+		return new this({
+			routedBusy,
+			frameType,
+			isExploreFrame,
+			isForeignFrame,
+			fromForeignHomeId,
+			serializedCC,
+			nodeId,
+		});
 	}
 
 	public readonly routedBusy: boolean;
@@ -123,13 +142,30 @@ export class ApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: SinglecastCC<CommandClass>; // TODO: why is this a SinglecastCC?
+	public command: CommandClass | undefined;
 
+	private _nodeId: number | undefined;
 	public override getNodeId(): number | undefined {
-		if (this.command.isSinglecast()) {
+		if (this.command?.isSinglecast()) {
 			return this.command.nodeId;
 		}
-		return super.getNodeId();
+
+		return this._nodeId ?? super.getNodeId();
+	}
+
+	public serializedCC: Buffer | undefined;
+	/** @internal */
+	public serializeCC(ctx: CCEncodingContext): Buffer {
+		if (!this.serializedCC) {
+			if (!this.command) {
+				throw new ZWaveError(
+					`Cannot serialize a ${this.constructor.name} without a command`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.serializedCC = this.command.serialize(ctx);
+		}
+		return this.serializedCC;
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
@@ -140,7 +176,7 @@ export class ApplicationCommandRequest extends Message
 			: 0)
 			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
-		const serializedCC = this.command.serialize(ctx);
+		const serializedCC = this.serializeCC(ctx);
 		const nodeId = encodeNodeID(
 			this.getNodeId() ?? ctx.ownNodeId,
 			ctx.nodeIdType,

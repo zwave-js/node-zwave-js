@@ -12,16 +12,15 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import {
-	type DeserializingMessageConstructor,
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
+	type MessageConstructor,
 	type MessageEncodingContext,
-	type MessageOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
-	gotDeserializationOptions,
 	messageTypes,
 } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
@@ -46,34 +45,48 @@ const {
 } = createSimpleReflectionDecorator<
 	ApplicationUpdateRequest,
 	[updateType: ApplicationUpdateTypes],
-	DeserializingMessageConstructor<ApplicationUpdateRequest>
+	MessageConstructor<ApplicationUpdateRequest>
 >({
 	name: "applicationUpdateType",
 });
 
+export interface ApplicationUpdateRequestOptions {
+	updateType?: ApplicationUpdateTypes;
+}
+
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(options?: MessageOptions) {
+	public constructor(
+		options: ApplicationUpdateRequestOptions & MessageBaseOptions = {},
+	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.updateType = this.payload[0];
+		this.updateType = options.updateType ?? getApplicationUpdateType(this)!;
+	}
 
-			const CommandConstructor = getApplicationUpdateRequestConstructor(
-				this.updateType,
-			);
-			if (
-				CommandConstructor
-				&& (new.target as any) !== CommandConstructor
-			) {
-				return new CommandConstructor(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationUpdateRequest {
+		const updateType: ApplicationUpdateTypes = raw.payload[0];
+		const payload = raw.payload.subarray(1);
 
-			this.payload = this.payload.subarray(1);
-		} else {
-			this.updateType = getApplicationUpdateType(this)!;
+		const CommandConstructor = getApplicationUpdateRequestConstructor(
+			updateType,
+		);
+		if (CommandConstructor) {
+			return CommandConstructor.from(
+				raw.withPayload(payload),
+				ctx,
+			) as ApplicationUpdateRequest;
 		}
+
+		const ret = new ApplicationUpdateRequest({
+			updateType,
+		});
+		ret.payload = payload;
+		return ret;
 	}
 
 	public readonly updateType: ApplicationUpdateTypes;
@@ -87,9 +100,7 @@ export class ApplicationUpdateRequest extends Message {
 	}
 }
 
-interface ApplicationUpdateRequestWithNodeInfoOptions
-	extends MessageBaseOptions
-{
+export interface ApplicationUpdateRequestWithNodeInfoOptions {
 	nodeInformation: NodeUpdatePayload;
 }
 
@@ -98,21 +109,27 @@ export class ApplicationUpdateRequestWithNodeInfo
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| ApplicationUpdateRequestWithNodeInfoOptions,
+			& ApplicationUpdateRequestWithNodeInfoOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.nodeInformation = parseNodeUpdatePayload(
-				this.payload,
-				options.ctx.nodeIdType,
-			);
-			this.nodeId = this.nodeInformation.nodeId;
-		} else {
-			this.nodeId = options.nodeInformation.nodeId;
-			this.nodeInformation = options.nodeInformation;
-		}
+		this.nodeId = options.nodeInformation.nodeId;
+		this.nodeInformation = options.nodeInformation;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationUpdateRequestWithNodeInfo {
+		const nodeInformation: NodeUpdatePayload = parseNodeUpdatePayload(
+			raw.payload,
+			ctx.nodeIdType,
+		);
+
+		return new this({
+			nodeInformation,
+		});
 	}
 
 	public nodeId: number;
@@ -147,52 +164,97 @@ export class ApplicationUpdateRequestNodeAdded
 	extends ApplicationUpdateRequestWithNodeInfo
 {}
 
+export interface ApplicationUpdateRequestNodeRemovedOptions {
+	nodeId: number;
+}
+
 @applicationUpdateType(ApplicationUpdateTypes.Node_Removed)
 export class ApplicationUpdateRequestNodeRemoved
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& ApplicationUpdateRequestNodeRemovedOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
+		this.nodeId = options.nodeId;
+	}
 
-		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
-		this.nodeId = nodeId;
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationUpdateRequestNodeRemoved {
+		const { nodeId } = parseNodeID(raw.payload, ctx.nodeIdType, 0);
 		// byte 1/2 is 0, meaning unknown
+
+		return new this({
+			nodeId,
+		});
 	}
 
 	public nodeId: number;
+}
+
+export interface ApplicationUpdateRequestSmartStartHomeIDReceivedBaseOptions {
+	remoteNodeId: number;
+	nwiHomeId: Buffer;
+	basicDeviceClass: BasicDeviceClass;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
+	supportedCCs: CommandClasses[];
 }
 
 class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& ApplicationUpdateRequestSmartStartHomeIDReceivedBaseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
+
+		// TODO: Check implementation:
+		this.remoteNodeId = options.remoteNodeId;
+		this.nwiHomeId = options.nwiHomeId;
+		this.basicDeviceClass = options.basicDeviceClass;
+		this.genericDeviceClass = options.genericDeviceClass;
+		this.specificDeviceClass = options.specificDeviceClass;
+		this.supportedCCs = options.supportedCCs;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationUpdateRequestSmartStartHomeIDReceivedBase {
 		let offset = 0;
-		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-			this.payload,
-			options.ctx.nodeIdType,
+		const { nodeId: remoteNodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
 			offset,
 		);
 		offset += nodeIdBytes;
-		this.remoteNodeId = nodeId;
-
 		// next byte is rxStatus
 		offset++;
-
-		this.nwiHomeId = this.payload.subarray(offset, offset + 4);
+		const nwiHomeId: Buffer = raw.payload.subarray(offset, offset + 4);
 		offset += 4;
-
-		const ccLength = this.payload[offset++];
-		this.basicDeviceClass = this.payload[offset++];
-		this.genericDeviceClass = this.payload[offset++];
-		this.specificDeviceClass = this.payload[offset++];
-		this.supportedCCs = parseCCList(
-			this.payload.subarray(offset, offset + ccLength),
+		const ccLength = raw.payload[offset++];
+		const basicDeviceClass: BasicDeviceClass = raw.payload[offset++];
+		const genericDeviceClass = raw.payload[offset++];
+		const specificDeviceClass = raw.payload[offset++];
+		const supportedCCs = parseCCList(
+			raw.payload.subarray(offset, offset + ccLength),
 		).supportedCCs;
+
+		return new this({
+			remoteNodeId,
+			nwiHomeId,
+			basicDeviceClass,
+			genericDeviceClass,
+			specificDeviceClass,
+			supportedCCs,
+		});
 	}
 
 	public readonly remoteNodeId: number;
@@ -237,18 +299,38 @@ export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}
 
+export interface ApplicationUpdateRequestSUCIdChangedOptions {
+	sucNodeID: number;
+}
+
 @applicationUpdateType(ApplicationUpdateTypes.SUC_IdChanged)
 export class ApplicationUpdateRequestSUCIdChanged
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& ApplicationUpdateRequestSUCIdChangedOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
-		this.sucNodeID = nodeId;
+		this.sucNodeID = options.sucNodeID;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ApplicationUpdateRequestSUCIdChanged {
+		const { nodeId: sucNodeID } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			0,
+		);
 		// byte 1/2 is 0, meaning unknown
+
+		return new this({
+			sucNodeID,
+		});
 	}
 
 	public sucNodeID: number;

@@ -23,16 +23,6 @@ export interface HostIDs {
 	homeId: number;
 }
 
-// FIXME: This should not be needed. Instead have the driver set callback IDs during sendMessage
-/** Allows generating a new callback ID */
-export interface GetNextCallbackId {
-	/**
-	 * Returns the next callback ID. Callback IDs are used to correlate requests
-	 * to the controller/nodes with its response
-	 */
-	getNextCallbackId(): number;
-}
-
 /** Allows querying device configuration for a node */
 export interface GetDeviceConfig {
 	getDeviceConfig(nodeId: number): DeviceConfig | undefined;
@@ -71,7 +61,7 @@ export interface CCParsingContext
 	__internalIsMockNode?: boolean;
 
 	/** If known, the frame type of the containing message */
-	frameType?: FrameType;
+	frameType: FrameType;
 
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 

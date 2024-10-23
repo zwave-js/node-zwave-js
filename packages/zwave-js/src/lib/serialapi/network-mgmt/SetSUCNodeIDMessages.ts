@@ -8,18 +8,17 @@ import {
 } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -29,7 +28,7 @@ export enum SetSUCNodeIdStatus {
 	Failed = 0x06,
 }
 
-export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
+export interface SetSUCNodeIdRequestOptions {
 	ownNodeId: number;
 	sucNodeId: number;
 	enableSUC: boolean;
@@ -40,14 +39,11 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.SetSUCNodeId)
 @priority(MessagePriority.Controller)
 export class SetSUCNodeIdRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SetSUCNodeIdRequestStatusReport
-		) {
-			return new SetSUCNodeIdRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetSUCNodeIdRequestBase {
+		return SetSUCNodeIdRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -55,22 +51,27 @@ export class SetSUCNodeIdRequestBase extends Message {
 @expectedCallback(FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public constructor(
-		options: MessageDeserializationOptions | SetSUCNodeIdRequestOptions,
+		options: SetSUCNodeIdRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.sucNodeId = options.sucNodeId;
-			this.enableSUC = options.enableSUC;
-			this.enableSIS = options.enableSIS;
-			this.transmitOptions = options.transmitOptions
-				?? TransmitOptions.DEFAULT;
-			this._ownNodeId = options.ownNodeId;
-		}
+		this.sucNodeId = options.sucNodeId;
+		this.enableSUC = options.enableSUC;
+		this.enableSIS = options.enableSIS;
+		this.transmitOptions = options.transmitOptions
+			?? TransmitOptions.DEFAULT;
+		this._ownNodeId = options.ownNodeId;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetSUCNodeIdRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SetSUCNodeIdRequest({});
 	}
 
 	public sucNodeId: number;
@@ -102,23 +103,37 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	}
 }
 
+export interface SetSUCNodeIdResponseOptions {
+	wasExecuted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetSUCNodeIdResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._wasExecuted = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.wasExecuted = options.wasExecuted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetSUCNodeIdResponse {
+		const wasExecuted = raw.payload[0] !== 0;
+
+		return new this({
+			wasExecuted,
+		});
 	}
 
 	isOK(): boolean {
-		return this._wasExecuted;
+		return this.wasExecuted;
 	}
 
-	private _wasExecuted: boolean;
-	public get wasExecuted(): boolean {
-		return this._wasExecuted;
-	}
+	public wasExecuted: boolean;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
@@ -128,24 +143,39 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	}
 }
 
+export interface SetSUCNodeIdRequestStatusReportOptions {
+	status: SetSUCNodeIdStatus;
+}
+
 export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetSUCNodeIdRequestStatusReportOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this._status = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.status = options.status;
 	}
 
-	private _status: SetSUCNodeIdStatus;
-	public get status(): SetSUCNodeIdStatus {
-		return this._status;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetSUCNodeIdRequestStatusReport {
+		const callbackId = raw.payload[0];
+		const status: SetSUCNodeIdStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			status,
+		});
 	}
+
+	public status: SetSUCNodeIdStatus;
 
 	public isOK(): boolean {
-		return this._status === SetSUCNodeIdStatus.Succeeded;
+		return this.status === SetSUCNodeIdStatus.Succeeded;
 	}
 }

@@ -8,19 +8,17 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 
-export interface ExtNVMWriteLongBufferRequestOptions
-	extends MessageBaseOptions
-{
+export interface ExtNVMWriteLongBufferRequestOptions {
 	offset: number;
 	buffer: Buffer;
 }
@@ -30,32 +28,35 @@ export interface ExtNVMWriteLongBufferRequestOptions
 @expectedResponse(FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ExtNVMWriteLongBufferRequestOptions,
+		options: ExtNVMWriteLongBufferRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
+		if (options.offset < 0 || options.offset > 0xffffff) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				"The offset must be a 24-bit number!",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.offset < 0 || options.offset > 0xffffff) {
-				throw new ZWaveError(
-					"The offset must be a 24-bit number!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			if (options.buffer.length < 1 || options.buffer.length > 0xffff) {
-				throw new ZWaveError(
-					"The buffer must be between 1 and 65535 bytes long",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.offset = options.offset;
-			this.buffer = options.buffer;
 		}
+		if (options.buffer.length < 1 || options.buffer.length > 0xffff) {
+			throw new ZWaveError(
+				"The buffer must be between 1 and 65535 bytes long",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.offset = options.offset;
+		this.buffer = options.buffer;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ExtNVMWriteLongBufferRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ExtNVMWriteLongBufferRequest({});
 	}
 
 	public offset: number;
@@ -82,13 +83,30 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 	}
 }
 
+export interface ExtNVMWriteLongBufferResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: ExtNVMWriteLongBufferResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.success = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ExtNVMWriteLongBufferResponse {
+		const success = raw.payload[0] !== 0;
+
+		return new this({
+			success,
+		});
 	}
 
 	public readonly success: boolean;

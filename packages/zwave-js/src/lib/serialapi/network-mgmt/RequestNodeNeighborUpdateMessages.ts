@@ -2,6 +2,8 @@ import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	MultiStageCallback,
 	SuccessIndicator,
 } from "@zwave-js/serial";
@@ -9,11 +11,8 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -25,26 +24,21 @@ export enum NodeNeighborUpdateStatus {
 	UpdateFailed = 0x23,
 }
 
-export interface RequestNodeNeighborUpdateRequestOptions
-	extends MessageBaseOptions
-{
-	nodeId: number;
-	/** This must be determined with {@link computeNeighborDiscoveryTimeout} */
-	discoveryTimeout: number;
-}
-
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== RequestNodeNeighborUpdateReport
-		) {
-			return new RequestNodeNeighborUpdateReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RequestNodeNeighborUpdateRequestBase {
+		return RequestNodeNeighborUpdateReport.from(raw, ctx);
 	}
+}
+
+export interface RequestNodeNeighborUpdateRequestOptions {
+	nodeId: number;
+	/** This must be determined with {@link computeNeighborDiscoveryTimeout} */
+	discoveryTimeout: number;
 }
 
 @expectedCallback(FunctionType.RequestNodeNeighborUpdate)
@@ -52,7 +46,7 @@ export class RequestNodeNeighborUpdateRequest
 	extends RequestNodeNeighborUpdateRequestBase
 {
 	public constructor(
-		options: RequestNodeNeighborUpdateRequestOptions,
+		options: RequestNodeNeighborUpdateRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.nodeId = options.nodeId;
@@ -83,31 +77,45 @@ export class RequestNodeNeighborUpdateRequest
 	}
 }
 
+export interface RequestNodeNeighborUpdateReportOptions {
+	updateStatus: NodeNeighborUpdateStatus;
+}
+
 export class RequestNodeNeighborUpdateReport
 	extends RequestNodeNeighborUpdateRequestBase
 	implements SuccessIndicator, MultiStageCallback
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: RequestNodeNeighborUpdateReportOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this._updateStatus = this.payload[1];
+		this.callbackId = options.callbackId;
+		this.updateStatus = options.updateStatus;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): RequestNodeNeighborUpdateReport {
+		const callbackId = raw.payload[0];
+		const updateStatus: NodeNeighborUpdateStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			updateStatus,
+		});
 	}
 
 	isOK(): boolean {
-		return this._updateStatus !== NodeNeighborUpdateStatus.UpdateFailed;
+		return this.updateStatus !== NodeNeighborUpdateStatus.UpdateFailed;
 	}
 
 	isFinal(): boolean {
-		return this._updateStatus === NodeNeighborUpdateStatus.UpdateDone;
+		return this.updateStatus === NodeNeighborUpdateStatus.UpdateDone;
 	}
 
-	private _updateStatus: NodeNeighborUpdateStatus;
-	public get updateStatus(): NodeNeighborUpdateStatus {
-		return this._updateStatus;
-	}
+	public updateStatus: NodeNeighborUpdateStatus;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
@@ -116,7 +124,7 @@ export class RequestNodeNeighborUpdateReport
 				"callback id": this.callbackId ?? "(not set)",
 				"update status": getEnumMemberName(
 					NodeNeighborUpdateStatus,
-					this._updateStatus,
+					this.updateStatus,
 				),
 			},
 		};

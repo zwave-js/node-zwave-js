@@ -1,17 +1,16 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -46,18 +45,15 @@ export enum ReplaceFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
 @priority(MessagePriority.Controller)
 export class ReplaceFailedNodeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== ReplaceFailedNodeRequestStatusReport
-		) {
-			return new ReplaceFailedNodeRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ReplaceFailedNodeRequestBase {
+		return ReplaceFailedNodeRequestStatusReport.from(raw, ctx);
 	}
 }
 
-interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
+export interface ReplaceFailedNodeRequestOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	failedNodeId: number;
 }
@@ -65,7 +61,7 @@ interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	public constructor(
-		options: ReplaceFailedNodeRequestOptions,
+		options: ReplaceFailedNodeRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.failedNodeId = options.failedNodeId;
@@ -83,25 +79,43 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	}
 }
 
+export interface ReplaceFailedNodeResponseOptions {
+	replaceStatus: ReplaceFailedNodeStartFlags;
+}
+
 @messageTypes(MessageType.Response, FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: ReplaceFailedNodeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._replaceStatus = this.payload[0];
+
+		// TODO: Check implementation:
+		this.replaceStatus = options.replaceStatus;
 	}
 
-	private _replaceStatus: ReplaceFailedNodeStartFlags;
-	public get replaceStatus(): ReplaceFailedNodeStartFlags {
-		return this._replaceStatus;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ReplaceFailedNodeResponse {
+		const replaceStatus: ReplaceFailedNodeStartFlags = raw.payload[0];
+
+		return new this({
+			replaceStatus,
+		});
 	}
+
+	public replaceStatus: ReplaceFailedNodeStartFlags;
 
 	public isOK(): boolean {
-		return this._replaceStatus === ReplaceFailedNodeStartFlags.OK;
+		return this.replaceStatus === ReplaceFailedNodeStartFlags.OK;
 	}
+}
+
+export interface ReplaceFailedNodeRequestStatusReportOptions {
+	replaceStatus: ReplaceFailedNodeStatus;
 }
 
 export class ReplaceFailedNodeRequestStatusReport
@@ -109,22 +123,35 @@ export class ReplaceFailedNodeRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& ReplaceFailedNodeRequestStatusReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this._replaceStatus = this.payload[1];
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.replaceStatus = options.replaceStatus;
 	}
 
-	private _replaceStatus: ReplaceFailedNodeStatus;
-	public get replaceStatus(): ReplaceFailedNodeStatus {
-		return this._replaceStatus;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ReplaceFailedNodeRequestStatusReport {
+		const callbackId = raw.payload[0];
+		const replaceStatus: ReplaceFailedNodeStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			replaceStatus,
+		});
 	}
+
+	public replaceStatus: ReplaceFailedNodeStatus;
 
 	public isOK(): boolean {
 		return (
-			this._replaceStatus
+			this.replaceStatus
 				=== ReplaceFailedNodeStatus.FailedNodeReplaceDone
 		);
 	}

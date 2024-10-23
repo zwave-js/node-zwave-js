@@ -254,14 +254,11 @@ export class LanguageCCReport extends LanguageCC {
 		options: WithAddress<LanguageCCReportOptions>,
 	) {
 		super(options);
-
-		// TODO: Check implementation:
 		this.language = options.language;
 		this.country = options.country;
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCReport {
-		// if (gotDeserializationOptions(options)) {
 		validatePayload(raw.payload.length >= 3);
 		const language = raw.payload.toString("ascii", 0, 3);
 		let country: MaybeNotKnown<string>;

@@ -3,15 +3,16 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 
-interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
+export interface SetSerialApiTimeoutsRequestOptions {
 	ackTimeout: number;
 	byteTimeout: number;
 }
@@ -21,7 +22,7 @@ interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 	public constructor(
-		options: SetSerialApiTimeoutsRequestOptions,
+		options: SetSerialApiTimeoutsRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.ackTimeout = options.ackTimeout;
@@ -40,23 +41,36 @@ export class SetSerialApiTimeoutsRequest extends Message {
 	}
 }
 
+export interface SetSerialApiTimeoutsResponseOptions {
+	oldAckTimeout: number;
+	oldByteTimeout: number;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetSerialApiTimeoutsResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this._oldAckTimeout = this.payload[0] * 10;
-		this._oldByteTimeout = this.payload[1] * 10;
+
+		// TODO: Check implementation:
+		this.oldAckTimeout = options.oldAckTimeout;
+		this.oldByteTimeout = options.oldByteTimeout;
 	}
 
-	private _oldAckTimeout: number;
-	public get oldAckTimeout(): number {
-		return this._oldAckTimeout;
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetSerialApiTimeoutsResponse {
+		const oldAckTimeout = raw.payload[0] * 10;
+		const oldByteTimeout = raw.payload[1] * 10;
+
+		return new this({
+			oldAckTimeout,
+			oldByteTimeout,
+		});
 	}
 
-	private _oldByteTimeout: number;
-	public get oldByteTimeout(): number {
-		return this._oldByteTimeout;
-	}
+	public oldAckTimeout: number;
+	public oldByteTimeout: number;
 }

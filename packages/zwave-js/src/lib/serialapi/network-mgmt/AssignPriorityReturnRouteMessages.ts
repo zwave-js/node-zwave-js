@@ -13,14 +13,13 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -29,21 +28,15 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignPriorityReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignPriorityReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any)
-				!== AssignPriorityReturnRouteRequestTransmitReport
-		) {
-			return new AssignPriorityReturnRouteRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPriorityReturnRouteRequestBase {
+		return AssignPriorityReturnRouteRequestTransmitReport.from(raw, ctx);
 	}
 }
 
-export interface AssignPriorityReturnRouteRequestOptions
-	extends MessageBaseOptions
-{
+export interface AssignPriorityReturnRouteRequestOptions {
 	nodeId: number;
 	destinationNodeId: number;
 	repeaters: number[];
@@ -56,38 +49,41 @@ export class AssignPriorityReturnRouteRequest
 	extends AssignPriorityReturnRouteRequestBase
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| AssignPriorityReturnRouteRequestOptions,
+		options: AssignPriorityReturnRouteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
+		if (options.nodeId === options.destinationNodeId) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`The source and destination node must not be identical`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.nodeId === options.destinationNodeId) {
-				throw new ZWaveError(
-					`The source and destination node must not be identical`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			if (
-				options.repeaters.length > MAX_REPEATERS
-				|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
-			) {
-				throw new ZWaveError(
-					`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.nodeId = options.nodeId;
-			this.destinationNodeId = options.destinationNodeId;
-			this.repeaters = options.repeaters;
-			this.routeSpeed = options.routeSpeed;
 		}
+		if (
+			options.repeaters.length > MAX_REPEATERS
+			|| options.repeaters.some((id) => id < 1 || id > MAX_NODES)
+		) {
+			throw new ZWaveError(
+				`The repeaters array must contain at most ${MAX_REPEATERS} node IDs between 1 and ${MAX_NODES}`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		this.nodeId = options.nodeId;
+		this.destinationNodeId = options.destinationNodeId;
+		this.repeaters = options.repeaters;
+		this.routeSpeed = options.routeSpeed;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignPriorityReturnRouteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new AssignPriorityReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -137,15 +133,32 @@ export class AssignPriorityReturnRouteRequest
 	}
 }
 
+export interface AssignPriorityReturnRouteResponseOptions {
+	hasStarted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.AssignPriorityReturnRoute)
 export class AssignPriorityReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: AssignPriorityReturnRouteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.hasStarted = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.hasStarted = options.hasStarted;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignPriorityReturnRouteResponse {
+		const hasStarted = raw.payload[0] !== 0;
+
+		return new this({
+			hasStarted,
+		});
 	}
 
 	public isOK(): boolean {
@@ -162,17 +175,36 @@ export class AssignPriorityReturnRouteResponse extends Message
 	}
 }
 
+export interface AssignPriorityReturnRouteRequestTransmitReportOptions {
+	transmitStatus: TransmitStatus;
+}
+
 export class AssignPriorityReturnRouteRequestTransmitReport
 	extends AssignPriorityReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& AssignPriorityReturnRouteRequestTransmitReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 
 		this.callbackId = this.payload[0];
 		this.transmitStatus = this.payload[1];
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AssignPriorityReturnRouteRequestTransmitReport {
+		const callbackId = raw.payload[0];
+		const transmitStatus: TransmitStatus = raw.payload[1];
+
+		return new this({
+			callbackId,
+			transmitStatus,
+		});
 	}
 
 	public isOK(): boolean {

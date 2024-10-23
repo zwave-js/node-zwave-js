@@ -8,17 +8,16 @@ import {
 } from "@zwave-js/core";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -75,7 +74,7 @@ export class ExtendedNVMOperationsRequest extends Message {
 export class ExtendedNVMOperationsOpenRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(options?: MessageOptions) {
+	public constructor(options: MessageBaseOptions = {}) {
 		super(options);
 		this.command = ExtendedNVMOperationsCommand.Open;
 	}
@@ -86,7 +85,7 @@ export class ExtendedNVMOperationsOpenRequest
 export class ExtendedNVMOperationsCloseRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(options?: MessageOptions) {
+	public constructor(options: MessageBaseOptions = {}) {
 		super(options);
 		this.command = ExtendedNVMOperationsCommand.Close;
 	}
@@ -94,9 +93,7 @@ export class ExtendedNVMOperationsCloseRequest
 
 // =============================================================================
 
-export interface ExtendedNVMOperationsReadRequestOptions
-	extends MessageBaseOptions
-{
+export interface ExtendedNVMOperationsReadRequestOptions {
 	length: number;
 	offset: number;
 }
@@ -105,35 +102,38 @@ export class ExtendedNVMOperationsReadRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ExtendedNVMOperationsReadRequestOptions,
+		options: ExtendedNVMOperationsReadRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.command = ExtendedNVMOperationsCommand.Read;
 
-		if (gotDeserializationOptions(options)) {
+		if (options.length < 0 || options.length > 0xff) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				"The length must be between 0 and 255!",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.length < 0 || options.length > 0xff) {
-				throw new ZWaveError(
-					"The length must be between 0 and 255!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			if (options.offset < 0 || options.offset > 0xffffffff) {
-				throw new ZWaveError(
-					"The offset must be a 32-bit number!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.length = options.length;
-			this.offset = options.offset;
 		}
+		if (options.offset < 0 || options.offset > 0xffffffff) {
+			throw new ZWaveError(
+				"The offset must be a 32-bit number!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		this.length = options.length;
+		this.offset = options.offset;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ExtendedNVMOperationsReadRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ExtendedNVMOperationsReadRequest({});
 	}
 
 	public length: number;
@@ -162,9 +162,7 @@ export class ExtendedNVMOperationsReadRequest
 
 // =============================================================================
 
-export interface ExtendedNVMOperationsWriteRequestOptions
-	extends MessageBaseOptions
-{
+export interface ExtendedNVMOperationsWriteRequestOptions {
 	offset: number;
 	buffer: Buffer;
 }
@@ -173,35 +171,38 @@ export class ExtendedNVMOperationsWriteRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| ExtendedNVMOperationsWriteRequestOptions,
+		options: ExtendedNVMOperationsWriteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 		this.command = ExtendedNVMOperationsCommand.Write;
 
-		if (gotDeserializationOptions(options)) {
+		if (options.offset < 0 || options.offset > 0xffffffff) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				"The offset must be a 32-bit number!",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.offset < 0 || options.offset > 0xffffffff) {
-				throw new ZWaveError(
-					"The offset must be a 32-bit number!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			if (options.buffer.length < 1 || options.buffer.length > 0xff) {
-				throw new ZWaveError(
-					"The buffer must be between 1 and 255 bytes long",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.offset = options.offset;
-			this.buffer = options.buffer;
 		}
+		if (options.buffer.length < 1 || options.buffer.length > 0xff) {
+			throw new ZWaveError(
+				"The buffer must be between 1 and 255 bytes long",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		this.offset = options.offset;
+		this.buffer = options.buffer;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ExtendedNVMOperationsWriteRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ExtendedNVMOperationsWriteRequest({});
 	}
 
 	public offset: number;
@@ -231,42 +232,60 @@ export class ExtendedNVMOperationsWriteRequest
 }
 
 // =============================================================================
+export interface ExtendedNVMOperationsResponseOptions {
+	status: ExtendedNVMOperationStatus;
+	offsetOrSize: number;
+	bufferOrBitmask: Buffer;
+}
 
 @messageTypes(MessageType.Response, FunctionType.ExtendedNVMOperations)
 export class ExtendedNVMOperationsResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: ExtendedNVMOperationsResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 2);
-		this.status = this.payload[0];
-		const dataLength = this.payload[1];
+		// TODO: Check implementation:
+		this.status = options.status;
+		this.offsetOrSize = options.offsetOrSize;
+		this.bufferOrBitmask = options.bufferOrBitmask;
+	}
 
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): ExtendedNVMOperationsResponse {
+		validatePayload(raw.payload.length >= 2);
+		const status: ExtendedNVMOperationStatus = raw.payload[0];
+		const dataLength = raw.payload[1];
 		let offset = 2;
-
-		if (this.payload.length >= offset + 4) {
-			this.offsetOrSize = this.payload.readUInt32BE(offset);
-		} else {
-			this.offsetOrSize = 0;
+		let offsetOrSize = 0;
+		if (raw.payload.length >= offset + 4) {
+			offsetOrSize = raw.payload.readUInt32BE(offset);
 		}
 
 		offset += 4;
-
 		// The buffer will contain:
 		// - Read command: the read NVM data
 		// - Write/Close command: nothing
 		// - Open command: bit mask of supported sub-commands
-		if (dataLength > 0 && this.payload.length >= offset + dataLength) {
-			this.bufferOrBitmask = this.payload.subarray(
+		let bufferOrBitmask: Buffer;
+		if (dataLength > 0 && raw.payload.length >= offset + dataLength) {
+			bufferOrBitmask = raw.payload.subarray(
 				offset,
 				offset + dataLength,
 			);
 		} else {
-			this.bufferOrBitmask = Buffer.from([]);
+			bufferOrBitmask = Buffer.from([]);
 		}
+
+		return new this({
+			status,
+			offsetOrSize,
+			bufferOrBitmask,
+		});
 	}
 
 	isOK(): boolean {

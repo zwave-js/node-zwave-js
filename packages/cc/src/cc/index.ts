@@ -544,7 +544,7 @@ export {
 	MultilevelSwitchCCSupportedReport,
 	MultilevelSwitchCCValues,
 } from "./MultilevelSwitchCC";
-export { NoOperationCC, messageIsPing } from "./NoOperationCC";
+export { NoOperationCC } from "./NoOperationCC";
 export type {
 	NodeNamingAndLocationCCLocationReportOptions,
 	NodeNamingAndLocationCCLocationSetOptions,

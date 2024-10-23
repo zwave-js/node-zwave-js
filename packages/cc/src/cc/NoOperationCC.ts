@@ -1,5 +1,4 @@
 import { CommandClasses, MessagePriority } from "@zwave-js/core/safe";
-import type { Message } from "@zwave-js/serial";
 import { PhysicalCCAPI } from "../lib/API";
 import { CommandClass } from "../lib/CommandClass";
 import {
@@ -7,7 +6,6 @@ import {
 	commandClass,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
-import { isCommandClassContainer } from "../lib/ICommandClassContainer";
 
 // @noSetValueAPI This CC has no set-type commands
 // @noInterview There's nothing to interview here
@@ -36,14 +34,4 @@ export class NoOperationCCAPI extends PhysicalCCAPI {
 @implementedVersion(1)
 export class NoOperationCC extends CommandClass {
 	declare ccCommand: undefined;
-}
-
-/**
- * @publicAPI
- * Tests if a given message is a ping
- */
-export function messageIsPing<T extends Message>(
-	msg: T,
-): msg is T & { command: NoOperationCC } {
-	return isCommandClassContainer(msg) && msg.command instanceof NoOperationCC;
 }

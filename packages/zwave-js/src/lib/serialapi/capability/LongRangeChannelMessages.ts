@@ -9,12 +9,12 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -25,23 +25,51 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @priority(MessagePriority.Controller)
 export class GetLongRangeChannelRequest extends Message {}
 
+export interface GetLongRangeChannelResponseOptions {
+	channel:
+		| LongRangeChannel.Unsupported
+		| LongRangeChannel.A
+		| LongRangeChannel.B;
+	supportsAutoChannelSelection: boolean;
+	autoChannelSelectionActive: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetLongRangeChannel)
 @priority(MessagePriority.Controller)
 export class GetLongRangeChannelResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: GetLongRangeChannelResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.channel = this.payload[0];
 
-		if (this.payload.length >= 2) {
-			this.supportsAutoChannelSelection =
-				!!(this.payload[1] & 0b0001_0000);
-			this.autoChannelSelectionActive = !!(this.payload[1] & 0b0010_0000);
+		// TODO: Check implementation:
+		this.channel = options.channel;
+		this.supportsAutoChannelSelection =
+			options.supportsAutoChannelSelection;
+		this.autoChannelSelectionActive = options.autoChannelSelectionActive;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): GetLongRangeChannelResponse {
+		const channel: GetLongRangeChannelResponseOptions["channel"] =
+			raw.payload[0];
+		let supportsAutoChannelSelection: boolean;
+		let autoChannelSelectionActive: boolean;
+		if (raw.payload.length >= 2) {
+			supportsAutoChannelSelection = !!(raw.payload[1] & 0b0001_0000);
+			autoChannelSelectionActive = !!(raw.payload[1] & 0b0010_0000);
 		} else {
-			this.supportsAutoChannelSelection = false;
-			this.autoChannelSelectionActive = false;
+			supportsAutoChannelSelection = false;
+			autoChannelSelectionActive = false;
 		}
+
+		return new this({
+			channel,
+			supportsAutoChannelSelection,
+			autoChannelSelectionActive,
+		});
 	}
 
 	public readonly channel:
@@ -52,7 +80,7 @@ export class GetLongRangeChannelResponse extends Message {
 	public readonly autoChannelSelectionActive: boolean;
 }
 
-export interface SetLongRangeChannelRequestOptions extends MessageBaseOptions {
+export interface SetLongRangeChannelRequestOptions {
 	channel: LongRangeChannel;
 }
 
@@ -61,19 +89,22 @@ export interface SetLongRangeChannelRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetLongRangeChannel)
 export class SetLongRangeChannelRequest extends Message {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| SetLongRangeChannelRequestOptions,
+		options: SetLongRangeChannelRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.channel = options.channel;
-		}
+		this.channel = options.channel;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetLongRangeChannelRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SetLongRangeChannelRequest({});
 	}
 
 	public channel: LongRangeChannel;
@@ -93,15 +124,32 @@ export class SetLongRangeChannelRequest extends Message {
 	}
 }
 
+export interface SetLongRangeChannelResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetLongRangeChannel)
 export class SetLongRangeChannelResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetLongRangeChannelResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.success = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetLongRangeChannelResponse {
+		const success = raw.payload[0] !== 0;
+
+		return new this({
+			success,
+		});
 	}
 
 	isOK(): boolean {

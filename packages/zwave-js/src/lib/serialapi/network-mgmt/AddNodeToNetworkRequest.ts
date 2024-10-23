@@ -14,17 +14,16 @@ import {
 import type { GetAllNodes } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -58,13 +57,13 @@ enum AddNodeFlags {
 	ProtocolLongRange = 0x20,
 }
 
-interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
+export interface AddNodeToNetworkRequestOptions {
 	addNodeType?: AddNodeType;
 	highPower?: boolean;
 	networkWide?: boolean;
 }
 
-interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
+export interface AddNodeDSKToNetworkRequestOptions {
 	nwiHomeId: Buffer;
 	authHomeId: Buffer;
 	highPower?: boolean;
@@ -94,14 +93,11 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
-		) {
-			return new AddNodeToNetworkRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AddNodeToNetworkRequestBase {
+		return AddNodeToNetworkRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -135,7 +131,7 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		options: AddNodeToNetworkRequestOptions = {},
+		options: AddNodeToNetworkRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
@@ -210,7 +206,7 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		options: AddNodeDSKToNetworkRequestOptions,
+		options: AddNodeDSKToNetworkRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
@@ -270,17 +266,36 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	}
 }
 
+export interface AddNodeToNetworkRequestStatusReportOptions {
+	status: AddNodeStatus;
+	statusContext?: AddNodeStatusContext;
+}
+
 export class AddNodeToNetworkRequestStatusReport
 	extends AddNodeToNetworkRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& AddNodeToNetworkRequestStatusReportOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.callbackId = this.payload[0];
-		this.status = this.payload[1];
-		switch (this.status) {
+
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.status = options.status;
+		this.statusContext = options.statusContext;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AddNodeToNetworkRequestStatusReport {
+		const callbackId = raw.payload[0];
+		const status: AddNodeStatus = raw.payload[1];
+		let statusContext: AddNodeStatusContext | undefined;
+		switch (status) {
 			case AddNodeStatus.Ready:
 			case AddNodeStatus.NodeFound:
 			case AddNodeStatus.ProtocolDone:
@@ -290,24 +305,30 @@ export class AddNodeToNetworkRequestStatusReport
 
 			case AddNodeStatus.Done: {
 				const { nodeId } = parseNodeID(
-					this.payload,
-					options.ctx.nodeIdType,
+					raw.payload,
+					ctx.nodeIdType,
 					2,
 				);
-				this.statusContext = { nodeId };
+				statusContext = { nodeId };
 				break;
 			}
 
 			case AddNodeStatus.AddingController:
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
-				this.statusContext = parseNodeUpdatePayload(
-					this.payload.subarray(2),
-					options.ctx.nodeIdType,
+				statusContext = parseNodeUpdatePayload(
+					raw.payload.subarray(2),
+					ctx.nodeIdType,
 				);
 				break;
 			}
 		}
+
+		return new this({
+			callbackId,
+			status,
+			statusContext,
+		});
 	}
 
 	isOK(): boolean {

@@ -9,13 +9,12 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageDeserializationOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
+	type MessageParsingContext,
+	type MessageRaw,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -47,18 +46,15 @@ export enum LearnModeStatus {
 @messageTypes(MessageType.Request, FunctionType.SetLearnMode)
 @priority(MessagePriority.Controller)
 export class SetLearnModeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SetLearnModeCallback
-		) {
-			return new SetLearnModeCallback(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetLearnModeRequestBase {
+		return SetLearnModeCallback.from(raw, ctx);
 	}
 }
 
-export interface SetLearnModeRequestOptions extends MessageBaseOptions {
+export interface SetLearnModeRequestOptions {
 	intent: LearnModeIntent;
 }
 
@@ -66,17 +62,22 @@ export interface SetLearnModeRequestOptions extends MessageBaseOptions {
 // The callback may come much (30+ seconds), so we wait for it outside of the queue
 export class SetLearnModeRequest extends SetLearnModeRequestBase {
 	public constructor(
-		options: MessageDeserializationOptions | SetLearnModeRequestOptions,
+		options: SetLearnModeRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.intent = options.intent;
-		}
+		this.intent = options.intent;
+	}
+
+	public static from(
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetLearnModeRequest {
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SetLearnModeRequest({});
 	}
 
 	public intent: LearnModeIntent;
@@ -102,13 +103,30 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 	}
 }
 
+export interface SetLearnModeResponseOptions {
+	success: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SetLearnMode)
 export class SetLearnModeResponse extends Message implements SuccessIndicator {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetLearnModeResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.success = this.payload[0] !== 0;
+
+		// TODO: Check implementation:
+		this.success = options.success;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetLearnModeResponse {
+		const success = raw.payload[0] !== 0;
+
+		return new this({
+			success,
+		});
 	}
 
 	public readonly success: boolean;
@@ -125,21 +143,46 @@ export class SetLearnModeResponse extends Message implements SuccessIndicator {
 	}
 }
 
+export interface SetLearnModeCallbackOptions {
+	status: LearnModeStatus;
+	assignedNodeId: number;
+	statusMessage?: Buffer;
+}
+
 export class SetLearnModeCallback extends SetLearnModeRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: SetLearnModeCallbackOptions & MessageBaseOptions,
 	) {
 		super(options);
 
-		this.callbackId = this.payload[0];
-		this.status = this.payload[1];
-		this.assignedNodeId = this.payload[2];
-		if (this.payload.length > 3) {
-			const msgLength = this.payload[3];
-			this.statusMessage = this.payload.subarray(4, 4 + msgLength);
+		// TODO: Check implementation:
+		this.callbackId = options.callbackId;
+		this.status = options.status;
+		this.assignedNodeId = options.assignedNodeId;
+		this.statusMessage = options.statusMessage;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): SetLearnModeCallback {
+		const callbackId = raw.payload[0];
+		const status: LearnModeStatus = raw.payload[1];
+		const assignedNodeId = raw.payload[2];
+		let statusMessage: Buffer | undefined;
+		if (raw.payload.length > 3) {
+			const msgLength = raw.payload[3];
+			statusMessage = raw.payload.subarray(4, 4 + msgLength);
 		}
+
+		return new this({
+			callbackId,
+			status,
+			assignedNodeId,
+			statusMessage,
+		});
 	}
 
 	public readonly status: LearnModeStatus;
