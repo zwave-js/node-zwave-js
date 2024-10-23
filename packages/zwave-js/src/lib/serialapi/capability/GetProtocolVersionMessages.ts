@@ -41,7 +41,7 @@ export class GetProtocolVersionResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetProtocolVersionResponse {
 		const protocolType: ProtocolType = raw.payload[0];
 		const protocolVersion = [

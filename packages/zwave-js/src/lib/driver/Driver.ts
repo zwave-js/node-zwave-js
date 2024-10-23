@@ -3,13 +3,13 @@ import {
 	type CCAPIHost,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
-	type CommandClass,
+	CommandClass,
 	type FirmwareUpdateResult,
-	type ICommandClassContainer,
 	type InterviewContext,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
+	NoOperationCC,
 	type PersistValuesContext,
 	type Powerlevel,
 	type RefreshValuesContext,
@@ -39,13 +39,10 @@ import {
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
 	type ZWaveProtocolCC,
-	assertValidCCs,
 	getImplementedVersion,
-	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
 	isTransportServiceEncapsulation,
-	messageIsPing,
 } from "@zwave-js/cc";
 import {
 	ConfigManager,
@@ -115,6 +112,7 @@ import {
 } from "@zwave-js/core";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	HostIDs,
 	NodeSchedulePollOptions,
 	ZWaveHostOptions,
@@ -183,9 +181,7 @@ import {
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
 } from "../node/_Types";
-import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
-import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
 import {
 	SerialAPIStartedRequest,
 	SerialAPIWakeUpReason,
@@ -219,6 +215,13 @@ import {
 	SendTestFrameRequest,
 	SendTestFrameTransmitReport,
 } from "../serialapi/transport/SendTestFrameMessages";
+import {
+	type CommandRequest,
+	type ContainsCC,
+	containsCC,
+	containsSerializedCC,
+	isCommandRequest,
+} from "../serialapi/utils";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	type AppInfo,
@@ -584,6 +587,31 @@ const enum ControllerRecoveryPhase {
 	JammedAfterReset,
 }
 
+function messageIsPing<T extends Message>(
+	msg: T,
+): msg is T & ContainsCC<NoOperationCC> {
+	return containsCC(msg) && msg.command instanceof NoOperationCC;
+}
+
+function assertValidCCs(container: ContainsCC): void {
+	if (container.command instanceof InvalidCC) {
+		if (typeof container.command.reason === "number") {
+			throw new ZWaveError(
+				"The message payload failed validation!",
+				container.command.reason,
+			);
+		} else {
+			throw new ZWaveError(
+				"The message payload is invalid!",
+				ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				container.command.reason,
+			);
+		}
+	} else if (containsCC(container.command)) {
+		assertValidCCs(container.command);
+	}
+}
+
 // Strongly type the event emitter events
 export interface DriverEventCallbacks extends PrefixedNodeEvents {
 	"driver ready": () => void;
@@ -667,27 +695,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 
 		const self = this;
-		this.messageParsingContext = {
-			getHighestSecurityClass: (nodeId) =>
-				this.getHighestSecurityClass(nodeId),
-			hasSecurityClass: (nodeId, securityClass) =>
-				this.hasSecurityClass(nodeId, securityClass),
-			setSecurityClass: (nodeId, securityClass, granted) =>
-				this.setSecurityClass(nodeId, securityClass, granted),
-			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
-			get securityManager() {
-				return self.securityManager;
-			},
-			get securityManager2() {
-				return self.securityManager2;
-			},
-			get securityManagerLR() {
-				return self.securityManagerLR;
-			},
-			get sdkVersion() {
-				return self._controller?.sdkVersion;
-			},
-		};
 		this.messageEncodingContext = {
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
@@ -744,14 +751,34 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 
-	private messageParsingContext: Omit<
-		MessageParsingContext,
-		keyof HostIDs | "nodeIdType"
-	>;
 	private messageEncodingContext: Omit<
 		MessageEncodingContext,
 		keyof HostIDs | "nodeIdType"
 	>;
+
+	private getMessageEncodingContext(): MessageEncodingContext {
+		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
+		// but not for messages, yet those implicitly encode CCs
+		return {
+			...this.messageEncodingContext,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
+		};
+	}
+
+	private getMessageParsingContext(): MessageParsingContext {
+		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
+		// but not for messages, yet those implicitly decode CCs
+		return {
+			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
+			sdkVersion: this._controller?.sdkVersion,
+			requestStorage: this._requestStorage,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
+		};
+	}
 
 	private getCCEncodingContext(): MessageEncodingContext & CCEncodingContext {
 		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
@@ -764,14 +791,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		};
 	}
 
-	private getCCParsingContext() {
+	private getCCParsingContext(): Omit<CCParsingContext, "sourceNodeId"> {
 		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
 		// but not for messages, yet those implicitly decode CCs
 		return {
-			...this.messageParsingContext,
+			...this.messageEncodingContext,
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
-			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
 		};
 	}
 
@@ -835,14 +861,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.nodeSessions.get(nodeId)!;
 	}
 
-	private _requestContext: Map<FunctionType, Record<string, unknown>> =
+	private _requestStorage: Map<FunctionType, Record<string, unknown>> =
 		new Map();
 	/**
 	 * @internal
 	 * Stores data from Serial API command requests to be used by their responses
 	 */
-	public get requestContext(): Map<FunctionType, Record<string, unknown>> {
-		return this._requestContext;
+	public get requestStorage(): Map<FunctionType, Record<string, unknown>> {
+		return this._requestStorage;
 	}
 
 	public readonly cacheDir: string;
@@ -3520,25 +3546,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.parse(data, this.getCCParsingContext());
-			// FIXME: Parse CCs in the next step
-			// FIXME: What to do about _requestContext?
-			// msg = Message.from({
-			// 	data,
-			// 	sdkVersion: this._controller?.sdkVersion,
-			// 	ctx: this.getCCParsingContext(),
-			// }, this._requestContext);
-			if (isCommandClassContainer(msg)) {
+			msg = Message.parse(data, this.getMessageParsingContext());
+
+			// Parse embedded CCs
+			if (isCommandRequest(msg) && containsSerializedCC(msg)) {
+				msg.command = CommandClass.parse(
+					msg.serializedCC,
+					{
+						...this.getCCParsingContext(),
+						sourceNodeId: msg.getNodeId()!,
+					},
+				);
+
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.tryGetNode(msg);
 				if (node) node.lastSeen = new Date();
 
 				// Ensure there are no errors
-				assertValidCCs(msg);
+				assertValidCCs(msg as ContainsCC);
 			}
 			// And update statistics
 			if (!!this._controller) {
-				if (isCommandClassContainer(msg)) {
+				if (containsCC(msg)) {
 					this.tryGetNode(msg)?.incrementStatistics("commandsRX");
 				} else {
 					this._controller.incrementStatistics("messagesRX");
@@ -3554,7 +3583,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					const response = this.handleDecodeError(e, data, msg);
 					if (response) await this.writeHeader(response);
 					if (!!this._controller) {
-						if (isCommandClassContainer(msg)) {
+						if (containsCC(msg)) {
 							this.tryGetNode(msg)?.incrementStatistics(
 								"commandsDroppedRX",
 							);
@@ -3622,12 +3651,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// If we receive a CC from a node while the controller is not ready yet,
 		// we can't do anything with it, but logging it may assume that it can access the controller.
 		// To prevent this problem, we just ignore CCs until the controller is ready
-		if (!this._controller && isCommandClassContainer(msg)) return;
+		if (!this._controller && containsCC(msg)) return;
 
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			let wasMessageLogged = false;
-			if (isCommandClassContainer(msg)) {
+			if (containsCC(msg)) {
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
 				// we're not set up to handle things like this. Reply to the nonce get
 				// and handle the encapsulation part normally
@@ -3840,7 +3869,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	private mustReplyWithSecurityS2MOS(
-		msg: ApplicationCommandRequest | BridgeApplicationCommandRequest,
+		msg: ContainsCC & CommandRequest,
 	): boolean {
 		// We're looking for a singlecast S2-encapsulated request
 		if (msg.frameType !== "singlecast") return false;
@@ -3876,7 +3905,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (
 			(e.code === ZWaveErrorCodes.Security2CC_NoSPAN
 				|| e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
-			&& isCommandClassContainer(msg)
+			&& containsCC(msg)
 		) {
 			// Decoding the command failed because no SPAN has been established with the other node
 			const nodeId = msg.getNodeId()!;
@@ -3902,7 +3931,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// Ensure that we're not flooding the queue with unnecessary NonceReports
 			const isS2NonceReport = (t: Transaction) =>
 				t.message.getNodeId() === nodeId
-				&& isCommandClassContainer(t.message)
+				&& containsCC(t.message)
 				&& t.message.command instanceof Security2CCNonceReport;
 
 			const message: string =
@@ -3961,9 +3990,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					direction: "outbound",
 				});
 				// Send the node our nonce, and use the chance to re-sync the MPAN if necessary
-				const s2MulticastOutOfSync =
-					(msg instanceof ApplicationCommandRequest
-						|| msg instanceof BridgeApplicationCommandRequest)
+				const s2MulticastOutOfSync = isCommandRequest(msg)
 					&& this.mustReplyWithSecurityS2MOS(msg);
 
 				node.commandClasses["Security 2"]
@@ -3984,7 +4011,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		} else if (
 			(e.code === ZWaveErrorCodes.Security2CC_NoMPAN
 				|| e.code === ZWaveErrorCodes.Security2CC_CannotDecodeMulticast)
-			&& isCommandClassContainer(msg)
+			&& containsCC(msg)
 		) {
 			// Decoding the command failed because the MPAN used by the other node
 			// is not known to us yet
@@ -4464,7 +4491,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 * Assembles partial CCs of in a message body. Returns `true` when the message is complete and can be handled further.
 	 * If the message expects another partial one, this returns `false`.
 	 */
-	private assemblePartialCCs(msg: Message & ICommandClassContainer): boolean {
+	private assemblePartialCCs(msg: Message & ContainsCC): boolean {
 		let command: CommandClass | undefined = msg.command;
 		// We search for the every CC that provides us with a session ID
 		// There might be newly-completed CCs that contain a partial CC,
@@ -4490,8 +4517,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(session, {
-							sourceNodeId: msg.command.nodeId as number,
 							...this.getCCParsingContext(),
+							sourceNodeId: msg.command.nodeId as number,
 						});
 						// Ensure there are no errors
 						assertValidCCs(msg);
@@ -5008,7 +5035,7 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
+		if (isNodeQuery(msg) || containsCC(msg)) {
 			const node = this.tryGetNode(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
@@ -5027,8 +5054,10 @@ ${handlers.length} left`,
 			}
 		}
 
-		// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
-		if (isCommandClassContainer(msg)) {
+		if (isCommandRequest(msg) && containsCC(msg)) {
+			const nodeId = msg.getNodeId()!;
+
+			// It could also be that this is the node's response for a CC that we sent, but where the ACK is delayed
 			const currentMessage = this.queue.currentTransaction
 				?.getCurrentMessage();
 			if (
@@ -5047,20 +5076,10 @@ ${handlers.length} left`,
 				currentMessage.prematureNodeUpdate = msg;
 				return;
 			}
-		}
 
-		if (isCommandClassContainer(msg)) {
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
-		}
 
-		// Otherwise go through the static handlers
-		if (
-			msg instanceof ApplicationCommandRequest
-			|| msg instanceof BridgeApplicationCommandRequest
-		) {
-			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
-			const nodeId = msg.command.nodeId;
 			// cannot handle ApplicationCommandRequests without a controller
 			if (this._controller == undefined) {
 				this.driverLog.print(
@@ -5355,7 +5374,7 @@ ${handlers.length} left`,
 		return cmd;
 	}
 
-	public unwrapCommands(msg: Message & ICommandClassContainer): void {
+	public unwrapCommands(msg: Message & ContainsCC): void {
 		// Unwrap encapsulating CCs until we get to the core
 		while (
 			isEncapsulatingCommandClass(msg.command)
@@ -5518,7 +5537,7 @@ ${handlers.length} left`,
 		if (currentNormalMsg?.getNodeId() !== targetNode.id) {
 			return false;
 		}
-		if (!isCommandClassContainer(currentNormalMsg)) {
+		if (!containsCC(currentNormalMsg)) {
 			return false;
 		}
 
@@ -5977,7 +5996,7 @@ ${handlers.length} left`,
 		this.ensureReady();
 
 		let node: ZWaveNode | undefined;
-		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
+		if (isNodeQuery(msg) || containsCC(msg)) {
 			node = this.tryGetNode(msg);
 		}
 
@@ -6159,7 +6178,7 @@ ${handlers.length} left`,
 	public createSendDataMessage(
 		command: CommandClass,
 		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
-	): SendDataMessage {
+	): SendDataMessage & ContainsCC {
 		// Automatically encapsulate commands before sending
 		if (options.autoEncapsulate !== false) {
 			command = this.encapsulateCommands(command, options);
@@ -6224,7 +6243,7 @@ ${handlers.length} left`,
 			msg.nodeUpdateTimeout = options.reportTimeoutMs;
 		}
 
-		return msg;
+		return msg as SendDataMessage & ContainsCC;
 	}
 
 	/**
@@ -6247,7 +6266,7 @@ ${handlers.length} left`,
 			const resp = await this.sendMessage(msg, options);
 
 			// And unwrap the response if there was any
-			if (isCommandClassContainer(resp)) {
+			if (containsCC(resp)) {
 				this.unwrapCommands(resp);
 				return resp.command as unknown as TResponse;
 			}
@@ -6650,7 +6669,7 @@ ${handlers.length} left`,
 			case messageIsPing(msg):
 			case transaction.priority === MessagePriority.Immediate:
 			// We also don't want to immediately send the node to sleep when it wakes up
-			case isCommandClassContainer(msg)
+			case containsCC(msg)
 				&& msg.command instanceof WakeUpCCNoMoreInformation:
 			// compat queries because they will be recreated when the node wakes up
 			case transaction.tag === "compat":
@@ -7030,11 +7049,13 @@ ${handlers.length} left`,
 
 	/** Computes the maximum net CC payload size for the given CC or SendDataRequest */
 	public computeNetCCPayloadSize(
-		commandOrMsg: CommandClass | SendDataRequest | SendDataBridgeRequest,
+		commandOrMsg:
+			| CommandClass
+			| (SendDataRequest | SendDataBridgeRequest) & ContainsCC,
 		ignoreEncapsulation: boolean = false,
 	): number {
 		// Recreate the correct encapsulation structure
-		let msg: SendDataRequest | SendDataBridgeRequest;
+		let msg: (SendDataRequest | SendDataBridgeRequest) & ContainsCC;
 		if (isSendDataSinglecast(commandOrMsg)) {
 			msg = commandOrMsg;
 		} else {
@@ -7042,7 +7063,7 @@ ${handlers.length} left`,
 			msg = new SendDataConstructor({
 				sourceNodeId: this.ownNodeId,
 				command: commandOrMsg,
-			});
+			}) as (SendDataRequest | SendDataBridgeRequest) & ContainsCC;
 		}
 		if (!ignoreEncapsulation) {
 			msg.command = this.encapsulateCommands(

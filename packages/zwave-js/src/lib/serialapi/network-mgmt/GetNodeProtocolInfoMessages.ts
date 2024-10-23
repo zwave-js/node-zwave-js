@@ -96,12 +96,15 @@ export class GetNodeProtocolInfoResponse extends Message {
 		// The context should contain the node ID the protocol info was requested for.
 		// We use it here to determine whether the node is long range.
 		let isLongRange = false;
+		const requestContext = ctx.requestStorage?.get(
+			FunctionType.GetNodeProtocolInfo,
+		);
 		if (
-			isObject(options.context)
-			&& "nodeId" in options.context
-			&& typeof options.context.nodeId === "number"
+			isObject(requestContext)
+			&& "nodeId" in requestContext
+			&& typeof requestContext.nodeId === "number"
 		) {
-			isLongRange = isLongRangeNodeId(options.context.nodeId);
+			isLongRange = isLongRangeNodeId(requestContext.nodeId);
 		}
 
 		const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(

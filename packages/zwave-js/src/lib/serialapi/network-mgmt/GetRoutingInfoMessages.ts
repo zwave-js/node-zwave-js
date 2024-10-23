@@ -83,7 +83,7 @@ export class GetRoutingInfoResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetRoutingInfoResponse {
 		let nodeIds: number[];
 		if (raw.payload.length === NUM_NODEMASK_BYTES) {

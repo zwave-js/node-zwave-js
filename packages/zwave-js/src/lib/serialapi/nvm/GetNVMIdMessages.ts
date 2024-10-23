@@ -93,7 +93,7 @@ export class GetNVMIdResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetNVMIdResponse {
 		const nvmManufacturerId = raw.payload[1];
 		const memoryType: NVMType = raw.payload[2];

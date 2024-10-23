@@ -2,7 +2,6 @@
 
 import "reflect-metadata";
 import "zwave-js";
-import { isCommandClassContainer } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
 	NodeIDType,
@@ -14,6 +13,7 @@ import {
 	generateEncryptionKey,
 } from "@zwave-js/core";
 import { Message } from "@zwave-js/serial";
+import { containsCC } from "zwave-js";
 
 (async () => {
 	const configManager = new ConfigManager();
@@ -54,7 +54,6 @@ import { Message } from "@zwave-js/serial";
 		receiverEI: Buffer.from("3664023a7971465342fe3d82ebb4b8e9", "hex"),
 	});
 
-	console.log(Message.getMessageLength(data));
 	const host = {
 		getSafeCCVersion: () => 1,
 		getSupportedCCVersion: () => 1,
@@ -97,9 +96,9 @@ import { Message } from "@zwave-js/serial";
 		getHighestSecurityClass: () => SecurityClass.S2_AccessControl,
 		hasSecurityClass: () => true,
 	};
-	const msg = Message.from({ data, ctx: ctx as any });
+	const msg = Message.parse(data, ctx as any);
 
-	if (isCommandClassContainer(msg)) {
+	if (containsCC(msg)) {
 		msg.command.mergePartialCCs([], {} as any);
 	}
 	msg;

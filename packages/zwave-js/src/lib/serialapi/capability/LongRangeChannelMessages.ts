@@ -51,7 +51,7 @@ export class GetLongRangeChannelResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetLongRangeChannelResponse {
 		const channel: GetLongRangeChannelResponseOptions["channel"] =
 			raw.payload[0];
@@ -96,8 +96,8 @@ export class SetLongRangeChannelRequest extends Message {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): SetLongRangeChannelRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -143,7 +143,7 @@ export class SetLongRangeChannelResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetLongRangeChannelResponse {
 		const success = raw.payload[0] !== 0;
 

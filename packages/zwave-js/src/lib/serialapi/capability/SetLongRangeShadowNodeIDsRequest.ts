@@ -31,7 +31,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetLongRangeShadowNodeIDsRequest {
 		const shadowNodeIds = parseBitMask(
 			raw.payload.subarray(0, 1),

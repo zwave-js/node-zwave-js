@@ -34,41 +34,15 @@ export enum MessageOrigin {
 	Host,
 }
 
-export interface MessageParsingContext
-	extends Readonly<SecurityManagers>, HostIDs, GetDeviceConfig
-{
+export interface MessageParsingContext extends HostIDs, GetDeviceConfig {
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;
 
 	sdkVersion: string | undefined;
 
+	requestStorage: Map<FunctionType, Record<string, unknown>> | undefined;
+
 	origin?: MessageOrigin;
-
-	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-
-	hasSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-	): MaybeNotKnown<boolean>;
-
-	setSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-		granted: boolean,
-	): void;
-}
-
-export interface MessageDeserializationOptions {
-	data: Buffer;
-	origin?: MessageOrigin;
-	/** Whether CCs should be parsed immediately (only affects messages that contain CCs). Default: `true` */
-	parseCCs?: boolean;
-	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
-	sdkVersion?: string;
-	/** Optional context used during deserialization */
-	context?: unknown;
-	// FIXME: This is a terrible property name when context already exists
-	ctx: MessageParsingContext;
 }
 
 export interface MessageBaseOptions {
@@ -83,9 +57,7 @@ export interface MessageCreationOptions extends MessageBaseOptions {
 	payload?: Buffer;
 }
 
-export type MessageOptions =
-	| MessageCreationOptions
-	| MessageDeserializationOptions;
+export type MessageOptions = MessageCreationOptions;
 
 export interface MessageEncodingContext
 	extends

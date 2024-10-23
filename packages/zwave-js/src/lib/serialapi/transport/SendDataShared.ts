@@ -1,5 +1,6 @@
 import {
 	type MessageRecord,
+	ProtocolDataRate,
 	type RSSI,
 	RssiError,
 	type SerializableTXReport,
@@ -137,6 +138,33 @@ export function parseTXReport(
 	}
 
 	return stripUndefined(ret as any) as any;
+}
+
+export function serializableTXReportToTXReport(
+	report: SerializableTXReport,
+): TXReport {
+	return {
+		txTicks: report.txTicks,
+		ackRSSI: report.ackRSSI,
+		ackRepeaterRSSI: report.ackRepeaterRSSI,
+		ackChannelNo: report.ackChannelNo,
+		txChannelNo: report.txChannelNo ?? 0,
+		routeSchemeState: report.routeSchemeState ?? 0,
+		repeaterNodeIds: report.repeaterNodeIds ?? [],
+		beam1000ms: report.beam1000ms ?? false,
+		beam250ms: report.beam250ms ?? false,
+		routeSpeed: report.routeSpeed ?? ProtocolDataRate.ZWave_100k,
+		routingAttempts: report.routingAttempts ?? 1,
+		failedRouteLastFunctionalNodeId: report.failedRouteLastFunctionalNodeId,
+		failedRouteFirstNonFunctionalNodeId:
+			report.failedRouteFirstNonFunctionalNodeId,
+		txPower: report.txPower,
+		measuredNoiseFloor: report.measuredNoiseFloor,
+		destinationAckTxPower: report.destinationAckTxPower,
+		destinationAckMeasuredRSSI: report.destinationAckMeasuredRSSI,
+		destinationAckMeasuredNoiseFloor:
+			report.destinationAckMeasuredNoiseFloor,
+	};
 }
 
 export function encodeTXReport(report: SerializableTXReport): Buffer {

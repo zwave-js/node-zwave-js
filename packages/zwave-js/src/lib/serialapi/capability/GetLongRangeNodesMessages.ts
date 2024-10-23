@@ -40,7 +40,7 @@ export class GetLongRangeNodesRequest extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetLongRangeNodesRequest {
 		const segmentNumber = raw.payload[0];
 
@@ -77,7 +77,7 @@ export class GetLongRangeNodesResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetLongRangeNodesResponse {
 		const moreNodes: boolean = raw.payload[0] != 0;
 		const segmentNumber = raw.payload[1];

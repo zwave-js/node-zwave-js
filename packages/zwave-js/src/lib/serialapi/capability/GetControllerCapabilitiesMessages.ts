@@ -44,7 +44,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetControllerCapabilitiesResponse {
 		const capabilityFlags = raw.payload[0];
 		const isSecondary = !!(

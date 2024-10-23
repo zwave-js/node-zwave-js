@@ -1,4 +1,4 @@
-import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
+import { type CommandClass } from "@zwave-js/cc";
 import {
 	type FrameType,
 	type MessageOrCCLogEntry,
@@ -8,7 +8,6 @@ import {
 	NODE_ID_BROADCAST_LR,
 	type RSSI,
 	RssiError,
-	type SinglecastCC,
 	isLongRangeNodeId,
 	parseNodeBitMask,
 	parseNodeID,
@@ -25,36 +24,53 @@ import {
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { tryParseRSSI } from "../transport/SendDataShared";
+import { type MessageWithCC } from "../utils";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 
-export interface BridgeApplicationCommandRequestOptions {
-	routedBusy: boolean;
-	frameType: FrameType;
-	isExploreFrame: boolean;
-	isForeignFrame: boolean;
-	fromForeignHomeId: boolean;
-	command: SinglecastCC<CommandClass>;
-	targetNodeId: number | number[];
-	rssi?: number;
-}
+export type BridgeApplicationCommandRequestOptions =
+	& (
+		| { command: CommandClass }
+		| {
+			nodeId: number;
+			serializedCC: Buffer;
+		}
+	)
+	& {
+		routedBusy: boolean;
+		frameType: FrameType;
+		isExploreFrame: boolean;
+		isForeignFrame: boolean;
+		fromForeignHomeId: boolean;
+		ownNodeId: number;
+		targetNodeId: number | number[];
+		rssi?: number;
+	};
 
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
 export class BridgeApplicationCommandRequest extends Message
-	implements ICommandClassContainer
+	implements MessageWithCC
 {
 	public constructor(
 		options: BridgeApplicationCommandRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
 
+		if ("command" in options) {
+			this.command = options.command;
+		} else {
+			this._nodeId = options.nodeId;
+			this.serializedCC = options.serializedCC;
+		}
+
 		this.routedBusy = options.routedBusy;
 		this.frameType = options.frameType;
 		this.isExploreFrame = options.isExploreFrame;
 		this.isForeignFrame = options.isForeignFrame;
 		this.fromForeignHomeId = options.fromForeignHomeId;
-		this.command = options.command;
+		// FIXME: We only need this in the toLogEntry context
+		this.ownNodeId = options.ownNodeId;
 		this.targetNodeId = options.targetNodeId;
 		this.rssi = options.rssi;
 	}
@@ -97,16 +113,12 @@ export class BridgeApplicationCommandRequest extends Message
 			offset,
 		);
 		offset += srcNodeIdBytes;
-		// Parse the CC
+		// Extract the CC payload
 		const commandLength = raw.payload[offset++];
-		const command: SinglecastCC<CommandClass> = CommandClass.parse(
-			raw.payload.subarray(offset, offset + commandLength),
-			{
-				sourceNodeId,
-				...ctx,
-				frameType: frameType,
-			},
-		) as SinglecastCC<CommandClass>;
+		const serializedCC = raw.payload.subarray(
+			offset,
+			offset + commandLength,
+		);
 		offset += commandLength;
 		// Read the correct target node id
 		const multicastNodesLength = raw.payload[offset];
@@ -133,7 +145,9 @@ export class BridgeApplicationCommandRequest extends Message
 			isExploreFrame,
 			isForeignFrame,
 			fromForeignHomeId,
-			command,
+			nodeId: sourceNodeId,
+			serializedCC,
+			ownNodeId: ctx.ownNodeId,
 			targetNodeId,
 			rssi,
 		});
@@ -147,14 +161,19 @@ export class BridgeApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 	public readonly rssi?: RSSI;
 
-	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: SinglecastCC<CommandClass>; // TODO: why is this a SinglecastCC?
+	public readonly ownNodeId: number;
 
+	public readonly serializedCC: Buffer | undefined;
+
+	// This needs to be writable or unwrapping MultiChannelCCs crashes
+	public command: CommandClass | undefined;
+
+	private _nodeId: number | undefined;
 	public override getNodeId(): number | undefined {
-		if (this.command.isSinglecast()) {
+		if (this.command?.isSinglecast()) {
 			return this.command.nodeId;
 		}
-		return super.getNodeId();
+		return this._nodeId ?? super.getNodeId();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -162,7 +181,7 @@ export class BridgeApplicationCommandRequest extends Message
 		if (this.frameType !== "singlecast") {
 			message.type = this.frameType;
 		}
-		if (this.targetNodeId !== this._ownNodeId) {
+		if (this.targetNodeId !== this.ownNodeId) {
 			if (typeof this.targetNodeId === "number") {
 				message["target node"] = this.targetNodeId;
 			} else if (this.targetNodeId.length === 1) {

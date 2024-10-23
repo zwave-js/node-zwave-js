@@ -39,7 +39,6 @@ import {
 	entryControlEventTypeLabels,
 	getEffectiveCCVersion,
 	getImplementedVersion,
-	isCommandClassContainer,
 	utils as ccUtils,
 } from "@zwave-js/cc";
 import {
@@ -241,6 +240,7 @@ import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
 } from "../serialapi/network-mgmt/RequestNodeInfoMessages";
+import { containsCC } from "../serialapi/utils";
 import { DeviceClass } from "./DeviceClass";
 import { type NodeDump, type ValueDump } from "./Dump";
 import { type Endpoint } from "./Endpoint";
@@ -1133,7 +1133,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		// The GetNodeProtocolInfoRequest needs to know the node ID to distinguish
 		// between ZWLR and ZW classic. We store it on the driver's context, so it
 		// can be retrieved when needed.
-		this.driver.requestContext.set(FunctionType.GetNodeProtocolInfo, {
+		this.driver.requestStorage.set(FunctionType.GetNodeProtocolInfo, {
 			nodeId: this.id,
 		});
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
@@ -2578,7 +2578,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
 		const isNonceReport = (t: Transaction) =>
 			t.message.getNodeId() === this.id
-			&& isCommandClassContainer(t.message)
+			&& containsCC(t.message)
 			&& t.message.command instanceof SecurityCCNonceReport;
 
 		if (this.driver.hasPendingTransactions(isNonceReport)) {
@@ -2655,7 +2655,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
 		const isNonceReport = (t: Transaction) =>
 			t.message.getNodeId() === this.id
-			&& isCommandClassContainer(t.message)
+			&& containsCC(t.message)
 			&& t.message.command instanceof Security2CCNonceReport;
 
 		if (this.driver.hasPendingTransactions(isNonceReport)) {

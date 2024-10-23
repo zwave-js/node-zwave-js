@@ -54,7 +54,7 @@ export class IsFailedNodeResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): IsFailedNodeResponse {
 		const result = !!raw.payload[0];
 

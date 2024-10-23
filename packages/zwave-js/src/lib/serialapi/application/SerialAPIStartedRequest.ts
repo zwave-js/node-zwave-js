@@ -10,7 +10,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
 	messageTypes,
@@ -75,7 +74,6 @@ export class SerialAPIStartedRequest extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
 	): SerialAPIStartedRequest {
 		const wakeUpReason: SerialAPIWakeUpReason = raw.payload[0];
 		const watchdogEnabled = raw.payload[1] === 0x01;

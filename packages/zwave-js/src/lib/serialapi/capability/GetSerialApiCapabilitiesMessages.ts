@@ -44,7 +44,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetSerialApiCapabilitiesResponse {
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
 		const firmwareVersion = `${raw.payload[0]}.${raw.payload[1]}`;

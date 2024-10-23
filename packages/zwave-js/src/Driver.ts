@@ -14,3 +14,4 @@ export type {
 	ZWaveOptions,
 } from "./lib/driver/ZWaveOptions";
 export type { DriverLogContext } from "./lib/log/Driver";
+export * from "./lib/serialapi/utils";

@@ -37,7 +37,7 @@ export class ShutdownResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): ShutdownResponse {
 		const success = raw.payload[0] !== 0;
 

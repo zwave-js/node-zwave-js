@@ -41,7 +41,7 @@ export class RequestNodeInfoResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): RequestNodeInfoResponse {
 		const wasSent = raw.payload[0] !== 0;
 

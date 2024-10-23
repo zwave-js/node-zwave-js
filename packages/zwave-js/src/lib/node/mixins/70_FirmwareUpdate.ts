@@ -12,7 +12,6 @@ import {
 	type FirmwareUpdateResult,
 	FirmwareUpdateStatus,
 	getEffectiveCCVersion,
-	isCommandClassContainer,
 } from "@zwave-js/cc";
 import {
 	CRC16_CCITT,
@@ -36,6 +35,7 @@ import { roundTo } from "alcalzone-shared/math";
 import { randomBytes } from "node:crypto";
 import { type Task, type TaskBuilder, TaskPriority } from "../../driver/Task";
 import { type Transaction } from "../../driver/Transaction";
+import { containsCC } from "../../serialapi/utils";
 import { SchedulePollMixin } from "./60_ScheduledPoll";
 
 interface AbortFirmwareUpdateContext {
@@ -779,7 +779,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		// Avoid queuing duplicate fragments
 		const isCurrentFirmwareFragment = (t: Transaction) =>
 			t.message.getNodeId() === this.id
-			&& isCommandClassContainer(t.message)
+			&& containsCC(t.message)
 			&& t.message.command instanceof FirmwareUpdateMetaDataCCReport
 			&& t.message.command.reportNumber === fragmentNumber;
 

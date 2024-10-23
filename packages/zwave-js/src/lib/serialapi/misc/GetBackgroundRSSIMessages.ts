@@ -46,7 +46,7 @@ export class GetBackgroundRSSIResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetBackgroundRSSIResponse {
 		const rssiChannel0 = parseRSSI(raw.payload, 0);
 		const rssiChannel1 = parseRSSI(raw.payload, 1);

@@ -54,7 +54,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetSerialApiInitDataResponse {
 		const apiVersion = raw.payload[0];
 		let zwaveApiVersion: ZWaveApiVersion;

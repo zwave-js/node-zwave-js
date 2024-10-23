@@ -37,7 +37,7 @@ export class GetControllerVersionResponse extends Message {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): GetControllerVersionResponse {
 		// The payload consists of a zero-terminated string and a uint8 for the controller type
 		const libraryVersion = cpp2js(raw.payload.toString("ascii"));

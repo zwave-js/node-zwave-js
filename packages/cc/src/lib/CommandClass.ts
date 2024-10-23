@@ -72,10 +72,6 @@ import {
 	isMultiEncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
 import {
-	type ICommandClassContainer,
-	isCommandClassContainer,
-} from "./ICommandClassContainer";
-import {
 	type CCValue,
 	type DynamicCCValue,
 	type StaticCCValue,
@@ -1187,26 +1183,6 @@ export class InvalidCC extends CommandClass {
 				}
 				: undefined,
 		};
-	}
-}
-
-/** @publicAPI */
-export function assertValidCCs(container: ICommandClassContainer): void {
-	if (container.command instanceof InvalidCC) {
-		if (typeof container.command.reason === "number") {
-			throw new ZWaveError(
-				"The message payload failed validation!",
-				container.command.reason,
-			);
-		} else {
-			throw new ZWaveError(
-				"The message payload is invalid!",
-				ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				container.command.reason,
-			);
-		}
-	} else if (isCommandClassContainer(container.command)) {
-		assertValidCCs(container.command);
 	}
 }
 

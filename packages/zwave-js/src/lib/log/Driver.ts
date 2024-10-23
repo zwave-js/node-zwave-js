@@ -1,6 +1,5 @@
 import {
 	type CommandClass,
-	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
 } from "@zwave-js/cc";
@@ -21,6 +20,7 @@ import type { Driver } from "../driver/Driver";
 import { type TransactionQueue } from "../driver/Queue";
 import type { Transaction } from "../driver/Transaction";
 import { NodeStatus } from "../node/_Types";
+import { containsCC } from "../serialapi/utils";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
@@ -122,7 +122,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 			return;
 		}
 
-		const isCCContainer = isCommandClassContainer(message);
+		const isCCContainer = containsCC(message);
 		const logEntry = message.toLogEntry();
 
 		let msg: string[] = [tagify(logEntry.tags)];
@@ -136,7 +136,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 
 		try {
 			// If possible, include information about the CCs
-			if (isCommandClassContainer(message)) {
+			if (isCCContainer) {
 				// Remove the default payload message and draw a bracket
 				msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
@@ -209,7 +209,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 							)
 						}]`
 						: "";
-					const command = isCommandClassContainer(trns.message)
+					const command = containsCC(trns.message)
 						? `: ${trns.message.command.constructor.name}`
 						: "";
 					message += `\n· ${prefix} ${

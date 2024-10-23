@@ -40,15 +40,15 @@ export class GetPriorityRouteRequest extends Message {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): GetPriorityRouteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new GetPriorityRouteRequest({});
+		// return new GetPriorityRouteRequest({});
 	}
 
 	public destinationNodeId: number;

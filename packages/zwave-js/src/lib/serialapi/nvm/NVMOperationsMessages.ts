@@ -113,8 +113,8 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): NVMOperationsReadRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -180,8 +180,8 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): NVMOperationsWriteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -239,7 +239,7 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): NVMOperationsResponse {
 		validatePayload(raw.payload.length >= 2);
 		const status: NVMOperationStatus = raw.payload[0];
