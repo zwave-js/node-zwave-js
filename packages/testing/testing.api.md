@@ -572,21 +572,20 @@ export interface WindowCoveringCCCapabilities {
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:480:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1283:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1290:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1414:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1512:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
-//   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1523:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
-//   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1537:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1598:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:450:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1655:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1658:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1808:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 

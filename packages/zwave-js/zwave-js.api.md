@@ -68,6 +68,7 @@ import { FirmwareUpdateStatus } from '@zwave-js/cc/safe';
 import { FLiRS } from '@zwave-js/core/safe';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core';
 import { formatId } from '@zwave-js/shared/safe';
+import { FrameType } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial';
 import { GenericDeviceClass } from '@zwave-js/core/safe';
 import { GetAllEndpoints } from '@zwave-js/core';
@@ -76,7 +77,6 @@ import { GetEndpoint } from '@zwave-js/core';
 import { getEnumMemberName } from '@zwave-js/shared/safe';
 import { GraphNode } from '@zwave-js/core';
 import { guessFirmwareFileFormat } from '@zwave-js/core';
-import { ICommandClassContainer } from '@zwave-js/cc';
 import { Interpreter } from 'xstate';
 import { InterpreterFrom } from 'xstate';
 import { InterviewContext } from '@zwave-js/cc';
@@ -95,12 +95,13 @@ import { MaybeNotKnown } from '@zwave-js/core';
 import { MaybeUnknown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import { MessageBaseOptions } from '@zwave-js/serial';
-import { MessageDeserializationOptions } from '@zwave-js/serial';
 import { MessageEncodingContext } from '@zwave-js/serial';
 import { MessageHeaders } from '@zwave-js/serial';
 import { MessageOptions } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
+import { MessageParsingContext } from '@zwave-js/serial';
 import { MessagePriority } from '@zwave-js/core';
+import { MessageRaw } from '@zwave-js/serial';
 import { MessageType } from '@zwave-js/serial';
 import type { MetadataUpdatedArgs } from '@zwave-js/core/safe';
 import { MockControllerBehavior } from '@zwave-js/testing';
@@ -109,7 +110,8 @@ import type { ModifyCCs } from '@zwave-js/core';
 import { MPDUHeaderType } from '@zwave-js/core/safe';
 import { MPDUHeaderType as MPDUHeaderType_2 } from '@zwave-js/core';
 import { MulticastCC } from '@zwave-js/core';
-import { MulticastDestination } from '@zwave-js/core/safe';
+import { MulticastDestination } from '@zwave-js/core';
+import { MulticastDestination as MulticastDestination_2 } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_BROADCAST as NODE_ID_BROADCAST_2 } from '@zwave-js/core';
@@ -256,6 +258,39 @@ export type BeamFrame = {
 export { BeamingInfo }
 
 export { buffer2hex }
+
+// Warning: (ae-forgotten-export) The symbol "ApplicationCommandRequest" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "BridgeApplicationCommandRequest" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "CommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CommandRequest = ApplicationCommandRequest | BridgeApplicationCommandRequest;
+
+// Warning: (ae-missing-release-tag) "ContainsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ContainsCC<T extends CommandClass = CommandClass> {
+    // (undocumented)
+    command: T;
+}
+
+// Warning: (ae-missing-release-tag) "containsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function containsCC<T extends object>(container: T | undefined): container is T & ContainsCC;
+
+// Warning: (ae-missing-release-tag) "ContainsSerializedCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ContainsSerializedCC {
+    // (undocumented)
+    serializedCC: Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "containsSerializedCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function containsSerializedCC<T extends object>(container: T | undefined): container is T & ContainsSerializedCC;
 
 // Warning: (ae-forgotten-export) The symbol "ControllerEventCallbacks" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "ControllerEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -413,14 +448,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements C
     checkForConfigUpdates(silent?: boolean): Promise<string | undefined>;
     // Warning: (ae-forgotten-export) The symbol "SendDataRequest" needs to be exported by the entry point index.d.ts
     // Warning: (ae-forgotten-export) The symbol "SendDataBridgeRequest" needs to be exported by the entry point index.d.ts
-    computeNetCCPayloadSize(commandOrMsg: CommandClass | SendDataRequest | SendDataBridgeRequest, ignoreEncapsulation?: boolean): number;
+    computeNetCCPayloadSize(commandOrMsg: CommandClass | (SendDataRequest | SendDataBridgeRequest) & ContainsCC, ignoreEncapsulation?: boolean): number;
     // (undocumented)
     readonly configManager: ConfigManager;
     // (undocumented)
     get configVersion(): string;
     get controller(): ZWaveController;
     // Warning: (ae-forgotten-export) The symbol "SendDataMessage" needs to be exported by the entry point index.d.ts
-    createSendDataMessage(command: CommandClass, options?: Omit<SendCommandOptions, keyof SendMessageOptions>): SendDataMessage;
+    createSendDataMessage(command: CommandClass, options?: Omit<SendCommandOptions, keyof SendMessageOptions>): SendDataMessage & ContainsCC;
     destroy(): Promise<void>;
     disableStatistics(): void;
     // Warning: (ae-forgotten-export) The symbol "AppInfo" needs to be exported by the entry point index.d.ts
@@ -529,7 +564,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements C
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     unregisterRequestHandler(fnType: FunctionType, handler: RequestHandler): void;
     // (undocumented)
-    unwrapCommands(msg: Message & ICommandClassContainer): void;
+    unwrapCommands(msg: Message & ContainsCC): void;
     updateLogConfig(config: Partial<LogConfig>): void;
     updateOptions(options: EditableZWaveOptions): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -862,6 +897,16 @@ export interface InclusionUserCallbacks {
 
 export { InterviewStage }
 
+// Warning: (ae-missing-release-tag) "isCommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isCommandRequest(msg: Message): msg is CommandRequest;
+
+// Warning: (ae-missing-release-tag) "isMessageWithCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMessageWithCC(msg: Message): msg is SendDataMessage | CommandRequest;
+
 export { isRssiError }
 
 // Warning: (ae-missing-release-tag) "JoinNetworkOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1100,6 +1145,16 @@ export { MessageOptions }
 export { MessagePriority }
 
 export { MessageType }
+
+// Warning: (ae-missing-release-tag) "MessageWithCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MessageWithCC {
+    // (undocumented)
+    command: CommandClass | undefined;
+    // (undocumented)
+    serializedCC: Buffer | undefined;
+}
 
 // Warning: (ae-missing-release-tag) "MPDU" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1493,7 +1548,7 @@ export class VirtualEndpoint implements VirtualEndpointId, SupportsCC_2 {
     // (undocumented)
     get node(): VirtualNode;
     // (undocumented)
-    get nodeId(): number | MulticastDestination;
+    get nodeId(): number | MulticastDestination_2;
     // (undocumented)
     protected setNode(node: VirtualNode): void;
     supportsCC(cc: CommandClasses): boolean;
@@ -2404,21 +2459,20 @@ export * from "@zwave-js/cc";
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:480:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1283:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1290:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1414:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1512:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
-//   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1523:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
-//   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1537:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1598:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:450:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1655:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1658:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1808:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 // /home/dominic/Repositories/node-zwave-js/packages/nvmedit/src/lib/NVM3.ts:430:20 - (TS18048) 'h' is possibly 'undefined'.
 // /home/dominic/Repositories/node-zwave-js/packages/nvmedit/src/lib/NVM3.ts:433:33 - (TS18048) 'header' is possibly 'undefined'.
 // /home/dominic/Repositories/node-zwave-js/packages/nvmedit/src/lib/NVM3.ts:434:54 - (TS18048) 'header' is possibly 'undefined'.
@@ -2427,19 +2481,19 @@ export * from "@zwave-js/cc";
 // /home/dominic/Repositories/node-zwave-js/packages/nvmedit/src/lib/NVM3.ts:440:12 - (TS18048) 'header' is possibly 'undefined'.
 // src/lib/controller/Controller.ts:997:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
 // src/lib/controller/Controller.ts:7605:3 - (ae-forgotten-export) The symbol "ExtendedNVMOperationsCommand" needs to be exported by the entry point index.d.ts
-// src/lib/driver/Driver.ts:807:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/driver/Driver.ts:4641:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5809:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
-// src/lib/driver/Driver.ts:6211:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:6212:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:6254:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:6255:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:6401:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:838:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/driver/Driver.ts:4678:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5838:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
+// src/lib/driver/Driver.ts:6240:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:6241:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:6283:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:6284:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:6430:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/ZWaveOptions.ts:280:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/lib/node/Node.ts:556:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
 // src/lib/node/Node.ts:2243:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/zniffer/Zniffer.ts:691:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/zniffer/Zniffer.ts:692:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/zniffer/Zniffer.ts:700:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/zniffer/Zniffer.ts:701:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 
 // (No @packageDocumentation comment for this package)
 

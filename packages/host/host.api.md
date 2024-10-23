@@ -54,7 +54,7 @@ export interface CCEncodingContext extends Readonly<SecurityManagers>, GetDevice
 export interface CCParsingContext extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs {
     // (undocumented)
     __internalIsMockNode?: boolean;
-    frameType?: FrameType;
+    frameType: FrameType;
     // (undocumented)
     getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
     // (undocumented)
@@ -122,13 +122,6 @@ export interface GetDeviceConfig {
 export interface GetInterviewOptions {
     // (undocumented)
     getInterviewOptions(): ZWaveHostOptions["interview"];
-}
-
-// Warning: (ae-missing-release-tag) "GetNextCallbackId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetNextCallbackId {
-    getNextCallbackId(): number;
 }
 
 // Warning: (ae-missing-release-tag) "GetNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

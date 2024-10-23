@@ -94,11 +94,6 @@ export class BootloaderScreenParser extends Transform {
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
 
-// Warning: (ae-missing-release-tag) "DeserializingMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type DeserializingMessageConstructor<T extends Message> = new (options: MessageDeserializationOptions) => T;
-
 // Warning: (ae-missing-release-tag) "DeserializingZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -464,11 +459,6 @@ export function getMessageType<T extends Message>(messageClass: T): MessageType 
 // @public
 export function getMessageTypeStatic<T extends MessageConstructor<Message>>(classConstructor: T): MessageType | undefined;
 
-// Warning: (ae-missing-release-tag) "gotDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function gotDeserializationOptions(options: Record<any, any> | undefined): options is MessageDeserializationOptions;
-
 // Warning: (ae-missing-release-tag) "INodeQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -517,19 +507,15 @@ export class Message {
     expectsCallback(): boolean;
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;
-    static extractPayload(data: Buffer): Buffer;
-    static from(options: MessageDeserializationOptions, contextStore?: Map<FunctionType, Record<string, unknown>>): Message;
+    static from(raw: MessageRaw, ctx: MessageParsingContext): Message;
     // (undocumented)
     functionType: FunctionType;
     getCallbackTimeout(): number | undefined;
-    static getConstructor(data: Buffer): MessageConstructor<Message>;
-    static getMessageLength(data: Buffer): number;
     getNodeId(): number | undefined;
     getResponseTimeout(): number | undefined;
     hasCallbackId(): this is this & {
         callbackId: number;
     };
-    static isComplete(data?: Buffer): boolean;
     isExpectedCallback(msg: Message): boolean;
     isExpectedNodeUpdate(msg: Message): boolean;
     isExpectedResponse(msg: Message): boolean;
@@ -538,7 +524,7 @@ export class Message {
     needsCallbackId(): boolean;
     nodeUpdateTimeout: number | undefined;
     // (undocumented)
-    readonly options: MessageOptions;
+    static parse(data: Buffer, ctx: MessageParsingContext): Message;
     // (undocumented)
     payload: Buffer;
     prematureNodeUpdate: Message | undefined;
@@ -563,38 +549,9 @@ export interface MessageBaseOptions {
 // Warning: (ae-missing-release-tag) "MessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MessageConstructor<T extends Message> = new (options?: MessageOptions) => T;
-
-// Warning: (ae-missing-release-tag) "MessageCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface MessageCreationOptions extends MessageBaseOptions {
-    // (undocumented)
-    expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
-    // (undocumented)
-    expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
-    // (undocumented)
-    functionType?: FunctionType;
-    // (undocumented)
-    payload?: Buffer;
-    // (undocumented)
-    type?: MessageType;
-}
-
-// Warning: (ae-missing-release-tag) "MessageDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface MessageDeserializationOptions {
-    context?: unknown;
-    // (undocumented)
-    ctx: MessageParsingContext;
-    // (undocumented)
-    data: Buffer;
-    // (undocumented)
-    origin?: MessageOrigin;
-    parseCCs?: boolean;
-    sdkVersion?: string;
-}
+export type MessageConstructor<T extends Message> = typeof Message & {
+    new (options: MessageBaseOptions): T;
+};
 
 // Warning: (ae-missing-release-tag) "MessageEncodingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -626,7 +583,18 @@ export enum MessageHeaders {
 // Warning: (ae-missing-release-tag) "MessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MessageOptions = MessageCreationOptions | MessageDeserializationOptions;
+export interface MessageOptions extends MessageBaseOptions {
+    // (undocumented)
+    expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
+    // (undocumented)
+    expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
+    // (undocumented)
+    functionType?: FunctionType;
+    // (undocumented)
+    payload?: Buffer;
+    // (undocumented)
+    type?: MessageType;
+}
 
 // Warning: (ae-missing-release-tag) "MessageOrigin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -641,14 +609,31 @@ export enum MessageOrigin {
 // Warning: (ae-missing-release-tag) "MessageParsingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MessageParsingContext extends Readonly<SecurityManagers>, HostIDs, GetDeviceConfig {
-    // (undocumented)
-    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-    // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
+export interface MessageParsingContext extends HostIDs, GetDeviceConfig {
     nodeIdType: NodeIDType;
     // (undocumented)
-    setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
+    origin?: MessageOrigin;
+    // (undocumented)
+    requestStorage: Map<FunctionType, Record<string, unknown>> | undefined;
+    // (undocumented)
+    sdkVersion: string | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "MessageRaw" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class MessageRaw {
+    constructor(type: MessageType, functionType: FunctionType, payload: Buffer);
+    // (undocumented)
+    readonly functionType: FunctionType;
+    // (undocumented)
+    static parse(data: Buffer): MessageRaw;
+    // (undocumented)
+    readonly payload: Buffer;
+    // (undocumented)
+    readonly type: MessageType;
+    // (undocumented)
+    withPayload(payload: Buffer): MessageRaw;
 }
 
 // Warning: (ae-missing-release-tag) "MessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -17,10 +17,11 @@ import { BatteryCCAPI } from '../cc/BatteryCC';
 import { BinarySensorCCAPI } from '../cc/BinarySensorCC';
 import { BinarySwitchCCAPI } from '../cc/BinarySwitchCC';
 import { BroadcastCC } from '@zwave-js/core';
+import { CCAddress } from '@zwave-js/core';
 import type { CCEncodingContext } from '@zwave-js/host';
 import type { CCEncodingContext as CCEncodingContext_2 } from '@zwave-js/host/safe';
 import { CCId } from '@zwave-js/core';
-import type { CCParsingContext } from '@zwave-js/host';
+import { CCParsingContext } from '@zwave-js/host';
 import type { CCParsingContext as CCParsingContext_2 } from '@zwave-js/host/safe';
 import { CentralSceneCCAPI } from '../cc/CentralSceneCC';
 import { ClimateControlScheduleCCAPI } from '../cc/ClimateControlScheduleCC';
@@ -87,10 +88,8 @@ import { MaybeNotKnown } from '@zwave-js/core/safe';
 import { MaybeNotKnown as MaybeNotKnown_2 } from '@zwave-js/core';
 import { MaybeUnknown } from '@zwave-js/core/safe';
 import { MaybeUnknown as MaybeUnknown_2 } from '@zwave-js/core';
-import type { Message } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessageOrCCLogEntry as MessageOrCCLogEntry_2 } from '@zwave-js/core/safe';
-import { MessageOrigin } from '@zwave-js/serial';
 import { MeterCCAPI } from '../cc/MeterCC';
 import { MeterScale } from '@zwave-js/core/safe';
 import { ModifyCCs } from '@zwave-js/core';
@@ -131,7 +130,6 @@ import { Security2CCAPI } from '../cc/Security2CC';
 import { SecurityCCAPI } from '../cc/SecurityCC';
 import { SecurityClass } from '@zwave-js/core';
 import { SecurityManager } from '@zwave-js/core';
-import { SecurityManager2 } from '@zwave-js/core';
 import { SecurityManagers } from '@zwave-js/core';
 import { SecurityManagers as SecurityManagers_2 } from '@zwave-js/core/safe';
 import type { SendCommand } from '@zwave-js/host';
@@ -170,6 +168,8 @@ import { VersionCCAPI } from '../cc/VersionCC';
 import { VirtualEndpointId } from '@zwave-js/core';
 import { WakeUpCCAPI } from '../cc/WakeUpCC';
 import { WindowCoveringCCAPI } from '../cc/WindowCoveringCC';
+import { WithAddress } from '@zwave-js/core/safe';
+import { WithAddress as WithAddress_2 } from '@zwave-js/core';
 import { ZWaveDataRate } from '@zwave-js/core';
 import { ZWaveDataRate as ZWaveDataRate_2 } from '@zwave-js/core/safe';
 import { ZWaveErrorCodes } from '@zwave-js/core';
@@ -200,7 +200,9 @@ export class AlarmSensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class AlarmSensorCCGet extends AlarmSensorCC {
-    constructor(options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions);
+    constructor(options: WithAddress<AlarmSensorCCGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): AlarmSensorCCGet;
     // (undocumented)
     sensorType: AlarmSensorType;
     // (undocumented)
@@ -212,7 +214,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 // Warning: (ae-missing-release-tag) "AlarmSensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AlarmSensorCCGetOptions extends CCCommandOptions {
+export interface AlarmSensorCCGetOptions {
     // (undocumented)
     sensorType?: AlarmSensorType;
 }
@@ -221,9 +223,11 @@ export interface AlarmSensorCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class AlarmSensorCCReport extends AlarmSensorCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<AlarmSensorCCReportOptions>);
     // (undocumented)
     readonly duration: number | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AlarmSensorCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -236,6 +240,20 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AlarmSensorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AlarmSensorCCReportOptions {
+    // (undocumented)
+    duration?: number;
+    // (undocumented)
+    sensorType: AlarmSensorType;
+    // (undocumented)
+    severity?: number;
+    // (undocumented)
+    state: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "AlarmSensorCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -246,13 +264,23 @@ export class AlarmSensorCCSupportedGet extends AlarmSensorCC {
 //
 // @public (undocumented)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<AlarmSensorCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AlarmSensorCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
-    get supportedSensorTypes(): readonly AlarmSensorType[];
+    supportedSensorTypes: AlarmSensorType[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AlarmSensorCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AlarmSensorCCSupportedReportOptions {
+    // (undocumented)
+    supportedSensorTypes: AlarmSensorType[];
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -276,26 +304,15 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
     duration: ((sensorType: AlarmSensorType) => {
-        readonly meta: {
-            readonly unit: "s";
-            readonly label: `${string} duration`;
-            readonly description: "For how long the alarm should be active";
-            readonly ccSpecific: {
-                readonly sensorType: AlarmSensorType;
-            };
-            readonly writeable: false;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Alarm Sensor"];
             property: "duration";
@@ -306,6 +323,17 @@ export const AlarmSensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
             readonly propertyKey: AlarmSensorType;
+        };
+        readonly meta: {
+            readonly unit: "s";
+            readonly label: `${string} duration`;
+            readonly description: "For how long the alarm should be active";
+            readonly ccSpecific: {
+                readonly sensorType: AlarmSensorType;
+            };
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -319,6 +347,17 @@ export const AlarmSensorCCValues: Readonly<{
         };
     };
     severity: ((sensorType: AlarmSensorType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "severity";
+            propertyKey: AlarmSensorType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            readonly endpoint: number;
+            readonly property: "severity";
+            readonly propertyKey: AlarmSensorType;
+        };
         readonly meta: {
             readonly min: 1;
             readonly max: 100;
@@ -330,17 +369,6 @@ export const AlarmSensorCCValues: Readonly<{
             readonly writeable: false;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            property: "severity";
-            propertyKey: AlarmSensorType;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
-            readonly endpoint: number;
-            readonly property: "severity";
-            readonly propertyKey: AlarmSensorType;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -354,16 +382,6 @@ export const AlarmSensorCCValues: Readonly<{
         };
     };
     state: ((sensorType: AlarmSensorType) => {
-        readonly meta: {
-            readonly label: `${string} state`;
-            readonly description: "Whether the alarm is active";
-            readonly ccSpecific: {
-                readonly sensorType: AlarmSensorType;
-            };
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Alarm Sensor"];
             property: "state";
@@ -374,6 +392,16 @@ export const AlarmSensorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "state";
             readonly propertyKey: AlarmSensorType;
+        };
+        readonly meta: {
+            readonly label: `${string} state`;
+            readonly description: "Whether the alarm is active";
+            readonly ccSpecific: {
+                readonly sensorType: AlarmSensorType;
+            };
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -447,12 +475,6 @@ export type APIConstructor<T extends CCAPI = CCAPI> = new (host: CCAPIHost, endp
 // @public (undocumented)
 export type APIMethodsOf<CC extends CCNameOrId> = Omit<OnlyMethods<CCToAPI<CC>>, "ccId" | "getNode" | "tryGetNode" | "isSetValueOptimistic" | "isSupported" | "pollValue" | "setValue" | "version" | "supportsCommand" | "withOptions" | "withTXReport">;
 
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "assertValidCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function assertValidCCs(container: ICommandClassContainer): void;
-
 // Warning: (ae-missing-release-tag) "assignLifelineIssueingCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -489,7 +511,9 @@ export class AssociationCC extends CommandClass {
 //
 // @public (undocumented)
 export class AssociationCCGet extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationCCGetOptions);
+    constructor(options: WithAddress<AssociationCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCGet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -501,7 +525,7 @@ export class AssociationCCGet extends AssociationCC {
 // Warning: (ae-missing-release-tag) "AssociationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationCCGetOptions extends CCCommandOptions {
+export interface AssociationCCGetOptions {
     // (undocumented)
     groupId: number;
 }
@@ -510,7 +534,9 @@ export interface AssociationCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class AssociationCCRemove extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (AssociationCCRemoveOptions & CCCommandOptions));
+    constructor(options: WithAddress<AssociationCCRemoveOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCRemove;
     // (undocumented)
     groupId?: number;
     // (undocumented)
@@ -533,9 +559,11 @@ export interface AssociationCCRemoveOptions {
 //
 // @public (undocumented)
 export class AssociationCCReport extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (AssociationCCReportSpecificOptions & CCCommandOptions));
+    constructor(options: WithAddress<AssociationCCReportOptions>);
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCReport;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -554,10 +582,10 @@ export class AssociationCCReport extends AssociationCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
-// Warning: (ae-missing-release-tag) "AssociationCCReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AssociationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationCCReportSpecificOptions {
+export interface AssociationCCReportOptions {
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -572,7 +600,9 @@ export interface AssociationCCReportSpecificOptions {
 //
 // @public (undocumented)
 export class AssociationCCSet extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationCCSetOptions);
+    constructor(options: WithAddress<AssociationCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCSet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -586,7 +616,7 @@ export class AssociationCCSet extends AssociationCC {
 // Warning: (ae-missing-release-tag) "AssociationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationCCSetOptions extends CCCommandOptions {
+export interface AssociationCCSetOptions {
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -603,7 +633,9 @@ export class AssociationCCSpecificGroupGet extends AssociationCC {
 //
 // @public (undocumented)
 export class AssociationCCSpecificGroupReport extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (AssociationCCSpecificGroupReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<AssociationCCSpecificGroupReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCSpecificGroupReport;
     // (undocumented)
     group: number;
     // (undocumented)
@@ -630,7 +662,9 @@ export class AssociationCCSupportedGroupingsGet extends AssociationCC {
 //
 // @public (undocumented)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationCCSupportedGroupingsReportOptions);
+    constructor(options: WithAddress<AssociationCCSupportedGroupingsReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationCCSupportedGroupingsReport;
     // (undocumented)
     groupCount: number;
     // (undocumented)
@@ -642,7 +676,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 // Warning: (ae-missing-release-tag) "AssociationCCSupportedGroupingsReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationCCSupportedGroupingsReportOptions extends CCCommandOptions {
+export interface AssociationCCSupportedGroupingsReportOptions {
     // (undocumented)
     groupCount: number;
 }
@@ -652,11 +686,6 @@ export interface AssociationCCSupportedGroupingsReportOptions extends CCCommandO
 // @public (undocumented)
 export const AssociationCCValues: Readonly<{
     nodeIds: ((groupId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Association;
             property: "nodeIds";
@@ -668,23 +697,23 @@ export const AssociationCCValues: Readonly<{
             readonly property: "nodeIds";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    maxNodes: ((groupId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    maxNodes: ((groupId: number) => {
         readonly id: {
             commandClass: CommandClasses.Association;
             property: "maxNodes";
@@ -696,14 +725,19 @@ export const AssociationCCValues: Readonly<{
             readonly property: "maxNodes";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -724,11 +758,11 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -749,11 +783,11 @@ export const AssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -830,9 +864,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationGroupInfoCCCommandListGetOptions);
+    constructor(options: WithAddress<AssociationGroupInfoCCCommandListGetOptions>);
     // (undocumented)
     allowCache: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCCommandListGet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -844,7 +880,7 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
+export interface AssociationGroupInfoCCCommandListGetOptions {
     // (undocumented)
     allowCache: boolean;
     // (undocumented)
@@ -855,9 +891,11 @@ export interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOp
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationGroupInfoCCCommandListReportOptions);
+    constructor(options: WithAddress<AssociationGroupInfoCCCommandListReportOptions>);
     // (undocumented)
     readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCCommandListReport;
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
@@ -869,7 +907,7 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationGroupInfoCCCommandListReportOptions extends CCCommandOptions {
+export interface AssociationGroupInfoCCCommandListReportOptions {
     // (undocumented)
     commands: ReadonlyMap<CommandClasses, readonly number[]>;
     // (undocumented)
@@ -880,7 +918,9 @@ export interface AssociationGroupInfoCCCommandListReportOptions extends CCComman
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationGroupInfoCCInfoGetOptions);
+    constructor(options: WithAddress<AssociationGroupInfoCCInfoGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCInfoGet;
     // (undocumented)
     groupId?: number;
     // (undocumented)
@@ -896,7 +936,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
+export type AssociationGroupInfoCCInfoGetOptions = {
     refreshCache: boolean;
 } & ({
     listMode: boolean;
@@ -908,7 +948,9 @@ export type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | (AssociationGroupInfoCCInfoReportSpecificOptions & CCCommandOptions));
+    constructor(options: WithAddress<AssociationGroupInfoCCInfoReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCInfoReport;
     // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfo" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -925,10 +967,10 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
-// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationGroupInfoCCInfoReportSpecificOptions {
+export interface AssociationGroupInfoCCInfoReportOptions {
     // (undocumented)
     groups: AssociationGroupInfo[];
     // (undocumented)
@@ -941,7 +983,9 @@ export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationGroupInfoCCNameGetOptions);
+    constructor(options: WithAddress<AssociationGroupInfoCCNameGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCNameGet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -953,7 +997,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
+export interface AssociationGroupInfoCCNameGetOptions {
     // (undocumented)
     groupId: number;
 }
@@ -962,7 +1006,9 @@ export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
-    constructor(options: CommandClassDeserializationOptions | AssociationGroupInfoCCNameReportOptions);
+    constructor(options: WithAddress<AssociationGroupInfoCCNameReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): AssociationGroupInfoCCNameReport;
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
@@ -978,7 +1024,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface AssociationGroupInfoCCNameReportOptions extends CCCommandOptions {
+export interface AssociationGroupInfoCCNameReportOptions {
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -990,11 +1036,6 @@ export interface AssociationGroupInfoCCNameReportOptions extends CCCommandOption
 // @public (undocumented)
 export const AssociationGroupInfoCCValues: Readonly<{
     commands: ((groupId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "issuedCommands";
@@ -1006,23 +1047,23 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "issuedCommands";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    groupInfo: ((groupId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    groupInfo: ((groupId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "info";
@@ -1034,23 +1075,23 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "info";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    groupName: ((groupId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    groupName: ((groupId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "name";
@@ -1062,14 +1103,19 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly property: "name";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -1090,11 +1136,11 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -1486,7 +1532,9 @@ export class BarrierOperatorCC extends CommandClass {
 //
 // @public (undocumented)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions | BarrierOperatorCCEventSignalingGetOptions);
+    constructor(options: WithAddress<BarrierOperatorCCEventSignalingGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): BarrierOperatorCCEventSignalingGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -1498,7 +1546,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
+export interface BarrierOperatorCCEventSignalingGetOptions {
     // (undocumented)
     subsystemType: SubsystemType;
 }
@@ -1507,7 +1555,9 @@ export interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<BarrierOperatorCCEventSignalingReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BarrierOperatorCCEventSignalingReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -1518,11 +1568,23 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCEventSignalingReportOptions {
+    // (undocumented)
+    subsystemState: SubsystemState;
+    // (undocumented)
+    subsystemType: SubsystemType;
+}
+
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions | BarrierOperatorCCEventSignalingSetOptions);
+    constructor(options: WithAddress<BarrierOperatorCCEventSignalingSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): BarrierOperatorCCEventSignalingSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -1536,7 +1598,7 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
+export interface BarrierOperatorCCEventSignalingSetOptions {
     // (undocumented)
     subsystemState: SubsystemState;
     // (undocumented)
@@ -1553,20 +1615,34 @@ export class BarrierOperatorCCGet extends BarrierOperatorCC {
 //
 // @public (undocumented)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<BarrierOperatorCCReportOptions>);
     // (undocumented)
     readonly currentState: MaybeUnknown<BarrierState>;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BarrierOperatorCCReport;
     // (undocumented)
     readonly position: MaybeUnknown<number>;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCReportOptions {
+    // (undocumented)
+    currentState: MaybeUnknown<BarrierState>;
+    // (undocumented)
+    position: MaybeUnknown<number>;
+}
+
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions | BarrierOperatorCCSetOptions);
+    constructor(options: WithAddress<BarrierOperatorCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): BarrierOperatorCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -1578,7 +1654,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BarrierOperatorCCSetOptions extends CCCommandOptions {
+export interface BarrierOperatorCCSetOptions {
     // (undocumented)
     targetState: BarrierState.Open | BarrierState.Closed;
 }
@@ -1593,11 +1669,21 @@ export class BarrierOperatorCCSignalingCapabilitiesGet extends BarrierOperatorCC
 //
 // @public (undocumented)
 export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperatorCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<BarrierOperatorCCSignalingCapabilitiesReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BarrierOperatorCCSignalingCapabilitiesReport;
     // (undocumented)
     readonly supportedSubsystemTypes: readonly SubsystemType[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCSignalingCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCSignalingCapabilitiesReportOptions {
+    // (undocumented)
+    supportedSubsystemTypes: SubsystemType[];
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1605,17 +1691,6 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 // @public (undocumented)
 export const BarrierOperatorCCValues: Readonly<{
     signalingState: ((subsystemType: SubsystemType) => {
-        readonly meta: {
-            readonly label: `Signaling State (${string})`;
-            readonly states: {
-                [x: number]: string;
-            };
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Barrier Operator"];
             property: "signalingState";
@@ -1626,6 +1701,17 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "signalingState";
             readonly propertyKey: SubsystemType;
+        };
+        readonly meta: {
+            readonly label: `Signaling State (${string})`;
+            readonly states: {
+                [x: number]: string;
+            };
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -1746,11 +1832,11 @@ export const BarrierOperatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -1818,11 +1904,13 @@ export class BasicCCGet extends BasicCC {
 //
 // @public (undocumented)
 export class BasicCCReport extends BasicCC {
-    constructor(options: CommandClassDeserializationOptions | BasicCCReportOptions);
+    constructor(options: WithAddress<BasicCCReportOptions>);
     // (undocumented)
-    get currentValue(): MaybeUnknown<number> | undefined;
+    currentValue: MaybeUnknown<number> | undefined;
     // (undocumented)
     readonly duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BasicCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -1836,18 +1924,22 @@ export class BasicCCReport extends BasicCC {
 // Warning: (ae-missing-release-tag) "BasicCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type BasicCCReportOptions = CCCommandOptions & {
-    currentValue: number;
-} & AllOrNone<{
-    targetValue: number;
-    duration: Duration;
-}>;
+export interface BasicCCReportOptions {
+    // (undocumented)
+    currentValue?: MaybeUnknown<number>;
+    // (undocumented)
+    duration?: Duration;
+    // (undocumented)
+    targetValue?: MaybeUnknown<number>;
+}
 
 // Warning: (ae-missing-release-tag) "BasicCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BasicCCSet extends BasicCC {
-    constructor(options: CommandClassDeserializationOptions | BasicCCSetOptions);
+    constructor(options: WithAddress<BasicCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BasicCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -1859,7 +1951,7 @@ export class BasicCCSet extends BasicCC {
 // Warning: (ae-missing-release-tag) "BasicCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BasicCCSetOptions extends CCCommandOptions {
+export interface BasicCCSetOptions {
     // (undocumented)
     targetValue: number;
 }
@@ -1888,10 +1980,10 @@ export const BasicCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly secret: false;
             readonly internal: false;
-            readonly minVersion: 1;
             readonly supportsEndpoints: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly stateful: false;
             readonly autoCreate: false;
         };
@@ -2053,7 +2145,9 @@ export class BatteryCCHealthGet extends BatteryCC {
 //
 // @public (undocumented)
 export class BatteryCCHealthReport extends BatteryCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress_2<BatteryCCHealthReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BatteryCCHealthReport;
     // (undocumented)
     readonly maximumCapacity: number | undefined;
     // (undocumented)
@@ -2064,17 +2158,31 @@ export class BatteryCCHealthReport extends BatteryCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BatteryCCHealthReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BatteryCCHealthReportOptions {
+    // (undocumented)
+    maximumCapacity?: number;
+    // (undocumented)
+    temperature?: number;
+    // (undocumented)
+    temperatureScale?: number;
+}
+
 // Warning: (ae-missing-release-tag) "BatteryCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BatteryCCReport extends BatteryCC {
-    constructor(options: CommandClassDeserializationOptions | BatteryCCReportOptions);
+    constructor(options: WithAddress_2<BatteryCCReportOptions>);
     // (undocumented)
     readonly backup: boolean | undefined;
     // (undocumented)
     readonly chargingStatus: BatteryChargingStatus | undefined;
     // (undocumented)
     readonly disconnected: boolean | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BatteryCCReport;
     // (undocumented)
     readonly isLow: boolean;
     // (undocumented)
@@ -2100,7 +2208,7 @@ export class BatteryCCReport extends BatteryCC {
 // Warning: (ae-missing-release-tag) "BatteryCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type BatteryCCReportOptions = CCCommandOptions & ({
+export type BatteryCCReportOptions = ({
     isLow?: false;
     level: number;
 } | {
@@ -2140,11 +2248,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
         };
     };
@@ -2166,11 +2274,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2197,11 +2305,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2223,11 +2331,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2249,11 +2357,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2275,11 +2383,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2301,11 +2409,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2332,11 +2440,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2360,11 +2468,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2389,11 +2497,11 @@ export const BatteryCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -2511,7 +2619,9 @@ export class BinarySensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class BinarySensorCCGet extends BinarySensorCC {
-    constructor(options: CommandClassDeserializationOptions | BinarySensorCCGetOptions);
+    constructor(options: WithAddress<BinarySensorCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BinarySensorCCGet;
     // (undocumented)
     sensorType: BinarySensorType | undefined;
     // (undocumented)
@@ -2523,7 +2633,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 // Warning: (ae-missing-release-tag) "BinarySensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BinarySensorCCGetOptions extends CCCommandOptions {
+export interface BinarySensorCCGetOptions {
     // (undocumented)
     sensorType?: BinarySensorType;
 }
@@ -2532,7 +2642,9 @@ export interface BinarySensorCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class BinarySensorCCReport extends BinarySensorCC {
-    constructor(options: BinarySensorCCReportOptions | CommandClassDeserializationOptions);
+    constructor(options: WithAddress<BinarySensorCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BinarySensorCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -2548,7 +2660,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 // Warning: (ae-missing-release-tag) "BinarySensorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BinarySensorCCReportOptions extends CCCommandOptions {
+export interface BinarySensorCCReportOptions {
     // (undocumented)
     type?: BinarySensorType;
     // (undocumented)
@@ -2565,7 +2677,9 @@ export class BinarySensorCCSupportedGet extends BinarySensorCC {
 //
 // @public (undocumented)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
-    constructor(options: CommandClassDeserializationOptions | (BinarySensorCCSupportedReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<BinarySensorCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BinarySensorCCSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -2587,15 +2701,6 @@ export interface BinarySensorCCSupportedReportOptions {
 // @public (undocumented)
 export const BinarySensorCCValues: Readonly<{
     state: ((sensorType: BinarySensorType) => {
-        readonly meta: {
-            readonly label: `Sensor state (${string})`;
-            readonly ccSpecific: {
-                readonly sensorType: BinarySensorType;
-            };
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Binary Sensor"];
             property: string;
@@ -2604,6 +2709,15 @@ export const BinarySensorCCValues: Readonly<{
             readonly commandClass: (typeof CommandClasses)["Binary Sensor"];
             readonly endpoint: number;
             readonly property: string;
+        };
+        readonly meta: {
+            readonly label: `Sensor state (${string})`;
+            readonly ccSpecific: {
+                readonly sensorType: BinarySensorType;
+            };
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -2633,11 +2747,11 @@ export const BinarySensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -2724,11 +2838,13 @@ export class BinarySwitchCCGet extends BinarySwitchCC {
 //
 // @public (undocumented)
 export class BinarySwitchCCReport extends BinarySwitchCC {
-    constructor(options: CommandClassDeserializationOptions | BinarySwitchCCReportOptions);
+    constructor(options: WithAddress<BinarySwitchCCReportOptions>);
     // (undocumented)
     readonly currentValue: MaybeUnknown<boolean> | undefined;
     // (undocumented)
     readonly duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BinarySwitchCCReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -2740,20 +2856,24 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 // Warning: (ae-missing-release-tag) "BinarySwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type BinarySwitchCCReportOptions = CCCommandOptions & {
-    currentValue: MaybeUnknown<boolean>;
-} & AllOrNone_2<{
-    targetValue: MaybeUnknown<boolean>;
-    duration: Duration | string;
-}>;
+export interface BinarySwitchCCReportOptions {
+    // (undocumented)
+    currentValue?: MaybeUnknown<boolean>;
+    // (undocumented)
+    duration?: Duration | string;
+    // (undocumented)
+    targetValue?: MaybeUnknown<boolean>;
+}
 
 // Warning: (ae-missing-release-tag) "BinarySwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BinarySwitchCCSet extends BinarySwitchCC {
-    constructor(options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions);
+    constructor(options: WithAddress<BinarySwitchCCSetOptions>);
     // (undocumented)
     duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): BinarySwitchCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -2765,7 +2885,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 // Warning: (ae-missing-release-tag) "BinarySwitchCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface BinarySwitchCCSetOptions extends CCCommandOptions {
+export interface BinarySwitchCCSetOptions {
     // (undocumented)
     duration?: Duration | string;
     // (undocumented)
@@ -2794,11 +2914,11 @@ export const BinarySwitchCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -3079,16 +3199,6 @@ export interface CCAPIs {
 // @public
 export const CCCommand: <TTarget extends CommandClass>(ccCommand: number) => TypedClassDecorator_2<TTarget>;
 
-// Warning: (ae-missing-release-tag) "CCCommandOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface CCCommandOptions {
-    // (undocumented)
-    endpoint?: number;
-    // (undocumented)
-    nodeId: number | MulticastDestination;
-}
-
 // Warning: (ae-missing-release-tag) "CCConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3110,6 +3220,23 @@ export type CCNameOrId = CommandClasses_2 | Extract<keyof CCAPIs, string>;
 //
 // @public (undocumented)
 export type CCNode = NodeId_2 & SupportsCC_2 & ControlsCC_2 & GetCCs & GetEndpoint_2<CCEndpoint> & GetAllEndpoints_2<CCEndpoint> & QuerySecurityClasses_2 & SetSecurityClass & ListenBehavior & QueryNodeStatus;
+
+// Warning: (ae-missing-release-tag) "CCRaw" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class CCRaw {
+    constructor(ccId: CommandClasses_2, ccCommand: number | undefined, payload: Buffer);
+    // (undocumented)
+    ccCommand: number | undefined;
+    // (undocumented)
+    ccId: CommandClasses_2;
+    // (undocumented)
+    static parse(data: Buffer): CCRaw;
+    // (undocumented)
+    payload: Buffer;
+    // (undocumented)
+    withPayload(payload: Buffer): CCRaw;
+}
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "CCResponsePredicate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3196,18 +3323,30 @@ export class CentralSceneCCConfigurationGet extends CentralSceneCC {
 //
 // @public (undocumented)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<CentralSceneCCConfigurationReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): CentralSceneCCConfigurationReport;
     // (undocumented)
     readonly slowRefresh: boolean;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "CentralSceneCCConfigurationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CentralSceneCCConfigurationReportOptions {
+    // (undocumented)
+    slowRefresh: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "CentralSceneCCConfigurationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
-    constructor(options: CommandClassDeserializationOptions | CentralSceneCCConfigurationSetOptions);
+    constructor(options: WithAddress<CentralSceneCCConfigurationSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): CentralSceneCCConfigurationSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3219,7 +3358,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 // Warning: (ae-missing-release-tag) "CentralSceneCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
+export interface CentralSceneCCConfigurationSetOptions {
     // (undocumented)
     slowRefresh: boolean;
 }
@@ -3228,7 +3367,9 @@ export interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions 
 //
 // @public (undocumented)
 export class CentralSceneCCNotification extends CentralSceneCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<CentralSceneCCNotificationOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): CentralSceneCCNotification;
     // (undocumented)
     readonly keyAttribute: CentralSceneKeys;
     // (undocumented)
@@ -3243,6 +3384,20 @@ export class CentralSceneCCNotification extends CentralSceneCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "CentralSceneCCNotificationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CentralSceneCCNotificationOptions {
+    // (undocumented)
+    keyAttribute: CentralSceneKeys;
+    // (undocumented)
+    sceneNumber: number;
+    // (undocumented)
+    sequenceNumber: number;
+    // (undocumented)
+    slowRefresh?: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "CentralSceneCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3253,7 +3408,9 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {
 //
 // @public (undocumented)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<CentralSceneCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): CentralSceneCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -3266,19 +3423,23 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "CentralSceneCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CentralSceneCCSupportedReportOptions {
+    // (undocumented)
+    sceneCount: number;
+    // (undocumented)
+    supportedKeyAttributes: Record<number, readonly CentralSceneKeys[]>;
+    // (undocumented)
+    supportsSlowRefresh: MaybeNotKnown<boolean>;
+}
+
 // Warning: (ae-missing-release-tag) "CentralSceneCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const CentralSceneCCValues: Readonly<{
     scene: ((sceneNumber: number) => {
-        readonly meta: {
-            readonly label: `Scene ${string}`;
-            readonly writeable: false;
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Central Scene"];
             property: "scene";
@@ -3290,14 +3451,22 @@ export const CentralSceneCCValues: Readonly<{
             readonly property: "scene";
             readonly propertyKey: string;
         };
+        readonly meta: {
+            readonly label: `Scene ${string}`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly secret: false;
             readonly internal: false;
-            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly stateful: false;
         };
     };
@@ -3345,11 +3514,11 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -3370,11 +3539,11 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -3395,11 +3564,11 @@ export const CentralSceneCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -3466,18 +3635,30 @@ export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCChangedReport extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCChangedReportOptions>);
     // (undocumented)
     readonly changeCounter: number;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ClimateControlScheduleCCChangedReport;
+    // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCChangedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCChangedReportOptions {
+    // (undocumented)
+    changeCounter: number;
 }
 
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions | ClimateControlScheduleCCGetOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ClimateControlScheduleCCGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3489,7 +3670,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
+export interface ClimateControlScheduleCCGetOptions {
     // (undocumented)
     weekday: Weekday;
 }
@@ -3504,7 +3685,9 @@ export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleC
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCOverrideReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ClimateControlScheduleCCOverrideReport;
     // (undocumented)
     readonly overrideState: SetbackState;
     // (undocumented)
@@ -3513,11 +3696,23 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCOverrideReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCOverrideReportOptions {
+    // (undocumented)
+    overrideState: SetbackState;
+    // (undocumented)
+    overrideType: ScheduleOverrideType;
+}
+
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCOverrideSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions | ClimateControlScheduleCCOverrideSetOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCOverrideSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ClimateControlScheduleCCOverrideSet;
     // (undocumented)
     overrideState: SetbackState;
     // (undocumented)
@@ -3531,7 +3726,7 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCOverrideSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
+export interface ClimateControlScheduleCCOverrideSetOptions {
     // (undocumented)
     overrideState: SetbackState;
     // (undocumented)
@@ -3542,7 +3737,9 @@ export interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOpt
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ClimateControlScheduleCCReport;
     // (undocumented)
     readonly schedule: readonly Switchpoint[];
     // (undocumented)
@@ -3551,11 +3748,23 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
     readonly weekday: Weekday;
 }
 
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCReportOptions {
+    // (undocumented)
+    schedule: Switchpoint[];
+    // (undocumented)
+    weekday: Weekday;
+}
+
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
-    constructor(options: CommandClassDeserializationOptions | ClimateControlScheduleCCSetOptions);
+    constructor(options: WithAddress<ClimateControlScheduleCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ClimateControlScheduleCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3569,7 +3778,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
+export interface ClimateControlScheduleCCSetOptions {
     // (undocumented)
     switchPoints: Switchpoint[];
     // (undocumented)
@@ -3581,12 +3790,6 @@ export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 // @public (undocumented)
 export const ClimateControlScheduleCCValues: Readonly<{
     schedule: ((weekday: Weekday) => {
-        readonly meta: {
-            readonly label: `Schedule (${string})`;
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Climate Control Schedule"];
             property: "schedule";
@@ -3597,6 +3800,12 @@ export const ClimateControlScheduleCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "schedule";
             readonly propertyKey: Weekday;
+        };
+        readonly meta: {
+            readonly label: `Schedule (${string})`;
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -3711,7 +3920,9 @@ export class ClockCCGet extends ClockCC {
 //
 // @public (undocumented)
 export class ClockCCReport extends ClockCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ClockCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ClockCCReport;
     // (undocumented)
     readonly hour: number;
     // (undocumented)
@@ -3722,11 +3933,25 @@ export class ClockCCReport extends ClockCC {
     readonly weekday: Weekday;
 }
 
+// Warning: (ae-missing-release-tag) "ClockCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClockCCReportOptions {
+    // (undocumented)
+    hour: number;
+    // (undocumented)
+    minute: number;
+    // (undocumented)
+    weekday: Weekday;
+}
+
 // Warning: (ae-missing-release-tag) "ClockCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ClockCCSet extends ClockCC {
-    constructor(options: CommandClassDeserializationOptions | ClockCCSetOptions);
+    constructor(options: WithAddress<ClockCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ClockCCSet;
     // (undocumented)
     hour: number;
     // (undocumented)
@@ -3742,7 +3967,7 @@ export class ClockCCSet extends ClockCC {
 // Warning: (ae-missing-release-tag) "ClockCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ClockCCSetOptions extends CCCommandOptions {
+export interface ClockCCSetOptions {
     // (undocumented)
     hour: number;
     // (undocumented)
@@ -3825,10 +4050,12 @@ export class ColorSwitchCC extends CommandClass {
 //
 // @public (undocumented)
 export class ColorSwitchCCGet extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions);
+    constructor(options: WithAddress_2<ColorSwitchCCGetOptions>);
     // (undocumented)
     get colorComponent(): ColorComponent;
     set colorComponent(value: ColorComponent);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3838,7 +4065,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 // Warning: (ae-missing-release-tag) "ColorSwitchCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ColorSwitchCCGetOptions extends CCCommandOptions {
+export interface ColorSwitchCCGetOptions {
     // (undocumented)
     colorComponent: ColorComponent;
 }
@@ -3847,13 +4074,15 @@ export interface ColorSwitchCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ColorSwitchCCReport extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (ColorSwitchCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<ColorSwitchCCReportOptions>);
     // (undocumented)
     readonly colorComponent: ColorComponent;
     // (undocumented)
     readonly currentValue: number;
     // (undocumented)
     readonly duration: Duration_2 | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -3867,23 +4096,28 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 // Warning: (ae-missing-release-tag) "ColorSwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ColorSwitchCCReportOptions = {
+export interface ColorSwitchCCReportOptions {
+    // (undocumented)
     colorComponent: ColorComponent;
+    // (undocumented)
     currentValue: number;
-} & AllOrNone<{
-    targetValue: number;
-    duration: Duration_2 | string;
-}>;
+    // (undocumented)
+    duration?: Duration_2 | string;
+    // (undocumented)
+    targetValue?: number;
+}
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorSwitchCCSet extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & ColorSwitchCCSetOptions));
+    constructor(options: WithAddress_2<ColorSwitchCCSetOptions>);
     // (undocumented)
     colorTable: ColorTable;
     // (undocumented)
     duration: Duration_2 | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3903,13 +4137,15 @@ export type ColorSwitchCCSetOptions = (ColorTable | {
 //
 // @public (undocumented)
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions));
+    constructor(options: WithAddress_2<ColorSwitchCCStartLevelChangeOptions>);
     // (undocumented)
     colorComponent: ColorComponent;
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
     // (undocumented)
     duration: Duration_2 | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCStartLevelChange;
     // (undocumented)
     ignoreStartLevel: boolean;
     // (undocumented)
@@ -3940,9 +4176,11 @@ export type ColorSwitchCCStartLevelChangeOptions = {
 //
 // @public (undocumented)
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | ColorSwitchCCStopLevelChangeOptions);
+    constructor(options: WithAddress_2<ColorSwitchCCStopLevelChangeOptions>);
     // (undocumented)
     readonly colorComponent: ColorComponent;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCStopLevelChange;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3952,7 +4190,7 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 // Warning: (ae-missing-release-tag) "ColorSwitchCCStopLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
+export interface ColorSwitchCCStopLevelChangeOptions {
     // (undocumented)
     colorComponent: ColorComponent;
 }
@@ -3967,7 +4205,9 @@ export class ColorSwitchCCSupportedGet extends ColorSwitchCC {
 //
 // @public (undocumented)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (ColorSwitchCCSupportedReportOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<ColorSwitchCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ColorSwitchCCSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -3989,16 +4229,6 @@ export interface ColorSwitchCCSupportedReportOptions {
 // @public (undocumented)
 export const ColorSwitchCCValues: Readonly<{
     targetColorChannel: ((component: ColorComponent) => {
-        readonly meta: {
-            readonly label: `Target value (${string})`;
-            readonly description: `The target value of the ${string} channel.`;
-            readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "targetColor";
@@ -4009,6 +4239,16 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "targetColor";
             readonly propertyKey: ColorComponent;
+        };
+        readonly meta: {
+            readonly label: `Target value (${string})`;
+            readonly description: `The target value of the ${string} channel.`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -4022,15 +4262,6 @@ export const ColorSwitchCCValues: Readonly<{
         };
     };
     currentColorChannel: ((component: ColorComponent) => {
-        readonly meta: {
-            readonly label: `Current value (${string})`;
-            readonly description: `The current value of the ${string} channel.`;
-            readonly writeable: false;
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "currentColor";
@@ -4041,6 +4272,15 @@ export const ColorSwitchCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "currentColor";
             readonly propertyKey: ColorComponent;
+        };
+        readonly meta: {
+            readonly label: `Current value (${string})`;
+            readonly description: `The current value of the ${string} channel.`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -4178,11 +4418,11 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -4203,11 +4443,11 @@ export const ColorSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -4250,15 +4490,6 @@ export class CommandClass implements CCId {
     get ccName(): string;
     protected computeEncapsulationOverhead(): number;
     static createInstanceUnchecked<T extends CommandClass>(endpoint: EndpointId, cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
-    protected deserialize(data: Buffer): {
-        ccId: CommandClasses_2;
-        ccCommand: number;
-        payload: Buffer;
-    } | {
-        ccId: CommandClasses_2;
-        payload: Buffer;
-        ccCommand?: undefined;
-    };
     determineRequiredCCInterviews(): readonly CommandClasses_2[];
     encapsulatingCC?: EncapsulatingCommandClass;
     encapsulationFlags: EncapsulationFlags;
@@ -4270,11 +4501,9 @@ export class CommandClass implements CCId {
     expectMoreMessages(_session: CommandClass[]): boolean;
     expectsCCResponse(): boolean;
     readonly frameType?: FrameType;
-    static from(options: CommandClassDeserializationOptions): CommandClass;
-    static getCCCommand(data: Buffer): number | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): CommandClass;
     protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
-    static getCommandClass(data: Buffer): CommandClasses_2;
-    static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
     getDefinedValueIDs(ctx: GetValueDB & GetSupportedCCVersion & GetDeviceConfig & GetNode<NodeId_2 & GetEndpoint_2<EndpointId & SupportsCC_2 & ControlsCC_2>>, includeInternal?: boolean): ValueID[];
     getEncapsulatedCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
@@ -4305,7 +4534,7 @@ export class CommandClass implements CCId {
     mergePartialCCs(_partials: CommandClass[], _ctx: CCParsingContext): void;
     nodeId: number | MulticastDestination;
     // (undocumented)
-    origin: MessageOrigin;
+    static parse(data: Buffer, ctx: CCParsingContext): CommandClass;
     // (undocumented)
     payload: Buffer;
     // Warning: (tsdoc-characters-after-block-tag) The token "@ccValue" looks like a TSDoc tag but contains an invalid character "."; if it is not a tag, use a backslash to escape the "@"
@@ -4343,26 +4572,17 @@ export class CommandClass implements CCId {
 // @public
 export const commandClass: <TTarget extends CommandClass>(ccId: CommandClasses_2) => TypedClassDecorator_2<TTarget>;
 
-// Warning: (ae-missing-release-tag) "CommandClassDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type CommandClassDeserializationOptions = {
-    data: Buffer;
-    origin?: MessageOrigin;
-    context: CCParsingContext;
-} & ({
-    fromEncapsulation?: false;
-    nodeId: number;
-} | {
-    fromEncapsulation: true;
-    encapCC: CommandClass;
-});
-
-// Warning: (ae-forgotten-export) The symbol "CommandClassCreationOptions" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "CommandClassOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CommandClassOptions = CommandClassCreationOptions | CommandClassDeserializationOptions;
+export interface CommandClassOptions extends CCAddress {
+    // (undocumented)
+    ccCommand?: number;
+    // (undocumented)
+    ccId?: number;
+    // (undocumented)
+    payload?: Buffer;
+}
 
 // Warning: (ae-missing-release-tag) "ConfigurationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4414,7 +4634,9 @@ export type ConfigurationCCAPISetOptions = {
 //
 // @public (undocumented)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCBulkGetOptions);
+    constructor(options: WithAddress<ConfigurationCCBulkGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ConfigurationCCBulkGet;
     // (undocumented)
     get parameters(): number[];
     // (undocumented)
@@ -4426,7 +4648,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+export interface ConfigurationCCBulkGetOptions {
     // (undocumented)
     parameters: number[];
 }
@@ -4435,32 +4657,52 @@ export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ConfigurationCCBulkReportOptions>);
     // (undocumented)
-    get defaultValues(): boolean;
+    defaultValues: boolean;
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCBulkReport;
+    // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
-    get isHandshakeResponse(): boolean;
+    isHandshakeResponse: boolean;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
-    get reportsToFollow(): number;
+    reportsToFollow: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     // (undocumented)
     get values(): ReadonlyMap<number, ConfigValue>;
     // (undocumented)
-    get valueSize(): number;
+    valueSize: number;
+}
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCBulkReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCBulkReportOptions {
+    // (undocumented)
+    defaultValues: boolean;
+    // (undocumented)
+    isHandshakeResponse: boolean;
+    // (undocumented)
+    reportsToFollow: number;
+    // (undocumented)
+    values: Record<number, ConfigValue>;
+    // (undocumented)
+    valueSize: number;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCBulkSetOptions);
+    constructor(options: WithAddress<ConfigurationCCBulkSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ConfigurationCCBulkSet;
     // (undocumented)
     get handshake(): boolean;
     // (undocumented)
@@ -4482,7 +4724,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ConfigurationCCBulkSetOptions = CCCommandOptions & {
+export type ConfigurationCCBulkSetOptions = {
     parameters: number[];
     handshake?: boolean;
 } & ({
@@ -4504,9 +4746,11 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCGet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCGetOptions);
+    constructor(options: WithAddress<ConfigurationCCGetOptions>);
     // (undocumented)
     allowUnexpectedResponse: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCGet;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4518,7 +4762,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCGetOptions extends CCCommandOptions {
+export interface ConfigurationCCGetOptions {
     allowUnexpectedResponse?: boolean;
     // (undocumented)
     parameter: number;
@@ -4528,7 +4772,9 @@ export interface ConfigurationCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCGetOptions);
+    constructor(options: WithAddress<ConfigurationCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCInfoGet;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4541,9 +4787,11 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCInfoReportOptions);
+    constructor(options: WithAddress<ConfigurationCCInfoReportOptions>);
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCInfoReport;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -4566,7 +4814,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
+export interface ConfigurationCCInfoReportOptions {
     // (undocumented)
     info: string;
     // (undocumented)
@@ -4579,7 +4827,9 @@ export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCNameGet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCGetOptions);
+    constructor(options: WithAddress<ConfigurationCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCNameGet;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4592,9 +4842,11 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCNameReport extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCNameReportOptions);
+    constructor(options: WithAddress<ConfigurationCCNameReportOptions>);
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCNameReport;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -4617,7 +4869,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCNameReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
+export interface ConfigurationCCNameReportOptions {
     // (undocumented)
     name: string;
     // (undocumented)
@@ -4630,7 +4882,9 @@ export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCGetOptions);
+    constructor(options: WithAddress<ConfigurationCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCPropertiesGet;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4643,11 +4897,13 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCPropertiesReportOptions);
+    constructor(options: WithAddress<ConfigurationCCPropertiesReportOptions>);
     // (undocumented)
     altersCapabilities: MaybeNotKnown<boolean>;
     // (undocumented)
     defaultValue: MaybeNotKnown<ConfigValue>;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCPropertiesReport;
     // (undocumented)
     isAdvanced: MaybeNotKnown<boolean>;
     // (undocumented)
@@ -4678,7 +4934,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCPropertiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCPropertiesReportOptions extends CCCommandOptions {
+export interface ConfigurationCCPropertiesReportOptions {
     // (undocumented)
     altersCapabilities?: boolean;
     // (undocumented)
@@ -4707,7 +4963,9 @@ export interface ConfigurationCCPropertiesReportOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export class ConfigurationCCReport extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCReportOptions);
+    constructor(options: WithAddress<ConfigurationCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCReport;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4726,7 +4984,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ConfigurationCCReportOptions extends CCCommandOptions {
+export interface ConfigurationCCReportOptions {
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4741,7 +4999,9 @@ export interface ConfigurationCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCSet extends ConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | ConfigurationCCSetOptions);
+    constructor(options: WithAddress<ConfigurationCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ConfigurationCCSet;
     // (undocumented)
     parameter: number;
     // (undocumented)
@@ -4761,7 +5021,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 // Warning: (ae-missing-release-tag) "ConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ConfigurationCCSetOptions = CCCommandOptions & ({
+export type ConfigurationCCSetOptions = {
     parameter: number;
     resetToDefault: true;
 } | {
@@ -4770,18 +5030,13 @@ export type ConfigurationCCSetOptions = CCCommandOptions & ({
     valueSize: number;
     valueFormat?: ConfigValueFormat;
     value: ConfigValue;
-});
+};
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export const ConfigurationCCValues: Readonly<{
     paramInformation: ((parameter: number, bitMask?: number | undefined) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Configuration;
             property: number;
@@ -4792,6 +5047,11 @@ export const ConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: number;
             readonly propertyKey: number | undefined;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -4821,10 +5081,10 @@ export const ConfigurationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -4884,11 +5144,13 @@ export class CRC16CC extends CommandClass {
 //
 // @public (undocumented)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
-    constructor(options: CommandClassDeserializationOptions | CRC16CCCommandEncapsulationOptions);
+    constructor(options: WithAddress<CRC16CCCommandEncapsulationOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
     encapsulated: CommandClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): CRC16CCCommandEncapsulation;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -4898,7 +5160,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 // Warning: (ae-missing-release-tag) "CRC16CCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+export interface CRC16CCCommandEncapsulationOptions {
     // (undocumented)
     encapsulated: CommandClass;
 }
@@ -4970,7 +5232,8 @@ export class DeviceResetLocallyCC extends CommandClass {
 //
 // @public (undocumented)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
-    constructor(options: CommandClassOptions);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): DeviceResetLocallyCCNotification;
 }
 
 // Warning: (ae-missing-release-tag) "DeviceResetLocallyCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5013,7 +5276,7 @@ export class DoorLockCCCapabilitiesGet extends DoorLockCC {
 //
 // @public (undocumented)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<DoorLockCCCapabilitiesReportOptions>);
     // (undocumented)
     readonly autoRelockSupported: boolean;
     // (undocumented)
@@ -5022,6 +5285,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
     readonly boltSupported: boolean;
     // (undocumented)
     readonly doorSupported: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): DoorLockCCCapabilitiesReport;
     // (undocumented)
     readonly holdAndReleaseSupported: boolean;
     // (undocumented)
@@ -5040,6 +5305,34 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
     readonly twistAssistSupported: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "DoorLockCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockCCCapabilitiesReportOptions {
+    // (undocumented)
+    autoRelockSupported: boolean;
+    // (undocumented)
+    blockToBlockSupported: boolean;
+    // (undocumented)
+    boltSupported: boolean;
+    // (undocumented)
+    doorSupported: boolean;
+    // (undocumented)
+    holdAndReleaseSupported: boolean;
+    // (undocumented)
+    latchSupported: boolean;
+    // (undocumented)
+    supportedDoorLockModes: DoorLockMode[];
+    // (undocumented)
+    supportedInsideHandles: DoorHandleStatus;
+    // (undocumented)
+    supportedOperationTypes: DoorLockOperationType[];
+    // (undocumented)
+    supportedOutsideHandles: DoorHandleStatus;
+    // (undocumented)
+    twistAssistSupported: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "DoorLockCCConfigurationGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5050,11 +5343,13 @@ export class DoorLockCCConfigurationGet extends DoorLockCC {
 //
 // @public (undocumented)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<DoorLockCCConfigurationReportOptions>);
     // (undocumented)
     readonly autoRelockTime?: number;
     // (undocumented)
     readonly blockToBlock?: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): DoorLockCCConfigurationReport;
     // (undocumented)
     readonly holdAndReleaseTime?: number;
     // (undocumented)
@@ -5073,15 +5368,39 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
     readonly twistAssist?: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "DoorLockCCConfigurationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "DoorLockCCConfigurationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class DoorLockCCConfigurationSet extends DoorLockCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & DoorLockCCConfigurationSetOptions));
+export interface DoorLockCCConfigurationReportOptions {
     // (undocumented)
     autoRelockTime?: number;
     // (undocumented)
     blockToBlock?: boolean;
+    // (undocumented)
+    holdAndReleaseTime?: number;
+    // (undocumented)
+    insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+    // (undocumented)
+    lockTimeoutConfiguration?: number;
+    // (undocumented)
+    operationType: DoorLockOperationType;
+    // (undocumented)
+    outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+    // (undocumented)
+    twistAssist?: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DoorLockCCConfigurationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DoorLockCCConfigurationSet extends DoorLockCC {
+    constructor(options: WithAddress<DoorLockCCConfigurationSetOptions>);
+    // (undocumented)
+    autoRelockTime?: number;
+    // (undocumented)
+    blockToBlock?: boolean;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): DoorLockCCConfigurationSet;
     // (undocumented)
     holdAndReleaseTime?: number;
     // (undocumented)
@@ -5128,7 +5447,7 @@ export class DoorLockCCOperationGet extends DoorLockCC {
 //
 // @public (undocumented)
 export class DoorLockCCOperationReport extends DoorLockCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<DoorLockCCOperationReportOptions>);
     // (undocumented)
     readonly boltStatus?: "locked" | "unlocked";
     // (undocumented)
@@ -5137,6 +5456,8 @@ export class DoorLockCCOperationReport extends DoorLockCC {
     readonly doorStatus?: "open" | "closed";
     // (undocumented)
     readonly duration?: Duration;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): DoorLockCCOperationReport;
     // (undocumented)
     readonly insideHandlesCanOpenDoor: DoorHandleStatus;
     // (undocumented)
@@ -5153,11 +5474,37 @@ export class DoorLockCCOperationReport extends DoorLockCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "DoorLockCCOperationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockCCOperationReportOptions {
+    // (undocumented)
+    boltStatus?: "unlocked" | "locked";
+    // (undocumented)
+    currentMode: DoorLockMode;
+    // (undocumented)
+    doorStatus?: "closed" | "open";
+    // (undocumented)
+    duration?: Duration;
+    // (undocumented)
+    insideHandlesCanOpenDoor: DoorHandleStatus;
+    // (undocumented)
+    latchStatus?: "closed" | "open";
+    // (undocumented)
+    lockTimeout?: number;
+    // (undocumented)
+    outsideHandlesCanOpenDoor: DoorHandleStatus;
+    // (undocumented)
+    targetMode?: DoorLockMode;
+}
+
 // Warning: (ae-missing-release-tag) "DoorLockCCOperationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class DoorLockCCOperationSet extends DoorLockCC {
-    constructor(options: CommandClassDeserializationOptions | DoorLockCCOperationSetOptions);
+    constructor(options: WithAddress<DoorLockCCOperationSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): DoorLockCCOperationSet;
     // (undocumented)
     mode: DoorLockMode;
     // (undocumented)
@@ -5169,7 +5516,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 // Warning: (ae-missing-release-tag) "DoorLockCCOperationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface DoorLockCCOperationSetOptions extends CCCommandOptions {
+export interface DoorLockCCOperationSetOptions {
     // (undocumented)
     mode: DoorLockMode;
 }
@@ -5196,11 +5543,11 @@ export const DoorLockCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
     };
@@ -5221,11 +5568,11 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -5247,11 +5594,11 @@ export const DoorLockCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
     };
@@ -5272,11 +5619,11 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -5298,11 +5645,11 @@ export const DoorLockCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
     };
@@ -5323,11 +5670,11 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -5349,10 +5696,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 4;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
@@ -5374,10 +5721,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5400,10 +5747,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 4;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
@@ -5425,10 +5772,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5453,10 +5800,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 4;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
@@ -5478,10 +5825,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5506,10 +5853,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 4;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
@@ -5531,10 +5878,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5695,10 +6042,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5772,10 +6119,10 @@ export const DoorLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: number;
         };
@@ -5798,11 +6145,11 @@ export const DoorLockCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
         };
     };
@@ -5908,7 +6255,9 @@ export class DoorLockLoggingCC extends CommandClass {
 //
 // @public (undocumented)
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
-    constructor(options: CommandClassDeserializationOptions | DoorLockLoggingCCRecordGetOptions);
+    constructor(options: WithAddress<DoorLockLoggingCCRecordGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): DoorLockLoggingCCRecordGet;
     // (undocumented)
     recordNumber: number;
     // (undocumented)
@@ -5920,7 +6269,7 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
+export interface DoorLockLoggingCCRecordGetOptions {
     // (undocumented)
     recordNumber: number;
 }
@@ -5929,13 +6278,25 @@ export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<DoorLockLoggingCCRecordReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): DoorLockLoggingCCRecordReport;
     // (undocumented)
     readonly record?: DoorLockLoggingRecord;
     // (undocumented)
     readonly recordNumber: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockLoggingCCRecordReportOptions {
+    // (undocumented)
+    record?: DoorLockLoggingRecord;
+    // (undocumented)
+    recordNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordsSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5948,11 +6309,21 @@ export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {
 //
 // @public (undocumented)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<DoorLockLoggingCCRecordsSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): DoorLockLoggingCCRecordsSupportedReport;
     // (undocumented)
     readonly recordsCount: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordsSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockLoggingCCRecordsSupportedReportOptions {
+    // (undocumented)
+    recordsCount: number;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5976,11 +6347,11 @@ export const DoorLockLoggingCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -6183,7 +6554,9 @@ export class EnergyProductionCC extends CommandClass {
 //
 // @public (undocumented)
 export class EnergyProductionCCGet extends EnergyProductionCC {
-    constructor(options: CommandClassDeserializationOptions | EnergyProductionCCGetOptions);
+    constructor(options: WithAddress_2<EnergyProductionCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): EnergyProductionCCGet;
     // (undocumented)
     parameter: EnergyProductionParameter;
     // (undocumented)
@@ -6195,7 +6568,7 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 // Warning: (ae-missing-release-tag) "EnergyProductionCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface EnergyProductionCCGetOptions extends CCCommandOptions {
+export interface EnergyProductionCCGetOptions {
     // (undocumented)
     parameter: EnergyProductionParameter;
 }
@@ -6204,7 +6577,9 @@ export interface EnergyProductionCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class EnergyProductionCCReport extends EnergyProductionCC {
-    constructor(options: CommandClassDeserializationOptions | EnergyProductionCCReportOptions);
+    constructor(options: WithAddress_2<EnergyProductionCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): EnergyProductionCCReport;
     // (undocumented)
     readonly parameter: EnergyProductionParameter;
     // (undocumented)
@@ -6222,7 +6597,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 // Warning: (ae-missing-release-tag) "EnergyProductionCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+export interface EnergyProductionCCReportOptions {
     // (undocumented)
     parameter: EnergyProductionParameter;
     // (undocumented)
@@ -6236,12 +6611,6 @@ export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 // @public (undocumented)
 export const EnergyProductionCCValues: Readonly<{
     value: ((parameter: EnergyProductionParameter) => {
-        readonly meta: {
-            readonly label: string;
-            readonly writeable: false;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Energy Production"];
             property: "value";
@@ -6252,6 +6621,12 @@ export const EnergyProductionCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "value";
             readonly propertyKey: EnergyProductionParameter;
+        };
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -6324,7 +6699,9 @@ export class EntryControlCCConfigurationGet extends EntryControlCC {
 //
 // @public (undocumented)
 export class EntryControlCCConfigurationReport extends EntryControlCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<EntryControlCCConfigurationReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): EntryControlCCConfigurationReport;
     // (undocumented)
     readonly keyCacheSize: number;
     // (undocumented)
@@ -6333,11 +6710,23 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "EntryControlCCConfigurationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EntryControlCCConfigurationReportOptions {
+    // (undocumented)
+    keyCacheSize: number;
+    // (undocumented)
+    keyCacheTimeout: number;
+}
+
 // Warning: (ae-missing-release-tag) "EntryControlCCConfigurationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EntryControlCCConfigurationSet extends EntryControlCC {
-    constructor(options: CommandClassDeserializationOptions | EntryControlCCConfigurationSetOptions);
+    constructor(options: WithAddress<EntryControlCCConfigurationSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): EntryControlCCConfigurationSet;
     // (undocumented)
     readonly keyCacheSize: number;
     // (undocumented)
@@ -6351,7 +6740,7 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 // Warning: (ae-missing-release-tag) "EntryControlCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
+export interface EntryControlCCConfigurationSetOptions {
     // (undocumented)
     keyCacheSize: number;
     // (undocumented)
@@ -6368,7 +6757,9 @@ export class EntryControlCCEventSupportedGet extends EntryControlCC {
 //
 // @public (undocumented)
 export class EntryControlCCEventSupportedReport extends EntryControlCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<EntryControlCCEventSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): EntryControlCCEventSupportedReport;
     // (undocumented)
     readonly maxKeyCacheSize: number;
     // (undocumented)
@@ -6387,6 +6778,24 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "EntryControlCCEventSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EntryControlCCEventSupportedReportOptions {
+    // (undocumented)
+    maxKeyCacheSize: number;
+    // (undocumented)
+    maxKeyCacheTimeout: number;
+    // (undocumented)
+    minKeyCacheSize: number;
+    // (undocumented)
+    minKeyCacheTimeout: number;
+    // (undocumented)
+    supportedDataTypes: EntryControlDataTypes[];
+    // (undocumented)
+    supportedEventTypes: EntryControlEventTypes[];
+}
+
 // Warning: (ae-missing-release-tag) "EntryControlCCKeySupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -6397,18 +6806,28 @@ export class EntryControlCCKeySupportedGet extends EntryControlCC {
 //
 // @public (undocumented)
 export class EntryControlCCKeySupportedReport extends EntryControlCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<EntryControlCCKeySupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): EntryControlCCKeySupportedReport;
     // (undocumented)
     readonly supportedKeys: readonly number[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "EntryControlCCKeySupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EntryControlCCKeySupportedReportOptions {
+    // (undocumented)
+    supportedKeys: number[];
+}
+
 // Warning: (ae-missing-release-tag) "EntryControlCCNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EntryControlCCNotification extends EntryControlCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<EntryControlCCNotificationOptions>);
     // (undocumented)
     readonly dataType: EntryControlDataTypes;
     // (undocumented)
@@ -6416,9 +6835,25 @@ export class EntryControlCCNotification extends EntryControlCC {
     // (undocumented)
     readonly eventType: EntryControlEventTypes;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): EntryControlCCNotification;
+    // (undocumented)
     readonly sequenceNumber: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "EntryControlCCNotificationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EntryControlCCNotificationOptions {
+    // (undocumented)
+    dataType: EntryControlDataTypes;
+    // (undocumented)
+    eventData?: string | Buffer;
+    // (undocumented)
+    eventType: EntryControlEventTypes;
+    // (undocumented)
+    sequenceNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6442,11 +6877,11 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -6467,11 +6902,11 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -6492,11 +6927,11 @@ export const EntryControlCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -6676,11 +7111,13 @@ export function extensionType(type: S2ExtensionType): TypedClassDecorator<Securi
 //
 // @public (undocumented)
 export class FibaroCC extends ManufacturerProprietaryCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    constructor(options: CommandClassOptions);
     // (undocumented)
     fibaroCCCommand?: number;
     // (undocumented)
     fibaroCCId?: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FibaroCC;
     // (undocumented)
     interview(ctx: InterviewContext): Promise<void>;
     // (undocumented)
@@ -6705,7 +7142,7 @@ export const fibaroCCCommand: <TTarget extends FibaroCC>(fibaroCCCommand: number
 //
 // @public (undocumented)
 export class FibaroVenetianBlindCC extends FibaroCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    constructor(options: CommandClassOptions);
     // Warning: (ae-forgotten-export) The symbol "FibaroVenetianBlindCCCommand" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
@@ -6724,29 +7161,45 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 //
 // @public (undocumented)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    constructor(options: CommandClassOptions);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FibaroVenetianBlindCCGet;
 }
 
 // Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FibaroVenetianBlindCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FibaroVenetianBlindCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
-    get position(): MaybeUnknown<number> | undefined;
+    position: MaybeUnknown<number> | undefined;
     // (undocumented)
-    get tilt(): MaybeUnknown<number> | undefined;
+    tilt: MaybeUnknown<number> | undefined;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FibaroVenetianBlindCCReportOptions {
+    // (undocumented)
+    position?: MaybeUnknown<number>;
+    // (undocumented)
+    tilt?: MaybeUnknown<number>;
 }
 
 // Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
-    constructor(options: CommandClassDeserializationOptions | FibaroVenetianBlindCCSetOptions);
+    constructor(options: WithAddress<FibaroVenetianBlindCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): FibaroVenetianBlindCCSet;
     // (undocumented)
     position: number | undefined;
     // (undocumented)
@@ -6760,14 +7213,14 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 // Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type FibaroVenetianBlindCCSetOptions = CCCommandOptions & ({
+export type FibaroVenetianBlindCCSetOptions = {
     position: number;
 } | {
     tilt: number;
 } | {
     position: number;
     tilt: number;
-});
+};
 
 // Warning: (ae-missing-release-tag) "FirmwareDownloadStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6867,7 +7320,7 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCActivationReportOptions>);
     // (undocumented)
     readonly activationStatus: FirmwareUpdateActivationStatus;
     // (undocumented)
@@ -6877,6 +7330,8 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
     // (undocumented)
     readonly firmwareTarget: number;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCActivationReport;
+    // (undocumented)
     readonly hardwareVersion?: number;
     // (undocumented)
     readonly manufacturerId: number;
@@ -6884,17 +7339,37 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
-// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCActivationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCActivationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions));
+export interface FirmwareUpdateMetaDataCCActivationReportOptions {
+    // (undocumented)
+    activationStatus: FirmwareUpdateActivationStatus;
     // (undocumented)
     checksum: number;
     // (undocumented)
     firmwareId: number;
     // (undocumented)
     firmwareTarget: number;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCActivationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCActivationSetOptions>);
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareTarget: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCActivationSet;
     // (undocumented)
     hardwareVersion?: number;
     // (undocumented)
@@ -6925,13 +7400,25 @@ export interface FirmwareUpdateMetaDataCCActivationSetOptions {
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCGet;
     // (undocumented)
     readonly numReports: number;
     // (undocumented)
     readonly reportNumber: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCGetOptions {
+    // (undocumented)
+    numReports: number;
+    // (undocumented)
+    reportNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCMetaDataGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6944,7 +7431,7 @@ export class FirmwareUpdateMetaDataCCMetaDataGet extends FirmwareUpdateMetaDataC
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC implements FirmwareUpdateMetaData {
-    constructor(options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCMetaDataReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCMetaDataReportOptions>);
     // (undocumented)
     readonly additionalFirmwareIDs: readonly number[];
     // (undocumented)
@@ -6955,6 +7442,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     readonly firmwareId: number;
     // (undocumented)
     readonly firmwareUpgradable: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCMetaDataReport;
     // (undocumented)
     readonly hardwareVersion?: number;
     // (undocumented)
@@ -7005,13 +7494,15 @@ export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions | FirmwareUpdateMetaDataCCPrepareGetOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCPrepareGetOptions>);
     // (undocumented)
     firmwareId: number;
     // (undocumented)
     firmwareTarget: number;
     // (undocumented)
     fragmentSize: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCPrepareGet;
     // (undocumented)
     hardwareVersion: number;
     // (undocumented)
@@ -7025,7 +7516,7 @@ export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
+export interface FirmwareUpdateMetaDataCCPrepareGetOptions {
     // (undocumented)
     firmwareId: number;
     // (undocumented)
@@ -7042,22 +7533,36 @@ export interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCPrepareReportOptions>);
     // (undocumented)
     readonly checksum: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCPrepareReport;
     // (undocumented)
     readonly status: FirmwareDownloadStatus;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCPrepareReportOptions {
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    status: FirmwareDownloadStatus;
+}
+
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions | FirmwareUpdateMetaDataCCReportOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCReportOptions>);
     // (undocumented)
     firmwareData: Buffer;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCReport;
     // (undocumented)
     isLast: boolean;
     // (undocumented)
@@ -7071,7 +7576,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
+export interface FirmwareUpdateMetaDataCCReportOptions {
     // (undocumented)
     firmwareData: Buffer;
     // (undocumented)
@@ -7084,7 +7589,7 @@ export interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions 
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions));
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCRequestGetOptions>);
     // (undocumented)
     activation?: boolean;
     // (undocumented)
@@ -7095,6 +7600,8 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
     firmwareTarget?: number;
     // (undocumented)
     fragmentSize?: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCRequestGet;
     // (undocumented)
     hardwareVersion?: number;
     // (undocumented)
@@ -7129,7 +7636,9 @@ export type FirmwareUpdateMetaDataCCRequestGetOptions = {
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCRequestReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCRequestReport;
     // (undocumented)
     nonSecureTransfer?: boolean;
     // (undocumented)
@@ -7140,16 +7649,40 @@ export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDat
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCRequestReportOptions {
+    // (undocumented)
+    nonSecureTransfer?: boolean;
+    // (undocumented)
+    resume?: boolean;
+    // (undocumented)
+    status: FirmwareUpdateRequestStatus;
+}
+
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaDataCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<FirmwareUpdateMetaDataCCStatusReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): FirmwareUpdateMetaDataCCStatusReport;
     // (undocumented)
     readonly status: FirmwareUpdateStatus;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     readonly waitTime?: number;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCStatusReportOptions {
+    // (undocumented)
+    status: FirmwareUpdateStatus;
+    // (undocumented)
+    waitTime?: number;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7173,11 +7706,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7198,11 +7731,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7223,11 +7756,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7248,11 +7781,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7273,11 +7806,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7298,11 +7831,11 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7597,11 +8130,6 @@ export const getManufacturerProprietaryCCConstructor: (manufacturerId: number) =
 // @public
 export function getS2ExtensionConstructor(type: S2ExtensionType): Security2ExtensionConstructor<Security2Extension> | undefined;
 
-// Warning: (ae-missing-release-tag) "gotDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function gotDeserializationOptions(options: CommandClassOptions): options is CommandClassDeserializationOptions;
-
 // Warning: (ae-missing-release-tag) "HailCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -7654,18 +8182,30 @@ export class HumidityControlModeCCGet extends HumidityControlModeCC {
 //
 // @public (undocumented)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlModeCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlModeCCReport;
     // (undocumented)
     readonly mode: HumidityControlMode;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "HumidityControlModeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlModeCCReportOptions {
+    // (undocumented)
+    mode: HumidityControlMode;
+}
+
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
-    constructor(options: CommandClassDeserializationOptions | HumidityControlModeCCSetOptions);
+    constructor(options: WithAddress<HumidityControlModeCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): HumidityControlModeCCSet;
     // (undocumented)
     mode: HumidityControlMode;
     // (undocumented)
@@ -7677,7 +8217,7 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
+export interface HumidityControlModeCCSetOptions {
     // (undocumented)
     mode: HumidityControlMode;
 }
@@ -7692,13 +8232,23 @@ export class HumidityControlModeCCSupportedGet extends HumidityControlModeCC {
 //
 // @public (undocumented)
 export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlModeCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlModeCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
-    get supportedModes(): readonly HumidityControlMode[];
+    supportedModes: HumidityControlMode[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlModeCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlModeCCSupportedReportOptions {
+    // (undocumented)
+    supportedModes: HumidityControlMode[];
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7722,11 +8272,11 @@ export const HumidityControlModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -7813,11 +8363,21 @@ export class HumidityControlOperatingStateCCGet extends HumidityControlOperating
 //
 // @public (undocumented)
 export class HumidityControlOperatingStateCCReport extends HumidityControlOperatingStateCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlOperatingStateCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlOperatingStateCCReport;
     // (undocumented)
     readonly state: HumidityControlOperatingState;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlOperatingStateCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlOperatingStateCCReportOptions {
+    // (undocumented)
+    state: HumidityControlOperatingState;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlOperatingStateCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7899,7 +8459,9 @@ export class HumidityControlSetpointCC extends CommandClass {
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | HumidityControlSetpointCCCapabilitiesGetOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCCapabilitiesGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): HumidityControlSetpointCCCapabilitiesGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -7911,7 +8473,7 @@ export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSet
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface HumidityControlSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+export interface HumidityControlSetpointCCCapabilitiesGetOptions {
     // (undocumented)
     setpointType: HumidityControlSetpointType;
 }
@@ -7920,28 +8482,48 @@ export interface HumidityControlSetpointCCCapabilitiesGetOptions extends CCComma
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCCapabilitiesReportOptions>);
     // (undocumented)
-    get maxValue(): number;
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlSetpointCCCapabilitiesReport;
     // (undocumented)
-    get maxValueScale(): number;
+    maxValue: number;
     // (undocumented)
-    get minValue(): number;
+    maxValueScale: number;
     // (undocumented)
-    get minValueScale(): number;
+    minValue: number;
+    // (undocumented)
+    minValueScale: number;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): HumidityControlSetpointType;
+    type: HumidityControlSetpointType;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCCapabilitiesReportOptions {
+    // (undocumented)
+    maxValue: number;
+    // (undocumented)
+    maxValueScale: number;
+    // (undocumented)
+    minValue: number;
+    // (undocumented)
+    minValueScale: number;
+    // (undocumented)
+    type: HumidityControlSetpointType;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | HumidityControlSetpointCCGetOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): HumidityControlSetpointCCGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -7953,7 +8535,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
+export interface HumidityControlSetpointCCGetOptions {
     // (undocumented)
     setpointType: HumidityControlSetpointType;
 }
@@ -7962,24 +8544,40 @@ export interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlSetpointCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
-    readonly scale: number;
+    scale: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     // (undocumented)
-    get type(): HumidityControlSetpointType;
+    type: HumidityControlSetpointType;
     // (undocumented)
-    get value(): number;
+    value: number;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCReportOptions {
+    // (undocumented)
+    scale: number;
+    // (undocumented)
+    type: HumidityControlSetpointType;
+    // (undocumented)
+    value: number;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | HumidityControlSetpointCCScaleSupportedGetOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCScaleSupportedGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): HumidityControlSetpointCCScaleSupportedGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -7991,7 +8589,7 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface HumidityControlSetpointCCScaleSupportedGetOptions extends CCCommandOptions {
+export interface HumidityControlSetpointCCScaleSupportedGetOptions {
     // (undocumented)
     setpointType: HumidityControlSetpointType;
 }
@@ -8000,18 +8598,30 @@ export interface HumidityControlSetpointCCScaleSupportedGetOptions extends CCCom
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCScaleSupportedReport extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCScaleSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlSetpointCCScaleSupportedReport;
     // (undocumented)
     readonly supportedScales: readonly number[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCScaleSupportedReportOptions {
+    // (undocumented)
+    supportedScales: number[];
+}
+
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | HumidityControlSetpointCCSetOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): HumidityControlSetpointCCSet;
     // (undocumented)
     scale: number;
     // (undocumented)
@@ -8027,7 +8637,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
+export interface HumidityControlSetpointCCSetOptions {
     // (undocumented)
     scale: number;
     // (undocumented)
@@ -8046,11 +8656,21 @@ export class HumidityControlSetpointCCSupportedGet extends HumidityControlSetpoi
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCSupportedReport extends HumidityControlSetpointCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<HumidityControlSetpointCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): HumidityControlSetpointCCSupportedReport;
     // (undocumented)
     readonly supportedSetpointTypes: readonly HumidityControlSetpointType[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCSupportedReportOptions {
+    // (undocumented)
+    supportedSetpointTypes: HumidityControlSetpointType[];
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8058,14 +8678,6 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 // @public (undocumented)
 export const HumidityControlSetpointCCValues: Readonly<{
     setpointScale: ((setpointType: number) => {
-        readonly meta: {
-            readonly label: `Setpoint scale (${string})`;
-            readonly writeable: false;
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
             property: "setpointScale";
@@ -8076,6 +8688,14 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setpointScale";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Setpoint scale (${string})`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8089,15 +8709,6 @@ export const HumidityControlSetpointCCValues: Readonly<{
         };
     };
     setpoint: ((setpointType: number) => {
-        readonly meta: {
-            readonly label: `Setpoint (${string})`;
-            readonly ccSpecific: {
-                readonly setpointType: number;
-            };
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
             property: "setpoint";
@@ -8108,6 +8719,15 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setpoint";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Setpoint (${string})`;
+            readonly ccSpecific: {
+                readonly setpointType: number;
+            };
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8137,11 +8757,11 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -8204,14 +8824,6 @@ export interface HumidityControlSetpointValue {
     value: number;
 }
 
-// Warning: (ae-missing-release-tag) "ICommandClassContainer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ICommandClassContainer {
-    // (undocumented)
-    command: CommandClass;
-}
-
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "implementedVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -8230,7 +8842,9 @@ export class InclusionControllerCC extends CommandClass {
 //
 // @public (undocumented)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
-    constructor(options: CommandClassDeserializationOptions | InclusionControllerCCCompleteOptions);
+    constructor(options: WithAddress_2<InclusionControllerCCCompleteOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): InclusionControllerCCComplete;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -8244,7 +8858,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 // Warning: (ae-missing-release-tag) "InclusionControllerCCCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+export interface InclusionControllerCCCompleteOptions {
     // (undocumented)
     status: InclusionControllerStatus;
     // (undocumented)
@@ -8255,7 +8869,9 @@ export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
-    constructor(options: CommandClassDeserializationOptions | InclusionControllerCCInitiateOptions);
+    constructor(options: WithAddress_2<InclusionControllerCCInitiateOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): InclusionControllerCCInitiate;
     // (undocumented)
     includedNodeId: number;
     // (undocumented)
@@ -8269,7 +8885,7 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 // Warning: (ae-missing-release-tag) "InclusionControllerCCInitiateOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+export interface InclusionControllerCCInitiateOptions {
     // (undocumented)
     includedNodeId: number;
     // (undocumented)
@@ -8356,7 +8972,9 @@ export class IndicatorCC extends CommandClass {
 //
 // @public (undocumented)
 export class IndicatorCCDescriptionGet extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | IndicatorCCDescriptionGetOptions);
+    constructor(options: WithAddress<IndicatorCCDescriptionGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCDescriptionGet;
     // (undocumented)
     indicatorId: number;
     // (undocumented)
@@ -8368,7 +8986,7 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 // Warning: (ae-missing-release-tag) "IndicatorCCDescriptionGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+export interface IndicatorCCDescriptionGetOptions {
     // (undocumented)
     indicatorId: number;
 }
@@ -8377,9 +8995,11 @@ export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | (IndicatorCCDescriptionReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<IndicatorCCDescriptionReportOptions>);
     // (undocumented)
     description: string;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCDescriptionReport;
     // (undocumented)
     indicatorId: number;
     // (undocumented)
@@ -8404,7 +9024,9 @@ export interface IndicatorCCDescriptionReportOptions {
 //
 // @public (undocumented)
 export class IndicatorCCGet extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | IndicatorCCGetOptions);
+    constructor(options: WithAddress<IndicatorCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCGet;
     // (undocumented)
     indicatorId: number | undefined;
     // (undocumented)
@@ -8416,7 +9038,7 @@ export class IndicatorCCGet extends IndicatorCC {
 // Warning: (ae-missing-release-tag) "IndicatorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IndicatorCCGetOptions extends CCCommandOptions {
+export interface IndicatorCCGetOptions {
     // (undocumented)
     indicatorId?: number;
 }
@@ -8425,7 +9047,9 @@ export interface IndicatorCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IndicatorCCReport extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | (IndicatorCCReportSpecificOptions & CCCommandOptions));
+    constructor(options: WithAddress<IndicatorCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCReport;
     // (undocumented)
     readonly indicator0Value: number | undefined;
     // (undocumented)
@@ -8434,16 +9058,14 @@ export class IndicatorCCReport extends IndicatorCC {
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
-    // Warning: (ae-forgotten-export) The symbol "IndicatorObject" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     readonly values: IndicatorObject[] | undefined;
 }
 
-// Warning: (ae-missing-release-tag) "IndicatorCCReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "IndicatorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type IndicatorCCReportSpecificOptions = {
+export type IndicatorCCReportOptions = {
     value: number;
 } | {
     values: IndicatorObject[];
@@ -8453,7 +9075,9 @@ export type IndicatorCCReportSpecificOptions = {
 //
 // @public (undocumented)
 export class IndicatorCCSet extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | (IndicatorCCSetOptions & CCCommandOptions));
+    constructor(options: WithAddress<IndicatorCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCSet;
     // (undocumented)
     indicator0Value: number | undefined;
     // (undocumented)
@@ -8477,7 +9101,9 @@ export type IndicatorCCSetOptions = {
 //
 // @public (undocumented)
 export class IndicatorCCSupportedGet extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | IndicatorCCSupportedGetOptions);
+    constructor(options: WithAddress<IndicatorCCSupportedGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCSupportedGet;
     // (undocumented)
     indicatorId: number;
     // (undocumented)
@@ -8489,7 +9115,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 // Warning: (ae-missing-release-tag) "IndicatorCCSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedGetOptions {
     // (undocumented)
     indicatorId: number;
 }
@@ -8498,7 +9124,9 @@ export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IndicatorCCSupportedReport extends IndicatorCC {
-    constructor(options: CommandClassDeserializationOptions | IndicatorCCSupportedReportOptions);
+    constructor(options: WithAddress<IndicatorCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IndicatorCCSupportedReport;
     // (undocumented)
     readonly indicatorId: number;
     // (undocumented)
@@ -8516,7 +9144,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 // Warning: (ae-missing-release-tag) "IndicatorCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedReportOptions {
     // (undocumented)
     indicatorId: number;
     // (undocumented)
@@ -8530,11 +9158,6 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 // @public (undocumented)
 export const IndicatorCCValues: Readonly<{
     indicatorDescription: ((indicatorId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Indicator;
             property: number;
@@ -8544,27 +9167,23 @@ export const IndicatorCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly internal: true;
             readonly minVersion: 4;
         };
     };
     valueV2: ((indicatorId: number, propertyId: number) => {
-        readonly meta: {
-            readonly ccSpecific: {
-                indicatorId: number;
-                propertyId: number;
-            };
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Indicator;
             property: number;
@@ -8576,23 +9195,27 @@ export const IndicatorCCValues: Readonly<{
             readonly property: number;
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly internal: false;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly minVersion: 2;
-        };
-    };
-    supportedPropertyIDs: ((indicatorId: number) => {
         readonly meta: {
+            readonly ccSpecific: {
+                indicatorId: number;
+                propertyId: number;
+            };
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 2;
+        };
+    };
+    supportedPropertyIDs: ((indicatorId: number) => {
         readonly id: {
             commandClass: CommandClasses.Indicator;
             property: "supportedPropertyIDs";
@@ -8604,14 +9227,19 @@ export const IndicatorCCValues: Readonly<{
             readonly property: "supportedPropertyIDs";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -8633,11 +9261,11 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
         };
     };
@@ -8662,11 +9290,11 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
         };
     };
@@ -8718,11 +9346,11 @@ export const IndicatorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -8758,6 +9386,18 @@ export type IndicatorMetadata = ValueMetadata_2 & {
     };
 };
 
+// Warning: (ae-missing-release-tag) "IndicatorObject" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorObject {
+    // (undocumented)
+    indicatorId: number;
+    // (undocumented)
+    propertyId: number;
+    // (undocumented)
+    value: number | boolean;
+}
+
 // Warning: (ae-missing-release-tag) "IndicatorTimeout" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -8776,7 +9416,7 @@ export type InterviewContext = CCAPIHost<CCAPINode & GetCCs & SupportsCC_2 & Con
 //
 // @public (undocumented)
 export class InvalidCC extends CommandClass {
-    constructor(options: InvalidCCCreationOptions);
+    constructor(options: InvalidCCOptions);
     // (undocumented)
     get ccName(): string;
     // (undocumented)
@@ -8785,10 +9425,10 @@ export class InvalidCC extends CommandClass {
     toLogEntry(_ctx?: GetValueDB): MessageOrCCLogEntry;
 }
 
-// Warning: (ae-missing-release-tag) "InvalidCCCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "InvalidCCOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
+export interface InvalidCCOptions extends CommandClassOptions {
     // (undocumented)
     ccName: string;
     // (undocumented)
@@ -8822,7 +9462,9 @@ export class IrrigationCCSystemConfigGet extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCSystemConfigReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCSystemConfigReport;
     // (undocumented)
     readonly highPressureThreshold: number;
     // (undocumented)
@@ -8837,11 +9479,29 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCSystemConfigReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCSystemConfigReportOptions {
+    // (undocumented)
+    highPressureThreshold: number;
+    // (undocumented)
+    lowPressureThreshold: number;
+    // (undocumented)
+    masterValveDelay: number;
+    // (undocumented)
+    moistureSensorPolarity?: IrrigationSensorPolarity;
+    // (undocumented)
+    rainSensorPolarity?: IrrigationSensorPolarity;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemConfigSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | (IrrigationCCSystemConfigSetOptions & CCCommandOptions));
+    constructor(options: WithAddress<IrrigationCCSystemConfigSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCSystemConfigSet;
     // (undocumented)
     highPressureThreshold: number;
     // (undocumented)
@@ -8879,7 +9539,9 @@ export class IrrigationCCSystemInfoGet extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCSystemInfoReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCSystemInfoReport;
     // (undocumented)
     readonly maxValveTableSize: number;
     // (undocumented)
@@ -8892,13 +9554,29 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCSystemInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCSystemInfoReportOptions {
+    // (undocumented)
+    maxValveTableSize: number;
+    // (undocumented)
+    numValves: number;
+    // (undocumented)
+    numValveTables: number;
+    // (undocumented)
+    supportsMasterValve: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemShutoff" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCSystemShutoff extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCSystemShutoffOptions);
+    constructor(options: WithAddress<IrrigationCCSystemShutoffOptions>);
     // (undocumented)
     duration?: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCSystemShutoff;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -8908,7 +9586,7 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemShutoffOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
+export interface IrrigationCCSystemShutoffOptions {
     duration?: number;
 }
 
@@ -8922,7 +9600,47 @@ export class IrrigationCCSystemStatusGet extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCSystemStatusReportOptions>);
+    // (undocumented)
+    errorEmergencyShutdown: boolean;
+    // (undocumented)
+    errorHighPressure: boolean;
+    // (undocumented)
+    errorLowPressure: boolean;
+    // (undocumented)
+    errorNotProgrammed: boolean;
+    // (undocumented)
+    errorValve: boolean;
+    // (undocumented)
+    firstOpenZoneId?: number;
+    // (undocumented)
+    flow?: number;
+    // (undocumented)
+    flowSensorActive: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCSystemStatusReport;
+    // (undocumented)
+    masterValveOpen: boolean;
+    // (undocumented)
+    moistureSensorActive: boolean;
+    // (undocumented)
+    pressure?: number;
+    // (undocumented)
+    pressureSensorActive: boolean;
+    // (undocumented)
+    rainSensorActive: boolean;
+    // (undocumented)
+    shutoffDuration: number;
+    // (undocumented)
+    systemVoltage: number;
+    // (undocumented)
+    toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCSystemStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCSystemStatusReportOptions {
     // (undocumented)
     errorEmergencyShutdown: boolean;
     // (undocumented)
@@ -8953,8 +9671,6 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
     shutoffDuration: number;
     // (undocumented)
     systemVoltage: number;
-    // (undocumented)
-    toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8962,16 +9678,6 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 // @public (undocumented)
 export const IrrigationCCValues: Readonly<{
     valveRunStartStop: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Start/Stop`;
-            readonly states: {
-                readonly true: "Start";
-                readonly false: "Stop";
-            };
-            readonly type: "boolean";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -8982,6 +9688,16 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "startStop";
+        };
+        readonly meta: {
+            readonly label: `${string}: Start/Stop`;
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -8995,15 +9711,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     valveRunDuration: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Run duration`;
-            readonly min: 1;
-            readonly unit: "s";
-            readonly max: 65535;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9014,6 +9721,15 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "duration";
+        };
+        readonly meta: {
+            readonly label: `${string}: Run duration`;
+            readonly min: 1;
+            readonly unit: "s";
+            readonly max: 65535;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9027,12 +9743,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     useMoistureSensor: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Use moisture sensor`;
-            readonly type: "boolean";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9043,6 +9753,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "useMoistureSensor";
+        };
+        readonly meta: {
+            readonly label: `${string}: Use moisture sensor`;
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9056,12 +9772,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     useRainSensor: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Use rain sensor`;
-            readonly type: "boolean";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9072,6 +9782,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "useRainSensor";
+        };
+        readonly meta: {
+            readonly label: `${string}: Use rain sensor`;
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9085,12 +9801,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorLowFlow: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Flow below high threshold`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9101,6 +9811,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorLowFlow";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Flow below high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9114,14 +9830,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     lowFlowThreshold: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Low flow threshold`;
-            readonly min: 0;
-            readonly unit: "l/h";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9132,6 +9840,14 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "lowFlowThreshold";
+        };
+        readonly meta: {
+            readonly label: `${string}: Low flow threshold`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9145,12 +9861,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorHighFlow: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Flow above high threshold`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9161,6 +9871,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorHighFlow";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Flow above high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9174,14 +9890,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     highFlowThreshold: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: High flow threshold`;
-            readonly min: 0;
-            readonly unit: "l/h";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9192,6 +9900,14 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "highFlowThreshold";
+        };
+        readonly meta: {
+            readonly label: `${string}: High flow threshold`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9205,12 +9921,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorMaximumFlow: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Maximum flow detected`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9221,6 +9931,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorMaximumFlow";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Maximum flow detected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9234,14 +9950,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     maximumFlow: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Maximum flow`;
-            readonly min: 0;
-            readonly unit: "l/h";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9252,6 +9960,14 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "maximumFlow";
+        };
+        readonly meta: {
+            readonly label: `${string}: Maximum flow`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9265,12 +9981,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorLowCurrent: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Current below low threshold`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9281,6 +9991,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorLowCurrent";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Current below low threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9294,12 +10010,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorHighCurrent: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Current above high threshold`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9310,6 +10020,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorHighCurrent";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Current above high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9323,12 +10039,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     errorShortCircuit: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Error - Short circuit detected`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9339,6 +10049,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "errorShortCircuit";
+        };
+        readonly meta: {
+            readonly label: `${string}: Error - Short circuit detected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9352,15 +10068,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrentLowThreshold: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Nominal current - low threshold`;
-            readonly min: 0;
-            readonly max: 2550;
-            readonly unit: "mA";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9371,6 +10078,15 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentLowThreshold";
+        };
+        readonly meta: {
+            readonly label: `${string}: Nominal current - low threshold`;
+            readonly min: 0;
+            readonly max: 2550;
+            readonly unit: "mA";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9384,15 +10100,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrentHighThreshold: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Nominal current - high threshold`;
-            readonly min: 0;
-            readonly max: 2550;
-            readonly unit: "mA";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9403,6 +10110,15 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrentHighThreshold";
+        };
+        readonly meta: {
+            readonly label: `${string}: Nominal current - high threshold`;
+            readonly min: 0;
+            readonly max: 2550;
+            readonly unit: "mA";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9416,13 +10132,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     nominalCurrent: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Nominal current`;
-            readonly unit: "mA";
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9433,6 +10142,13 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "nominalCurrent";
+        };
+        readonly meta: {
+            readonly label: `${string}: Nominal current`;
+            readonly unit: "mA";
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -9446,12 +10162,6 @@ export const IrrigationCCValues: Readonly<{
         };
     };
     valveConnected: ((valveId: ValveId) => {
-        readonly meta: {
-            readonly label: `${string}: Connected`;
-            readonly writeable: false;
-            readonly type: "boolean";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Irrigation;
             property: ValveId;
@@ -9462,6 +10172,12 @@ export const IrrigationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: ValveId;
             readonly propertyKey: "valveConnected";
+        };
+        readonly meta: {
+            readonly label: `${string}: Connected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -10064,11 +10780,11 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -10089,11 +10805,11 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -10114,11 +10830,11 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -10139,11 +10855,11 @@ export const IrrigationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -10153,7 +10869,9 @@ export const IrrigationCCValues: Readonly<{
 //
 // @public (undocumented)
 export class IrrigationCCValveConfigGet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveConfigGetOptions);
+    constructor(options: WithAddress<IrrigationCCValveConfigGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveConfigGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10165,7 +10883,7 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveConfigGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveConfigGetOptions {
     // (undocumented)
     valveId: ValveId;
 }
@@ -10174,7 +10892,9 @@ export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IrrigationCCValveConfigReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCValveConfigReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCValveConfigReport;
     // (undocumented)
     highFlowThreshold: number;
     // (undocumented)
@@ -10197,11 +10917,35 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
     valveId: ValveId;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCValveConfigReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveConfigReportOptions {
+    // (undocumented)
+    highFlowThreshold: number;
+    // (undocumented)
+    lowFlowThreshold: number;
+    // (undocumented)
+    maximumFlow: number;
+    // (undocumented)
+    nominalCurrentHighThreshold: number;
+    // (undocumented)
+    nominalCurrentLowThreshold: number;
+    // (undocumented)
+    useMoistureSensor: boolean;
+    // (undocumented)
+    useRainSensor: boolean;
+    // (undocumented)
+    valveId: ValveId;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCValveConfigSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCValveConfigSet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | (IrrigationCCValveConfigSetOptions & CCCommandOptions));
+    constructor(options: WithAddress<IrrigationCCValveConfigSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveConfigSet;
     // (undocumented)
     highFlowThreshold: number;
     // (undocumented)
@@ -10242,7 +10986,9 @@ export type IrrigationCCValveConfigSetOptions = {
 //
 // @public (undocumented)
 export class IrrigationCCValveInfoGet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveInfoGetOptions);
+    constructor(options: WithAddress<IrrigationCCValveInfoGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveInfoGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10254,7 +11000,7 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveInfoGetOptions {
     // (undocumented)
     valveId: ValveId;
 }
@@ -10263,7 +11009,7 @@ export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IrrigationCCValveInfoReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCValveInfoReportOptions>);
     // (undocumented)
     readonly connected: boolean;
     // (undocumented)
@@ -10279,6 +11025,8 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
     // (undocumented)
     readonly errorShortCircuit: boolean;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCValveInfoReport;
+    // (undocumented)
     readonly nominalCurrent: number;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
@@ -10288,13 +11036,39 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
     readonly valveId: ValveId;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCValveInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveInfoReportOptions {
+    // (undocumented)
+    connected: boolean;
+    // (undocumented)
+    errorHighCurrent: boolean;
+    // (undocumented)
+    errorHighFlow?: boolean;
+    // (undocumented)
+    errorLowCurrent: boolean;
+    // (undocumented)
+    errorLowFlow?: boolean;
+    // (undocumented)
+    errorMaximumFlow?: boolean;
+    // (undocumented)
+    errorShortCircuit: boolean;
+    // (undocumented)
+    nominalCurrent: number;
+    // (undocumented)
+    valveId: ValveId;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCValveRun" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCValveRun extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveRunOptions);
+    constructor(options: WithAddress<IrrigationCCValveRunOptions>);
     // (undocumented)
     duration: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveRun;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10306,7 +11080,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveRunOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveRunOptions extends CCCommandOptions {
+export interface IrrigationCCValveRunOptions {
     // (undocumented)
     duration: number;
     // (undocumented)
@@ -10317,7 +11091,9 @@ export interface IrrigationCCValveRunOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IrrigationCCValveTableGet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveTableGetOptions);
+    constructor(options: WithAddress<IrrigationCCValveTableGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveTableGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10329,7 +11105,7 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableGetOptions {
     // (undocumented)
     tableId: number;
 }
@@ -10338,20 +11114,34 @@ export interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IrrigationCCValveTableReport extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<IrrigationCCValveTableReportOptions>);
     // (undocumented)
     readonly entries: ValveTableEntry[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): IrrigationCCValveTableReport;
     // (undocumented)
     readonly tableId: number;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCValveTableReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveTableReportOptions {
+    // (undocumented)
+    entries: ValveTableEntry[];
+    // (undocumented)
+    tableId: number;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableRun" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCValveTableRun extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveTableRunOptions);
+    constructor(options: WithAddress<IrrigationCCValveTableRunOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveTableRun;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10363,7 +11153,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableRunOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableRunOptions {
     // (undocumented)
     tableIDs: number[];
 }
@@ -10372,9 +11162,11 @@ export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IrrigationCCValveTableSet extends IrrigationCC {
-    constructor(options: CommandClassDeserializationOptions | IrrigationCCValveTableSetOptions);
+    constructor(options: WithAddress<IrrigationCCValveTableSetOptions>);
     // (undocumented)
     entries: ValveTableEntry[];
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): IrrigationCCValveTableSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10386,7 +11178,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableSetOptions {
     // (undocumented)
     entries: ValveTableEntry[];
     // (undocumented)
@@ -10444,11 +11236,6 @@ export enum IrrigationSensorPolarity {
     // (undocumented)
     Low = 0
 }
-
-// Warning: (ae-missing-release-tag) "isCommandClassContainer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function isCommandClassContainer<T>(msg: T | undefined): msg is T & ICommandClassContainer;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "isEncapsulatingCommandClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10538,23 +11325,37 @@ export class LanguageCCGet extends LanguageCC {
 //
 // @public (undocumented)
 export class LanguageCCReport extends LanguageCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<LanguageCCReportOptions>);
     // (undocumented)
     readonly country: MaybeNotKnown<string>;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): LanguageCCReport;
     // (undocumented)
     readonly language: string;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "LanguageCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LanguageCCReportOptions {
+    // (undocumented)
+    country: MaybeNotKnown<string>;
+    // (undocumented)
+    language: string;
+}
+
 // Warning: (ae-missing-release-tag) "LanguageCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LanguageCCSet extends LanguageCC {
-    constructor(options: CommandClassDeserializationOptions | LanguageCCSetOptions);
+    constructor(options: WithAddress<LanguageCCSetOptions>);
     // (undocumented)
     get country(): MaybeNotKnown<string>;
     set country(value: MaybeNotKnown<string>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): LanguageCCSet;
     // (undocumented)
     get language(): string;
     set language(value: string);
@@ -10567,7 +11368,7 @@ export class LanguageCCSet extends LanguageCC {
 // Warning: (ae-missing-release-tag) "LanguageCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface LanguageCCSetOptions extends CCCommandOptions {
+export interface LanguageCCSetOptions {
     // (undocumented)
     country?: string;
     // (undocumented)
@@ -10688,18 +11489,30 @@ export class LockCCGet extends LockCC {
 //
 // @public (undocumented)
 export class LockCCReport extends LockCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<LockCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): LockCCReport;
     // (undocumented)
     readonly locked: boolean;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "LockCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LockCCReportOptions {
+    // (undocumented)
+    locked: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "LockCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class LockCCSet extends LockCC {
-    constructor(options: CommandClassDeserializationOptions | LockCCSetOptions);
+    constructor(options: WithAddress<LockCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): LockCCSet;
     // (undocumented)
     locked: boolean;
     // (undocumented)
@@ -10711,7 +11524,7 @@ export class LockCCSet extends LockCC {
 // Warning: (ae-missing-release-tag) "LockCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface LockCCSetOptions extends CCCommandOptions {
+export interface LockCCSetOptions {
     // (undocumented)
     locked: boolean;
 }
@@ -10777,11 +11590,13 @@ export const manufacturerProprietaryAPI: <TTarget extends CCAPI>(manufacturerId:
 //
 // @public (undocumented)
 export class ManufacturerProprietaryCC extends CommandClass {
-    constructor(options: CommandClassDeserializationOptions | ManufacturerProprietaryCCOptions);
+    constructor(options: WithAddress<ManufacturerProprietaryCCOptions>);
     // (undocumented)
     ccCommand: undefined;
     // (undocumented)
     createSpecificInstance(): ManufacturerProprietaryCC | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ManufacturerProprietaryCC;
     // (undocumented)
     interview(ctx: InterviewContext): Promise<void>;
     // (undocumented)
@@ -10795,7 +11610,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 // Warning: (ae-missing-release-tag) "ManufacturerProprietaryCCOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+export interface ManufacturerProprietaryCCOptions {
     // (undocumented)
     manufacturerId?: number;
     // (undocumented)
@@ -10818,9 +11633,11 @@ export class ManufacturerSpecificCC extends CommandClass {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
-    constructor(options: CommandClassDeserializationOptions | ManufacturerSpecificCCDeviceSpecificGetOptions);
+    constructor(options: WithAddress<ManufacturerSpecificCCDeviceSpecificGetOptions>);
     // (undocumented)
     deviceIdType: DeviceIdType;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ManufacturerSpecificCCDeviceSpecificGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -10830,7 +11647,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ManufacturerSpecificCCDeviceSpecificGetOptions extends CCCommandOptions {
+export interface ManufacturerSpecificCCDeviceSpecificGetOptions {
     // (undocumented)
     deviceIdType: DeviceIdType;
 }
@@ -10839,13 +11656,25 @@ export interface ManufacturerSpecificCCDeviceSpecificGetOptions extends CCComman
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ManufacturerSpecificCCDeviceSpecificReportOptions>);
     // (undocumented)
     readonly deviceId: string;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ManufacturerSpecificCCDeviceSpecificReport;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly type: DeviceIdType;
+}
+
+// Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ManufacturerSpecificCCDeviceSpecificReportOptions {
+    // (undocumented)
+    deviceId: string;
+    // (undocumented)
+    type: DeviceIdType;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10858,7 +11687,9 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
-    constructor(options: (ManufacturerSpecificCCReportOptions & CCCommandOptions) | CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ManufacturerSpecificCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ManufacturerSpecificCCReport;
     // (undocumented)
     readonly manufacturerId: number;
     // (undocumented)
@@ -10888,12 +11719,6 @@ export interface ManufacturerSpecificCCReportOptions {
 // @public (undocumented)
 export const ManufacturerSpecificCCValues: Readonly<{
     deviceId: ((type: DeviceIdType) => {
-        readonly meta: {
-            readonly label: string;
-            readonly writeable: false;
-            readonly type: "string";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Manufacturer Specific"];
             property: "deviceId";
@@ -10905,14 +11730,20 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly property: "deviceId";
             readonly propertyKey: string;
         };
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "string";
+            readonly readable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -10936,11 +11767,11 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -10964,11 +11795,11 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -10992,11 +11823,11 @@ export const ManufacturerSpecificCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -11015,14 +11846,6 @@ export enum ManufacturerSpecificCommand {
     // (undocumented)
     Report = 5
 }
-
-// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
-// Warning: (ae-missing-release-tag) "messageIsPing" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function messageIsPing<T extends Message>(msg: T): msg is T & {
-    command: NoOperationCC;
-};
 
 // Warning: (ae-missing-release-tag) "MeterCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -11048,7 +11871,9 @@ export class MeterCC extends CommandClass {
 //
 // @public (undocumented)
 export class MeterCCGet extends MeterCC {
-    constructor(options: CommandClassDeserializationOptions | (MeterCCGetOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<MeterCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MeterCCGet;
     // (undocumented)
     rateType: RateType | undefined;
     // (undocumented)
@@ -11073,9 +11898,11 @@ export interface MeterCCGetOptions {
 //
 // @public (undocumented)
 export class MeterCCReport extends MeterCC {
-    constructor(options: CommandClassDeserializationOptions | (MeterCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<MeterCCReportOptions>);
     // (undocumented)
     deltaTime: MaybeUnknown_2<number>;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MeterCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -11116,7 +11943,9 @@ export interface MeterCCReportOptions {
 //
 // @public (undocumented)
 export class MeterCCReset extends MeterCC {
-    constructor(options: CommandClassDeserializationOptions | (MeterCCResetOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<MeterCCResetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MeterCCReset;
     // (undocumented)
     rateType: RateType | undefined;
     // (undocumented)
@@ -11151,7 +11980,9 @@ export class MeterCCSupportedGet extends MeterCC {
 //
 // @public (undocumented)
 export class MeterCCSupportedReport extends MeterCC {
-    constructor(options: CommandClassDeserializationOptions | (MeterCCSupportedReportOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<MeterCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MeterCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -11187,16 +12018,6 @@ export interface MeterCCSupportedReportOptions {
 // @public (undocumented)
 export const MeterCCValues: Readonly<{
     value: ((meterType: number, rateType: RateType, scale: number) => {
-        readonly meta: {
-            readonly ccSpecific: {
-                readonly meterType: number;
-                readonly rateType: RateType;
-                readonly scale: number;
-            };
-            readonly writeable: false;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Meter;
             property: "value";
@@ -11207,6 +12028,16 @@ export const MeterCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "value";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly ccSpecific: {
+                readonly meterType: number;
+                readonly rateType: RateType;
+                readonly scale: number;
+            };
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -11220,6 +12051,17 @@ export const MeterCCValues: Readonly<{
         };
     };
     resetSingle: ((meterType: number, rateType: RateType, scale: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "reset";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "reset";
+            readonly propertyKey: number;
+        };
         readonly meta: {
             readonly label: `Reset (${string})` | `Reset (Consumption, ${string})` | `Reset (Production, ${string})`;
             readonly states: {
@@ -11233,17 +12075,6 @@ export const MeterCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Meter;
-            property: "reset";
-            propertyKey: number;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: CommandClasses.Meter;
-            readonly endpoint: number;
-            readonly property: "reset";
-            readonly propertyKey: number;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -11302,11 +12133,11 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11327,11 +12158,11 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11352,11 +12183,11 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11377,11 +12208,11 @@ export const MeterCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11510,7 +12341,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelAssociationCCGetOptions);
+    constructor(options: WithAddress<MultiChannelAssociationCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelAssociationCCGet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -11522,7 +12355,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
+export interface MultiChannelAssociationCCGetOptions {
     // (undocumented)
     groupId: number;
 }
@@ -11531,9 +12364,11 @@ export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (MultiChannelAssociationCCRemoveOptions & CCCommandOptions));
+    constructor(options: WithAddress<MultiChannelAssociationCCRemoveOptions>);
     // (undocumented)
     endpoints?: EndpointAddress[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelAssociationCCRemove;
     // (undocumented)
     groupId?: number;
     // (undocumented)
@@ -11557,11 +12392,13 @@ export interface MultiChannelAssociationCCRemoveOptions {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (MultiChannelAssociationCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<MultiChannelAssociationCCReportOptions>);
     // (undocumented)
     endpoints: EndpointAddress[];
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelAssociationCCReport;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -11600,9 +12437,11 @@ export interface MultiChannelAssociationCCReportOptions {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
-    constructor(options: CommandClassDeserializationOptions | (MultiChannelAssociationCCSetOptions & CCCommandOptions));
+    constructor(options: WithAddress<MultiChannelAssociationCCSetOptions>);
     // (undocumented)
     endpoints: EndpointAddress[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelAssociationCCSet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -11637,7 +12476,9 @@ export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannel
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelAssociationCCSupportedGroupingsReportOptions);
+    constructor(options: WithAddress<MultiChannelAssociationCCSupportedGroupingsReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelAssociationCCSupportedGroupingsReport;
     // (undocumented)
     readonly groupCount: number;
     // (undocumented)
@@ -11649,7 +12490,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSupportedGroupingsReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelAssociationCCSupportedGroupingsReportOptions extends CCCommandOptions {
+export interface MultiChannelAssociationCCSupportedGroupingsReportOptions {
     // (undocumented)
     groupCount: number;
 }
@@ -11659,11 +12500,6 @@ export interface MultiChannelAssociationCCSupportedGroupingsReportOptions extend
 // @public (undocumented)
 export const MultiChannelAssociationCCValues: Readonly<{
     endpoints: ((groupId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "endpoints";
@@ -11675,23 +12511,23 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "endpoints";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    nodeIds: ((groupId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    nodeIds: ((groupId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "nodeIds";
@@ -11703,23 +12539,23 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "nodeIds";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID_2) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    maxNodes: ((groupId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    maxNodes: ((groupId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "maxNodes";
@@ -11731,14 +12567,19 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly property: "maxNodes";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11759,11 +12600,11 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -11806,7 +12647,9 @@ export class MultiChannelCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCAggregatedMembersGetOptions);
+    constructor(options: WithAddress<MultiChannelCCAggregatedMembersGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): MultiChannelCCAggregatedMembersGet;
     // (undocumented)
     requestedEndpoint: number;
     // (undocumented)
@@ -11818,7 +12661,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCAggregatedMembersGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
+export interface MultiChannelCCAggregatedMembersGetOptions {
     // (undocumented)
     requestedEndpoint: number;
 }
@@ -11827,20 +12670,34 @@ export interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<MultiChannelCCAggregatedMembersReportOptions>);
     // (undocumented)
     readonly aggregatedEndpointIndex: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCAggregatedMembersReport;
     // (undocumented)
     readonly members: readonly number[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCAggregatedMembersReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCAggregatedMembersReportOptions {
+    // (undocumented)
+    aggregatedEndpointIndex: number;
+    // (undocumented)
+    members: number[];
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCCapabilityGetOptions);
+    constructor(options: WithAddress<MultiChannelCCCapabilityGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCCapabilityGet;
     // (undocumented)
     requestedEndpoint: number;
     // (undocumented)
@@ -11852,7 +12709,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
+export interface MultiChannelCCCapabilityGetOptions {
     // (undocumented)
     requestedEndpoint: number;
 }
@@ -11861,7 +12718,9 @@ export interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC implements ApplicationNodeInformation {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCCapabilityReportOptions);
+    constructor(options: WithAddress<MultiChannelCCCapabilityReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCCapabilityReport;
     // (undocumented)
     readonly genericDeviceClass: number;
     // (undocumented)
@@ -11883,7 +12742,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCCapabilityReportOptions extends CCCommandOptions {
+export interface MultiChannelCCCapabilityReportOptions {
     // (undocumented)
     endpointIndex: number;
     // (undocumented)
@@ -11902,13 +12761,15 @@ export interface MultiChannelCCCapabilityReportOptions extends CCCommandOptions 
 //
 // @public (undocumented)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCCommandEncapsulationOptions);
+    constructor(options: WithAddress<MultiChannelCCCommandEncapsulationOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // Warning: (ae-forgotten-export) The symbol "MultiChannelCCDestination" needs to be exported by the entry point index.d.ts
     destination: MultiChannelCCDestination;
     // (undocumented)
     encapsulated: CommandClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCCommandEncapsulation;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -11918,7 +12779,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
+export interface MultiChannelCCCommandEncapsulationOptions {
     // (undocumented)
     destination: MultiChannelCCDestination;
     // (undocumented)
@@ -11929,7 +12790,9 @@ export interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCEndPointFindOptions);
+    constructor(options: WithAddress<MultiChannelCCEndPointFindOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCEndPointFind;
     // (undocumented)
     genericClass: number;
     // (undocumented)
@@ -11943,7 +12806,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
+export interface MultiChannelCCEndPointFindOptions {
     // (undocumented)
     genericClass: number;
     // (undocumented)
@@ -11954,11 +12817,13 @@ export interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCEndPointFindReportOptions);
+    constructor(options: WithAddress<MultiChannelCCEndPointFindReportOptions>);
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
     foundEndpoints: number[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCEndPointFindReport;
     // (undocumented)
     genericClass: number;
     // (undocumented)
@@ -11978,7 +12843,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCEndPointFindReportOptions extends CCCommandOptions {
+export interface MultiChannelCCEndPointFindReportOptions {
     // (undocumented)
     foundEndpoints: number[];
     // (undocumented)
@@ -11999,11 +12864,13 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCEndPointReportOptions);
+    constructor(options: WithAddress<MultiChannelCCEndPointReportOptions>);
     // (undocumented)
     aggregatedCount: MaybeNotKnown<number>;
     // (undocumented)
     countIsDynamic: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCEndPointReport;
     // (undocumented)
     identicalCapabilities: boolean;
     // (undocumented)
@@ -12017,7 +12884,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
+export interface MultiChannelCCEndPointReportOptions {
     // (undocumented)
     aggregatedCount?: number;
     // (undocumented)
@@ -12032,11 +12899,13 @@ export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCV1CommandEncapsulationOptions);
+    constructor(options: WithAddress<MultiChannelCCV1CommandEncapsulationOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
     encapsulated: CommandClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCV1CommandEncapsulation;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -12046,7 +12915,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1CommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
+export interface MultiChannelCCV1CommandEncapsulationOptions {
     // (undocumented)
     encapsulated: CommandClass;
 }
@@ -12055,7 +12924,9 @@ export interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOp
 //
 // @public (undocumented)
 export class MultiChannelCCV1Get extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions | MultiChannelCCV1GetOptions);
+    constructor(options: WithAddress<MultiChannelCCV1GetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): MultiChannelCCV1Get;
     // (undocumented)
     requestedCC: CommandClasses;
     // (undocumented)
@@ -12067,7 +12938,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1GetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiChannelCCV1GetOptions extends CCCommandOptions {
+export interface MultiChannelCCV1GetOptions {
     // (undocumented)
     requestedCC: CommandClasses;
 }
@@ -12076,13 +12947,25 @@ export interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultiChannelCCV1Report extends MultiChannelCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<MultiChannelCCV1ReportOptions>);
     // (undocumented)
     readonly endpointCount: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiChannelCCV1Report;
     // (undocumented)
     readonly requestedCC: CommandClasses;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelCCV1ReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCV1ReportOptions {
+    // (undocumented)
+    endpointCount: number;
+    // (undocumented)
+    requestedCC: CommandClasses;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12090,11 +12973,6 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 // @public (undocumented)
 export const MultiChannelCCValues: Readonly<{
     aggregatedEndpointMembers: ((endpointIndex: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "members";
@@ -12106,14 +12984,19 @@ export const MultiChannelCCValues: Readonly<{
             readonly property: "members";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12134,11 +13017,11 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12159,11 +13042,11 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12184,10 +13067,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12209,10 +13092,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12234,10 +13117,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12259,10 +13142,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12284,10 +13167,10 @@ export const MultiChannelCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12339,9 +13222,11 @@ export class MultiCommandCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
-    constructor(options: CommandClassDeserializationOptions | MultiCommandCCCommandEncapsulationOptions);
+    constructor(options: WithAddress<MultiCommandCCCommandEncapsulationOptions>);
     // (undocumented)
     encapsulated: CommandClass[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultiCommandCCCommandEncapsulation;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -12351,7 +13236,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 // Warning: (ae-missing-release-tag) "MultiCommandCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
+export interface MultiCommandCCCommandEncapsulationOptions {
     // (undocumented)
     encapsulated: CommandClass[];
 }
@@ -12394,7 +13279,9 @@ export class MultilevelSensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSensorCCGetOptions);
+    constructor(options: WithAddress_2<MultilevelSensorCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSensorCCGet;
     // (undocumented)
     scale: number | undefined;
     // (undocumented)
@@ -12405,17 +13292,21 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
-// Warning: (ae-forgotten-export) The symbol "MultilevelSensorCCGetSpecificOptions" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type MultilevelSensorCCGetOptions = CCCommandOptions | (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
+export type MultilevelSensorCCGetOptions = AllOrNone<{
+    sensorType: number;
+    scale: number;
+}>;
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSensorCCGetSupportedScaleOptions);
+    constructor(options: WithAddress_2<MultilevelSensorCCGetSupportedScaleOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSensorCCGetSupportedScale;
     // (undocumented)
     sensorType: number;
     // (undocumented)
@@ -12427,7 +13318,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedScaleOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
+export interface MultilevelSensorCCGetSupportedScaleOptions {
     // (undocumented)
     sensorType: number;
 }
@@ -12442,7 +13333,9 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 //
 // @public (undocumented)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSensorCCReportOptions);
+    constructor(options: WithAddress_2<MultilevelSensorCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSensorCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -12460,7 +13353,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
+export interface MultilevelSensorCCReportOptions {
     // (undocumented)
     scale: number | Scale;
     // (undocumented)
@@ -12473,7 +13366,9 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSensorCCSupportedScaleReportOptions);
+    constructor(options: WithAddress_2<MultilevelSensorCCSupportedScaleReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSensorCCSupportedScaleReport;
     // (undocumented)
     readonly sensorType: number;
     // (undocumented)
@@ -12487,7 +13382,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedScaleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSensorCCSupportedScaleReportOptions extends CCCommandOptions {
+export interface MultilevelSensorCCSupportedScaleReportOptions {
     // (undocumented)
     sensorType: number;
     // (undocumented)
@@ -12498,7 +13393,9 @@ export interface MultilevelSensorCCSupportedScaleReportOptions extends CCCommand
 //
 // @public (undocumented)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSensorCCSupportedSensorReportOptions);
+    constructor(options: WithAddress_2<MultilevelSensorCCSupportedSensorReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSensorCCSupportedSensorReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -12510,7 +13407,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedSensorReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSensorCCSupportedSensorReportOptions extends CCCommandOptions {
+export interface MultilevelSensorCCSupportedSensorReportOptions {
     // (undocumented)
     supportedSensorTypes: readonly number[];
 }
@@ -12520,12 +13417,6 @@ export interface MultilevelSensorCCSupportedSensorReportOptions extends CCComman
 // @public (undocumented)
 export const MultilevelSensorCCValues: Readonly<{
     value: ((sensorTypeName: string) => {
-        readonly meta: {
-            readonly label: string;
-            readonly writeable: false;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             property: string;
@@ -12534,6 +13425,12 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             readonly endpoint: number;
             readonly property: string;
+        };
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -12547,11 +13444,6 @@ export const MultilevelSensorCCValues: Readonly<{
         };
     };
     supportedScales: ((sensorType: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             property: "supportedScales";
@@ -12563,14 +13455,19 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly property: "supportedScales";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12591,11 +13488,11 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12665,11 +13562,13 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSwitchCCReportOptions);
+    constructor(options: WithAddress<MultilevelSwitchCCReportOptions>);
     // (undocumented)
     currentValue: MaybeUnknown<number> | undefined;
     // (undocumented)
     duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSwitchCCReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -12681,22 +13580,24 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
+export interface MultilevelSwitchCCReportOptions {
     // (undocumented)
-    currentValue: MaybeUnknown<number>;
+    currentValue?: MaybeUnknown<number>;
     // (undocumented)
     duration?: Duration | string;
     // (undocumented)
-    targetValue: MaybeUnknown<number>;
+    targetValue?: MaybeUnknown<number>;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | MultilevelSwitchCCSetOptions);
+    constructor(options: WithAddress<MultilevelSwitchCCSetOptions>);
     // (undocumented)
     duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSwitchCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -12708,7 +13609,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
+export interface MultilevelSwitchCCSetOptions {
     // (undocumented)
     duration?: Duration | string;
     // (undocumented)
@@ -12719,11 +13620,13 @@ export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions));
+    constructor(options: WithAddress<MultilevelSwitchCCStartLevelChangeOptions>);
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
     // (undocumented)
     duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSwitchCCStartLevelChange;
     // (undocumented)
     ignoreStartLevel: boolean;
     // (undocumented)
@@ -12765,7 +13668,9 @@ export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & MultilevelSwitchCCSupportedReportOptions));
+    constructor(options: WithAddress<MultilevelSwitchCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): MultilevelSwitchCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -12789,6 +13694,15 @@ export interface MultilevelSwitchCCSupportedReportOptions {
 // @public (undocumented)
 export const MultilevelSwitchCCValues: Readonly<{
     levelChangeDown: ((switchType: SwitchType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -12802,15 +13716,6 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            readonly endpoint: number;
-            readonly property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -12824,6 +13729,15 @@ export const MultilevelSwitchCCValues: Readonly<{
         };
     };
     levelChangeUp: ((switchType: SwitchType) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
         readonly meta: {
             readonly label: `Perform a level change (${string})`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -12837,15 +13751,6 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            property: string;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-            readonly endpoint: number;
-            readonly property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -12875,10 +13780,10 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -12900,11 +13805,11 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -12928,10 +13833,10 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly secret: false;
             readonly internal: false;
-            readonly minVersion: 1;
             readonly supportsEndpoints: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly stateful: false;
             readonly autoCreate: (applHost: GetValueDB_2 & GetDeviceConfig_2, endpoint: EndpointId_2) => boolean;
         };
@@ -13123,18 +14028,30 @@ export class NodeNamingAndLocationCCLocationGet extends NodeNamingAndLocationCC 
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    constructor(options: WithAddress<NodeNamingAndLocationCCLocationReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NodeNamingAndLocationCCLocationReport;
     // (undocumented)
     readonly location: string;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCLocationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeNamingAndLocationCCLocationReportOptions {
+    // (undocumented)
+    location: string;
+}
+
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCLocationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
-    constructor(options: CommandClassDeserializationOptions | NodeNamingAndLocationCCLocationSetOptions);
+    constructor(options: WithAddress<NodeNamingAndLocationCCLocationSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): NodeNamingAndLocationCCLocationSet;
     // (undocumented)
     location: string;
     // (undocumented)
@@ -13146,7 +14063,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCLocationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
+export interface NodeNamingAndLocationCCLocationSetOptions {
     // (undocumented)
     location: string;
 }
@@ -13161,18 +14078,30 @@ export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    constructor(options: WithAddress<NodeNamingAndLocationCCNameReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NodeNamingAndLocationCCNameReport;
     // (undocumented)
     readonly name: string;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeNamingAndLocationCCNameReportOptions {
+    // (undocumented)
+    name: string;
+}
+
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
-    constructor(options: CommandClassDeserializationOptions | NodeNamingAndLocationCCNameSetOptions);
+    constructor(options: WithAddress<NodeNamingAndLocationCCNameSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): NodeNamingAndLocationCCNameSet;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -13184,7 +14113,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
+export interface NodeNamingAndLocationCCNameSetOptions {
     // (undocumented)
     name: string;
 }
@@ -13211,11 +14140,11 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -13237,11 +14166,11 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -13299,7 +14228,9 @@ export class NotificationCC extends CommandClass {
 //
 // @public (undocumented)
 export class NotificationCCEventSupportedGet extends NotificationCC {
-    constructor(options: CommandClassDeserializationOptions | NotificationCCEventSupportedGetOptions);
+    constructor(options: WithAddress_2<NotificationCCEventSupportedGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCEventSupportedGet;
     // (undocumented)
     notificationType: number;
     // (undocumented)
@@ -13311,7 +14242,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+export interface NotificationCCEventSupportedGetOptions {
     // (undocumented)
     notificationType: number;
 }
@@ -13320,7 +14251,9 @@ export interface NotificationCCEventSupportedGetOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export class NotificationCCEventSupportedReport extends NotificationCC {
-    constructor(options: CommandClassDeserializationOptions | NotificationCCEventSupportedReportOptions);
+    constructor(options: WithAddress_2<NotificationCCEventSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCEventSupportedReport;
     // (undocumented)
     notificationType: number;
     // (undocumented)
@@ -13336,7 +14269,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NotificationCCEventSupportedReportOptions extends CCCommandOptions {
+export interface NotificationCCEventSupportedReportOptions {
     // (undocumented)
     notificationType: number;
     // (undocumented)
@@ -13347,8 +14280,10 @@ export interface NotificationCCEventSupportedReportOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class NotificationCCGet extends NotificationCC {
-    constructor(options: CommandClassDeserializationOptions | NotificationCCGetOptions);
+    constructor(options: WithAddress_2<NotificationCCGetOptions>);
     alarmType: number | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCGet;
     // (undocumented)
     notificationEvent: number | undefined;
     notificationType: number | undefined;
@@ -13358,23 +14293,29 @@ export class NotificationCCGet extends NotificationCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
-// Warning: (ae-forgotten-export) The symbol "NotificationCCGetSpecificOptions" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "NotificationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type NotificationCCGetOptions = CCCommandOptions & NotificationCCGetSpecificOptions;
+export type NotificationCCGetOptions = {
+    alarmType: number;
+} | {
+    notificationType: number;
+    notificationEvent?: number;
+};
 
 // Warning: (ae-missing-release-tag) "NotificationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationCCReport extends NotificationCC {
-    constructor(options: CommandClassDeserializationOptions | (NotificationCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress_2<NotificationCCReportOptions>);
     // (undocumented)
     alarmLevel: number | undefined;
     // (undocumented)
     alarmType: number | undefined;
     // (undocumented)
     eventParameters: Buffer | Duration | Record<string, number> | number | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCReport;
     // (undocumented)
     notificationEvent: number | undefined;
     // (undocumented)
@@ -13395,11 +14336,11 @@ export class NotificationCCReport extends NotificationCC {
 //
 // @public (undocumented)
 export type NotificationCCReportOptions = {
-    alarmType: number;
-    alarmLevel: number;
-} | {
-    notificationType: number;
-    notificationEvent: number;
+    alarmType?: number;
+    alarmLevel?: number;
+    notificationType?: number;
+    notificationEvent?: number;
+    notificationStatus?: number;
     eventParameters?: Buffer;
     sequenceNumber?: number;
 };
@@ -13408,7 +14349,9 @@ export type NotificationCCReportOptions = {
 //
 // @public (undocumented)
 export class NotificationCCSet extends NotificationCC {
-    constructor(options: CommandClassDeserializationOptions | NotificationCCSetOptions);
+    constructor(options: WithAddress_2<NotificationCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCSet;
     // (undocumented)
     notificationStatus: boolean;
     // (undocumented)
@@ -13422,7 +14365,7 @@ export class NotificationCCSet extends NotificationCC {
 // Warning: (ae-missing-release-tag) "NotificationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NotificationCCSetOptions extends CCCommandOptions {
+export interface NotificationCCSetOptions {
     // (undocumented)
     notificationStatus: boolean;
     // (undocumented)
@@ -13439,7 +14382,9 @@ export class NotificationCCSupportedGet extends NotificationCC {
 //
 // @public (undocumented)
 export class NotificationCCSupportedReport extends NotificationCC {
-    constructor(options: NotificationCCSupportedReportOptions | CommandClassDeserializationOptions);
+    constructor(options: WithAddress_2<NotificationCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): NotificationCCSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -13453,7 +14398,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 // Warning: (ae-missing-release-tag) "NotificationCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
+export interface NotificationCCSupportedReportOptions {
     // (undocumented)
     supportedNotificationTypes: number[];
     // (undocumented)
@@ -13465,11 +14410,6 @@ export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 // @public (undocumented)
 export const NotificationCCValues: Readonly<{
     notificationVariable: ((notificationName: string, variableName: string) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Notification;
             property: string;
@@ -13480,6 +14420,11 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
             readonly propertyKey: string;
+        };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -13493,17 +14438,6 @@ export const NotificationCCValues: Readonly<{
         };
     };
     unknownNotificationVariable: ((notificationType: number, notificationName: string) => {
-        readonly meta: {
-            readonly label: `${string}: Unknown value`;
-            readonly ccSpecific: {
-                readonly notificationType: number;
-            };
-            readonly writeable: false;
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Notification;
             property: string;
@@ -13514,6 +14448,17 @@ export const NotificationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: string;
             readonly propertyKey: "unknown";
+        };
+        readonly meta: {
+            readonly label: `${string}: Unknown value`;
+            readonly ccSpecific: {
+                readonly notificationType: number;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -13527,6 +14472,15 @@ export const NotificationCCValues: Readonly<{
         };
     };
     unknownNotificationType: ((notificationType: number) => {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: string;
+        };
         readonly meta: {
             readonly label: `Unknown notification (${string})`;
             readonly ccSpecific: {
@@ -13537,15 +14491,6 @@ export const NotificationCCValues: Readonly<{
             readonly max: 255;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: CommandClasses.Notification;
-            property: string;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: CommandClasses.Notification;
-            readonly endpoint: number;
-            readonly property: string;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -13559,11 +14504,6 @@ export const NotificationCCValues: Readonly<{
         };
     };
     supportedNotificationEvents: ((notificationType: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Notification;
             property: "supportedNotificationEvents";
@@ -13575,13 +14515,18 @@ export const NotificationCCValues: Readonly<{
             readonly property: "supportedNotificationEvents";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -13615,11 +14560,11 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
             readonly autoCreate: false;
         };
     };
@@ -13652,11 +14597,11 @@ export const NotificationCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly supportsEndpoints: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
             readonly autoCreate: (ctx: GetValueDB_2, endpoint: EndpointId_2) => boolean;
         };
     };
@@ -13733,11 +14678,11 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -13758,10 +14703,10 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -13783,10 +14728,10 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -13808,10 +14753,10 @@ export const NotificationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -13865,7 +14810,7 @@ export type PartialCCValuePredicate = (properties: ValueIDProperties) => boolean
 // Warning: (ae-missing-release-tag) "PersistValuesContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type PersistValuesContext = GetValueDB & GetSupportedCCVersion & GetDeviceConfig & GetNode<NodeId_2 & GetEndpoint_2<EndpointId & SupportsCC_2 & ControlsCC_2>> & LogNode;
+export type PersistValuesContext = HostIDs & GetValueDB & GetSupportedCCVersion & GetDeviceConfig & GetNode<NodeId_2 & GetEndpoint_2<EndpointId & SupportsCC_2 & ControlsCC_2>> & LogNode;
 
 // Warning: (ae-missing-release-tag) "PhysicalCCAPI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13935,7 +14880,9 @@ export class PowerlevelCCGet extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCReport extends PowerlevelCC {
-    constructor(options: CommandClassDeserializationOptions | (PowerlevelCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<PowerlevelCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): PowerlevelCCReport;
     // (undocumented)
     readonly powerlevel: Powerlevel;
     // (undocumented)
@@ -13961,7 +14908,9 @@ export type PowerlevelCCReportOptions = {
 //
 // @public (undocumented)
 export class PowerlevelCCSet extends PowerlevelCC {
-    constructor(options: CommandClassDeserializationOptions | PowerlevelCCSetOptions);
+    constructor(options: WithAddress<PowerlevelCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): PowerlevelCCSet;
     // (undocumented)
     powerlevel: Powerlevel;
     // (undocumented)
@@ -13975,13 +14924,13 @@ export class PowerlevelCCSet extends PowerlevelCC {
 // Warning: (ae-missing-release-tag) "PowerlevelCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type PowerlevelCCSetOptions = CCCommandOptions & ({
+export type PowerlevelCCSetOptions = {
     powerlevel: Powerlevel;
     timeout: number;
 } | {
     powerlevel: (typeof Powerlevel)["Normal Power"];
     timeout?: undefined;
-});
+};
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13993,9 +14942,11 @@ export class PowerlevelCCTestNodeGet extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
-    constructor(options: CommandClassDeserializationOptions | (PowerlevelCCTestNodeReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<PowerlevelCCTestNodeReportOptions>);
     // (undocumented)
     acknowledgedFrames: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): PowerlevelCCTestNodeReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -14022,7 +14973,9 @@ export interface PowerlevelCCTestNodeReportOptions {
 //
 // @public (undocumented)
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
-    constructor(options: CommandClassDeserializationOptions | PowerlevelCCTestNodeSetOptions);
+    constructor(options: WithAddress<PowerlevelCCTestNodeSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): PowerlevelCCTestNodeSet;
     // (undocumented)
     powerlevel: Powerlevel;
     // (undocumented)
@@ -14038,7 +14991,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
+export interface PowerlevelCCTestNodeSetOptions {
     // (undocumented)
     powerlevel: Powerlevel;
     // (undocumented)
@@ -14099,20 +15052,32 @@ export class ProtectionCCExclusiveControlGet extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ProtectionCCExclusiveControlReportOptions>);
     // (undocumented)
     readonly exclusiveControlNodeId: number;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ProtectionCCExclusiveControlReport;
+    // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCExclusiveControlReportOptions {
+    // (undocumented)
+    exclusiveControlNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions | ProtectionCCExclusiveControlSetOptions);
+    constructor(options: WithAddress<ProtectionCCExclusiveControlSetOptions>);
     // (undocumented)
     exclusiveControlNodeId: number;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ProtectionCCExclusiveControlSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -14122,7 +15087,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 // Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
+export interface ProtectionCCExclusiveControlSetOptions {
     // (undocumented)
     exclusiveControlNodeId: number;
 }
@@ -14137,7 +15102,9 @@ export class ProtectionCCGet extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCReport extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ProtectionCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ProtectionCCReport;
     // (undocumented)
     readonly local: LocalProtectionState;
     // (undocumented)
@@ -14146,11 +15113,23 @@ export class ProtectionCCReport extends ProtectionCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ProtectionCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCReportOptions {
+    // (undocumented)
+    local: LocalProtectionState;
+    // (undocumented)
+    rf?: RFProtectionState;
+}
+
 // Warning: (ae-missing-release-tag) "ProtectionCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ProtectionCCSet extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions | ProtectionCCSetOptions);
+    constructor(options: WithAddress<ProtectionCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ProtectionCCSet;
     // (undocumented)
     local: LocalProtectionState;
     // (undocumented)
@@ -14164,7 +15143,7 @@ export class ProtectionCCSet extends ProtectionCC {
 // Warning: (ae-missing-release-tag) "ProtectionCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProtectionCCSetOptions extends CCCommandOptions {
+export interface ProtectionCCSetOptions {
     // (undocumented)
     local: LocalProtectionState;
     // (undocumented)
@@ -14181,7 +15160,9 @@ export class ProtectionCCSupportedGet extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCSupportedReport extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ProtectionCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ProtectionCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -14196,6 +15177,20 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ProtectionCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCSupportedReportOptions {
+    // (undocumented)
+    supportedLocalStates: LocalProtectionState[];
+    // (undocumented)
+    supportedRFStates: RFProtectionState[];
+    // (undocumented)
+    supportsExclusiveControl: boolean;
+    // (undocumented)
+    supportsTimeout: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ProtectionCCTimeoutGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14206,18 +15201,30 @@ export class ProtectionCCTimeoutGet extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ProtectionCCTimeoutReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ProtectionCCTimeoutReport;
     // (undocumented)
     readonly timeout: Timeout;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ProtectionCCTimeoutReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCTimeoutReportOptions {
+    // (undocumented)
+    timeout: Timeout;
+}
+
 // Warning: (ae-missing-release-tag) "ProtectionCCTimeoutSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ProtectionCCTimeoutSet extends ProtectionCC {
-    constructor(options: CommandClassDeserializationOptions | ProtectionCCTimeoutSetOptions);
+    constructor(options: WithAddress<ProtectionCCTimeoutSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ProtectionCCTimeoutSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -14229,7 +15236,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 // Warning: (ae-missing-release-tag) "ProtectionCCTimeoutSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+export interface ProtectionCCTimeoutSetOptions {
     // (undocumented)
     timeout: Timeout;
 }
@@ -14255,11 +15262,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -14280,11 +15287,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -14305,11 +15312,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -14330,11 +15337,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -14358,11 +15365,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -14387,11 +15394,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -14444,11 +15451,11 @@ export const ProtectionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -14533,9 +15540,11 @@ export class SceneActivationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneActivationCCSet extends SceneActivationCC {
-    constructor(options: CommandClassDeserializationOptions | SceneActivationCCSetOptions);
+    constructor(options: WithAddress<SceneActivationCCSetOptions>);
     // (undocumented)
     dimmingDuration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SceneActivationCCSet;
     // (undocumented)
     sceneId: number;
     // (undocumented)
@@ -14547,7 +15556,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 // Warning: (ae-missing-release-tag) "SceneActivationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SceneActivationCCSetOptions extends CCCommandOptions {
+export interface SceneActivationCCSetOptions {
     // (undocumented)
     dimmingDuration?: Duration | string;
     // (undocumented)
@@ -14605,11 +15614,11 @@ export const SceneActivationCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly secret: false;
             readonly internal: false;
-            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly secret: false;
+            readonly minVersion: 1;
             readonly stateful: false;
         };
     };
@@ -14637,7 +15646,9 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | SceneActuatorConfigurationCCGetOptions);
+    constructor(options: WithAddress<SceneActuatorConfigurationCCGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): SceneActuatorConfigurationCCGet;
     // (undocumented)
     sceneId: number;
     // (undocumented)
@@ -14649,7 +15660,7 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
+export interface SceneActuatorConfigurationCCGetOptions {
     // (undocumented)
     sceneId: number;
 }
@@ -14658,9 +15669,11 @@ export interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<SceneActuatorConfigurationCCReportOptions>);
     // (undocumented)
     readonly dimmingDuration?: Duration;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SceneActuatorConfigurationCCReport;
     // (undocumented)
     readonly level?: number;
     // (undocumented)
@@ -14671,13 +15684,27 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneActuatorConfigurationCCReportOptions {
+    // (undocumented)
+    dimmingDuration?: Duration;
+    // (undocumented)
+    level?: number;
+    // (undocumented)
+    sceneId: number;
+}
+
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | SceneActuatorConfigurationCCSetOptions);
+    constructor(options: WithAddress<SceneActuatorConfigurationCCSetOptions>);
     // (undocumented)
     dimmingDuration: Duration;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): SceneActuatorConfigurationCCSet;
     // (undocumented)
     level?: number;
     // (undocumented)
@@ -14691,7 +15718,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
+export interface SceneActuatorConfigurationCCSetOptions {
     // (undocumented)
     dimmingDuration: Duration;
     // (undocumented)
@@ -14705,12 +15732,6 @@ export interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions
 // @public (undocumented)
 export const SceneActuatorConfigurationCCValues: Readonly<{
     dimmingDuration: ((sceneId: number) => {
-        readonly meta: {
-            readonly label: `Dimming duration (${number})`;
-            readonly type: "duration";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
             property: "dimmingDuration";
@@ -14721,6 +15742,12 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Dimming duration (${number})`;
+            readonly type: "duration";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -14734,15 +15761,6 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
         };
     };
     level: ((sceneId: number) => {
-        readonly meta: {
-            readonly label: `Level (${number})`;
-            readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
             property: "level";
@@ -14753,6 +15771,15 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "level";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Level (${number})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -14798,7 +15825,9 @@ export class SceneControllerConfigurationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneControllerConfigurationCCGet extends SceneControllerConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | SceneControllerConfigurationCCGetOptions);
+    constructor(options: WithAddress<SceneControllerConfigurationCCGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): SceneControllerConfigurationCCGet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -14810,7 +15839,7 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
+export interface SceneControllerConfigurationCCGetOptions {
     // (undocumented)
     groupId: number;
 }
@@ -14819,9 +15848,11 @@ export interface SceneControllerConfigurationCCGetOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export class SceneControllerConfigurationCCReport extends SceneControllerConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<SceneControllerConfigurationCCReportOptions>);
     // (undocumented)
     readonly dimmingDuration: Duration;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SceneControllerConfigurationCCReport;
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
@@ -14832,13 +15863,27 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneControllerConfigurationCCReportOptions {
+    // (undocumented)
+    dimmingDuration: Duration;
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    sceneId: number;
+}
+
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SceneControllerConfigurationCCSet extends SceneControllerConfigurationCC {
-    constructor(options: CommandClassDeserializationOptions | SceneControllerConfigurationCCSetOptions);
+    constructor(options: WithAddress<SceneControllerConfigurationCCSetOptions>);
     // (undocumented)
     dimmingDuration: Duration;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): SceneControllerConfigurationCCSet;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -14852,7 +15897,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
+export interface SceneControllerConfigurationCCSetOptions {
     // (undocumented)
     dimmingDuration?: Duration | string;
     // (undocumented)
@@ -14866,12 +15911,6 @@ export interface SceneControllerConfigurationCCSetOptions extends CCCommandOptio
 // @public (undocumented)
 export const SceneControllerConfigurationCCValues: Readonly<{
     dimmingDuration: ((groupId: number) => {
-        readonly meta: {
-            readonly label: `Dimming duration (${number})`;
-            readonly type: "duration";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
             property: "dimmingDuration";
@@ -14882,6 +15921,12 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "dimmingDuration";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Dimming duration (${number})`;
+            readonly type: "duration";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -14895,15 +15940,6 @@ export const SceneControllerConfigurationCCValues: Readonly<{
         };
     };
     sceneId: ((groupId: number) => {
-        readonly meta: {
-            readonly label: `Associated Scene ID (${number})`;
-            readonly valueChangeOptions: readonly ["transitionDuration"];
-            readonly min: 0;
-            readonly max: 255;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
             property: "sceneId";
@@ -14914,6 +15950,15 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "sceneId";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `Associated Scene ID (${number})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -14967,7 +16012,9 @@ export class ScheduleEntryLockCC extends CommandClass {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCDailyRepeatingScheduleGetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCDailyRepeatingScheduleGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCDailyRepeatingScheduleGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -14981,17 +16028,19 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+export type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions = ScheduleEntryLockSlotId;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & ScheduleEntryLockCCDailyRepeatingScheduleReportOptions));
+    constructor(options: WithAddress_2<ScheduleEntryLockCCDailyRepeatingScheduleReportOptions>);
     // (undocumented)
     durationHour?: number;
     // (undocumented)
     durationMinute?: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCDailyRepeatingScheduleReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -15019,13 +16068,15 @@ export type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions = ScheduleEnt
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCDailyRepeatingScheduleSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCDailyRepeatingScheduleSetOptions>);
     // (undocumented)
     action: ScheduleEntryLockSetAction;
     // (undocumented)
     durationHour?: number;
     // (undocumented)
     durationMinute?: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCDailyRepeatingScheduleSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15046,7 +16097,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryL
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions = ScheduleEntryLockSlotId & ({
     action: ScheduleEntryLockSetAction.Erase;
 } | ({
     action: ScheduleEntryLockSetAction.Set;
@@ -15056,9 +16107,11 @@ export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions = CCCommandOptio
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableAllSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCEnableAllSetOptions>);
     // (undocumented)
     enabled: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCEnableAllSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15068,7 +16121,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableAllSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCEnableAllSetOptions {
     // (undocumented)
     enabled: boolean;
 }
@@ -15077,9 +16130,11 @@ export interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCEnableSetOptions>);
     // (undocumented)
     enabled: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCEnableSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15091,7 +16146,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCEnableSetOptions {
     // (undocumented)
     enabled: boolean;
     // (undocumented)
@@ -15108,7 +16163,9 @@ export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCSupportedReportOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCSupportedReport;
     // (undocumented)
     numDailyRepeatingSlots: number | undefined;
     // (undocumented)
@@ -15124,7 +16181,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScheduleEntryLockCCSupportedReportOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCSupportedReportOptions {
     // (undocumented)
     numDailyRepeatingSlots?: number;
     // (undocumented)
@@ -15143,9 +16200,11 @@ export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetReportOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCTimeOffsetReportOptions>);
     // (undocumented)
     dstOffset: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCTimeOffsetReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15157,7 +16216,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCTimeOffsetReportOptions {
     // (undocumented)
     dstOffset: number;
     // (undocumented)
@@ -15168,9 +16227,11 @@ export interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOpt
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCTimeOffsetSetOptions>);
     // (undocumented)
     dstOffset: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCTimeOffsetSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15182,7 +16243,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCTimeOffsetSetOptions {
     // (undocumented)
     dstOffset: number;
     // (undocumented)
@@ -15194,11 +16255,6 @@ export interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOption
 // @public (undocumented)
 export const ScheduleEntryLockCCValues: Readonly<{
     schedule: ((scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "schedule";
@@ -15210,23 +16266,23 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly property: "schedule";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    scheduleKind: ((userId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    scheduleKind: ((userId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "scheduleKind";
@@ -15238,23 +16294,23 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly property: "scheduleKind";
             readonly propertyKey: number;
         };
-    }) & {
-        is: (valueId: ValueID) => boolean;
-        readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
-            readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-            readonly internal: true;
-        };
-    };
-    userEnabled: ((userId: number) => {
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
             readonly writeable: true;
         };
+    }) & {
+        is: (valueId: ValueID) => boolean;
+        readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly internal: true;
+        };
+    };
+    userEnabled: ((userId: number) => {
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "userEnabled";
@@ -15266,14 +16322,19 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly property: "userEnabled";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -15294,11 +16355,11 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -15319,11 +16380,11 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -15344,11 +16405,11 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -15358,7 +16419,9 @@ export const ScheduleEntryLockCCValues: Readonly<{
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleGetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCWeekDayScheduleGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCWeekDayScheduleGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15372,13 +16435,15 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCWeekDayScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+export type ScheduleEntryLockCCWeekDayScheduleGetOptions = ScheduleEntryLockSlotId;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleReportOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCWeekDayScheduleReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCWeekDayScheduleReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -15404,15 +16469,17 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCWeekDayScheduleReportOptions = CCCommandOptions & ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockWeekDaySchedule>;
+export type ScheduleEntryLockCCWeekDayScheduleReportOptions = ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockWeekDaySchedule>;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCWeekDayScheduleSetOptions>);
     // (undocumented)
     action: ScheduleEntryLockSetAction;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCWeekDayScheduleSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15437,7 +16504,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+export type ScheduleEntryLockCCWeekDayScheduleSetOptions = ScheduleEntryLockSlotId & ({
     action: ScheduleEntryLockSetAction.Erase;
 } | ({
     action: ScheduleEntryLockSetAction.Set;
@@ -15447,7 +16514,9 @@ export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions & Sc
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleGetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCYearDayScheduleGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCYearDayScheduleGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15461,13 +16530,15 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCYearDayScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+export type ScheduleEntryLockCCYearDayScheduleGetOptions = ScheduleEntryLockSlotId;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleReportOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCYearDayScheduleReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCYearDayScheduleReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -15503,15 +16574,17 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCYearDayScheduleReportOptions = CCCommandOptions & ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockYearDaySchedule>;
+export type ScheduleEntryLockCCYearDayScheduleReportOptions = ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockYearDaySchedule>;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
-    constructor(options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleSetOptions);
+    constructor(options: WithAddress_2<ScheduleEntryLockCCYearDayScheduleSetOptions>);
     // (undocumented)
     action: ScheduleEntryLockSetAction;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ScheduleEntryLockCCYearDayScheduleSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -15546,7 +16619,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions & ScheduleEntryLockSlotId & ({
+export type ScheduleEntryLockCCYearDayScheduleSetOptions = ScheduleEntryLockSlotId & ({
     action: ScheduleEntryLockSetAction.Erase;
 } | ({
     action: ScheduleEntryLockSetAction.Set;
@@ -15727,11 +16800,6 @@ export interface SchedulePollOptions {
 // @public (undocumented)
 export class Security2CC extends CommandClass {
     // (undocumented)
-    protected assertSecurity(options: (CCCommandOptions & {
-        ownNodeId: number;
-        securityManagers: SecurityManagers_2;
-    }) | CommandClassDeserializationOptions): SecurityManager2;
-    // (undocumented)
     ccCommand: Security2Command;
     static encapsulate(cc: CommandClass, ownNodeId: number, securityManagers: SecurityManagers_2, options?: {
         securityClass?: SecurityClass;
@@ -15754,7 +16822,9 @@ export class Security2CCCommandsSupportedGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCCommandsSupportedReport extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCCommandsSupportedReportOptions);
+    constructor(options: WithAddress_2<Security2CCCommandsSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCCommandsSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -15766,7 +16836,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCCommandsSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCCommandsSupportedReportOptions extends CCCommandOptions {
+export interface Security2CCCommandsSupportedReportOptions {
     // (undocumented)
     supportedCCs: CommandClasses_2[];
 }
@@ -15775,9 +16845,11 @@ export interface Security2CCCommandsSupportedReportOptions extends CCCommandOpti
 //
 // @public (undocumented)
 export class Security2CCKEXFail extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCKEXFailOptions);
+    constructor(options: WithAddress_2<Security2CCKEXFailOptions>);
     // (undocumented)
     failType: KEXFailType;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCKEXFail;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -15787,7 +16859,7 @@ export class Security2CCKEXFail extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCKEXFailOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCKEXFailOptions extends CCCommandOptions {
+export interface Security2CCKEXFailOptions {
     // (undocumented)
     failType: KEXFailType;
 }
@@ -15802,9 +16874,11 @@ export class Security2CCKEXGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCKEXReport extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCKEXReportOptions));
+    constructor(options: WithAddress_2<Security2CCKEXReportOptions>);
     // (undocumented)
     readonly echo: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCKEXReport;
     // (undocumented)
     readonly requestCSA: boolean;
     // (undocumented)
@@ -15843,9 +16917,11 @@ export interface Security2CCKEXReportOptions {
 //
 // @public (undocumented)
 export class Security2CCKEXSet extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCKEXSetOptions));
+    constructor(options: WithAddress_2<Security2CCKEXSetOptions>);
     // (undocumented)
     echo: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCKEXSet;
     // (undocumented)
     grantedKeys: SecurityClass[];
     // (undocumented)
@@ -15884,7 +16960,7 @@ export interface Security2CCKEXSetOptions {
 //
 // @public (undocumented)
 export class Security2CCMessageEncapsulation extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCMessageEncapsulationOptions);
+    constructor(options: WithAddress_2<Security2CCMessageEncapsulationOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
@@ -15892,6 +16968,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     // (undocumented)
     extensions: Security2Extension[];
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCMessageEncapsulation;
     getMulticastGroupId(): number | undefined;
     getSenderEI(): Buffer | undefined;
     // (undocumented)
@@ -15900,7 +16977,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     prepareRetransmission(): void;
     // (undocumented)
     readonly securityClass?: SecurityClass;
-    get sequenceNumber(): number;
+    // (undocumented)
+    sequenceNumber: number | undefined;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -15912,16 +16990,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCMessageEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+export interface Security2CCMessageEncapsulationOptions {
     // (undocumented)
     encapsulated?: CommandClass;
     // (undocumented)
     extensions?: Security2Extension[];
-    // (undocumented)
-    ownNodeId: number;
     securityClass?: SecurityClass;
     // (undocumented)
-    securityManagers: Readonly<SecurityManagers_2>;
+    sequenceNumber?: number;
     // (undocumented)
     verifyDelivery?: boolean;
 }
@@ -15930,7 +17006,9 @@ export interface Security2CCMessageEncapsulationOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export class Security2CCNetworkKeyGet extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCNetworkKeyGetOptions);
+    constructor(options: WithAddress_2<Security2CCNetworkKeyGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCNetworkKeyGet;
     // (undocumented)
     requestedKey: SecurityClass;
     // (undocumented)
@@ -15942,7 +17020,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
+export interface Security2CCNetworkKeyGetOptions {
     // (undocumented)
     requestedKey: SecurityClass;
 }
@@ -15951,7 +17029,9 @@ export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class Security2CCNetworkKeyReport extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCNetworkKeyReportOptions);
+    constructor(options: WithAddress_2<Security2CCNetworkKeyReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCNetworkKeyReport;
     // (undocumented)
     grantedKey: SecurityClass;
     // (undocumented)
@@ -15965,7 +17045,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
+export interface Security2CCNetworkKeyReportOptions {
     // (undocumented)
     grantedKey: SecurityClass;
     // (undocumented)
@@ -15982,8 +17062,11 @@ export class Security2CCNetworkKeyVerify extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCNonceGet extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCNonceGetOptions));
-    get sequenceNumber(): number;
+    constructor(options: WithAddress_2<Security2CCNonceGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCNonceGet;
+    // (undocumented)
+    sequenceNumber: number | undefined;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -15995,21 +17078,22 @@ export class Security2CCNonceGet extends Security2CC {
 // @public (undocumented)
 export interface Security2CCNonceGetOptions {
     // (undocumented)
-    ownNodeId: number;
-    // (undocumented)
-    securityManagers: Readonly<SecurityManagers_2>;
+    sequenceNumber?: number;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNonceReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCNonceReport extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCNonceReportOptions));
+    constructor(options: WithAddress_2<Security2CCNonceReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCNonceReport;
     // (undocumented)
     readonly MOS: boolean;
     // (undocumented)
     readonly receiverEI?: Buffer;
-    get sequenceNumber(): number;
+    // (undocumented)
+    sequenceNumber: number | undefined;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16022,8 +17106,7 @@ export class Security2CCNonceReport extends Security2CC {
 //
 // @public (undocumented)
 export type Security2CCNonceReportOptions = {
-    ownNodeId: number;
-    securityManagers: SecurityManagers_2;
+    sequenceNumber?: number;
 } & ({
     MOS: boolean;
     SOS: true;
@@ -16038,7 +17121,9 @@ export type Security2CCNonceReportOptions = {
 //
 // @public (undocumented)
 export class Security2CCPublicKeyReport extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCPublicKeyReportOptions);
+    constructor(options: WithAddress_2<Security2CCPublicKeyReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCPublicKeyReport;
     // (undocumented)
     includingNode: boolean;
     // (undocumented)
@@ -16052,7 +17137,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCPublicKeyReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
+export interface Security2CCPublicKeyReportOptions {
     // (undocumented)
     includingNode: boolean;
     // (undocumented)
@@ -16063,7 +17148,9 @@ export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class Security2CCTransferEnd extends Security2CC {
-    constructor(options: CommandClassDeserializationOptions | Security2CCTransferEndOptions);
+    constructor(options: WithAddress_2<Security2CCTransferEndOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): Security2CCTransferEnd;
     // (undocumented)
     keyRequestComplete: boolean;
     // (undocumented)
@@ -16077,7 +17164,7 @@ export class Security2CCTransferEnd extends Security2CC {
 // Warning: (ae-missing-release-tag) "Security2CCTransferEndOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Security2CCTransferEndOptions extends CCCommandOptions {
+export interface Security2CCTransferEndOptions {
     // (undocumented)
     keyRequestComplete: boolean;
     // (undocumented)
@@ -16152,11 +17239,6 @@ export class Security2Extension {
 // @public (undocumented)
 export class SecurityCC extends CommandClass {
     // (undocumented)
-    protected assertSecurity(options: (CCCommandOptions & {
-        ownNodeId: number;
-        securityManager: SecurityManager;
-    }) | CommandClassDeserializationOptions): SecurityManager;
-    // (undocumented)
     ccCommand: SecurityCommand;
     static encapsulate(ownNodeId: number, securityManager: SecurityManager, cc: CommandClass): SecurityCCCommandEncapsulation;
     // (undocumented)
@@ -16170,13 +17252,15 @@ export class SecurityCC extends CommandClass {
 //
 // @public (undocumented)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | SecurityCCCommandEncapsulationOptions);
+    constructor(options: WithAddress_2<SecurityCCCommandEncapsulationOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
     encapsulated: CommandClass;
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SecurityCCCommandEncapsulation;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -16200,16 +17284,16 @@ export class SecurityCCCommandEncapsulationNonceGet extends SecurityCCCommandEnc
 // Warning: (ae-missing-release-tag) "SecurityCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
-    // (undocumented)
+export type SecurityCCCommandEncapsulationOptions = {
     alternativeNetworkKey?: Buffer;
-    // (undocumented)
+} & ({
     encapsulated: CommandClass;
-    // (undocumented)
-    ownNodeId: number;
-    // (undocumented)
-    securityManager: SecurityManager;
-}
+} | {
+    decryptedCCBytes: Buffer;
+    sequenced: boolean;
+    secondFrame: boolean;
+    sequenceCounter: number;
+});
 
 // Warning: (ae-missing-release-tag) "SecurityCCCommandsSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -16221,17 +17305,19 @@ export class SecurityCCCommandsSupportedGet extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | SecurityCCCommandsSupportedReportOptions);
+    constructor(options: WithAddress_2<SecurityCCCommandsSupportedReportOptions>);
     // (undocumented)
     controlledCCs: CommandClasses_2[];
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SecurityCCCommandsSupportedReport;
+    // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
     mergePartialCCs(partials: SecurityCCCommandsSupportedReport[]): void;
     // (undocumented)
-    readonly reportsToFollow: number;
+    reportsToFollow: number;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16243,9 +17329,11 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 // Warning: (ae-missing-release-tag) "SecurityCCCommandsSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SecurityCCCommandsSupportedReportOptions extends CCCommandOptions {
+export interface SecurityCCCommandsSupportedReportOptions {
     // (undocumented)
     controlledCCs: CommandClasses_2[];
+    // (undocumented)
+    reportsToFollow?: number;
     // (undocumented)
     supportedCCs: CommandClasses_2[];
 }
@@ -16254,7 +17342,9 @@ export interface SecurityCCCommandsSupportedReportOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export class SecurityCCNetworkKeySet extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | SecurityCCNetworkKeySetOptions);
+    constructor(options: WithAddress_2<SecurityCCNetworkKeySetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SecurityCCNetworkKeySet;
     // (undocumented)
     networkKey: Buffer;
     // (undocumented)
@@ -16266,7 +17356,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 // Warning: (ae-missing-release-tag) "SecurityCCNetworkKeySetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
+export interface SecurityCCNetworkKeySetOptions {
     // (undocumented)
     networkKey: Buffer;
 }
@@ -16288,7 +17378,9 @@ export class SecurityCCNonceGet extends SecurityCC {
 // @public (undocumented)
 export class SecurityCCNonceReport extends SecurityCC {
     // Warning: (ae-forgotten-export) The symbol "SecurityCCNonceReportOptions" needs to be exported by the entry point index.d.ts
-    constructor(options: CommandClassDeserializationOptions | SecurityCCNonceReportOptions);
+    constructor(options: WithAddress_2<SecurityCCNonceReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SecurityCCNonceReport;
     // (undocumented)
     nonce: Buffer;
     // (undocumented)
@@ -16301,7 +17393,6 @@ export class SecurityCCNonceReport extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCSchemeGet extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16312,7 +17403,6 @@ export class SecurityCCSchemeGet extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCSchemeInherit extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16323,7 +17413,8 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCSchemeReport extends SecurityCC {
-    constructor(options: CommandClassDeserializationOptions | CCCommandOptions);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SecurityCCSchemeReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16501,11 +17592,13 @@ export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & SoundSwitchCCConfigurationReportOptions));
+    constructor(options: WithAddress<SoundSwitchCCConfigurationReportOptions>);
     // (undocumented)
     defaultToneId: number;
     // (undocumented)
     defaultVolume: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCConfigurationReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16526,11 +17619,13 @@ export interface SoundSwitchCCConfigurationReportOptions {
 //
 // @public (undocumented)
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | SoundSwitchCCConfigurationSetOptions);
+    constructor(options: WithAddress<SoundSwitchCCConfigurationSetOptions>);
     // (undocumented)
     defaultToneId: number;
     // (undocumented)
     defaultVolume: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCConfigurationSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16540,7 +17635,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 // Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
+export interface SoundSwitchCCConfigurationSetOptions {
     // (undocumented)
     defaultToneId: number;
     // (undocumented)
@@ -16551,7 +17646,9 @@ export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | SoundSwitchCCToneInfoGetOptions);
+    constructor(options: WithAddress<SoundSwitchCCToneInfoGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCToneInfoGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16563,7 +17660,7 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 // Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
+export interface SoundSwitchCCToneInfoGetOptions {
     // (undocumented)
     toneId: number;
 }
@@ -16572,9 +17669,11 @@ export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | SoundSwitchCCToneInfoReportOptions);
+    constructor(options: WithAddress<SoundSwitchCCToneInfoReportOptions>);
     // (undocumented)
     readonly duration: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCToneInfoReport;
     // (undocumented)
     readonly name: string;
     // (undocumented)
@@ -16588,7 +17687,7 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 // Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
+export interface SoundSwitchCCToneInfoReportOptions {
     // (undocumented)
     duration: number;
     // (undocumented)
@@ -16607,7 +17706,9 @@ export class SoundSwitchCCTonePlayGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & SoundSwitchCCTonePlayReportOptions));
+    constructor(options: WithAddress<SoundSwitchCCTonePlayReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCTonePlayReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16632,7 +17733,9 @@ export interface SoundSwitchCCTonePlayReportOptions {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & SoundSwitchCCTonePlaySetOptions));
+    constructor(options: WithAddress<SoundSwitchCCTonePlaySetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCTonePlaySet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16663,7 +17766,9 @@ export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
-    constructor(options: CommandClassDeserializationOptions | SoundSwitchCCTonesNumberReportOptions);
+    constructor(options: WithAddress<SoundSwitchCCTonesNumberReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SoundSwitchCCTonesNumberReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -16675,7 +17780,7 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 // Warning: (ae-missing-release-tag) "SoundSwitchCCTonesNumberReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SoundSwitchCCTonesNumberReportOptions extends CCCommandOptions {
+export interface SoundSwitchCCTonesNumberReportOptions {
     // (undocumented)
     toneCount: number;
 }
@@ -16887,11 +17992,13 @@ export class SupervisionCC extends CommandClass {
 //
 // @public (undocumented)
 export class SupervisionCCGet extends SupervisionCC {
-    constructor(options: CommandClassDeserializationOptions | SupervisionCCGetOptions);
+    constructor(options: WithAddress<SupervisionCCGetOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
     encapsulated: CommandClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SupervisionCCGet;
     // (undocumented)
     requestStatusUpdates: boolean;
     // (undocumented)
@@ -16905,7 +18012,7 @@ export class SupervisionCCGet extends SupervisionCC {
 // Warning: (ae-missing-release-tag) "SupervisionCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SupervisionCCGetOptions extends CCCommandOptions {
+export interface SupervisionCCGetOptions {
     // (undocumented)
     encapsulated: CommandClass;
     // (undocumented)
@@ -16918,9 +18025,11 @@ export interface SupervisionCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class SupervisionCCReport extends SupervisionCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & SupervisionCCReportOptions));
+    constructor(options: WithAddress<SupervisionCCReportOptions>);
     // (undocumented)
     readonly duration: Duration | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): SupervisionCCReport;
     // (undocumented)
     readonly moreUpdatesFollow: boolean;
     // (undocumented)
@@ -16956,11 +18065,6 @@ export type SupervisionCCReportOptions = {
 // @public (undocumented)
 export const SupervisionCCValues: Readonly<{
     ccSupported: ((ccId: CommandClasses) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: CommandClasses.Supervision;
             property: "ccSupported";
@@ -16972,13 +18076,18 @@ export const SupervisionCCValues: Readonly<{
             readonly property: "ccSupported";
             readonly propertyKey: CommandClasses;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
         };
@@ -17086,7 +18195,9 @@ export class ThermostatFanModeCCGet extends ThermostatFanModeCC {
 //
 // @public (undocumented)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ThermostatFanModeCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatFanModeCCReport;
     // (undocumented)
     readonly mode: ThermostatFanMode;
     // (undocumented)
@@ -17095,11 +18206,23 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatFanModeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatFanModeCCReportOptions {
+    // (undocumented)
+    mode: ThermostatFanMode;
+    // (undocumented)
+    off?: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatFanModeCCSetOptions);
+    constructor(options: WithAddress<ThermostatFanModeCCSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): ThermostatFanModeCCSet;
     // (undocumented)
     mode: ThermostatFanMode;
     // (undocumented)
@@ -17113,10 +18236,12 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
+export interface ThermostatFanModeCCSetOptions {
+    // (undocumented)
     mode: ThermostatFanMode;
+    // (undocumented)
     off?: boolean;
-};
+}
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -17128,13 +18253,23 @@ export class ThermostatFanModeCCSupportedGet extends ThermostatFanModeCC {
 //
 // @public (undocumented)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ThermostatFanModeCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatFanModeCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
     readonly supportedModes: ThermostatFanMode[];
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatFanModeCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatFanModeCCSupportedReportOptions {
+    // (undocumented)
+    supportedModes: ThermostatFanMode[];
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17158,11 +18293,11 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -17215,11 +18350,11 @@ export const ThermostatFanModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
         };
     };
@@ -17287,11 +18422,21 @@ export class ThermostatFanStateCCGet extends ThermostatFanStateCC {
 //
 // @public (undocumented)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ThermostatFanStateCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatFanStateCCReport;
     // (undocumented)
     readonly state: ThermostatFanState;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatFanStateCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatFanStateCCReportOptions {
+    // (undocumented)
+    state: ThermostatFanState;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatFanStateCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17401,7 +18546,9 @@ export class ThermostatModeCCGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCReport extends ThermostatModeCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatModeCCReportOptions);
+    constructor(options: WithAddress<ThermostatModeCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatModeCCReport;
     // (undocumented)
     readonly manufacturerData: Buffer | undefined;
     // (undocumented)
@@ -17417,19 +18564,21 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 // Warning: (ae-missing-release-tag) "ThermostatModeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ThermostatModeCCReportOptions = CCCommandOptions & ({
+export type ThermostatModeCCReportOptions = {
     mode: Exclude<ThermostatMode, (typeof ThermostatMode)["Manufacturer specific"]>;
     manufacturerData?: undefined;
 } | {
     mode: (typeof ThermostatMode)["Manufacturer specific"];
     manufacturerData?: Buffer;
-});
+};
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatModeCCSet extends ThermostatModeCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatModeCCSetOptions);
+    constructor(options: WithAddress<ThermostatModeCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatModeCCSet;
     // (undocumented)
     manufacturerData?: Buffer;
     // (undocumented)
@@ -17443,12 +18592,12 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ThermostatModeCCSetOptions = CCCommandOptions & ({
+export type ThermostatModeCCSetOptions = {
     mode: Exclude<ThermostatMode, (typeof ThermostatMode)["Manufacturer specific"]>;
 } | {
     mode: (typeof ThermostatMode)["Manufacturer specific"];
     manufacturerData: Buffer;
-});
+};
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -17460,7 +18609,9 @@ export class ThermostatModeCCSupportedGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatModeCCSupportedReportOptions);
+    constructor(options: WithAddress<ThermostatModeCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatModeCCSupportedReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -17474,7 +18625,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatModeCCSupportedReportOptions extends CCCommandOptions {
+export interface ThermostatModeCCSupportedReportOptions {
     // (undocumented)
     supportedModes: ThermostatMode[];
 }
@@ -17500,11 +18651,11 @@ export const ThermostatModeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -17635,11 +18786,21 @@ export class ThermostatOperatingStateCCGet extends ThermostatOperatingStateCC {
 //
 // @public (undocumented)
 export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<ThermostatOperatingStateCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatOperatingStateCCReport;
     // (undocumented)
     readonly state: ThermostatOperatingState;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatOperatingStateCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatOperatingStateCCReportOptions {
+    // (undocumented)
+    state: ThermostatOperatingState;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatOperatingStateCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17711,7 +18872,9 @@ export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
 //
 // @public (undocumented)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & ThermostatSetbackCCReportOptions));
+    constructor(options: WithAddress<ThermostatSetbackCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetbackCCReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     readonly setbackState: SetbackState;
@@ -17735,7 +18898,9 @@ export interface ThermostatSetbackCCReportOptions {
 //
 // @public (undocumented)
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetbackCCSetOptions);
+    constructor(options: WithAddress<ThermostatSetbackCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetbackCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     setbackState: SetbackState;
@@ -17748,7 +18913,7 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
+export interface ThermostatSetbackCCSetOptions {
     // (undocumented)
     setbackState: SetbackState;
     // (undocumented)
@@ -17799,7 +18964,9 @@ export class ThermostatSetpointCC extends CommandClass {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCCapabilitiesGetOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCCapabilitiesGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCCapabilitiesGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -17811,7 +18978,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCCapabilitiesGetOptions {
     // (undocumented)
     setpointType: ThermostatSetpointType;
 }
@@ -17820,7 +18987,9 @@ export interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOpt
 //
 // @public (undocumented)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCCapabilitiesReportOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCCapabilitiesReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCCapabilitiesReport;
     // (undocumented)
     maxValue: number;
     // (undocumented)
@@ -17842,7 +19011,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCCapabilitiesReportOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCCapabilitiesReportOptions {
     // (undocumented)
     maxValue: number;
     // (undocumented)
@@ -17859,7 +19028,9 @@ export interface ThermostatSetpointCCCapabilitiesReportOptions extends CCCommand
 //
 // @public (undocumented)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCGetOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -17871,7 +19042,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCGetOptions {
     // (undocumented)
     setpointType: ThermostatSetpointType;
 }
@@ -17880,7 +19051,9 @@ export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCReportOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -17898,7 +19071,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCReportOptions {
     // (undocumented)
     scale: number;
     // (undocumented)
@@ -17911,7 +19084,9 @@ export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCSetOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCSet;
     // (undocumented)
     scale: number;
     // (undocumented)
@@ -17927,7 +19102,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCSetOptions {
     // (undocumented)
     scale: number;
     // (undocumented)
@@ -17946,7 +19121,9 @@ export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
-    constructor(options: CommandClassDeserializationOptions | ThermostatSetpointCCSupportedReportOptions);
+    constructor(options: WithAddress<ThermostatSetpointCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ThermostatSetpointCCSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -17958,7 +19135,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ThermostatSetpointCCSupportedReportOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCSupportedReportOptions {
     // (undocumented)
     supportedSetpointTypes: ThermostatSetpointType[];
 }
@@ -17968,11 +19145,6 @@ export interface ThermostatSetpointCCSupportedReportOptions extends CCCommandOpt
 // @public (undocumented)
 export const ThermostatSetpointCCValues: Readonly<{
     setpointScale: ((setpointType: ThermostatSetpointType) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             property: "setpointScale";
@@ -17984,27 +19156,23 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly property: "setpointScale";
             readonly propertyKey: ThermostatSetpointType;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
     setpoint: ((setpointType: ThermostatSetpointType) => {
-        readonly meta: {
-            readonly label: `Setpoint (${string})`;
-            readonly ccSpecific: {
-                readonly setpointType: ThermostatSetpointType;
-            };
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             property: "setpoint";
@@ -18015,6 +19183,15 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "setpoint";
             readonly propertyKey: ThermostatSetpointType;
+        };
+        readonly meta: {
+            readonly label: `Setpoint (${string})`;
+            readonly ccSpecific: {
+                readonly setpointType: ThermostatSetpointType;
+            };
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -18044,11 +19221,11 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -18163,9 +19340,11 @@ export class TimeCCDateGet extends TimeCC {
 //
 // @public (undocumented)
 export class TimeCCDateReport extends TimeCC {
-    constructor(options: CommandClassDeserializationOptions | TimeCCDateReportOptions);
+    constructor(options: WithAddress_2<TimeCCDateReportOptions>);
     // (undocumented)
     day: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TimeCCDateReport;
     // (undocumented)
     month: number;
     // (undocumented)
@@ -18179,7 +19358,7 @@ export class TimeCCDateReport extends TimeCC {
 // Warning: (ae-missing-release-tag) "TimeCCDateReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TimeCCDateReportOptions extends CCCommandOptions {
+export interface TimeCCDateReportOptions {
     // (undocumented)
     day: number;
     // (undocumented)
@@ -18204,13 +19383,15 @@ export class TimeCCTimeOffsetGet extends TimeCC {
 //
 // @public (undocumented)
 export class TimeCCTimeOffsetReport extends TimeCC {
-    constructor(options: CommandClassDeserializationOptions | TimeCCTimeOffsetReportOptions);
+    constructor(options: WithAddress_2<TimeCCTimeOffsetReportOptions>);
     // (undocumented)
     dstEndDate: Date;
     // (undocumented)
     dstOffset: number;
     // (undocumented)
     dstStartDate: Date;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TimeCCTimeOffsetReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18222,7 +19403,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 // Warning: (ae-missing-release-tag) "TimeCCTimeOffsetReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetReportOptions {
     // (undocumented)
     dstEnd: Date;
     // (undocumented)
@@ -18237,13 +19418,15 @@ export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class TimeCCTimeOffsetSet extends TimeCC {
-    constructor(options: CommandClassDeserializationOptions | TimeCCTimeOffsetSetOptions);
+    constructor(options: WithAddress_2<TimeCCTimeOffsetSetOptions>);
     // (undocumented)
     dstEndDate: Date;
     // (undocumented)
     dstOffset: number;
     // (undocumented)
     dstStartDate: Date;
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): TimeCCTimeOffsetSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18255,7 +19438,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 // Warning: (ae-missing-release-tag) "TimeCCTimeOffsetSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetSetOptions {
     // (undocumented)
     dstEnd: Date;
     // (undocumented)
@@ -18270,7 +19453,9 @@ export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class TimeCCTimeReport extends TimeCC {
-    constructor(options: CommandClassDeserializationOptions | TimeCCTimeReportOptions);
+    constructor(options: WithAddress_2<TimeCCTimeReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TimeCCTimeReport;
     // (undocumented)
     hour: number;
     // (undocumented)
@@ -18286,7 +19471,7 @@ export class TimeCCTimeReport extends TimeCC {
 // Warning: (ae-missing-release-tag) "TimeCCTimeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TimeCCTimeReportOptions extends CCCommandOptions {
+export interface TimeCCTimeReportOptions {
     // (undocumented)
     hour: number;
     // (undocumented)
@@ -18335,22 +19520,34 @@ export class TimeParametersCCGet extends TimeParametersCC {
 //
 // @public (undocumented)
 export class TimeParametersCCReport extends TimeParametersCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress_2<TimeParametersCCReportOptions>);
     // (undocumented)
-    get dateAndTime(): Date;
+    dateAndTime: Date;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TimeParametersCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "TimeParametersCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeParametersCCReportOptions {
+    // (undocumented)
+    dateAndTime: Date;
+}
+
 // Warning: (ae-missing-release-tag) "TimeParametersCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeParametersCCSet extends TimeParametersCC {
-    constructor(options: CommandClassDeserializationOptions | TimeParametersCCSetOptions);
+    constructor(options: WithAddress_2<TimeParametersCCSetOptions>);
     // (undocumented)
     dateAndTime: Date;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TimeParametersCCSet;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -18362,7 +19559,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 // Warning: (ae-missing-release-tag) "TimeParametersCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TimeParametersCCSetOptions extends CCCommandOptions {
+export interface TimeParametersCCSetOptions {
     // (undocumented)
     dateAndTime: Date;
     // (undocumented)
@@ -18440,15 +19637,6 @@ export class TransportServiceCC extends CommandClass implements SinglecastCC_2<T
     // (undocumented)
     ccCommand: TransportServiceCommand;
     // (undocumented)
-    protected deserialize(data: Buffer): {
-        ccId: CommandClasses;
-        ccCommand: number;
-        payload: Buffer;
-    };
-    static encapsulate(_cc: CommandClass): TransportServiceCC;
-    // (undocumented)
-    static getCCCommand(data: Buffer): number | undefined;
-    // (undocumented)
     nodeId: number;
 }
 
@@ -18456,7 +19644,7 @@ export class TransportServiceCC extends CommandClass implements SinglecastCC_2<T
 //
 // @public (undocumented)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
-    constructor(options: CommandClassDeserializationOptions | TransportServiceCCFirstSegmentOptions);
+    constructor(options: WithAddress<TransportServiceCCFirstSegmentOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
@@ -18465,6 +19653,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
     encapsulated: CommandClass;
     // (undocumented)
     expectMoreMessages(): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TransportServiceCCFirstSegment;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -18482,7 +19672,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 // Warning: (ae-missing-release-tag) "TransportServiceCCFirstSegmentOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
+export interface TransportServiceCCFirstSegmentOptions {
     // (undocumented)
     datagramSize: number;
     // (undocumented)
@@ -18497,7 +19687,9 @@ export interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions 
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
-    constructor(options: CommandClassDeserializationOptions | TransportServiceCCSegmentCompleteOptions);
+    constructor(options: WithAddress<TransportServiceCCSegmentCompleteOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TransportServiceCCSegmentComplete;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18509,7 +19701,7 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
+export interface TransportServiceCCSegmentCompleteOptions {
     // (undocumented)
     sessionId: number;
 }
@@ -18518,9 +19710,11 @@ export interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
-    constructor(options: CommandClassDeserializationOptions | TransportServiceCCSegmentRequestOptions);
+    constructor(options: WithAddress<TransportServiceCCSegmentRequestOptions>);
     // (undocumented)
     datagramOffset: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TransportServiceCCSegmentRequest;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18532,7 +19726,7 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TransportServiceCCSegmentRequestOptions extends CCCommandOptions {
+export interface TransportServiceCCSegmentRequestOptions {
     // (undocumented)
     datagramOffset: number;
     // (undocumented)
@@ -18543,7 +19737,9 @@ export interface TransportServiceCCSegmentRequestOptions extends CCCommandOption
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
-    constructor(options: CommandClassDeserializationOptions | TransportServiceCCSegmentWaitOptions);
+    constructor(options: WithAddress<TransportServiceCCSegmentWaitOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TransportServiceCCSegmentWait;
     // (undocumented)
     pendingSegments: number;
     // (undocumented)
@@ -18555,7 +19751,7 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentWaitOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
+export interface TransportServiceCCSegmentWaitOptions {
     // (undocumented)
     pendingSegments: number;
 }
@@ -18564,7 +19760,7 @@ export interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
-    constructor(options: CommandClassDeserializationOptions | TransportServiceCCSubsequentSegmentOptions);
+    constructor(options: WithAddress<TransportServiceCCSubsequentSegmentOptions>);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
@@ -18578,6 +19774,8 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     TransportServiceCCFirstSegment,
     ...TransportServiceCCSubsequentSegment[]
     ]): boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): TransportServiceCCSubsequentSegment;
     // (undocumented)
     getPartialCCSessionId(): Record<string, any> | undefined;
     // (undocumented)
@@ -18665,9 +19863,11 @@ export class UserCodeCCAdminCodeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCAdminCodeReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCAdminCodeReportOptions);
+    constructor(options: WithAddress<UserCodeCCAdminCodeReportOptions>);
     // (undocumented)
     readonly adminCode: string;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCAdminCodeReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18677,7 +19877,7 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
+export interface UserCodeCCAdminCodeReportOptions {
     // (undocumented)
     adminCode: string;
 }
@@ -18686,9 +19886,11 @@ export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCAdminCodeSet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCAdminCodeSetOptions);
+    constructor(options: WithAddress<UserCodeCCAdminCodeSetOptions>);
     // (undocumented)
     adminCode: string;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCAdminCodeSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18698,7 +19900,7 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
+export interface UserCodeCCAdminCodeSetOptions {
     // (undocumented)
     adminCode: string;
 }
@@ -18713,7 +19915,9 @@ export class UserCodeCCCapabilitiesGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCCapabilitiesReportOptions);
+    constructor(options: WithAddress<UserCodeCCCapabilitiesReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCCapabilitiesReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18739,7 +19943,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
+export interface UserCodeCCCapabilitiesReportOptions {
     // (undocumented)
     supportedASCIIChars: string;
     // (undocumented)
@@ -18762,7 +19966,9 @@ export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCExtendedUserCodeGetOptions);
+    constructor(options: WithAddress<UserCodeCCExtendedUserCodeGetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): UserCodeCCExtendedUserCodeGet;
     // (undocumented)
     reportMore: boolean;
     // (undocumented)
@@ -18776,7 +19982,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+export interface UserCodeCCExtendedUserCodeGetOptions {
     // (undocumented)
     reportMore?: boolean;
     // (undocumented)
@@ -18787,7 +19993,9 @@ export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<UserCodeCCExtendedUserCodeReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCExtendedUserCodeReport;
     // (undocumented)
     readonly nextUserId: number;
     // (undocumented)
@@ -18800,11 +20008,23 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
     readonly userCodes: readonly UserCode[];
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCExtendedUserCodeReportOptions {
+    // (undocumented)
+    nextUserId: number;
+    // (undocumented)
+    userCodes: UserCode[];
+}
+
 // Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCExtendedUserCodeSetOptions);
+    constructor(options: WithAddress<UserCodeCCExtendedUserCodeSetOptions>);
+    // (undocumented)
+    static from(_raw: CCRaw, _ctx: CCParsingContext_2): UserCodeCCExtendedUserCodeSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18816,7 +20036,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
+export interface UserCodeCCExtendedUserCodeSetOptions {
     // (undocumented)
     userCodes: UserCodeCCSetOptions[];
 }
@@ -18825,7 +20045,9 @@ export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCGet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCGetOptions);
+    constructor(options: WithAddress<UserCodeCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCGet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18837,7 +20059,7 @@ export class UserCodeCCGet extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCGetOptions extends CCCommandOptions {
+export interface UserCodeCCGetOptions {
     // (undocumented)
     userId: number;
 }
@@ -18852,7 +20074,9 @@ export class UserCodeCCKeypadModeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCKeypadModeReportOptions);
+    constructor(options: WithAddress<UserCodeCCKeypadModeReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCKeypadModeReport;
     // (undocumented)
     readonly keypadMode: KeypadMode;
     // (undocumented)
@@ -18866,7 +20090,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
+export interface UserCodeCCKeypadModeReportOptions {
     // (undocumented)
     keypadMode: KeypadMode;
 }
@@ -18875,7 +20099,9 @@ export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCKeypadModeSetOptions);
+    constructor(options: WithAddress<UserCodeCCKeypadModeSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCKeypadModeSet;
     // (undocumented)
     keypadMode: KeypadMode;
     // (undocumented)
@@ -18887,7 +20113,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+export interface UserCodeCCKeypadModeSetOptions {
     // (undocumented)
     keypadMode: KeypadMode;
 }
@@ -18897,7 +20123,9 @@ export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCReport extends UserCodeCC implements NotificationEventPayload {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCReportOptions);
+    constructor(options: WithAddress<UserCodeCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCReport;
     // (undocumented)
     persistValues(ctx: PersistValuesContext): boolean;
     // (undocumented)
@@ -18919,7 +20147,7 @@ export class UserCodeCCReport extends UserCodeCC implements NotificationEventPay
 // Warning: (ae-missing-release-tag) "UserCodeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCReportOptions extends CCCommandOptions {
+export interface UserCodeCCReportOptions {
     // (undocumented)
     userCode?: string | Buffer;
     // (undocumented)
@@ -18932,7 +20160,9 @@ export interface UserCodeCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class UserCodeCCSet extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & UserCodeCCSetOptions));
+    constructor(options: WithAddress<UserCodeCCSetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18972,7 +20202,9 @@ export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCUserCodeChecksumReportOptions);
+    constructor(options: WithAddress<UserCodeCCUserCodeChecksumReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCUserCodeChecksumReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -18984,7 +20216,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCUserCodeChecksumReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCUserCodeChecksumReportOptions extends CCCommandOptions {
+export interface UserCodeCCUserCodeChecksumReportOptions {
     // (undocumented)
     userCodeChecksum: number;
 }
@@ -18999,7 +20231,9 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
-    constructor(options: CommandClassDeserializationOptions | UserCodeCCUsersNumberReportOptions);
+    constructor(options: WithAddress<UserCodeCCUsersNumberReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): UserCodeCCUsersNumberReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -19011,7 +20245,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 // Warning: (ae-missing-release-tag) "UserCodeCCUsersNumberReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
+export interface UserCodeCCUsersNumberReportOptions {
     // (undocumented)
     supportedUsers: number;
 }
@@ -19021,11 +20255,6 @@ export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
 // @public (undocumented)
 export const UserCodeCCValues: Readonly<{
     userCode: ((userId: number) => {
-        readonly meta: {
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
             property: "userCode";
@@ -19037,24 +20266,23 @@ export const UserCodeCCValues: Readonly<{
             readonly property: "userCode";
             readonly propertyKey: number;
         };
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
-            readonly stateful: true;
             readonly internal: false;
-            readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly minVersion: 1;
             readonly secret: true;
         };
     };
     userIdStatus: ((userId: number) => {
-        readonly meta: {
-            readonly label: `User ID status (${number})`;
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
             property: "userIdStatus";
@@ -19065,6 +20293,12 @@ export const UserCodeCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "userIdStatus";
             readonly propertyKey: number;
+        };
+        readonly meta: {
+            readonly label: `User ID status (${number})`;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
         };
     }) & {
         is: (valueId: ValueID_2) => boolean;
@@ -19097,10 +20331,10 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
             readonly minVersion: 2;
             readonly secret: true;
         };
@@ -19123,11 +20357,11 @@ export const UserCodeCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
         };
     };
@@ -19148,11 +20382,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19173,11 +20407,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19198,11 +20432,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19223,11 +20457,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19248,11 +20482,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19273,11 +20507,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19298,11 +20532,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19323,11 +20557,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19348,11 +20582,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19373,11 +20607,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19398,11 +20632,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19423,11 +20657,11 @@ export const UserCodeCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -19568,7 +20802,9 @@ export class VersionCCCapabilitiesGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCCapabilitiesReport extends VersionCC {
-    constructor(options: CommandClassDeserializationOptions | (VersionCCCapabilitiesReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<VersionCCCapabilitiesReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): VersionCCCapabilitiesReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -19589,7 +20825,9 @@ export interface VersionCCCapabilitiesReportOptions {
 //
 // @public (undocumented)
 export class VersionCCCommandClassGet extends VersionCC {
-    constructor(options: CommandClassDeserializationOptions | VersionCCCommandClassGetOptions);
+    constructor(options: WithAddress<VersionCCCommandClassGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): VersionCCCommandClassGet;
     // (undocumented)
     requestedCC: CommandClasses;
     // (undocumented)
@@ -19601,7 +20839,7 @@ export class VersionCCCommandClassGet extends VersionCC {
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+export interface VersionCCCommandClassGetOptions {
     // (undocumented)
     requestedCC: CommandClasses;
 }
@@ -19610,9 +20848,11 @@ export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class VersionCCCommandClassReport extends VersionCC {
-    constructor(options: VersionCCCommandClassReportOptions | CommandClassDeserializationOptions);
+    constructor(options: WithAddress<VersionCCCommandClassReportOptions>);
     // (undocumented)
     ccVersion: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): VersionCCCommandClassReport;
     // (undocumented)
     requestedCC: CommandClasses;
     // (undocumented)
@@ -19624,7 +20864,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+export interface VersionCCCommandClassReportOptions {
     // (undocumented)
     ccVersion: number;
     // (undocumented)
@@ -19641,9 +20881,11 @@ export class VersionCCGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCReport extends VersionCC {
-    constructor(options: CommandClassDeserializationOptions | (VersionCCReportOptions & CCCommandOptions));
+    constructor(options: WithAddress<VersionCCReportOptions>);
     // (undocumented)
     readonly firmwareVersions: string[];
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): VersionCCReport;
     // (undocumented)
     readonly hardwareVersion: number | undefined;
     // (undocumented)
@@ -19692,10 +20934,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19718,10 +20960,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19744,10 +20986,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19770,10 +21012,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19796,10 +21038,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19822,10 +21064,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19848,10 +21090,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19874,10 +21116,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19900,10 +21142,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly supportsEndpoints: false;
         };
@@ -19925,10 +21167,10 @@ export const VersionCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 3;
             readonly internal: true;
         };
@@ -19951,10 +21193,10 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
-            readonly stateful: true;
-            readonly secret: false;
             readonly internal: false;
             readonly autoCreate: true;
+            readonly stateful: true;
+            readonly secret: false;
             readonly minVersion: 2;
             readonly supportsEndpoints: false;
         };
@@ -19977,11 +21219,11 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -20006,11 +21248,11 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -20032,11 +21274,11 @@ export const VersionCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -20052,7 +21294,7 @@ export class VersionCCZWaveSoftwareGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<VersionCCZWaveSoftwareReportOptions>);
     // (undocumented)
     readonly applicationBuildNumber: number;
     // (undocumented)
@@ -20061,6 +21303,8 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
     readonly applicationFrameworkBuildNumber: number;
     // (undocumented)
     readonly applicationVersion: string;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): VersionCCZWaveSoftwareReport;
     // (undocumented)
     readonly hostInterfaceBuildNumber: number;
     // (undocumented)
@@ -20073,6 +21317,30 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
     readonly zWaveProtocolBuildNumber: number;
     // (undocumented)
     readonly zWaveProtocolVersion: string;
+}
+
+// Warning: (ae-missing-release-tag) "VersionCCZWaveSoftwareReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionCCZWaveSoftwareReportOptions {
+    // (undocumented)
+    applicationBuildNumber: number;
+    // (undocumented)
+    applicationFrameworkAPIVersion: string;
+    // (undocumented)
+    applicationFrameworkBuildNumber: number;
+    // (undocumented)
+    applicationVersion: string;
+    // (undocumented)
+    hostInterfaceBuildNumber: number;
+    // (undocumented)
+    hostInterfaceVersion: string;
+    // (undocumented)
+    sdkVersion: string;
+    // (undocumented)
+    zWaveProtocolBuildNumber: number;
+    // (undocumented)
+    zWaveProtocolVersion: string;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20122,9 +21390,11 @@ export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {
 //
 // @public (undocumented)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<WakeUpCCIntervalCapabilitiesReportOptions>);
     // (undocumented)
     readonly defaultWakeUpInterval: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): WakeUpCCIntervalCapabilitiesReport;
     // (undocumented)
     readonly maxWakeUpInterval: number;
     // (undocumented)
@@ -20139,6 +21409,22 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
     readonly wakeUpOnDemandSupported: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "WakeUpCCIntervalCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WakeUpCCIntervalCapabilitiesReportOptions {
+    // (undocumented)
+    defaultWakeUpInterval: number;
+    // (undocumented)
+    maxWakeUpInterval: number;
+    // (undocumented)
+    minWakeUpInterval: number;
+    // (undocumented)
+    wakeUpIntervalSteps: number;
+    // (undocumented)
+    wakeUpOnDemandSupported: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "WakeUpCCIntervalGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -20149,22 +21435,36 @@ export class WakeUpCCIntervalGet extends WakeUpCC {
 //
 // @public (undocumented)
 export class WakeUpCCIntervalReport extends WakeUpCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress<WakeUpCCIntervalReportOptions>);
     // (undocumented)
     readonly controllerNodeId: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): WakeUpCCIntervalReport;
     // (undocumented)
     toLogEntry(ctx?: GetValueDB_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly wakeUpInterval: number;
 }
 
+// Warning: (ae-missing-release-tag) "WakeUpCCIntervalReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WakeUpCCIntervalReportOptions {
+    // (undocumented)
+    controllerNodeId: number;
+    // (undocumented)
+    wakeUpInterval: number;
+}
+
 // Warning: (ae-missing-release-tag) "WakeUpCCIntervalSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WakeUpCCIntervalSet extends WakeUpCC {
-    constructor(options: CommandClassDeserializationOptions | WakeUpCCIntervalSetOptions);
+    constructor(options: WithAddress<WakeUpCCIntervalSetOptions>);
     // (undocumented)
     controllerNodeId: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): WakeUpCCIntervalSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext_2): Buffer;
     // (undocumented)
@@ -20176,7 +21476,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 // Warning: (ae-missing-release-tag) "WakeUpCCIntervalSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
+export interface WakeUpCCIntervalSetOptions {
     // (undocumented)
     controllerNodeId: number;
     // (undocumented)
@@ -20210,9 +21510,9 @@ export const WakeUpCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly autoCreate: true;
             readonly internal: true;
             readonly supportsEndpoints: false;
             readonly minVersion: number;
@@ -20238,11 +21538,11 @@ export const WakeUpCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -20264,11 +21564,11 @@ export const WakeUpCCValues: Readonly<{
             readonly readable: true;
         };
         readonly options: {
+            readonly internal: false;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
-            readonly internal: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
         };
     };
@@ -20355,7 +21655,9 @@ export class WindowCoveringCC extends CommandClass {
 //
 // @public (undocumented)
 export class WindowCoveringCCGet extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions | WindowCoveringCCGetOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCGetOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCGet;
     // (undocumented)
     parameter: WindowCoveringParameter;
     // (undocumented)
@@ -20367,7 +21669,7 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 // Warning: (ae-missing-release-tag) "WindowCoveringCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WindowCoveringCCGetOptions extends CCCommandOptions {
+export interface WindowCoveringCCGetOptions {
     // (undocumented)
     parameter: WindowCoveringParameter;
 }
@@ -20376,11 +21678,13 @@ export interface WindowCoveringCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class WindowCoveringCCReport extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCReportOptions>);
     // (undocumented)
     readonly currentValue: number;
     // (undocumented)
     readonly duration: Duration_2;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCReport;
     // (undocumented)
     readonly parameter: WindowCoveringParameter;
     // (undocumented)
@@ -20389,13 +21693,29 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
     toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "WindowCoveringCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCReportOptions {
+    // (undocumented)
+    currentValue: number;
+    // (undocumented)
+    duration: Duration_2;
+    // (undocumented)
+    parameter: WindowCoveringParameter;
+    // (undocumented)
+    targetValue: number;
+}
+
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WindowCoveringCCSet extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions | WindowCoveringCCSetOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCSetOptions>);
     // (undocumented)
     duration: Duration_2 | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCSet;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -20410,7 +21730,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WindowCoveringCCSetOptions extends CCCommandOptions {
+export interface WindowCoveringCCSetOptions {
     // (undocumented)
     duration?: Duration_2 | string;
     // (undocumented)
@@ -20424,11 +21744,13 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions | WindowCoveringCCStartLevelChangeOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCStartLevelChangeOptions>);
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
     // (undocumented)
     duration: Duration_2 | undefined;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCStartLevelChange;
     // (undocumented)
     parameter: WindowCoveringParameter;
     // (undocumented)
@@ -20440,7 +21762,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WindowCoveringCCStartLevelChangeOptions extends CCCommandOptions {
+export interface WindowCoveringCCStartLevelChangeOptions {
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
     // (undocumented)
@@ -20453,7 +21775,9 @@ export interface WindowCoveringCCStartLevelChangeOptions extends CCCommandOption
 //
 // @public (undocumented)
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions | WindowCoveringCCStopLevelChangeOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCStopLevelChangeOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCStopLevelChange;
     // (undocumented)
     parameter: WindowCoveringParameter;
     // (undocumented)
@@ -20465,7 +21789,7 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStopLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
+export interface WindowCoveringCCStopLevelChangeOptions {
     // (undocumented)
     parameter: WindowCoveringParameter;
 }
@@ -20480,7 +21804,9 @@ export class WindowCoveringCCSupportedGet extends WindowCoveringCC {
 //
 // @public (undocumented)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
-    constructor(options: CommandClassDeserializationOptions | WindowCoveringCCSupportedReportOptions);
+    constructor(options: WithAddress_2<WindowCoveringCCSupportedReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): WindowCoveringCCSupportedReport;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -20492,7 +21818,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface WindowCoveringCCSupportedReportOptions extends CCCommandOptions {
+export interface WindowCoveringCCSupportedReportOptions {
     // (undocumented)
     supportedParameters: readonly WindowCoveringParameter[];
 }
@@ -20502,6 +21828,17 @@ export interface WindowCoveringCCSupportedReportOptions extends CCCommandOptions
 // @public (undocumented)
 export const WindowCoveringCCValues: Readonly<{
     levelChangeDown: ((parameter: WindowCoveringParameter) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "levelChangeDown";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "levelChangeDown";
+            readonly propertyKey: WindowCoveringParameter;
+        };
         readonly meta: {
             readonly label: `${string} - ${string}`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -20515,17 +21852,6 @@ export const WindowCoveringCCValues: Readonly<{
             readonly readable: false;
             readonly type: "boolean";
             readonly writeable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "levelChangeDown";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "levelChangeDown";
-            readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -20539,6 +21865,17 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     levelChangeUp: ((parameter: WindowCoveringParameter) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "levelChangeUp";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "levelChangeUp";
+            readonly propertyKey: WindowCoveringParameter;
+        };
         readonly meta: {
             readonly label: `${string} - ${string}`;
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -20553,17 +21890,6 @@ export const WindowCoveringCCValues: Readonly<{
             readonly type: "boolean";
             readonly writeable: true;
         };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "levelChangeUp";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "levelChangeUp";
-            readonly propertyKey: WindowCoveringParameter;
-        };
     }) & {
         is: (valueId: ValueID) => boolean;
         readonly options: {
@@ -20576,15 +21902,6 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     duration: ((parameter: WindowCoveringParameter) => {
-        readonly meta: {
-            readonly label: `Remaining duration - ${string}`;
-            readonly ccSpecific: {
-                readonly parameter: WindowCoveringParameter;
-            };
-            readonly writeable: false;
-            readonly type: "duration";
-            readonly readable: true;
-        };
         readonly id: {
             commandClass: (typeof CommandClasses_2)["Window Covering"];
             property: "duration";
@@ -20595,6 +21912,15 @@ export const WindowCoveringCCValues: Readonly<{
             readonly endpoint: number;
             readonly property: "duration";
             readonly propertyKey: WindowCoveringParameter;
+        };
+        readonly meta: {
+            readonly label: `Remaining duration - ${string}`;
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly writeable: false;
+            readonly type: "duration";
+            readonly readable: true;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -20608,6 +21934,17 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     targetValue: ((parameter: WindowCoveringParameter) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "targetValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
         readonly meta: {
             readonly label: `Target value - ${string}`;
             readonly writeable: boolean;
@@ -20624,17 +21961,6 @@ export const WindowCoveringCCValues: Readonly<{
             readonly type: "number";
             readonly readable: true;
         };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "targetValue";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "targetValue";
-            readonly propertyKey: WindowCoveringParameter;
-        };
     }) & {
         is: (valueId: ValueID) => boolean;
         readonly options: {
@@ -20647,6 +21973,17 @@ export const WindowCoveringCCValues: Readonly<{
         };
     };
     currentValue: ((parameter: WindowCoveringParameter) => {
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "currentValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
         readonly meta: {
             readonly label: `Current value - ${string}`;
             readonly states: {
@@ -20660,17 +21997,6 @@ export const WindowCoveringCCValues: Readonly<{
             readonly min: 0;
             readonly type: "number";
             readonly readable: true;
-        };
-        readonly id: {
-            commandClass: (typeof CommandClasses_2)["Window Covering"];
-            property: "currentValue";
-            propertyKey: WindowCoveringParameter;
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-            readonly endpoint: number;
-            readonly property: "currentValue";
-            readonly propertyKey: WindowCoveringParameter;
         };
     }) & {
         is: (valueId: ValueID) => boolean;
@@ -20700,11 +22026,11 @@ export const WindowCoveringCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -20832,7 +22158,9 @@ export class ZWavePlusCCGet extends ZWavePlusCC {
 //
 // @public (undocumented)
 export class ZWavePlusCCReport extends ZWavePlusCC {
-    constructor(options: CommandClassDeserializationOptions | (CCCommandOptions & ZWavePlusCCReportOptions));
+    constructor(options: WithAddress<ZWavePlusCCReportOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext_2): ZWavePlusCCReport;
     // (undocumented)
     installerIcon: number;
     // (undocumented)
@@ -20886,11 +22214,11 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -20911,11 +22239,11 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
             readonly internal: true;
         };
     };
@@ -20936,10 +22264,10 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
         };
@@ -20961,10 +22289,10 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
         };
@@ -20986,10 +22314,10 @@ export const ZWavePlusCCValues: Readonly<{
             readonly writeable: true;
         };
         readonly options: {
+            readonly autoCreate: true;
             readonly stateful: true;
             readonly secret: false;
             readonly minVersion: 1;
-            readonly autoCreate: true;
             readonly supportsEndpoints: false;
             readonly internal: true;
         };
@@ -21052,9 +22380,11 @@ export class ZWaveProtocolCC extends CommandClass {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCAcceptLostOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCAcceptLostOptions>);
     // (undocumented)
     accepted: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCAcceptLost;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
 }
@@ -21062,7 +22392,7 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAcceptLostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCAcceptLostOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCAcceptLostOptions {
     // (undocumented)
     accepted: boolean;
 }
@@ -21071,9 +22401,11 @@ export interface ZWaveProtocolCCAcceptLostOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignIDsOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCAssignIDsOptions>);
     // (undocumented)
     assignedNodeId: number;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCAssignIDs;
     // (undocumented)
     homeId: number;
     // (undocumented)
@@ -21083,7 +22415,7 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCAssignIDsOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCAssignIDsOptions {
     // (undocumented)
     assignedNodeId: number;
     // (undocumented)
@@ -21094,13 +22426,15 @@ export interface ZWaveProtocolCCAssignIDsOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignReturnRouteOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCAssignReturnRouteOptions>);
     // (undocumented)
     destinationNodeId: number;
     // (undocumented)
     destinationSpeed: ZWaveDataRate;
     // (undocumented)
     destinationWakeUp: WakeUpTime;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCAssignReturnRoute;
     // (undocumented)
     repeaters: number[];
     // (undocumented)
@@ -21112,7 +22446,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRouteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCAssignReturnRouteOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCAssignReturnRouteOptions {
     // (undocumented)
     destinationNodeId: number;
     // (undocumented)
@@ -21129,7 +22463,9 @@ export interface ZWaveProtocolCCAssignReturnRouteOptions extends CCCommandOption
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignReturnRoutePriorityOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCAssignReturnRoutePriorityOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCAssignReturnRoutePriority;
     // (undocumented)
     routeNumber: number;
     // (undocumented)
@@ -21141,7 +22477,7 @@ export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRoutePriorityOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCAssignReturnRoutePriorityOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCAssignReturnRoutePriorityOptions {
     // (undocumented)
     routeNumber: number;
     // (undocumented)
@@ -21170,7 +22506,9 @@ export class ZWaveProtocolCCAutomaticControllerUpdateStart extends ZWaveProtocol
 //
 // @public (undocumented)
 export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCCommandCompleteOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCCommandCompleteOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCCommandComplete;
     // (undocumented)
     sequenceNumber: number;
     // (undocumented)
@@ -21180,7 +22518,7 @@ export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCCommandCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCCommandCompleteOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCCommandCompleteOptions {
     // (undocumented)
     sequenceNumber: number;
 }
@@ -21195,11 +22533,13 @@ export class ZWaveProtocolCCExcludeRequest extends ZWaveProtocolCCNodeInformatio
 //
 // @public (undocumented)
 export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCFindNodesInRangeOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCFindNodesInRangeOptions>);
     // (undocumented)
     candidateNodeIds: number[];
     // (undocumented)
     dataRate: ZWaveDataRate;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCFindNodesInRange;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -21209,7 +22549,7 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCFindNodesInRangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCFindNodesInRangeOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCFindNodesInRangeOptions {
     // (undocumented)
     candidateNodeIds: number[];
     // (undocumented)
@@ -21228,7 +22568,9 @@ export class ZWaveProtocolCCGetNodesInRange extends ZWaveProtocolCC {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCLostOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCLostOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCLost;
     // (undocumented)
     lostNodeId: number;
     // (undocumented)
@@ -21238,7 +22580,7 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCLostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCLostOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCLostOptions {
     // (undocumented)
     lostNodeId: number;
 }
@@ -21247,9 +22589,11 @@ export interface ZWaveProtocolCCLostOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC implements NodeInformationFrame {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNewNodeRegisteredOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNewNodeRegisteredOptions>);
     // (undocumented)
     basicDeviceClass: BasicDeviceClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNewNodeRegistered;
     // (undocumented)
     genericDeviceClass: number;
     // (undocumented)
@@ -21283,7 +22627,7 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC implements
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewNodeRegisteredOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNewNodeRegisteredOptions extends CCCommandOptions, NodeInformationFrame {
+export interface ZWaveProtocolCCNewNodeRegisteredOptions extends NodeInformationFrame {
     // (undocumented)
     newNodeId: number;
 }
@@ -21292,7 +22636,9 @@ export interface ZWaveProtocolCCNewNodeRegisteredOptions extends CCCommandOption
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNewRangeRegisteredOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNewRangeRegisteredOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNewRangeRegistered;
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21304,7 +22650,7 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewRangeRegisteredOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNewRangeRegisteredOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCNewRangeRegisteredOptions {
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21315,9 +22661,11 @@ export interface ZWaveProtocolCCNewRangeRegisteredOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC implements NodeInformationFrame {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNodeInformationFrameOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNodeInformationFrameOptions>);
     // (undocumented)
     basicDeviceClass: BasicDeviceClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNodeInformationFrame;
     // (undocumented)
     genericDeviceClass: number;
     // (undocumented)
@@ -21349,14 +22697,16 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC impleme
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodeInformationFrameOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNodeInformationFrameOptions extends CCCommandOptions, NodeInformationFrame {
+export interface ZWaveProtocolCCNodeInformationFrameOptions extends NodeInformationFrame {
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExist" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNodesExistOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNodesExistOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNodesExist;
     // (undocumented)
     nodeIDs: number[];
     // (undocumented)
@@ -21368,7 +22718,7 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExistOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNodesExistOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCNodesExistOptions {
     // (undocumented)
     nodeIDs: number[];
     // (undocumented)
@@ -21379,7 +22729,9 @@ export interface ZWaveProtocolCCNodesExistOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNodesExistReplyOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNodesExistReplyOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNodesExistReply;
     // (undocumented)
     nodeListUpdated: boolean;
     // (undocumented)
@@ -21391,7 +22743,7 @@ export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExistReplyOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNodesExistReplyOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCNodesExistReplyOptions {
     // (undocumented)
     nodeListUpdated: boolean;
     // (undocumented)
@@ -21402,7 +22754,9 @@ export interface ZWaveProtocolCCNodesExistReplyOptions extends CCCommandOptions 
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCNOPPowerOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCNOPPowerOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCNOPPower;
     // (undocumented)
     powerDampening: number;
     // (undocumented)
@@ -21412,7 +22766,7 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNOPPowerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCNOPPowerOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCNOPPowerOptions {
     // (undocumented)
     powerDampening: number;
 }
@@ -21421,7 +22775,9 @@ export interface ZWaveProtocolCCNOPPowerOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCRangeInfoOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCRangeInfoOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCRangeInfo;
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21433,7 +22789,7 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCRangeInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCRangeInfoOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCRangeInfoOptions {
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21450,7 +22806,9 @@ export class ZWaveProtocolCCRequestNodeInformationFrame extends ZWaveProtocolCC 
 //
 // @public (undocumented)
 export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCReservedIDsOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCReservedIDsOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCReservedIDs;
     // (undocumented)
     reservedNodeIDs: number[];
     // (undocumented)
@@ -21460,7 +22818,7 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCReservedIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCReservedIDsOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCReservedIDsOptions {
     // (undocumented)
     reservedNodeIDs: number[];
 }
@@ -21469,7 +22827,9 @@ export interface ZWaveProtocolCCReservedIDsOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCReserveNodeIDsOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCReserveNodeIDsOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCReserveNodeIDs;
     // (undocumented)
     numNodeIDs: number;
     // (undocumented)
@@ -21479,7 +22839,7 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCReserveNodeIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCReserveNodeIDsOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCReserveNodeIDsOptions {
     // (undocumented)
     numNodeIDs: number;
 }
@@ -21488,9 +22848,11 @@ export interface ZWaveProtocolCCReserveNodeIDsOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCSetNWIModeOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCSetNWIModeOptions>);
     // (undocumented)
     enabled: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCSetNWIMode;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -21500,7 +22862,7 @@ export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetNWIModeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCSetNWIModeOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCSetNWIModeOptions {
     // (undocumented)
     enabled: boolean;
     // (undocumented)
@@ -21511,9 +22873,11 @@ export interface ZWaveProtocolCCSetNWIModeOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCSetSUCOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCSetSUCOptions>);
     // (undocumented)
     enableSIS: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCSetSUC;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
 }
@@ -21522,9 +22886,11 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCSetSUCAckOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCSetSUCAckOptions>);
     // (undocumented)
     accepted: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCSetSUCAck;
     // (undocumented)
     isSIS: boolean;
     // (undocumented)
@@ -21534,7 +22900,7 @@ export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetSUCAckOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCSetSUCAckOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCSetSUCAckOptions {
     // (undocumented)
     accepted: boolean;
     // (undocumented)
@@ -21544,7 +22910,7 @@ export interface ZWaveProtocolCCSetSUCAckOptions extends CCCommandOptions {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetSUCOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCSetSUCOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCSetSUCOptions {
     // (undocumented)
     enableSIS: boolean;
 }
@@ -21553,7 +22919,9 @@ export interface ZWaveProtocolCCSetSUCOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSmartStartIncludedNodeInformation extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCSmartStartIncludedNodeInformationOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCSmartStartIncludedNodeInformationOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCSmartStartIncludedNodeInformation;
     // (undocumented)
     nwiHomeId: Buffer;
     // (undocumented)
@@ -21563,7 +22931,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation extends ZWaveProto
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSmartStartIncludedNodeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions {
     // (undocumented)
     nwiHomeId: Buffer;
 }
@@ -21584,7 +22952,9 @@ export class ZWaveProtocolCCSmartStartPrime extends ZWaveProtocolCCNodeInformati
 //
 // @public (undocumented)
 export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCStaticRouteRequestOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCStaticRouteRequestOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCStaticRouteRequest;
     // (undocumented)
     nodeIds: number[];
     // (undocumented)
@@ -21594,7 +22964,7 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCStaticRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCStaticRouteRequestOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCStaticRouteRequestOptions {
     // (undocumented)
     nodeIds: number[];
 }
@@ -21603,7 +22973,9 @@ export interface ZWaveProtocolCCStaticRouteRequestOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCSUCNodeIDOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCSUCNodeIDOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCSUCNodeID;
     // (undocumented)
     isSIS: boolean;
     // (undocumented)
@@ -21615,7 +22987,7 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSUCNodeIDOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCSUCNodeIDOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCSUCNodeIDOptions {
     // (undocumented)
     isSIS: boolean;
     // (undocumented)
@@ -21626,7 +22998,9 @@ export interface ZWaveProtocolCCSUCNodeIDOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferEndOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCTransferEndOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCTransferEnd;
     // (undocumented)
     serialize(ctx: CCEncodingContext): Buffer;
     // (undocumented)
@@ -21636,7 +23010,7 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferEndOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCTransferEndOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCTransferEndOptions {
     // (undocumented)
     status: NetworkTransferStatus;
 }
@@ -21645,7 +23019,9 @@ export interface ZWaveProtocolCCTransferEndOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferNewPrimaryControllerComplete extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCTransferNewPrimaryControllerComplete;
     // (undocumented)
     genericDeviceClass: number;
     // (undocumented)
@@ -21655,7 +23031,7 @@ export class ZWaveProtocolCCTransferNewPrimaryControllerComplete extends ZWavePr
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions {
     // (undocumented)
     genericDeviceClass: number;
 }
@@ -21664,9 +23040,11 @@ export interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions exte
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC implements NodeProtocolInfoAndDeviceClass {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferNodeInformationOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCTransferNodeInformationOptions>);
     // (undocumented)
     basicDeviceClass: BasicDeviceClass;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCTransferNodeInformation;
     // (undocumented)
     genericDeviceClass: number;
     // (undocumented)
@@ -21700,7 +23078,7 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC impl
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferNodeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCTransferNodeInformationOptions extends CCCommandOptions, NodeProtocolInfoAndDeviceClass {
+export interface ZWaveProtocolCCTransferNodeInformationOptions extends NodeProtocolInfoAndDeviceClass {
     // (undocumented)
     sequenceNumber: number;
     // (undocumented)
@@ -21711,9 +23089,11 @@ export interface ZWaveProtocolCCTransferNodeInformationOptions extends CCCommand
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferPresentationOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCTransferPresentationOptions>);
     // (undocumented)
     excludeNode: boolean;
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCTransferPresentation;
     // (undocumented)
     includeNode: boolean;
     // (undocumented)
@@ -21725,7 +23105,7 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferPresentationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCTransferPresentationOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCTransferPresentationOptions {
     // (undocumented)
     excludeNode: boolean;
     // (undocumented)
@@ -21738,7 +23118,9 @@ export interface ZWaveProtocolCCTransferPresentationOptions extends CCCommandOpt
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
-    constructor(options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferRangeInformationOptions);
+    constructor(options: WithAddress_2<ZWaveProtocolCCTransferRangeInformationOptions>);
+    // (undocumented)
+    static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCTransferRangeInformation;
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21752,7 +23134,7 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferRangeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ZWaveProtocolCCTransferRangeInformationOptions extends CCCommandOptions {
+export interface ZWaveProtocolCCTransferRangeInformationOptions {
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
@@ -21839,8 +23221,8 @@ export enum ZWaveProtocolCommand {
 
 // Warnings were encountered during analysis:
 //
-// src/cc/TransportServiceCC.ts:47:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
-// src/cc/TransportServiceCC.ts:49:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
+// src/cc/TransportServiceCC.ts:46:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
+// src/cc/TransportServiceCC.ts:48:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 
 // (No @packageDocumentation comment for this package)
 

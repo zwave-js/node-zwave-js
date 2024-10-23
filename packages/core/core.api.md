@@ -168,18 +168,24 @@ export interface CacheValue extends Pick<ValueID, "endpoint" | "property" | "pro
     value: SerializedValue;
 }
 
-// Warning: (ae-missing-release-tag) "CCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CCAddress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export interface CCId {
-    // (undocumented)
-    ccCommand?: number;
-    // (undocumented)
-    ccId: CommandClasses;
+export interface CCAddress {
     // (undocumented)
     endpointIndex?: number;
     // (undocumented)
     nodeId: number | MulticastDestination;
+}
+
+// Warning: (ae-missing-release-tag) "CCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface CCId extends CCAddress {
+    // (undocumented)
+    ccCommand?: number;
+    // (undocumented)
+    ccId: CommandClasses;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "channelPadding" should be prefixed with an underscore because the declaration is marked as @internal
@@ -3673,7 +3679,6 @@ export interface TXReport {
     failedRouteFirstNonFunctionalNodeId?: number;
     failedRouteLastFunctionalNodeId?: number;
     measuredNoiseFloor?: RSSI;
-    numRepeaters: number;
     repeaterNodeIds: [number?, number?, number?, number?];
     routeSchemeState: RoutingScheme;
     routeSpeed: ProtocolDataRate;
@@ -4235,6 +4240,11 @@ export interface VirtualNodeId extends VirtualEndpointId {
 export function wasControllerReset(e: unknown): e is ZWaveError & {
     code: ZWaveErrorCodes.Controller_Reset;
 };
+
+// Warning: (ae-missing-release-tag) "WithAddress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type WithAddress<T extends object> = T & CCAddress;
 
 // Warning: (ae-missing-release-tag) "ZnifferProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
