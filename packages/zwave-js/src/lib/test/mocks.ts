@@ -249,10 +249,6 @@ export function createTestNode(
 			return !ret.isListening && !ret.isFrequentListening;
 		},
 
-		// status: options.status
-		// 	?? (options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
-		// interviewStage: options.interviewStage ?? InterviewStage.Complete,
-
 		setEndpoint: (endpoint) => {
 			endpointCache.set(
 				endpoint.index,
@@ -291,16 +287,6 @@ export function createTestNode(
 			}
 			return ep;
 		},
-
-		// getAllEndpoints() {
-		// 	if (!options.numEndpoints) return [...endpointCache.values()];
-		// 	const eps: IZWaveEndpoint[] = [];
-		// 	for (let i = 0; i <= options.numEndpoints; i++) {
-		// 		const ep = ret.getEndpoint(i);
-		// 		if (ep) eps.push(ep);
-		// 	}
-		// 	return eps;
-		// },
 
 		// These are copied from Node.ts
 		getHighestSecurityClass(): SecurityClass | undefined {

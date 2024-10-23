@@ -35,12 +35,6 @@ test.before(async (t) => {
 		loadConfiguration: false,
 		skipNodeInterview: true,
 		skipControllerIdentification: true,
-		// beforeStartup(mockPort) {
-		// 	controller = new MockController({ serial: mockPort });
-		// 	controller.defineBehavior(
-		// 		...createDefaultMockControllerBehaviors(),
-		// 	);
-		// },
 	});
 	t.context.driver = driver;
 
