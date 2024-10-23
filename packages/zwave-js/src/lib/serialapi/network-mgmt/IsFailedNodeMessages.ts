@@ -58,7 +58,7 @@ export class IsFailedNodeResponse extends Message {
 	): IsFailedNodeResponse {
 		const result = !!raw.payload[0];
 
-		return new IsFailedNodeResponse({
+		return new this({
 			result,
 		});
 	}

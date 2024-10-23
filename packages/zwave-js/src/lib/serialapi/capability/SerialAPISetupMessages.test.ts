@@ -8,11 +8,10 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7
 		"hex",
 	);
 
-	const msg = Message.from({
+	const msg = Message.parse(
 		data,
-		sdkVersion: "7.19.0",
-		ctx: {} as any,
-	});
+		{ sdkVersion: "7.19.0" } as any,
+	);
 	t.true(msg instanceof SerialAPISetup_GetSupportedCommandsResponse);
 	const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 		.supportedCommands;
@@ -29,11 +28,10 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (post-
 		"hex",
 	);
 
-	const msg = Message.from({
+	const msg = Message.parse(
 		data,
-		sdkVersion: "7.19.1",
-		ctx: {} as any,
-	});
+		{ sdkVersion: "7.19.1" } as any,
+	);
 	t.true(msg instanceof SerialAPISetup_GetSupportedCommandsResponse);
 	const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 		.supportedCommands;

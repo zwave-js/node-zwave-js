@@ -124,7 +124,7 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	): SetSUCNodeIdResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
-		return new SetSUCNodeIdResponse({
+		return new this({
 			wasExecuted,
 		});
 	}
@@ -167,7 +167,7 @@ export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 		const callbackId = raw.payload[0];
 		const status: SetSUCNodeIdStatus = raw.payload[1];
 
-		return new SetSUCNodeIdRequestStatusReport({
+		return new this({
 			callbackId,
 			status,
 		});

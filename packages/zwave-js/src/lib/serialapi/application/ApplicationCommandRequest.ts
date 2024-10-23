@@ -124,7 +124,7 @@ export class ApplicationCommandRequest extends Message
 			offset + commandLength,
 		);
 
-		return new ApplicationCommandRequest({
+		return new this({
 			routedBusy,
 			frameType,
 			isExploreFrame,

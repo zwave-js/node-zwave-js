@@ -63,7 +63,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 		const powerlevel: Powerlevel = raw.payload[offset++];
 		const callbackId = raw.payload[offset++];
 
-		return new SendTestFrameRequest({
+		return new this({
 			testNodeId,
 			powerlevel,
 			callbackId,
@@ -118,7 +118,7 @@ export class SendTestFrameResponse extends Message {
 	): SendTestFrameResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new SendTestFrameResponse({
+		return new this({
 			wasSent,
 		});
 	}
@@ -155,7 +155,7 @@ export class SendTestFrameTransmitReport extends SendTestFrameRequestBase
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new SendTestFrameTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

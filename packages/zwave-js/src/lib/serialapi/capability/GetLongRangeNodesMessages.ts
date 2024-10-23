@@ -44,7 +44,7 @@ export class GetLongRangeNodesRequest extends Message {
 	): GetLongRangeNodesRequest {
 		const segmentNumber = raw.payload[0];
 
-		return new GetLongRangeNodesRequest({
+		return new this({
 			segmentNumber,
 		});
 	}
@@ -99,7 +99,7 @@ export class GetLongRangeNodesResponse extends Message {
 			nodeIds = [];
 		}
 
-		return new GetLongRangeNodesResponse({
+		return new this({
 			moreNodes,
 			segmentNumber,
 			nodeIds,

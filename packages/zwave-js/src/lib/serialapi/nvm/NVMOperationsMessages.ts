@@ -259,7 +259,7 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 			buffer = Buffer.from([]);
 		}
 
-		return new NVMOperationsResponse({
+		return new this({
 			status,
 			offsetOrSize,
 			buffer,

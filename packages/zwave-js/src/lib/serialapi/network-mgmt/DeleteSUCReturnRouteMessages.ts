@@ -76,7 +76,7 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 		const nodeId = raw.payload[0];
 		const callbackId = raw.payload[1];
 
-		return new DeleteSUCReturnRouteRequest({
+		return new this({
 			nodeId,
 			callbackId,
 		});
@@ -115,7 +115,7 @@ export class DeleteSUCReturnRouteResponse extends Message
 	): DeleteSUCReturnRouteResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
-		return new DeleteSUCReturnRouteResponse({
+		return new this({
 			wasExecuted,
 		});
 	}
@@ -165,7 +165,7 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new DeleteSUCReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

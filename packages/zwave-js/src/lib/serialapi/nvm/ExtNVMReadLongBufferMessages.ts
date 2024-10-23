@@ -100,7 +100,7 @@ export class ExtNVMReadLongBufferResponse extends Message {
 		raw: MessageRaw,
 		_ctx: MessageParsingContext,
 	): ExtNVMReadLongBufferResponse {
-		return new ExtNVMReadLongBufferResponse({
+		return new this({
 			buffer: raw.payload,
 		});
 	}

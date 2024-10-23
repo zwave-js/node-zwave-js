@@ -44,7 +44,7 @@ export class GetControllerVersionResponse extends Message {
 		const controllerType: ZWaveLibraryTypes =
 			raw.payload[libraryVersion.length + 1];
 
-		return new GetControllerVersionResponse({
+		return new this({
 			libraryVersion,
 			controllerType,
 		});

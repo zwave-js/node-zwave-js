@@ -53,7 +53,7 @@ export class HardResetCallback extends HardResetRequestBase {
 	): HardResetCallback {
 		const callbackId = raw.payload[0];
 
-		return new HardResetCallback({
+		return new this({
 			callbackId,
 		});
 	}

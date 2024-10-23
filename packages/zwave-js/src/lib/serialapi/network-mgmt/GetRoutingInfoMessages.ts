@@ -93,7 +93,7 @@ export class GetRoutingInfoResponse extends Message {
 			nodeIds = [];
 		}
 
-		return new GetRoutingInfoResponse({
+		return new this({
 			nodeIds,
 		});
 	}

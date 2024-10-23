@@ -116,7 +116,7 @@ export class AssignReturnRouteResponse extends Message
 	): AssignReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
-		return new AssignReturnRouteResponse({
+		return new this({
 			hasStarted,
 		});
 	}
@@ -162,7 +162,7 @@ export class AssignReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new AssignReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

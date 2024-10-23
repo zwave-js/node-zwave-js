@@ -46,7 +46,7 @@ export class GetControllerIdResponse extends Message {
 			4,
 		);
 
-		return new GetControllerIdResponse({
+		return new this({
 			homeId,
 			ownNodeId,
 		});

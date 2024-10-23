@@ -98,7 +98,7 @@ export class DeleteReturnRouteResponse extends Message
 	): DeleteReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
-		return new DeleteReturnRouteResponse({
+		return new this({
 			hasStarted,
 		});
 	}
@@ -144,7 +144,7 @@ export class DeleteReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new DeleteReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

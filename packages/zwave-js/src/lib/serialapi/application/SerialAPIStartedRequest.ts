@@ -96,7 +96,7 @@ export class SerialAPIStartedRequest extends Message {
 			supportsLongRange = !!(protocols & 0b1);
 		}
 
-		return new SerialAPIStartedRequest({
+		return new this({
 			wakeUpReason,
 			watchdogEnabled,
 			isListening,

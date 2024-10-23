@@ -99,7 +99,7 @@ export class GetNVMIdResponse extends Message {
 		const memoryType: NVMType = raw.payload[2];
 		const memorySize: NVMSize = raw.payload[3];
 
-		return new GetNVMIdResponse({
+		return new this({
 			nvmManufacturerId,
 			memoryType,
 			memorySize,

@@ -63,7 +63,7 @@ export class GetProtocolVersionResponse extends Message {
 			}
 		}
 
-		return new GetProtocolVersionResponse({
+		return new this({
 			protocolType,
 			protocolVersion,
 			applicationFrameworkBuildNumber,

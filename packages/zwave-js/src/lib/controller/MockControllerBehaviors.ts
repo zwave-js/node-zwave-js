@@ -90,7 +90,7 @@ function createLazySendDataPayload(
 ): () => CommandClass {
 	return () => {
 		try {
-			const cmd = CommandClass.parse(msg.payload, {
+			const cmd = CommandClass.parse(msg.serializedCC!, {
 				sourceNodeId: controller.ownNodeId,
 				__internalIsMockNode: true,
 				...node.encodingContext,

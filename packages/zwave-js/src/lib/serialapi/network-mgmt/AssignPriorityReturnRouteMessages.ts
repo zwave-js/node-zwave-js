@@ -156,7 +156,7 @@ export class AssignPriorityReturnRouteResponse extends Message
 	): AssignPriorityReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
-		return new AssignPriorityReturnRouteResponse({
+		return new this({
 			hasStarted,
 		});
 	}
@@ -201,7 +201,7 @@ export class AssignPriorityReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new AssignPriorityReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

@@ -89,7 +89,7 @@ export class SetRFReceiveModeResponse extends Message
 	): SetRFReceiveModeResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SetRFReceiveModeResponse({
+		return new this({
 			success,
 		});
 	}

@@ -206,7 +206,7 @@ export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
 	): FirmwareUpdateNVM_InitResponse {
 		const supported = raw.payload[0] !== 0;
 
-		return new FirmwareUpdateNVM_InitResponse({
+		return new this({
 			supported,
 		});
 	}
@@ -248,7 +248,7 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 	): FirmwareUpdateNVM_SetNewImageRequest {
 		const newImage: boolean = raw.payload[0] !== 0;
 
-		return new FirmwareUpdateNVM_SetNewImageRequest({
+		return new this({
 			newImage,
 		});
 	}
@@ -294,7 +294,7 @@ export class FirmwareUpdateNVM_SetNewImageResponse
 	): FirmwareUpdateNVM_SetNewImageResponse {
 		const changed = raw.payload[0] !== 0;
 
-		return new FirmwareUpdateNVM_SetNewImageResponse({
+		return new this({
 			changed,
 		});
 	}
@@ -341,7 +341,7 @@ export class FirmwareUpdateNVM_GetNewImageResponse
 	): FirmwareUpdateNVM_GetNewImageResponse {
 		const newImage: boolean = raw.payload[0] !== 0;
 
-		return new FirmwareUpdateNVM_GetNewImageResponse({
+		return new this({
 			newImage,
 		});
 	}
@@ -390,7 +390,7 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 		const blockLength = raw.payload.readUInt16BE(3);
 		const crcSeed = raw.payload.readUInt16BE(5);
 
-		return new FirmwareUpdateNVM_UpdateCRC16Request({
+		return new this({
 			crcSeed,
 			offset,
 			blockLength,
@@ -451,7 +451,7 @@ export class FirmwareUpdateNVM_UpdateCRC16Response
 		validatePayload(raw.payload.length >= 2);
 		const crc16 = raw.payload.readUInt16BE(0);
 
-		return new FirmwareUpdateNVM_UpdateCRC16Response({
+		return new this({
 			crc16,
 		});
 	}
@@ -504,7 +504,7 @@ export class FirmwareUpdateNVM_IsValidCRC16Response
 		const isValid = raw.payload[0] !== 0;
 		// There are two more bytes containing the CRC result, but we don't care about that
 
-		return new FirmwareUpdateNVM_IsValidCRC16Response({
+		return new this({
 			isValid,
 		});
 	}
@@ -546,7 +546,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 		const bufferLength = raw.payload.readUInt16BE(3);
 		const buffer = raw.payload.subarray(5, 5 + bufferLength);
 
-		return new FirmwareUpdateNVM_WriteRequest({
+		return new this({
 			offset,
 			buffer,
 		});
@@ -597,7 +597,7 @@ export class FirmwareUpdateNVM_WriteResponse extends FirmwareUpdateNVMResponse {
 	): FirmwareUpdateNVM_WriteResponse {
 		const overwritten = raw.payload[0] !== 0;
 
-		return new FirmwareUpdateNVM_WriteResponse({
+		return new this({
 			overwritten,
 		});
 	}

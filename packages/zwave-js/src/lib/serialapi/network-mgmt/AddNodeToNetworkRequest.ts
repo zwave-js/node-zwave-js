@@ -324,7 +324,7 @@ export class AddNodeToNetworkRequestStatusReport
 			}
 		}
 
-		return new AddNodeToNetworkRequestStatusReport({
+		return new this({
 			callbackId,
 			status,
 			statusContext,

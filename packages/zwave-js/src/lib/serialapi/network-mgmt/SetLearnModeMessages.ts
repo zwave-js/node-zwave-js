@@ -124,7 +124,7 @@ export class SetLearnModeResponse extends Message implements SuccessIndicator {
 	): SetLearnModeResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SetLearnModeResponse({
+		return new this({
 			success,
 		});
 	}
@@ -177,7 +177,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 			statusMessage = raw.payload.subarray(4, 4 + msgLength);
 		}
 
-		return new SetLearnModeCallback({
+		return new this({
 			callbackId,
 			status,
 			assignedNodeId,

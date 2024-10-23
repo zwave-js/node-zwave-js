@@ -145,7 +145,7 @@ export class AssignPrioritySUCReturnRouteResponse extends Message
 	): AssignPrioritySUCReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
-		return new AssignPrioritySUCReturnRouteResponse({
+		return new this({
 			hasStarted,
 		});
 	}
@@ -191,7 +191,7 @@ export class AssignPrioritySUCReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new AssignPrioritySUCReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

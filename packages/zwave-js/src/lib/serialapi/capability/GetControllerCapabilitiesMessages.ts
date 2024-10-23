@@ -66,7 +66,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 			capabilityFlags & ControllerCapabilityFlags.NoNodesIncluded
 		);
 
-		return new GetControllerCapabilitiesResponse({
+		return new this({
 			isSecondary,
 			isUsingHomeIdFromOtherNetwork,
 			isSISPresent,

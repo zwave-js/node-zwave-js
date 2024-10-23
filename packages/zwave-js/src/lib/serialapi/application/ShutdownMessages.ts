@@ -41,7 +41,7 @@ export class ShutdownResponse extends Message {
 	): ShutdownResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new ShutdownResponse({
+		return new this({
 			success,
 		});
 	}

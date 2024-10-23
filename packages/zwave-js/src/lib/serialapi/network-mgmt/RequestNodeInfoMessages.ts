@@ -45,7 +45,7 @@ export class RequestNodeInfoResponse extends Message
 	): RequestNodeInfoResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new RequestNodeInfoResponse({
+		return new this({
 			wasSent,
 		});
 	}
@@ -106,7 +106,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 			0,
 		).nodeId;
 
-		return new RequestNodeInfoRequest({
+		return new this({
 			nodeId,
 		});
 	}

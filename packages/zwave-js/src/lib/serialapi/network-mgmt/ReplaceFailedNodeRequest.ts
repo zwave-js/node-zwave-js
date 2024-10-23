@@ -102,7 +102,7 @@ export class ReplaceFailedNodeResponse extends Message
 	): ReplaceFailedNodeResponse {
 		const replaceStatus: ReplaceFailedNodeStartFlags = raw.payload[0];
 
-		return new ReplaceFailedNodeResponse({
+		return new this({
 			replaceStatus,
 		});
 	}
@@ -141,7 +141,7 @@ export class ReplaceFailedNodeRequestStatusReport
 		const callbackId = raw.payload[0];
 		const replaceStatus: ReplaceFailedNodeStatus = raw.payload[1];
 
-		return new ReplaceFailedNodeRequestStatusReport({
+		return new this({
 			callbackId,
 			replaceStatus,
 		});

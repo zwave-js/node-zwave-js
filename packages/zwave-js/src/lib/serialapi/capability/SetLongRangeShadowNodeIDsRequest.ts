@@ -39,7 +39,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 			NUM_LONG_RANGE_SHADOW_NODE_IDS,
 		);
 
-		return new SetLongRangeShadowNodeIDsRequest({
+		return new this({
 			shadowNodeIds,
 		});
 	}

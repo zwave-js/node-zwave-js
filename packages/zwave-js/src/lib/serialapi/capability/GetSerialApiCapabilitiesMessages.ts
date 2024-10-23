@@ -61,7 +61,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			functionBitMask,
 		);
 
-		return new GetSerialApiCapabilitiesResponse({
+		return new this({
 			firmwareVersion,
 			manufacturerId,
 			productType,

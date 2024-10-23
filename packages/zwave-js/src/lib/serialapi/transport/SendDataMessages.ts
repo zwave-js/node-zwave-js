@@ -132,7 +132,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			offset + serializedCCLength,
 		);
 
-		return new SendDataRequest({
+		return new this({
 			transmitOptions,
 			callbackId,
 			nodeId,
@@ -262,7 +262,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 			raw.payload.subarray(2),
 		);
 
-		return new SendDataRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 			txReport,
@@ -329,7 +329,7 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 	): SendDataResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new SendDataResponse({
+		return new this({
 			wasSent,
 		});
 	}
@@ -464,7 +464,7 @@ export class SendDataMulticastRequest<
 		// 	command = undefined as any;
 		// }
 
-		return new SendDataMulticastRequest({
+		return new this({
 			transmitOptions,
 			callbackId,
 			nodeIds: nodeIds as MulticastDestination,
@@ -571,7 +571,7 @@ export class SendDataMulticastRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new SendDataMulticastRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});
@@ -624,7 +624,7 @@ export class SendDataMulticastResponse extends Message
 	): SendDataMulticastResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new SendDataMulticastResponse({
+		return new this({
 			wasSent,
 		});
 	}

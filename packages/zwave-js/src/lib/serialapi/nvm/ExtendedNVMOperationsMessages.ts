@@ -281,7 +281,7 @@ export class ExtendedNVMOperationsResponse extends Message
 			bufferOrBitmask = Buffer.from([]);
 		}
 
-		return new ExtendedNVMOperationsResponse({
+		return new this({
 			status,
 			offsetOrSize,
 			bufferOrBitmask,

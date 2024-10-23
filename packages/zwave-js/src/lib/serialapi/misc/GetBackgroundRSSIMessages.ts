@@ -53,7 +53,7 @@ export class GetBackgroundRSSIResponse extends Message {
 		const rssiChannel2 = tryParseRSSI(raw.payload, 2);
 		const rssiChannel3 = tryParseRSSI(raw.payload, 3);
 
-		return new GetBackgroundRSSIResponse({
+		return new this({
 			rssiChannel0,
 			rssiChannel1,
 			rssiChannel2,

@@ -109,7 +109,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			zwaveChipType = getZWaveChipType(chipType, chipVersion);
 		}
 
-		return new GetSerialApiInitDataResponse({
+		return new this({
 			zwaveApiVersion,
 			nodeType,
 			supportsTimers,

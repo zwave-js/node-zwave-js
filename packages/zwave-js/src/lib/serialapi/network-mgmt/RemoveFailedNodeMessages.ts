@@ -107,7 +107,7 @@ export class RemoveFailedNodeRequestStatusReport
 		const callbackId = raw.payload[0];
 		const removeStatus: RemoveFailedNodeStatus = raw.payload[1];
 
-		return new RemoveFailedNodeRequestStatusReport({
+		return new this({
 			callbackId,
 			removeStatus,
 		});
@@ -143,7 +143,7 @@ export class RemoveFailedNodeResponse extends Message
 	): RemoveFailedNodeResponse {
 		const removeStatus: RemoveFailedNodeStartFlags = raw.payload[0];
 
-		return new RemoveFailedNodeResponse({
+		return new this({
 			removeStatus,
 		});
 	}

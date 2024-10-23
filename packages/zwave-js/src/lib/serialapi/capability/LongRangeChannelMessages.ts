@@ -65,7 +65,7 @@ export class GetLongRangeChannelResponse extends Message {
 			autoChannelSelectionActive = false;
 		}
 
-		return new GetLongRangeChannelResponse({
+		return new this({
 			channel,
 			supportsAutoChannelSelection,
 			autoChannelSelectionActive,
@@ -147,7 +147,7 @@ export class SetLongRangeChannelResponse extends Message
 	): SetLongRangeChannelResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SetLongRangeChannelResponse({
+		return new this({
 			success,
 		});
 	}

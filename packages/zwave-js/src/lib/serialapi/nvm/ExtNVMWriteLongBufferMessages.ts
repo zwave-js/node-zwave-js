@@ -104,7 +104,7 @@ export class ExtNVMWriteLongBufferResponse extends Message {
 	): ExtNVMWriteLongBufferResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new ExtNVMWriteLongBufferResponse({
+		return new this({
 			success,
 		});
 	}

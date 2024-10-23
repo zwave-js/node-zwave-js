@@ -39,7 +39,7 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = new Message({ data: original, ctx: {} as any });
+		const parsed = Message.parse(original, {} as any);
 		t.deepEqual(parsed.serialize({} as any), original);
 	}
 });
@@ -91,7 +91,7 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 	for (const [message, msg, code] of brokenMessages) {
 		assertZWaveError(
 			t,
-			() => new Message({ data: message, ctx: {} as any }),
+			() => Message.parse(message, {} as any),
 			{
 				messageMatches: msg,
 				errorCode: code,
@@ -302,9 +302,12 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	t.deepEqual(msg4.toJSON(), json4);
 });
 
-test("getConstructor() should return `Message` for an unknown packet type", (t) => {
+test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
 	const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.is(Message.getConstructor(unknown), Message);
+	t.is(
+		Message.parse(unknown, {} as any).constructor,
+		Message,
+	);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {

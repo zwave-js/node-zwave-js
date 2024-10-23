@@ -74,7 +74,7 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 		const nodeId = raw.payload[0];
 		const callbackId = raw.payload[1];
 
-		return new AssignSUCReturnRouteRequest({
+		return new this({
 			nodeId,
 			callbackId,
 		});
@@ -113,7 +113,7 @@ export class AssignSUCReturnRouteResponse extends Message
 	): AssignSUCReturnRouteResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
-		return new AssignSUCReturnRouteResponse({
+		return new this({
 			wasExecuted,
 		});
 	}
@@ -163,7 +163,7 @@ export class AssignSUCReturnRouteRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new AssignSUCReturnRouteRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});

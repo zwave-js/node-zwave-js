@@ -223,7 +223,7 @@ export class SerialAPISetup_CommandUnsupportedResponse
 		// The payload contains which command is unsupported
 		const command: any = raw.payload[0];
 
-		return new SerialAPISetup_CommandUnsupportedResponse({
+		return new this({
 			command,
 		});
 	}
@@ -314,7 +314,7 @@ export class SerialAPISetup_GetSupportedCommandsResponse
 			);
 		}
 
-		return new SerialAPISetup_GetSupportedCommandsResponse({
+		return new this({
 			supportedCommands,
 		});
 	}
@@ -345,7 +345,7 @@ export class SerialAPISetup_SetTXStatusReportRequest
 	): SerialAPISetup_SetTXStatusReportRequest {
 		const enabled = raw.payload[0] === 0xff;
 
-		return new SerialAPISetup_SetTXStatusReportRequest({
+		return new this({
 			enabled,
 		});
 	}
@@ -391,7 +391,7 @@ export class SerialAPISetup_SetTXStatusReportResponse
 	): SerialAPISetup_SetTXStatusReportResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetTXStatusReportResponse({
+		return new this({
 			success,
 		});
 	}
@@ -480,7 +480,7 @@ export class SerialAPISetup_SetNodeIDTypeResponse extends SerialAPISetupResponse
 	): SerialAPISetup_SetNodeIDTypeResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetNodeIDTypeResponse({
+		return new this({
 			success,
 		});
 	}
@@ -524,7 +524,7 @@ export class SerialAPISetup_GetRFRegionResponse extends SerialAPISetupResponse {
 	): SerialAPISetup_GetRFRegionResponse {
 		const region: RFRegion = raw.payload[0];
 
-		return new SerialAPISetup_GetRFRegionResponse({
+		return new this({
 			region,
 		});
 	}
@@ -561,7 +561,7 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 	): SerialAPISetup_SetRFRegionRequest {
 		const region: RFRegion = raw.payload[0];
 
-		return new SerialAPISetup_SetRFRegionRequest({
+		return new this({
 			region,
 		});
 	}
@@ -603,7 +603,7 @@ export class SerialAPISetup_SetRFRegionResponse extends SerialAPISetupResponse
 	): SerialAPISetup_SetRFRegionResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetRFRegionResponse({
+		return new this({
 			success,
 		});
 	}
@@ -658,7 +658,7 @@ export class SerialAPISetup_GetPowerlevelResponse
 		const powerlevel = raw.payload.readInt8(0) / 10;
 		const measured0dBm = raw.payload.readInt8(1) / 10;
 
-		return new SerialAPISetup_GetPowerlevelResponse({
+		return new this({
 			powerlevel,
 			measured0dBm,
 		});
@@ -772,7 +772,7 @@ export class SerialAPISetup_SetPowerlevelResponse extends SerialAPISetupResponse
 	): SerialAPISetup_SetPowerlevelResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetPowerlevelResponse({
+		return new this({
 			success,
 		});
 	}
@@ -827,7 +827,7 @@ export class SerialAPISetup_GetPowerlevel16BitResponse
 		const powerlevel = raw.payload.readInt16BE(0) / 10;
 		const measured0dBm = raw.payload.readInt16BE(2) / 10;
 
-		return new SerialAPISetup_GetPowerlevel16BitResponse({
+		return new this({
 			powerlevel,
 			measured0dBm,
 		});
@@ -944,7 +944,7 @@ export class SerialAPISetup_SetPowerlevel16BitResponse
 	): SerialAPISetup_SetPowerlevel16BitResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetPowerlevel16BitResponse({
+		return new this({
 			success,
 		});
 	}
@@ -996,7 +996,7 @@ export class SerialAPISetup_GetLongRangeMaximumTxPowerResponse
 		// The values are in 0.1 dBm, signed
 		const limit = raw.payload.readInt16BE(0) / 10;
 
-		return new SerialAPISetup_GetLongRangeMaximumTxPowerResponse({
+		return new this({
 			limit,
 		});
 	}
@@ -1102,7 +1102,7 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerResponse
 	): SerialAPISetup_SetLongRangeMaximumTxPowerResponse {
 		const success = raw.payload[0] !== 0;
 
-		return new SerialAPISetup_SetLongRangeMaximumTxPowerResponse({
+		return new this({
 			success,
 		});
 	}
@@ -1152,7 +1152,7 @@ export class SerialAPISetup_GetMaximumPayloadSizeResponse
 	): SerialAPISetup_GetMaximumPayloadSizeResponse {
 		const maxPayloadSize = raw.payload[0];
 
-		return new SerialAPISetup_GetMaximumPayloadSizeResponse({
+		return new this({
 			maxPayloadSize,
 		});
 	}
@@ -1198,7 +1198,7 @@ export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 	): SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse {
 		const maxPayloadSize = raw.payload[0];
 
-		return new SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse({
+		return new this({
 			maxPayloadSize,
 		});
 	}
@@ -1249,7 +1249,7 @@ export class SerialAPISetup_GetSupportedRegionsResponse
 			...raw.payload.subarray(1, 1 + numRegions),
 		];
 
-		return new SerialAPISetup_GetSupportedRegionsResponse({
+		return new this({
 			supportedRegions,
 		});
 	}
@@ -1278,7 +1278,7 @@ export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 	): SerialAPISetup_GetRegionInfoRequest {
 		const region: RFRegion = raw.payload[0];
 
-		return new SerialAPISetup_GetRegionInfoRequest({
+		return new this({
 			region,
 		});
 	}
@@ -1340,7 +1340,7 @@ export class SerialAPISetup_GetRegionInfoResponse
 			}
 		}
 
-		return new SerialAPISetup_GetRegionInfoResponse({
+		return new this({
 			region,
 			supportsZWave,
 			supportsLongRange,

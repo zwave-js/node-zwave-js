@@ -48,7 +48,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 		const requestedNodeId =
 			parseNodeID(raw.payload, ctx.nodeIdType, 0).nodeId;
 
-		return new GetNodeProtocolInfoRequest({
+		return new this({
 			requestedNodeId,
 		});
 	}
@@ -129,7 +129,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 			? raw.payload[5]
 			: 0x00;
 
-		return new GetNodeProtocolInfoResponse({
+		return new this({
 			isListening,
 			isFrequentListening,
 			isRouting,

@@ -88,7 +88,7 @@ export class ExtNVMReadLongByteResponse extends Message {
 	): ExtNVMReadLongByteResponse {
 		const byte = raw.payload[0];
 
-		return new ExtNVMReadLongByteResponse({
+		return new this({
 			byte,
 		});
 	}

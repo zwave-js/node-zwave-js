@@ -127,7 +127,7 @@ export class ApplicationUpdateRequestWithNodeInfo
 			ctx.nodeIdType,
 		);
 
-		return new ApplicationUpdateRequestWithNodeInfo({
+		return new this({
 			nodeInformation,
 		});
 	}
@@ -188,7 +188,7 @@ export class ApplicationUpdateRequestNodeRemoved
 		const { nodeId } = parseNodeID(raw.payload, ctx.nodeIdType, 0);
 		// byte 1/2 is 0, meaning unknown
 
-		return new ApplicationUpdateRequestNodeRemoved({
+		return new this({
 			nodeId,
 		});
 	}
@@ -247,7 +247,7 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 			raw.payload.subarray(offset, offset + ccLength),
 		).supportedCCs;
 
-		return new ApplicationUpdateRequestSmartStartHomeIDReceivedBase({
+		return new this({
 			remoteNodeId,
 			nwiHomeId,
 			basicDeviceClass,
@@ -328,7 +328,7 @@ export class ApplicationUpdateRequestSUCIdChanged
 		);
 		// byte 1/2 is 0, meaning unknown
 
-		return new ApplicationUpdateRequestSUCIdChanged({
+		return new this({
 			sucNodeID,
 		});
 	}

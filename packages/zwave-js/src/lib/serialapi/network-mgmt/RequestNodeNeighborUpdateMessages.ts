@@ -101,7 +101,7 @@ export class RequestNodeNeighborUpdateReport
 		const callbackId = raw.payload[0];
 		const updateStatus: NodeNeighborUpdateStatus = raw.payload[1];
 
-		return new RequestNodeNeighborUpdateReport({
+		return new this({
 			callbackId,
 			updateStatus,
 		});

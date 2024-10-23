@@ -158,7 +158,7 @@ export class SetPriorityRouteResponse extends Message
 		);
 		const success = raw.payload[bytesRead] !== 0;
 
-		return new SetPriorityRouteResponse({
+		return new this({
 			success,
 		});
 	}

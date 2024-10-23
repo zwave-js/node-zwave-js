@@ -65,7 +65,7 @@ export class SetSerialApiTimeoutsResponse extends Message {
 		const oldAckTimeout = raw.payload[0] * 10;
 		const oldByteTimeout = raw.payload[1] * 10;
 
-		return new SetSerialApiTimeoutsResponse({
+		return new this({
 			oldAckTimeout,
 			oldByteTimeout,
 		});

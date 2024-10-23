@@ -236,7 +236,7 @@ export class SendDataBridgeRequestTransmitReport
 			raw.payload.subarray(2),
 		);
 
-		return new SendDataBridgeRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 			txReport,
@@ -291,7 +291,7 @@ export class SendDataBridgeResponse extends Message
 	): SendDataBridgeResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new SendDataBridgeResponse({
+		return new this({
 			wasSent,
 		});
 	}
@@ -493,7 +493,7 @@ export class SendDataMulticastBridgeRequestTransmitReport
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
 
-		return new SendDataMulticastBridgeRequestTransmitReport({
+		return new this({
 			callbackId,
 			transmitStatus,
 		});
@@ -542,7 +542,7 @@ export class SendDataMulticastBridgeResponse extends Message
 	): SendDataMulticastBridgeResponse {
 		const wasSent = raw.payload[0] !== 0;
 
-		return new SendDataMulticastBridgeResponse({
+		return new this({
 			wasSent,
 		});
 	}

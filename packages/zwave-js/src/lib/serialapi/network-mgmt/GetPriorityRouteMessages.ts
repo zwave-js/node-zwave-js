@@ -115,7 +115,7 @@ export class GetPriorityRouteResponse extends Message {
 			routeSpeed = raw.payload[offset + MAX_REPEATERS];
 		}
 
-		return new GetPriorityRouteResponse({
+		return new this({
 			destinationNodeId,
 			routeKind,
 			repeaters,

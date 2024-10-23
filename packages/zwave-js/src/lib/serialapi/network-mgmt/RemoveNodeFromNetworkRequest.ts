@@ -173,7 +173,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 			}
 		}
 
-		return new RemoveNodeFromNetworkRequestStatusReport({
+		return new this({
 			callbackId,
 			status,
 			statusContext,

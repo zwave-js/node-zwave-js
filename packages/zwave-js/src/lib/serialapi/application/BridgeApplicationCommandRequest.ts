@@ -139,7 +139,7 @@ export class BridgeApplicationCommandRequest extends Message
 		offset += multicastNodesLength;
 		const rssi: number | undefined = tryParseRSSI(raw.payload, offset);
 
-		return new BridgeApplicationCommandRequest({
+		return new this({
 			routedBusy,
 			frameType,
 			isExploreFrame,

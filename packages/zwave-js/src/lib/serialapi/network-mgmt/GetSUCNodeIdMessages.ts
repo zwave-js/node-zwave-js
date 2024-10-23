@@ -41,7 +41,7 @@ export class GetSUCNodeIdResponse extends Message {
 			0,
 		).nodeId;
 
-		return new GetSUCNodeIdResponse({
+		return new this({
 			sucNodeId,
 		});
 	}
