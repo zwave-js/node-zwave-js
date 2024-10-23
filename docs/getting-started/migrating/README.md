@@ -1,5 +1,6 @@
 # Migrating from previous versions
 
+- [Migrating to v14](getting-started/migrating/v14.md)
 - [Migrating to v13](getting-started/migrating/v13.md)
 - [Migrating to v12](getting-started/migrating/v12.md)
 - [Migrating to v11](getting-started/migrating/v11.md)
