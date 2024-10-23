@@ -452,18 +452,6 @@ export class SendDataMulticastRequest<
 		offset++;
 		const callbackId: any = raw.payload[offset];
 
-		// let command: MulticastCC<CCType>;
-		// if (options.parseCCs !== false) {
-		// 	command = CommandClass.parse(serializedCC, {
-		// 		sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
-		// 		...ctx,
-		// 	}) as MulticastCC<CCType>;
-		// 	command.nodeId = nodeIds;
-		// } else {
-		// 	// Little hack for testing with a network mock. This will be parsed in the next step.
-		// 	command = undefined as any;
-		// }
-
 		return new this({
 			transmitOptions,
 			callbackId,

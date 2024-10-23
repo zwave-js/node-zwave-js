@@ -756,9 +756,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		keyof HostIDs | "nodeIdType"
 	>;
 
-	private getMessageEncodingContext(): MessageEncodingContext {
-		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
-		// but not for messages, yet those implicitly encode CCs
+	private getEncodingContext(): MessageEncodingContext & CCEncodingContext {
 		return {
 			...this.messageEncodingContext,
 			ownNodeId: this.controller.ownNodeId!,
@@ -768,8 +766,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	private getMessageParsingContext(): MessageParsingContext {
-		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
-		// but not for messages, yet those implicitly decode CCs
 		return {
 			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
 			sdkVersion: this._controller?.sdkVersion,
@@ -780,20 +776,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		};
 	}
 
-	private getCCEncodingContext(): MessageEncodingContext & CCEncodingContext {
-		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
-		// but not for messages, yet those implicitly encode CCs
-		return {
-			...this.messageEncodingContext,
-			ownNodeId: this.controller.ownNodeId!,
-			homeId: this.controller.homeId!,
-			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
-		};
-	}
-
-	private getCCParsingContext(): Omit<CCParsingContext, "sourceNodeId"> {
-		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
-		// but not for messages, yet those implicitly decode CCs
+	private getCCParsingContext(): Omit<
+		CCParsingContext,
+		"sourceNodeId" | "frameType"
+	> {
 		return {
 			...this.messageEncodingContext,
 			ownNodeId: this.controller.ownNodeId!,
@@ -3555,6 +3541,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					{
 						...this.getCCParsingContext(),
 						sourceNodeId: msg.getNodeId()!,
+						frameType: msg.frameType,
 					},
 				);
 
@@ -3656,7 +3643,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			let wasMessageLogged = false;
-			if (containsCC(msg)) {
+			if (isCommandRequest(msg) && containsCC(msg)) {
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
 				// we're not set up to handle things like this. Reply to the nonce get
 				// and handle the encapsulation part normally
@@ -4491,7 +4478,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 * Assembles partial CCs of in a message body. Returns `true` when the message is complete and can be handled further.
 	 * If the message expects another partial one, this returns `false`.
 	 */
-	private assemblePartialCCs(msg: Message & ContainsCC): boolean {
+	private assemblePartialCCs(msg: CommandRequest & ContainsCC): boolean {
 		let command: CommandClass | undefined = msg.command;
 		// We search for the every CC that provides us with a session ID
 		// There might be newly-completed CCs that contain a partial CC,
@@ -4519,6 +4506,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 						command.mergePartialCCs(session, {
 							...this.getCCParsingContext(),
 							sourceNodeId: msg.command.nodeId as number,
+							frameType: msg.frameType,
 						});
 						// Ensure there are no errors
 						assertValidCCs(msg);
@@ -5858,7 +5846,7 @@ ${handlers.length} left`,
 
 		const machine = createSerialAPICommandMachine(
 			msg,
-			msg.serialize(this.getCCEncodingContext()),
+			msg.serialize(this.getEncodingContext()),
 			{
 				sendData: (data) => this.writeSerial(data),
 				sendDataAbort: () => this.abortSendData(),
@@ -6057,7 +6045,7 @@ ${handlers.length} left`,
 		// Create the transaction
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
-			this.getCCEncodingContext(),
+			this.getEncodingContext(),
 			msg,
 			(msg, _result) => {
 				this.handleSerialAPICommandResult(msg, options, _result);
@@ -6423,7 +6411,7 @@ ${handlers.length} left`,
 		try {
 			const abort = new SendDataAbort();
 			await this.writeSerial(
-				abort.serialize(this.getCCEncodingContext()),
+				abort.serialize(this.getEncodingContext()),
 			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
@@ -7117,7 +7105,7 @@ ${handlers.length} left`,
 	}
 
 	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-		return msg.serializeCC(this.getCCEncodingContext()).length
+		return msg.serializeCC(this.getEncodingContext()).length
 			> this.getMaxPayloadLength(msg);
 	}
 

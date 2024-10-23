@@ -1318,6 +1318,7 @@ export class NotificationCCReport extends NotificationCC {
 					// Convert CommandClass instances to a standardized object representation
 					const cc = CommandClass.parse(this.eventParameters, {
 						...ctx,
+						frameType: "singlecast",
 						sourceNodeId: this.nodeId as number,
 						// Security encapsulation is handled outside of this CC,
 						// so it is not needed here:

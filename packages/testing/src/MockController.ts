@@ -236,7 +236,6 @@ export class MockController {
 			msg = Message.parse(data, {
 				...this.parsingContext,
 				origin: MessageOrigin.Host,
-				// FIXME: parseCCs: false should be used everywhere
 			});
 			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {

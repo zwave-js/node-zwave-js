@@ -8,9 +8,12 @@ import {
 import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type FrameType,
 	type LogConfig,
 	MPDUHeaderType,
 	type MaybeNotKnown,
+	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	type RSSI,
 	SPANState,
 	SecurityClass,
@@ -265,7 +268,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private serial: ZnifferSerialPortBase | undefined;
 	private parsingContext: Omit<
 		CCParsingContext,
-		keyof HostIDs | "sourceNodeId" | keyof SecurityManagers
+		keyof HostIDs | "sourceNodeId" | "frameType" | keyof SecurityManagers
 	>;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;
@@ -565,6 +568,13 @@ supported frequencies: ${
 				}
 
 				// TODO: Support parsing multicast S2 frames
+				const frameType: FrameType =
+					mpdu.headerType === MPDUHeaderType.Multicast
+						? "multicast"
+						: (destNodeId === NODE_ID_BROADCAST
+								|| destNodeId === NODE_ID_BROADCAST_LR)
+						? "broadcast"
+						: "singlecast";
 				try {
 					cc = CommandClass.parse(
 						mpdu.payload,
@@ -572,6 +582,7 @@ supported frequencies: ${
 							homeId: mpdu.homeId,
 							ownNodeId: destNodeId,
 							sourceNodeId: mpdu.sourceNodeId,
+							frameType,
 							securityManager: destSecurityManager,
 							securityManager2: destSecurityManager2,
 							securityManagerLR: destSecurityManagerLR,

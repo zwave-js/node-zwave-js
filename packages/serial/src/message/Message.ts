@@ -37,11 +37,8 @@ export enum MessageOrigin {
 export interface MessageParsingContext extends HostIDs, GetDeviceConfig {
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;
-
 	sdkVersion: string | undefined;
-
 	requestStorage: Map<FunctionType, Record<string, unknown>> | undefined;
-
 	origin?: MessageOrigin;
 }
 
@@ -49,15 +46,13 @@ export interface MessageBaseOptions {
 	callbackId?: number;
 }
 
-export interface MessageCreationOptions extends MessageBaseOptions {
+export interface MessageOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
 	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
 	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
 	payload?: Buffer;
 }
-
-export type MessageOptions = MessageCreationOptions;
 
 export interface MessageEncodingContext
 	extends
@@ -141,21 +136,6 @@ export class MessageRaw {
 	public withPayload(payload: Buffer): MessageRaw {
 		return new MessageRaw(this.type, this.functionType, payload);
 	}
-
-	// FIXME: Use this?
-	public serialize(): Buffer {
-		const ret = Buffer.allocUnsafe(this.payload.length + 5);
-		ret[0] = MessageHeaders.SOF;
-		// length of the following data, including the checksum
-		ret[1] = this.payload.length + 3;
-		// write the remaining data
-		ret[2] = this.type;
-		ret[3] = this.functionType;
-		this.payload.copy(ret, 4);
-		// followed by the checksum
-		ret[ret.length - 1] = computeChecksum(ret);
-		return ret;
-	}
 }
 
 /**
@@ -163,7 +143,7 @@ export class MessageRaw {
  */
 export class Message {
 	public constructor(
-		options: MessageCreationOptions = {},
+		options: MessageOptions = {},
 	) {
 		const {
 			// Try to determine the message type if none is given
@@ -201,22 +181,11 @@ export class Message {
 	public static parse(
 		data: Buffer,
 		ctx: MessageParsingContext,
-		// contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
 		const raw = MessageRaw.parse(data);
 
 		const Constructor = getMessageConstructor(raw.type, raw.functionType)
 			?? Message;
-
-		// Take the context out of the context store if it exists
-		// FIXME: Is there a better way to do this?
-		// if (contextStore) {
-		// 	const functionType = getFunctionTypeStatic(Constructor)!;
-		// 	if (contextStore.has(functionType)) {
-		// 		options.context = contextStore.get(functionType)!;
-		// 		contextStore.delete(functionType);
-		// 	}
-		// }
 
 		return Constructor.from(raw, ctx);
 	}
@@ -300,18 +269,6 @@ export class Message {
 		// followed by the checksum
 		ret[ret.length - 1] = computeChecksum(ret);
 		return ret;
-	}
-
-	/**
-	 * Checks if there's enough data in the buffer to deserialize
-	 */
-	public static isComplete(data?: Buffer): boolean {
-		if (!data || !data.length || data.length < 5) return false; // not yet
-
-		const messageLength = getMessageLength(data);
-		if (data.length < messageLength) return false; // not yet
-
-		return true; // probably, but the checksum may be wrong
 	}
 
 	/** Generates a representation of this Message for the log */

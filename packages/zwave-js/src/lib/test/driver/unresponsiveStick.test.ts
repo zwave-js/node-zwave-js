@@ -46,7 +46,7 @@ integrationTest(
 			mockController.autoAckHostMessages = false;
 
 			const ids = await driver.sendMessage<GetControllerIdResponse>(
-				new GetControllerIdRequest(driver),
+				new GetControllerIdRequest(),
 				{ supportCheck: false },
 			);
 
@@ -97,7 +97,7 @@ integrationTest(
 				t,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
-						new GetControllerIdRequest(driver),
+						new GetControllerIdRequest(),
 						{ supportCheck: false },
 					),
 				{
@@ -164,7 +164,7 @@ integrationTest(
 				t,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
-						new GetControllerIdRequest(driver),
+						new GetControllerIdRequest(),
 						{ supportCheck: false },
 					),
 				{

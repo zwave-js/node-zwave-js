@@ -191,16 +191,6 @@ export class CCRaw {
 	public withPayload(payload: Buffer): CCRaw {
 		return new CCRaw(this.ccId, this.ccCommand, payload);
 	}
-
-	// FIXME: Use this?
-	public serialize(): Buffer {
-		const ccIdLength = this.ccId >= 0xf100 ? 2 : 1;
-		const data = Buffer.allocUnsafe(ccIdLength + 1 + this.payload.length);
-		data.writeUIntBE(this.ccId, 0, ccIdLength);
-		data[ccIdLength] = this.ccCommand ?? 0;
-		this.payload.copy(data, ccIdLength + 1);
-		return data;
-	}
 }
 
 // @publicAPI
