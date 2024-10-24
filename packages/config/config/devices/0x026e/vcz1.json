@@ -17,7 +17,7 @@
 	"metadata": {
 		"inclusion": "Press and hold the programming button until the LED light bar begins to flash green then release the button.",
 		"exclusion": "Press and hold the programming button until the LED light bar begins to flash green then release the button.",
-		"reset": "Press and hold the programming button until the LEDs stop blinking. LEDs will  blink green, amber, red, and then finally turn off (about 15 seconds). Local Reset must be performed on both the controllers and motors and should only be used if the primary controller is no longer available.",
+		"reset": "Press and hold the programming button until the LEDs stop blinking. LEDs will blink green, amber, red, and then finally turn off (about 15 seconds). Local Reset must be performed on both the controllers and motors and should only be used if the primary controller is no longer available.",
 		"wakeup": "Press and release the programming button one time.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1786/Graber%20Virtual%20Cord%20Owner's%20Manual.pdf"
 	},
