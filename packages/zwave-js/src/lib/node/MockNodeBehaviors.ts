@@ -30,10 +30,12 @@ import {
 	MultiChannelCCHooks,
 } from "./mockCCBehaviors/MultiChannel";
 import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
+import { MultilevelSwitchCCBehaviors } from "./mockCCBehaviors/MultilevelSwitch";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
 import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
+import { ThermostatSetbackCCBehaviors } from "./mockCCBehaviors/ThermostatSetback";
 import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
 import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
 import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
@@ -186,11 +188,13 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...ManufacturerSpecificCCBehaviors,
 		...MeterCCBehaviors,
 		...MultilevelSensorCCBehaviors,
+		...MultilevelSwitchCCBehaviors,
 		...NotificationCCBehaviors,
 		...ScheduleEntryLockCCBehaviors,
 		...SoundSwitchCCBehaviors,
 		...ThermostatModeCCBehaviors,
 		...ThermostatSetpointCCBehaviors,
+		...ThermostatSetbackCCBehaviors,
 		...UserCodeCCBehaviors,
 		...WindowCoveringCCBehaviors,
 	];

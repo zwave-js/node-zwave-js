@@ -15,6 +15,7 @@ import {
 	getCCName,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
+import { type Task } from "../driver/Task";
 
 function getValue<T>(
 	applHost: ZWaveApplicationHost,
@@ -357,4 +358,9 @@ export function getDefinedValueIDsInternal(
 
 	// Translate the remaining value IDs before exposing them to applications
 	return ret.map((id) => translateValueID(applHost, node, id));
+}
+
+/** Checks if a task belongs to a route rebuilding process */
+export function isFirmwareUpdateOTATask(t: Task<unknown>): boolean {
+	return t.tag?.id === "firmware-update-ota";
 }

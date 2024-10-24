@@ -36,5 +36,9 @@
 			["Battery", "get"],
 			["Thermostat Setpoint", "get", 1]
 		]
+	},
+	"metadata": {
+		"reset": "a) Remove the battery cover and take out one battery.\nb) Press and hold the (o) button for about 10 secs while reinserting the battery.",
+		"manual": "https://manuals-backend.z-wave.info/make.php?lang=en&sku=DAN_LC-13"
 	}
 }

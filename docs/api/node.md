@@ -1581,3 +1581,11 @@ interface RouteStatistics {
 	routeFailedBetween?: [number, number];
 }
 ```
+
+### `"node info received"`
+
+The node has sent a node information frame (NIF) Z-Wave JS did not expect. This can be caused by the user pushing a button on the device. Some older devices also send a NIF to notify the controller that their status has changed. The callback only references the node itself:
+
+```ts
+(node: ZWaveNode) => void
+```

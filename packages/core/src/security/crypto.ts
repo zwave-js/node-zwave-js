@@ -344,7 +344,7 @@ export function decryptAES128CCM(
 	try {
 		decipher.final();
 		authOK = true;
-	} catch (e) {
+	} catch {
 		/* nothing to do */
 	}
 	return { plaintext, authOK };

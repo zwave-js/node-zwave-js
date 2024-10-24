@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
 import "reflect-metadata";
@@ -66,6 +65,8 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
+		await wait(5000);
+		await driver.controller.hardReset();
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader

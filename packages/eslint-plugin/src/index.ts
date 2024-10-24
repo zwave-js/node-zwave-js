@@ -6,6 +6,7 @@ import { consistentDeviceConfigPropertyOrder } from "./rules/consistent-device-c
 import { consistentParamUnits } from "./rules/consistent-param-units.js";
 import { noDebugInTests } from "./rules/no-debug-in-tests.js";
 import { noForbiddenImports } from "./rules/no-forbidden-imports.js";
+import { noInternalCCTypes } from "./rules/no-internal-cc-types.js";
 import { noMisspelledNames } from "./rules/no-misspelled-names.js";
 import { noSurroundingWhitespace } from "./rules/no-surrounding-whitespace.js";
 import { noUnnecessaryMinMaxValue } from "./rules/no-unnecessary-min-max-value.js";
@@ -13,10 +14,7 @@ import { noUselessDescription } from "./rules/no-useless-description.js";
 import { noValueInOptionLabel } from "./rules/no-value-in-option-label.js";
 import { preferDefaultValue } from "./rules/prefer-defaultvalue.js";
 
-import { configFiles as configFilesConfig } from "./configs/configFiles.js";
-import { noInternalCCTypes } from "./rules/no-internal-cc-types.js";
-
-module.exports = {
+export default {
 	rules: {
 		"auto-unsigned": autoUnsigned,
 		"ccapi-validate-args": ccAPIValidateArgs,
@@ -34,8 +32,5 @@ module.exports = {
 		"no-value-in-option-label": noValueInOptionLabel,
 		"prefer-defaultvalue": preferDefaultValue,
 		"no-internal-cc-types": noInternalCCTypes,
-	},
-	configs: {
-		"config-files": configFilesConfig,
 	},
 };

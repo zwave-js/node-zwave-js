@@ -27,6 +27,9 @@ export enum ZWaveErrorCodes {
 	Driver_NoErrorHandler,
 	Driver_FeatureDisabled,
 
+	/** The task was removed from the task queue */
+	Driver_TaskRemoved,
+
 	/** There was a timeout while waiting for a message from the controller */
 	Controller_Timeout = 200,
 	/** There was a timeout while waiting for a response from a node */
@@ -87,6 +90,8 @@ export enum ZWaveErrorCodes {
 	NVM_InvalidFormat,
 	/** Not enough space in the NVM */
 	NVM_NoSpace,
+	/** The NVM hasn't been opened yet */
+	NVM_NotOpen,
 
 	CC_Invalid = 300,
 	CC_NoNodeID,

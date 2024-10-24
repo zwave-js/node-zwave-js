@@ -43,14 +43,10 @@ export type NodeInterviewFailedEventArgs =
 		errorMessage: string;
 		isFinal: boolean;
 	}
-	& (
-		| {
-			attempt: number;
-			maxAttempts: number;
-		}
-		// eslint-disable-next-line @typescript-eslint/ban-types
-		| {}
-	);
+	& AllOrNone<{
+		attempt: number;
+		maxAttempts: number;
+	}>;
 
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 export type ZWaveNodeValueUpdatedArgs =
@@ -213,6 +209,7 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	ready: (node: ZWaveNode) => void;
 	"interview stage completed": (node: ZWaveNode, stageName: string) => void;
 	"interview started": (node: ZWaveNode) => void;
+	"node info received": (node: ZWaveNode) => void;
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;

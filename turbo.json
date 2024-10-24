@@ -1,6 +1,6 @@
 {
 	"$schema": "https://turborepo.org/schema.json",
-	"pipeline": {
+	"tasks": {
 		"clean": {
 			"cache": false
 		},
@@ -37,7 +37,7 @@
 				// All source files are input
 				"packages/*/src/**",
 				// Exclude test files from inputs
-				"!**/*.test.ts"
+				"!*/**/*.test.ts"
 			],
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
@@ -50,8 +50,7 @@
 				":!:build/",
 				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
-				"../../.eslintrc.js",
-				"../../.eslintignore",
+				"../../eslint.config.mjs",
 				"../../tsconfig.all.json"
 			]
 		},
@@ -62,8 +61,7 @@
 				":!:build/",
 				"**/*.{ts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
-				"../../.eslintrc.js",
-				"../../.eslintignore",
+				"../../eslint.config.mjs",
 				"../../tsconfig.all.json"
 			],
 			"outputs": ["**/*.{ts,json}"]
@@ -74,7 +72,11 @@
 			// Dummy task to enable running all lint:zwave tasks
 		},
 		"@zwave-js/config#lint:zwave": {
-			"inputs": ["**/*.ts", "config/**/*.json"]
+			"inputs": [
+				"**/*.ts",
+				"config/**/*.json",
+				"config/eslint.config.mjs"
+			]
 		},
 
 		"extract-api": {

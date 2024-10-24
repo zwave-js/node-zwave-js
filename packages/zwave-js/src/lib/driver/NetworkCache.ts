@@ -51,6 +51,7 @@ export const cacheKeys = {
 		return {
 			_baseKey: nodeBaseKey,
 			_securityClassBaseKey: `${nodeBaseKey}securityClasses`,
+			_priorityReturnRouteBaseKey: `${nodeBaseKey}priorityReturnRoute`,
 			interviewStage: `${nodeBaseKey}interviewStage`,
 			deviceClass: `${nodeBaseKey}deviceClass`,
 			isListening: `${nodeBaseKey}isListening`,
@@ -115,6 +116,14 @@ export const cacheKeyUtils = {
 		const match = /endpoints\.(?<index>\d+)$/.exec(key);
 		if (match) {
 			return parseInt(match.groups!.index, 10);
+		}
+	},
+	destinationFromPriorityReturnRouteKey: (
+		key: string,
+	): number | undefined => {
+		const match = /\.priorityReturnRoute\.(?<nodeId>\d+)$/.exec(key);
+		if (match) {
+			return parseInt(match.groups!.nodeId, 10);
 		}
 	},
 } as const;
@@ -378,7 +387,7 @@ export function deserializeNetworkCacheValue(
 		);
 	}
 
-	function fail() {
+	function fail(): never {
 		throw new ZWaveError(
 			`Failed to deserialize property "${key}"`,
 			ZWaveErrorCodes.Driver_InvalidCache,
@@ -389,12 +398,12 @@ export function deserializeNetworkCacheValue(
 		case "interviewStage": {
 			value = tryParseInterviewStage(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 		case "deviceClass": {
 			value = tryParseDeviceClass(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 		case "isListening":
 		case "isRouting":
@@ -411,14 +420,14 @@ export function deserializeNetworkCacheValue(
 				case false:
 					return false;
 			}
-			throw fail();
+			fail();
 		}
 
 		case "dsk": {
 			if (typeof value === "string") {
 				return dskFromString(value);
 			}
-			throw fail();
+			fail();
 		}
 
 		case "supportsSecurity":
@@ -435,7 +444,7 @@ export function deserializeNetworkCacheValue(
 		case "nodeType": {
 			value = tryParseNodeType(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 
 		case "supportedDataRates": {
@@ -445,19 +454,19 @@ export function deserializeNetworkCacheValue(
 			) {
 				return value;
 			}
-			throw fail();
+			fail();
 		}
 
 		case "lastSeen": {
 			value = tryParseDate(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 
 		case "deviceConfigHash": {
 			value = tryParseBuffer(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 	}
 
@@ -465,23 +474,23 @@ export function deserializeNetworkCacheValue(
 	if (key.startsWith("controller.associations.")) {
 		value = tryParseAssociationAddress(value);
 		if (value) return value;
-		throw fail();
+		fail();
 	} else if (key.startsWith("controller.securityKeys.")) {
 		value = tryParseBuffer(value);
 		if (value) return value;
-		throw fail();
+		fail();
 	}
 
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
 			value = tryParseProvisioningList(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 		case cacheKeys.controller.privateKey: {
 			value = tryParseBuffer(value);
 			if (value) return value;
-			throw fail();
+			fail();
 		}
 	}
 

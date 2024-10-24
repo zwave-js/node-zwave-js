@@ -4,6 +4,80 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 13.10.0 (2024-10-24)
+### Features
+* `mock-server` now supports putting the simulated controller into add and remove mode (#7314)
+
+## 13.9.1 (2024-10-17)
+### Bugfixes
+* Fixed an issue where preferred scales were not being found when set as a string (#7286)
+
+## 13.9.0 (2024-10-14)
+### Features
+* Zniffer: allow filtering frames when saving the capture (#7279)
+
+### Bugfixes
+* Fixed an issue where the `StartLevelChange` command for `Window Covering CC` was sent with an inverted direction flag (#7278)
+
+### Config file changes
+* Add manual and reset metadata for Danfoss LC-13 (#7274)
+
+## 13.8.0 (2024-10-11)
+### Features
+* Support playing tones on mocked sirens, improve support for node dumps of switches/dimmers (#7272)
+
+## 13.7.0 (2024-10-10)
+### Features
+* Thermostat Setback CC: Fix encoding of the setback state, add mocks, remove non-functional CC values (#7271)
+
+## 13.6.0 (2024-10-10)
+### Features
+* Skip rebuilding routes for nodes with priority return routes (#7252)
+* Add `node info received` event (#7253)
+* OTA firmware updates now use the task scheduler. This allows running multiple OTA updates at once. (#7256)
+* Implement Multilevel Switch mocks, add default state for Binary Switch mocks (#7270)
+
+### Bugfixes
+* Use configured network keys on secondary controller if learned keys are absent (#7226)
+* Pending tasks are removed when hard-resetting or entering bootloader (#7255)
+
+### Config file changes
+* Add incompatibility warning to UZB1 (#7225)
+* Override Central Scene CC version for Springs Window Fashions VCZ1 (#7263)
+
+### Changes under the hood
+* Dependency updates
+* Fix bootstrap command in devcontainer (#7254)
+
+## 13.5.0 (2024-10-07)
+This release adds an internal task scheduler that will allow more control over longer running tasks like device interviews, route rebuilding, firmware updates, etc. These improvements include pausing/resuming tasks, better prioritization for user-initiated actions, queueing tasks without interrupting ongoing ones, and more. Migration of existing features to the new scheduler will be done incrementally, starting with route rebuilding.
+
+### Features
+* Reworked route rebuilding to use the task scheduler. This enables rebuilding routes for multiple individual nodes at once. (#7196, #7203)
+
+### Bugfixes
+* Fixed a regression from `13.4.0` that prevented restoring NVM backups on 700/800 series controllers (#7220)
+
+### Config file changes
+* Add fingerprint to Aeotec ZWA024 (#7191)
+* Correct max. value of SKU parameters for Kwikset locks (#7178)
+* Add fingerprint to Remotec ZXT-800 (#7195)
+
+### Changes under the hood
+* Implement task scheduler (#7193)
+* Upgrade to ESLint v9, typescript-eslint v8 (#6987)
+* Update FAQ on secondary controllers (#7190)
+
+## 13.4.0 (2024-09-24)
+### Features
+* Added `Controller.nvm` property to enable incremental modification of NVM contents on the fly (#7153)
+* When the `NODE_ENV` env variable is set to `development`, debugging information for S0 encryption is included in logs (#7181)
+* Add driver preset `NO_WATCHDOG` to disable watchdog (#7188)
+
+### Config file changes
+* Update Z-Wave SDK warnings to mention recommended versions (#7187)
+* Update Zooz devices (#7186)
+
 ## 13.3.1 (2024-09-17)
 ### Bugfixes
 * Fixed the identification of the primary controller role on some older controllers (#7174)

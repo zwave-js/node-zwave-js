@@ -4,6 +4,7 @@
 
 ```ts
 
+import * as crypto from 'node:crypto';
 import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
@@ -521,20 +522,38 @@ export const CONTROL_CHAR_WIDTH = 2;
 // @public (undocumented)
 export const CONTROLLER_LABEL = "CNTRLR";
 
+// Warning: (ae-missing-release-tag) "ControllerCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ControllerCapabilities {
+    // (undocumented)
+    isSecondary: boolean;
+    // (undocumented)
+    isSISPresent: boolean;
+    // (undocumented)
+    isSUC: boolean;
+    // (undocumented)
+    isUsingHomeIdFromOtherNetwork: boolean;
+    // (undocumented)
+    noNodesIncluded: boolean;
+    // (undocumented)
+    wasRealPrimary: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ControllerCapabilityFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export enum ControllerCapabilityFlags {
     // (undocumented)
-    NoNodesIncluded = 32,// Controller is a secondary
+    NoNodesIncluded = 32,
     // (undocumented)
-    OnOtherNetwork = 2,// Controller is using a home ID from another network
+    OnOtherNetwork = 2,
     // (undocumented)
-    Secondary = 1,// There's a SUC id server (SIS) on the network
+    Secondary = 1,
     // (undocumented)
-    SISPresent = 4,// Before the SIS was added, the controller was the primary
+    SISPresent = 4,
     // (undocumented)
-    SUC = 16,// Controller is a static update controller (SUC)
+    SUC = 16,
     // (undocumented)
     WasRealPrimary = 8
 }
@@ -583,6 +602,15 @@ export type ControllerNodeLogContext = LogContext<"controller"> & NodeLogContext
     endpoint?: number;
     direction: string;
 };
+
+// Warning: (ae-missing-release-tag) "ControllerRole" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ControllerRole {
+    Inclusion = 2,
+    Primary = 0,
+    Secondary = 1
+}
 
 // Warning: (ae-missing-release-tag) "ControllerSelfLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -633,12 +661,12 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format;
 // Warning: (ae-missing-release-tag) "createReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
+export function createReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface CreateReflectionDecoratorOptions<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     constructorLookupKey?: false | ((target: TConstructor, ...args: TArgs) => string);
     name: string;
     valueFromArgs: (...args: TArgs) => TValue;
@@ -647,7 +675,7 @@ export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs ex
 // Warning: (ae-missing-release-tag) "createReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
+export function createReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorPairOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -660,7 +688,7 @@ export interface CreateReflectionDecoratorPairOptions {
 // Warning: (ae-missing-release-tag) "createSimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createSimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
+export function createSimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateSimpleReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -672,7 +700,7 @@ export interface CreateSimpleReflectionDecoratorOptions {
 // Warning: (ae-missing-release-tag) "createValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createValuelessReflectionDecorator<TBase extends Object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
+export function createValuelessReflectionDecorator<TBase extends object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
 
 // Warning: (ae-missing-release-tag) "CreateValuelessReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -978,6 +1006,16 @@ export function enumValuesToMetadataStates<T extends Record<string, any>>(enumer
 // @public
 export function extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware;
 
+// Warning: (ae-missing-release-tag) "extractRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function extractRawECDHPrivateKey(privateKey: crypto.KeyObject): Buffer;
+
+// Warning: (ae-missing-release-tag) "extractRawECDHPublicKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function extractRawECDHPublicKey(publicKey: crypto.KeyObject): Buffer;
+
 // Warning: (ae-missing-release-tag) "Firmware" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1030,6 +1068,11 @@ export type FrameType = "singlecast" | "broadcast" | "multicast";
 //
 // @public
 export function generateAuthKey(networkKey: Buffer): Buffer;
+
+// Warning: (ae-missing-release-tag) "generateECDHKeyPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function generateECDHKeyPair(): KeyPair;
 
 // Warning: (ae-missing-release-tag) "generateEncryptionKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1329,6 +1372,16 @@ export interface ICommandClass {
     // (undocumented)
     serialize(): Buffer;
 }
+
+// Warning: (ae-missing-release-tag) "importRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function importRawECDHPrivateKey(privateKey: Buffer): crypto.KeyObject;
+
+// Warning: (ae-missing-release-tag) "importRawECDHPublicKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function importRawECDHPublicKey(publicKey: Buffer): crypto.KeyObject;
 
 // Warning: (ae-missing-release-tag) "indexDBsByNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1866,6 +1919,21 @@ export interface IZWaveNode extends IZWaveEndpoint, SecurityClassOwner {
     // (undocumented)
     readonly status: NodeStatus;
 }
+
+// Warning: (ae-missing-release-tag) "KeyPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface KeyPair {
+    // (undocumented)
+    privateKey: crypto.KeyObject;
+    // (undocumented)
+    publicKey: crypto.KeyObject;
+}
+
+// Warning: (ae-missing-release-tag) "keyPairFromRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair;
 
 // Warning: (ae-missing-release-tag) "LOG_PREFIX_WIDTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2822,7 +2890,7 @@ export type QRProvisioningInformation = {
 // Warning: (ae-missing-release-tag) "ReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructorByKey: (key: string) => TConstructor | undefined;
     lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
@@ -2833,7 +2901,7 @@ export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], 
 // Warning: (ae-missing-release-tag) "ReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     lookupSubConstructor: (...args: [...TSuperArgs, ...TSubArgs]) => TConstructor | undefined;
     lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
     lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
@@ -2858,6 +2926,8 @@ export enum RFRegion {
     // (undocumented)
     "Default (EU)" = 255,
     // (undocumented)
+    "Europe (Long Range)" = 11,
+    // (undocumented)
     "Hong Kong" = 3,
     // (undocumented)
     "USA (Long Range)" = 9,
@@ -2879,6 +2949,20 @@ export enum RFRegion {
     "Unknown" = 254,
     // (undocumented)
     "USA" = 1
+}
+
+// Warning: (ae-missing-release-tag) "RFRegionInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RFRegionInfo {
+    // (undocumented)
+    includesRegion?: RFRegion;
+    // (undocumented)
+    region: RFRegion;
+    // (undocumented)
+    supportsLongRange: boolean;
+    // (undocumented)
+    supportsZWave: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "Route" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3168,7 +3252,7 @@ export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
 //
 // @public (undocumented)
 export type SendCommandSecurityS2Options = {
-    s2OverrideSecurityClass?: S2SecurityClass;
+    s2OverrideSecurityClass?: SecurityClass;
     s2VerifyDelivery?: boolean;
     s2MulticastOutOfSync?: boolean;
     s2MulticastGroupId?: number;
@@ -3222,6 +3306,26 @@ export interface SensorDefinition {
 // @public (undocumented)
 export type Sensors = typeof sensors;
 
+// Warning: (ae-missing-release-tag) "SerialApiInitData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialApiInitData {
+    // (undocumented)
+    isPrimary: boolean;
+    // (undocumented)
+    isSIS: boolean;
+    // (undocumented)
+    nodeIds: number[];
+    // (undocumented)
+    nodeType: NodeType;
+    // (undocumented)
+    supportsTimers: boolean;
+    // (undocumented)
+    zwaveApiVersion: ZWaveApiVersion;
+    // (undocumented)
+    zwaveChipType?: string | UnknownZWaveChipType;
+}
+
 // Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -3259,7 +3363,7 @@ export interface SetValueOptions {
 // Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface SimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructor: (...args: TArgs) => TConstructor | undefined;
     lookupValue: (target: TBase) => TArgs[0] | undefined;
@@ -3654,7 +3758,7 @@ export function valueIdToString(valueID: ValueID): string;
 // Warning: (ae-missing-release-tag) "ValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ValuelessReflectionDecorator<TBase extends Object> {
+export interface ValuelessReflectionDecorator<TBase extends object> {
     decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
     isDecorated: (target: TBase) => boolean;
     isDecoratedStatic: (constr: Function) => boolean;
@@ -4114,6 +4218,8 @@ export enum ZnifferRegion {
     // (undocumented)
     "Default (EU)" = 255,
     // (undocumented)
+    "Europe (Long Range)" = 11,
+    // (undocumented)
     "Hong Kong" = 3,
     // (undocumented)
     "USA (Long Range)" = 9,
@@ -4316,6 +4422,7 @@ export enum ZWaveErrorCodes {
     Driver_NotSupported = 105,
     // (undocumented)
     Driver_Reset = 101,
+    Driver_TaskRemoved = 112,
     FirmwareUpdateCC_Busy = 1500,
     FirmwareUpdateCC_FailedToAbort = 1504,
     FirmwareUpdateCC_FailedToStart = 1503,
@@ -4334,6 +4441,7 @@ export enum ZWaveErrorCodes {
     NVM_InvalidFormat = 283,
     NVM_InvalidJSON = 281,
     NVM_NoSpace = 284,
+    NVM_NotOpen = 285,
     NVM_NotSupported = 280,
     NVM_ObjectNotFound = 282,
     OTW_Update_Busy = 380,

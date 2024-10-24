@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/host",
-  "version": "13.3.1",
+  "version": "13.9.0",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {
@@ -46,7 +46,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "dependencies": {
@@ -56,9 +56,9 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.47.0",
-    "@types/node": "^18.19.42",
-    "del-cli": "^5.1.0",
-    "typescript": "5.5.3"
+    "@microsoft/api-extractor": "^7.47.9",
+    "@types/node": "^18.19.55",
+    "del-cli": "^6.0.0",
+    "typescript": "5.6.2"
   }
 }

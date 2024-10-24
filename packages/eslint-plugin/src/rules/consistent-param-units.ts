@@ -1,6 +1,6 @@
 import type { AST } from "jsonc-eslint-parser";
-import { CONFIG_PARAM } from "../jsonSelectors";
-import { type JSONCRule } from "../utils";
+import { CONFIG_PARAM } from "../jsonSelectors.js";
+import { type JSONCRule } from "../utils.js";
 
 interface FixableUnit {
 	wrong: string[];
@@ -34,9 +34,9 @@ fixableUnits.forEach(({ correct }) =>
 
 export const consistentParamUnits: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 		return {
 			// Ensure consistent ordering of properties in configuration parameters
 			[`${CONFIG_PARAM} > JSONProperty[key.value='unit']`](
@@ -82,12 +82,13 @@ export const consistentParamUnits: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				"Ensures that no forbidden units are used in config parameters.",
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"forbidden-unit":
 				`The unit "{{unit}}" is not allowed. Use "{{correct}}" instead.`,

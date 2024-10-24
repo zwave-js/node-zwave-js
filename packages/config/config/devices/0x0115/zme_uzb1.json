@@ -15,7 +15,12 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "n/a",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1147/ZME_UZB1_Manual.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1147/ZME_UZB1_Manual.pdf",
+		"comments": [
+			{
+				"level": "warning",
+				"text": "This controller has a bug in its USB implementation, which can cause issues with newer Linux kernel versions. Using a powered USB hub MAY help to work around the issue, but migrating to a different controller is recommended."
+			}
+		]
 	}
 }

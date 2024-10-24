@@ -10,18 +10,16 @@ import {
 	This state machine handles the receipt of Transport Service encapsulated commands from a node
 */
 
-/* eslint-disable @typescript-eslint/ban-types */
 export interface TransportServiceRXStateSchema {
 	states: {
-		waitingForSegment: {};
-		segmentTimeout: {};
-		waitingForRequestedSegment: {};
-		segmentsComplete: {};
-		success: {};
-		failure: {};
+		waitingForSegment: object;
+		segmentTimeout: object;
+		waitingForRequestedSegment: object;
+		segmentsComplete: object;
+		success: object;
+		failure: object;
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 export interface TransportServiceRXContext {
 	receivedBytes: boolean[];

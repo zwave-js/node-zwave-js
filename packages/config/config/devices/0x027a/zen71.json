@@ -12,14 +12,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 3.10 && firmwareVersion < 10.0",
-			"value": "ZEN71 800LR"
-		},
-		"ZEN71"
-	],
-	"description": "ON/OFF Switch",
+	"label": "ZEN71",
+	"description": "On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x7000",

@@ -656,6 +656,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.secondFrame = !!(frameControl & 0b10_0000);
 
 			this.decryptedCCBytes = frameControlAndDecryptedCC.subarray(1);
+
+			// Remember for debugging purposes
+			this.authData = authData;
+			this.authCode = authCode;
+			this.iv = iv;
 		} else {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
@@ -686,6 +691,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return this.host.securityManager.getNonceId(this.nonce);
 	}
 	public nonce: Buffer | undefined;
+
+	// Only used testing/for debugging purposes
+	private iv?: Buffer;
+	private authData?: Buffer;
+	private authCode?: Buffer;
+	private ciphertext?: Buffer;
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		if (this.sequenced) {
@@ -750,6 +761,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		);
 		const authCode = computeMAC(authData, this.authKey);
 
+		// Remember for debugging purposes
+		this.iv = iv;
+		this.authData = authData;
+		this.authCode = authCode;
+		this.ciphertext = ciphertext;
+
 		this.payload = Buffer.concat([
 			senderNonce,
 			ciphertext,
@@ -778,6 +795,26 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				if (this.sequenceCounter != undefined) {
 					message["sequence counter"] = this.sequenceCounter;
 				}
+			}
+		}
+		// Log the plaintext in integration tests and development mode
+		if (
+			process.env.NODE_ENV === "test"
+			|| process.env.NODE_ENV === "development"
+		) {
+			if (this.iv) {
+				message.IV = buffer2hex(this.iv);
+			}
+			if (this.ciphertext) {
+				message.ciphertext = buffer2hex(this.ciphertext);
+			} else if (this.decryptedCCBytes) {
+				message.plaintext = buffer2hex(this.decryptedCCBytes);
+			}
+			if (this.authData) {
+				message["auth data"] = buffer2hex(this.authData);
+			}
+			if (this.authCode) {
+				message["auth code"] = buffer2hex(this.authCode);
 			}
 		}
 		return {

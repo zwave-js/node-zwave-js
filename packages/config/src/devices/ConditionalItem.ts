@@ -38,7 +38,7 @@ export function conditionApplies<T>(
 
 	try {
 		return !!evaluate(self.condition, deviceId);
-	} catch (e) {
+	} catch {
 		throw new ZWaveError(
 			`Invalid condition "${self.condition}"!`,
 			ZWaveErrorCodes.Config_Invalid,

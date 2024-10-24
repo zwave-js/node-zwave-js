@@ -1,5 +1,5 @@
 import { type AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
+import { type JSONCRule } from "../utils.js";
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);
@@ -7,9 +7,9 @@ function isSurroundedByWhitespace(str: string) {
 
 export const noSurroundingWhitespace: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow surrounding whitespace
@@ -30,12 +30,13 @@ export const noSurroundingWhitespace: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Prevents strings in configuration files to be surrounded by whitespace`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-surrounding-whitespace":
 				"Leading and trailing whitespace is not allowed",

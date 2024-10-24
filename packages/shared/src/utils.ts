@@ -2,8 +2,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function keysOf<T extends {}>(obj: T): (keyof T)[] {
+export function keysOf<T extends object>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as unknown as (keyof T)[];
 }
 
@@ -235,4 +234,18 @@ export function sum(values: number[]): number {
 /** Does nothing. Can be used for empty `.catch(...)` calls. */
 export function noop(): void {
 	// intentionally empty
+}
+
+export type FnOrStatic<TArgs extends any[], TReturn> =
+	| ((...args: TArgs) => TReturn)
+	| TReturn;
+
+export type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R
+	: T;
+
+export function evalOrStatic<T>(
+	fnOrConst: T,
+	...args: any[]
+): ReturnTypeOrStatic<T> {
+	return typeof fnOrConst === "function" ? fnOrConst(...args) : fnOrConst;
 }

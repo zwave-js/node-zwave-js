@@ -4,6 +4,9 @@ import {
 	SoundSwitchCCConfigurationSet,
 	SoundSwitchCCToneInfoGet,
 	SoundSwitchCCToneInfoReport,
+	SoundSwitchCCTonePlayGet,
+	SoundSwitchCCTonePlayReport,
+	SoundSwitchCCTonePlaySet,
 	SoundSwitchCCTonesNumberGet,
 	SoundSwitchCCTonesNumberReport,
 } from "@zwave-js/cc/SoundSwitchCC";
@@ -11,6 +14,7 @@ import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
 	type SoundSwitchCCCapabilities,
+	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: SoundSwitchCCCapabilities = {
@@ -19,10 +23,18 @@ const defaultCapabilities: SoundSwitchCCCapabilities = {
 	tones: [],
 };
 
+interface SoundSwitchState {
+	toneId: number;
+	volume: number;
+	timeout: NodeJS.Timeout;
+}
+
 const STATE_KEY_PREFIX = "SoundSwitch_";
 const StateKeys = {
 	defaultToneId: `${STATE_KEY_PREFIX}defaultToneId`,
 	defaultVolume: `${STATE_KEY_PREFIX}defaultVolume`,
+	state: `${STATE_KEY_PREFIX}state`,
+	lastNonZeroVolume: `${STATE_KEY_PREFIX}lastNonZeroVolume`,
 } as const;
 
 const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
@@ -108,9 +120,112 @@ const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
 	},
 };
 
+const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCTonePlaySet) {
+			const capabilities = {
+				...defaultCapabilities,
+				...self.getCCCapabilities(
+					CommandClasses["Sound Switch"],
+					receivedCC.endpointIndex,
+				),
+			};
+
+			const currentState = self.state.get(
+				StateKeys.state,
+			) as SoundSwitchState | undefined;
+
+			if (receivedCC.toneId === 0) {
+				if (currentState) {
+					clearTimeout(currentState.timeout);
+					self.state.delete(StateKeys.state);
+				}
+
+				// TODO: Send unsolicited report if not supervised
+
+				return { action: "ok" };
+			} else {
+				const toneId = receivedCC.toneId === 0xff
+					? capabilities.defaultToneId
+					: receivedCC.toneId;
+				const tone = capabilities.tones[toneId - 1];
+				if (!tone) return { action: "fail" };
+
+				const volume = (receivedCC.volume === 0
+					? capabilities.defaultVolume
+					: receivedCC.volume === 0xff
+					? self.state.get(
+						StateKeys.lastNonZeroVolume,
+					) as (number | undefined)
+					: receivedCC.volume) || capabilities.defaultVolume;
+
+				// Stop "playing" the previous tone
+				if (currentState) {
+					clearTimeout(currentState.timeout);
+					self.state.delete(StateKeys.state);
+				}
+
+				if (volume !== 0) {
+					self.state.set(StateKeys.lastNonZeroVolume, volume);
+				}
+
+				const newState: SoundSwitchState = {
+					toneId,
+					volume,
+					timeout: setTimeout(async () => {
+						self.state.delete(StateKeys.state);
+
+						// Tell the controller that we're done playing
+						const cc = new SoundSwitchCCTonePlayReport(
+							self.host,
+							{
+								nodeId: controller.host.ownNodeId,
+								toneId: 0,
+								volume: 0,
+							},
+						);
+						await self.sendToController(
+							createMockZWaveRequestFrame(cc, {
+								ackRequested: false,
+							}),
+						);
+					}, tone.duration * 1000).unref(),
+				};
+				self.state.set(StateKeys.state, newState);
+
+				// TODO: Send unsolicited report if not supervised
+				return { action: "ok" };
+			}
+		}
+	},
+};
+
+const respondToSoundSwitchTonePlayGet: MockNodeBehavior = {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCTonePlayGet) {
+			const currentState = self.state.get(
+				StateKeys.state,
+			) as SoundSwitchState | undefined;
+
+			const cc = new SoundSwitchCCTonePlayReport(
+				self.host,
+				{
+					nodeId: controller.host.ownNodeId,
+					toneId: currentState?.toneId ?? 0,
+					volume: currentState?.volume ?? 0,
+				},
+			);
+
+			return { action: "sendCC", cc };
+		}
+	},
+};
+
 export const SoundSwitchCCBehaviors = [
 	respondToSoundSwitchConfigurationGet,
 	respondToSoundSwitchConfigurationSet,
 	respondToSoundSwitchToneNumberGet,
 	respondToSoundSwitchToneInfoGet,
+	respondToSoundSwitchTonePlaySet,
+	respondToSoundSwitchTonePlayGet,
 ];

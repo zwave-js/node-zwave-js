@@ -1,14 +1,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "productType === 0x0904",
-			"value": "ZEN51 LR"
-		},
-		"ZEN51"
-	],
-	"description": "700 Series Dry Contact Relay",
+	"label": "ZEN51",
+	"description": "Dry Contact Relay",
 	"devices": [
 		{
 			// Regular Z-Wave version:
@@ -17,7 +11,7 @@
 			"zwaveAllianceId": 4610
 		},
 		{
-			// Long Range capable version:
+			// Long Range capable version (firmware 1.50+):
 			"productType": "0x0904",
 			"productId": "0x0201"
 		}

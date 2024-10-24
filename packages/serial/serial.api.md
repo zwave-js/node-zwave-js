@@ -151,33 +151,35 @@ export enum FunctionType {
     // (undocumented)
     ExploreRequestInclusion = 94,// ??
     // (undocumented)
-    ExtExtWriteLongByte = 45,// Returns random data of variable length
+    ExtendedNVMOperations = 61,// Returns random data of variable length
     // (undocumented)
-    ExtNVMReadLongBuffer = 42,// Get Home ID and Controller Node ID
+    ExtExtWriteLongByte = 45,// Get Home ID and Controller Node ID
     // (undocumented)
-    ExtNVMReadLongByte = 44,// get a byte of memory
+    ExtNVMReadLongBuffer = 42,// get a byte of memory
     // (undocumented)
-    ExtNVMWriteLongBuffer = 43,// write a byte of memory
+    ExtNVMReadLongByte = 44,// write a byte of memory
+    // (undocumented)
+    ExtNVMWriteLongBuffer = 43,
     // (undocumented)
     FirmwareUpdateNVM = 120,
     // (undocumented)
-    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,
+    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,// Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
     // (undocumented)
-    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,// Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
+    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,// ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
     // (undocumented)
-    FUNC_ID_ZW_ENABLE_SUC = 82,// ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
+    FUNC_ID_ZW_ENABLE_SUC = 82,// Returns information about the external NVM
     // (undocumented)
-    FUNC_ID_ZW_GET_RANDOM = 28,// Returns information about the external NVM
+    FUNC_ID_ZW_GET_RANDOM = 28,// Reads a buffer from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_NEW_CONTROLLER = 67,// Reads a buffer from the external NVM
+    FUNC_ID_ZW_NEW_CONTROLLER = 67,// Writes a buffer to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,// Writes a buffer to the external NVM
+    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,// Reads a byte from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,// Reads a byte from the external NVM
+    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,// Writes a byte to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,// Writes a byte to the external NVM
+    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,// Read and write from/to the external NVM (700+ series)
     // (undocumented)
-    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,// 700-series command to read and write from/to the external NVM
+    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,// ??
     // (undocumented)
     FUNC_ID_ZW_SEND_SLAVE_DATA = 163,// ??
     // (undocumented)
@@ -191,19 +193,19 @@ export enum FunctionType {
     // (undocumented)
     GetControllerId = 32,// ??
     // (undocumented)
-    GetControllerVersion = 21,// ??
+    GetControllerVersion = 21,// Reset the Z-Wave module's internal TX timers
     // (undocumented)
-    GetLibrary = 189,// Reset the Z-Wave module's internal TX timers
+    GetLibrary = 189,// Request the Z-Wave module's internal TX timers
     // (undocumented)
-    GetLongRangeChannel = 219,// Request the Z-Wave module's internal TX timers
+    GetLongRangeChannel = 219,// Clear the current Network Statistics collected by the Z-Wave API Module
     // (undocumented)
-    GetLongRangeNodes = 218,// Clear the current Network Statistics collected by the Z-Wave API Module
+    GetLongRangeNodes = 218,// Request the current Network Statistics from the Z-Wave API Module
     // (undocumented)
-    GetNetworkStats = 58,// Request the current Network Statistics from the Z-Wave API Module
+    GetNetworkStats = 58,// request the most recent background RSSI levels detected
     // (undocumented)
-    GetNodeProtocolInfo = 65,// request the most recent background RSSI levels detected
+    GetNodeProtocolInfo = 65,// Set the RSSI threshold above which the stick will not transmit
     // (undocumented)
-    GetNVMId = 41,// Set the RSSI threshold above which the stick will not transmit
+    GetNVMId = 41,// Read and write from/to the external NVM with 32-bit addresses (700+ series)
     // (undocumented)
     GetPriorityRoute = 146,// Trigger removal of a specific node that desires exclusion from the network
     // (undocumented)
@@ -347,7 +349,7 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_GetTXCounter = 129,// Set controller into promiscuous mode to listen to all messages
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,
+    UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,// deprecated, replaced with a flag for the ApplicationCommandHandler
     // (undocumented)
     UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,// Start Hardware Watchdog (700 series and newer)
     // (undocumented)

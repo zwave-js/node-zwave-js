@@ -1,5 +1,5 @@
 import { type AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
+import { type JSONCRule } from "../utils.js";
 
 interface CommonError {
 	pattern: string | RegExp;
@@ -25,9 +25,9 @@ function fixCommonErrors(str: string): string {
 
 export const noMisspelledNames: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Fix some common misspellings in labels and descriptions
@@ -54,12 +54,13 @@ export const noMisspelledNames: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Prevents some common misspellings in labels and descriptions`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"change-to-fixed": `Change to "{{fixed}}"`,
 		},

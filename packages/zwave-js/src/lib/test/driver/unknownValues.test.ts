@@ -15,6 +15,7 @@ import {
 } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
+	ccCaps,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -95,7 +96,12 @@ integrationTest(
 		// ),
 
 		nodeCapabilities: {
-			commandClasses: [CommandClasses["Multilevel Switch"]],
+			commandClasses: [ccCaps({
+				ccId: CommandClasses["Multilevel Switch"],
+				isSupported: true,
+				version: 4,
+				defaultValue: UNKNOWN_STATE,
+			})],
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
@@ -103,8 +109,8 @@ integrationTest(
 			const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
 			// At the start, values are not known yet
-			t.is(node.getValue(targetValueId), NOT_KNOWN);
-			t.is(node.getValue(currentValueId), NOT_KNOWN);
+			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
+			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
 
 			// Send an initial state
 			let cc = new MultilevelSwitchCCReport(mockNode.host, {
@@ -155,7 +161,13 @@ integrationTest(
 		// ),
 
 		nodeCapabilities: {
-			commandClasses: [CommandClasses["Binary Switch"]],
+			commandClasses: [
+				ccCaps({
+					ccId: CommandClasses["Binary Switch"],
+					isSupported: true,
+					defaultValue: NOT_KNOWN,
+				}),
+			],
 		},
 
 		additionalDriverOptions: {

@@ -43,7 +43,7 @@ export class ConfigManager {
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
 		this._configVersion =
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			// eslint-disable-next-line @typescript-eslint/no-require-imports
 			require("@zwave-js/config/package.json").version;
 	}
 

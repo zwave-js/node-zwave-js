@@ -47,7 +47,6 @@ const respondToThermostatModeGet: MockNodeBehavior = {
 
 			const cc = new ThermostatModeCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				// @ts-expect-error yeah yeah...
 				mode,
 				// @ts-expect-error I know...
 				manufacturerData,

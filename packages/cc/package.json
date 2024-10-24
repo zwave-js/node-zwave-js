@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/cc",
-  "version": "13.3.1",
+  "version": "13.9.1",
   "description": "zwave-js: Command Classes",
   "keywords": [],
   "publishConfig": {
@@ -59,7 +59,7 @@
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "ts": "node -r esbuild-register --conditions=@@dev",
-    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
@@ -74,14 +74,14 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.47.0",
+    "@microsoft/api-extractor": "^7.47.9",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.42",
+    "@types/node": "^18.19.55",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
     "ava": "^6.1.3",
-    "del-cli": "^5.1.0",
+    "del-cli": "^6.0.0",
     "fs-extra": "^11.2.0",
-    "typescript": "5.5.3"
+    "typescript": "5.6.2"
   }
 }

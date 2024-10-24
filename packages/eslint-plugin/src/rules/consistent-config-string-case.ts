@@ -1,20 +1,20 @@
 import { type AST } from "jsonc-eslint-parser";
-import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors";
+import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors.js";
 import {
 	type JSONCRule,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
-} from "../utils";
-import { toSentenceCase, toTitleCase } from "../utils/titleAndSentenceCase";
+} from "../utils.js";
+import { toSentenceCase, toTitleCase } from "../utils/titleAndSentenceCase.js";
 
 // TODO: Avoid Enable/Disable in param labels
 // remove Z-Wave and all its variants
 
 export const consistentConfigStringCase: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Enforce title case for device descriptions
@@ -143,16 +143,18 @@ export const consistentConfigStringCase: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Ensures that the casing of labels in configuration files follows the style guide`,
 		},
 		fixable: "code",
 		hasSuggestions: true,
-		schema: [],
+		schema: false,
 		messages: {
 			"must-be-title-case": "{{what}} must be in Title Case",
-			"must-be-sentence-case": "{{what}} must be in Sentence case",
+			"must-be-sentence-case":
+				"{{what}} must be in Sentence case, except for Command Class names",
 			"change-to-fixed": `Change to "{{fixed}}"`,
 			"disable-for-all-options":
 				`Disable for all options of this parameter`,

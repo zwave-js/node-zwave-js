@@ -1,11 +1,11 @@
 import type { AST } from "jsonc-eslint-parser";
-import { type JSONCRule, removeJSONProperty } from "../utils";
+import { type JSONCRule, removeJSONProperty } from "../utils.js";
 
 export const noUnnecessaryMinMaxValue: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 		return {
 			// Avoid unnecessary min/max value in parameters with predefined options
 			"JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression"(
@@ -61,11 +61,12 @@ export const noUnnecessaryMinMaxValue: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description: "Ensures that min/maxValue are not used unnecessarily",
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-min-value":
 				`For parameters with "allowManualEntry = false" and predefined options, "minValue" is unnecessary and should not be specified.`,

@@ -5,7 +5,7 @@
 		"COREPACK_ENABLE_DOWNLOAD_PROMPT": "0" // Avoids interactive prompt causing container creation to hang
 	},
 
-	"updateContentCommand": "sudo corepack enable && yarn && yarn build",
+	"updateContentCommand": "sudo corepack enable && yarn && yarn bootstrap",
 	"customizations": {
 		"vscode": {
 			"extensions": [

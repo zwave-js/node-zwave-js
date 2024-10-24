@@ -233,6 +233,7 @@ import {
 	createMessageDroppedUnexpectedError,
 	serialAPICommandErrorToZWaveError,
 } from "./StateMachineShared";
+import { TaskScheduler } from "./Task";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 import {
@@ -253,7 +254,8 @@ import type {
 import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageJson = require(packageJsonPath);
 const libraryRootDir = path.dirname(packageJsonPath);
 export const libVersion: string = packageJson.version;
@@ -675,6 +677,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 		this.serialAPIQueue = new AsyncQueue();
 		this._queueIdle = false;
+
+		this._scheduler = new TaskScheduler();
 	}
 
 	/** The serial port instance */
@@ -693,6 +697,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return [this.immediateQueue, this.queue];
 	}
 
+	private _scheduler: TaskScheduler;
+	public get scheduler(): TaskScheduler {
+		return this._scheduler;
+	}
+
 	private queuePaused = false;
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
@@ -706,7 +715,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 	private set queueIdle(value: boolean) {
 		if (this._queueIdle !== value) {
-			this.driverLog.print(`all queues ${value ? "idle" : "busy"}`);
+			this.driverLog.print(
+				value ? "all queues idle" : "one or more queues busy",
+			);
 			this._queueIdle = value;
 			this.handleQueueIdleChange(value);
 		}
@@ -1218,7 +1229,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			try {
 				await this.openSerialport();
 			} catch (e) {
-				spOpenPromise.reject(e);
+				spOpenPromise.reject(e as Error);
 				void this.destroy();
 				return;
 			}
@@ -1234,6 +1245,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			// Start the serial API queue
 			void this.drainSerialAPIQueue();
+
+			// Start the task scheduler
+			this._scheduler.start();
 
 			if (
 				typeof this._options.testingHooks?.onSerialPortOpen
@@ -1680,6 +1694,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		} else {
 			// Secondary controller - load security keys from cache.
 			// Either LR or S2+S0, not both
+			// FIXME: The fallback code duplicates the logic from the primary controller above. Find a nicer solution.
 			if (isLongRangeNodeId(this.controller.ownNodeId!)) {
 				const securityKeysLongRange = [
 					SecurityClass.S2_AccessControl,
@@ -1702,6 +1717,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					for (const [sc, key] of securityKeysLongRange) {
 						this._securityManagerLR.setKey(sc, key);
 					}
+				} else if (
+					this._options.securityKeysLongRange?.S2_AccessControl
+					|| this._options.securityKeysLongRange?.S2_Authenticated
+				) {
+					this.driverLog.print(
+						"Fallback to configured network keys for Z-Wave Long Range, enabling security manager...",
+					);
+					this._securityManagerLR = new SecurityManager2();
+					if (this._options.securityKeysLongRange?.S2_AccessControl) {
+						this._securityManagerLR.setKey(
+							SecurityClass.S2_AccessControl,
+							this._options.securityKeysLongRange
+								.S2_AccessControl,
+						);
+					}
+					if (this._options.securityKeysLongRange?.S2_Authenticated) {
+						this._securityManagerLR.setKey(
+							SecurityClass.S2_Authenticated,
+							this._options.securityKeysLongRange
+								.S2_Authenticated,
+						);
+					}
 				} else {
 					this.driverLog.print(
 						"No network key for Z-Wave Long Range configured, communication won't work!",
@@ -1718,6 +1755,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					);
 					this._securityManager = new SecurityManager({
 						networkKey: s0Key,
+						ownNodeId: this._controller.ownNodeId!,
+						nonceTimeout: this._options.timeouts.nonce,
+					});
+				} else if (this._options.securityKeys?.S0_Legacy) {
+					this.driverLog.print(
+						"Fallback to configured S0 network key, enabling S0 security manager...",
+					);
+					this._securityManager = new SecurityManager({
+						networkKey: this._options.securityKeys.S0_Legacy,
 						ownNodeId: this._controller.ownNodeId!,
 						nonceTimeout: this._options.timeouts.nonce,
 					});
@@ -1744,6 +1790,36 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this._securityManager2 = new SecurityManager2();
 					for (const [sc, key] of securityKeys) {
 						this._securityManager2.setKey(sc, key);
+					}
+				} else if (
+					this._options.securityKeys
+					&& Object.keys(this._options.securityKeys).some(
+						(key) =>
+							key.startsWith("S2_")
+							&& key in SecurityClass
+							&& securityClassIsS2((SecurityClass as any)[key]),
+					)
+				) {
+					this.driverLog.print(
+						"Fallback to configured network keys for S2, enabling S2 security manager...",
+					);
+					this._securityManager2 = new SecurityManager2();
+					// Set up all keys
+					for (
+						const secClass of [
+							"S2_Unauthenticated",
+							"S2_Authenticated",
+							"S2_AccessControl",
+							"S0_Legacy",
+						] as const
+					) {
+						const key = this._options.securityKeys[secClass];
+						if (key) {
+							this._securityManager2.setKey(
+								SecurityClass[secClass],
+								key,
+							);
+						}
 					}
 				} else {
 					this.driverLog.print(
@@ -2556,6 +2632,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			} catch {
 				// ignore
 			}
+
+			// No need to keep the node awake longer than necessary
+			node.keepAwake = false;
+			this.debounceSendNodeToSleep(node);
 		}
 	}
 
@@ -3076,6 +3156,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			cacheKeys.controller.privateKey,
 		);
 
+		// Drop all scheduled tasks - they don't make sense after a hard reset
+		await this.scheduler.removeTasks(
+			() => true,
+			new ZWaveError(
+				"The controller is being hard-reset",
+				ZWaveErrorCodes.Driver_TaskRemoved,
+			),
+		);
+
 		// Update the controller NIF prior to hard resetting
 		await this.controller.setControllerNIF();
 		await this.controller.hardReset();
@@ -3197,7 +3286,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		this.driverLog.print("destroying driver instance...");
 
-		// First stop all queues and close the serial port, so nothing happens anymore
+		// First stop the scheduler, all queues and close the serial port, so nothing happens anymore
+		await this._scheduler.stop();
+
 		this.serialAPIQueue.abort();
 		for (const queue of this.queues) {
 			queue.abort();
@@ -4059,7 +4150,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					"Attempting to recover controller again...",
 					"warn",
 				);
-				void this.softReset().catch(() => {
+				void this.softResetInternal(true).catch(() => {
 					this.driverLog.print(
 						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
 						"warn",
@@ -4088,7 +4179,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				);
 
 				// Execute the soft-reset asynchronously
-				void this.softReset().then(() => {
+				void this.softResetInternal(true).then(() => {
 					// The controller responded. It is no longer unresponsive.
 
 					// Re-queue the transaction, so it can get handled next.
@@ -5543,7 +5634,7 @@ ${handlers.length} left`,
 				);
 				result.resolve(ret);
 			} catch (e) {
-				result.reject(e);
+				result.reject(e as Error);
 			} finally {
 				this._currentSerialAPICommandPromise = undefined;
 			}
@@ -6655,6 +6746,35 @@ ${handlers.length} left`,
 		}
 	}
 
+	/**
+	 * @internal
+	 * Helper function to find multiple existing values from the network cache
+	 */
+	public cacheList<T>(
+		prefix: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): Record<string, T> {
+		const ret: Record<string, T> = {};
+		for (const entry of this.networkCache.entries()) {
+			const key = entry[0];
+			if (!key.startsWith(prefix)) continue;
+			let value = entry[1];
+			if (value === undefined) continue;
+			if (typeof options?.reviver === "function") {
+				try {
+					value = options.reviver(value);
+				} catch {
+					// invalid entry
+					continue;
+				}
+			}
+			ret[key] = value;
+		}
+		return ret;
+	}
+
 	private cachePurge(prefix: string): void {
 		for (const key of this.networkCache.keys()) {
 			if (key.startsWith(prefix)) {
@@ -6961,6 +7081,14 @@ ${handlers.length} left`,
 		try {
 			// await this.controller.toggleRF(false);
 			// Avoid re-transmissions etc. communicating with the bootloader
+			await this.scheduler.removeTasks(
+				() => true,
+				new ZWaveError(
+					"The controller is entering bootloader mode.",
+					ZWaveErrorCodes.Driver_TaskRemoved,
+				),
+			);
+
 			this.rejectTransactions(
 				(_t) => true,
 				"The controller is entering bootloader mode.",

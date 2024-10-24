@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-require("reflect-metadata");
+import "reflect-metadata";
+
 import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import * as c from "ansi-colors";

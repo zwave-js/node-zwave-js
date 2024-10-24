@@ -16,20 +16,18 @@ import {
 import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
-/* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
 	states: {
-		sending: {};
-		waitForACK: {};
-		waitForResponse: {};
-		waitForCallback: {};
-		retry: {};
-		retryWait: {};
-		failure: {};
-		success: {};
+		sending: object;
+		waitForACK: object;
+		waitForResponse: object;
+		waitForCallback: object;
+		retry: object;
+		retryWait: object;
+		failure: object;
+		success: object;
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 export type SerialAPICommandError =
 	| "send failure"

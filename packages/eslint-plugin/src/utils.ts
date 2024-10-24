@@ -5,8 +5,13 @@ import {
 } from "@typescript-eslint/utils";
 import { CommandClasses } from "@zwave-js/core";
 import { type Rule as ESLintRule } from "eslint";
-import { type AST as JSONC_AST } from "jsonc-eslint-parser";
+import { type AST as JSONC_AST, type RuleListener } from "jsonc-eslint-parser";
 import path from "node:path";
+
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export type ReportFixGenerator = (
 	fixer: ESLintRule.RuleFixer,
@@ -106,13 +111,67 @@ export namespace JSONCRule {
 	// Special ESLint rule type for JSONC files
 	// AST viewer at https://ota-meshi.github.io/jsonc-eslint-parser/
 
-	export interface RuleListener {
-		[key: string]: ((node: never) => void) | undefined;
-	}
 	export interface RuleModule {
+		meta: RuleMetaData;
+		jsoncDefineRule: PartialRuleModule;
 		create(context: ESLintRule.RuleContext): RuleListener;
-		meta?: ESLintRule.RuleMetaData | undefined;
-		schema?: ESLintRule.RuleMetaData["schema"];
+	}
+
+	export interface RuleMetaData {
+		docs: {
+			description: string;
+			recommended: ("json" | "jsonc" | "json5")[] | null;
+			url: string;
+			ruleId: string;
+			ruleName: string;
+			default?: "error" | "warn";
+			extensionRule:
+				| boolean
+				| string
+				| {
+					plugin: string;
+					url: string;
+				};
+			layout: boolean;
+		};
+		messages: { [messageId: string]: string };
+		fixable?: "code" | "whitespace";
+		hasSuggestions?: boolean;
+		schema: false /*| JSONSchema4 | JSONSchema4[]*/;
+		deprecated?: boolean;
+		replacedBy?: [];
+		type: "problem" | "suggestion" | "layout";
+	}
+
+	export interface PartialRuleModule {
+		meta: PartialRuleMetaData;
+		create(
+			context: ESLintRule.RuleContext,
+			params: { customBlock: boolean },
+		): RuleListener;
+	}
+
+	export interface PartialRuleMetaData {
+		docs: {
+			description: string;
+			recommended: ("json" | "jsonc" | "json5")[] | null;
+			default?: "error" | "warn";
+			extensionRule:
+				| boolean
+				| string
+				| {
+					plugin: string;
+					url: string;
+				};
+			layout: boolean;
+		};
+		messages: { [messageId: string]: string };
+		fixable?: "code" | "whitespace";
+		hasSuggestions?: boolean;
+		schema: false; /* | JSONSchema4 | JSONSchema4[]*/
+		deprecated?: boolean;
+		replacedBy?: [];
+		type: "problem" | "suggestion" | "layout";
 	}
 }
 
