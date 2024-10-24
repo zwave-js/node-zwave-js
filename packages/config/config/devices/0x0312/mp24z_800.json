@@ -1,0 +1,51 @@
+{
+	"manufacturer": "Minoston",
+	"manufacturerId": "0x0312",
+	"label": "MP24Z",
+	"description": "Outdoor Smart Plug - 2 Outlet (800S)",
+	"devices": [
+		{
+			"productType": "0xff01",
+			"productId": "0xff97",
+			"zwaveAllianceId": 3719
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
+		},
+		{
+			"#": "2",
+			"$import": "templates/minoston_template.json#auto_off_timer",
+			"label": "Outlet 1 (Left): Auto Off Timer"
+		},
+		{
+			"#": "3",
+			"$import": "templates/minoston_template.json#auto_off_timer",
+			"label": "Outlet 2 (Right): Auto Off Timer"
+		},
+		{
+			"#": "4",
+			"$import": "templates/minoston_template.json#auto_on_timer",
+			"label": "Outlet 1 (Left): Auto On Timer"
+		},
+		{
+			"#": "5",
+			"$import": "templates/minoston_template.json#auto_on_timer",
+			"label": "Outlet 2 (Right): Auto On Timer"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "7",
+			"$import": "templates/minoston_template.json#led_indicator_brightness"
+		}
+	]
+}
