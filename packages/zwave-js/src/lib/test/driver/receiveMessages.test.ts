@@ -1,9 +1,9 @@
 import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
+import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ApplicationCommandRequest } from "../../serialapi/application/ApplicationCommandRequest";
 
 interface TestContext {
 	driver: Driver;
@@ -43,7 +43,9 @@ test.serial(
 				wakeUpInterval: 5,
 			}),
 		});
-		controller.serial.emitData(req.serialize(driver));
+		controller.serial.emitData(
+			req.serialize(driver["getEncodingContext"]()),
+		);
 		await controller.expectHostACK(1000);
 		t.pass();
 	},

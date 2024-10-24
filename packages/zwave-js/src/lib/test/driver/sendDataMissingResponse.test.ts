@@ -17,7 +17,7 @@ import {
 	SendDataAbort,
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-} from "../../serialapi/transport/SendDataMessages";
+} from "@zwave-js/serial/serialapi";
 import { integrationTest } from "../integrationTestSuite";
 
 let shouldTimeOut: boolean;

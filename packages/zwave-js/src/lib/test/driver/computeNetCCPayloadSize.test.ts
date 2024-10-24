@@ -2,12 +2,12 @@ import { FirmwareUpdateMetaDataCC } from "@zwave-js/cc/FirmwareUpdateMetaDataCC"
 import { MultiChannelCCCommandEncapsulation } from "@zwave-js/cc/MultiChannelCC";
 import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
 import { EncapsulationFlags, TransmitOptions } from "@zwave-js/core";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 
 interface TestContext {
 	driver: Driver;
@@ -46,13 +46,11 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg1 = new SendDataRequest({
 		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
-			ownNodeId: driver.ownNodeId,
-			securityManager: driver.securityManager!,
 			encapsulated: {} as any,
 		}),
 		transmitOptions: TransmitOptions.DEFAULT,
 	});
-	testMsg1.command.encapsulated = undefined as any;
+	testMsg1.command!.encapsulated = undefined as any;
 	t.is(driver.computeNetCCPayloadSize(testMsg1), 26);
 
 	const multiChannelCC = new MultiChannelCCCommandEncapsulation({
@@ -63,8 +61,6 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg2 = new SendDataRequest({
 		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
-			ownNodeId: driver.ownNodeId,
-			securityManager: driver.securityManager!,
 			encapsulated: multiChannelCC,
 		}),
 		transmitOptions: TransmitOptions.NoRoute,

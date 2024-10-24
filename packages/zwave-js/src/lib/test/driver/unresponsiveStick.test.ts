@@ -1,13 +1,13 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import Sinon from "sinon";
 import {
 	GetControllerIdRequest,
 	type GetControllerIdResponse,
-} from "../../serialapi/memory/GetControllerIdMessages";
-import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
+} from "@zwave-js/serial/serialapi";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import { type MockControllerBehavior } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
+import Sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 
 let shouldRespond = true;

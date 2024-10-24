@@ -7,6 +7,13 @@ import {
 	getZWaveChipType,
 } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import {
+	SendDataAbort,
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	SendDataResponse,
+} from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
@@ -14,13 +21,6 @@ import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
 } from "../../controller/MockControllerState";
-import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
-import {
-	SendDataAbort,
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-} from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
 import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
 

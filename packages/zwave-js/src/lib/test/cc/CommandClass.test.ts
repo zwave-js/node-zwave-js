@@ -10,8 +10,8 @@ import {
 	implementedVersion,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import test from "ava";
-import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)

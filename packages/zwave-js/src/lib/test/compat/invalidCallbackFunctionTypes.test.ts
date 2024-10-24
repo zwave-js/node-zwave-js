@@ -2,6 +2,15 @@ import { WakeUpTime, ZWaveProtocolCCAssignSUCReturnRoute } from "@zwave-js/cc";
 import { TransmitStatus, ZWaveDataRate } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	DeleteSUCReturnRouteRequest,
+	DeleteSUCReturnRouteRequestTransmitReport,
+	DeleteSUCReturnRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
 	type MockControllerBehavior,
 	createMockZWaveRequestFrame,
 	getDefaultSupportedFunctionTypes,
@@ -10,15 +19,6 @@ import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
 } from "../../controller/MockControllerState";
-import {
-	AssignSUCReturnRouteRequest,
-	AssignSUCReturnRouteResponse,
-} from "../../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import {
-	DeleteSUCReturnRouteRequest,
-	DeleteSUCReturnRouteRequestTransmitReport,
-	DeleteSUCReturnRouteResponse,
-} from "../../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import { integrationTest } from "../integrationTestSuite";
 
 // Repro for https://github.com/zwave-js/node-zwave-js/issues/6363

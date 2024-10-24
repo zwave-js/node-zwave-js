@@ -4,9 +4,9 @@ import {
 	MultilevelSwitchCCSet,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { ApplicationUpdateRequestNodeInfoReceived } from "@zwave-js/serial/serialapi";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import { ApplicationUpdateRequestNodeInfoReceived } from "../../serialapi/application/ApplicationUpdateRequest";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

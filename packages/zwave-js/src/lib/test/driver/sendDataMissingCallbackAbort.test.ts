@@ -13,23 +13,23 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import path from "node:path";
-import Sinon from "sinon";
-import { determineNIF } from "../../controller/NodeInformationFrame";
 import {
 	SerialAPIStartedRequest,
 	SerialAPIWakeUpReason,
-} from "../../serialapi/application/SerialAPIStartedRequest";
-import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
+} from "@zwave-js/serial/serialapi";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
 import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
-} from "../../serialapi/network-mgmt/RequestNodeInfoMessages";
+} from "@zwave-js/serial/serialapi";
 import {
 	SendDataAbort,
 	SendDataRequest,
 	SendDataResponse,
-} from "../../serialapi/transport/SendDataMessages";
+} from "@zwave-js/serial/serialapi";
+import path from "node:path";
+import Sinon from "sinon";
+import { determineNIF } from "../../controller/NodeInformationFrame";
 import { integrationTest } from "../integrationTestSuite";
 import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
 
