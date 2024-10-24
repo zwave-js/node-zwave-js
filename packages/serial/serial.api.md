@@ -68,7 +68,7 @@ export enum BootloaderChunkType {
 // Warning: (ae-missing-release-tag) "bootloaderMenuPreamble" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export const bootloaderMenuPreamble = "Gecko Bootloader";
+export const bootloaderMenuPreamble = "Gecko Boo";
 
 // Warning: (ae-missing-release-tag) "BootloaderParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
