@@ -715,7 +715,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 	private set queueIdle(value: boolean) {
 		if (this._queueIdle !== value) {
-			this.driverLog.print(`${value ? "all queues idle" : "one or more queues busy"}`);
+			this.driverLog.print(
+				value ? "all queues idle" : "one or more queues busy",
+			);
 			this._queueIdle = value;
 			this.handleQueueIdleChange(value);
 		}
