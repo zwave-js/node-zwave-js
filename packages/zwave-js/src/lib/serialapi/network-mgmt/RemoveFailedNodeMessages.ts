@@ -9,6 +9,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -49,7 +50,11 @@ export class RemoveFailedNodeRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): RemoveFailedNodeRequestBase {
-		return RemoveFailedNodeRequestStatusReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return RemoveFailedNodeRequest.from(raw, ctx);
+		} else {
+			return RemoveFailedNodeRequestStatusReport.from(raw, ctx);
+		}
 	}
 }
 

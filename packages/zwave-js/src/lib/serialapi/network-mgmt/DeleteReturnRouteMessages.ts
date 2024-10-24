@@ -17,6 +17,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -32,7 +33,11 @@ export class DeleteReturnRouteRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): DeleteReturnRouteRequestBase {
-		return DeleteReturnRouteRequestTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return DeleteReturnRouteRequest.from(raw, ctx);
+		} else {
+			return DeleteReturnRouteRequestTransmitReport.from(raw, ctx);
+		}
 	}
 }
 

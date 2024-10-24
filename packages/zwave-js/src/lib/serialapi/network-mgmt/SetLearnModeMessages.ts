@@ -10,6 +10,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
+	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -50,7 +51,11 @@ export class SetLearnModeRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): SetLearnModeRequestBase {
-		return SetLearnModeCallback.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return SetLearnModeRequest.from(raw, ctx);
+		} else {
+			return SetLearnModeCallback.from(raw, ctx);
+		}
 	}
 }
 

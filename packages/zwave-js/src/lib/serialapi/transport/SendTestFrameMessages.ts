@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
+	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -29,7 +30,11 @@ export class SendTestFrameRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): SendTestFrameRequestBase {
-		return SendTestFrameTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return SendTestFrameRequest.from(raw, ctx);
+		} else {
+			return SendTestFrameTransmitReport.from(raw, ctx);
+		}
 	}
 }
 

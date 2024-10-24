@@ -17,6 +17,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -32,7 +33,11 @@ export class AssignReturnRouteRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): AssignReturnRouteRequestBase {
-		return AssignReturnRouteRequestTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return AssignReturnRouteRequest.from(raw, ctx);
+		} else {
+			return AssignReturnRouteRequestTransmitReport.from(raw, ctx);
+		}
 	}
 }
 
