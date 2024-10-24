@@ -56,6 +56,12 @@ import {
 } from "../serialapi/memory/GetControllerIdMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
+	AddNodeStatus,
+	AddNodeToNetworkRequest,
+	AddNodeToNetworkRequestStatusReport,
+	AddNodeType,
+} from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
+import {
 	AssignSUCReturnRouteRequest,
 	AssignSUCReturnRouteRequestTransmitReport,
 	AssignSUCReturnRouteResponse,
@@ -68,6 +74,12 @@ import {
 	GetSUCNodeIdRequest,
 	GetSUCNodeIdResponse,
 } from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
+import {
+	RemoveNodeFromNetworkRequest,
+	RemoveNodeFromNetworkRequestStatusReport,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "../serialapi/network-mgmt/RemoveNodeFromNetworkRequest";
 import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
@@ -82,6 +94,7 @@ import {
 } from "../serialapi/transport/SendDataMessages";
 import {
 	MockControllerCommunicationState,
+	MockControllerInclusionState,
 	MockControllerStateKeys,
 } from "./MockControllerState";
 import { determineNIF } from "./NodeInformationFrame";
@@ -619,6 +632,150 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 	},
 };
 
+const handleAddNode: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof AddNodeToNetworkRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.InclusionState,
+			) as MockControllerInclusionState | undefined;
+
+			const expectCallback = msg.callbackId !== 0;
+			let cb: AddNodeToNetworkRequestStatusReport | undefined;
+			if (
+				state === MockControllerInclusionState.AddingNode
+			) {
+				// While adding, only accept stop commands
+				if (msg.addNodeType === AddNodeType.Stop) {
+					controller.state.set(
+						MockControllerStateKeys.InclusionState,
+						MockControllerInclusionState.Idle,
+					);
+					cb = new AddNodeToNetworkRequestStatusReport(
+						host,
+						{
+							callbackId: msg.callbackId,
+							status: AddNodeStatus.Failed,
+						},
+					);
+				} else {
+					cb = new AddNodeToNetworkRequestStatusReport(
+						host,
+						{
+							callbackId: msg.callbackId,
+							status: AddNodeStatus.Failed,
+						},
+					);
+				}
+			} else if (state === MockControllerInclusionState.RemovingNode) {
+				// Cannot start adding nodes while removing one
+				cb = new AddNodeToNetworkRequestStatusReport(
+					host,
+					{
+						callbackId: msg.callbackId,
+						status: AddNodeStatus.Failed,
+					},
+				);
+			} else {
+				// Idle
+
+				// Set the controller into "adding node" state
+				// For now we don't actually do anything in that state
+				controller.state.set(
+					MockControllerStateKeys.InclusionState,
+					MockControllerInclusionState.AddingNode,
+				);
+
+				cb = new AddNodeToNetworkRequestStatusReport(
+					host,
+					{
+						callbackId: msg.callbackId,
+						status: AddNodeStatus.Ready,
+					},
+				);
+			}
+
+			if (expectCallback && cb) {
+				await controller.sendToHost(cb.serialize());
+			}
+
+			return true;
+		}
+	},
+};
+
+const handleRemoveNode: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof RemoveNodeFromNetworkRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.InclusionState,
+			) as MockControllerInclusionState | undefined;
+
+			const expectCallback = msg.callbackId !== 0;
+			let cb: RemoveNodeFromNetworkRequestStatusReport | undefined;
+			if (
+				state === MockControllerInclusionState.RemovingNode
+			) {
+				// While removing, only accept stop commands
+				if (msg.removeNodeType === RemoveNodeType.Stop) {
+					controller.state.set(
+						MockControllerStateKeys.InclusionState,
+						MockControllerInclusionState.Idle,
+					);
+					cb = new RemoveNodeFromNetworkRequestStatusReport(
+						host,
+						{
+							callbackId: msg.callbackId,
+							status: RemoveNodeStatus.Failed,
+						},
+					);
+				} else {
+					cb = new RemoveNodeFromNetworkRequestStatusReport(
+						host,
+						{
+							callbackId: msg.callbackId,
+							status: RemoveNodeStatus.Failed,
+						},
+					);
+				}
+			} else if (state === MockControllerInclusionState.AddingNode) {
+				// Cannot start removing nodes while adding one
+				cb = new RemoveNodeFromNetworkRequestStatusReport(
+					host,
+					{
+						callbackId: msg.callbackId,
+						status: RemoveNodeStatus.Failed,
+					},
+				);
+			} else {
+				// Idle
+
+				// Set the controller into "removing node" state
+				// For now we don't actually do anything in that state
+				controller.state.set(
+					MockControllerStateKeys.InclusionState,
+					MockControllerInclusionState.RemovingNode,
+				);
+
+				cb = new RemoveNodeFromNetworkRequestStatusReport(
+					host,
+					{
+						callbackId: msg.callbackId,
+						status: RemoveNodeStatus.Ready,
+					},
+				);
+			}
+
+			if (expectCallback && cb) {
+				await controller.sendToHost(cb.serialize());
+			}
+
+			return true;
+		}
+	},
+};
+
 const forwardCommandClassesToHost: MockControllerBehavior = {
 	async onNodeFrame(host, controller, node, frame) {
 		if (
@@ -682,6 +839,8 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		handleSendDataMulticast,
 		handleRequestNodeInfo,
 		handleAssignSUCReturnRoute,
+		handleAddNode,
+		handleRemoveNode,
 		forwardCommandClassesToHost,
 		forwardUnsolicitedNIF,
 	];

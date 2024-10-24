@@ -5,7 +5,9 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	NodeType,
+	type NodeUpdatePayload,
 	Protocols,
+	encodeNodeUpdatePayload,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
@@ -17,6 +19,7 @@ import {
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
 	type MessageOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	gotDeserializationOptions,
@@ -90,12 +93,21 @@ export function computeNeighborDiscoveryTimeout(
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
-		) {
-			return new AddNodeToNetworkRequestStatusReport(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host
+				&& (new.target as any) !== AddNodeToNetworkRequest
+			) {
+				return new AddNodeToNetworkRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host
+				&& (new.target as any)
+					!== AddNodeToNetworkRequestStatusReport
+			) {
+				return new AddNodeToNetworkRequestStatusReport(host, options);
+			}
 		}
+
 		super(host, options);
 	}
 }
@@ -131,13 +143,23 @@ function testCallbackForAddNodeRequest(
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
 		host: ZWaveHost,
-		options: AddNodeToNetworkRequestOptions = {},
+		options:
+			| MessageDeserializationOptions
+			| AddNodeToNetworkRequestOptions = {},
 	) {
 		super(host, options);
 
-		this.addNodeType = options.addNodeType;
-		this.highPower = !!options.highPower;
-		this.networkWide = !!options.networkWide;
+		if (gotDeserializationOptions(options)) {
+			const config = this.payload[0];
+			this.highPower = !!(config & AddNodeFlags.HighPower);
+			this.networkWide = !!(config & AddNodeFlags.NetworkWide);
+			this.addNodeType = config & 0b1111;
+			this.callbackId = this.payload[1];
+		} else {
+			this.addNodeType = options.addNodeType;
+			this.highPower = !!options.highPower;
+			this.networkWide = !!options.networkWide;
+		}
 	}
 
 	/** The type of node to add */
@@ -265,43 +287,70 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	}
 }
 
+export type AddNodeToNetworkRequestStatusReportOptions = {
+	status:
+		| AddNodeStatus.Ready
+		| AddNodeStatus.NodeFound
+		| AddNodeStatus.ProtocolDone
+		| AddNodeStatus.Failed;
+} | {
+	status: AddNodeStatus.Done;
+	nodeId: number;
+} | {
+	status: AddNodeStatus.AddingController | AddNodeStatus.AddingSlave;
+	nodeInfo: NodeUpdatePayload;
+};
+
 export class AddNodeToNetworkRequestStatusReport
 	extends AddNodeToNetworkRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| (AddNodeToNetworkRequestStatusReportOptions & MessageBaseOptions),
 	) {
 		super(host, options);
-		this.callbackId = this.payload[0];
-		this.status = this.payload[1];
-		switch (this.status) {
-			case AddNodeStatus.Ready:
-			case AddNodeStatus.NodeFound:
-			case AddNodeStatus.ProtocolDone:
-			case AddNodeStatus.Failed:
-				// no context for the status to parse
-				break;
 
-			case AddNodeStatus.Done: {
-				const { nodeId } = parseNodeID(
-					this.payload,
-					host.nodeIdType,
-					2,
-				);
-				this.statusContext = { nodeId };
-				break;
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this.status = this.payload[1];
+			switch (this.status) {
+				case AddNodeStatus.Ready:
+				case AddNodeStatus.NodeFound:
+				case AddNodeStatus.ProtocolDone:
+				case AddNodeStatus.Failed:
+					// no context for the status to parse
+					break;
+
+				case AddNodeStatus.Done: {
+					const { nodeId } = parseNodeID(
+						this.payload,
+						host.nodeIdType,
+						2,
+					);
+					this.statusContext = { nodeId };
+					break;
+				}
+
+				case AddNodeStatus.AddingController:
+				case AddNodeStatus.AddingSlave: {
+					// the payload contains a node information frame
+					this.statusContext = parseNodeUpdatePayload(
+						this.payload.subarray(2),
+						host.nodeIdType,
+					);
+					break;
+				}
 			}
-
-			case AddNodeStatus.AddingController:
-			case AddNodeStatus.AddingSlave: {
-				// the payload contains a node information frame
-				this.statusContext = parseNodeUpdatePayload(
-					this.payload.subarray(2),
-					host.nodeIdType,
-				);
-				break;
+		} else {
+			this.callbackId = options.callbackId;
+			this.status = options.status;
+			if ("nodeId" in options) {
+				this.statusContext = { nodeId: options.nodeId };
+			} else if ("nodeInfo" in options) {
+				this.statusContext = options.nodeInfo;
 			}
 		}
 	}
@@ -314,6 +363,20 @@ export class AddNodeToNetworkRequestStatusReport
 
 	public readonly status: AddNodeStatus;
 	public readonly statusContext: AddNodeStatusContext | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.callbackId, this.status]);
+		if (this.statusContext?.basicDeviceClass != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeNodeUpdatePayload(
+					this.statusContext as NodeUpdatePayload,
+					this.host.nodeIdType,
+				),
+			]);
+		}
+		return super.serialize();
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
