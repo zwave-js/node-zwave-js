@@ -144,6 +144,12 @@ function suite(
 				}
 			});
 
+			if (options.additionalDriverOptions?.allowBootloaderOnly) {
+				driver.once("bootloader ready", () => {
+					process.nextTick(resolve);
+				});
+			}
+
 			continueStartup();
 		});
 	}
