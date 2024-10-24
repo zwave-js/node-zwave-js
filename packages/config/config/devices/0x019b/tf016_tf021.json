@@ -227,20 +227,19 @@
 		{
 			"#": "17",
 			"$if": "firmwareVersion >= 1.92",
-			"label": "Temperature report interval",
-			"description": "Time interval between consecutive temperature reports",
+			"label": "Temperature Report Interval",
 			"valueSize": 2,
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-				{
+		{
 			"#": "18",
 			"$if": "firmwareVersion >= 1.92",
-			"label": "Temperature report hysteresis",
-			"description": "The temperature report will be sent if there is a difference in temperature value from the previous value 
-reported, defined in this parameter",
+			"label": "Temperature Report Change Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
