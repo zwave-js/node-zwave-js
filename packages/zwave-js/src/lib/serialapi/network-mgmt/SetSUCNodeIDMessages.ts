@@ -16,6 +16,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -43,7 +44,11 @@ export class SetSUCNodeIdRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): SetSUCNodeIdRequestBase {
-		return SetSUCNodeIdRequestStatusReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return SetSUCNodeIdRequest.from(raw, ctx);
+		} else {
+			return SetSUCNodeIdRequestStatusReport.from(raw, ctx);
+		}
 	}
 }
 

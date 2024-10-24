@@ -14,6 +14,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
+	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -32,7 +33,14 @@ export class AssignPrioritySUCReturnRouteRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): AssignPrioritySUCReturnRouteRequestBase {
-		return AssignPrioritySUCReturnRouteRequestTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return AssignPrioritySUCReturnRouteRequest.from(raw, ctx);
+		} else {
+			return AssignPrioritySUCReturnRouteRequestTransmitReport.from(
+				raw,
+				ctx,
+			);
+		}
 	}
 }
 

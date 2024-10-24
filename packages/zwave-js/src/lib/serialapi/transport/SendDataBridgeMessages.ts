@@ -24,6 +24,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -45,7 +46,11 @@ export class SendDataBridgeRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): SendDataBridgeRequestBase {
-		return SendDataBridgeRequestTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return SendDataBridgeRequest.from(raw, ctx);
+		} else {
+			return SendDataBridgeRequestTransmitReport.from(raw, ctx);
+		}
 	}
 }
 
@@ -317,7 +322,11 @@ export class SendDataMulticastBridgeRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): SendDataMulticastBridgeRequestBase {
-		return SendDataMulticastBridgeRequestTransmitReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return SendDataMulticastBridgeRequest.from(raw, ctx);
+		} else {
+			return SendDataMulticastBridgeRequestTransmitReport.from(raw, ctx);
+		}
 	}
 }
 

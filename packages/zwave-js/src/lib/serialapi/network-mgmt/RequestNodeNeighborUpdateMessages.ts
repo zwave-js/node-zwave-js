@@ -11,6 +11,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	messageTypes,
@@ -31,7 +32,11 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): RequestNodeNeighborUpdateRequestBase {
-		return RequestNodeNeighborUpdateReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return RequestNodeNeighborUpdateRequest.from(raw, ctx);
+		} else {
+			return RequestNodeNeighborUpdateReport.from(raw, ctx);
+		}
 	}
 }
 
