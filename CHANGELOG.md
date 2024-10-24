@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.10.0 (2024-10-24)
 ### Features
 * `mock-server` now supports putting the simulated controller into add and remove mode (#7314)
 
