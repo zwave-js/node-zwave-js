@@ -17,8 +17,7 @@ export type SerialPortMockOpenOptions = Omit<
 >;
 
 export class SerialPortMock extends SerialPortStream<MockBindingInterface> {
-	// eslint-disable-next-line @typescript-eslint/unbound-method
-	static list = MockBinding.list;
+	// es tic list = MockBinding.list;
 	static readonly binding = MockBinding;
 
 	constructor(

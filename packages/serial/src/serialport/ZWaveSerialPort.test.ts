@@ -2,9 +2,9 @@ import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
 import { PassThrough } from "node:stream";
 import sinon from "sinon";
-import { MessageHeaders } from "./MessageHeaders";
-import { createAndOpenMockedZWaveSerialPort } from "./MockSerialPort";
-import type { MockPortBinding } from "./SerialPortBindingMock";
+import { MessageHeaders } from "../message/MessageHeaders";
+import { createAndOpenMockedZWaveSerialPort } from "../mock/MockSerialPort";
+import type { MockPortBinding } from "../mock/SerialPortBindingMock";
 import type { ZWaveSerialPort } from "./ZWaveSerialPort";
 
 interface TestContext {

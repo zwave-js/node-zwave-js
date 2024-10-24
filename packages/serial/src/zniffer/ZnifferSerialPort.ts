@@ -4,7 +4,7 @@ import {
 	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import { SerialPort } from "serialport";
-import type { DisconnectError } from "./DisconnectError";
+import type { DisconnectError } from "../serialport/DisconnectError";
 import { ZnifferSerialPortBase } from "./ZnifferSerialPortBase";
 
 // FIXME: This class is identical to ZWaveSerialPort, except for the class name and the base class

@@ -5,12 +5,12 @@ import {
 	getDirectionPrefix,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { MessageHeaders } from "../message/MessageHeaders";
 import {
 	SERIAL_LABEL,
 	SERIAL_LOGLEVEL,
 	type SerialLogContext,
 } from "./Logger_safe";
-import { MessageHeaders } from "./MessageHeaders";
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	constructor(loggers: ZWaveLogContainer) {

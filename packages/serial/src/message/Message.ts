@@ -20,9 +20,9 @@ import type {
 } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
-import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
+import { MessageHeaders } from "./MessageHeaders";
 
 export type MessageConstructor<T extends Message> = typeof Message & {
 	new (options: MessageBaseOptions): T;

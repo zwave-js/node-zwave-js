@@ -4,7 +4,7 @@ import {
 	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import * as net from "node:net";
-import { type ZWaveSocketOptions } from "./ZWaveSocketOptions";
+import { type ZWaveSocketOptions } from "../serialport/ZWaveSocketOptions";
 import { ZnifferSerialPortBase } from "./ZnifferSerialPortBase";
 
 // FIXME: This class is identical to ZWaveSocket, except for the class name and the base class
