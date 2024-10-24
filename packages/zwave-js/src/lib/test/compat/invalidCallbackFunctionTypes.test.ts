@@ -2,6 +2,15 @@ import { WakeUpTime, ZWaveProtocolCCAssignSUCReturnRoute } from "@zwave-js/cc";
 import { TransmitStatus, ZWaveDataRate } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	DeleteSUCReturnRouteRequest,
+	DeleteSUCReturnRouteRequestTransmitReport,
+	DeleteSUCReturnRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
 	type MockControllerBehavior,
 	createMockZWaveRequestFrame,
 	getDefaultSupportedFunctionTypes,
@@ -10,15 +19,6 @@ import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
 } from "../../controller/MockControllerState";
-import {
-	AssignSUCReturnRouteRequest,
-	AssignSUCReturnRouteResponse,
-} from "../../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import {
-	DeleteSUCReturnRouteRequest,
-	DeleteSUCReturnRouteRequestTransmitReport,
-	DeleteSUCReturnRouteResponse,
-} from "../../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import { integrationTest } from "../integrationTestSuite";
 
 // Repro for https://github.com/zwave-js/node-zwave-js/issues/6363
@@ -44,7 +44,7 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Incorrectly respond to AssignSUCReturnRoute with DeleteSUCReturnRoute
 			const handleAssignSUCReturnRoute: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					if (msg instanceof AssignSUCReturnRouteRequest) {
 						// Check if this command is legal right now
 						const state = controller.state.get(
@@ -65,15 +65,14 @@ integrationTest(
 							MockControllerCommunicationState.Sending,
 						);
 
-						const expectCallback = msg.callbackId !== 0;
+						const expectCallback = !!msg.callbackId;
 
 						// Send the command to the node
 						const node = controller.nodes.get(msg.getNodeId()!)!;
 						const command = new ZWaveProtocolCCAssignSUCReturnRoute(
-							host,
 							{
 								nodeId: node.id,
-								destinationNodeId: controller.host.ownNodeId,
+								destinationNodeId: controller.ownNodeId,
 								repeaters: [], // don't care
 								routeIndex: 0, // don't care
 								destinationSpeed: ZWaveDataRate["100k"],
@@ -86,10 +85,10 @@ integrationTest(
 						const ackPromise = controller.sendToNode(node, frame);
 
 						// Notify the host that the message was sent
-						const res = new AssignSUCReturnRouteResponse(host, {
+						const res = new AssignSUCReturnRouteResponse({
 							wasExecuted: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						let ack = false;
 						if (expectCallback) {
@@ -114,17 +113,14 @@ integrationTest(
 
 						if (expectCallback) {
 							const cb =
-								new DeleteSUCReturnRouteRequestTransmitReport(
-									host,
-									{
-										callbackId: msg.callbackId,
-										transmitStatus: ack
-											? TransmitStatus.OK
-											: TransmitStatus.NoAck,
-									},
-								);
+								new DeleteSUCReturnRouteRequestTransmitReport({
+									callbackId: msg.callbackId!,
+									transmitStatus: ack
+										? TransmitStatus.OK
+										: TransmitStatus.NoAck,
+								});
 
-							await controller.sendToHost(cb.serialize());
+							await controller.sendMessageToHost(cb);
 						}
 						return true;
 					}
@@ -134,7 +130,7 @@ integrationTest(
 
 			// Incorrectly respond to DeleteSUCReturnRoute with a message with function type 0
 			const handleDeleteSUCReturnRoute: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					if (msg instanceof DeleteSUCReturnRouteRequest) {
 						// Check if this command is legal right now
 						const state = controller.state.get(
@@ -155,15 +151,14 @@ integrationTest(
 							MockControllerCommunicationState.Sending,
 						);
 
-						const expectCallback = msg.callbackId !== 0;
+						const expectCallback = !!msg.callbackId;
 
 						// Send the command to the node
 						const node = controller.nodes.get(msg.getNodeId()!)!;
 						const command = new ZWaveProtocolCCAssignSUCReturnRoute(
-							host,
 							{
 								nodeId: node.id,
-								destinationNodeId: controller.host.ownNodeId,
+								destinationNodeId: controller.ownNodeId,
 								repeaters: [], // don't care
 								routeIndex: 0, // don't care
 								destinationSpeed: ZWaveDataRate["100k"],
@@ -176,10 +171,10 @@ integrationTest(
 						const ackPromise = controller.sendToNode(node, frame);
 
 						// Notify the host that the message was sent
-						const res = new DeleteSUCReturnRouteResponse(host, {
+						const res = new DeleteSUCReturnRouteResponse({
 							wasExecuted: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						let ack = false;
 						if (expectCallback) {
@@ -204,19 +199,16 @@ integrationTest(
 
 						if (expectCallback) {
 							const cb =
-								new DeleteSUCReturnRouteRequestTransmitReport(
-									host,
-									{
-										callbackId: msg.callbackId,
-										transmitStatus: ack
-											? TransmitStatus.OK
-											: TransmitStatus.NoAck,
-									},
-								);
+								new DeleteSUCReturnRouteRequestTransmitReport({
+									callbackId: msg.callbackId!,
+									transmitStatus: ack
+										? TransmitStatus.OK
+										: TransmitStatus.NoAck,
+								});
 							// @ts-expect-error 0 is not a valid function type
 							cb.functionType = 0;
 
-							await controller.sendToHost(cb.serialize());
+							await controller.sendMessageToHost(cb);
 						}
 						return true;
 					}

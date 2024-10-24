@@ -27,7 +27,7 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 	},
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
-		const zwpRequest = new ZWavePlusCCGet(mockController.host, {
+		const zwpRequest = new ZWavePlusCCGet({
 			nodeId: mockNode.id,
 		});
 		await mockNode.sendToController(

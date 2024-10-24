@@ -1,6 +1,6 @@
 import { Transform, type TransformCallback } from "node:stream";
-import type { SerialLogger } from "../Logger";
-import { XModemMessageHeaders } from "../MessageHeaders";
+import type { SerialLogger } from "../log/Logger";
+import { XModemMessageHeaders } from "../message/MessageHeaders";
 
 export enum BootloaderChunkType {
 	Error,

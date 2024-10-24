@@ -440,10 +440,12 @@ testPlans.forEach((plan) => {
 			}
 
 			// And create a test machine with it
-			const msg = JSON.parse(match.groups.json);
+			const msgSelector = JSON.parse(match.groups.json);
+			// @ts-ignore
+			const message: Message = messages[msgSelector.resp][msgSelector.cb];
 			const machine = createSerialAPICommandMachine(
-				// @ts-ignore
-				messages[msg.resp][msg.cb],
+				message,
+				message.serialize({} as any),
 				implementations,
 				machineParams,
 			);

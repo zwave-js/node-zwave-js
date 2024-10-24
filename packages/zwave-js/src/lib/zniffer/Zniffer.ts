@@ -5,15 +5,21 @@ import {
 	Security2CCNonceReport,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc";
+import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type FrameType,
 	type LogConfig,
 	MPDUHeaderType,
+	type MaybeNotKnown,
+	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	type RSSI,
 	SPANState,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
+	type SecurityManagers,
 	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -24,6 +30,8 @@ import {
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
+import { sdkVersionGte } from "@zwave-js/core";
+import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
@@ -62,10 +70,8 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
-import { sdkVersionGte } from "../controller/utils";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
-import { ZnifferCCParsingContext } from "./CCParsingContext";
 import {
 	type CorruptedFrame,
 	type Frame,
@@ -202,12 +208,68 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this._options = options;
 
 		this._active = false;
+
+		this.parsingContext = {
+			getHighestSecurityClass(
+				_nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
+				return SecurityClass.S2_AccessControl;
+			},
+
+			hasSecurityClass(
+				_nodeId: number,
+				_securityClass: SecurityClass,
+			): MaybeNotKnown<boolean> {
+				// We don't actually know. Attempt parsing with all security classes
+				return true;
+			},
+
+			setSecurityClass(
+				_nodeId: number,
+				_securityClass: SecurityClass,
+				_granted: boolean,
+			): void {
+				// Do nothing
+			},
+
+			getDeviceConfig(_nodeId: number): DeviceConfig | undefined {
+				// Disable strict validation while parsing certain CCs
+				// Most of this stuff isn't actually needed, only the compat flags...
+				return new DeviceConfig(
+					"unknown.json",
+					false,
+					"UNKNOWN_MANUFACTURER",
+					0x0000,
+					"UNKNOWN_PRODUCT",
+					"UNKNOWN_DESCRIPTION",
+					[],
+					{
+						min: "0.0",
+						max: "255.255",
+					},
+					true,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					// ...down here:
+					{
+						disableStrictEntryControlDataValidation: true,
+						disableStrictMeasurementValidation: true,
+					},
+				);
+			},
+		};
 	}
 
 	private _options: ZnifferOptions;
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
+	private parsingContext: Omit<
+		CCParsingContext,
+		keyof HostIDs | "sourceNodeId" | "frameType" | keyof SecurityManagers
+	>;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;
 	private get wasDestroyed(): boolean {
@@ -506,20 +568,27 @@ supported frequencies: ${
 				}
 
 				// TODO: Support parsing multicast S2 frames
-
-				const ctx = new ZnifferCCParsingContext(
-					destNodeId,
-					mpdu.homeId,
-					destSecurityManager,
-					destSecurityManager2,
-					destSecurityManagerLR,
-				);
+				const frameType: FrameType =
+					mpdu.headerType === MPDUHeaderType.Multicast
+						? "multicast"
+						: (destNodeId === NODE_ID_BROADCAST
+								|| destNodeId === NODE_ID_BROADCAST_LR)
+						? "broadcast"
+						: "singlecast";
 				try {
-					cc = CommandClass.from(ctx, {
-						data: mpdu.payload,
-						fromEncapsulation: false,
-						nodeId: mpdu.sourceNodeId,
-					});
+					cc = CommandClass.parse(
+						mpdu.payload,
+						{
+							homeId: mpdu.homeId,
+							ownNodeId: destNodeId,
+							sourceNodeId: mpdu.sourceNodeId,
+							frameType,
+							securityManager: destSecurityManager,
+							securityManager2: destSecurityManager2,
+							securityManagerLR: destSecurityManagerLR,
+							...this.parsingContext,
+						},
+					);
 				} catch (e: any) {
 					// Ignore
 					console.error(e.stack);

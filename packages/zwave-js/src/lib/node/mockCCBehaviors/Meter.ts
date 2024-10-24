@@ -29,8 +29,8 @@ const respondToMeterSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new MeterCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new MeterCCSupportedReport({
+				nodeId: controller.ownNodeId,
 				type: capabilities.meterType,
 				supportedScales: capabilities.supportedScales,
 				supportedRateTypes: capabilities.supportedRateTypes,
@@ -68,8 +68,8 @@ const respondToMeterGet: MockNodeBehavior = {
 				}
 				: value;
 
-			const cc = new MeterCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new MeterCCReport({
+				nodeId: controller.ownNodeId,
 				type: capabilities.meterType,
 				scale,
 				rateType,

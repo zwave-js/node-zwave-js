@@ -7,6 +7,13 @@ import {
 	getZWaveChipType,
 } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import {
+	SendDataAbort,
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	SendDataResponse,
+} from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
@@ -14,13 +21,6 @@ import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
 } from "../../controller/MockControllerState";
-import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
-import {
-	SendDataAbort,
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-} from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
 import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
 
@@ -42,7 +42,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 	customSetup: async (driver, controller, mockNode) => {
 		// Return a TX status of Fail when desired
 		const handleSendData: MockControllerBehavior = {
-			async onHostMessage(host, controller, msg) {
+			async onHostMessage(controller, msg) {
 				if (msg instanceof SendDataRequest) {
 					if (!shouldFail) {
 						// Defer to the default behavior
@@ -69,10 +69,10 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 					);
 
 					// Notify the host that the message was sent
-					const res = new SendDataResponse(host, {
+					const res = new SendDataResponse({
 						wasSent: true,
 					});
-					await controller.sendToHost(res.serialize());
+					await controller.sendMessageToHost(res);
 
 					await wait(100);
 
@@ -81,8 +81,8 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 						MockControllerCommunicationState.Idle,
 					);
 
-					const cb = new SendDataRequestTransmitReport(host, {
-						callbackId: msg.callbackId,
+					const cb = new SendDataRequestTransmitReport({
+						callbackId: msg.callbackId!,
 						transmitStatus: TransmitStatus.Fail,
 						txReport: {
 							txTicks: 0,
@@ -91,7 +91,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 							ackRSSI: 0,
 						},
 					});
-					await controller.sendToHost(cb.serialize());
+					await controller.sendMessageToHost(cb);
 
 					return true;
 				} else if (msg instanceof SendDataAbort) {
@@ -159,7 +159,7 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Return a TX status of Fail when desired
 			const handleSendData: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					// Soft reset should restore normal operation
 					if (msg instanceof SoftResetRequest) {
 						shouldFail = false;
@@ -192,10 +192,10 @@ integrationTest(
 						);
 
 						// Notify the host that the message was sent
-						const res = new SendDataResponse(host, {
+						const res = new SendDataResponse({
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						await wait(100);
 
@@ -204,8 +204,8 @@ integrationTest(
 							MockControllerCommunicationState.Idle,
 						);
 
-						const cb = new SendDataRequestTransmitReport(host, {
-							callbackId: msg.callbackId,
+						const cb = new SendDataRequestTransmitReport({
+							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {
 								txTicks: 0,
@@ -214,7 +214,7 @@ integrationTest(
 								ackRSSI: 0,
 							},
 						});
-						await controller.sendToHost(cb.serialize());
+						await controller.sendMessageToHost(cb);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -305,7 +305,7 @@ integrationTestMulti(
 		customSetup: async (driver, controller, mockNodes) => {
 			// Return a TX status of Fail when desired
 			const handleSendData: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					if (msg instanceof SendDataRequest) {
 						// Commands to node 3 work normally
 						if (msg.getNodeId() === 3) {
@@ -333,10 +333,10 @@ integrationTestMulti(
 						);
 
 						// Notify the host that the message was sent
-						const res = new SendDataResponse(host, {
+						const res = new SendDataResponse({
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						await wait(100);
 
@@ -345,8 +345,8 @@ integrationTestMulti(
 							MockControllerCommunicationState.Idle,
 						);
 
-						const cb = new SendDataRequestTransmitReport(host, {
-							callbackId: msg.callbackId,
+						const cb = new SendDataRequestTransmitReport({
+							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {
 								txTicks: 0,
@@ -355,7 +355,7 @@ integrationTestMulti(
 								ackRSSI: 0,
 							},
 						});
-						await controller.sendToHost(cb.serialize());
+						await controller.sendMessageToHost(cb);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {

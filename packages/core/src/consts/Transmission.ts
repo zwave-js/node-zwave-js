@@ -1,8 +1,8 @@
 import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
 import { type SecurityClass } from "../security/SecurityClass";
+import type { CCId } from "../traits/CommandClasses";
 import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
@@ -163,8 +163,6 @@ export function routingSchemeToString(scheme: RoutingScheme): string {
 export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
-	/** Number of repeaters used in the route to the destination, 0 for direct range */
-	numRepeaters: number;
 	/** RSSI value of the acknowledgement frame */
 	ackRSSI?: RSSI;
 	/** RSSI values of the incoming acknowledgement frame, measured by repeater 0...3 */
@@ -297,7 +295,7 @@ export type SendCommandOptions =
 		reportTimeoutMs?: number;
 	};
 
-export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
+export type SendCommandReturnType<TResponse extends CCId | undefined> =
 	undefined extends TResponse ? SupervisionResult | undefined
 		: TResponse | undefined;
 

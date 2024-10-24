@@ -4,16 +4,16 @@ import {
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -21,7 +21,13 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+
 import { CRC16Command } from "../lib/_Types";
+
+const headerBuffer = Buffer.from([
+	CommandClasses["CRC-16 Encapsulation"],
+	CRC16Command.CommandEncapsulation,
+]);
 
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
@@ -46,12 +52,12 @@ export class CRC16CCAPI extends CCAPI {
 			CRC16Command.CommandEncapsulation,
 		);
 
-		const cc = new CRC16CCCommandEncapsulation(this.applHost, {
+		const cc = new CRC16CCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			encapsulated: encapsulatedCC,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -70,10 +76,9 @@ export class CRC16CC extends CommandClass {
 
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
-		const ret = new CRC16CCCommandEncapsulation(host, {
+		const ret = new CRC16CCCommandEncapsulation({
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
@@ -88,7 +93,7 @@ export class CRC16CC extends CommandClass {
 }
 
 // @publicAPI
-export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+export interface CRC16CCCommandEncapsulationOptions {
 	encapsulated: CommandClass;
 }
 
@@ -107,53 +112,50 @@ function getCCResponseForCommandEncapsulation(
 )
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| CRC16CCCommandEncapsulationOptions,
+		options: WithAddress<CRC16CCCommandEncapsulationOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
+		super(options);
+		this.encapsulated = options.encapsulated;
+		this.encapsulated.encapsulatingCC = this as any;
+	}
 
-			const ccBuffer = this.payload.subarray(0, -2);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): CRC16CCCommandEncapsulation {
+		validatePayload(raw.payload.length >= 3);
 
-			// Verify the CRC
-			let expectedCRC = CRC16_CCITT(this.headerBuffer);
-			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
-			const actualCRC = this.payload.readUInt16BE(
-				this.payload.length - 2,
-			);
-			validatePayload(expectedCRC === actualCRC);
+		const ccBuffer = raw.payload.subarray(0, -2);
 
-			this.encapsulated = CommandClass.from(this.host, {
-				data: ccBuffer,
-				fromEncapsulation: true,
-				encapCC: this,
-				origin: options.origin,
-				frameType: options.frameType,
-			});
-		} else {
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
-		}
+		// Verify the CRC
+		let expectedCRC = CRC16_CCITT(headerBuffer);
+		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+		const actualCRC = raw.payload.readUInt16BE(
+			raw.payload.length - 2,
+		);
+		validatePayload(expectedCRC === actualCRC);
+
+		const encapsulated = CommandClass.parse(ccBuffer, ctx);
+		return new CRC16CCCommandEncapsulation({
+			nodeId: ctx.sourceNodeId,
+			encapsulated,
+		});
 	}
 
 	public encapsulated: CommandClass;
-	private readonly headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 
-	public serialize(): Buffer {
-		const commandBuffer = this.encapsulated.serialize();
+	public serialize(ctx: CCEncodingContext): Buffer {
+		const commandBuffer = this.encapsulated.serialize(ctx);
 		// Reserve 2 bytes for the CRC
 		this.payload = Buffer.concat([commandBuffer, Buffer.allocUnsafe(2)]);
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
-		let crc = CRC16_CCITT(this.headerBuffer);
+		let crc = CRC16_CCITT(headerBuffer);
 		crc = CRC16_CCITT(commandBuffer, crc);
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -161,9 +163,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};

@@ -88,8 +88,9 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () => SecurityClass.None;
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
+				SecurityClass.None;
 
 			// Create a security manager for the controller
 			const smCtrlr = new SecurityManager2();
@@ -106,8 +107,10 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () => NOT_KNOWN;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.encodingContext.getHighestSecurityClass =
+				controller.parsingContext.getHighestSecurityClass =
+					() => NOT_KNOWN;
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {

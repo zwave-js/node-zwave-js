@@ -67,7 +67,7 @@ test.serial(
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
-		const command = new BasicCCSet(driver, {
+		const command = new BasicCCSet({
 			nodeId: 2,
 			targetValue: 99,
 		});
@@ -132,7 +132,7 @@ test.serial(
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
-		const command = new BasicCCSet(driver, {
+		const command = new BasicCCSet({
 			nodeId: 2,
 			targetValue: 99,
 		});

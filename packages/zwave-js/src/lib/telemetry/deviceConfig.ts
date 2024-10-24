@@ -1,7 +1,6 @@
 // import got from "@esm2cjs/got";
 // import { AssociationGroupInfoCC, ConfigurationCC } from "@zwave-js/cc";
 // import { CommandClasses } from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
 // import { formatId } from "@zwave-js/shared";
 // import { isObject } from "alcalzone-shared/typeguards";
 import type { ZWaveNode } from "../node/Node";
@@ -9,7 +8,7 @@ import type { ZWaveNode } from "../node/Node";
 // const missingDeviceConfigCache = new Set<string>();
 
 export async function reportMissingDeviceConfig(
-	_applHost: ZWaveApplicationHost,
+	_ctx: any,
 	_node: ZWaveNode & {
 		manufacturerId: number;
 		productType: number;

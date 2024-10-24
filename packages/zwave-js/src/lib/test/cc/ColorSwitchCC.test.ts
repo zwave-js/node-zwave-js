@@ -9,6 +9,7 @@ import {
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 	ColorSwitchCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
@@ -16,10 +17,8 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -31,7 +30,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCSupportedGet(host, {
+	const cc = new ColorSwitchCCSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -39,7 +38,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should deserialize correctly", (t) => {
@@ -50,10 +49,11 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = new ColorSwitchCCSupportedReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCSupportedReport;
+	t.is(cc.constructor, ColorSwitchCCSupportedReport);
 
 	t.deepEqual(cc.supportedColorComponents, [
 		ColorComponent["Warm White"],
@@ -71,7 +71,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 });
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCGet(host, {
+	const cc = new ColorSwitchCCGet({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
 	});
@@ -81,7 +81,7 @@ test("the Get command should serialize correctly", (t) => {
 			2, // Color Component
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should deserialize correctly (version 1)", (t) => {
@@ -92,10 +92,11 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = new ColorSwitchCCReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCReport;
+	t.is(cc.constructor, ColorSwitchCCReport);
 
 	t.is(cc.colorComponent, ColorComponent.Red);
 	t.is(cc.currentValue, 255);
@@ -113,10 +114,11 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = new ColorSwitchCCReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCReport;
+	t.is(cc.constructor, ColorSwitchCCReport);
 
 	t.is(cc.colorComponent, ColorComponent.Red);
 	t.is(cc.currentValue, 128);
@@ -126,7 +128,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 });
 
 test("the Set command should serialize correctly (without duration)", (t) => {
-	const cc = new ColorSwitchCCSet(host, {
+	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
 		green: 255,
@@ -144,11 +146,18 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 			0xff, // duration: default
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 0; // Default to implemented version
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Set command should serialize correctly (version 2)", (t) => {
-	const cc = new ColorSwitchCCSet(host, {
+	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
 		green: 255,
@@ -167,11 +176,17 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the StartLevelChange command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCStartLevelChange(host, {
+	const cc = new ColorSwitchCCStartLevelChange({
 		nodeId: 1,
 		startLevel: 5,
 		ignoreStartLevel: true,
@@ -179,8 +194,6 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 		colorComponent: ColorComponent.Red,
 		duration: new Duration(1, "seconds"),
 	});
-	cc.version = 3;
-
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ColorSwitchCommand.StartLevelChange,
@@ -190,11 +203,17 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 3;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCStopLevelChange(host, {
+	const cc = new ColorSwitchCCStopLevelChange({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
 	});
@@ -205,7 +224,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			0b0000_0010, // color: red
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the setValue API verifies that targetColor isn't set with non-numeric keys", async (t) => {

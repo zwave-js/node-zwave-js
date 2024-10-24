@@ -8,6 +8,7 @@ import {
 	type SupervisionResult,
 	Timeout,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -15,9 +16,9 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -32,10 +33,12 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
+	getEffectiveCCVersion,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -220,11 +223,11 @@ export class ProtectionCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Get);
 
-		const cc = new ProtectionCCGet(this.applHost, {
+		const cc = new ProtectionCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<ProtectionCCReport>(
+		const response = await this.host.sendCommand<ProtectionCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -240,13 +243,13 @@ export class ProtectionCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Set);
 
-		const cc = new ProtectionCCSet(this.applHost, {
+		const cc = new ProtectionCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			local,
 			rf,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -256,11 +259,11 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.SupportedGet,
 		);
 
-		const cc = new ProtectionCCSupportedGet(this.applHost, {
+		const cc = new ProtectionCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCSupportedReport
 		>(
 			cc,
@@ -282,11 +285,11 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.ExclusiveControlGet,
 		);
 
-		const cc = new ProtectionCCExclusiveControlGet(this.applHost, {
+		const cc = new ProtectionCCExclusiveControlGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCExclusiveControlReport
 		>(
 			cc,
@@ -304,12 +307,12 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.ExclusiveControlSet,
 		);
 
-		const cc = new ProtectionCCExclusiveControlSet(this.applHost, {
+		const cc = new ProtectionCCExclusiveControlSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimeout(): Promise<MaybeNotKnown<Timeout>> {
@@ -318,11 +321,11 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.TimeoutGet,
 		);
 
-		const cc = new ProtectionCCTimeoutGet(this.applHost, {
+		const cc = new ProtectionCCTimeoutGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCTimeoutReport
 		>(
 			cc,
@@ -340,12 +343,12 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.TimeoutSet,
 		);
 
-		const cc = new ProtectionCCTimeoutSet(this.applHost, {
+		const cc = new ProtectionCCTimeoutSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			timeout,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -355,18 +358,20 @@ export class ProtectionCCAPI extends CCAPI {
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Protection,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -377,8 +382,8 @@ export class ProtectionCC extends CommandClass {
 		let hadCriticalTimeout = false;
 
 		// First find out what the device supports
-		if (this.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+		if (api.version >= 2) {
+			ctx.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
 			});
@@ -403,7 +408,7 @@ RF protection states:    ${
 						.map((str) => `\n· ${str}`)
 						.join("")
 				}`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -412,34 +417,36 @@ RF protection states:    ${
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.setInterviewComplete(applHost, true);
+		if (!hadCriticalTimeout) this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Protection,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportsExclusiveControl = !!this.getValue(
-			applHost,
+			ctx,
 			ProtectionCCValues.supportsExclusiveControl,
 		);
 		const supportsTimeout = !!this.getValue(
-			applHost,
+			ctx,
 			ProtectionCCValues.supportsTimeout,
 		);
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "querying protection status...",
 			direction: "outbound",
 		});
@@ -451,7 +458,7 @@ local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
 				logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -459,13 +466,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsTimeout) {
 			// Query the current timeout
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: "querying protection timeout...",
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
 			if (timeout) {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: `received timeout: ${timeout.toString()}`,
 					direction: "inbound",
 				});
@@ -474,13 +481,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsExclusiveControl) {
 			// Query the current timeout
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: "querying exclusive control node...",
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
 			if (nodeId != undefined) {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: (nodeId !== 0
 						? `Node ${padStart(nodeId.toString(), 3, "0")}`
 						: `no node`) + ` has exclusive control`,
@@ -492,7 +499,7 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 }
 
 // @publicAPI
-export interface ProtectionCCSetOptions extends CCCommandOptions {
+export interface ProtectionCCSetOptions {
 	local: LocalProtectionState;
 	rf?: RFProtectionState;
 }
@@ -501,33 +508,37 @@ export interface ProtectionCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | ProtectionCCSetOptions,
+		options: WithAddress<ProtectionCCSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.local = options.local;
-			this.rf = options.rf;
-		}
+		super(options);
+		this.local = options.local;
+		this.rf = options.rf;
+	}
+
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): ProtectionCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ProtectionCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public local: LocalProtectionState;
 	public rf?: RFProtectionState;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.local & 0b1111,
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
 		]);
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (
-			this.version < 2 && this.host.getDeviceConfig?.(
+			ccVersion < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {
@@ -535,10 +546,10 @@ export class ProtectionCCSet extends ProtectionCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -546,24 +557,43 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 }
 
+// @publicAPI
+export interface ProtectionCCReportOptions {
+	local: LocalProtectionState;
+	rf?: RFProtectionState;
+}
+
 @CCCommand(ProtectionCommand.Report)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ProtectionCCReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.local = this.payload[0] & 0b1111;
-		if (this.payload.length >= 2) {
-			this.rf = this.payload[1] & 0b1111;
+		super(options);
+
+		// TODO: Check implementation:
+		this.local = options.local;
+		this.rf = options.rf;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): ProtectionCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const local: LocalProtectionState = raw.payload[0] & 0b1111;
+		let rf: RFProtectionState | undefined;
+		if (raw.payload.length >= 2) {
+			rf = raw.payload[1] & 0b1111;
 		}
+
+		return new ProtectionCCReport({
+			nodeId: ctx.sourceNodeId,
+			local,
+			rf,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.localProtectionState)
@@ -572,7 +602,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -580,7 +610,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -590,32 +620,59 @@ export class ProtectionCCReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCReport)
 export class ProtectionCCGet extends ProtectionCC {}
 
+// @publicAPI
+export interface ProtectionCCSupportedReportOptions {
+	supportsTimeout: boolean;
+	supportsExclusiveControl: boolean;
+	supportedLocalStates: LocalProtectionState[];
+	supportedRFStates: RFProtectionState[];
+}
+
 @CCCommand(ProtectionCommand.SupportedReport)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ProtectionCCSupportedReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 5);
-		this.supportsTimeout = !!(this.payload[0] & 0b1);
-		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
-		this.supportedLocalStates = parseBitMask(
-			this.payload.subarray(1, 3),
-			LocalProtectionState.Unprotected,
-		);
-		this.supportedRFStates = parseBitMask(
-			this.payload.subarray(3, 5),
-			RFProtectionState.Unprotected,
-		);
+		super(options);
+
+		// TODO: Check implementation:
+		this.supportsTimeout = options.supportsTimeout;
+		this.supportsExclusiveControl = options.supportsExclusiveControl;
+		this.supportedLocalStates = options.supportedLocalStates;
+		this.supportedRFStates = options.supportedRFStates;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ProtectionCCSupportedReport {
+		validatePayload(raw.payload.length >= 5);
+		const supportsTimeout = !!(raw.payload[0] & 0b1);
+		const supportsExclusiveControl = !!(raw.payload[0] & 0b10);
+		const supportedLocalStates: LocalProtectionState[] = parseBitMask(
+			raw.payload.subarray(1, 3),
+			LocalProtectionState.Unprotected,
+		);
+		const supportedRFStates: RFProtectionState[] = parseBitMask(
+			raw.payload.subarray(3, 5),
+			RFProtectionState.Unprotected,
+		);
+
+		return new ProtectionCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			supportsTimeout,
+			supportsExclusiveControl,
+			supportedLocalStates,
+			supportedRFStates,
+		});
+	}
+
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// update metadata (partially) for the local and rf values
 		const localStateValue = ProtectionCCValues.localProtectionState;
-		this.setMetadata(applHost, localStateValue, {
+		this.setMetadata(ctx, localStateValue, {
 			...localStateValue.meta,
 			states: enumValuesToMetadataStates(
 				LocalProtectionState,
@@ -624,7 +681,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		});
 
 		const rfStateValue = ProtectionCCValues.rfProtectionState;
-		this.setMetadata(applHost, rfStateValue, {
+		this.setMetadata(ctx, rfStateValue, {
 			...rfStateValue.meta,
 			states: enumValuesToMetadataStates(
 				RFProtectionState,
@@ -647,9 +704,9 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
@@ -672,23 +729,41 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCSupportedReport)
 export class ProtectionCCSupportedGet extends ProtectionCC {}
 
+// @publicAPI
+export interface ProtectionCCExclusiveControlReportOptions {
+	exclusiveControlNodeId: number;
+}
+
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ProtectionCCExclusiveControlReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.exclusiveControlNodeId = this.payload[0];
+		super(options);
+
+		// TODO: Check implementation:
+		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ProtectionCCExclusiveControlReport {
+		validatePayload(raw.payload.length >= 1);
+		const exclusiveControlNodeId = raw.payload[0];
+
+		return new ProtectionCCExclusiveControlReport({
+			nodeId: ctx.sourceNodeId,
+			exclusiveControlNodeId,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -701,9 +776,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 export class ProtectionCCExclusiveControlGet extends ProtectionCC {}
 
 // @publicAPI
-export interface ProtectionCCExclusiveControlSetOptions
-	extends CCCommandOptions
-{
+export interface ProtectionCCExclusiveControlSetOptions {
 	exclusiveControlNodeId: number;
 }
 
@@ -712,33 +785,37 @@ export interface ProtectionCCExclusiveControlSetOptions
 @useSupervision()
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| ProtectionCCExclusiveControlSetOptions,
+		options: WithAddress<ProtectionCCExclusiveControlSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.exclusiveControlNodeId = options.exclusiveControlNodeId;
-		}
+		super(options);
+		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): ProtectionCCExclusiveControlSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ProtectionCCExclusiveControlSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public exclusiveControlNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.exclusiveControlNodeId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -746,23 +823,41 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	}
 }
 
+// @publicAPI
+export interface ProtectionCCTimeoutReportOptions {
+	timeout: Timeout;
+}
+
 @CCCommand(ProtectionCommand.TimeoutReport)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ProtectionCCTimeoutReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.timeout = Timeout.parse(this.payload[0]);
+		super(options);
+
+		// TODO: Check implementation:
+		this.timeout = options.timeout;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ProtectionCCTimeoutReport {
+		validatePayload(raw.payload.length >= 1);
+		const timeout: Timeout = Timeout.parse(raw.payload[0]);
+
+		return new ProtectionCCTimeoutReport({
+			nodeId: ctx.sourceNodeId,
+			timeout,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -773,7 +868,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 export class ProtectionCCTimeoutGet extends ProtectionCC {}
 
 // @publicAPI
-export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+export interface ProtectionCCTimeoutSetOptions {
 	timeout: Timeout;
 }
 
@@ -782,33 +877,37 @@ export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| ProtectionCCTimeoutSetOptions,
+		options: WithAddress<ProtectionCCTimeoutSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.timeout = options.timeout;
-		}
+		super(options);
+		this.timeout = options.timeout;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): ProtectionCCTimeoutSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new ProtectionCCTimeoutSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public timeout: Timeout;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.timeout.serialize()]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

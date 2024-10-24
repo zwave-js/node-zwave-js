@@ -1,12 +1,12 @@
 import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
 import { MessagePriority } from "@zwave-js/core";
 import { type Message, getDefaultPriority } from "@zwave-js/serial";
+import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
+import { RemoveFailedNodeRequest } from "@zwave-js/serial/serialapi";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import test from "ava";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
-import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
-import { RemoveFailedNodeRequest } from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
-import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import type { Driver } from "./Driver";
 import {
 	type MessageGenerator,
@@ -23,6 +23,9 @@ function createDummyMessageGenerator(msg: Message): MessageGenerator {
 		self: undefined,
 		current: undefined,
 		parent: undefined as any,
+		reset() {
+			this.current = undefined;
+		},
 	};
 }
 
@@ -49,8 +52,8 @@ test("should compare priority, then the timestamp", (t) => {
 		controller: {
 			nodes: new Map<number, MockNode>(),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -147,8 +150,8 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -164,12 +167,12 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 	) {
 		const driver = driverMock as any as Driver;
 		const msg = nodeId != undefined
-			? new SendDataRequest(driver, {
-				command: new NoOperationCC(driver, {
+			? new SendDataRequest({
+				command: new NoOperationCC({
 					nodeId,
 				}),
 			})
-			: new GetControllerVersionRequest(driver);
+			: new GetControllerVersionRequest();
 		const ret = createDummyTransaction(driverMock, {
 			priority,
 			message: msg,
@@ -260,8 +263,8 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -273,8 +276,8 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 
 	function createTransaction(nodeId: number, priority: MessagePriority) {
 		const driver = driverMock as any as Driver;
-		const msg = new SendDataRequest(driver, {
-			command: new NoOperationCC(driver, { nodeId }),
+		const msg = new SendDataRequest({
+			command: new NoOperationCC({ nodeId }),
 		});
 		const ret = createDummyTransaction(driverMock, {
 			priority,
@@ -356,8 +359,8 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -380,14 +383,14 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 		return ret;
 	}
 
-	const msgForSleepingNode = new SendDataRequest(driverMock, {
-		command: new NoOperationCC(driverMock, { nodeId: 2 }),
+	const msgForSleepingNode = new SendDataRequest({
+		command: new NoOperationCC({ nodeId: 2 }),
 	});
 	const tSleepingNode = createTransaction(
 		msgForSleepingNode,
 		MessagePriority.WakeUp,
 	);
-	const msgForController = new RemoveFailedNodeRequest(driverMock, {
+	const msgForController = new RemoveFailedNodeRequest({
 		failedNodeId: 3,
 	});
 	const tController = createTransaction(msgForController);
@@ -401,8 +404,8 @@ test("should capture a stack trace where it was created", (t) => {
 		controller: {
 			nodes: new Map<number, MockNode>(),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},

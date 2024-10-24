@@ -22,8 +22,8 @@ integrationTest(
 				1000,
 			);
 
-			const cc = new CommandClass(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			const cc = new CommandClass({
+				nodeId: mockController.ownNodeId,
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02, // Get
 				payload: Buffer.from([0x00, 0x01]), // Technically invalid

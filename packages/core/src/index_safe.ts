@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
 /* @forbiddenImports external */
 
-export * from "./abstractions/ICommandClass";
-export * from "./abstractions/IZWaveEndpoint";
-export * from "./abstractions/IZWaveNode";
 export * from "./capabilities/CommandClasses";
 export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/LibraryTypes";
@@ -24,6 +21,11 @@ export * from "./registries/Sensors";
 export * from "./security/DSK";
 export * from "./security/SecurityClass";
 export * from "./security/shared_safe";
+export * from "./traits/CommandClasses";
+export * from "./traits/Endpoints";
+export * from "./traits/Endpoints";
+export * from "./traits/Nodes";
+export * from "./traits/SecurityManagers";
 export * from "./util/_Types";
 export * from "./util/config";
 export * from "./util/crc";

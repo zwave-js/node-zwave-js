@@ -2,11 +2,9 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { FunctionType, MessageType } from "./Constants";
-import type { INodeQuery } from "./INodeQuery";
 import { Message, messageTypes } from "./Message";
 
 test("should deserialize and serialize correctly", (t) => {
-	const host = createTestingHost();
 	// actual messages from OZW
 	const okayMessages = [
 		Buffer.from([
@@ -40,24 +38,22 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = new Message(host, { data: original });
-		t.deepEqual(parsed.serialize(), original);
+		const parsed = Message.parse(original, {} as any);
+		t.deepEqual(parsed.serialize({} as any), original);
 	}
 });
 
 test("should serialize correctly when the payload is null", (t) => {
-	const host = createTestingHost();
 	// synthetic message
 	const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-	const message = new Message(host, {
+	const message = new Message({
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
-	t.deepEqual(message.serialize(), expected);
+	t.deepEqual(message.serialize({} as any), expected);
 });
 
 test("should throw the correct error when parsing a faulty message", (t) => {
-	const host = createTestingHost();
 	// fake messages to produce certain errors
 	const brokenMessages: [Buffer, string, ZWaveErrorCodes][] = [
 		// too short (<5 bytes)
@@ -92,164 +88,19 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		assertZWaveError(t, () => new Message(host, { data: message }), {
-			messageMatches: msg,
-			errorCode: code,
-		});
-	}
-});
-
-test("isComplete() should work correctly", (t) => {
-	// actual messages from OZW
-	const okayMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
-		Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-		]),
-	];
-	for (const msg of okayMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
-	}
-
-	// truncated messages
-	const truncatedMessages = [
-		undefined,
-		Buffer.from([]),
-		Buffer.from([0x01]),
-		Buffer.from([0x01, 0x09]),
-		Buffer.from([0x01, 0x09, 0x00]),
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-		]),
-	];
-	for (const msg of truncatedMessages) {
-		t.is(Message.isComplete(msg), false); // `${msg ? msg.toString("hex") : "null"} should be detected as incomplete`
-	}
-
-	// faulty but non-truncated messages should be detected as complete
-	const faultyMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
-		Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-		]),
-	];
-	for (const msg of faultyMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
-	}
-
-	// actual messages from OZW, appended with some random data
-	const tooLongMessages = [
-		Buffer.from([
-			0x01,
-			0x09,
-			0x00,
-			0x13,
-			0x03,
-			0x02,
-			0x00,
-			0x00,
-			0x25,
-			0x0b,
-			0xca,
-			0x00,
-		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99, 0x01, 0x02]),
-		Buffer.from([
-			0x01,
-			0x06,
-			0x00,
-			0x46,
-			0x0c,
-			0x0d,
-			0x32,
-			0x8c,
-			0xab,
-			0xcd,
-			0xef,
-		]),
-		Buffer.from([
-			0x01,
-			0x0a,
-			0x00,
-			0x13,
-			0x03,
-			0x03,
-			0x8e,
-			0x02,
-			0x04,
-			0x25,
-			0x40,
-			0x0b,
-			0x12,
-		]),
-	];
-	for (const msg of tooLongMessages) {
-		t.is(Message.isComplete(msg), true); // `${msg.toString("hex")} should be detected as complete`
+		assertZWaveError(
+			t,
+			() => Message.parse(message, {} as any),
+			{
+				messageMatches: msg,
+				errorCode: code,
+			},
+		);
 	}
 });
 
 test("toJSON() should return a semi-readable JSON representation", (t) => {
-	const host = createTestingHost();
-	const msg1 = new Message(host, {
+	const msg1 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 	});
@@ -259,7 +110,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		functionType: "GetControllerVersion",
 		payload: "",
 	};
-	const msg2 = new Message(host, {
+	const msg2 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 		payload: Buffer.from("aabbcc", "hex"),
@@ -270,7 +121,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		functionType: "GetControllerVersion",
 		payload: "aabbcc",
 	};
-	const msg3 = new Message(host, {
+	const msg3 = new Message({
 		type: MessageType.Response,
 		functionType: FunctionType.GetControllerVersion,
 		expectedResponse: FunctionType.GetControllerVersion,
@@ -282,7 +133,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		expectedResponse: "GetControllerVersion",
 		payload: "",
 	};
-	const msg4 = new Message(host, {
+	const msg4 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 		expectedResponse: FunctionType.GetControllerVersion,
@@ -302,32 +153,37 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	t.deepEqual(msg4.toJSON(), json4);
 });
 
-test("getConstructor() should return `Message` for an unknown packet type", (t) => {
+test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
 	const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.is(Message.getConstructor(unknown), Message);
+	t.is(
+		Message.parse(unknown, {} as any).constructor,
+		Message,
+	);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {
-	const host = createTestingHost();
-	assertZWaveError(t, () => new Message(host, { functionType: 0xff }), {
-		errorCode: ZWaveErrorCodes.Argument_Invalid,
-		messageMatches: /message type/i,
-	});
+	assertZWaveError(
+		t,
+		() => new Message({ functionType: 0xff as any }),
+		{
+			errorCode: ZWaveErrorCodes.Argument_Invalid,
+			messageMatches: /message type/i,
+		},
+	);
 
-	@messageTypes(undefined as any, 0xff)
+	@messageTypes(undefined as any, 0xff as any)
 	class FakeMessageWithoutMessageType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutMessageType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutMessageType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
 });
 
 test(`the constructor should throw when no function type is specified`, (t) => {
-	const host = createTestingHost();
 	assertZWaveError(
 		t,
-		() => new Message(host, { type: MessageType.Request }),
+		() => new Message({ type: MessageType.Request }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
 			messageMatches: /function type/i,
@@ -337,44 +193,44 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	@messageTypes(MessageType.Request, undefined as any)
 	class FakeMessageWithoutFunctionType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /function type/i,
 	});
 });
 
-test("getNodeUnsafe() returns undefined when the controller is not initialized yet", (t) => {
+test("tryGetNode() returns undefined when the controller is not initialized yet", (t) => {
 	const host = createTestingHost();
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
-	t.is(msg.getNodeUnsafe(host), undefined);
+	t.is(msg.tryGetNode(host), undefined);
 });
 
-test("getNodeUnsafe() returns undefined when the message is no node query", (t) => {
+test("tryGetNode() returns undefined when the message is no node query", (t) => {
 	const host = createTestingHost();
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
-	t.is(msg.getNodeUnsafe(host), undefined);
+	t.is(msg.tryGetNode(host), undefined);
 });
 
-test("getNodeUnsafe() returns the associated node otherwise", (t) => {
+test("tryGetNode() returns the associated node otherwise", (t) => {
 	const host = createTestingHost();
-	host.nodes.set(1, {} as any);
+	host.setNode(1, {} as any);
 
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
 
 	// This node exists
-	(msg as any as INodeQuery).nodeId = 1;
-	t.is(msg.getNodeUnsafe(host), host.nodes.get(1));
+	(msg as any).nodeId = 1;
+	t.is(msg.tryGetNode(host), host.getNode(1));
 
 	// This one does
-	(msg as any as INodeQuery).nodeId = 2;
-	t.is(msg.getNodeUnsafe(host), undefined);
+	(msg as any).nodeId = 2;
+	t.is(msg.tryGetNode(host), undefined);
 });

@@ -56,10 +56,10 @@ createCCInstanceUnsafe<T>(cc: CommandClasses): T | undefined
 
 Like [`createCCInstance`](#createCCInstance) but returns `undefined` instead of throwing when a CC is not supported.
 
-### `getNodeUnsafe`
+### `tryGetNode`
 
 ```ts
-getNodeUnsafe(): ZWaveNode | undefined
+tryGetNode(): ZWaveNode | undefined
 ```
 
 Returns the node this endpoint belongs to (or undefined if the node doesn't exist).

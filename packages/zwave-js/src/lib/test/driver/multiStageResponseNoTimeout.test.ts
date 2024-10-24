@@ -37,8 +37,8 @@ integrationTest(
 				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof ConfigurationCCNameGet) {
 						await wait(700);
-						let cc = new ConfigurationCCNameReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						let cc = new ConfigurationCCNameReport({
+							nodeId: controller.ownNodeId,
 							parameter: receivedCC.parameter,
 							name: "Test para",
 							reportsToFollow: 1,
@@ -51,8 +51,8 @@ integrationTest(
 
 						await wait(700);
 
-						cc = new ConfigurationCCNameReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						cc = new ConfigurationCCNameReport({
+							nodeId: controller.ownNodeId,
 							parameter: receivedCC.parameter,
 							name: "meter",
 							reportsToFollow: 0,
@@ -100,16 +100,13 @@ integrationTest(
 			const respondToConfigurationNameGet: MockNodeBehavior = {
 				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof ConfigurationCCNameGet) {
-						const configCC = new ConfigurationCCNameReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								parameter: receivedCC.parameter,
-								name:
-									"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
-								reportsToFollow: 0,
-							},
-						);
+						const configCC = new ConfigurationCCNameReport({
+							nodeId: controller.ownNodeId,
+							parameter: receivedCC.parameter,
+							name:
+								"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
+							reportsToFollow: 0,
+						});
 						const serialized = configCC.serialize();
 						const segment1 = serialized.subarray(
 							0,
@@ -119,25 +116,19 @@ integrationTest(
 
 						const sessionId = 7;
 
-						const tsFS = new TransportServiceCCFirstSegment(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								sessionId,
-								datagramSize: serialized.length,
-								partialDatagram: segment1,
-							},
-						);
-						const tsSS = new TransportServiceCCSubsequentSegment(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								sessionId,
-								datagramSize: serialized.length,
-								datagramOffset: segment1.length,
-								partialDatagram: segment2,
-							},
-						);
+						const tsFS = new TransportServiceCCFirstSegment({
+							nodeId: controller.ownNodeId,
+							sessionId,
+							datagramSize: serialized.length,
+							partialDatagram: segment1,
+						});
+						const tsSS = new TransportServiceCCSubsequentSegment({
+							nodeId: controller.ownNodeId,
+							sessionId,
+							datagramSize: serialized.length,
+							datagramOffset: segment1.length,
+							partialDatagram: segment2,
+						});
 
 						await wait(700);
 						await self.sendToController(
@@ -185,8 +176,8 @@ integrationTest("GET requests DO time out if there's no matching response", {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof ConfigurationCCNameGet) {
 					// This is not the response you're looking for
-					const cc = new BasicCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const cc = new BasicCCReport({
+						nodeId: controller.ownNodeId,
 						currentValue: 1,
 					});
 					return { action: "sendCC", cc };

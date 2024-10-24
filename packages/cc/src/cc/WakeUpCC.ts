@@ -6,13 +6,14 @@ import {
 	type SupervisionResult,
 	TransmitOptions,
 	ValueMetadata,
+	type WithAddress,
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -27,10 +28,10 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -107,7 +108,7 @@ export class WakeUpCCAPI extends CCAPI {
 			}
 			const result = await this.setInterval(
 				value,
-				this.applHost.ownNodeId ?? 1,
+				this.host.ownNodeId ?? 1,
 			);
 
 			// Verify the change after a short delay, unless the command was supervised and successful
@@ -134,11 +135,11 @@ export class WakeUpCCAPI extends CCAPI {
 	public async getInterval() {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalGet);
 
-		const cc = new WakeUpCCIntervalGet(this.applHost, {
+		const cc = new WakeUpCCIntervalGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WakeUpCCIntervalReport
 		>(
 			cc,
@@ -156,11 +157,11 @@ export class WakeUpCCAPI extends CCAPI {
 			WakeUpCommand.IntervalCapabilitiesGet,
 		);
 
-		const cc = new WakeUpCCIntervalCapabilitiesGet(this.applHost, {
+		const cc = new WakeUpCCIntervalCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
 		>(
 			cc,
@@ -184,13 +185,13 @@ export class WakeUpCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalSet);
 
-		const cc = new WakeUpCCIntervalSet(this.applHost, {
+		const cc = new WakeUpCCIntervalSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			wakeUpInterval,
 			controllerNodeId,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
@@ -199,11 +200,11 @@ export class WakeUpCCAPI extends CCAPI {
 			WakeUpCommand.NoMoreInformation,
 		);
 
-		const cc = new WakeUpCCNoMoreInformation(this.applHost, {
+		const cc = new WakeUpCCNoMoreInformation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,
@@ -222,30 +223,32 @@ export class WakeUpCCAPI extends CCAPI {
 export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Wake Up"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (applHost.isControllerNode(node.id)) {
-			applHost.controllerLog.logNode(
+		if (node.id === ctx.ownNodeId) {
+			ctx.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
 			);
 		} else if (node.isFrequentListening) {
-			applHost.controllerLog.logNode(
+			ctx.logNode(
 				node.id,
 				`skipping wakeup configuration for frequent listening device`,
 			);
@@ -256,8 +259,8 @@ export class WakeUpCC extends CommandClass {
 			let maxInterval: number | undefined;
 
 			// Retrieve the allowed wake up intervals and wake on demand support if possible
-			if (this.version >= 2) {
-				applHost.controllerLog.logNode(node.id, {
+			if (api.version >= 2) {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"retrieving wakeup capabilities from the device...",
@@ -271,7 +274,7 @@ minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
 wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -285,7 +288,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
@@ -296,7 +299,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 				const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -310,7 +313,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 				currentControllerNodeId = 0; // assume not set
 			}
 
-			const ownNodeId = applHost.ownNodeId;
+			const ownNodeId = ctx.ownNodeId;
 			// Only change the destination if necessary
 			if (currentControllerNodeId !== ownNodeId) {
 				// Spec compliance: Limit the interval to the allowed range, but...
@@ -327,18 +330,18 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					);
 				}
 
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "configuring wakeup destination node",
 					direction: "outbound",
 				});
 				await api.setInterval(desiredInterval, ownNodeId);
 				this.setValue(
-					applHost,
+					ctx,
 					WakeUpCCValues.controllerNodeId,
 					ownNodeId,
 				);
-				applHost.controllerLog.logNode(
+				ctx.logNode(
 					node.id,
 					"wakeup destination node changed!",
 				);
@@ -346,12 +349,12 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
 // @publicAPI
-export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
+export interface WakeUpCCIntervalSetOptions {
 	wakeUpInterval: number;
 	controllerNodeId: number;
 }
@@ -360,26 +363,29 @@ export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 @useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| WakeUpCCIntervalSetOptions,
+		options: WithAddress<WakeUpCCIntervalSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.wakeUpInterval = this.payload.readUIntBE(0, 3);
-			this.controllerNodeId = this.payload[3];
-		} else {
-			this.wakeUpInterval = options.wakeUpInterval;
-			this.controllerNodeId = options.controllerNodeId;
-		}
+		super(options);
+		this.wakeUpInterval = options.wakeUpInterval;
+		this.controllerNodeId = options.controllerNodeId;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): WakeUpCCIntervalSet {
+		validatePayload(raw.payload.length >= 4);
+		const wakeUpInterval = raw.payload.readUIntBE(0, 3);
+		const controllerNodeId = raw.payload[3];
+
+		return new WakeUpCCIntervalSet({
+			nodeId: ctx.sourceNodeId,
+			wakeUpInterval,
+			controllerNodeId,
+		});
 	}
 
 	public wakeUpInterval: number;
 	public controllerNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			0,
 			0,
@@ -387,12 +393,12 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 			this.controllerNodeId,
 		]);
 		this.payload.writeUIntBE(this.wakeUpInterval, 0, 3);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -401,17 +407,37 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 	}
 }
 
+// @publicAPI
+export interface WakeUpCCIntervalReportOptions {
+	wakeUpInterval: number;
+	controllerNodeId: number;
+}
+
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<WakeUpCCIntervalReportOptions>,
 	) {
-		super(host, options);
+		super(options);
 
-		validatePayload(this.payload.length >= 4);
-		this.wakeUpInterval = this.payload.readUIntBE(0, 3);
-		this.controllerNodeId = this.payload[3];
+		// TODO: Check implementation:
+		this.wakeUpInterval = options.wakeUpInterval;
+		this.controllerNodeId = options.controllerNodeId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): WakeUpCCIntervalReport {
+		validatePayload(raw.payload.length >= 4);
+		const wakeUpInterval = raw.payload.readUIntBE(0, 3);
+		const controllerNodeId = raw.payload[3];
+
+		return new WakeUpCCIntervalReport({
+			nodeId: ctx.sourceNodeId,
+			wakeUpInterval,
+			controllerNodeId,
+		});
 	}
 
 	@ccValue(WakeUpCCValues.wakeUpInterval)
@@ -420,9 +446,9 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.controllerNodeId)
 	public readonly controllerNodeId: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -441,31 +467,58 @@ export class WakeUpCCWakeUpNotification extends WakeUpCC {}
 @CCCommand(WakeUpCommand.NoMoreInformation)
 export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 
+// @publicAPI
+export interface WakeUpCCIntervalCapabilitiesReportOptions {
+	minWakeUpInterval: number;
+	maxWakeUpInterval: number;
+	defaultWakeUpInterval: number;
+	wakeUpIntervalSteps: number;
+	wakeUpOnDemandSupported: boolean;
+}
+
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<WakeUpCCIntervalCapabilitiesReportOptions>,
 	) {
-		super(host, options);
+		super(options);
 
-		validatePayload(this.payload.length >= 12);
-		this.minWakeUpInterval = this.payload.readUIntBE(0, 3);
-		this.maxWakeUpInterval = this.payload.readUIntBE(3, 3);
-		this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
-		this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
-
-		// Get 'Wake Up on Demand Support' if node supports V3 and sends 13th byte
-		if (this.version >= 3 && this.payload.length >= 13) {
-			this.wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
-		} else {
-			this.wakeUpOnDemandSupported = false;
-		}
+		// TODO: Check implementation:
+		this.minWakeUpInterval = options.minWakeUpInterval;
+		this.maxWakeUpInterval = options.maxWakeUpInterval;
+		this.defaultWakeUpInterval = options.defaultWakeUpInterval;
+		this.wakeUpIntervalSteps = options.wakeUpIntervalSteps;
+		this.wakeUpOnDemandSupported = options.wakeUpOnDemandSupported;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): WakeUpCCIntervalCapabilitiesReport {
+		validatePayload(raw.payload.length >= 12);
+		const minWakeUpInterval = raw.payload.readUIntBE(0, 3);
+		const maxWakeUpInterval = raw.payload.readUIntBE(3, 3);
+		const defaultWakeUpInterval = raw.payload.readUIntBE(6, 3);
+		const wakeUpIntervalSteps = raw.payload.readUIntBE(9, 3);
+		let wakeUpOnDemandSupported = false;
+		if (raw.payload.length >= 13) {
+			// V3+
+			wakeUpOnDemandSupported = !!(raw.payload[12] & 0b1);
+		}
+
+		return new WakeUpCCIntervalCapabilitiesReport({
+			nodeId: ctx.sourceNodeId,
+			minWakeUpInterval,
+			maxWakeUpInterval,
+			defaultWakeUpInterval,
+			wakeUpIntervalSteps,
+			wakeUpOnDemandSupported,
+		});
+	}
+
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
+		const valueDB = this.getValueDB(ctx);
 
 		// Store the received information as metadata for the wake up interval
 		valueDB.setMetadata(
@@ -496,9 +549,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.wakeUpOnDemandSupported)
 	public readonly wakeUpOnDemandSupported: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default interval": `${this.defaultWakeUpInterval} seconds`,
 				"minimum interval": `${this.minWakeUpInterval} seconds`,

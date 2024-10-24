@@ -22,6 +22,7 @@ import {
 	type ZnifferFrameInfo,
 	ZnifferFrameType,
 } from "@zwave-js/serial";
+import { parseRSSI } from "@zwave-js/serial/serialapi";
 import {
 	type AllOrNone,
 	buffer2hex,
@@ -29,7 +30,6 @@ import {
 	staticExtends,
 } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
-import { parseRSSI } from "../serialapi/transport/SendDataShared";
 import {
 	ExplorerFrameCommand,
 	LongRangeFrameType,

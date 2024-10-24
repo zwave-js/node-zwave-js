@@ -1,3 +1,3 @@
-export * from "./MockSerialPort";
-export * from "./SerialPortBindingMock";
-export * from "./SerialPortMock";
+export * from "./mock/MockSerialPort";
+export * from "./mock/SerialPortBindingMock";
+export * from "./mock/SerialPortMock";

@@ -1,4 +1,4 @@
-import { ZnifferMessageHeaders } from "../MessageHeaders";
+import { ZnifferMessageHeaders } from "./MessageHeaders";
 
 /** Indicates the type of a data message */
 export enum MessageType {

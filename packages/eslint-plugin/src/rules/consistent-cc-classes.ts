@@ -45,6 +45,9 @@ function getRequiredInterviewCCsFromMethod(
 export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		let currentCCId: CommandClasses | undefined;
+		let isInCCCommand = false;
+		let ctor: TSESTree.MethodDefinition | undefined;
+		let hasFromImpl: boolean;
 
 		return {
 			// Look at class declarations ending with "CC"
@@ -154,7 +157,23 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 				}
 			},
 			MethodDefinition(node) {
-				// Only care about methods inside non-application CC classes,
+				if (isInCCCommand) {
+					if (
+						node.key.type === AST_NODE_TYPES.Identifier
+						&& node.key.name === "from"
+					) {
+						hasFromImpl = true;
+					}
+
+					if (
+						node.key.type === AST_NODE_TYPES.Identifier
+						&& node.key.name === "constructor"
+					) {
+						ctor = node;
+					}
+				}
+
+				// For the following, only care about methods inside non-application CC classes,
 				// since only application CCs may depend on other application CCs
 				if (!currentCCId || applicationCCs.includes(currentCCId)) {
 					return;
@@ -198,8 +217,64 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 					});
 				}
 			},
-			"ClassDeclaration:exit"(_node) {
+
+			"ClassDeclaration:exit"(node) {
+				// Ensure each CC class with a custom constructor also has a from method
+				if (isInCCCommand && !!ctor && !hasFromImpl) {
+					const fix = (fixer: TSESLint.RuleFixer) => {
+						return fixer.insertTextAfter(
+							ctor!,
+							`
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ${node.id!.name} {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			\`\${this.name}: deserialization not implemented\`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+	}`,
+						);
+					};
+
+					context.report({
+						node: ctor,
+						loc: ctor.key.loc,
+						messageId: "missing-from-impl",
+						suggest: [
+							{
+								messageId: "suggest-impl-from",
+								fix,
+							},
+						],
+					});
+				}
+
 				currentCCId = undefined;
+				isInCCCommand = false;
+				hasFromImpl = false;
+				ctor = undefined;
+			},
+
+			// =================================================================
+
+			// Ensure consistent implementation of CC commands
+
+			// Look at class declarations containing, but not ending with "CC"
+			"ClassDeclaration[id.name=/.+CC.+/]"(
+				node: TSESTree.ClassDeclaration & {
+					id: TSESTree.Identifier;
+				},
+			) {
+				if (
+					node.superClass?.type === AST_NODE_TYPES.Identifier
+					&& node.superClass.name.endsWith("CC")
+				) {
+					// TODO: Implement more rules, for now only look at constructor/from
+					isInCCCommand = true;
+				}
 			},
 
 			// =================================================================
@@ -330,12 +405,15 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 				"Classes implementing a CC API must have a CC assigned using the `@API(...)` decorator",
 			"missing-version-decorator":
 				"Classes implementing a CC must be decorated with `@implementedVersion(...)`",
+			"missing-from-impl":
+				"CC implementations with a custom constructor must also override the `CommandClass.from(...)` method",
 			"must-export": "Classes implementing a CC must be exported",
 			"must-export-api": "Classes implementing a CC API must be exported",
 			"must-inherit-ccapi":
 				"Classes implementing a CC API MUST inherit from `CCAPI` or `PhysicalCCAPI`",
 			"suggest-extend-ccapi": "Inherit from `CCAPI`",
 			"suggest-extend-physicalccapi": "Inherit from `PhysicalCCAPI`",
+			"suggest-impl-from": "Override `CommandClass.from(...)`",
 			"must-inherit-commandclass":
 				"Classes implementing a CC MUST inherit from `CommandClass`",
 			"required-ccs-failed":

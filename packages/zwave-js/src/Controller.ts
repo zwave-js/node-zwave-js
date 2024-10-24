@@ -11,6 +11,8 @@ export {
 	isRssiError,
 } from "@zwave-js/core/safe";
 export type { RSSI, TXReport } from "@zwave-js/core/safe";
+export type { ZWaveApiVersion, ZWaveLibraryTypes } from "@zwave-js/core/safe";
+export { SerialAPISetupCommand } from "@zwave-js/serial/serialapi";
 export { ZWaveController } from "./lib/controller/Controller";
 export type { ControllerEvents } from "./lib/controller/Controller";
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
@@ -28,8 +30,3 @@ export type {
 	RebuildRoutesStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";
-export type {
-	ZWaveApiVersion,
-	ZWaveLibraryTypes,
-} from "./lib/serialapi/_Types";
-export { SerialAPISetupCommand } from "./lib/serialapi/capability/SerialAPISetupMessages";

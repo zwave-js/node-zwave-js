@@ -42,7 +42,7 @@ integrationTest(
 			const respondToSupervisionGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SupervisionCCGet) {
-						const cc = new SupervisionCCReport(controller.host, {
+						const cc = new SupervisionCCReport({
 							nodeId: self.id,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,

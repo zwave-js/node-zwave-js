@@ -39,8 +39,8 @@ integrationTest(
 						};
 
 						// Incorrectly respond with 0xFF as the sensor type
-						const cc = new BinarySensorCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new BinarySensorCCReport({
+							nodeId: controller.ownNodeId,
 							type: BinarySensorType.Any,
 							value: true,
 						});

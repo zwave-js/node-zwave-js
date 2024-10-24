@@ -1,21 +1,23 @@
 import {
 	CommandClasses,
 	Duration,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetDeviceConfig,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -31,10 +33,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -245,7 +248,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		if (!this.endpoint.virtual) {
 			const groupCount = SceneControllerConfigurationCC
 				.getGroupCountCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 				);
 
@@ -265,15 +268,15 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneControllerConfigurationCCSet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			sceneId,
 			dimmingDuration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLastActivated(): Promise<
@@ -289,12 +292,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			SceneControllerConfigurationCommand.Get,
 		);
 
-		const cc = new SceneControllerConfigurationCCGet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId: 0,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneControllerConfigurationCCReport
 		>(
 			cc,
@@ -337,12 +340,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneControllerConfigurationCCGet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneControllerConfigurationCCReport
 		>(
 			cc,
@@ -374,22 +377,24 @@ export class SceneControllerConfigurationCC extends CommandClass {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 		if (groupCount === 0) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`skipping Scene Controller Configuration interview because Association group count is unknown`,
@@ -405,39 +410,41 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			const sceneIdValue = SceneControllerConfigurationCCValues.sceneId(
 				groupId,
 			);
-			this.ensureMetadata(applHost, sceneIdValue);
+			this.ensureMetadata(ctx, sceneIdValue);
 
 			const dimmingDurationValue = SceneControllerConfigurationCCValues
 				.dimmingDuration(groupId);
-			this.ensureMetadata(applHost, dimmingDurationValue);
+			this.ensureMetadata(ctx, dimmingDurationValue);
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Scene Controller Configuration"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "querying all scene controller configurations...",
 			direction: "outbound",
 		});
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying scene configuration for group #${groupId}...`,
@@ -449,7 +456,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 					`received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -464,22 +471,18 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * or the AssociationCC.
 	 */
 	public static getGroupCountCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB & GetDeviceConfig,
+		endpoint: EndpointId,
 	): number {
-		return (
-			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-				?.forceSceneControllerGroupCount
-				?? AssociationCC.getGroupCountCached(applHost, endpoint)
-				?? 0
-		);
+		return ctx.getDeviceConfig?.(endpoint.nodeId)?.compat
+			?.forceSceneControllerGroupCount
+			?? AssociationCC.getGroupCountCached(ctx, endpoint)
+			?? 0;
 	}
 }
 
 // @publicAPI
-export interface SceneControllerConfigurationCCSetOptions
-	extends CCCommandOptions
-{
+export interface SceneControllerConfigurationCCSetOptions {
 	groupId: number;
 	sceneId: number;
 	dimmingDuration?: Duration | string;
@@ -491,43 +494,47 @@ export class SceneControllerConfigurationCCSet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| SceneControllerConfigurationCCSetOptions,
+		options: WithAddress<SceneControllerConfigurationCCSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.groupId = options.groupId;
-			this.sceneId = options.sceneId;
-			// if dimmingDuration was missing, use default duration.
-			this.dimmingDuration = Duration.from(options.dimmingDuration)
-				?? Duration.default();
-		}
+		super(options);
+		this.groupId = options.groupId;
+		this.sceneId = options.sceneId;
+		// if dimmingDuration was missing, use default duration.
+		this.dimmingDuration = Duration.from(options.dimmingDuration)
+			?? Duration.default();
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): SceneControllerConfigurationCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SceneControllerConfigurationCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public groupId: number;
 	public sceneId: number;
 	public dimmingDuration: Duration;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.groupId,
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -537,28 +544,52 @@ export class SceneControllerConfigurationCCSet
 	}
 }
 
+// @publicAPI
+export interface SceneControllerConfigurationCCReportOptions {
+	groupId: number;
+	sceneId: number;
+	dimmingDuration: Duration;
+}
+
 @CCCommand(SceneControllerConfigurationCommand.Report)
 export class SceneControllerConfigurationCCReport
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<SceneControllerConfigurationCCReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 3);
-		this.groupId = this.payload[0];
-		this.sceneId = this.payload[1];
-		this.dimmingDuration = Duration.parseReport(this.payload[2])
+		super(options);
+
+		// TODO: Check implementation:
+		this.groupId = options.groupId;
+		this.sceneId = options.sceneId;
+		this.dimmingDuration = options.dimmingDuration;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): SceneControllerConfigurationCCReport {
+		validatePayload(raw.payload.length >= 3);
+		const groupId = raw.payload[0];
+		const sceneId = raw.payload[1];
+		const dimmingDuration: Duration = Duration.parseReport(raw.payload[2])
 			?? Duration.unknown();
+
+		return new SceneControllerConfigurationCCReport({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			sceneId,
+			dimmingDuration,
+		});
 	}
 
 	public readonly groupId: number;
 	public readonly sceneId: number;
 	public readonly dimmingDuration: Duration;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// If groupId = 0, values are meaningless
 		if (this.groupId === 0) return false;
@@ -566,20 +597,20 @@ export class SceneControllerConfigurationCCReport
 		const sceneIdValue = SceneControllerConfigurationCCValues.sceneId(
 			this.groupId,
 		);
-		this.ensureMetadata(applHost, sceneIdValue);
+		this.ensureMetadata(ctx, sceneIdValue);
 		const dimmingDurationValue = SceneControllerConfigurationCCValues
 			.dimmingDuration(this.groupId);
-		this.ensureMetadata(applHost, dimmingDurationValue);
+		this.ensureMetadata(ctx, dimmingDurationValue);
 
-		this.setValue(applHost, sceneIdValue, this.sceneId);
-		this.setValue(applHost, dimmingDurationValue, this.dimmingDuration);
+		this.setValue(ctx, sceneIdValue, this.sceneId);
+		this.setValue(ctx, dimmingDurationValue, this.dimmingDuration);
 
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -599,9 +630,7 @@ function testResponseForSceneControllerConfigurationGet(
 }
 
 // @publicAPI
-export interface SceneControllerConfigurationCCGetOptions
-	extends CCCommandOptions
-{
+export interface SceneControllerConfigurationCCGetOptions {
 	groupId: number;
 }
 
@@ -614,33 +643,37 @@ export class SceneControllerConfigurationCCGet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| SceneControllerConfigurationCCGetOptions,
+		options: WithAddress<SceneControllerConfigurationCCGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.groupId = options.groupId;
-		}
+		super(options);
+		this.groupId = options.groupId;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): SceneControllerConfigurationCCGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new SceneControllerConfigurationCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}

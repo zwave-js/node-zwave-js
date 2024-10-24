@@ -17,8 +17,8 @@ integrationTest("Notification values can get idled manually", {
 			"Alarm status",
 		).id;
 
-		let cc = new NotificationCCReport(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+		let cc = new NotificationCCReport({
+			nodeId: mockController.ownNodeId,
 			notificationType: 0x01, // Smoke Alarm
 			notificationEvent: 0x03, // Smoke alarm test
 		});
@@ -46,8 +46,8 @@ integrationTest("Notification values can get idled manually", {
 			"Door state",
 		).id;
 
-		cc = new NotificationCCReport(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+		cc = new NotificationCCReport({
+			nodeId: mockController.ownNodeId,
 			notificationType: 0x06, // Access Control
 			notificationEvent: 0x16, // Door state
 		});
@@ -80,8 +80,8 @@ integrationTest(
 					"Alarm status",
 				).id;
 
-			let cc = new NotificationCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			let cc = new NotificationCCReport({
+				nodeId: mockController.ownNodeId,
 				notificationType: 0x01, // Smoke Alarm
 				notificationEvent: 0x03, // Smoke alarm test
 			});
@@ -108,8 +108,8 @@ integrationTest(
 				"Door state",
 			).id;
 
-			cc = new NotificationCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			cc = new NotificationCCReport({
+				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control
 				notificationEvent: 0x16, // Door state
 			});

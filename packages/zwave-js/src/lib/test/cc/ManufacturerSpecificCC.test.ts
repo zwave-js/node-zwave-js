@@ -1,13 +1,11 @@
 import {
+	CommandClass,
 	ManufacturerSpecificCCGet,
 	ManufacturerSpecificCCReport,
 	ManufacturerSpecificCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -19,13 +17,13 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ManufacturerSpecificCCGet(host, { nodeId: 1 });
+	const cc = new ManufacturerSpecificCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ManufacturerSpecificCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -40,10 +38,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x06,
 		]),
 	);
-	const cc = new ManufacturerSpecificCCReport(host, {
-		nodeId: 2,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as ManufacturerSpecificCCReport;
+	t.is(cc.constructor, ManufacturerSpecificCCReport);
 
 	t.is(cc.manufacturerId, 0x0102);
 	t.is(cc.productType, 0x0304);

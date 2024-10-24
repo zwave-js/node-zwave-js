@@ -3,7 +3,7 @@ import { MessageType } from "@zwave-js/serial";
 
 const defaultImplementations = {
 	serialize: () => Buffer.from([1, 2, 3]),
-	getNodeUnsafe: () => undefined,
+	tryGetNode: () => undefined,
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),
 	needsCallbackId: () => true,

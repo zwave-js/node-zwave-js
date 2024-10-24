@@ -6,7 +6,6 @@ export * from "./lib/API";
 export * from "./lib/CommandClass";
 export * from "./lib/CommandClassDecorators";
 export * from "./lib/EncapsulatingCommandClass";
-export * from "./lib/ICommandClassContainer";
 export {
 	MGRPExtension,
 	MOSExtension,

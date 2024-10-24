@@ -1,7 +1,7 @@
 import { Transform, type TransformCallback } from "node:stream";
-import type { SerialLogger } from "../Logger";
-import { ZnifferMessageHeaders } from "../MessageHeaders";
+import type { SerialLogger } from "../log/Logger";
 import { ZnifferFrameType } from "../message/Constants";
+import { ZnifferMessageHeaders } from "../message/MessageHeaders";
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
 function getMessageLength(data: Buffer): number | undefined {

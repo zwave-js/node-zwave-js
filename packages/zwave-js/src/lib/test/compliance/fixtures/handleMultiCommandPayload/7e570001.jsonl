@@ -17,3 +17,4 @@
 
 // Define some base functionality for node 2 so we can skip the interview of these CCs
 {"k":"node.2.endpoint.0.commandClass.0x5e","v":{"isSupported":true,"isControlled":false,"secure":false,"version":2}}
+{"k":"node.2.endpoint.0.commandClass.0x2b","v":{"isSupported":false,"isControlled":true,"secure":false,"version":1}}

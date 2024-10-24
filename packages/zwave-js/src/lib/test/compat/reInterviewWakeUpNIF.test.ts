@@ -31,7 +31,7 @@ integrationTest(
 			await wait(500);
 
 			// Send a NIF to trigger the re-interview
-			const cc = new ZWaveProtocolCCNodeInformationFrame(mockNode.host, {
+			const cc = new ZWaveProtocolCCNodeInformationFrame({
 				nodeId: mockNode.id,
 				...mockNode.capabilities,
 				supportedCCs: [...mockNode.implementedCCs]

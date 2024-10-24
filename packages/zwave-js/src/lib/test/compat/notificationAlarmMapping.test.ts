@@ -31,7 +31,7 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			// Send a report that should be mapped to notifications
-			const cc = new NotificationCCReport(mockNode.host, {
+			const cc = new NotificationCCReport({
 				nodeId: 2,
 				alarmType: 18,
 				alarmLevel: 2,

@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, WithAddress } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -7,11 +7,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -21,8 +17,10 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -87,11 +85,11 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 			ThermostatOperatingStateCommand.Get,
 		);
 
-		const cc = new ThermostatOperatingStateCCGet(this.applHost, {
+		const cc = new ThermostatOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ThermostatOperatingStateCCReport
 		>(
 			cc,
@@ -107,34 +105,38 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Operating State"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
 			direction: "outbound",
@@ -142,7 +144,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 		const state = await api.get();
 		if (state) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received current thermostat operating state: ${
 					getEnumMemberName(
@@ -156,26 +158,43 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ThermostatOperatingStateCCReportOptions {
+	state: ThermostatOperatingState;
+}
+
 @CCCommand(ThermostatOperatingStateCommand.Report)
 export class ThermostatOperatingStateCCReport
 	extends ThermostatOperatingStateCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<ThermostatOperatingStateCCReportOptions>,
 	) {
-		super(host, options);
+		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.state = this.payload[0];
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ThermostatOperatingStateCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const state: ThermostatOperatingState = raw.payload[0];
+
+		return new ThermostatOperatingStateCCReport({
+			nodeId: ctx.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(ThermostatOperatingStateCCValues.operatingState)
 	public readonly state: ThermostatOperatingState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				state: getEnumMemberName(ThermostatOperatingState, this.state),
 			},

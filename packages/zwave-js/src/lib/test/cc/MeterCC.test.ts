@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	MeterCC,
 	MeterCCGet,
 	MeterCCReport,
@@ -13,7 +14,7 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import * as nodeUtils from "../../node/utils";
 import { createTestNode } from "../mocks";
@@ -31,39 +32,57 @@ const host = createTestingHost();
 const node2 = createTestNode(host, { id: 2 });
 
 test("the Get command (V1) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1 });
+	const cc = new MeterCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 1;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V2) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x03 });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x03 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
 			0b11_000, // Scale
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V3) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x06 });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x06 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
 			0b110_000, // Scale
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 3;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V4) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x0f });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x0f });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
@@ -71,31 +90,37 @@ test("the Get command (V4) should serialize correctly", (t) => {
 			0x1, // Scale 2
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 4;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new MeterCCSupportedGet(host, { nodeId: 1 });
+	const cc = new MeterCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Reset command (V2) should serialize correctly", (t) => {
-	const cc = new MeterCCReset(host, { nodeId: 1 });
+	const cc = new MeterCCReset({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Reset, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Reset command (V6) should serialize correctly", (t) => {
-	const cc = new MeterCCReset(host, {
+	const cc = new MeterCCReset({
 		nodeId: 1,
 		type: 7,
 		scale: 3,
@@ -110,7 +135,7 @@ test("the Reset command (V6) should serialize correctly", (t) => {
 			123, // 12.3
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (V1) should be deserialized correctly", (t) => {
@@ -122,7 +147,11 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 			55, // value
 		]),
 	);
-	const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -143,7 +172,11 @@ test("the Report command (V2) should be deserialized correctly (no time delta)",
 			0,
 		]),
 	);
-	const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -165,7 +198,11 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.type, 3);
 	t.is(cc.scale, 2);
@@ -187,7 +224,11 @@ test("the Report command (V3) should be deserialized correctly", (t) => {
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.scale, 6);
 });
@@ -205,7 +246,11 @@ test("the Report command (V4) should be deserialized correctly", (t) => {
 			0b01, // Scale2
 		]),
 	);
-	const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(cc.constructor, MeterCCReport);
 
 	t.is(cc.scale, 8);
 });
@@ -224,7 +269,11 @@ test("the Report command should validate that a known meter type is given", (t) 
 		]),
 	);
 
-	const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 31 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {
@@ -246,7 +295,11 @@ test("the Report command should validate that a known meter scale is given", (t)
 		]),
 	);
 
-	const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCReport;
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 4, Scale 8 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {
@@ -275,10 +328,11 @@ test("the SupportedReport command (V2/V3) should be deserialized correctly", (t)
 			0b01101110, // supported scales
 		]),
 	);
-	const cc = new MeterCCSupportedReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCSupportedReport;
+	t.is(cc.constructor, MeterCCSupportedReport);
 
 	t.is(cc.type, 21);
 	t.true(cc.supportsReset);
@@ -297,10 +351,11 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 			1,
 		]),
 	);
-	const cc = new MeterCCSupportedReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCCSupportedReport;
+	t.is(cc.constructor, MeterCCSupportedReport);
 
 	t.is(cc.type, 21);
 	t.true(cc.supportsReset);
@@ -319,7 +374,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 // 			1,
 // 		]),
 // 	);
-// 	const cc = new MeterCCSupportedReport(host, {
+// 	const cc = new MeterCCSupportedReport({
 // 		nodeId: 1,
 // 		data: ccData,
 // 	});
@@ -334,10 +389,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MeterCC(host, {
-		nodeId: 1,
-		data: serializedCC,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as MeterCC;
 	t.is(cc.constructor, MeterCC);
 });
 

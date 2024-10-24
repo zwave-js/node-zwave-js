@@ -31,15 +31,15 @@ integrationTest("All CCs contained in a Multi Command CC are handled", {
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
 		// This one requires a response
-		const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+		const zwpRequest = new ZWavePlusCCGet({
+			nodeId: mockController.ownNodeId,
 		});
 		// This one updates a value
-		const scaSet = new SceneActivationCCSet(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+		const scaSet = new SceneActivationCCSet({
+			nodeId: mockController.ownNodeId,
 			sceneId: 7,
 		});
-		const cc = MultiCommandCC.encapsulate(mockNode.host, [
+		const cc = MultiCommandCC.encapsulate([
 			zwpRequest,
 			scaSet,
 		]);

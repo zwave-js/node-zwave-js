@@ -30,8 +30,6 @@ test("when the driver is restarted from cache, the node should be ready as soon 
 	const service = startMachine(t, testMachine);
 	service.send("RESTART_FROM_CACHE");
 	t.is(service.getSnapshot().value, "readyIfNotDead");
-	// service.send("MAYBE_DEAD");
-	// t.is(service.getSnapshot().value, "readyIfNotDead");
 	service.send("NOT_DEAD");
 	t.is(service.getSnapshot().value, "ready");
 });

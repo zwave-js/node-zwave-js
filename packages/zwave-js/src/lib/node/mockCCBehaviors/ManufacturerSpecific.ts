@@ -7,7 +7,7 @@ import { type MockNodeBehavior } from "@zwave-js/testing";
 const respondToManufacturerSpecificGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof ManufacturerSpecificCCGet) {
-			const cc = new ManufacturerSpecificCCReport(self.host, {
+			const cc = new ManufacturerSpecificCCReport({
 				nodeId: self.id,
 				manufacturerId: self.capabilities.manufacturerId,
 				productType: self.capabilities.productType,

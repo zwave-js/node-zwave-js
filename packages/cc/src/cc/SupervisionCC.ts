@@ -2,33 +2,33 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	type IZWaveEndpoint,
+	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	type SinglecastCC,
 	type SupervisionResult,
 	SupervisionStatus,
+	type SupportsCC,
 	TransmitOptions,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isTransmissionError,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetNode,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -88,9 +88,9 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			lowPriority = false,
 			...cmdOptions
 		} = options;
-		const cc = new SupervisionCCReport(this.applHost, {
+		const cc = new SupervisionCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...cmdOptions,
 		});
 
@@ -98,7 +98,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		cc.encapsulationFlags = encapsulationFlags;
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
 				priority: lowPriority
@@ -140,8 +140,8 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
+		sessionId: number,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
 		if (!cc.isSinglecast()) {
@@ -151,11 +151,12 @@ export class SupervisionCC extends CommandClass {
 			);
 		}
 
-		const ret = new SupervisionCCGet(host, {
+		const ret = new SupervisionCCGet({
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
-			endpoint: cc.endpointIndex,
+			endpointIndex: cc.endpointIndex,
 			encapsulated: cc,
+			sessionId,
 			requestStatusUpdates,
 		});
 
@@ -195,13 +196,13 @@ export class SupervisionCC extends CommandClass {
 	 * Returns whether a node supports the given CC with Supervision encapsulation.
 	 */
 	public static getCCSupportedWithSupervision(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 	): boolean {
 		// By default assume supervision is supported for all CCs, unless we've remembered one not to be
 		return (
-			applHost
+			ctx
 				.getValueDB(endpoint.nodeId)
 				.getValue(
 					SupervisionCCValues.ccSupported(ccId).endpoint(
@@ -215,12 +216,12 @@ export class SupervisionCC extends CommandClass {
 	 * Remembers whether a node supports the given CC with Supervision encapsulation.
 	 */
 	public static setCCSupportedWithSupervision(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 		supported: boolean,
 	): void {
-		applHost
+		ctx
 			.getValueDB(endpoint.nodeId)
 			.setValue(
 				SupervisionCCValues.ccSupported(ccId).endpoint(endpoint.index),
@@ -230,7 +231,11 @@ export class SupervisionCC extends CommandClass {
 
 	/** Returns whether this is a valid command to send supervised */
 	public static mayUseSupervision<T extends CommandClass>(
-		applHost: ZWaveApplicationHost,
+		ctx:
+			& GetValueDB
+			& GetNode<
+				NodeId & SupportsCC & GetEndpoint<EndpointId>
+			>,
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response
@@ -239,9 +244,9 @@ export class SupervisionCC extends CommandClass {
 		if (command.expectsCCResponse()) return false;
 
 		// with a valid node and endpoint
-		const node = command.getNode(applHost);
+		const node = command.getNode(ctx);
 		if (!node) return false;
-		const endpoint = command.getEndpoint(applHost);
+		const endpoint = command.getEndpoint(ctx);
 		if (!endpoint) return false;
 
 		// and only if ...
@@ -252,7 +257,7 @@ export class SupervisionCC extends CommandClass {
 			&& shouldUseSupervision(command)
 			// ... and we haven't previously determined that the node doesn't properly support it
 			&& SupervisionCC.getCCSupportedWithSupervision(
-				applHost,
+				ctx,
 				endpoint,
 				command.ccId,
 			)
@@ -283,30 +288,47 @@ export type SupervisionCCReportOptions =
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & SupervisionCCReportOptions),
+		options: WithAddress<SupervisionCCReportOptions>,
 	) {
-		super(host, options);
+		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
-			this.requestWakeUpOnDemand = !!(this.payload[0] & 0b0_1_000000);
-			this.sessionId = this.payload[0] & 0b111111;
-			this.status = this.payload[1];
-			this.duration = Duration.parseReport(this.payload[2]);
+		this.moreUpdatesFollow = options.moreUpdatesFollow;
+		this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
+		this.sessionId = options.sessionId;
+		this.status = options.status;
+		if (options.status === SupervisionStatus.Working) {
+			this.duration = options.duration;
 		} else {
-			this.moreUpdatesFollow = options.moreUpdatesFollow;
-			this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
-			this.sessionId = options.sessionId;
-			this.status = options.status;
-			if (options.status === SupervisionStatus.Working) {
-				this.duration = options.duration;
-			} else {
-				this.duration = new Duration(0, "seconds");
-			}
+			this.duration = new Duration(0, "seconds");
+		}
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCReport {
+		validatePayload(raw.payload.length >= 3);
+		const moreUpdatesFollow = !!(raw.payload[0] & 0b1_0_000000);
+		const requestWakeUpOnDemand = !!(raw.payload[0] & 0b0_1_000000);
+		const sessionId = raw.payload[0] & 0b111111;
+		const status: SupervisionStatus = raw.payload[1];
+
+		if (status === SupervisionStatus.Working) {
+			const duration = Duration.parseReport(raw.payload[2])
+				?? new Duration(0, "seconds");
+			return new SupervisionCCReport({
+				nodeId: ctx.sourceNodeId,
+				moreUpdatesFollow,
+				requestWakeUpOnDemand,
+				sessionId,
+				status,
+				duration,
+			});
+		} else {
+			return new SupervisionCCReport({
+				nodeId: ctx.sourceNodeId,
+				moreUpdatesFollow,
+				requestWakeUpOnDemand,
+				sessionId,
+				status,
+			});
 		}
 	}
 
@@ -316,7 +338,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.moreUpdatesFollow ? 0b1_0_000000 : 0)
@@ -332,10 +354,10 @@ export class SupervisionCCReport extends SupervisionCC {
 				Buffer.from([this.duration.serializeReport()]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -345,7 +367,7 @@ export class SupervisionCCReport extends SupervisionCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -365,9 +387,10 @@ export class SupervisionCCReport extends SupervisionCC {
 }
 
 // @publicAPI
-export interface SupervisionCCGetOptions extends CCCommandOptions {
+export interface SupervisionCCGetOptions {
 	requestStatusUpdates: boolean;
 	encapsulated: CommandClass;
+	sessionId: number;
 }
 
 function testResponseForSupervisionCCGet(
@@ -381,35 +404,37 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
+		options: WithAddress<SupervisionCCGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
-			this.sessionId = this.payload[0] & 0b111111;
+		super(options);
+		this.sessionId = options.sessionId;
+		this.requestStatusUpdates = options.requestStatusUpdates;
+		this.encapsulated = options.encapsulated;
+		// Supervision is inside MultiChannel CCs, so the endpoint must be copied
+		this.encapsulated.endpointIndex = this.endpointIndex;
+		this.encapsulated.encapsulatingCC = this as any;
+	}
 
-			this.encapsulated = CommandClass.from(this.host, {
-				data: this.payload.subarray(2),
-				fromEncapsulation: true,
-				encapCC: this,
-				origin: options.origin,
-			});
-		} else {
-			this.sessionId = host.getNextSupervisionSessionId(this.nodeId);
-			this.requestStatusUpdates = options.requestStatusUpdates;
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
-		}
+	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCGet {
+		validatePayload(raw.payload.length >= 3);
+		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
+		const sessionId = raw.payload[0] & 0b111111;
+
+		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
+		return new SupervisionCCGet({
+			nodeId: ctx.sourceNodeId,
+			requestStatusUpdates,
+			sessionId,
+			encapsulated,
+		});
 	}
 
 	public requestStatusUpdates: boolean;
 	public sessionId: number;
 	public encapsulated: CommandClass;
 
-	public serialize(): Buffer {
-		const encapCC = this.encapsulated.serialize();
+	public serialize(ctx: CCEncodingContext): Buffer {
+		const encapCC = this.encapsulated.serialize(ctx);
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0)
@@ -418,7 +443,7 @@ export class SupervisionCCGet extends SupervisionCC {
 			]),
 			encapCC,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -426,9 +451,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"session id": this.sessionId,
 				"request updates": this.requestStatusUpdates,

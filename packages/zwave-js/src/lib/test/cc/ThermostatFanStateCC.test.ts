@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	ThermostatFanState,
 	ThermostatFanStateCC,
 	ThermostatFanStateCCGet,
@@ -6,10 +7,7 @@ import {
 	ThermostatFanStateCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -21,13 +19,13 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ThermostatFanStateCCGet(host, { nodeId: 1 });
+	const cc = new ThermostatFanStateCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ThermostatFanStateCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
@@ -37,10 +35,11 @@ test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
 			ThermostatFanState["Idle / off"], // state
 		]),
 	);
-	const cc = new ThermostatFanStateCCReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ThermostatFanStateCCReport;
+	t.is(cc.constructor, ThermostatFanStateCCReport);
 
 	t.is(cc.state, ThermostatFanState["Idle / off"]);
 });
@@ -49,10 +48,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new ThermostatFanStateCC(host, {
-		nodeId: 1,
-		data: serializedCC,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as ThermostatFanStateCC;
 	t.is(cc.constructor, ThermostatFanStateCC);
 });
 

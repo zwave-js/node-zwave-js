@@ -1,7 +1,7 @@
 import { SecurityCCNonceGet } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import path from "node:path";
-import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

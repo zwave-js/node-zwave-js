@@ -6,6 +6,22 @@ import {
 	isZWaveError,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
+import {
+	SendDataBridgeRequest,
+	type SendDataBridgeRequestTransmitReport,
+	SendDataMulticastBridgeRequest,
+	type SendDataMulticastBridgeRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	SendDataMulticastRequest,
+	type SendDataMulticastRequestTransmitReport,
+	SendDataRequest,
+	type SendDataRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	isSendData,
+	isSendDataTransmitReport,
+} from "@zwave-js/serial/serialapi";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	type AnyStateMachine,
@@ -13,22 +29,6 @@ import {
 	type InterpreterFrom,
 	type InterpreterOptions,
 } from "xstate";
-import {
-	SendDataBridgeRequest,
-	type SendDataBridgeRequestTransmitReport,
-	SendDataMulticastBridgeRequest,
-	type SendDataMulticastBridgeRequestTransmitReport,
-} from "../serialapi/transport/SendDataBridgeMessages";
-import {
-	SendDataMulticastRequest,
-	type SendDataMulticastRequestTransmitReport,
-	SendDataRequest,
-	type SendDataRequestTransmitReport,
-} from "../serialapi/transport/SendDataMessages";
-import {
-	isSendData,
-	isSendDataTransmitReport,
-} from "../serialapi/transport/SendDataShared";
 import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 

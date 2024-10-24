@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	DoorLockLoggingCCRecordGet,
 	DoorLockLoggingCCRecordReport,
 	DoorLockLoggingCCRecordsSupportedGet,
@@ -7,10 +8,7 @@ import {
 	DoorLockLoggingEventType,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,7 +20,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the RecordsCountGet command should serialize correctly", (t) => {
-	const cc = new DoorLockLoggingCCRecordsSupportedGet(host, {
+	const cc = new DoorLockLoggingCCRecordsSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -30,7 +28,7 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the RecordsCountReport command should be deserialized correctly", (t) => {
@@ -40,16 +38,17 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = new DoorLockLoggingCCRecordsSupportedReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockLoggingCCRecordsSupportedReport;
+	t.is(cc.constructor, DoorLockLoggingCCRecordsSupportedReport);
 
 	t.is(cc.recordsCount, 20);
 });
 
 test("the RecordGet command should serialize correctly", (t) => {
-	const cc = new DoorLockLoggingCCRecordGet(host, {
+	const cc = new DoorLockLoggingCCRecordGet({
 		nodeId: 1,
 		recordNumber: 1,
 	});
@@ -59,7 +58,7 @@ test("the RecordGet command should serialize correctly", (t) => {
 			1, // Record Number
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the RecordReport command should be deserialized correctly", (t) => {
@@ -81,10 +80,11 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 		]),
 	);
 
-	const cc = new DoorLockLoggingCCRecordReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockLoggingCCRecordReport;
+	t.is(cc.constructor, DoorLockLoggingCCRecordReport);
 
 	t.is(cc.recordNumber, 7);
 

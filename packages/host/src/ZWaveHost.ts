@@ -1,50 +1,34 @@
-import type { ConfigManager, DeviceConfig } from "@zwave-js/config";
+import type { DeviceConfig } from "@zwave-js/config";
 import type {
+	CCId,
 	CommandClasses,
 	ControllerLogger,
-	ICommandClass,
-	IZWaveNode,
+	FrameType,
 	MaybeNotKnown,
-	NodeIDType,
+	NodeId,
 	SecurityClass,
-	SecurityManager,
-	SecurityManager2,
+	SecurityManagers,
 	SendCommandOptions,
 	SendCommandReturnType,
 	ValueDB,
 	ValueID,
 } from "@zwave-js/core";
-import type { ReadonlyThrowingMap } from "@zwave-js/shared";
 import type { ZWaveHostOptions } from "./ZWaveHostOptions";
 
-/** Host application abstractions to be used in Serial API and CC implementations */
-export interface ZWaveHost {
+/** Allows querying the home ID and node ID of the host */
+export interface HostIDs {
 	/** The ID of this node in the current network */
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
+}
 
-	/** How many bytes a node ID occupies in serial API commands */
-	readonly nodeIdType?: NodeIDType;
+/** Allows querying device configuration for a node */
+export interface GetDeviceConfig {
+	getDeviceConfig(nodeId: number): DeviceConfig | undefined;
+}
 
-	/** Management of Security S0 keys and nonces */
-	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
-	securityManager2: SecurityManager2 | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
-	securityManagerLR: SecurityManager2 | undefined;
-
-	/**
-	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
-	 * Throws if the CC is not implemented in this library yet.
-	 */
-	getSafeCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number;
-
+export interface GetSupportedCCVersion {
 	/**
 	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
 	 * Returns 0 when the CC is not supported or that information is not known yet.
@@ -54,15 +38,30 @@ export interface ZWaveHost {
 		nodeId: number,
 		endpointIndex?: number,
 	): number;
+}
 
+export interface GetSafeCCVersion {
 	/**
-	 * Determines whether a CC must be secure for a given node and endpoint.
+	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
+	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns `undefined` for CCs that are not implemented in this library yet.
 	 */
-	isCCSecure(
+	getSafeCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex?: number,
-	): boolean;
+	): number | undefined;
+}
+
+/** Additional context needed for deserializing CCs */
+export interface CCParsingContext
+	extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs
+{
+	sourceNodeId: number;
+	__internalIsMockNode?: boolean;
+
+	/** If known, the frame type of the containing message */
+	frameType: FrameType;
 
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
@@ -76,25 +75,33 @@ export interface ZWaveHost {
 		securityClass: SecurityClass,
 		granted: boolean,
 	): void;
+}
 
-	/**
-	 * Returns the next callback ID. Callback IDs are used to correlate requests
-	 * to the controller/nodes with its response
-	 */
-	getNextCallbackId(): number;
+/** Additional context needed for serializing CCs */
+// FIXME: Lot of duplication between the CC and message contexts
+export interface CCEncodingContext
+	extends
+		Readonly<SecurityManagers>,
+		GetDeviceConfig,
+		HostIDs,
+		GetSupportedCCVersion
+{
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
-	/**
-	 * Returns the next session ID for supervised communication
-	 */
-	getNextSupervisionSessionId(nodeId: number): number;
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
 
-	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
-
-	__internalIsMockNode?: boolean;
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
 }
 
 /** Host application abstractions that provide support for reading and writing values to a database */
-export interface ZWaveValueHost {
+export interface GetValueDB {
 	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
 	getValueDB(nodeId: number): ValueDB;
 
@@ -102,32 +109,50 @@ export interface ZWaveValueHost {
 	tryGetValueDB(nodeId: number): ValueDB | undefined;
 }
 
-/** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
-export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
-	/** Gives access to the configuration files */
-	configManager: ConfigManager;
+/** Allows accessing a specific node */
+export interface GetNode<T extends NodeId> {
+	getNode(nodeId: number): T | undefined;
+	getNodeOrThrow(nodeId: number): T;
+}
 
-	options: ZWaveHostOptions;
+/** Allows accessing all nodes */
+export interface GetAllNodes<T extends NodeId> {
+	getAllNodes(): T[];
+}
 
-	// TODO: There's probably a better fitting name for this now
-	controllerLog: ControllerLogger;
+/** Allows looking up Z-Wave manufacturers by manufacturer ID */
+export interface LookupManufacturer {
+	/** Looks up the name of the manufacturer with the given ID in the configuration DB */
+	lookupManufacturer(manufacturerId: number): string | undefined;
+}
 
-	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, IZWaveNode>;
-
-	/** Whether the node with the given ID is the controller */
-	isControllerNode(nodeId: number): boolean;
-
-	sendCommand<TResponse extends ICommandClass | undefined = undefined>(
-		command: ICommandClass,
+/** Allows sending commands to one or more nodes */
+export interface SendCommand {
+	sendCommand<TResponse extends CCId | undefined = undefined>(
+		command: CCId,
 		options?: SendCommandOptions,
 	): Promise<SendCommandReturnType<TResponse>>;
+}
 
-	waitForCommand<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
-		timeout: number,
-	): Promise<T>;
+/** Allows reading options to use for interviewing devices */
+export interface GetInterviewOptions {
+	getInterviewOptions(): ZWaveHostOptions["interview"];
+}
 
+/** Allows reading user preferences */
+export interface GetUserPreferences {
+	getUserPreferences(): ZWaveHostOptions["preferences"];
+}
+
+/** Allows reading user preferences */
+export interface GetCommunicationTimeouts {
+	getCommunicationTimeouts(): ZWaveHostOptions["timeouts"];
+}
+
+export type LogNode = Pick<ControllerLogger, "logNode">;
+
+/** Allows scheduling a value refresh (poll) for a later time */
+export interface SchedulePoll {
 	schedulePoll(
 		nodeId: number,
 		valueId: ValueID,

@@ -44,8 +44,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -63,8 +63,9 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
+			controller.securityManagers.securityManager2 = smCtrlr;
+			// controller.parsingContext.getHighestSecurityClass =
+			controller.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
@@ -72,10 +73,10 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -97,10 +98,10 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -123,11 +124,12 @@ integrationTest(
 
 			// Send a secure command that should be handled
 			let nodeToHost: CommandClass = Security2CC.encapsulate(
-				mockNode.host,
-				new BasicCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+				new BasicCCReport({
+					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
+				mockNode.id,
+				mockNode.securityManagers,
 			);
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nodeToHost, {
@@ -142,8 +144,8 @@ integrationTest(
 			t.is(currentValue, 99);
 
 			// Then send an unencypted one that should be discarded
-			nodeToHost = new BasicCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			nodeToHost = new BasicCCReport({
+				nodeId: mockController.ownNodeId,
 				currentValue: 1,
 			});
 

@@ -1,7 +1,7 @@
 import type { CCConstructor, CommandClass } from "@zwave-js/cc";
+import { SendDataBridgeRequest } from "@zwave-js/serial/serialapi";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import type { ExecutionContext } from "ava";
-import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
-import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 export function assertCC<
 	TConst extends CCConstructor<CommandClass> = CCConstructor<CommandClass>,

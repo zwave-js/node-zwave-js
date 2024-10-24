@@ -30,7 +30,7 @@ integrationTest(
 			const respondToBasicGetWithDelayedAck: MockNodeBehavior = {
 				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BasicCCGet) {
-						const cc = new BasicCCReport(controller.host, {
+						const cc = new BasicCCReport({
 							nodeId: self.id,
 							currentValue: 55,
 						});
