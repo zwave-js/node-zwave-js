@@ -36,7 +36,6 @@
         {
             "#": "1",
             "label": "Enable Manual Pull-Start",
-			"description": "Enable Manual Pull-Start",
             "valueSize": 1,
             "defaultValue": 1,
             "allowManualEntry": false,
@@ -54,7 +53,6 @@
         {
             "#": "2",
             "label": "Set Motor Direction",
-			"description": "Set Motor Direction",
             "valueSize": 1,
             "defaultValue": 1,
             "allowManualEntry": false,
@@ -72,7 +70,6 @@
         {
             "#": "3",
             "label": "Manually Set Open Borders",
-			"description": "Manually Set Open Borders",
             "valueSize": 1,
             "defaultValue": 0,
             "allowManualEntry": false,
@@ -90,7 +87,6 @@
         {
             "#": "4",
             "label": "Manually Set Close Borders",
-			"description": "Manually Set Close Borders",
             "valueSize": 1,
             "defaultValue": 0,
             "allowManualEntry": false,
@@ -130,7 +126,6 @@
         {
             "#": "6",
             "label": "Calibrate Travel Point",
-			"description": "Calibrate Travel Point",
             "valueSize": 1,
             "defaultValue": 1,
             "allowManualEntry": false,
@@ -152,7 +147,6 @@
         {
             "#": "7",
             "label": "Delete Travel Point",
-			"description": "Delete Travel Point",
             "valueSize": 1,
             "defaultValue": 0,
             "allowManualEntry": false,
@@ -178,7 +172,6 @@
         {
             "#": "8",
             "label": "Low Battery Level Alarm Threshold",
-			"description": "Low Battery Level Alarm Threshold",
             "valueSize": 1,
             "unit": "%",
             "minValue": 0,
@@ -189,7 +182,6 @@
         {
             "#": "9",
             "label": "Battery Auto Report Interval Time",
-			"description": "Battery Auto Report Interval Time",
             "valueSize": 4,
             "unit": "seconds",
             "minValue": 0,
@@ -200,7 +192,6 @@
         {
             "#": "10",
             "label": "Battery Change Report Threshold",
-			"description": "Battery Change Report Threshold",
             "valueSize": 1,
             "unit": "%",
             "minValue": 0,
@@ -211,7 +202,6 @@
         {
             "#": "11",
             "label": "Curtain Status Report Command Setting",
-			"description": "Curtain Status Report Command Setting",
             "valueSize": 1,
             "defaultValue": 6,
             "allowManualEntry": false,
