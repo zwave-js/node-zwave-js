@@ -1,0 +1,242 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-TEMP3",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0x0031",
+			"productId": "0x3101",
+			"zwaveAllianceId": 4908
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Binary Switch Set",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Thermostat Setpoint Set",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Thermostat Mode Set",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Local Control",
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "Min Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "3",
+			"label": "Max Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "4",
+			"label": "Temp Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "5",
+			"label": "Regulation Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hysteresis",
+					"value": 0
+				},
+				{
+					"label": "PWM",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Update Interval",
+			"description": "Allowable range: 0, 150-2000",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Only on change",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Temperature Control Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5
+		},
+		{
+			"#": "8",
+			"label": "Temperature Display",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Setpoint",
+					"value": 0
+				},
+				{
+					"label": "Measured",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Active Display Brightness",
+			"valueSize": 1,
+			"unit": "10 %",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10
+		},
+		{
+			"#": "10",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 150,
+			"maxValue": 65535,
+			"defaultValue": 990,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Temperature Report Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "12",
+			"label": "Humidity Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 150,
+			"maxValue": 65535,
+			"defaultValue": 990,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Humidity Report Hysteresis",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 25
+		},
+		{
+			"#": "14",
+			"label": "Heating Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		},
+		{
+			"#": "15",
+			"label": "Cooling Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 250
+		},
+		{
+			"#": "16",
+			"label": "Eco Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 180
+		},
+		{
+			"#": "17",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Heating",
+					"value": 1
+				},
+				{
+					"label": "Cooling",
+					"value": 2
+				},
+				{
+					"label": "Eco",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Open Window Detection"
+		}
+	],
+	"metadata": {
+		"inclusion": "Hold the Center button for 5 seconds. The display will show “OFF”\n Press the ”+” button once to see “CON” in the display.\n Start the add/remove device process in your primary controller.\n Start the configuration mode on the thermostat by holding the Center button for approximately 2 seconds.",
+		"exclusion": "Hold the Center button for 5 seconds. The display will show “OFF”\n Press the ”+” button once to see “CON” in the display.\n Start the add/remove device process in your primary controller.\n Start the configuration mode on the thermostat by holding the Center button for approximately 2 seconds.",
+		"reset": "Enter the menu by holding the Center button for about 5seconds, navigate in the menu with the ”+” button til you see FACT. Press the Center button until you see “-- --” blinking in the display, then hold for about 5 seconds to perform a reset. You may also initiate a reset by holding the Right and Center buttons for 55 seconds.",
+		"manual": "https://media.heatit.com/3872"
+	}
+}
