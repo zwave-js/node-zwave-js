@@ -2,7 +2,6 @@
 export { SerialLogger } from "./log/Logger";
 export type { SerialLogContext } from "./log/Logger_safe";
 export * from "./message/Constants";
-export * from "./message/INodeQuery";
 export * from "./message/Message";
 export * from "./message/MessageHeaders";
 export * from "./message/SuccessIndicator";

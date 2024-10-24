@@ -7,7 +7,6 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type {
-	INodeQuery,
 	MessageEncodingContext,
 	MessageParsingContext,
 	MessageRaw,
@@ -48,9 +47,7 @@ export interface AssignReturnRouteRequestOptions {
 
 @expectedResponse(FunctionType.AssignReturnRoute)
 @expectedCallback(FunctionType.AssignReturnRoute)
-export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
-	implements INodeQuery
-{
+export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase {
 	public constructor(
 		options: AssignReturnRouteRequestOptions & MessageBaseOptions,
 	) {

@@ -6,7 +6,6 @@ import {
 } from "@zwave-js/core";
 import {
 	FunctionType,
-	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
@@ -88,7 +87,7 @@ function testCallbackForRequestNodeInfoRequest(
 @expectedResponse(RequestNodeInfoResponse)
 @expectedCallback(testCallbackForRequestNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
-export class RequestNodeInfoRequest extends Message implements INodeQuery {
+export class RequestNodeInfoRequest extends Message {
 	public constructor(
 		options: RequestNodeInfoRequestOptions & MessageBaseOptions,
 	) {

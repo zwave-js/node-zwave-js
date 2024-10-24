@@ -7,7 +7,6 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type {
-	INodeQuery,
 	MessageEncodingContext,
 	MessageParsingContext,
 	MessageRaw,
@@ -47,9 +46,7 @@ export interface DeleteReturnRouteRequestOptions {
 
 @expectedResponse(FunctionType.DeleteReturnRoute)
 @expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
-	implements INodeQuery
-{
+export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase {
 	public constructor(
 		options: DeleteReturnRouteRequestOptions & MessageBaseOptions,
 	) {

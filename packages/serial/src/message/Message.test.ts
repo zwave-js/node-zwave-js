@@ -2,7 +2,6 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { FunctionType, MessageType } from "./Constants";
-import type { INodeQuery } from "./INodeQuery";
 import { Message, messageTypes } from "./Message";
 
 test("should deserialize and serialize correctly", (t) => {
@@ -228,10 +227,10 @@ test("tryGetNode() returns the associated node otherwise", (t) => {
 	});
 
 	// This node exists
-	(msg as any as INodeQuery).nodeId = 1;
+	(msg as any).nodeId = 1;
 	t.is(msg.tryGetNode(host), host.getNode(1));
 
 	// This one does
-	(msg as any as INodeQuery).nodeId = 2;
+	(msg as any).nodeId = 2;
 	t.is(msg.tryGetNode(host), undefined);
 });

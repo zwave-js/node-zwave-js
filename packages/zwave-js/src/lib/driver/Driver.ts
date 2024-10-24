@@ -121,7 +121,7 @@ import {
 	type BootloaderChunk,
 	BootloaderChunkType,
 	FunctionType,
-	type INodeQuery,
+	type HasNodeId,
 	Message,
 	type MessageEncodingContext,
 	MessageHeaders,
@@ -135,7 +135,7 @@ import {
 	type ZWaveSerialPortImplementation,
 	ZWaveSocket,
 	getDefaultPriority,
-	isNodeQuery,
+	hasNodeId,
 	isSuccessIndicator,
 	isZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
@@ -4046,7 +4046,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 */
 	public handleMissingNodeACK(
 		transaction: Transaction & {
-			message: INodeQuery;
+			message: HasNodeId;
 		},
 		error: ZWaveError,
 	): boolean {
@@ -5023,7 +5023,7 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		if (isNodeQuery(msg) || containsCC(msg)) {
+		if (hasNodeId(msg) || containsCC(msg)) {
 			const node = this.tryGetNode(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
@@ -5465,7 +5465,7 @@ ${handlers.length} left`,
 		// Update statistics
 		const node = this.tryGetNode(msg);
 		let success = true;
-		if (isSendData(msg) || isNodeQuery(msg)) {
+		if (isSendData(msg) || hasNodeId(msg)) {
 			// This shouldn't happen, but just in case
 			if (!node) return;
 
@@ -5984,7 +5984,7 @@ ${handlers.length} left`,
 		this.ensureReady();
 
 		let node: ZWaveNode | undefined;
-		if (isNodeQuery(msg) || containsCC(msg)) {
+		if (hasNodeId(msg) || containsCC(msg)) {
 			node = this.tryGetNode(msg);
 		}
 
@@ -6111,7 +6111,7 @@ ${handlers.length} left`,
 			} else {
 				// For other messages to the node, just check for successful completion. If the callback is not OK,
 				// we might not be able to communicate with the node. Sending another message is not a good idea.
-				maybeSendToSleep = isNodeQuery(msg)
+				maybeSendToSleep = hasNodeId(msg)
 					&& result
 					&& isSuccessIndicator(result)
 					&& result.isOK();

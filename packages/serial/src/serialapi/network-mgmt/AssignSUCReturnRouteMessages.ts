@@ -6,7 +6,6 @@ import {
 } from "@zwave-js/core";
 import {
 	FunctionType,
-	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
@@ -55,8 +54,8 @@ function testAssignSUCReturnRouteCallback(
 
 @expectedResponse(FunctionType.AssignSUCReturnRoute)
 @expectedCallback(testAssignSUCReturnRouteCallback)
-export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
-	implements INodeQuery
+export class AssignSUCReturnRouteRequest
+	extends AssignSUCReturnRouteRequestBase
 {
 	public constructor(
 		options: AssignSUCReturnRouteRequestOptions & MessageBaseOptions,

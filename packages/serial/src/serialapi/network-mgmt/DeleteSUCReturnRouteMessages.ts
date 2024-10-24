@@ -5,7 +5,6 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type {
-	INodeQuery,
 	MessageEncodingContext,
 	MessageParsingContext,
 	MessageRaw,
@@ -57,8 +56,8 @@ function testDeleteSUCReturnRouteCallback(
 
 @expectedResponse(FunctionType.DeleteSUCReturnRoute)
 @expectedCallback(testDeleteSUCReturnRouteCallback)
-export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
-	implements INodeQuery
+export class DeleteSUCReturnRouteRequest
+	extends DeleteSUCReturnRouteRequestBase
 {
 	public constructor(
 		options: DeleteSUCReturnRouteRequestOptions & MessageBaseOptions,

@@ -21,7 +21,6 @@ import type {
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { FunctionType, MessageType } from "./Constants";
-import { isNodeQuery } from "./INodeQuery";
 import { MessageHeaders } from "./MessageHeaders";
 
 export type MessageConstructor<T extends Message> = typeof Message & {
@@ -76,6 +75,15 @@ export interface MessageEncodingContext
 		securityClass: SecurityClass,
 		granted: boolean,
 	): void;
+}
+
+export interface HasNodeId {
+	nodeId: number;
+}
+
+/** Tests if the given message is for a node or references a node */
+export function hasNodeId<T extends Message>(msg: T): msg is T & HasNodeId {
+	return typeof (msg as any).nodeId === "number";
 }
 
 /** Returns the number of bytes the first message in the buffer occupies */
@@ -393,7 +401,7 @@ export class Message {
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
 	public getNodeId(): number | undefined {
-		if (isNodeQuery(this)) return this.nodeId;
+		if (hasNodeId(this)) return this.nodeId;
 		// Override this in subclasses if a different behavior is desired
 	}
 
