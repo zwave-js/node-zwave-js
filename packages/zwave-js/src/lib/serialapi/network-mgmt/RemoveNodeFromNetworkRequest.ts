@@ -1,6 +1,7 @@
 import {
 	type CommandClasses,
 	MessagePriority,
+	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
 import type {
@@ -13,6 +14,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	messageTypes,
@@ -56,7 +58,11 @@ export class RemoveNodeFromNetworkRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): RemoveNodeFromNetworkRequestBase {
-		return RemoveNodeFromNetworkRequestStatusReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return RemoveNodeFromNetworkRequest.from(raw, ctx);
+		} else {
+			return RemoveNodeFromNetworkRequestStatusReport.from(raw, ctx);
+		}
 	}
 }
 
@@ -101,6 +107,23 @@ export class RemoveNodeFromNetworkRequest
 		this.networkWide = !!options.networkWide;
 	}
 
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): RemoveNodeFromNetworkRequest {
+		const highPower = !!(raw.payload[0] & RemoveNodeFlags.HighPower);
+		const networkWide = !!(raw.payload[0] & RemoveNodeFlags.NetworkWide);
+		const removeNodeType = raw.payload[0] & 0b11111;
+		const callbackId = raw.payload[1];
+
+		return new this({
+			callbackId,
+			removeNodeType,
+			highPower,
+			networkWide,
+		});
+	}
+
 	/** The type of node to remove */
 	public removeNodeType: RemoveNodeType | undefined;
 	/** Whether to use high power */
@@ -120,10 +143,19 @@ export class RemoveNodeFromNetworkRequest
 	}
 }
 
-export interface RemoveNodeFromNetworkRequestStatusReportOptions {
-	status: RemoveNodeStatus;
-	statusContext?: RemoveNodeStatusContext;
-}
+export type RemoveNodeFromNetworkRequestStatusReportOptions = {
+	status:
+		| RemoveNodeStatus.Ready
+		| RemoveNodeStatus.NodeFound
+		| RemoveNodeStatus.Failed
+		| RemoveNodeStatus.Reserved_0x05
+		| RemoveNodeStatus.Done;
+} | {
+	status:
+		| RemoveNodeStatus.RemovingController
+		| RemoveNodeStatus.RemovingSlave;
+	nodeId: number;
+};
 
 export class RemoveNodeFromNetworkRequestStatusReport
 	extends RemoveNodeFromNetworkRequestBase
@@ -136,10 +168,10 @@ export class RemoveNodeFromNetworkRequestStatusReport
 	) {
 		super(options);
 
-		// TODO: Check implementation:
-		this.callbackId = options.callbackId;
 		this.status = options.status;
-		this.statusContext = options.statusContext;
+		if ("nodeId" in options) {
+			this.statusContext = { nodeId: options.nodeId };
+		}
 	}
 
 	public static from(
@@ -148,18 +180,21 @@ export class RemoveNodeFromNetworkRequestStatusReport
 	): RemoveNodeFromNetworkRequestStatusReport {
 		const callbackId = raw.payload[0];
 		const status: RemoveNodeStatus = raw.payload[1];
-		let statusContext: RemoveNodeStatusContext | undefined;
 		switch (status) {
 			case RemoveNodeStatus.Ready:
 			case RemoveNodeStatus.NodeFound:
 			case RemoveNodeStatus.Failed:
+			case RemoveNodeStatus.Reserved_0x05:
 			case RemoveNodeStatus.Done:
 				// no context for the status to parse
 				// TODO:
 				// An application MUST time out waiting for the REMOVE_NODE_STATUS_REMOVING_SLAVE status
 				// if it does not receive the indication within a 14 sec after receiving the
 				// REMOVE_NODE_STATUS_NODE_FOUND status.
-				break;
+				return new this({
+					callbackId,
+					status,
+				});
 
 			case RemoveNodeStatus.RemovingController:
 			case RemoveNodeStatus.RemovingSlave: {
@@ -168,17 +203,17 @@ export class RemoveNodeFromNetworkRequestStatusReport
 					raw.payload.subarray(2),
 					ctx.nodeIdType,
 				);
-				statusContext = { nodeId };
-				break;
+				return new this({
+					callbackId,
+					status,
+					nodeId,
+				});
 			}
 		}
-
-		return new this({
-			callbackId,
-			status,
-			statusContext,
-		});
 	}
+
+	public readonly status: RemoveNodeStatus;
+	public readonly statusContext: RemoveNodeStatusContext | undefined;
 
 	isOK(): boolean {
 		// Some of the status codes are for unsolicited callbacks, but
@@ -186,8 +221,18 @@ export class RemoveNodeFromNetworkRequestStatusReport
 		return this.status !== RemoveNodeStatus.Failed;
 	}
 
-	public readonly status: RemoveNodeStatus;
-	public readonly statusContext: RemoveNodeStatusContext | undefined;
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		this.payload = Buffer.from([this.callbackId, this.status]);
+		if (this.statusContext?.nodeId != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeNodeID(this.statusContext.nodeId, ctx.nodeIdType),
+			]);
+		}
+
+		return super.serialize(ctx);
+	}
 }
 
 interface RemoveNodeStatusContext {

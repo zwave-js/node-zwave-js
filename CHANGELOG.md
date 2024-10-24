@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 13.10.0 (2024-10-24)
+### Features
+* `mock-server` now supports putting the simulated controller into add and remove mode (#7314)
+
+## 13.9.1 (2024-10-17)
+### Bugfixes
+* Fixed an issue where preferred scales were not being found when set as a string (#7286)
+
 ## 13.9.0 (2024-10-14)
 ### Features
 * Zniffer: allow filtering frames when saving the capture (#7279)

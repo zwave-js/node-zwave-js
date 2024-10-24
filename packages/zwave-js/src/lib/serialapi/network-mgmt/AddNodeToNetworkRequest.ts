@@ -7,7 +7,9 @@ import {
 	type MessageRecord,
 	type NodeId,
 	NodeType,
+	type NodeUpdatePayload,
 	Protocols,
+	encodeNodeUpdatePayload,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
@@ -22,6 +24,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	MessageOrigin,
 	MessageType,
 	expectedCallback,
 	messageTypes,
@@ -97,7 +100,11 @@ export class AddNodeToNetworkRequestBase extends Message {
 		raw: MessageRaw,
 		ctx: MessageParsingContext,
 	): AddNodeToNetworkRequestBase {
-		return AddNodeToNetworkRequestStatusReport.from(raw, ctx);
+		if (ctx.origin === MessageOrigin.Host) {
+			return AddNodeToNetworkRequest.from(raw, ctx);
+		} else {
+			return AddNodeToNetworkRequestStatusReport.from(raw, ctx);
+		}
 	}
 }
 
@@ -138,6 +145,23 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 		this.addNodeType = options.addNodeType;
 		this.highPower = !!options.highPower;
 		this.networkWide = !!options.networkWide;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): AddNodeToNetworkRequest {
+		const highPower = !!(raw.payload[0] & AddNodeFlags.HighPower);
+		const networkWide = !!(raw.payload[0] & AddNodeFlags.NetworkWide);
+		const addNodeType = raw.payload[0] & 0b1111;
+		const callbackId = raw.payload[1];
+
+		return new this({
+			callbackId,
+			addNodeType,
+			highPower,
+			networkWide,
+		});
 	}
 
 	/** The type of node to add */
@@ -266,10 +290,19 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	}
 }
 
-export interface AddNodeToNetworkRequestStatusReportOptions {
-	status: AddNodeStatus;
-	statusContext?: AddNodeStatusContext;
-}
+export type AddNodeToNetworkRequestStatusReportOptions = {
+	status:
+		| AddNodeStatus.Ready
+		| AddNodeStatus.NodeFound
+		| AddNodeStatus.ProtocolDone
+		| AddNodeStatus.Failed;
+} | {
+	status: AddNodeStatus.Done;
+	nodeId: number;
+} | {
+	status: AddNodeStatus.AddingController | AddNodeStatus.AddingSlave;
+	nodeInfo: NodeUpdatePayload;
+};
 
 export class AddNodeToNetworkRequestStatusReport
 	extends AddNodeToNetworkRequestBase
@@ -282,10 +315,12 @@ export class AddNodeToNetworkRequestStatusReport
 	) {
 		super(options);
 
-		// TODO: Check implementation:
-		this.callbackId = options.callbackId;
 		this.status = options.status;
-		this.statusContext = options.statusContext;
+		if ("nodeId" in options) {
+			this.statusContext = { nodeId: options.nodeId };
+		} else if ("nodeInfo" in options) {
+			this.statusContext = options.nodeInfo;
+		}
 	}
 
 	public static from(
@@ -294,14 +329,16 @@ export class AddNodeToNetworkRequestStatusReport
 	): AddNodeToNetworkRequestStatusReport {
 		const callbackId = raw.payload[0];
 		const status: AddNodeStatus = raw.payload[1];
-		let statusContext: AddNodeStatusContext | undefined;
 		switch (status) {
 			case AddNodeStatus.Ready:
 			case AddNodeStatus.NodeFound:
 			case AddNodeStatus.ProtocolDone:
 			case AddNodeStatus.Failed:
 				// no context for the status to parse
-				break;
+				return new this({
+					callbackId,
+					status,
+				});
 
 			case AddNodeStatus.Done: {
 				const { nodeId } = parseNodeID(
@@ -309,26 +346,27 @@ export class AddNodeToNetworkRequestStatusReport
 					ctx.nodeIdType,
 					2,
 				);
-				statusContext = { nodeId };
-				break;
+				return new this({
+					callbackId,
+					status,
+					nodeId,
+				});
 			}
 
 			case AddNodeStatus.AddingController:
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
-				statusContext = parseNodeUpdatePayload(
+				const nodeInfo = parseNodeUpdatePayload(
 					raw.payload.subarray(2),
 					ctx.nodeIdType,
 				);
-				break;
+				return new this({
+					callbackId,
+					status,
+					nodeInfo,
+				});
 			}
 		}
-
-		return new this({
-			callbackId,
-			status,
-			statusContext,
-		});
 	}
 
 	isOK(): boolean {
@@ -339,6 +377,21 @@ export class AddNodeToNetworkRequestStatusReport
 
 	public readonly status: AddNodeStatus;
 	public readonly statusContext: AddNodeStatusContext | undefined;
+
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		this.payload = Buffer.from([this.callbackId, this.status]);
+		if (this.statusContext?.basicDeviceClass != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeNodeUpdatePayload(
+					this.statusContext as NodeUpdatePayload,
+					ctx.nodeIdType,
+				),
+			]);
+		}
+		return super.serialize(ctx);
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
