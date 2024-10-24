@@ -49,28 +49,21 @@ module.exports.default = {
 			},
 			behaviors: [
 				{
-					async onControllerFrame(controller, self, frame) {
+					async handleCC(controller, self, receivedCC) {
 						if (
-							frame.type === MockZWaveFrameType.Request
-							&& frame.payload instanceof SupervisionCCGet
-							&& frame.payload.encapsulated
+							receivedCC instanceof SupervisionCCGet
+							&& receivedCC.encapsulated
 								instanceof ConfigurationCCSet
 						) {
-							const cc = new SupervisionCCReport(self.host, {
-								nodeId: controller.host.ownNodeId,
-								sessionId: frame.payload.sessionId,
+							const cc = new SupervisionCCReport({
+								nodeId: controller.ownNodeId,
+								sessionId: receivedCC.sessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Fail,
 							});
-							// await wait(500);
-							await self.sendToController(
-								createMockZWaveRequestFrame(cc, {
-									ackRequested: false,
-								}),
-							);
-							return true;
+
+							return { action: "sendCC", cc };
 						}
-						return false;
 					},
 				},
 			],
