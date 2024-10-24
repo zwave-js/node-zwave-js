@@ -79,8 +79,9 @@ export class BootloaderScreenParser extends Transform {
 			const screen = this.receiveBuffer.slice(0, nulCharIndex).trim();
 			this.receiveBuffer = this.receiveBuffer.slice(nulCharIndex + 1);
 
-			this.logger?.bootloaderScreen(screen);
+			if (screen === "") continue;
 
+			this.logger?.bootloaderScreen(screen);
 			this.push(screen);
 		}
 
@@ -107,7 +108,9 @@ export class BootloaderScreenParser extends Transform {
 	}
 }
 
-export const bootloaderMenuPreamble = "Gecko Bootloader";
+// Sometimes the first chunk of the bootloader screen is relatively short,
+// so we consider the following enough to detect the bootloader menu:
+export const bootloaderMenuPreamble = "Gecko Boo";
 const preambleRegex = /^Gecko Bootloader v(?<version>\d+\.\d+\.\d+)/;
 const menuSuffix = "BL >";
 const optionsRegex = /^(?<num>\d+)\. (?<option>.+)/gm;
