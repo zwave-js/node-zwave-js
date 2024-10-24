@@ -33,6 +33,7 @@ const ccAndCommandNames = combinations(
 		"Scene Activation",
 		"Meter",
 		"Indicator",
+		"Window Covering",
 	],
 	[
 		"Command Class",
