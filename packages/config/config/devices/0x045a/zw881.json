@@ -1,0 +1,16 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "ZW881",
+	"description": "Multi-Protocol Gateway",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0371"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
