@@ -1,4 +1,4 @@
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, type ZWaveLibraryTypes } from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
@@ -12,7 +12,6 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { cpp2js } from "@zwave-js/shared";
-import type { ZWaveLibraryTypes } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)

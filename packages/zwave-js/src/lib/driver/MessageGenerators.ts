@@ -43,18 +43,18 @@ import {
 } from "@zwave-js/core";
 import { type CCEncodingContext } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
+import {
+	type SendDataMessage,
+	isSendData,
+	isTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import { type ContainsCC, containsCC } from "@zwave-js/serial/serialapi";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import {
-	type SendDataMessage,
-	isSendData,
-	isTransmitReport,
-} from "../serialapi/transport/SendDataShared";
-import { type ContainsCC, containsCC } from "../serialapi/utils";
 import type { Driver } from "./Driver";
 import type { MessageGenerator } from "./Transaction";
 

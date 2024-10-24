@@ -17,3 +17,5 @@ export * from "./serialport/ZWaveSocketOptions";
 export * from "./zniffer/ZnifferSerialPort";
 export * from "./zniffer/ZnifferSerialPortBase";
 export * from "./zniffer/ZnifferSocket";
+
+export * from "./index_serialapi";

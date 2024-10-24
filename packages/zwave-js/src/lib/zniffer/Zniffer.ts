@@ -30,6 +30,7 @@ import {
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
+import { sdkVersionGte } from "@zwave-js/core";
 import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
 	type ZWaveSerialPortImplementation,
@@ -69,7 +70,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
-import { sdkVersionGte } from "../controller/utils";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import {

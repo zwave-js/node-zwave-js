@@ -15,12 +15,12 @@ import {
 } from "@zwave-js/core";
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
+import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { type TransactionQueue } from "../driver/Queue";
 import type { Transaction } from "../driver/Transaction";
 import { NodeStatus } from "../node/_Types";
-import { containsCC } from "../serialapi/utils";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";

@@ -13,6 +13,74 @@ import {
 	ZWaveErrorCodes,
 	isZWaveError,
 } from "@zwave-js/core";
+import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
+import {
+	type ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "@zwave-js/serial/serialapi";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetControllerCapabilitiesRequest,
+	GetControllerCapabilitiesResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetControllerVersionRequest,
+	GetControllerVersionResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSerialApiCapabilitiesRequest,
+	GetSerialApiCapabilitiesResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSerialApiInitDataRequest,
+	GetSerialApiInitDataResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetControllerIdRequest,
+	GetControllerIdResponse,
+} from "@zwave-js/serial/serialapi";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import {
+	AddNodeStatus,
+	AddNodeToNetworkRequest,
+	AddNodeToNetworkRequestStatusReport,
+	AddNodeType,
+} from "@zwave-js/serial/serialapi";
+import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteRequestTransmitReport,
+	AssignSUCReturnRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSUCNodeIdRequest,
+	GetSUCNodeIdResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	RemoveNodeFromNetworkRequest,
+	RemoveNodeFromNetworkRequestStatusReport,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "@zwave-js/serial/serialapi";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	SendDataMulticastRequest,
+	SendDataMulticastRequestTransmitReport,
+	SendDataMulticastResponse,
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	SendDataResponse,
+} from "@zwave-js/serial/serialapi";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockController,
@@ -21,74 +89,6 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
-import {
-	type ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "../serialapi/application/SerialAPIStartedRequest";
-import {
-	GetControllerCapabilitiesRequest,
-	GetControllerCapabilitiesResponse,
-} from "../serialapi/capability/GetControllerCapabilitiesMessages";
-import {
-	GetControllerVersionRequest,
-	GetControllerVersionResponse,
-} from "../serialapi/capability/GetControllerVersionMessages";
-import {
-	GetSerialApiCapabilitiesRequest,
-	GetSerialApiCapabilitiesResponse,
-} from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
-import {
-	GetSerialApiInitDataRequest,
-	GetSerialApiInitDataResponse,
-} from "../serialapi/capability/GetSerialApiInitDataMessages";
-import {
-	GetControllerIdRequest,
-	GetControllerIdResponse,
-} from "../serialapi/memory/GetControllerIdMessages";
-import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
-import {
-	AddNodeStatus,
-	AddNodeToNetworkRequest,
-	AddNodeToNetworkRequestStatusReport,
-	AddNodeType,
-} from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
-import {
-	AssignSUCReturnRouteRequest,
-	AssignSUCReturnRouteRequestTransmitReport,
-	AssignSUCReturnRouteResponse,
-} from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import {
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
-import {
-	GetSUCNodeIdRequest,
-	GetSUCNodeIdResponse,
-} from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
-import {
-	RemoveNodeFromNetworkRequest,
-	RemoveNodeFromNetworkRequestStatusReport,
-	RemoveNodeStatus,
-	RemoveNodeType,
-} from "../serialapi/network-mgmt/RemoveNodeFromNetworkRequest";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "../serialapi/network-mgmt/RequestNodeInfoMessages";
-import {
-	SendDataMulticastRequest,
-	SendDataMulticastRequestTransmitReport,
-	SendDataMulticastResponse,
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-} from "../serialapi/transport/SendDataMessages";
 import {
 	MockControllerCommunicationState,
 	MockControllerInclusionState,

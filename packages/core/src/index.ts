@@ -32,6 +32,7 @@ export * from "./traits/Endpoints";
 export * from "./traits/Nodes";
 export * from "./traits/SecurityManagers";
 export * from "./util/_Types";
+export * from "./util/compareVersions";
 export * from "./util/config";
 export * from "./util/crc";
 export * from "./util/date";

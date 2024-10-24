@@ -75,9 +75,11 @@ import {
 	UNKNOWN_STATE,
 	type UnknownZWaveChipType,
 	ValueDB,
+	type ZWaveApiVersion,
 	type ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZWaveLibraryTypes,
 	authHomeIdFromDSK,
 	averageRSSI,
 	computePRK,
@@ -96,6 +98,10 @@ import {
 	isZWaveError,
 	nwiHomeIdFromDSK,
 	parseBitMask,
+	sdkVersionGt,
+	sdkVersionGte,
+	sdkVersionLt,
+	sdkVersionLte,
 	securityClassIsS2,
 	securityClassOrder,
 } from "@zwave-js/core";
@@ -116,6 +122,238 @@ import {
 	type SuccessIndicator,
 	XModemMessageHeaders,
 } from "@zwave-js/serial";
+import {
+	type ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeAdded,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeRemoved,
+	ApplicationUpdateRequestSUCIdChanged,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
+	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
+} from "@zwave-js/serial/serialapi";
+import {
+	ShutdownRequest,
+	type ShutdownResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetControllerCapabilitiesRequest,
+	type GetControllerCapabilitiesResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetControllerVersionRequest,
+	type GetControllerVersionResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetLongRangeNodesRequest,
+	type GetLongRangeNodesResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetProtocolVersionRequest,
+	type GetProtocolVersionResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSerialApiCapabilitiesRequest,
+	type GetSerialApiCapabilitiesResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSerialApiInitDataRequest,
+	type GetSerialApiInitDataResponse,
+} from "@zwave-js/serial/serialapi";
+import { HardResetRequest } from "@zwave-js/serial/serialapi";
+import {
+	GetLongRangeChannelRequest,
+	type GetLongRangeChannelResponse,
+	SetLongRangeChannelRequest,
+	type SetLongRangeChannelResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	SerialAPISetupCommand,
+	SerialAPISetup_CommandUnsupportedResponse,
+	SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest,
+	type SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse,
+	SerialAPISetup_GetLongRangeMaximumTxPowerRequest,
+	type SerialAPISetup_GetLongRangeMaximumTxPowerResponse,
+	SerialAPISetup_GetMaximumPayloadSizeRequest,
+	type SerialAPISetup_GetMaximumPayloadSizeResponse,
+	SerialAPISetup_GetPowerlevel16BitRequest,
+	type SerialAPISetup_GetPowerlevel16BitResponse,
+	SerialAPISetup_GetPowerlevelRequest,
+	type SerialAPISetup_GetPowerlevelResponse,
+	SerialAPISetup_GetRFRegionRequest,
+	type SerialAPISetup_GetRFRegionResponse,
+	SerialAPISetup_GetRegionInfoRequest,
+	type SerialAPISetup_GetRegionInfoResponse,
+	SerialAPISetup_GetSupportedCommandsRequest,
+	type SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_GetSupportedRegionsRequest,
+	type SerialAPISetup_GetSupportedRegionsResponse,
+	SerialAPISetup_SetLongRangeMaximumTxPowerRequest,
+	type SerialAPISetup_SetLongRangeMaximumTxPowerResponse,
+	SerialAPISetup_SetNodeIDTypeRequest,
+	type SerialAPISetup_SetNodeIDTypeResponse,
+	SerialAPISetup_SetPowerlevel16BitRequest,
+	type SerialAPISetup_SetPowerlevel16BitResponse,
+	SerialAPISetup_SetPowerlevelRequest,
+	type SerialAPISetup_SetPowerlevelResponse,
+	SerialAPISetup_SetRFRegionRequest,
+	type SerialAPISetup_SetRFRegionResponse,
+	SerialAPISetup_SetTXStatusReportRequest,
+	type SerialAPISetup_SetTXStatusReportResponse,
+} from "@zwave-js/serial/serialapi";
+import { SetApplicationNodeInformationRequest } from "@zwave-js/serial/serialapi";
+import {
+	GetControllerIdRequest,
+	type GetControllerIdResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetBackgroundRSSIRequest,
+	type GetBackgroundRSSIResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	SetRFReceiveModeRequest,
+	type SetRFReceiveModeResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	SetSerialApiTimeoutsRequest,
+	type SetSerialApiTimeoutsResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	StartWatchdogRequest,
+	StopWatchdogRequest,
+} from "@zwave-js/serial/serialapi";
+import {
+	AddNodeDSKToNetworkRequest,
+	AddNodeStatus,
+	AddNodeToNetworkRequest,
+	type AddNodeToNetworkRequestStatusReport,
+	AddNodeType,
+	EnableSmartStartListenRequest,
+	computeNeighborDiscoveryTimeout,
+} from "@zwave-js/serial/serialapi";
+import { AssignPriorityReturnRouteRequest } from "@zwave-js/serial/serialapi";
+import {
+	AssignPrioritySUCReturnRouteRequest,
+	type AssignPrioritySUCReturnRouteRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	AssignReturnRouteRequest,
+	type AssignReturnRouteRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	DeleteReturnRouteRequest,
+	type DeleteReturnRouteRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	DeleteSUCReturnRouteRequest,
+	DeleteSUCReturnRouteRequestTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetPriorityRouteRequest,
+	type GetPriorityRouteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetRoutingInfoRequest,
+	type GetRoutingInfoResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetSUCNodeIdRequest,
+	type GetSUCNodeIdResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	IsFailedNodeRequest,
+	type IsFailedNodeResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	RemoveFailedNodeRequest,
+	type RemoveFailedNodeRequestStatusReport,
+	RemoveFailedNodeResponse,
+	RemoveFailedNodeStartFlags,
+	RemoveFailedNodeStatus,
+} from "@zwave-js/serial/serialapi";
+import {
+	RemoveNodeFromNetworkRequest,
+	type RemoveNodeFromNetworkRequestStatusReport,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "@zwave-js/serial/serialapi";
+import {
+	ReplaceFailedNodeRequest,
+	type ReplaceFailedNodeRequestStatusReport,
+	type ReplaceFailedNodeResponse,
+	ReplaceFailedNodeStartFlags,
+	ReplaceFailedNodeStatus,
+} from "@zwave-js/serial/serialapi";
+import {
+	NodeNeighborUpdateStatus,
+	type RequestNodeNeighborUpdateReport,
+	RequestNodeNeighborUpdateRequest,
+} from "@zwave-js/serial/serialapi";
+import {
+	LearnModeIntent,
+	LearnModeStatus,
+	type SetLearnModeCallback,
+	SetLearnModeRequest,
+} from "@zwave-js/serial/serialapi";
+import { SetPriorityRouteRequest } from "@zwave-js/serial/serialapi";
+import { SetSUCNodeIdRequest } from "@zwave-js/serial/serialapi";
+import {
+	ExtNVMReadLongBufferRequest,
+	type ExtNVMReadLongBufferResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	ExtNVMReadLongByteRequest,
+	type ExtNVMReadLongByteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	ExtNVMWriteLongBufferRequest,
+	type ExtNVMWriteLongBufferResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	ExtNVMWriteLongByteRequest,
+	type ExtNVMWriteLongByteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	ExtendedNVMOperationStatus,
+	ExtendedNVMOperationsCloseRequest,
+	ExtendedNVMOperationsCommand,
+	ExtendedNVMOperationsOpenRequest,
+	ExtendedNVMOperationsReadRequest,
+	type ExtendedNVMOperationsResponse,
+	ExtendedNVMOperationsWriteRequest,
+} from "@zwave-js/serial/serialapi";
+import {
+	FirmwareUpdateNVM_GetNewImageRequest,
+	type FirmwareUpdateNVM_GetNewImageResponse,
+	FirmwareUpdateNVM_InitRequest,
+	type FirmwareUpdateNVM_InitResponse,
+	FirmwareUpdateNVM_IsValidCRC16Request,
+	type FirmwareUpdateNVM_IsValidCRC16Response,
+	FirmwareUpdateNVM_SetNewImageRequest,
+	type FirmwareUpdateNVM_SetNewImageResponse,
+	FirmwareUpdateNVM_UpdateCRC16Request,
+	type FirmwareUpdateNVM_UpdateCRC16Response,
+	FirmwareUpdateNVM_WriteRequest,
+	type FirmwareUpdateNVM_WriteResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetNVMIdRequest,
+	type GetNVMIdResponse,
+	type NVMId,
+	nvmSizeToBufferSize,
+} from "@zwave-js/serial/serialapi";
+import {
+	NVMOperationStatus,
+	NVMOperationsCloseRequest,
+	NVMOperationsOpenRequest,
+	NVMOperationsReadRequest,
+	type NVMOperationsResponse,
+	NVMOperationsWriteRequest,
+} from "@zwave-js/serial/serialapi";
+import type { TransmitReport } from "@zwave-js/serial/serialapi";
 import {
 	Mixin,
 	type ReadonlyObjectKeyMap,
@@ -152,239 +390,6 @@ import {
 	type LifelineRoutes,
 	NodeStatus,
 } from "../node/_Types";
-import { type ZWaveApiVersion, ZWaveLibraryTypes } from "../serialapi/_Types";
-import {
-	type ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeAdded,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeRemoved,
-	ApplicationUpdateRequestSUCIdChanged,
-	ApplicationUpdateRequestSmartStartHomeIDReceived,
-	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
-} from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	ShutdownRequest,
-	type ShutdownResponse,
-} from "../serialapi/application/ShutdownMessages";
-import {
-	GetControllerCapabilitiesRequest,
-	type GetControllerCapabilitiesResponse,
-} from "../serialapi/capability/GetControllerCapabilitiesMessages";
-import {
-	GetControllerVersionRequest,
-	type GetControllerVersionResponse,
-} from "../serialapi/capability/GetControllerVersionMessages";
-import {
-	GetLongRangeNodesRequest,
-	type GetLongRangeNodesResponse,
-} from "../serialapi/capability/GetLongRangeNodesMessages";
-import {
-	GetProtocolVersionRequest,
-	type GetProtocolVersionResponse,
-} from "../serialapi/capability/GetProtocolVersionMessages";
-import {
-	GetSerialApiCapabilitiesRequest,
-	type GetSerialApiCapabilitiesResponse,
-} from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
-import {
-	GetSerialApiInitDataRequest,
-	type GetSerialApiInitDataResponse,
-} from "../serialapi/capability/GetSerialApiInitDataMessages";
-import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
-import {
-	GetLongRangeChannelRequest,
-	type GetLongRangeChannelResponse,
-	SetLongRangeChannelRequest,
-	type SetLongRangeChannelResponse,
-} from "../serialapi/capability/LongRangeChannelMessages";
-import {
-	SerialAPISetupCommand,
-	SerialAPISetup_CommandUnsupportedResponse,
-	SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest,
-	type SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse,
-	SerialAPISetup_GetLongRangeMaximumTxPowerRequest,
-	type SerialAPISetup_GetLongRangeMaximumTxPowerResponse,
-	SerialAPISetup_GetMaximumPayloadSizeRequest,
-	type SerialAPISetup_GetMaximumPayloadSizeResponse,
-	SerialAPISetup_GetPowerlevel16BitRequest,
-	type SerialAPISetup_GetPowerlevel16BitResponse,
-	SerialAPISetup_GetPowerlevelRequest,
-	type SerialAPISetup_GetPowerlevelResponse,
-	SerialAPISetup_GetRFRegionRequest,
-	type SerialAPISetup_GetRFRegionResponse,
-	SerialAPISetup_GetRegionInfoRequest,
-	type SerialAPISetup_GetRegionInfoResponse,
-	SerialAPISetup_GetSupportedCommandsRequest,
-	type SerialAPISetup_GetSupportedCommandsResponse,
-	SerialAPISetup_GetSupportedRegionsRequest,
-	type SerialAPISetup_GetSupportedRegionsResponse,
-	SerialAPISetup_SetLongRangeMaximumTxPowerRequest,
-	type SerialAPISetup_SetLongRangeMaximumTxPowerResponse,
-	SerialAPISetup_SetNodeIDTypeRequest,
-	type SerialAPISetup_SetNodeIDTypeResponse,
-	SerialAPISetup_SetPowerlevel16BitRequest,
-	type SerialAPISetup_SetPowerlevel16BitResponse,
-	SerialAPISetup_SetPowerlevelRequest,
-	type SerialAPISetup_SetPowerlevelResponse,
-	SerialAPISetup_SetRFRegionRequest,
-	type SerialAPISetup_SetRFRegionResponse,
-	SerialAPISetup_SetTXStatusReportRequest,
-	type SerialAPISetup_SetTXStatusReportResponse,
-} from "../serialapi/capability/SerialAPISetupMessages";
-import { SetApplicationNodeInformationRequest } from "../serialapi/capability/SetApplicationNodeInformationRequest";
-import {
-	GetControllerIdRequest,
-	type GetControllerIdResponse,
-} from "../serialapi/memory/GetControllerIdMessages";
-import {
-	GetBackgroundRSSIRequest,
-	type GetBackgroundRSSIResponse,
-} from "../serialapi/misc/GetBackgroundRSSIMessages";
-import {
-	SetRFReceiveModeRequest,
-	type SetRFReceiveModeResponse,
-} from "../serialapi/misc/SetRFReceiveModeMessages";
-import {
-	SetSerialApiTimeoutsRequest,
-	type SetSerialApiTimeoutsResponse,
-} from "../serialapi/misc/SetSerialApiTimeoutsMessages";
-import {
-	StartWatchdogRequest,
-	StopWatchdogRequest,
-} from "../serialapi/misc/WatchdogMessages";
-import {
-	AddNodeDSKToNetworkRequest,
-	AddNodeStatus,
-	AddNodeToNetworkRequest,
-	type AddNodeToNetworkRequestStatusReport,
-	AddNodeType,
-	EnableSmartStartListenRequest,
-	computeNeighborDiscoveryTimeout,
-} from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
-import { AssignPriorityReturnRouteRequest } from "../serialapi/network-mgmt/AssignPriorityReturnRouteMessages";
-import {
-	AssignPrioritySUCReturnRouteRequest,
-	type AssignPrioritySUCReturnRouteRequestTransmitReport,
-} from "../serialapi/network-mgmt/AssignPrioritySUCReturnRouteMessages";
-import {
-	AssignReturnRouteRequest,
-	type AssignReturnRouteRequestTransmitReport,
-} from "../serialapi/network-mgmt/AssignReturnRouteMessages";
-import {
-	AssignSUCReturnRouteRequest,
-	AssignSUCReturnRouteRequestTransmitReport,
-} from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import {
-	DeleteReturnRouteRequest,
-	type DeleteReturnRouteRequestTransmitReport,
-} from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
-import {
-	DeleteSUCReturnRouteRequest,
-	DeleteSUCReturnRouteRequestTransmitReport,
-} from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
-import {
-	GetPriorityRouteRequest,
-	type GetPriorityRouteResponse,
-} from "../serialapi/network-mgmt/GetPriorityRouteMessages";
-import {
-	GetRoutingInfoRequest,
-	type GetRoutingInfoResponse,
-} from "../serialapi/network-mgmt/GetRoutingInfoMessages";
-import {
-	GetSUCNodeIdRequest,
-	type GetSUCNodeIdResponse,
-} from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
-import {
-	IsFailedNodeRequest,
-	type IsFailedNodeResponse,
-} from "../serialapi/network-mgmt/IsFailedNodeMessages";
-import {
-	RemoveFailedNodeRequest,
-	type RemoveFailedNodeRequestStatusReport,
-	RemoveFailedNodeResponse,
-	RemoveFailedNodeStartFlags,
-	RemoveFailedNodeStatus,
-} from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
-import {
-	RemoveNodeFromNetworkRequest,
-	type RemoveNodeFromNetworkRequestStatusReport,
-	RemoveNodeStatus,
-	RemoveNodeType,
-} from "../serialapi/network-mgmt/RemoveNodeFromNetworkRequest";
-import {
-	ReplaceFailedNodeRequest,
-	type ReplaceFailedNodeRequestStatusReport,
-	type ReplaceFailedNodeResponse,
-	ReplaceFailedNodeStartFlags,
-	ReplaceFailedNodeStatus,
-} from "../serialapi/network-mgmt/ReplaceFailedNodeRequest";
-import {
-	NodeNeighborUpdateStatus,
-	type RequestNodeNeighborUpdateReport,
-	RequestNodeNeighborUpdateRequest,
-} from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
-import {
-	LearnModeIntent,
-	LearnModeStatus,
-	type SetLearnModeCallback,
-	SetLearnModeRequest,
-} from "../serialapi/network-mgmt/SetLearnModeMessages";
-import { SetPriorityRouteRequest } from "../serialapi/network-mgmt/SetPriorityRouteMessages";
-import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
-import {
-	ExtNVMReadLongBufferRequest,
-	type ExtNVMReadLongBufferResponse,
-} from "../serialapi/nvm/ExtNVMReadLongBufferMessages";
-import {
-	ExtNVMReadLongByteRequest,
-	type ExtNVMReadLongByteResponse,
-} from "../serialapi/nvm/ExtNVMReadLongByteMessages";
-import {
-	ExtNVMWriteLongBufferRequest,
-	type ExtNVMWriteLongBufferResponse,
-} from "../serialapi/nvm/ExtNVMWriteLongBufferMessages";
-import {
-	ExtNVMWriteLongByteRequest,
-	type ExtNVMWriteLongByteResponse,
-} from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
-import {
-	ExtendedNVMOperationStatus,
-	ExtendedNVMOperationsCloseRequest,
-	ExtendedNVMOperationsCommand,
-	ExtendedNVMOperationsOpenRequest,
-	ExtendedNVMOperationsReadRequest,
-	type ExtendedNVMOperationsResponse,
-	ExtendedNVMOperationsWriteRequest,
-} from "../serialapi/nvm/ExtendedNVMOperationsMessages";
-import {
-	FirmwareUpdateNVM_GetNewImageRequest,
-	type FirmwareUpdateNVM_GetNewImageResponse,
-	FirmwareUpdateNVM_InitRequest,
-	type FirmwareUpdateNVM_InitResponse,
-	FirmwareUpdateNVM_IsValidCRC16Request,
-	type FirmwareUpdateNVM_IsValidCRC16Response,
-	FirmwareUpdateNVM_SetNewImageRequest,
-	type FirmwareUpdateNVM_SetNewImageResponse,
-	FirmwareUpdateNVM_UpdateCRC16Request,
-	type FirmwareUpdateNVM_UpdateCRC16Response,
-	FirmwareUpdateNVM_WriteRequest,
-	type FirmwareUpdateNVM_WriteResponse,
-} from "../serialapi/nvm/FirmwareUpdateNVMMessages";
-import {
-	GetNVMIdRequest,
-	type GetNVMIdResponse,
-	type NVMId,
-	nvmSizeToBufferSize,
-} from "../serialapi/nvm/GetNVMIdMessages";
-import {
-	NVMOperationStatus,
-	NVMOperationsCloseRequest,
-	NVMOperationsOpenRequest,
-	NVMOperationsReadRequest,
-	type NVMOperationsResponse,
-	NVMOperationsWriteRequest,
-} from "../serialapi/nvm/NVMOperationsMessages";
-import type { TransmitReport } from "../serialapi/transport/SendDataShared";
 import {
 	type ControllerStatistics,
 	ControllerStatisticsHost,
@@ -431,14 +436,7 @@ import {
 	type RebuildRoutesStatus,
 	type SDKVersion,
 } from "./_Types";
-import {
-	assertProvisioningEntry,
-	isRebuildRoutesTask,
-	sdkVersionGt,
-	sdkVersionGte,
-	sdkVersionLt,
-	sdkVersionLte,
-} from "./utils";
+import { assertProvisioningEntry, isRebuildRoutesTask } from "./utils";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks

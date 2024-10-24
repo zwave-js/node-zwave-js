@@ -139,6 +139,31 @@ import {
 	isSuccessIndicator,
 	isZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
+import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "@zwave-js/serial/serialapi";
+import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "@zwave-js/serial/serialapi";
+import {
+	MAX_SEND_ATTEMPTS,
+	SendDataAbort,
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "@zwave-js/serial/serialapi";
+import {
+	type SendDataMessage,
+	hasTXReport,
+	isSendData,
+	isSendDataSinglecast,
+	isSendDataTransmitReport,
+	isTransmitReport,
+} from "@zwave-js/serial/serialapi";
 import {
 	AsyncQueue,
 	type ThrowingMap,
@@ -181,47 +206,22 @@ import {
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
 } from "../node/_Types";
-import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "../serialapi/application/SerialAPIStartedRequest";
-import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
-import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
-import {
-	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
-} from "../serialapi/transport/SendDataBridgeMessages";
-import {
-	MAX_SEND_ATTEMPTS,
-	SendDataAbort,
-	SendDataMulticastRequest,
-	SendDataRequest,
-} from "../serialapi/transport/SendDataMessages";
-import {
-	type SendDataMessage,
-	hasTXReport,
-	isSendData,
-	isSendDataSinglecast,
-	isSendDataTransmitReport,
-	isTransmitReport,
-} from "../serialapi/transport/SendDataShared";
 
-import { type ZWaveNodeBase } from "../node/mixins/00_Base";
-import { type NodeWakeup } from "../node/mixins/30_Wakeup";
-import { type NodeValues } from "../node/mixins/40_Values";
-import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
 import {
 	SendTestFrameRequest,
 	SendTestFrameTransmitReport,
-} from "../serialapi/transport/SendTestFrameMessages";
+} from "@zwave-js/serial/serialapi";
 import {
 	type CommandRequest,
 	type ContainsCC,
 	containsCC,
 	containsSerializedCC,
 	isCommandRequest,
-} from "../serialapi/utils";
+} from "@zwave-js/serial/serialapi";
+import { type ZWaveNodeBase } from "../node/mixins/00_Base";
+import { type NodeWakeup } from "../node/mixins/30_Wakeup";
+import { type NodeValues } from "../node/mixins/40_Values";
+import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	type AppInfo,

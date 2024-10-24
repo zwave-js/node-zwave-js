@@ -154,7 +154,6 @@ export class ApplicationCommandRequest extends Message
 	}
 
 	public serializedCC: Buffer | undefined;
-	/** @internal */
 	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this.serializedCC) {
 			if (!this.command) {

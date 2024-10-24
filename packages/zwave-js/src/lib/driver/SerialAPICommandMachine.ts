@@ -4,6 +4,7 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "@zwave-js/serial";
+import { isSendData } from "@zwave-js/serial/serialapi";
 import {
 	type InterpreterFrom,
 	type MachineConfig,
@@ -13,7 +14,6 @@ import {
 	createMachine,
 	raise,
 } from "xstate";
-import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 export interface SerialAPICommandStateSchema {

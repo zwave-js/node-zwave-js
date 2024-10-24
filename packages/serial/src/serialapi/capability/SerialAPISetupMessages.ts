@@ -10,6 +10,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
+import { sdkVersionLt } from "@zwave-js/core";
 import type {
 	MessageConstructor,
 	MessageEncodingContext,
@@ -27,7 +28,6 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { sdkVersionLt } from "../../controller/utils";
 
 export enum SerialAPISetupCommand {
 	Unsupported = 0x00,

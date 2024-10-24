@@ -199,6 +199,20 @@ import {
 } from "@zwave-js/core";
 import { FunctionType, type Message } from "@zwave-js/serial";
 import {
+	type ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "@zwave-js/serial/serialapi";
+import {
+	GetNodeProtocolInfoRequest,
+	type GetNodeProtocolInfoResponse,
+} from "@zwave-js/serial/serialapi";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "@zwave-js/serial/serialapi";
+import { containsCC } from "@zwave-js/serial/serialapi";
+import {
 	Mixin,
 	type TypedEventEmitter,
 	cloneDeep,
@@ -227,20 +241,6 @@ import { type Driver, libVersion } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
-import {
-	type ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	GetNodeProtocolInfoRequest,
-	type GetNodeProtocolInfoResponse,
-} from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "../serialapi/network-mgmt/RequestNodeInfoMessages";
-import { containsCC } from "../serialapi/utils";
 import { DeviceClass } from "./DeviceClass";
 import { type NodeDump, type ValueDump } from "./Dump";
 import { type Endpoint } from "./Endpoint";

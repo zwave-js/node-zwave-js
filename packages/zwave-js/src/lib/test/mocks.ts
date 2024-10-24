@@ -28,10 +28,10 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import sinon from "sinon";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";
-import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 const MockRequestMessageWithExpectation_FunctionType =
 	0xfa as unknown as FunctionType;

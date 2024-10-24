@@ -24,6 +24,7 @@ import {
 	securityClassIsS2,
 	timespan,
 } from "@zwave-js/core";
+import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName, throttle } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
@@ -35,7 +36,6 @@ import { roundTo } from "alcalzone-shared/math";
 import { randomBytes } from "node:crypto";
 import { type Task, type TaskBuilder, TaskPriority } from "../../driver/Task";
 import { type Transaction } from "../../driver/Transaction";
-import { containsCC } from "../../serialapi/utils";
 import { SchedulePollMixin } from "./60_ScheduledPoll";
 
 interface AbortFirmwareUpdateContext {
