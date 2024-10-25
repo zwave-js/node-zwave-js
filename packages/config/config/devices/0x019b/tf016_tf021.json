@@ -223,6 +223,32 @@
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 210
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "10 seconds",
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Temperature Report Change Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
 		}
 	],
 	"compat": {
