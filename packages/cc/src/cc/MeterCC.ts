@@ -992,7 +992,7 @@ export class MeterCCReport extends MeterCC {
 		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(this.type, this.scale, this.rateType),
-			unit: scale.label,
+			unit: scale.unit,
 			ccSpecific: {
 				meterType: this.type,
 				scale: this.scale,
