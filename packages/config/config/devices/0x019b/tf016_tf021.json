@@ -232,7 +232,13 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "18",
