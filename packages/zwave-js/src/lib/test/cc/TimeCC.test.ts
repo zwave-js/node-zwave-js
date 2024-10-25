@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	TimeCC,
 	TimeCCDateGet,
 	TimeCCDateReport,
@@ -7,10 +8,7 @@ import {
 	TimeCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,13 +20,13 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the TimeGet command should serialize correctly", (t) => {
-	const cc = new TimeCCTimeGet(host, { nodeId: 1 });
+	const cc = new TimeCCTimeGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the TimeReport command should be deserialized correctly", (t) => {
@@ -40,10 +38,11 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 			59,
 		]),
 	);
-	const cc = new TimeCCTimeReport(host, {
-		nodeId: 8,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCCTimeReport;
+	t.is(cc.constructor, TimeCCTimeReport);
 
 	t.is(cc.hour, 14);
 	t.is(cc.minute, 23);
@@ -51,13 +50,13 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 });
 
 test("the DateGet command should serialize correctly", (t) => {
-	const cc = new TimeCCDateGet(host, { nodeId: 1 });
+	const cc = new TimeCCDateGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the DateReport command should be deserialized correctly", (t) => {
@@ -70,10 +69,11 @@ test("the DateReport command should be deserialized correctly", (t) => {
 			17,
 		]),
 	);
-	const cc = new TimeCCDateReport(host, {
-		nodeId: 8,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCCDateReport;
+	t.is(cc.constructor, TimeCCDateReport);
 
 	t.is(cc.year, 1989);
 	t.is(cc.month, 10);
@@ -84,10 +84,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new TimeCC(host, {
-		nodeId: 8,
-		data: serializedCC,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 8 } as any,
+	) as TimeCC;
 	t.is(cc.constructor, TimeCC);
 });
 

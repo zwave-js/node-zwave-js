@@ -37,8 +37,8 @@ integrationTest(
 			const respondToBinarySwitchGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BinarySwitchCCGet) {
-						const cc = new BinarySwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new BinarySwitchCCReport({
+							nodeId: controller.ownNodeId,
 							currentValue: true,
 						});
 						return { action: "sendCC", cc };
@@ -73,8 +73,8 @@ integrationTest(
 			const respondToBinarySwitchGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BinarySwitchCCGet) {
-						const cc = new BinarySwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new BinarySwitchCCReport({
+							nodeId: controller.ownNodeId,
 							currentValue: true,
 						});
 						return { action: "sendCC", cc };

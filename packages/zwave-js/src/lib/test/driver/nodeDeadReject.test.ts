@@ -20,7 +20,7 @@ integrationTest(
 
 			t.is(node2.status, NodeStatus.Alive);
 
-			const command1 = new BasicCCSet(driver, {
+			const command1 = new BasicCCSet({
 				nodeId: 2,
 				targetValue: 99,
 			});
@@ -33,7 +33,7 @@ integrationTest(
 				driver.driverLog.print("basicSetPromise rejected");
 			}); // Don't throw here, do it below
 
-			const command2 = new BasicCCGet(driver, {
+			const command2 = new BasicCCGet({
 				nodeId: 2,
 			});
 			const basicGetPromise = driver.sendCommand(command2, {
@@ -88,7 +88,7 @@ integrationTest(
 
 			t.is(node2.status, NodeStatus.Alive);
 
-			const command1 = new BasicCCSet(driver, {
+			const command1 = new BasicCCSet({
 				nodeId: 2,
 				targetValue: 99,
 			});
@@ -101,7 +101,7 @@ integrationTest(
 				driver.driverLog.print("basicSetPromise rejected");
 			});
 
-			const command2 = new BasicCCGet(driver, {
+			const command2 = new BasicCCGet({
 				nodeId: 2,
 			});
 			const basicGetPromise = driver.sendCommand(command2, {

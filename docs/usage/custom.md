@@ -8,7 +8,7 @@ The only downside is that you won't necessarily receive any responses that would
 Here's an example how to turn off the LED on a **Aeotec Gen 5 stick**.
 
 ```ts
-const turnLEDOff = new Message(driver, {
+const turnLEDOff = new Message({
 	type: MessageType.Request,
 	functionType: 0xf2,
 	payload: Buffer.from("5101000501", "hex"),
@@ -28,7 +28,7 @@ await driver.sendMessage(turnLEDOff, {
 This example sends an `Anti-theft Get` command (which is currently unsupported) to node 2:
 
 ```ts
-const cc = new CommandClass(driver, {
+const cc = new CommandClass({
 	nodeId: 2,
 	ccId: CommandClasses["Anti-theft"], // or 0x5d
 	ccCommand: 0x02,

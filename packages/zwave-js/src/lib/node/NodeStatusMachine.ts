@@ -1,6 +1,6 @@
 import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
-import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./_Types";
+import { type NodeNetworkRole } from "./mixins/01_NetworkRole";
 
 export interface NodeStatusStateSchema {
 	states: {
@@ -44,7 +44,9 @@ export type NodeStatusMachine = StateMachine<
 >;
 export type NodeStatusInterpreter = InterpreterFrom<NodeStatusMachine>;
 
-export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
+export function createNodeStatusMachine(
+	node: NodeNetworkRole,
+): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",

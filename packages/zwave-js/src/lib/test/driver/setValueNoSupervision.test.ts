@@ -29,8 +29,8 @@ integrationTest("setValue without supervision: expect validation GET", {
 		const respondToBinarySwitchGet: MockNodeBehavior = {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof BinarySwitchCCGet) {
-					const cc = new BinarySwitchCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const cc = new BinarySwitchCCReport({
+						nodeId: controller.ownNodeId,
 						currentValue: false,
 					});
 					return { action: "sendCC", cc };

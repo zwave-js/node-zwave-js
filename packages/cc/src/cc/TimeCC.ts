@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	formatDate,
@@ -12,19 +13,18 @@ import {
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -62,11 +62,11 @@ export class TimeCCAPI extends CCAPI {
 	public async getTime() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeGet);
 
-		const cc = new TimeCCTimeGet(this.applHost, {
+		const cc = new TimeCCTimeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<TimeCCTimeReport>(
+		const response = await this.host.sendCommand<TimeCCTimeReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -83,25 +83,25 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeReport);
 
-		const cc = new TimeCCTimeReport(this.applHost, {
+		const cc = new TimeCCTimeReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			hour,
 			minute,
 			second,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getDate() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateGet);
 
-		const cc = new TimeCCDateGet(this.applHost, {
+		const cc = new TimeCCDateGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<TimeCCDateReport>(
+		const response = await this.host.sendCommand<TimeCCDateReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -118,14 +118,14 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateReport);
 
-		const cc = new TimeCCDateReport(this.applHost, {
+		const cc = new TimeCCDateReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			year,
 			month,
 			day,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -134,25 +134,25 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
 
-		const cc = new TimeCCTimeOffsetSet(this.applHost, {
+		const cc = new TimeCCTimeOffsetSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
-		const cc = new TimeCCTimeOffsetGet(this.applHost, {
+		const cc = new TimeCCTimeOffsetGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			TimeCCTimeOffsetReport
 		>(
 			cc,
@@ -174,15 +174,15 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetReport);
 
-		const cc = new TimeCCTimeOffsetReport(this.applHost, {
+		const cc = new TimeCCTimeOffsetReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -191,18 +191,20 @@ export class TimeCCAPI extends CCAPI {
 export class TimeCC extends CommandClass {
 	declare ccCommand: TimeCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Time,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -210,7 +212,7 @@ export class TimeCC extends CommandClass {
 
 		// Synchronize the slave's time
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",
@@ -221,12 +223,12 @@ export class TimeCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
 // @publicAPI
-export interface TimeCCTimeReportOptions extends CCCommandOptions {
+export interface TimeCCTimeReportOptions {
 	hour: number;
 	minute: number;
 	second: number;
@@ -235,41 +237,53 @@ export interface TimeCCTimeReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
+		options: WithAddress<TimeCCTimeReportOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.hour = this.payload[0] & 0b11111;
-			validatePayload(this.hour >= 0, this.hour <= 23);
-			this.minute = this.payload[1];
-			validatePayload(this.minute >= 0, this.minute <= 59);
-			this.second = this.payload[2];
-			validatePayload(this.second >= 0, this.second <= 59);
-		} else {
-			this.hour = options.hour;
-			this.minute = options.minute;
-			this.second = options.second;
-		}
+		super(options);
+		this.hour = options.hour;
+		this.minute = options.minute;
+		this.second = options.second;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCTimeReport {
+		validatePayload(raw.payload.length >= 3);
+		const hour = raw.payload[0] & 0b11111;
+		const minute = raw.payload[1];
+		const second = raw.payload[2];
+
+		validatePayload(
+			hour >= 0,
+			hour <= 23,
+			minute >= 0,
+			minute <= 59,
+			second >= 0,
+			second <= 59,
+		);
+
+		return new TimeCCTimeReport({
+			nodeId: ctx.sourceNodeId,
+			hour,
+			minute,
+			second,
+		});
 	}
 
 	public hour: number;
 	public minute: number;
 	public second: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.hour & 0b11111,
 			this.minute,
 			this.second,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				time: `${padStart(this.hour.toString(), 2, "0")}:${
 					padStart(
@@ -288,7 +302,7 @@ export class TimeCCTimeReport extends TimeCC {
 export class TimeCCTimeGet extends TimeCC {}
 
 // @publicAPI
-export interface TimeCCDateReportOptions extends CCCommandOptions {
+export interface TimeCCDateReportOptions {
 	year: number;
 	month: number;
 	day: number;
@@ -297,27 +311,33 @@ export interface TimeCCDateReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
+		options: WithAddress<TimeCCDateReportOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.year = this.payload.readUInt16BE(0);
-			this.month = this.payload[2];
-			this.day = this.payload[3];
-		} else {
-			this.year = options.year;
-			this.month = options.month;
-			this.day = options.day;
-		}
+		super(options);
+		this.year = options.year;
+		this.month = options.month;
+		this.day = options.day;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCDateReport {
+		validatePayload(raw.payload.length >= 4);
+		const year = raw.payload.readUInt16BE(0);
+		const month = raw.payload[2];
+		const day = raw.payload[3];
+
+		return new TimeCCDateReport({
+			nodeId: ctx.sourceNodeId,
+			year,
+			month,
+			day,
+		});
 	}
 
 	public year: number;
 	public month: number;
 	public day: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			// 2 bytes placeholder for year
 			0,
@@ -326,12 +346,12 @@ export class TimeCCDateReport extends TimeCC {
 			this.day,
 		]);
 		this.payload.writeUInt16BE(this.year, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				date: `${padStart(this.year.toString(), 4, "0")}-${
 					padStart(
@@ -350,7 +370,7 @@ export class TimeCCDateReport extends TimeCC {
 export class TimeCCDateGet extends TimeCC {}
 
 // @publicAPI
-export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetSetOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -361,24 +381,28 @@ export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| TimeCCTimeOffsetSetOptions,
+		options: WithAddress<TimeCCTimeOffsetSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-			this.dstStartDate = options.dstStart;
-			this.dstEndDate = options.dstEnd;
-		}
+		super(options);
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+		this.dstStartDate = options.dstStart;
+		this.dstEndDate = options.dstEnd;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): TimeCCTimeOffsetSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new TimeCCTimeOffsetSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public standardOffset: number;
@@ -386,7 +410,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
@@ -401,12 +425,12 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -418,7 +442,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 }
 
 // @publicAPI
-export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+export interface TimeCCTimeOffsetReportOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -428,41 +452,46 @@ export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| TimeCCTimeOffsetReportOptions,
+		options: WithAddress<TimeCCTimeOffsetReportOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 9);
-			const { standardOffset, dstOffset } = parseTimezone(this.payload);
-			this.standardOffset = standardOffset;
-			this.dstOffset = dstOffset;
+		super(options);
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+		this.dstStartDate = options.dstStart;
+		this.dstEndDate = options.dstEnd;
+	}
 
-			const currentYear = new Date().getUTCFullYear();
-			this.dstStartDate = new Date(
-				Date.UTC(
-					currentYear,
-					this.payload[3] - 1,
-					this.payload[4],
-					this.payload[5],
-				),
-			);
-			this.dstEndDate = new Date(
-				Date.UTC(
-					currentYear,
-					this.payload[6] - 1,
-					this.payload[7],
-					this.payload[8],
-				),
-			);
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-			this.dstStartDate = options.dstStart;
-			this.dstEndDate = options.dstEnd;
-		}
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): TimeCCTimeOffsetReport {
+		validatePayload(raw.payload.length >= 9);
+		const { standardOffset, dstOffset } = parseTimezone(raw.payload);
+		const currentYear = new Date().getUTCFullYear();
+		const dstStartDate: Date = new Date(
+			Date.UTC(
+				currentYear,
+				raw.payload[3] - 1,
+				raw.payload[4],
+				raw.payload[5],
+			),
+		);
+		const dstEndDate: Date = new Date(
+			Date.UTC(
+				currentYear,
+				raw.payload[6] - 1,
+				raw.payload[7],
+				raw.payload[8],
+			),
+		);
+
+		return new TimeCCTimeOffsetReport({
+			nodeId: ctx.sourceNodeId,
+			standardOffset,
+			dstOffset,
+			dstStart: dstStartDate,
+			dstEnd: dstEndDate,
+		});
 	}
 
 	public standardOffset: number;
@@ -470,7 +499,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
@@ -485,12 +514,12 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,

@@ -1512,6 +1512,7 @@ export enum ThermostatSetpointType {
 	"Away Heating" = 0x0d, // CC v2
 	"Away Cooling" = 0x0e, // CC v3
 	"Full Power" = 0x0f, // CC v3
+	// Update the interview procecure when adding new types
 }
 
 export interface ThermostatSetpointValue {

@@ -1,10 +1,10 @@
 import {
 	type CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
+import type { GetDeviceConfig, GetValueDB } from "@zwave-js/host";
 import {
 	type FnOrStatic,
 	type ReturnTypeOrStatic,
@@ -48,8 +48,8 @@ export interface CCValueOptions {
 	autoCreate?:
 		| boolean
 		| ((
-			applHost: ZWaveApplicationHost,
-			endpoint: IZWaveEndpoint,
+			ctx: GetValueDB & GetDeviceConfig,
+			endpoint: EndpointId,
 		) => boolean);
 }
 

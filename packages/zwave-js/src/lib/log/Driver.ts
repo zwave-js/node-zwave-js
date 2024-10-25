@@ -1,6 +1,5 @@
 import {
 	type CommandClass,
-	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
 } from "@zwave-js/cc";
@@ -16,6 +15,7 @@ import {
 } from "@zwave-js/core";
 import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
+import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { type TransactionQueue } from "../driver/Queue";
@@ -122,7 +122,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 			return;
 		}
 
-		const isCCContainer = isCommandClassContainer(message);
+		const isCCContainer = containsCC(message);
 		const logEntry = message.toLogEntry();
 
 		let msg: string[] = [tagify(logEntry.tags)];
@@ -136,7 +136,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 
 		try {
 			// If possible, include information about the CCs
-			if (isCommandClassContainer(message)) {
+			if (isCCContainer) {
 				// Remove the default payload message and draw a bracket
 				msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
@@ -197,7 +197,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 			if (queue.length > 0) {
 				for (const trns of queue.transactions) {
 					// TODO: This formatting should be shared with the other logging methods
-					const node = trns.message.getNodeUnsafe(this.driver);
+					const node = trns.message.tryGetNode(this.driver);
 					const prefix = trns.message.type === MessageType.Request
 						? "[REQ]"
 						: "[RES]";
@@ -209,7 +209,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 							)
 						}]`
 						: "";
-					const command = isCommandClassContainer(trns.message)
+					const command = containsCC(trns.message)
 						? `: ${trns.message.command.constructor.name}`
 						: "";
 					message += `\n· ${prefix} ${

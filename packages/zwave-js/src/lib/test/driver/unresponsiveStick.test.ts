@@ -1,13 +1,13 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import Sinon from "sinon";
 import {
 	GetControllerIdRequest,
 	type GetControllerIdResponse,
-} from "../../serialapi/memory/GetControllerIdMessages";
-import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
+} from "@zwave-js/serial/serialapi";
+import { SoftResetRequest } from "@zwave-js/serial/serialapi";
+import { type MockControllerBehavior } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
+import Sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 
 let shouldRespond = true;
@@ -19,7 +19,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) {
 						// Soft reset should restore normal operation
 						if (msg instanceof SoftResetRequest) {
@@ -46,11 +46,11 @@ integrationTest(
 			mockController.autoAckHostMessages = false;
 
 			const ids = await driver.sendMessage<GetControllerIdResponse>(
-				new GetControllerIdRequest(driver),
+				new GetControllerIdRequest(),
 				{ supportCheck: false },
 			);
 
-			t.is(ids.ownNodeId, mockController.host.ownNodeId);
+			t.is(ids.ownNodeId, mockController.ownNodeId);
 		},
 	},
 );
@@ -72,7 +72,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) return true;
 
 					return false;
@@ -97,7 +97,7 @@ integrationTest(
 				t,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
-						new GetControllerIdRequest(driver),
+						new GetControllerIdRequest(),
 						{ supportCheck: false },
 					),
 				{
@@ -144,7 +144,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) {
 						return true;
 					}
@@ -164,7 +164,7 @@ integrationTest(
 				t,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
-						new GetControllerIdRequest(driver),
+						new GetControllerIdRequest(),
 						{ supportCheck: false },
 					),
 				{

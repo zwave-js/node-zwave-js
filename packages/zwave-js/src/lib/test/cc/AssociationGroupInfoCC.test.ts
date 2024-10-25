@@ -9,12 +9,10 @@ import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
 	BasicCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -26,7 +24,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the NameGet command should serialize correctly", (t) => {
-	const cc = new AssociationGroupInfoCCNameGet(host, {
+	const cc = new AssociationGroupInfoCCNameGet({
 		nodeId: 1,
 		groupId: 7,
 	});
@@ -36,7 +34,7 @@ test("the NameGet command should serialize correctly", (t) => {
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the NameReport command should be deserialized correctly", (t) => {
@@ -54,17 +52,18 @@ test("the NameReport command should be deserialized correctly", (t) => {
 			0x72,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCNameReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCNameReport;
+	t.is(cc.constructor, AssociationGroupInfoCCNameReport);
 
 	t.is(cc.groupId, 7);
 	t.is(cc.name, "foobar");
 });
 
 test("the InfoGet command should serialize correctly (no flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: false,
@@ -77,11 +76,11 @@ test("the InfoGet command should serialize correctly (no flag set)", (t) => {
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the InfoGet command should serialize correctly (refresh cache flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: false,
@@ -94,11 +93,11 @@ test("the InfoGet command should serialize correctly (refresh cache flag set)", 
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the InfoGet command should serialize correctly (list mode flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: true,
@@ -111,7 +110,7 @@ test("the InfoGet command should serialize correctly (list mode flag set)", (t) 
 			0, // group id is ignored
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Info Report command should be deserialized correctly", (t) => {
@@ -140,10 +139,11 @@ test("the Info Report command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCInfoReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCInfoReport;
+	t.is(cc.constructor, AssociationGroupInfoCCInfoReport);
 
 	t.is(cc.groups.length, 2);
 	t.is(cc.groups[0].groupId, 1);
@@ -156,7 +156,7 @@ test("the Info Report command should be deserialized correctly", (t) => {
 });
 
 test("the CommandListGet command should serialize correctly", (t) => {
-	const cc = new AssociationGroupInfoCCCommandListGet(host, {
+	const cc = new AssociationGroupInfoCCCommandListGet({
 		nodeId: 1,
 		groupId: 6,
 		allowCache: true,
@@ -168,7 +168,7 @@ test("the CommandListGet command should serialize correctly", (t) => {
 			6, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CommandListReport command should be deserialized correctly", (t) => {
@@ -185,10 +185,11 @@ test("the CommandListReport command should be deserialized correctly", (t) => {
 			0x05,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCCommandListReport(host, {
-		nodeId: 1,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCCCommandListReport;
+	t.is(cc.constructor, AssociationGroupInfoCCCommandListReport);
 
 	t.is(cc.groupId, 7);
 	t.is(cc.commands.size, 2);
@@ -203,10 +204,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new AssociationGroupInfoCC(host, {
-		nodeId: 1,
-		data: serializedCC,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationGroupInfoCC;
 	t.is(cc.constructor, AssociationGroupInfoCC);
 });
 

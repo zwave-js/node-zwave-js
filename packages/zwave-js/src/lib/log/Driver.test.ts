@@ -35,12 +35,6 @@ test.before(async (t) => {
 		loadConfiguration: false,
 		skipNodeInterview: true,
 		skipControllerIdentification: true,
-		// beforeStartup(mockPort) {
-		// 	controller = new MockController({ serial: mockPort });
-		// 	controller.defineBehavior(
-		// 		...createDefaultMockControllerBehaviors(),
-		// 	);
-		// },
 	});
 	t.context.driver = driver;
 
@@ -88,7 +82,7 @@ function createMessage(
 	driver: Driver,
 	options: Partial<CreateTransactionOptions>,
 ) {
-	return new Message(driver, {
+	return new Message({
 		type: options.type || MessageType.Request,
 		functionType: options.functionType || (0x00 as any),
 	});

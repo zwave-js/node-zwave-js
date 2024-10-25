@@ -2,6 +2,7 @@ import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -10,7 +11,11 @@ import {
 	ValueMetadata,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -19,12 +24,7 @@ import {
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
-import {
-	type CCCommandOptions,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -108,13 +108,13 @@ export class SceneActivationCCAPI extends CCAPI {
 			SceneActivationCommand.Set,
 		);
 
-		const cc = new SceneActivationCCSet(this.applHost, {
+		const cc = new SceneActivationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sceneId,
 			dimmingDuration,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -126,7 +126,7 @@ export class SceneActivationCC extends CommandClass {
 }
 
 // @publicAPI
-export interface SceneActivationCCSetOptions extends CCCommandOptions {
+export interface SceneActivationCCSetOptions {
 	sceneId: number;
 	dimmingDuration?: Duration | string;
 }
@@ -135,25 +135,32 @@ export interface SceneActivationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| SceneActivationCCSetOptions,
+		options: WithAddress<SceneActivationCCSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.sceneId = this.payload[0];
-			// Per the specs, dimmingDuration is required, but as always the real world is different...
-			if (this.payload.length >= 2) {
-				this.dimmingDuration = Duration.parseSet(this.payload[1]);
-			}
+		super(options);
+		this.sceneId = options.sceneId;
+		this.dimmingDuration = Duration.from(options.dimmingDuration);
+	}
 
-			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
-		} else {
-			this.sceneId = options.sceneId;
-			this.dimmingDuration = Duration.from(options.dimmingDuration);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): SceneActivationCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const sceneId = raw.payload[0];
+		validatePayload(sceneId >= 1, sceneId <= 255);
+
+		// Per the specs, dimmingDuration is required, but as always the real world is different...
+		let dimmingDuration: Duration | undefined;
+		if (raw.payload.length >= 2) {
+			dimmingDuration = Duration.parseSet(raw.payload[1]);
 		}
+
+		return new SceneActivationCCSet({
+			nodeId: ctx.sourceNodeId,
+			sceneId,
+			dimmingDuration,
+		});
 	}
 
 	@ccValue(SceneActivationCCValues.sceneId)
@@ -162,21 +169,21 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	@ccValue(SceneActivationCCValues.dimmingDuration)
 	public dimmingDuration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.sceneId,
 			this.dimmingDuration?.serializeSet() ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
 			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

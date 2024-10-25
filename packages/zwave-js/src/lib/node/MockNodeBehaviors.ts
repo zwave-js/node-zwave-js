@@ -46,7 +46,7 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 			receivedCC
 				instanceof ZWaveProtocolCCRequestNodeInformationFrame
 		) {
-			const cc = new ZWaveProtocolCCNodeInformationFrame(self.host, {
+			const cc = new ZWaveProtocolCCNodeInformationFrame({
 				nodeId: self.id,
 				...self.capabilities,
 				supportedCCs: [...self.implementedCCs]
@@ -85,9 +85,9 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 				version = 1;
 			}
 
-			const cc = new VersionCCCommandClassReport(self.host, {
+			const cc = new VersionCCCommandClassReport({
 				nodeId: self.id,
-				endpoint: "index" in endpoint ? endpoint.index : undefined,
+				endpointIndex: "index" in endpoint ? endpoint.index : undefined,
 				requestedCC: receivedCC.requestedCC,
 				ccVersion: version,
 			});
@@ -99,8 +99,8 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 const respondToZWavePlusCCGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof ZWavePlusCCGet) {
-			const cc = new ZWavePlusCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new ZWavePlusCCReport({
+				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
 				roleType: self.capabilities.isListening
@@ -123,8 +123,8 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 			receivedCC instanceof SecurityCCCommandEncapsulation
 			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
-			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			let cc: CommandClass = new ZWavePlusCCReport({
+				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
 				roleType: self.capabilities.isListening
@@ -135,7 +135,11 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 				installerIcon: 0x0000,
 				userIcon: 0x0000,
 			});
-			cc = SecurityCC.encapsulate(self.host, cc);
+			cc = SecurityCC.encapsulate(
+				self.id,
+				self.securityManagers.securityManager!,
+				cc,
+			);
 			return { action: "sendCC", cc, ackRequested: true };
 		}
 	},
@@ -147,8 +151,8 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 			receivedCC instanceof Security2CCMessageEncapsulation
 			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
-			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			let cc: CommandClass = new ZWavePlusCCReport({
+				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
 				roleType: self.capabilities.isListening
@@ -159,7 +163,11 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 				installerIcon: 0x0000,
 				userIcon: 0x0000,
 			});
-			cc = Security2CC.encapsulate(self.host, cc);
+			cc = Security2CC.encapsulate(
+				cc,
+				self.id,
+				self.securityManagers,
+			);
 			return { action: "sendCC", cc };
 		}
 	},

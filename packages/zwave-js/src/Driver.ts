@@ -7,6 +7,16 @@ export type {
 	ResponsePredicate,
 	ResponseRole,
 } from "@zwave-js/serial";
+export {
+	type CommandRequest,
+	type ContainsCC,
+	type ContainsSerializedCC,
+	type MessageWithCC,
+	containsCC,
+	containsSerializedCC,
+	isCommandRequest,
+	isMessageWithCC,
+} from "@zwave-js/serial/serialapi";
 export { Driver, libName, libVersion } from "./lib/driver/Driver";
 export type {
 	EditableZWaveOptions,

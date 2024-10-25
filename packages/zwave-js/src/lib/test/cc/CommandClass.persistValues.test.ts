@@ -1,4 +1,4 @@
-import { CentralSceneCommand, CentralSceneKeys } from "@zwave-js/cc";
+import { CentralSceneKeys } from "@zwave-js/cc";
 import { BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { CentralSceneCCNotification } from "@zwave-js/cc/CentralSceneCC";
 import { CommandClasses } from "@zwave-js/core";
@@ -71,7 +71,7 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 	const { node2, driver } = t.context;
 
 	// Repro for #383
-	const cc = new BasicCCSet(driver, {
+	const cc = new BasicCCSet({
 		nodeId: node2.id,
 		targetValue: 55,
 	});
@@ -91,15 +91,11 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 test(`persistValues() should not store values marked as "events" (non-stateful)`, async (t) => {
 	const { node2, driver } = t.context;
 
-	const cc = new CentralSceneCCNotification(driver, {
+	const cc = new CentralSceneCCNotification({
 		nodeId: node2.id,
-		data: Buffer.from([
-			CommandClasses["Central Scene"],
-			CentralSceneCommand.Notification,
-			1, // seq number
-			CentralSceneKeys.KeyPressed,
-			1, // scene number
-		]),
+		sequenceNumber: 1,
+		sceneNumber: 1,
+		keyAttribute: CentralSceneKeys.KeyPressed,
 	});
 
 	// Central Scene should use the value notification event instead of added/updated

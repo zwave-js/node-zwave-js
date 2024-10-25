@@ -1,23 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
 	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
-	type IZWaveEndpoint,
-	type IZWaveNode,
-	InterviewStage,
+	type InterviewStage,
 	type MaybeNotKnown,
 	MessagePriority,
 	NOT_KNOWN,
-	NodeStatus,
+	type NodeStatus,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { TestingHost } from "@zwave-js/host";
+import type {
+	BaseTestEndpoint,
+	BaseTestNode,
+	GetNode,
+	GetValueDB,
+} from "@zwave-js/host";
 import {
 	type FunctionType,
 	Message,
@@ -26,11 +28,10 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import sinon from "sinon";
-import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";
-import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 const MockRequestMessageWithExpectation_FunctionType =
 	0xfa as unknown as FunctionType;
@@ -171,9 +172,7 @@ export function createEmptyMockDriver() {
 		},
 	};
 	ret.sendCommand.callsFake(async (command, options) => {
-		const msg = new SendDataRequest(ret as unknown as Driver, {
-			command,
-		});
+		const msg = new SendDataRequest({ command });
 		const resp = await ret.sendMessage(msg, options);
 		return resp?.command;
 	});
@@ -211,23 +210,27 @@ export interface CreateTestNodeOptions {
 	interviewStage?: InterviewStage;
 	isSecure?: MaybeNotKnown<boolean>;
 
-	numEndpoints?: number;
-
-	supportsCC?: (cc: CommandClasses) => boolean;
-	controlsCC?: (cc: CommandClasses) => boolean;
-	isCCSecure?: (cc: CommandClasses) => boolean;
-	getCCVersion?: (cc: CommandClasses) => number;
+	commandClasses?: Partial<
+		Record<
+			CommandClasses,
+			Partial<CommandClassInfo>
+		>
+	>;
+	endpoints?: Record<
+		number,
+		Omit<CreateTestEndpointOptions, "index" | "nodeId">
+	>;
 }
 
-export interface TestNode extends IZWaveNode {
+export type TestNode = BaseTestNode & {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
-}
+};
 
 export function createTestNode(
-	host: TestingHost,
+	host: GetValueDB & GetNode<BaseTestNode>,
 	options: CreateTestNodeOptions,
 ): TestNode {
-	const endpointCache = new Map<number, IZWaveEndpoint>();
+	const endpointCache = new Map<number, BaseTestEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
 	const ret: TestNode = {
@@ -235,10 +238,7 @@ export function createTestNode(
 		...createTestEndpoint(host, {
 			nodeId: options.id,
 			index: 0,
-			supportsCC: options.supportsCC,
-			controlsCC: options.controlsCC,
-			isCCSecure: options.isCCSecure,
-			getCCVersion: options.getCCVersion,
+			commandClasses: options.commandClasses,
 		}),
 
 		isListening: options.isListening ?? true,
@@ -249,47 +249,33 @@ export function createTestNode(
 			return !ret.isListening && !ret.isFrequentListening;
 		},
 
-		status: options.status
-			?? (options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
-		interviewStage: options.interviewStage ?? InterviewStage.Complete,
-
 		setEndpoint: (endpoint) => {
 			endpointCache.set(
 				endpoint.index,
 				createTestEndpoint(host, {
 					nodeId: options.id,
 					index: endpoint.index,
-					supportsCC: endpoint.supportsCC ?? options.supportsCC,
-					controlsCC: endpoint.controlsCC ?? options.controlsCC,
-					isCCSecure: endpoint.isCCSecure ?? options.isCCSecure,
-					getCCVersion: endpoint.getCCVersion ?? options.getCCVersion,
+					commandClasses: endpoint.commandClasses,
 				}),
 			);
 		},
 
 		getEndpoint: ((index: number) => {
-			// When the endpoint count is known, return undefined for non-existent endpoints
-			if (
-				options.numEndpoints != undefined
-				&& index > options.numEndpoints
-			) {
-				return undefined;
-			}
+			if (index === 0) return ret;
 
 			if (!endpointCache.has(index)) {
-				ret.setEndpoint(
-					createTestEndpoint(host, {
-						nodeId: options.id,
-						index,
-						supportsCC: options.supportsCC,
-						controlsCC: options.controlsCC,
-						isCCSecure: options.isCCSecure,
-						getCCVersion: options.getCCVersion,
-					}),
-				);
+				if (!options.endpoints?.[index]) {
+					return undefined;
+				}
+
+				ret.setEndpoint({
+					nodeId: options.id,
+					index,
+					commandClasses: options.endpoints[index].commandClasses,
+				});
 			}
 			return endpointCache.get(index);
-		}) as IZWaveNode["getEndpoint"],
+		}) as BaseTestNode["getEndpoint"],
 
 		getEndpointOrThrow(index) {
 			const ep = ret.getEndpoint(index);
@@ -300,16 +286,6 @@ export function createTestNode(
 				);
 			}
 			return ep;
-		},
-
-		getAllEndpoints() {
-			if (!options.numEndpoints) return [...endpointCache.values()];
-			const eps: IZWaveEndpoint[] = [];
-			for (let i = 0; i <= options.numEndpoints; i++) {
-				const ep = ret.getEndpoint(i);
-				if (ep) eps.push(ep);
-			}
-			return eps;
 		},
 
 		// These are copied from Node.ts
@@ -342,10 +318,19 @@ export function createTestNode(
 	endpointCache.set(0, ret);
 
 	// If the number of endpoints are given, use them as the individual endpoint count
-	if (options.numEndpoints != undefined) {
-		nodeUtils.setIndividualEndpointCount(host, ret, options.numEndpoints);
-		nodeUtils.setAggregatedEndpointCount(host, ret, 0);
-		nodeUtils.setMultiChannelInterviewComplete(host, ret, true);
+	if (options.endpoints) {
+		nodeUtils.setIndividualEndpointCount(
+			host,
+			ret.id,
+			Object.keys(options.endpoints).length,
+		);
+		nodeUtils.setEndpointIndizes(
+			host,
+			ret.id,
+			Object.keys(options.endpoints).map((index) => parseInt(index, 10)),
+		);
+		nodeUtils.setAggregatedEndpointCount(host, ret.id, 0);
+		nodeUtils.setMultiChannelInterviewComplete(host, ret.id, true);
 	}
 
 	return ret;
@@ -354,42 +339,45 @@ export function createTestNode(
 export interface CreateTestEndpointOptions {
 	nodeId: number;
 	index: number;
-	supportsCC?: (cc: CommandClasses) => boolean;
-	controlsCC?: (cc: CommandClasses) => boolean;
-	isCCSecure?: (cc: CommandClasses) => boolean;
-	getCCVersion?: (cc: CommandClasses) => number;
+	commandClasses?: Partial<
+		Record<
+			CommandClasses,
+			Partial<CommandClassInfo>
+		>
+	>;
 }
 
 export function createTestEndpoint(
-	host: TestingHost,
+	host: GetNode<BaseTestNode>,
 	options: CreateTestEndpointOptions,
-): IZWaveEndpoint {
-	const ret: IZWaveEndpoint = {
+): BaseTestEndpoint {
+	const ret: BaseTestEndpoint = {
+		virtual: false,
 		nodeId: options.nodeId,
 		index: options.index,
-		supportsCC: options.supportsCC ?? (() => true),
-		controlsCC: options.controlsCC ?? (() => false),
-		isCCSecure: options.isCCSecure ?? (() => false),
-		getCCVersion: options.getCCVersion
-			?? ((cc) =>
-				host.getSafeCCVersion(cc, options.nodeId, options.index)),
-		virtual: false,
-		addCC: function(
-			cc: CommandClasses,
-			info: Partial<CommandClassInfo>,
-		): void {
-			throw new Error("Function not implemented.");
+		supportsCC: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.isSupported ?? true;
 		},
-		removeCC: function(cc: CommandClasses): void {
-			throw new Error("Function not implemented.");
+		controlsCC: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.isControlled ?? false;
 		},
-		getCCs: function(): Iterable<
-			[ccId: CommandClasses, info: CommandClassInfo]
-		> {
-			throw new Error("Function not implemented.");
+		isCCSecure: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.secure ?? false;
 		},
-		getNodeUnsafe: function(): IZWaveNode | undefined {
-			return host.nodes.get(options.nodeId);
+		getCCVersion: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			const defaultVersion = ccInfo?.isSupported
+				? getImplementedVersion(cc)
+				: 0;
+			return ccInfo?.version
+				?? host.getNode(options.nodeId)?.getCCVersion(cc)
+				?? defaultVersion;
 		},
 	};
 

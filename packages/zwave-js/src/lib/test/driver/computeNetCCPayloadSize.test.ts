@@ -2,12 +2,12 @@ import { FirmwareUpdateMetaDataCC } from "@zwave-js/cc/FirmwareUpdateMetaDataCC"
 import { MultiChannelCCCommandEncapsulation } from "@zwave-js/cc/MultiChannelCC";
 import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
 import { EncapsulationFlags, TransmitOptions } from "@zwave-js/core";
+import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 
 interface TestContext {
 	driver: Driver;
@@ -43,23 +43,23 @@ test.afterEach.always(async (t) => {
 
 test("should compute the correct net payload sizes", (t) => {
 	const { driver } = t.context;
-	const testMsg1 = new SendDataRequest(driver, {
-		command: new SecurityCCCommandEncapsulation(driver, {
+	const testMsg1 = new SendDataRequest({
+		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			encapsulated: {} as any,
 		}),
 		transmitOptions: TransmitOptions.DEFAULT,
 	});
-	testMsg1.command.encapsulated = undefined as any;
+	testMsg1.command!.encapsulated = undefined as any;
 	t.is(driver.computeNetCCPayloadSize(testMsg1), 26);
 
-	const multiChannelCC = new MultiChannelCCCommandEncapsulation(driver, {
+	const multiChannelCC = new MultiChannelCCCommandEncapsulation({
 		nodeId: 2,
 		destination: 1,
 		encapsulated: {} as any,
 	});
-	const testMsg2 = new SendDataRequest(driver, {
-		command: new SecurityCCCommandEncapsulation(driver, {
+	const testMsg2 = new SendDataRequest({
+		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			encapsulated: multiChannelCC,
 		}),
@@ -68,7 +68,7 @@ test("should compute the correct net payload sizes", (t) => {
 	multiChannelCC.encapsulated = undefined as any;
 	t.is(driver.computeNetCCPayloadSize(testMsg2), 54 - 20 - 4);
 
-	const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
+	const testMsg3 = new FirmwareUpdateMetaDataCC({
 		nodeId: 2,
 	});
 	testMsg3.toggleEncapsulationFlag(EncapsulationFlags.Security, true);

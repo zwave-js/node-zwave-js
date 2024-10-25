@@ -4,13 +4,9 @@ import {
 	TransmitOptions,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost } from "@zwave-js/host/safe";
+import { type CCParsingContext } from "@zwave-js/host";
 import { CCAPI } from "../lib/API";
-import {
-	CommandClass,
-	type CommandClassOptions,
-	gotDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -39,15 +35,15 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 			DeviceResetLocallyCommand.Notification,
 		);
 
-		const cc = new DeviceResetLocallyCCNotification(this.applHost, {
+		const cc = new DeviceResetLocallyCCNotification({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 
 		try {
 			// This command is sent immediately before a hard reset of the controller.
 			// If we don't wait for a callback (ack), the controller locks up when hard-resetting.
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Do not fall back to explorer frames
 				transmitOptions: TransmitOptions.ACK
@@ -73,16 +69,18 @@ export class DeviceResetLocallyCC extends CommandClass {
 
 @CCCommand(DeviceResetLocallyCommand.Notification)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): DeviceResetLocallyCCNotification {
+		// We need to make sure this doesn't get parsed accidentally, e.g. because of a bit flip
 
-		if (gotDeserializationOptions(options)) {
-			// We need to make sure this doesn't get parsed accidentally, e.g. because of a bit flip
+		// This CC has no payload
+		validatePayload(raw.payload.length === 0);
+		// The driver ensures before handling it that it is only received from the root device
 
-			// This CC has no payload
-			validatePayload(this.payload.length === 0);
-			// It MUST be issued by the root device
-			validatePayload(this.endpointIndex === 0);
-		}
+		return new DeviceResetLocallyCCNotification({
+			nodeId: ctx.sourceNodeId,
+		});
 	}
 }

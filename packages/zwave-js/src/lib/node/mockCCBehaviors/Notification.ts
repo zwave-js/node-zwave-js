@@ -23,8 +23,8 @@ const respondToNotificationSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new NotificationCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new NotificationCCSupportedReport({
+				nodeId: controller.ownNodeId,
 				supportsV1Alarm: capabilities.supportsV1Alarm,
 				supportedNotificationTypes: Object.keys(
 					capabilities.notificationTypesAndEvents,
@@ -49,8 +49,8 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 				receivedCC.notificationType
 					in capabilities.notificationTypesAndEvents
 			) {
-				const cc = new NotificationCCEventSupportedReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				const cc = new NotificationCCEventSupportedReport({
+					nodeId: controller.ownNodeId,
 					notificationType: receivedCC.notificationType,
 					supportedEvents: capabilities.notificationTypesAndEvents[
 						receivedCC.notificationType

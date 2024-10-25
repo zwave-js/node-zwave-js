@@ -17,6 +17,11 @@
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },
+    "./serialapi": {
+      "@@dev": "./src/index_serialapi.ts",
+      "types": "./build/index_serialapi.d.ts",
+      "default": "./build/index_serialapi.js"
+    },
     "./mock": {
       "@@dev": "./src/index_mock.ts",
       "types": "./build/index_mock.d.ts",
@@ -58,6 +63,7 @@
   },
   "dependencies": {
     "@serialport/stream": "^12.0.0",
+    "@zwave-js/cc": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/shared": "workspace:*",

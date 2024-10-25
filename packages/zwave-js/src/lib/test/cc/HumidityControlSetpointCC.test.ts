@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	HumidityControlSetpointCCCapabilitiesGet,
 	HumidityControlSetpointCCCapabilitiesReport,
 	HumidityControlSetpointCCGet,
@@ -28,7 +29,7 @@ const host = createTestingHost();
 const nodeId = 2;
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCGet(host, {
+	const cc = new HumidityControlSetpointCCGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
 	});
@@ -38,11 +39,11 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Humidifier, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCSet(host, {
+	const cc = new HumidityControlSetpointCCSet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
 		value: 57,
@@ -57,7 +58,7 @@ test("the Set command should serialize correctly", (t) => {
 			encodeFloatWithScale(57, 1),
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -70,10 +71,11 @@ test("the Report command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCReport;
+	t.is(cc.constructor, HumidityControlSetpointCCReport);
 
 	t.deepEqual(cc.type, HumidityControlSetpointType.Humidifier);
 	t.is(cc.scale, 1);
@@ -95,10 +97,10 @@ test("the Report command should set the correct value", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCReport;
 	report.persistValues(host);
 
 	const currentValue = host.getValueDB(nodeId).getValue({
@@ -126,10 +128,10 @@ test("the Report command should set the correct metadata", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCReport;
 	report.persistValues(host);
 
 	const setpointMeta = host.getValueDB(nodeId).getMetadata({
@@ -146,7 +148,7 @@ test("the Report command should set the correct metadata", (t) => {
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCSupportedGet(host, {
+	const cc = new HumidityControlSetpointCCSupportedGet({
 		nodeId: nodeId,
 	});
 	const expected = buildCCBuffer(
@@ -154,7 +156,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -165,10 +167,11 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCSupportedReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCSupportedReport;
+	t.is(cc.constructor, HumidityControlSetpointCCSupportedReport);
 
 	t.deepEqual(cc.supportedSetpointTypes, [
 		HumidityControlSetpointType.Humidifier,
@@ -184,10 +187,10 @@ test("the SupportedReport command should set the correct value", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const report = new HumidityControlSetpointCCSupportedReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCSupportedReport;
 	report.persistValues(host);
 
 	const currentValue = host.getValueDB(nodeId).getValue({
@@ -201,7 +204,7 @@ test("the SupportedReport command should set the correct value", (t) => {
 });
 
 test("the ScaleSupportedGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCScaleSupportedGet(host, {
+	const cc = new HumidityControlSetpointCCScaleSupportedGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
 	});
@@ -211,7 +214,7 @@ test("the ScaleSupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ScaleSupportedReport command should be deserialized correctly", (t) => {
@@ -221,10 +224,11 @@ test("the ScaleSupportedReport command should be deserialized correctly", (t) =>
 			0b11, // percent + absolute
 		]),
 	);
-	const cc = new HumidityControlSetpointCCScaleSupportedReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCScaleSupportedReport;
+	t.is(cc.constructor, HumidityControlSetpointCCScaleSupportedReport);
 
 	t.deepEqual(cc.supportedScales, [0, 1]);
 	// 	new Scale(0, {
@@ -239,7 +243,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", (t) =>
 });
 
 test("the CapabilitiesGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCCapabilitiesGet(host, {
+	const cc = new HumidityControlSetpointCCCapabilitiesGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
 	});
@@ -249,7 +253,7 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", (t) => {
@@ -263,10 +267,11 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCCapabilitiesReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCCapabilitiesReport;
+	t.is(cc.constructor, HumidityControlSetpointCCCapabilitiesReport);
 
 	t.deepEqual(cc.type, HumidityControlSetpointType.Humidifier);
 	t.deepEqual(cc.minValue, 10);
@@ -286,10 +291,10 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCCapabilitiesReport(host, {
-		nodeId: nodeId,
-		data: ccData,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlSetpointCCCapabilitiesReport;
 	report.persistValues(host);
 
 	const setpointMeta = host.getValueDB(nodeId).getMetadata({

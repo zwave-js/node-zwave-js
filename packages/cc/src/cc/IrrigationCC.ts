@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -8,6 +8,7 @@ import {
 	type SupervisionResult,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeFloatWithScale,
@@ -16,9 +17,9 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -35,10 +36,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -602,11 +604,11 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemInfoGet,
 		);
 
-		const cc = new IrrigationCCSystemInfoGet(this.applHost, {
+		const cc = new IrrigationCCSystemInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemInfoReport
 		>(
 			cc,
@@ -629,11 +631,11 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemStatusGet,
 		);
 
-		const cc = new IrrigationCCSystemStatusGet(this.applHost, {
+		const cc = new IrrigationCCSystemStatusGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemStatusReport
 		>(
 			cc,
@@ -667,11 +669,11 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemConfigGet,
 		);
 
-		const cc = new IrrigationCCSystemConfigGet(this.applHost, {
+		const cc = new IrrigationCCSystemConfigGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemConfigReport
 		>(
 			cc,
@@ -697,13 +699,13 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemConfigSet,
 		);
 
-		const cc = new IrrigationCCSystemConfigSet(this.applHost, {
+		const cc = new IrrigationCCSystemConfigSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...config,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -714,12 +716,12 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveInfoGet,
 		);
 
-		const cc = new IrrigationCCValveInfoGet(this.applHost, {
+		const cc = new IrrigationCCValveInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveInfoReport
 		>(
 			cc,
@@ -748,13 +750,13 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveConfigSet,
 		);
 
-		const cc = new IrrigationCCValveConfigSet(this.applHost, {
+		const cc = new IrrigationCCValveConfigSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -765,12 +767,12 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveConfigGet,
 		);
 
-		const cc = new IrrigationCCValveConfigGet(this.applHost, {
+		const cc = new IrrigationCCValveConfigGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveConfigReport
 		>(
 			cc,
@@ -799,14 +801,14 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveRun,
 		);
 
-		const cc = new IrrigationCCValveRun(this.applHost, {
+		const cc = new IrrigationCCValveRun({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -828,7 +830,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		if (!this.endpoint.virtual) {
 			const maxValveTableSize = IrrigationCC.getMaxValveTableSizeCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			);
 			if (
@@ -842,14 +844,14 @@ export class IrrigationCCAPI extends CCAPI {
 			}
 		}
 
-		const cc = new IrrigationCCValveTableSet(this.applHost, {
+		const cc = new IrrigationCCValveTableSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableId,
 			entries,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -861,12 +863,12 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveTableGet,
 		);
 
-		const cc = new IrrigationCCValveTableGet(this.applHost, {
+		const cc = new IrrigationCCValveTableGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveTableReport
 		>(
 			cc,
@@ -886,13 +888,13 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveTableRun,
 		);
 
-		const cc = new IrrigationCCValveTableRun(this.applHost, {
+		const cc = new IrrigationCCValveTableRun({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableIDs,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -908,13 +910,13 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemShutoff,
 		);
 
-		const cc = new IrrigationCCSystemShutoff(this.applHost, {
+		const cc = new IrrigationCCSystemShutoff({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Shuts off the entire system permanently and prevents schedules from running */
@@ -1118,10 +1120,10 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static getMaxValveTableSizeCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IrrigationCCValues.maxValveTableSize.endpoint(endpoint.index),
@@ -1133,10 +1135,10 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static getNumValvesCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(IrrigationCCValues.numValves.endpoint(endpoint.index));
 	}
@@ -1146,41 +1148,43 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static supportsMasterValveCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 	): boolean {
-		return !!applHost
+		return !!ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IrrigationCCValues.supportsMasterValve.endpoint(endpoint.index),
 			);
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Irrigation,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system info...",
 			direction: "outbound",
 		});
 		const systemInfo = await api.getSystemInfo();
 		if (!systemInfo) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Time out while querying irrigation system info, skipping interview...",
@@ -1193,7 +1197,7 @@ supports master valve: ${systemInfo.supportsMasterValve}
 no. of valves:         ${systemInfo.numValves}
 no. of valve tables:   ${systemInfo.numValveTables}
 max. valve table size: ${systemInfo.maxValveTableSize}`;
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -1202,37 +1206,39 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		// For each valve, create the values to start/stop a run
 		for (let i = 1; i <= systemInfo.numValves; i++) {
 			this.ensureMetadata(
-				applHost,
+				ctx,
 				IrrigationCCValues.valveRunDuration(i),
 			);
 			this.ensureMetadata(
-				applHost,
+				ctx,
 				IrrigationCCValues.valveRunStartStop(i),
 			);
 		}
 		// And create a shutoff value
-		this.ensureMetadata(applHost, IrrigationCCValues.shutoffSystem);
+		this.ensureMetadata(ctx, IrrigationCCValues.shutoffSystem);
 
 		// Query current values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Irrigation,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current system config
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system configuration...",
 			direction: "outbound",
@@ -1261,7 +1267,7 @@ moisture sensor polarity: ${
 					)
 				}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -1270,7 +1276,7 @@ moisture sensor polarity: ${
 
 		// and status
 		// Query the current system config
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system status...",
 			direction: "outbound",
@@ -1278,15 +1284,15 @@ moisture sensor polarity: ${
 		await api.getSystemStatus();
 
 		// for each valve, query the current status and configuration
-		if (IrrigationCC.supportsMasterValveCached(applHost, endpoint)) {
-			applHost.controllerLog.logNode(node.id, {
+		if (IrrigationCC.supportsMasterValveCached(ctx, endpoint)) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve configuration...",
 				direction: "outbound",
 			});
 			await api.getValveConfig("master");
 
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve status...",
 				direction: "outbound",
@@ -1296,10 +1302,10 @@ moisture sensor polarity: ${
 
 		for (
 			let i = 1;
-			i <= (IrrigationCC.getNumValvesCached(applHost, endpoint) ?? 0);
+			i <= (IrrigationCC.getNumValvesCached(ctx, endpoint) ?? 0);
 			i++
 		) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying configuration for valve ${
 					padStart(
@@ -1312,7 +1318,7 @@ moisture sensor polarity: ${
 			});
 			await api.getValveConfig(i);
 
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying status for valve ${
 					padStart(
@@ -1328,7 +1334,7 @@ moisture sensor polarity: ${
 	}
 
 	public translateProperty(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1337,22 +1343,49 @@ moisture sensor polarity: ${
 		} else if (typeof property === "number") {
 			return `Valve ${padStart(property.toString(), 3, "0")}`;
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
+}
+
+// @publicAPI
+export interface IrrigationCCSystemInfoReportOptions {
+	supportsMasterValve: boolean;
+	numValves: number;
+	numValveTables: number;
+	maxValveTableSize: number;
 }
 
 @CCCommand(IrrigationCommand.SystemInfoReport)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<IrrigationCCSystemInfoReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 4);
-		this.supportsMasterValve = !!(this.payload[0] & 0x01);
-		this.numValves = this.payload[1];
-		this.numValveTables = this.payload[2];
-		this.maxValveTableSize = this.payload[3] & 0b1111;
+		super(options);
+
+		// TODO: Check implementation:
+		this.supportsMasterValve = options.supportsMasterValve;
+		this.numValves = options.numValves;
+		this.numValveTables = options.numValveTables;
+		this.maxValveTableSize = options.maxValveTableSize;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCSystemInfoReport {
+		validatePayload(raw.payload.length >= 4);
+		const supportsMasterValve = !!(raw.payload[0] & 0x01);
+		const numValves = raw.payload[1];
+		const numValveTables = raw.payload[2];
+		const maxValveTableSize = raw.payload[3] & 0b1111;
+
+		return new IrrigationCCSystemInfoReport({
+			nodeId: ctx.sourceNodeId,
+			supportsMasterValve,
+			numValves,
+			numValveTables,
+			maxValveTableSize,
+		});
 	}
 
 	@ccValue(IrrigationCCValues.numValves)
@@ -1367,9 +1400,9 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.maxValveTableSize)
 	public readonly maxValveTableSize: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports master valve": this.supportsMasterValve,
 				"no. of valves": this.numValves,
@@ -1384,49 +1417,112 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 @expectedCCResponse(IrrigationCCSystemInfoReport)
 export class IrrigationCCSystemInfoGet extends IrrigationCC {}
 
+// @publicAPI
+export interface IrrigationCCSystemStatusReportOptions {
+	systemVoltage: number;
+	flowSensorActive: boolean;
+	pressureSensorActive: boolean;
+	rainSensorActive: boolean;
+	moistureSensorActive: boolean;
+	flow?: number;
+	pressure?: number;
+	shutoffDuration: number;
+	errorNotProgrammed: boolean;
+	errorEmergencyShutdown: boolean;
+	errorHighPressure: boolean;
+	errorLowPressure: boolean;
+	errorValve: boolean;
+	masterValveOpen: boolean;
+	firstOpenZoneId?: number;
+}
+
 @CCCommand(IrrigationCommand.SystemStatusReport)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<IrrigationCCSystemStatusReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.systemVoltage = this.payload[0];
-		this.flowSensorActive = !!(this.payload[1] & 0x01);
-		this.pressureSensorActive = !!(this.payload[1] & 0x02);
-		this.rainSensorActive = !!(this.payload[1] & 0x04);
-		this.moistureSensorActive = !!(this.payload[1] & 0x08);
+		super(options);
 
+		// TODO: Check implementation:
+		this.systemVoltage = options.systemVoltage;
+		this.flowSensorActive = options.flowSensorActive;
+		this.pressureSensorActive = options.pressureSensorActive;
+		this.rainSensorActive = options.rainSensorActive;
+		this.moistureSensorActive = options.moistureSensorActive;
+		this.flow = options.flow;
+		this.pressure = options.pressure;
+		this.shutoffDuration = options.shutoffDuration;
+		this.errorNotProgrammed = options.errorNotProgrammed;
+		this.errorEmergencyShutdown = options.errorEmergencyShutdown;
+		this.errorHighPressure = options.errorHighPressure;
+		this.errorLowPressure = options.errorLowPressure;
+		this.errorValve = options.errorValve;
+		this.masterValveOpen = options.masterValveOpen;
+		this.firstOpenZoneId = options.firstOpenZoneId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCSystemStatusReport {
+		validatePayload(raw.payload.length >= 2);
+		const systemVoltage = raw.payload[0];
+		const flowSensorActive = !!(raw.payload[1] & 0x01);
+		const pressureSensorActive = !!(raw.payload[1] & 0x02);
+		const rainSensorActive = !!(raw.payload[1] & 0x04);
+		const moistureSensorActive = !!(raw.payload[1] & 0x08);
 		let offset = 2;
+		let flow: number | undefined;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
+				raw.payload.subarray(offset),
 			);
 			validatePayload(scale === 0);
-			if (this.flowSensorActive) this.flow = value;
-			offset += bytesRead;
-		}
-		{
-			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
-			);
-			validatePayload(scale === 0);
-			if (this.pressureSensorActive) this.pressure = value;
+			if (flowSensorActive) flow = value;
 			offset += bytesRead;
 		}
 
-		validatePayload(this.payload.length >= offset + 4);
-		this.shutoffDuration = this.payload[offset];
-		this.errorNotProgrammed = !!(this.payload[offset + 1] & 0x01);
-		this.errorEmergencyShutdown = !!(this.payload[offset + 1] & 0x02);
-		this.errorHighPressure = !!(this.payload[offset + 1] & 0x04);
-		this.errorLowPressure = !!(this.payload[offset + 1] & 0x08);
-		this.errorValve = !!(this.payload[offset + 1] & 0x10);
-		this.masterValveOpen = !!(this.payload[offset + 2] & 0x01);
-		if (this.payload[offset + 3]) {
-			this.firstOpenZoneId = this.payload[offset + 3];
+		let pressure: number | undefined;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				raw.payload.subarray(offset),
+			);
+			validatePayload(scale === 0);
+			if (pressureSensorActive) pressure = value;
+			offset += bytesRead;
 		}
+
+		validatePayload(raw.payload.length >= offset + 4);
+		const shutoffDuration = raw.payload[offset];
+		const errorNotProgrammed = !!(raw.payload[offset + 1] & 0x01);
+		const errorEmergencyShutdown = !!(raw.payload[offset + 1] & 0x02);
+		const errorHighPressure = !!(raw.payload[offset + 1] & 0x04);
+		const errorLowPressure = !!(raw.payload[offset + 1] & 0x08);
+		const errorValve = !!(raw.payload[offset + 1] & 0x10);
+		const masterValveOpen = !!(raw.payload[offset + 2] & 0x01);
+		let firstOpenZoneId: number | undefined;
+		if (raw.payload[offset + 3]) {
+			firstOpenZoneId = raw.payload[offset + 3];
+		}
+
+		return new IrrigationCCSystemStatusReport({
+			nodeId: ctx.sourceNodeId,
+			systemVoltage,
+			flowSensorActive,
+			pressureSensorActive,
+			rainSensorActive,
+			moistureSensorActive,
+			flow,
+			pressure,
+			shutoffDuration,
+			errorNotProgrammed,
+			errorEmergencyShutdown,
+			errorHighPressure,
+			errorLowPressure,
+			errorValve,
+			masterValveOpen,
+			firstOpenZoneId,
+		});
 	}
 
 	@ccValue(IrrigationCCValues.systemVoltage)
@@ -1474,7 +1570,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.firstOpenZoneId)
 	public firstOpenZoneId?: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"system voltage": `${this.systemVoltage} V`,
 			"active sensors": [
@@ -1515,7 +1611,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1538,25 +1634,29 @@ export type IrrigationCCSystemConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (IrrigationCCSystemConfigSetOptions & CCCommandOptions),
+		options: WithAddress<IrrigationCCSystemConfigSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.masterValveDelay = options.masterValveDelay;
-			this.highPressureThreshold = options.highPressureThreshold;
-			this.lowPressureThreshold = options.lowPressureThreshold;
-			this.rainSensorPolarity = options.rainSensorPolarity;
-			this.moistureSensorPolarity = options.moistureSensorPolarity;
-		}
+		super(options);
+		this.masterValveDelay = options.masterValveDelay;
+		this.highPressureThreshold = options.highPressureThreshold;
+		this.lowPressureThreshold = options.lowPressureThreshold;
+		this.rainSensorPolarity = options.rainSensorPolarity;
+		this.moistureSensorPolarity = options.moistureSensorPolarity;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCSystemConfigSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCSystemConfigSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public masterValveDelay: number;
@@ -1565,7 +1665,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public rainSensorPolarity?: IrrigationSensorPolarity;
 	public moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		let polarity = 0;
 		if (this.rainSensorPolarity != undefined) polarity |= 0b1;
 		if (this.moistureSensorPolarity != undefined) polarity |= 0b10;
@@ -1582,10 +1682,10 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			encodeFloatWithScale(this.lowPressureThreshold, 0 /* kPa */),
 			Buffer.from([polarity]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1604,45 +1704,81 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 }
 
+// @publicAPI
+export interface IrrigationCCSystemConfigReportOptions {
+	masterValveDelay: number;
+	highPressureThreshold: number;
+	lowPressureThreshold: number;
+	rainSensorPolarity?: IrrigationSensorPolarity;
+	moistureSensorPolarity?: IrrigationSensorPolarity;
+}
+
 @CCCommand(IrrigationCommand.SystemConfigReport)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<IrrigationCCSystemConfigReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.masterValveDelay = this.payload[0];
+		super(options);
+
+		// TODO: Check implementation:
+		this.masterValveDelay = options.masterValveDelay;
+		this.highPressureThreshold = options.highPressureThreshold;
+		this.lowPressureThreshold = options.lowPressureThreshold;
+		this.rainSensorPolarity = options.rainSensorPolarity;
+		this.moistureSensorPolarity = options.moistureSensorPolarity;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCSystemConfigReport {
+		validatePayload(raw.payload.length >= 2);
+		const masterValveDelay = raw.payload[0];
 		let offset = 1;
+		let highPressureThreshold;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
+				raw.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* kPa */);
-			this.highPressureThreshold = value;
+			highPressureThreshold = value;
 			offset += bytesRead;
 		}
+
+		let lowPressureThreshold;
 		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
+				raw.payload.subarray(offset),
 			);
 			validatePayload(scale === 0 /* kPa */);
-			this.lowPressureThreshold = value;
+			lowPressureThreshold = value;
 			offset += bytesRead;
 		}
-		validatePayload(this.payload.length >= offset + 1);
-		const polarity = this.payload[offset];
+
+		validatePayload(raw.payload.length >= offset + 1);
+		const polarity = raw.payload[offset];
+		let rainSensorPolarity: IrrigationSensorPolarity | undefined;
+		let moistureSensorPolarity: IrrigationSensorPolarity | undefined;
 		if (!!(polarity & 0b1000_0000)) {
 			// The valid bit is set
-			this.rainSensorPolarity = polarity & 0b1;
-			this.moistureSensorPolarity = (polarity & 0b10) >>> 1;
+			rainSensorPolarity = polarity & 0b1;
+			moistureSensorPolarity = (polarity & 0b10) >>> 1;
 		}
+
+		return new IrrigationCCSystemConfigReport({
+			nodeId: ctx.sourceNodeId,
+			masterValveDelay,
+			highPressureThreshold,
+			lowPressureThreshold,
+			rainSensorPolarity,
+			moistureSensorPolarity,
+		});
 	}
 
 	@ccValue(IrrigationCCValues.masterValveDelay)
@@ -1660,7 +1796,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.moistureSensorPolarity)
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1679,7 +1815,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1689,30 +1825,76 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 @expectedCCResponse(IrrigationCCSystemConfigReport)
 export class IrrigationCCSystemConfigGet extends IrrigationCC {}
 
+// @publicAPI
+export interface IrrigationCCValveInfoReportOptions {
+	valveId: ValveId;
+	connected: boolean;
+	nominalCurrent: number;
+	errorShortCircuit: boolean;
+	errorHighCurrent: boolean;
+	errorLowCurrent: boolean;
+	errorMaximumFlow?: boolean;
+	errorHighFlow?: boolean;
+	errorLowFlow?: boolean;
+}
+
 @CCCommand(IrrigationCommand.ValveInfoReport)
 export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<IrrigationCCValveInfoReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 4);
-		if ((this.payload[0] & 0b1) === ValveType.MasterValve) {
-			this.valveId = "master";
+		super(options);
+
+		// TODO: Check implementation:
+		this.valveId = options.valveId;
+		this.connected = options.connected;
+		this.nominalCurrent = options.nominalCurrent;
+		this.errorShortCircuit = options.errorShortCircuit;
+		this.errorHighCurrent = options.errorHighCurrent;
+		this.errorLowCurrent = options.errorLowCurrent;
+		this.errorMaximumFlow = options.errorMaximumFlow;
+		this.errorHighFlow = options.errorHighFlow;
+		this.errorLowFlow = options.errorLowFlow;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCValveInfoReport {
+		validatePayload(raw.payload.length >= 4);
+		let valveId: ValveId;
+		if ((raw.payload[0] & 0b1) === ValveType.MasterValve) {
+			valveId = "master";
 		} else {
-			this.valveId = this.payload[1];
+			valveId = raw.payload[1];
 		}
 
-		this.connected = !!(this.payload[0] & 0b10);
-		this.nominalCurrent = 10 * this.payload[2];
-		this.errorShortCircuit = !!(this.payload[3] & 0b1);
-		this.errorHighCurrent = !!(this.payload[3] & 0b10);
-		this.errorLowCurrent = !!(this.payload[3] & 0b100);
-		if (this.valveId === "master") {
-			this.errorMaximumFlow = !!(this.payload[3] & 0b1000);
-			this.errorHighFlow = !!(this.payload[3] & 0b1_0000);
-			this.errorLowFlow = !!(this.payload[3] & 0b10_0000);
+		const connected = !!(raw.payload[0] & 0b10);
+		const nominalCurrent = 10 * raw.payload[2];
+		const errorShortCircuit = !!(raw.payload[3] & 0b1);
+		const errorHighCurrent = !!(raw.payload[3] & 0b10);
+		const errorLowCurrent = !!(raw.payload[3] & 0b100);
+		let errorMaximumFlow: boolean | undefined;
+		let errorHighFlow: boolean | undefined;
+		let errorLowFlow: boolean | undefined;
+		if (valveId === "master") {
+			errorMaximumFlow = !!(raw.payload[3] & 0b1000);
+			errorHighFlow = !!(raw.payload[3] & 0b1_0000);
+			errorLowFlow = !!(raw.payload[3] & 0b10_0000);
 		}
+
+		return new IrrigationCCValveInfoReport({
+			nodeId: ctx.sourceNodeId,
+			valveId,
+			connected,
+			nominalCurrent,
+			errorShortCircuit,
+			errorHighCurrent,
+			errorLowCurrent,
+			errorMaximumFlow,
+			errorHighFlow,
+			errorLowFlow,
+		});
 	}
 
 	public readonly valveId: ValveId;
@@ -1726,51 +1908,51 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public readonly errorHighFlow?: boolean;
 	public readonly errorLowFlow?: boolean;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// connected
 		const valveConnectedValue = IrrigationCCValues.valveConnected(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, valveConnectedValue);
-		this.setValue(applHost, valveConnectedValue, this.connected);
+		this.ensureMetadata(ctx, valveConnectedValue);
+		this.setValue(ctx, valveConnectedValue, this.connected);
 
 		// nominalCurrent
 		const nominalCurrentValue = IrrigationCCValues.nominalCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, nominalCurrentValue);
-		this.setValue(applHost, nominalCurrentValue, this.nominalCurrent);
+		this.ensureMetadata(ctx, nominalCurrentValue);
+		this.setValue(ctx, nominalCurrentValue, this.nominalCurrent);
 
 		// errorShortCircuit
 		const errorShortCircuitValue = IrrigationCCValues.errorShortCircuit(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorShortCircuitValue);
-		this.setValue(applHost, errorShortCircuitValue, this.errorShortCircuit);
+		this.ensureMetadata(ctx, errorShortCircuitValue);
+		this.setValue(ctx, errorShortCircuitValue, this.errorShortCircuit);
 
 		// errorHighCurrent
 		const errorHighCurrentValue = IrrigationCCValues.errorHighCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorHighCurrentValue);
-		this.setValue(applHost, errorHighCurrentValue, this.errorHighCurrent);
+		this.ensureMetadata(ctx, errorHighCurrentValue);
+		this.setValue(ctx, errorHighCurrentValue, this.errorHighCurrent);
 
 		// errorLowCurrent
 		const errorLowCurrentValue = IrrigationCCValues.errorLowCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorLowCurrentValue);
-		this.setValue(applHost, errorLowCurrentValue, this.errorLowCurrent);
+		this.ensureMetadata(ctx, errorLowCurrentValue);
+		this.setValue(ctx, errorLowCurrentValue, this.errorLowCurrent);
 
 		if (this.errorMaximumFlow != undefined) {
 			const errorMaximumFlowValue = IrrigationCCValues.errorMaximumFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorMaximumFlowValue);
+			this.ensureMetadata(ctx, errorMaximumFlowValue);
 			this.setValue(
-				applHost,
+				ctx,
 				errorMaximumFlowValue,
 				this.errorMaximumFlow,
 			);
@@ -1780,22 +1962,22 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			const errorHighFlowValue = IrrigationCCValues.errorHighFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorHighFlowValue);
-			this.setValue(applHost, errorHighFlowValue, this.errorHighFlow);
+			this.ensureMetadata(ctx, errorHighFlowValue);
+			this.setValue(ctx, errorHighFlowValue, this.errorHighFlow);
 		}
 
 		if (this.errorLowFlow != undefined) {
 			const errorLowFlowValue = IrrigationCCValues.errorLowFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorLowFlowValue);
-			this.setValue(applHost, errorLowFlowValue, this.errorLowFlow);
+			this.ensureMetadata(ctx, errorLowFlowValue);
+			this.setValue(ctx, errorLowFlowValue, this.errorLowFlow);
 		}
 
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 			connected: this.connected,
@@ -1813,14 +1995,14 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			message.errors = errors.map((e) => `\n· ${e}`).join("");
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 }
 
 // @publicAPI
-export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveInfoGetOptions {
 	valveId: ValveId;
 }
 
@@ -1842,36 +2024,40 @@ function testResponseForIrrigationCommandWithValveId(
 )
 export class IrrigationCCValveInfoGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveInfoGetOptions,
+		options: WithAddress<IrrigationCCValveInfoGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.valveId = options.valveId;
-		}
+		super(options);
+		this.valveId = options.valveId;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveInfoGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveInfoGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -1895,30 +2081,32 @@ export type IrrigationCCValveConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (IrrigationCCValveConfigSetOptions & CCCommandOptions),
+		options: WithAddress<IrrigationCCValveConfigSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.valveId = options.valveId;
-			this.nominalCurrentHighThreshold =
-				options.nominalCurrentHighThreshold;
-			this.nominalCurrentLowThreshold =
-				options.nominalCurrentLowThreshold;
-			this.maximumFlow = options.maximumFlow;
-			this.highFlowThreshold = options.highFlowThreshold;
-			this.lowFlowThreshold = options.lowFlowThreshold;
-			this.useRainSensor = options.useRainSensor;
-			this.useMoistureSensor = options.useMoistureSensor;
-		}
+		super(options);
+		this.valveId = options.valveId;
+		this.nominalCurrentHighThreshold = options.nominalCurrentHighThreshold;
+		this.nominalCurrentLowThreshold = options.nominalCurrentLowThreshold;
+		this.maximumFlow = options.maximumFlow;
+		this.highFlowThreshold = options.highFlowThreshold;
+		this.lowFlowThreshold = options.lowFlowThreshold;
+		this.useRainSensor = options.useRainSensor;
+		this.useMoistureSensor = options.useMoistureSensor;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveConfigSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveConfigSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
@@ -1930,7 +2118,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this.valveId === "master" ? 1 : 0,
@@ -1946,12 +2134,12 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 				| (this.useMoistureSensor ? 0b10 : 0),
 			]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold":
@@ -1968,61 +2156,107 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	}
 }
 
+// @publicAPI
+export interface IrrigationCCValveConfigReportOptions {
+	valveId: ValveId;
+	nominalCurrentHighThreshold: number;
+	nominalCurrentLowThreshold: number;
+	maximumFlow: number;
+	highFlowThreshold: number;
+	lowFlowThreshold: number;
+	useRainSensor: boolean;
+	useMoistureSensor: boolean;
+}
+
 @CCCommand(IrrigationCommand.ValveConfigReport)
 export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<IrrigationCCValveConfigReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 4);
-		if ((this.payload[0] & 0b1) === ValveType.MasterValve) {
-			this.valveId = "master";
-		} else {
-			this.valveId = this.payload[1];
-		}
-		this.nominalCurrentHighThreshold = 10 * this.payload[2];
-		this.nominalCurrentLowThreshold = 10 * this.payload[3];
+		super(options);
 
-		let offset = 4;
-		{
-			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
-			);
-			validatePayload(scale === 0 /* l/h */);
-			this.maximumFlow = value;
-			offset += bytesRead;
-		}
-		{
-			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
-			);
-			validatePayload(scale === 0 /* l/h */);
-			this.highFlowThreshold = value;
-			offset += bytesRead;
-		}
-		{
-			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.subarray(offset),
-			);
-			validatePayload(scale === 0 /* l/h */);
-			this.lowFlowThreshold = value;
-			offset += bytesRead;
-		}
-		validatePayload(this.payload.length >= offset + 1);
-		this.useRainSensor = !!(this.payload[offset] & 0b1);
-		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
+		// TODO: Check implementation:
+		this.valveId = options.valveId;
+		this.nominalCurrentHighThreshold = options.nominalCurrentHighThreshold;
+		this.nominalCurrentLowThreshold = options.nominalCurrentLowThreshold;
+		this.maximumFlow = options.maximumFlow;
+		this.highFlowThreshold = options.highFlowThreshold;
+		this.lowFlowThreshold = options.lowFlowThreshold;
+		this.useRainSensor = options.useRainSensor;
+		this.useMoistureSensor = options.useMoistureSensor;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCValveConfigReport {
+		validatePayload(raw.payload.length >= 4);
+		let valveId: ValveId;
+		if ((raw.payload[0] & 0b1) === ValveType.MasterValve) {
+			valveId = "master";
+		} else {
+			valveId = raw.payload[1];
+		}
+
+		const nominalCurrentHighThreshold = 10 * raw.payload[2];
+		const nominalCurrentLowThreshold = 10 * raw.payload[3];
+		let offset = 4;
+		let maximumFlow;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				raw.payload.subarray(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			maximumFlow = value;
+			offset += bytesRead;
+		}
+
+		let highFlowThreshold;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				raw.payload.subarray(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			highFlowThreshold = value;
+			offset += bytesRead;
+		}
+
+		let lowFlowThreshold;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				raw.payload.subarray(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			lowFlowThreshold = value;
+			offset += bytesRead;
+		}
+
+		validatePayload(raw.payload.length >= offset + 1);
+		const useRainSensor = !!(raw.payload[offset] & 0b1);
+		const useMoistureSensor = !!(raw.payload[offset] & 0b10);
+
+		return new IrrigationCCValveConfigReport({
+			nodeId: ctx.sourceNodeId,
+			valveId,
+			nominalCurrentHighThreshold,
+			nominalCurrentLowThreshold,
+			maximumFlow,
+			highFlowThreshold,
+			lowFlowThreshold,
+			useRainSensor,
+			useMoistureSensor,
+		});
+	}
+
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// nominalCurrentHighThreshold
 		const nominalCurrentHighThresholdValue = IrrigationCCValues
 			.nominalCurrentHighThreshold(this.valveId);
-		this.ensureMetadata(applHost, nominalCurrentHighThresholdValue);
+		this.ensureMetadata(ctx, nominalCurrentHighThresholdValue);
 		this.setValue(
-			applHost,
+			ctx,
 			nominalCurrentHighThresholdValue,
 			this.nominalCurrentHighThreshold,
 		);
@@ -2030,45 +2264,45 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		// nominalCurrentLowThreshold
 		const nominalCurrentLowThresholdValue = IrrigationCCValues
 			.nominalCurrentLowThreshold(this.valveId);
-		this.ensureMetadata(applHost, nominalCurrentLowThresholdValue);
+		this.ensureMetadata(ctx, nominalCurrentLowThresholdValue);
 		this.setValue(
-			applHost,
+			ctx,
 			nominalCurrentLowThresholdValue,
 			this.nominalCurrentLowThreshold,
 		);
 
 		// maximumFlow
 		const maximumFlowValue = IrrigationCCValues.maximumFlow(this.valveId);
-		this.ensureMetadata(applHost, maximumFlowValue);
-		this.setValue(applHost, maximumFlowValue, this.maximumFlow);
+		this.ensureMetadata(ctx, maximumFlowValue);
+		this.setValue(ctx, maximumFlowValue, this.maximumFlow);
 
 		// highFlowThreshold
 		const highFlowThresholdValue = IrrigationCCValues.highFlowThreshold(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, highFlowThresholdValue);
-		this.setValue(applHost, highFlowThresholdValue, this.highFlowThreshold);
+		this.ensureMetadata(ctx, highFlowThresholdValue);
+		this.setValue(ctx, highFlowThresholdValue, this.highFlowThreshold);
 
 		// lowFlowThreshold
 		const lowFlowThresholdValue = IrrigationCCValues.lowFlowThreshold(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, lowFlowThresholdValue);
-		this.setValue(applHost, lowFlowThresholdValue, this.lowFlowThreshold);
+		this.ensureMetadata(ctx, lowFlowThresholdValue);
+		this.setValue(ctx, lowFlowThresholdValue, this.lowFlowThreshold);
 
 		// useRainSensor
 		const useRainSensorValue = IrrigationCCValues.useRainSensor(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, useRainSensorValue);
-		this.setValue(applHost, useRainSensorValue, this.useRainSensor);
+		this.ensureMetadata(ctx, useRainSensorValue);
+		this.setValue(ctx, useRainSensorValue, this.useRainSensor);
 
 		// useMoistureSensor
 		const useMoistureSensorValue = IrrigationCCValues.useMoistureSensor(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, useMoistureSensorValue);
-		this.setValue(applHost, useMoistureSensorValue, this.useMoistureSensor);
+		this.ensureMetadata(ctx, useMoistureSensorValue);
+		this.setValue(ctx, useMoistureSensorValue, this.useMoistureSensor);
 
 		return true;
 	}
@@ -2082,9 +2316,9 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold":
@@ -2102,7 +2336,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 }
 
 // @publicAPI
-export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveConfigGetOptions {
 	valveId: ValveId;
 }
 
@@ -2113,36 +2347,40 @@ export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
 )
 export class IrrigationCCValveConfigGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveConfigGetOptions,
+		options: WithAddress<IrrigationCCValveConfigGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.valveId = options.valveId;
-		}
+		super(options);
+		this.valveId = options.valveId;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveConfigGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveConfigGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -2151,7 +2389,7 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 }
 
 // @publicAPI
-export interface IrrigationCCValveRunOptions extends CCCommandOptions {
+export interface IrrigationCCValveRunOptions {
 	valveId: ValveId;
 	duration: number;
 }
@@ -2160,28 +2398,32 @@ export interface IrrigationCCValveRunOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveRunOptions,
+		options: WithAddress<IrrigationCCValveRunOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.valveId = options.valveId;
-			this.duration = options.duration;
-		}
+		super(options);
+		this.valveId = options.valveId;
+		this.duration = options.duration;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveRun {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveRun({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
 	public duration: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
@@ -2189,10 +2431,10 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.duration, 2);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 		};
@@ -2202,14 +2444,14 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			message.action = "turn off";
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 }
 
 // @publicAPI
-export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableSetOptions {
 	tableId: number;
 	entries: ValveTableEntry[];
 }
@@ -2218,28 +2460,32 @@ export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveTableSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveTableSetOptions,
+		options: WithAddress<IrrigationCCValveTableSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.tableId = options.tableId;
-			this.entries = options.entries;
-		}
+		super(options);
+		this.tableId = options.tableId;
+		this.entries = options.entries;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveTableSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveTableSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableId: number;
 	public entries: ValveTableEntry[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(1 + this.entries.length * 3);
 		this.payload[0] = this.tableId;
 		for (let i = 0; i < this.entries.length; i++) {
@@ -2248,10 +2494,10 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			this.payload[offset] = entry.valveId;
 			this.payload.writeUInt16BE(entry.duration, offset + 1);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2265,55 +2511,76 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
-			message,
-		};
-	}
-}
-
-@CCCommand(IrrigationCommand.ValveTableReport)
-export class IrrigationCCValveTableReport extends IrrigationCC {
-	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(host, options);
-		validatePayload((this.payload.length - 1) % 3 === 0);
-		this.tableId = this.payload[0];
-		this.entries = [];
-		for (let offset = 1; offset < this.payload.length; offset += 3) {
-			this.entries.push({
-				valveId: this.payload[offset],
-				duration: this.payload.readUInt16BE(offset + 1),
-			});
-		}
-	}
-
-	public readonly tableId: number;
-	public readonly entries: ValveTableEntry[];
-
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
-		const message: MessageRecord = {
-			"table ID": this.tableId,
-		};
-		for (let i = 0; i < this.entries.length; i++) {
-			const entry = this.entries[i];
-			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
-			if (entry.duration) {
-				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
-			} else {
-				message[`valve ${valveLabel} action`] = `turn off`;
-			}
-		}
-		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 }
 
 // @publicAPI
-export interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableReportOptions {
+	tableId: number;
+	entries: ValveTableEntry[];
+}
+
+@CCCommand(IrrigationCommand.ValveTableReport)
+export class IrrigationCCValveTableReport extends IrrigationCC {
+	public constructor(
+		options: WithAddress<IrrigationCCValveTableReportOptions>,
+	) {
+		super(options);
+
+		// TODO: Check implementation:
+		this.tableId = options.tableId;
+		this.entries = options.entries;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): IrrigationCCValveTableReport {
+		validatePayload((raw.payload.length - 1) % 3 === 0);
+		const tableId = raw.payload[0];
+		const entries: ValveTableEntry[] = [];
+		for (let offset = 1; offset < raw.payload.length; offset += 3) {
+			entries.push({
+				valveId: raw.payload[offset],
+				duration: raw.payload.readUInt16BE(offset + 1),
+			});
+		}
+
+		return new IrrigationCCValveTableReport({
+			nodeId: ctx.sourceNodeId,
+			tableId,
+			entries,
+		});
+	}
+
+	public readonly tableId: number;
+	public readonly entries: ValveTableEntry[];
+
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"table ID": this.tableId,
+		};
+		for (let i = 0; i < this.entries.length; i++) {
+			const entry = this.entries[i];
+			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
+			if (entry.duration) {
+				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
+			} else {
+				message[`valve ${valveLabel} action`] = `turn off`;
+			}
+		}
+		return {
+			...super.toLogEntry(ctx),
+			message,
+		};
+	}
+}
+
+// @publicAPI
+export interface IrrigationCCValveTableGetOptions {
 	tableId: number;
 }
 
@@ -2331,33 +2598,37 @@ function testResponseForIrrigationValveTableGet(
 )
 export class IrrigationCCValveTableGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveTableGetOptions,
+		options: WithAddress<IrrigationCCValveTableGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.tableId = options.tableId;
-		}
+		super(options);
+		this.tableId = options.tableId;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveTableGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveTableGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.tableId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"table ID": this.tableId,
 			},
@@ -2366,7 +2637,7 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 }
 
 // @publicAPI
-export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
+export interface IrrigationCCValveTableRunOptions {
 	tableIDs: number[];
 }
 
@@ -2374,39 +2645,43 @@ export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveTableRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCValveTableRunOptions,
+		options: WithAddress<IrrigationCCValveTableRunOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
+		super(options);
+		this.tableIDs = options.tableIDs;
+		if (this.tableIDs.length < 1) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`${this.constructor.name}: At least one table ID must be specified.`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			this.tableIDs = options.tableIDs;
-			if (this.tableIDs.length < 1) {
-				throw new ZWaveError(
-					`${this.constructor.name}: At least one table ID must be specified.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCValveTableRun {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCValveTableRun({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableIDs: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from(this.tableIDs);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"table IDs": this.tableIDs
 					.map((id) => padStart(id.toString(), 3, "0"))
@@ -2417,7 +2692,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 }
 
 // @publicAPI
-export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
+export interface IrrigationCCSystemShutoffOptions {
 	/**
 	 * The duration in minutes the system must stay off.
 	 * 255 or `undefined` will prevent schedules from running.
@@ -2429,33 +2704,37 @@ export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| IrrigationCCSystemShutoffOptions,
+		options: WithAddress<IrrigationCCSystemShutoffOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.duration = options.duration;
-		}
+		super(options);
+		this.duration = options.duration;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): IrrigationCCSystemShutoff {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new IrrigationCCSystemShutoff({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public duration?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.duration ?? 255]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				duration: this.duration === 0
 					? "temporarily"

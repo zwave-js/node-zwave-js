@@ -65,6 +65,7 @@
     "logform": "^2.6.1",
     "nrf-intel-hex": "^1.4.0",
     "reflect-metadata": "^0.2.2",
+    "semver": "^7.6.3",
     "triple-beam": "*",
     "winston": "^3.15.0",
     "winston-daily-rotate-file": "^5.0.0",
@@ -73,6 +74,7 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.55",
+    "@types/semver": "^7.5.8",
     "@types/sinon": "^17.0.3",
     "@types/triple-beam": "^1.3.5",
     "ava": "^6.1.3",

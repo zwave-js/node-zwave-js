@@ -59,7 +59,6 @@ export type ZnifferMessageOptions =
  */
 export class ZnifferMessage {
 	public constructor(
-		// public readonly host: ZWaveHost,
 		options: ZnifferMessageOptions,
 	) {
 		// decide which implementation we follow

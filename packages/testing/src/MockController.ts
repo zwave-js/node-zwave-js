@@ -1,14 +1,24 @@
-import { type ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
+	type CCId,
+	type MaybeNotKnown,
+	NOT_KNOWN,
+	NodeIDType,
+	SecurityClass,
+	type SecurityManagers,
+	securityClassOrder,
+} from "@zwave-js/core";
+import {
+	type FunctionType,
 	Message,
+	type MessageEncodingContext,
 	MessageHeaders,
 	MessageOrigin,
+	type MessageParsingContext,
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
-import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
+import { TimedExpectation } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { randomInt } from "node:crypto";
 import {
@@ -43,7 +53,7 @@ export class MockController {
 		this.serial.on("write", async (data) => {
 			// Execute hooks for inspecting the raw data first
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostData?.(this.host, this, data)) {
+				if (await behavior.onHostData?.(this, data)) {
 					return;
 				}
 			}
@@ -56,26 +66,58 @@ export class MockController {
 		// const valuesStorage = new Map();
 		// const metadataStorage = new Map();
 		// const valueDBCache = new Map<number, ValueDB>();
-		const supervisionSessionIDs = new Map<number, () => number>();
+		// const supervisionSessionIDs = new Map<number, () => number>();
 
-		this.host = {
-			ownNodeId: options.ownNodeId ?? 1,
-			homeId: options.homeId ?? 0x7e571000,
-			securityManager: undefined,
-			securityManager2: undefined,
-			securityManagerLR: undefined,
-			// nodes: this.nodes as any,
-			getNextCallbackId: () => 1,
-			getNextSupervisionSessionId: (nodeId) => {
-				if (!supervisionSessionIDs.has(nodeId)) {
-					supervisionSessionIDs.set(
-						nodeId,
-						createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
-					);
-				}
-				return supervisionSessionIDs.get(nodeId)!();
+		this.ownNodeId = options.ownNodeId ?? 1;
+		this.homeId = options.homeId ?? 0x7e571000;
+
+		this.capabilities = {
+			...getDefaultMockControllerCapabilities(),
+			...options.capabilities,
+		};
+
+		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
+		const requestStorage = new Map<FunctionType, Record<string, unknown>>();
+
+		const self = this;
+		this.encodingContext = {
+			homeId: this.homeId,
+			ownNodeId: this.ownNodeId,
+			// TODO: LR is not supported in mocks
+			nodeIdType: NodeIDType.Short,
+			hasSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+			): MaybeNotKnown<boolean> {
+				return (
+					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
+				);
 			},
-			getSafeCCVersion: () => 100,
+			setSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+				granted: boolean,
+			): void {
+				if (!securityClasses.has(nodeId)) {
+					securityClasses.set(nodeId, new Map());
+				}
+				securityClasses.get(nodeId)!.set(securityClass, granted);
+			},
+			getHighestSecurityClass(
+				nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
+				const map = securityClasses.get(nodeId);
+				if (!map?.size) return undefined;
+				let missingSome = false;
+				for (const secClass of securityClassOrder) {
+					if (map.get(secClass) === true) return secClass;
+					if (!map.has(secClass)) {
+						missingSome = true;
+					}
+				}
+				// If we don't have the info for every security class, we don't know the highest one yet
+				return missingSome ? undefined : SecurityClass.None;
+			},
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
 					return 0;
@@ -84,34 +126,38 @@ export class MockController {
 				const endpoint = node.endpoints.get(endpointIndex);
 				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
 			},
-			isCCSecure: () => false,
-			// TODO: We don't care about security classes on the controller
-			// This is handled by the nodes hosts
-			getHighestSecurityClass: () => undefined,
-			hasSecurityClass: () => false,
-			setSecurityClass: () => {},
-			// getValueDB: (nodeId) => {
-			// 	if (!valueDBCache.has(nodeId)) {
-			// 		valueDBCache.set(
-			// 			nodeId,
-			// 			new ValueDB(
-			// 				nodeId,
-			// 				valuesStorage as any,
-			// 				metadataStorage as any,
-			// 			),
-			// 		);
-			// 	}
-			// 	return valueDBCache.get(nodeId)!;
-			// },
+			getDeviceConfig: () => undefined,
+			get securityManager() {
+				return self.securityManagers.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManagers.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagers.securityManagerLR;
+			},
 		};
-
-		this.capabilities = {
-			...getDefaultMockControllerCapabilities(),
-			...options.capabilities,
+		this.parsingContext = {
+			...this.encodingContext,
+			// FIXME: Take from the controller capabilities
+			sdkVersion: undefined,
+			requestStorage,
 		};
 
 		void this.execute();
 	}
+
+	public homeId: number;
+	public ownNodeId: number;
+
+	public securityManagers: SecurityManagers = {
+		securityManager: undefined,
+		securityManager2: undefined,
+		securityManagerLR: undefined,
+	};
+
+	public encodingContext: MessageEncodingContext;
+	public parsingContext: MessageParsingContext;
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
@@ -151,8 +197,6 @@ export class MockController {
 	public removeNode(node: MockNode): void {
 		this._nodes.delete(node.id);
 	}
-
-	public readonly host: ZWaveHost;
 
 	public readonly capabilities: MockControllerCapabilities;
 
@@ -196,10 +240,9 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = Message.from(this.host, {
-				data,
+			msg = Message.parse(data, {
+				...this.parsingContext,
 				origin: MessageOrigin.Host,
-				parseCCs: false,
 			});
 			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {
@@ -220,7 +263,7 @@ export class MockController {
 			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostMessage?.(this.host, this, msg)) {
+				if (await behavior.onHostMessage?.(this, msg)) {
 					return;
 				}
 			}
@@ -308,10 +351,10 @@ export class MockController {
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
-	public async expectNodeCC<T extends ICommandClass = ICommandClass>(
+	public async expectNodeCC<T extends CCId = CCId>(
 		node: MockNode,
 		timeout: number,
-		predicate: (cc: ICommandClass) => cc is T,
+		predicate: (cc: CCId) => cc is T,
 	): Promise<T> {
 		const ret = await this.expectNodeFrame(
 			node,
@@ -343,6 +386,27 @@ export class MockController {
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
 	private sendHeaderToHost(data: MessageHeaders): void {
 		this.serial.emitData(Buffer.from([data]));
+	}
+
+	/** Sends a raw buffer to the host/driver and expect an ACK */
+	public async sendMessageToHost(
+		msg: Message,
+		fromNode?: MockNode,
+	): Promise<void> {
+		let data: Buffer;
+		if (fromNode) {
+			data = msg.serialize({
+				nodeIdType: this.encodingContext.nodeIdType,
+				...fromNode.encodingContext,
+			});
+			// Simulate the frame being transmitted via radio
+			await wait(fromNode.capabilities.txDelay);
+		} else {
+			data = msg.serialize(this.encodingContext);
+		}
+		this.serial.emitData(data);
+		// TODO: make the timeout match the configured ACK timeout
+		await this.expectHostACK(1000);
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
@@ -389,7 +453,7 @@ export class MockController {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
 				if (
-					await behavior.onNodeFrame?.(this.host, this, node, frame)
+					await behavior.onNodeFrame?.(this, node, frame)
 				) {
 					return;
 				}
@@ -498,19 +562,16 @@ export interface MockControllerBehavior {
 	 * Return `true` to indicate that the data has been handled and should not be processed further.
 	 */
 	onHostData?: (
-		host: ZWaveHost,
 		controller: MockController,
 		data: Buffer,
 	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
 	onHostMessage?: (
-		host: ZWaveHost,
 		controller: MockController,
 		msg: Message,
 	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeFrame?: (
-		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
 		frame: MockZWaveFrame,

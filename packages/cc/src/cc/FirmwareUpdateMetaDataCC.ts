@@ -5,14 +5,15 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -23,10 +24,10 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
+	type InterviewContext,
+	getEffectiveCCVersion,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -41,7 +42,6 @@ import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
-	type FirmwareUpdateInitResult,
 	type FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
@@ -113,11 +113,11 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCMetaDataGet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCMetaDataGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			FirmwareUpdateMetaDataCCMetaDataReport
 		>(
 			cc,
@@ -149,55 +149,38 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.Report,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCMetaDataReport(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCMetaDataReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
 	 * Requests the device to start the firmware update process.
-	 * WARNING: This method may wait up to 60 seconds for a reply.
+	 * This does not wait for the reply - that is up to the caller of this method.
 	 */
 	@validateArgs()
 	public async requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
-	): Promise<FirmwareUpdateInitResult> {
+	): Promise<void> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.RequestGet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCRequestGet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCRequestGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
-		// Since the response may take longer than with other commands,
-		// we do not use the built-in waiting functionality, which would block
-		// all other communication.
 
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
 		});
-		const result = await this.applHost
-			.waitForCommand<
-				FirmwareUpdateMetaDataCCRequestReport
-			>(
-				(cc) =>
-					cc instanceof FirmwareUpdateMetaDataCCRequestReport
-					&& cc.nodeId === this.endpoint.nodeId,
-				60000,
-			);
-		return pick(result, [
-			"status",
-			"resume",
-			"nonSecureTransfer",
-		]);
 	}
 
 	/**
@@ -214,14 +197,14 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.Report,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCReport(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			reportNumber: fragmentNumber,
 			isLast: isLastFragment,
 			firmwareData: data,
 		});
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
@@ -238,12 +221,12 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.ActivationSet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCActivationSet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCActivationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			FirmwareUpdateMetaDataCCActivationReport
 		>(
 			cc,
@@ -263,24 +246,26 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Firmware Update Meta Data"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying firmware update capabilities...",
 			direction: "outbound",
@@ -305,13 +290,13 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 			} else {
 				logMessage += `\nfirmware upgradeable: false`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Firmware update capability query timed out",
 				direction: "inbound",
@@ -319,7 +304,7 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
@@ -344,75 +329,93 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	implements FirmwareUpdateMetaData
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (
-				& FirmwareUpdateMetaDataCCMetaDataReportOptions
-				& CCCommandOptions
-			),
+		options: WithAddress<FirmwareUpdateMetaDataCCMetaDataReportOptions>,
 	) {
-		super(host, options);
+		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 6);
-			this.manufacturerId = this.payload.readUInt16BE(0);
-			this.firmwareId = this.payload.readUInt16BE(2);
-			this.checksum = this.payload.readUInt16BE(4);
-			// V1/V2 only have a single firmware which must be upgradable
-			this.firmwareUpgradable = this.payload[6] === 0xff
-				|| this.payload[6] == undefined;
+		this.manufacturerId = options.manufacturerId;
+		this.firmwareId = options.firmwareId ?? 0;
+		this.checksum = options.checksum ?? 0;
+		this.firmwareUpgradable = options.firmwareUpgradable;
+		this.maxFragmentSize = options.maxFragmentSize;
+		this.additionalFirmwareIDs = options.additionalFirmwareIDs ?? [];
+		this.hardwareVersion = options.hardwareVersion;
+		this.continuesToFunction = options.continuesToFunction;
+		this.supportsActivation = options.supportsActivation;
+		this.supportsResuming = options.supportsResuming;
+		this.supportsNonSecureTransfer = options.supportsNonSecureTransfer;
+	}
 
-			if (this.version >= 3 && this.payload.length >= 10) {
-				this.maxFragmentSize = this.payload.readUInt16BE(8);
-				// Read variable length list of additional firmwares
-				const numAdditionalFirmwares = this.payload[7];
-				const additionalFirmwareIDs = [];
-				validatePayload(
-					this.payload.length >= 10 + 2 * numAdditionalFirmwares,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCMetaDataReport {
+		validatePayload(raw.payload.length >= 6);
+		const manufacturerId = raw.payload.readUInt16BE(0);
+		const firmwareId = raw.payload.readUInt16BE(2);
+		const checksum = raw.payload.readUInt16BE(4);
+
+		// V1/V2 only have a single firmware which must be upgradable
+		const firmwareUpgradable = raw.payload[6] === 0xff
+			|| raw.payload[6] == undefined;
+
+		let maxFragmentSize: number | undefined;
+		let additionalFirmwareIDs: number[] | undefined;
+		let hardwareVersion: number | undefined;
+		let continuesToFunction: MaybeNotKnown<boolean>;
+		let supportsActivation: MaybeNotKnown<boolean>;
+		let supportsResuming: MaybeNotKnown<boolean>;
+		let supportsNonSecureTransfer: MaybeNotKnown<boolean>;
+
+		if (raw.payload.length >= 10) {
+			// V3+
+			maxFragmentSize = raw.payload.readUInt16BE(8);
+			// Read variable length list of additional firmwares
+			const numAdditionalFirmwares = raw.payload[7];
+			additionalFirmwareIDs = [];
+			validatePayload(
+				raw.payload.length >= 10 + 2 * numAdditionalFirmwares,
+			);
+			for (let i = 0; i < numAdditionalFirmwares; i++) {
+				additionalFirmwareIDs.push(
+					raw.payload.readUInt16BE(10 + 2 * i),
 				);
-				for (let i = 0; i < numAdditionalFirmwares; i++) {
-					additionalFirmwareIDs.push(
-						this.payload.readUInt16BE(10 + 2 * i),
-					);
-				}
-				this.additionalFirmwareIDs = additionalFirmwareIDs;
-				// Read hardware version (if it exists)
-				let offset = 10 + 2 * numAdditionalFirmwares;
-				if (this.version >= 5 && this.payload.length >= offset + 1) {
-					this.hardwareVersion = this.payload[offset];
+			}
+			// Read hardware version (if it exists)
+			let offset = 10 + 2 * numAdditionalFirmwares;
+			if (raw.payload.length >= offset + 1) {
+				// V5+
+				hardwareVersion = raw.payload[offset];
+				offset++;
+				if (raw.payload.length >= offset + 1) {
+					// V6+
+					const capabilities = raw.payload[offset];
 					offset++;
-					if (
-						this.version >= 6 && this.payload.length >= offset + 1
-					) {
-						const capabilities = this.payload[offset];
-						offset++;
 
-						this.continuesToFunction = !!(capabilities & 0b1);
-						if (this.version >= 7) {
-							this.supportsActivation = !!(capabilities & 0b10);
-						}
-						if (this.version >= 8) {
-							this.supportsResuming = !!(capabilities & 0b1000);
-							this.supportsNonSecureTransfer =
-								!!(capabilities & 0b100);
-						}
-					}
+					continuesToFunction = !!(capabilities & 0b1);
+					// V7+
+					supportsActivation = !!(capabilities & 0b10);
+					// V8+
+					supportsResuming = !!(capabilities & 0b1000);
+					supportsNonSecureTransfer = !!(capabilities & 0b100);
 				}
 			}
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.firmwareId = options.firmwareId ?? 0;
-			this.checksum = options.checksum ?? 0;
-			this.firmwareUpgradable = options.firmwareUpgradable;
-			this.maxFragmentSize = options.maxFragmentSize;
-			this.additionalFirmwareIDs = options.additionalFirmwareIDs ?? [];
-			this.hardwareVersion = options.hardwareVersion;
-			this.continuesToFunction = options.continuesToFunction;
-			this.supportsActivation = options.supportsActivation;
-			this.supportsResuming = options.supportsResuming;
-			this.supportsNonSecureTransfer = options.supportsNonSecureTransfer;
 		}
+
+		return new FirmwareUpdateMetaDataCCMetaDataReport({
+			nodeId: ctx.sourceNodeId,
+			manufacturerId,
+			firmwareId,
+			checksum,
+			firmwareUpgradable,
+			maxFragmentSize,
+			additionalFirmwareIDs,
+			hardwareVersion,
+			continuesToFunction,
+			supportsActivation,
+			supportsResuming,
+			supportsNonSecureTransfer,
+		});
 	}
 
 	public readonly manufacturerId: number;
@@ -433,7 +436,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer)
 	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.alloc(
 			12 + 2 * this.additionalFirmwareIDs.length,
 		);
@@ -454,10 +457,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			| (this.supportsNonSecureTransfer ? 0b100 : 0)
 			| (this.supportsResuming ? 0b1000 : 0);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": this.manufacturerId,
 			"firmware id": this.firmwareId,
@@ -490,7 +493,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -502,28 +505,54 @@ export class FirmwareUpdateMetaDataCCMetaDataGet
 	extends FirmwareUpdateMetaDataCC
 {}
 
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCRequestReportOptions {
+	status: FirmwareUpdateRequestStatus;
+	resume?: boolean;
+	nonSecureTransfer?: boolean;
+}
+
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestReport)
 export class FirmwareUpdateMetaDataCCRequestReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCRequestReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.status = this.payload[0];
-		if (this.payload.length >= 2) {
-			this.resume = !!(this.payload[1] & 0b100);
-			this.nonSecureTransfer = !!(this.payload[1] & 0b10);
+		super(options);
+
+		// TODO: Check implementation:
+		this.status = options.status;
+		this.resume = options.resume;
+		this.nonSecureTransfer = options.nonSecureTransfer;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCRequestReport {
+		validatePayload(raw.payload.length >= 1);
+		const status: FirmwareUpdateRequestStatus = raw.payload[0];
+		let resume: boolean | undefined;
+		let nonSecureTransfer: boolean | undefined;
+		if (raw.payload.length >= 2) {
+			resume = !!(raw.payload[1] & 0b100);
+			nonSecureTransfer = !!(raw.payload[1] & 0b10);
 		}
+
+		return new FirmwareUpdateMetaDataCCRequestReport({
+			nodeId: ctx.sourceNodeId,
+			status,
+			resume,
+			nonSecureTransfer,
+		});
 	}
 
 	public readonly status: FirmwareUpdateRequestStatus;
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			status: getEnumMemberName(
 				FirmwareUpdateRequestStatus,
@@ -537,7 +566,7 @@ export class FirmwareUpdateMetaDataCCRequestReport
 			message["non-secure transfer"] = this.nonSecureTransfer;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -570,31 +599,35 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions),
+		options: WithAddress<FirmwareUpdateMetaDataCCRequestGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.firmwareId = options.firmwareId;
-			this.checksum = options.checksum;
-			if ("firmwareTarget" in options) {
-				this.firmwareTarget = options.firmwareTarget;
-				this.fragmentSize = options.fragmentSize;
-				this.activation = options.activation ?? false;
-				this.hardwareVersion = options.hardwareVersion;
-				this.resume = options.resume;
-				this.nonSecureTransfer = options.nonSecureTransfer;
-			}
+		super(options);
+		this.manufacturerId = options.manufacturerId;
+		this.firmwareId = options.firmwareId;
+		this.checksum = options.checksum;
+		if ("firmwareTarget" in options) {
+			this.firmwareTarget = options.firmwareTarget;
+			this.fragmentSize = options.fragmentSize;
+			this.activation = options.activation ?? false;
+			this.hardwareVersion = options.hardwareVersion;
+			this.resume = options.resume;
+			this.nonSecureTransfer = options.nonSecureTransfer;
 		}
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCRequestGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new FirmwareUpdateMetaDataCCRequestGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;
@@ -607,36 +640,24 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public serialize(): Buffer {
-		const isV3 = this.version >= 3
-			&& this.firmwareTarget != undefined
-			&& this.fragmentSize != undefined;
-		const isV4 = isV3 && this.version >= 4;
-		const isV5 = isV4
-			&& this.version >= 5
-			&& this.hardwareVersion != undefined;
-		this.payload = Buffer.allocUnsafe(
-			6 + (isV3 ? 3 : 0) + (isV4 ? 1 : 0) + (isV5 ? 1 : 0),
-		);
+	public serialize(ctx: CCEncodingContext): Buffer {
+		this.payload = Buffer.alloc(11, 0);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
-		if (isV3) {
-			this.payload[6] = this.firmwareTarget!;
-			this.payload.writeUInt16BE(this.fragmentSize!, 7);
-		}
-		if (isV4) {
-			this.payload[9] = (this.activation ? 0b1 : 0)
-				| (this.nonSecureTransfer ? 0b10 : 0)
-				| (this.resume ? 0b100 : 0);
-		}
-		if (isV5) {
-			this.payload[10] = this.hardwareVersion!;
-		}
-		return super.serialize();
+		this.payload[6] = this.firmwareTarget ?? 0;
+		// 32 seems like a reasonable default fragment size,
+		// but it should be specified anyways
+		this.payload.writeUInt16BE(this.fragmentSize ?? 32, 7);
+		this.payload[9] = (this.activation ? 0b1 : 0)
+			| (this.nonSecureTransfer ? 0b10 : 0)
+			| (this.resume ? 0b100 : 0);
+		this.payload[10] = this.hardwareVersion ?? 0x00;
+
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -661,31 +682,52 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
+}
+
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCGetOptions {
+	numReports: number;
+	reportNumber: number;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.Get)
 // This is sent to us from the node, so we expect no response
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCGetOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 3);
-		this.numReports = this.payload[0];
-		this.reportNumber = this.payload.readUInt16BE(1) & 0x7fff;
+		super(options);
+
+		// TODO: Check implementation:
+		this.numReports = options.numReports;
+		this.reportNumber = options.reportNumber;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCGet {
+		validatePayload(raw.payload.length >= 3);
+		const numReports = raw.payload[0];
+		const reportNumber = raw.payload.readUInt16BE(1) & 0x7fff;
+
+		return new FirmwareUpdateMetaDataCCGet({
+			nodeId: ctx.sourceNodeId,
+			numReports,
+			reportNumber,
+		});
 	}
 
 	public readonly numReports: number;
 	public readonly reportNumber: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"total # of reports": this.numReports,
 				"report number": this.reportNumber,
@@ -695,9 +737,7 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 }
 
 // @publicAPI
-export interface FirmwareUpdateMetaDataCCReportOptions
-	extends CCCommandOptions
-{
+export interface FirmwareUpdateMetaDataCCReportOptions {
 	isLast: boolean;
 	reportNumber: number;
 	firmwareData: Buffer;
@@ -707,30 +747,34 @@ export interface FirmwareUpdateMetaDataCCReportOptions
 // We send this in reply to the Get command and expect no response
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| FirmwareUpdateMetaDataCCReportOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCReportOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.reportNumber = options.reportNumber;
-			this.firmwareData = options.firmwareData;
-			this.isLast = options.isLast;
-		}
+		super(options);
+		this.reportNumber = options.reportNumber;
+		this.firmwareData = options.firmwareData;
+		this.isLast = options.isLast;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCReport {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new FirmwareUpdateMetaDataCCReport({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public isLast: boolean;
 	public reportNumber: number;
 	public firmwareData: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const commandBuffer = Buffer.concat([
 			Buffer.allocUnsafe(2), // placeholder for report number
 			this.firmwareData,
@@ -740,7 +784,10 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			0,
 		);
 
-		if (this.version >= 2) {
+		// V1 devices would consider the checksum to be part of the firmware data
+		// so it must not be included for those
+		const ccVersion = getEffectiveCCVersion(ctx, this);
+		if (ccVersion >= 2) {
 			// Compute and save the CRC16 in the payload
 			// The CC header is included in the CRC computation
 			let crc = CRC16_CCITT(Buffer.from([this.ccId, this.ccCommand]));
@@ -754,12 +801,12 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			this.payload = commandBuffer;
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"report #": this.reportNumber,
 				"is last": this.isLast,
@@ -768,27 +815,49 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	}
 }
 
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCStatusReportOptions {
+	status: FirmwareUpdateStatus;
+	waitTime?: number;
+}
+
 @CCCommand(FirmwareUpdateMetaDataCommand.StatusReport)
 export class FirmwareUpdateMetaDataCCStatusReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCStatusReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.status = this.payload[0];
-		if (this.payload.length >= 3) {
-			this.waitTime = this.payload.readUInt16BE(1);
+		super(options);
+
+		// TODO: Check implementation:
+		this.status = options.status;
+		this.waitTime = options.waitTime;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCStatusReport {
+		validatePayload(raw.payload.length >= 1);
+		const status: FirmwareUpdateStatus = raw.payload[0];
+		let waitTime: number | undefined;
+		if (raw.payload.length >= 3) {
+			waitTime = raw.payload.readUInt16BE(1);
 		}
+
+		return new FirmwareUpdateMetaDataCCStatusReport({
+			nodeId: ctx.sourceNodeId,
+			status,
+			waitTime,
+		});
 	}
 
 	public readonly status: FirmwareUpdateStatus;
 	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			status: getEnumMemberName(FirmwareUpdateStatus, this.status),
 		};
@@ -796,10 +865,20 @@ export class FirmwareUpdateMetaDataCCStatusReport
 			message["wait time"] = `${this.waitTime} seconds`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
+}
+
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCActivationReportOptions {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareTarget: number;
+	activationStatus: FirmwareUpdateActivationStatus;
+	hardwareVersion?: number;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.ActivationReport)
@@ -807,19 +886,44 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCActivationReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 8);
-		this.manufacturerId = this.payload.readUInt16BE(0);
-		this.firmwareId = this.payload.readUInt16BE(2);
-		this.checksum = this.payload.readUInt16BE(4);
-		this.firmwareTarget = this.payload[6];
-		this.activationStatus = this.payload[7];
-		if (this.version >= 5 && this.payload.length >= 9) {
-			this.hardwareVersion = this.payload[8];
+		super(options);
+
+		// TODO: Check implementation:
+		this.manufacturerId = options.manufacturerId;
+		this.firmwareId = options.firmwareId;
+		this.checksum = options.checksum;
+		this.firmwareTarget = options.firmwareTarget;
+		this.activationStatus = options.activationStatus;
+		this.hardwareVersion = options.hardwareVersion;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCActivationReport {
+		validatePayload(raw.payload.length >= 8);
+		const manufacturerId = raw.payload.readUInt16BE(0);
+		const firmwareId = raw.payload.readUInt16BE(2);
+		const checksum = raw.payload.readUInt16BE(4);
+		const firmwareTarget = raw.payload[6];
+		const activationStatus: FirmwareUpdateActivationStatus = raw.payload[7];
+		let hardwareVersion: number | undefined;
+		if (raw.payload.length >= 9) {
+			// V5+
+			hardwareVersion = raw.payload[8];
 		}
+
+		return new FirmwareUpdateMetaDataCCActivationReport({
+			nodeId: ctx.sourceNodeId,
+			manufacturerId,
+			firmwareId,
+			checksum,
+			firmwareTarget,
+			activationStatus,
+			hardwareVersion,
+		});
 	}
 
 	public readonly manufacturerId: number;
@@ -829,7 +933,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	public readonly activationStatus: FirmwareUpdateActivationStatus;
 	public readonly hardwareVersion?: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -844,7 +948,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 			message.hardwareVersion = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -866,25 +970,29 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions),
+		options: WithAddress<FirmwareUpdateMetaDataCCActivationSetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.firmwareId = options.firmwareId;
-			this.checksum = options.checksum;
-			this.firmwareTarget = options.firmwareTarget;
-			this.hardwareVersion = options.hardwareVersion;
-		}
+		super(options);
+		this.manufacturerId = options.manufacturerId;
+		this.firmwareId = options.firmwareId;
+		this.checksum = options.checksum;
+		this.firmwareTarget = options.firmwareTarget;
+		this.hardwareVersion = options.hardwareVersion;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCActivationSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new FirmwareUpdateMetaDataCCActivationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;
@@ -893,20 +1001,17 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public firmwareTarget: number;
 	public hardwareVersion?: number;
 
-	public serialize(): Buffer {
-		const isV5 = this.version >= 5 && this.hardwareVersion != undefined;
-		this.payload = Buffer.allocUnsafe(7 + (isV5 ? 1 : 0));
+	public serialize(ctx: CCEncodingContext): Buffer {
+		this.payload = Buffer.allocUnsafe(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
 		this.payload[6] = this.firmwareTarget;
-		if (isV5) {
-			this.payload[7] = this.hardwareVersion!;
-		}
-		return super.serialize();
+		this.payload[7] = this.hardwareVersion ?? 0x00;
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -917,10 +1022,16 @@ export class FirmwareUpdateMetaDataCCActivationSet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
+}
+
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCPrepareReportOptions {
+	status: FirmwareDownloadStatus;
+	checksum: number;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.PrepareReport)
@@ -928,21 +1039,36 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCPrepareReportOptions>,
 	) {
-		super(host, options);
-		validatePayload(this.payload.length >= 3);
-		this.status = this.payload[0];
-		this.checksum = this.payload.readUInt16BE(1);
+		super(options);
+
+		// TODO: Check implementation:
+		this.status = options.status;
+		this.checksum = options.checksum;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCPrepareReport {
+		validatePayload(raw.payload.length >= 3);
+		const status: FirmwareDownloadStatus = raw.payload[0];
+		const checksum = raw.payload.readUInt16BE(1);
+
+		return new FirmwareUpdateMetaDataCCPrepareReport({
+			nodeId: ctx.sourceNodeId,
+			status,
+			checksum,
+		});
 	}
 
 	public readonly status: FirmwareDownloadStatus;
 	public readonly checksum: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				status: getEnumMemberName(FirmwareDownloadStatus, this.status),
 				checksum: num2hex(this.checksum),
@@ -952,9 +1078,7 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 }
 
 // @publicAPI
-export interface FirmwareUpdateMetaDataCCPrepareGetOptions
-	extends CCCommandOptions
-{
+export interface FirmwareUpdateMetaDataCCPrepareGetOptions {
 	manufacturerId: number;
 	firmwareId: number;
 	firmwareTarget: number;
@@ -968,25 +1092,29 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
-		options:
-			| CommandClassDeserializationOptions
-			| FirmwareUpdateMetaDataCCPrepareGetOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCPrepareGetOptions>,
 	) {
-		super(host, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.firmwareId = options.firmwareId;
-			this.firmwareTarget = options.firmwareTarget;
-			this.fragmentSize = options.fragmentSize;
-			this.hardwareVersion = options.hardwareVersion;
-		}
+		super(options);
+		this.manufacturerId = options.manufacturerId;
+		this.firmwareId = options.firmwareId;
+		this.firmwareTarget = options.firmwareTarget;
+		this.fragmentSize = options.fragmentSize;
+		this.hardwareVersion = options.hardwareVersion;
+	}
+
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): FirmwareUpdateMetaDataCCPrepareGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		// return new FirmwareUpdateMetaDataCCPrepareGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;
@@ -995,19 +1123,19 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	public fragmentSize: number;
 	public hardwareVersion: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload[4] = this.firmwareTarget;
 		this.payload.writeUInt16BE(this.fragmentSize, 5);
 		this.payload[7] = this.hardwareVersion;
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"firmware id": num2hex(this.firmwareId),

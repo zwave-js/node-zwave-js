@@ -2,10 +2,13 @@ import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type ControlsCC,
+	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
+	type NodeId,
 	type SetValueOptions,
+	type SupportsCC,
 	type TranslatedValueID,
 	type ValueID,
 	ZWaveError,
@@ -14,120 +17,125 @@ import {
 	applicationCCs,
 	getCCName,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
-import { type Task } from "../driver/Task";
+import type {
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
+	GetValueDB,
+	HostIDs,
+} from "@zwave-js/host";
 
 function getValue<T>(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	valueId: ValueID,
 ): T | undefined {
-	return applHost.getValueDB(node.id).getValue(valueId);
+	return ctx.getValueDB(nodeId).getValue(valueId);
 }
 
 function setValue(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	valueId: ValueID,
 	value: unknown,
 	options?: SetValueOptions,
 ): void {
-	return applHost.getValueDB(node.id).setValue(valueId, value, options);
+	return ctx.getValueDB(nodeId).setValue(valueId, value, options);
 }
 
 export function endpointCountIsDynamic(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): MaybeNotKnown<boolean> {
 	return getValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.endpointCountIsDynamic.id,
 	);
 }
 
 export function endpointsHaveIdenticalCapabilities(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): MaybeNotKnown<boolean> {
 	return getValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.endpointsHaveIdenticalCapabilities.id,
 	);
 }
 
 export function getIndividualEndpointCount(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): MaybeNotKnown<number> {
 	return getValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.individualEndpointCount.id,
 	);
 }
 
 export function getAggregatedEndpointCount(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): MaybeNotKnown<number> {
 	return getValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.aggregatedEndpointCount.id,
 	);
 }
 
 export function getEndpointCount(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): number {
 	return (
-		(getIndividualEndpointCount(applHost, node) || 0)
-		+ (getAggregatedEndpointCount(applHost, node) || 0)
+		(getIndividualEndpointCount(ctx, nodeId) || 0)
+		+ (getAggregatedEndpointCount(ctx, nodeId) || 0)
 	);
 }
 
 export function setIndividualEndpointCount(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	count: number,
 ): void {
 	setValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.individualEndpointCount.id,
 		count,
 	);
 }
 
 export function setAggregatedEndpointCount(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	count: number,
 ): void {
 	setValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.aggregatedEndpointCount.id,
 		count,
 	);
 }
 
 export function getEndpointIndizes(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): number[] {
 	let ret = getValue<number[]>(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		MultiChannelCCValues.endpointIndizes.id,
 	);
 	if (!ret) {
 		// Endpoint indizes not stored, assume sequential endpoints
 		ret = [];
-		for (let i = 1; i <= getEndpointCount(applHost, node); i++) {
+		for (let i = 1; i <= getEndpointCount(ctx, nodeId); i++) {
 			ret.push(i);
 		}
 	}
@@ -135,18 +143,23 @@ export function getEndpointIndizes(
 }
 
 export function setEndpointIndizes(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	indizes: number[],
 ): void {
-	setValue(applHost, node, MultiChannelCCValues.endpointIndizes.id, indizes);
+	setValue(
+		ctx,
+		nodeId,
+		MultiChannelCCValues.endpointIndizes.id,
+		indizes,
+	);
 }
 
 export function isMultiChannelInterviewComplete(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 ): boolean {
-	return !!getValue(applHost, node, {
+	return !!getValue(ctx, nodeId, {
 		commandClass: CommandClasses["Multi Channel"],
 		endpoint: 0,
 		property: "interviewComplete",
@@ -154,13 +167,13 @@ export function isMultiChannelInterviewComplete(
 }
 
 export function setMultiChannelInterviewComplete(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	nodeId: number,
 	complete: boolean,
 ): void {
 	setValue(
-		applHost,
-		node,
+		ctx,
+		nodeId,
 		{
 			commandClass: CommandClasses["Multi Channel"],
 			endpoint: 0,
@@ -170,15 +183,15 @@ export function setMultiChannelInterviewComplete(
 	);
 }
 
-export function getAllEndpoints(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
-): IZWaveEndpoint[] {
-	const ret: IZWaveEndpoint[] = [node];
+export function getAllEndpoints<T extends EndpointId>(
+	ctx: GetValueDB,
+	node: T & GetEndpoint<EndpointId & T>,
+): T[] {
+	const ret: T[] = [node];
 	// Check if the Multi Channel CC interview for this node is completed,
 	// because we don't have all the endpoint information before that
-	if (isMultiChannelInterviewComplete(applHost, node)) {
-		for (const i of getEndpointIndizes(applHost, node)) {
+	if (isMultiChannelInterviewComplete(ctx, node.nodeId)) {
+		for (const i of getEndpointIndizes(ctx, node.nodeId)) {
 			const endpoint = node.getEndpoint(i);
 			if (endpoint) ret.push(endpoint);
 		}
@@ -188,15 +201,15 @@ export function getAllEndpoints(
 
 /** Determines whether the root application CC values should be hidden in favor of endpoint values */
 export function shouldHideRootApplicationCCValues(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB & GetDeviceConfig,
+	nodeId: number,
 ): boolean {
 	// This is not the case when the root values should explicitly be preserved
-	const compatConfig = applHost.getDeviceConfig?.(node.id)?.compat;
+	const compatConfig = ctx.getDeviceConfig?.(nodeId)?.compat;
 	if (compatConfig?.preserveRootApplicationCCValueIDs) return false;
 
 	// This is not the case when there are no endpoints
-	const endpointIndizes = getEndpointIndizes(applHost, node);
+	const endpointIndizes = getEndpointIndizes(ctx, nodeId);
 	if (endpointIndizes.length === 0) return false;
 
 	// This is not the case when only individual endpoints should be preserved in addition to the root
@@ -217,8 +230,8 @@ export function shouldHideRootApplicationCCValues(
  * Enhances a value id so it can be consumed better by applications
  */
 export function translateValueID<T extends ValueID>(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx: GetValueDB,
+	endpoint: EndpointId,
 	valueId: T,
 ): T & TranslatedValueID {
 	// Try to retrieve the speaking CC name
@@ -228,8 +241,7 @@ export function translateValueID<T extends ValueID>(
 		...valueId,
 	};
 	const ccInstance = CommandClass.createInstanceUnchecked(
-		applHost,
-		node,
+		endpoint,
 		valueId.commandClass,
 	);
 	if (!ccInstance) {
@@ -245,14 +257,14 @@ export function translateValueID<T extends ValueID>(
 
 	// Retrieve the speaking property name
 	ret.propertyName = ccInstance.translateProperty(
-		applHost,
+		ctx,
 		valueId.property,
 		valueId.propertyKey,
 	);
 	// Try to retrieve the speaking property key
 	if (valueId.propertyKey != undefined) {
 		const propertyKey = ccInstance.translatePropertyKey(
-			applHost,
+			ctx,
 			valueId.property,
 			valueId.propertyKey,
 		);
@@ -297,10 +309,21 @@ export function filterRootApplicationCCValueIDs<T extends ValueID>(
 
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx:
+		& HostIDs
+		& GetValueDB
+		& GetDeviceConfig
+		& GetSupportedCCVersion
+		& GetNode<
+			NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+		>,
+	node:
+		& NodeId
+		& SupportsCC
+		& ControlsCC
+		& GetEndpoint<EndpointId & SupportsCC & ControlsCC>,
 ): TranslatedValueID[] {
-	return getDefinedValueIDsInternal(applHost, node, false);
+	return getDefinedValueIDsInternal(ctx, node, false);
 }
 
 /**
@@ -308,18 +331,34 @@ export function getDefinedValueIDs(
  * Returns a list of all value names that are defined on all endpoints of this node
  */
 export function getDefinedValueIDsInternal(
-	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	ctx:
+		& HostIDs
+		& GetValueDB
+		& GetDeviceConfig
+		& GetSupportedCCVersion
+		& GetNode<
+			NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+		>,
+	node:
+		& NodeId
+		& SupportsCC
+		& ControlsCC
+		& GetEndpoint<EndpointId & SupportsCC & ControlsCC>,
 	includeInternal: boolean = false,
 ): TranslatedValueID[] {
 	// The controller has no values. Even if some ended up in the cache somehow, do not return any.
-	if (applHost.isControllerNode(node.id)) return [];
+	if (node.id === ctx.ownNodeId) return [];
 
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
 		CommandClasses["Scene Activation"],
 	];
-	for (const endpoint of getAllEndpoints(applHost, node)) {
+	for (
+		const endpoint of getAllEndpoints<EndpointId & SupportsCC & ControlsCC>(
+			ctx,
+			node,
+		)
+	) {
 		for (const cc of allCCs) {
 			if (
 				// Create values only for supported CCs
@@ -331,14 +370,13 @@ export function getDefinedValueIDsInternal(
 				|| cc === CommandClasses.Basic
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
-					applHost,
 					endpoint,
 					cc,
 				);
 				if (ccInstance) {
 					ret.push(
 						...ccInstance.getDefinedValueIDs(
-							applHost,
+							ctx,
 							includeInternal,
 						),
 					);
@@ -352,15 +390,10 @@ export function getDefinedValueIDsInternal(
 	// via service discovery mechanisms like mDNS or to users in a GUI.
 
 	// We do this when there are endpoints that were explicitly preserved
-	if (shouldHideRootApplicationCCValues(applHost, node)) {
+	if (shouldHideRootApplicationCCValues(ctx, node.id)) {
 		ret = filterRootApplicationCCValueIDs(ret);
 	}
 
 	// Translate the remaining value IDs before exposing them to applications
-	return ret.map((id) => translateValueID(applHost, node, id));
-}
-
-/** Checks if a task belongs to a route rebuilding process */
-export function isFirmwareUpdateOTATask(t: Task<unknown>): boolean {
-	return t.tag?.id === "firmware-update-ota";
+	return ret.map((id) => translateValueID(ctx, node, id));
 }

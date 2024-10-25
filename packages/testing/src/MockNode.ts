@@ -5,9 +5,10 @@ import {
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	SecurityClass,
+	type SecurityManagers,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
@@ -111,14 +112,44 @@ export class MockNode {
 		this.id = options.id;
 		this.controller = options.controller;
 
-		// A node's host is a bit more specialized than the controller's host.
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
-		this.host = {
-			...this.controller.host,
-			ownNodeId: this.id,
-			__internalIsMockNode: true,
 
-			// Mimic the behavior of ZWaveNode, but for arbitrary node IDs
+		const {
+			commandClasses = [],
+			endpoints = [],
+			...capabilities
+		} = options.capabilities ?? {};
+		this.capabilities = {
+			...getDefaultMockNodeCapabilities(),
+			...capabilities,
+		};
+
+		for (const cc of commandClasses) {
+			if (typeof cc === "number") {
+				this.addCC(cc, {});
+			} else {
+				const { ccId, ...ccInfo } = cc;
+				this.addCC(ccId, ccInfo);
+			}
+		}
+
+		let index = 0;
+		for (const endpoint of endpoints) {
+			index++;
+			this.endpoints.set(
+				index,
+				new MockEndpoint({
+					index,
+					node: this,
+					capabilities: endpoint,
+				}),
+			);
+		}
+
+		const self = this;
+		this.encodingContext = {
+			homeId: this.controller.homeId,
+			ownNodeId: this.id,
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,
@@ -152,45 +183,36 @@ export class MockNode {
 				// If we don't have the info for every security class, we don't know the highest one yet
 				return missingSome ? undefined : SecurityClass.None;
 			},
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
+				// Mock endpoints only care about the version they implement
+				const endpoint = this.endpoints.get(endpointIndex);
+				return (endpoint ?? this).implementedCCs.get(cc)?.version ?? 0;
+			},
+			// Mock nodes don't care about device configuration files
+			getDeviceConfig: () => undefined,
+			get securityManager() {
+				return self.securityManagers.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManagers.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagers.securityManagerLR;
+			},
 		};
-
-		const {
-			commandClasses = [],
-			endpoints = [],
-			...capabilities
-		} = options.capabilities ?? {};
-		this.capabilities = {
-			...getDefaultMockNodeCapabilities(),
-			...capabilities,
-		};
-
-		for (const cc of commandClasses) {
-			if (typeof cc === "number") {
-				this.addCC(cc, {});
-			} else {
-				const { ccId, ...ccInfo } = cc;
-				this.addCC(ccId, ccInfo);
-			}
-		}
-
-		let index = 0;
-		for (const endpoint of endpoints) {
-			index++;
-			this.endpoints.set(
-				index,
-				new MockEndpoint({
-					index,
-					node: this,
-					capabilities: endpoint,
-				}),
-			);
-		}
 	}
 
-	public readonly host: ZWaveHost;
 	public readonly id: number;
 	public readonly controller: MockController;
 	public readonly capabilities: MockNodeCapabilities;
+
+	public securityManagers: SecurityManagers = {
+		securityManager: undefined,
+		securityManager2: undefined,
+		securityManagerLR: undefined,
+	};
+
+	public encodingContext: CCEncodingContext;
 
 	private behaviors: MockNodeBehavior[] = [];
 

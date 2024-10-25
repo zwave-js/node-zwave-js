@@ -4,6 +4,8 @@
 
 ```ts
 
+import type { CCEncodingContext } from '@zwave-js/host';
+import { CCId } from '@zwave-js/core';
 import type { ColorComponent } from '@zwave-js/cc';
 import { CommandClass } from '@zwave-js/cc';
 import { CommandClasses } from '@zwave-js/core';
@@ -11,17 +13,20 @@ import { CommandClassInfo } from '@zwave-js/core';
 import type { ConfigValue } from '@zwave-js/core';
 import type { ConfigValueFormat } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
-import { ICommandClass } from '@zwave-js/core';
 import type { KeypadMode } from '@zwave-js/cc';
+import type { MaybeUnknown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
+import { MessageEncodingContext } from '@zwave-js/serial';
+import { MessageParsingContext } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
+import { SecurityManagers } from '@zwave-js/core';
+import type { SwitchType } from '@zwave-js/cc';
 import type { ThermostatMode } from '@zwave-js/cc';
 import type { ThermostatSetpointType } from '@zwave-js/cc';
 import type { UserIDStatus } from '@zwave-js/cc';
 import type { WindowCoveringParameter } from '@zwave-js/cc';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
-import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -32,6 +37,14 @@ export interface BinarySensorCCCapabilities {
     getValue?: (sensorType: number | undefined) => boolean | undefined;
     // (undocumented)
     supportedSensorTypes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "BinarySwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySwitchCCCapabilities {
+    // (undocumented)
+    defaultValue?: MaybeUnknown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "ccCaps" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -51,7 +64,9 @@ export type CCSpecificCapabilities = {
     [CommandClasses.Configuration]: ConfigurationCCCapabilities;
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [48]: BinarySensorCCCapabilities;
+    [0x25]: BinarySwitchCCCapabilities;
     [49]: MultilevelSensorCCCapabilities;
+    [0x26]: MultilevelSwitchCCCapabilities;
     [51]: ColorSwitchCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
@@ -220,6 +235,8 @@ export class MockController {
     // (undocumented)
     destroy(): void;
     // (undocumented)
+    encodingContext: MessageEncodingContext;
+    // (undocumented)
     execute(): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectHostACK(timeout: number): Promise<void>;
@@ -228,18 +245,25 @@ export class MockController {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectNodeACK(node: MockNode, timeout: number): Promise<MockZWaveAckFrame>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    expectNodeCC<T extends ICommandClass = ICommandClass>(node: MockNode, timeout: number, predicate: (cc: ICommandClass) => cc is T): Promise<T>;
+    expectNodeCC<T extends CCId = CCId>(node: MockNode, timeout: number, predicate: (cc: CCId) => cc is T): Promise<T>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectNodeFrame<T extends MockZWaveFrame = MockZWaveFrame>(node: MockNode, timeout: number, predicate: (msg: MockZWaveFrame) => msg is T): Promise<T>;
     // (undocumented)
-    readonly host: ZWaveHost;
+    homeId: number;
     // (undocumented)
     get nodes(): ReadonlyMap<number, MockNode>;
     onNodeFrame(node: MockNode, frame: MockZWaveFrame): Promise<void>;
     // (undocumented)
+    ownNodeId: number;
+    // (undocumented)
+    parsingContext: MessageParsingContext;
+    // (undocumented)
     get receivedHostMessages(): readonly Readonly<Message>[];
     // (undocumented)
     removeNode(node: MockNode): void;
+    // (undocumented)
+    securityManagers: SecurityManagers;
+    sendMessageToHost(msg: Message, fromNode?: MockNode): Promise<void>;
     sendToHost(data: Buffer): Promise<void>;
     sendToNode(node: MockNode, frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     // (undocumented)
@@ -251,8 +275,8 @@ export class MockController {
 //
 // @public (undocumented)
 export interface MockControllerBehavior {
-    onHostMessage?: (host: ZWaveHost, controller: MockController, msg: Message) => Promise<boolean | undefined> | boolean | undefined;
-    onNodeFrame?: (host: ZWaveHost, controller: MockController, node: MockNode, frame: MockZWaveFrame) => Promise<boolean | undefined> | boolean | undefined;
+    onHostMessage?: (controller: MockController, msg: Message) => Promise<boolean | undefined> | boolean | undefined;
+    onNodeFrame?: (controller: MockController, node: MockNode, frame: MockZWaveFrame) => Promise<boolean | undefined> | boolean | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "MockControllerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -325,6 +349,8 @@ export class MockNode {
     // (undocumented)
     defineBehavior(...behaviors: MockNodeBehavior[]): void;
     // (undocumented)
+    encodingContext: CCEncodingContext;
+    // (undocumented)
     readonly endpoints: Map<number, MockEndpoint>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectControllerACK(timeout: number): Promise<MockZWaveAckFrame>;
@@ -333,13 +359,13 @@ export class MockNode {
     // (undocumented)
     getCCCapabilities<T extends CommandClasses>(ccId: T, endpointIndex?: number): Partial<CCIdToCapabilities<T>> | undefined;
     // (undocumented)
-    readonly host: ZWaveHost;
-    // (undocumented)
     readonly id: number;
     // (undocumented)
     readonly implementedCCs: Map<CommandClasses, CommandClassInfo>;
     onControllerFrame(frame: MockZWaveFrame): Promise<void>;
     removeCC(cc: CommandClasses): void;
+    // (undocumented)
+    securityManagers: SecurityManagers;
     sendToController(frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     readonly state: Map<string, unknown>;
 }
@@ -434,6 +460,16 @@ export interface MultilevelSensorCCCapabilities {
     sensors: Record<number, {
         supportedScales: number[];
     }>;
+}
+
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSwitchCCCapabilities {
+    // (undocumented)
+    defaultValue?: MaybeUnknown<number>;
+    // (undocumented)
+    primarySwitchType: SwitchType;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -536,21 +572,20 @@ export interface WindowCoveringCCCapabilities {
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:480:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1283:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1290:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1414:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1456:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
-//   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1467:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
-//   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1481:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1542:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:450:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1655:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1658:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1808:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 

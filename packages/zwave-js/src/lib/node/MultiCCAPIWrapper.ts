@@ -57,7 +57,7 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 
 	// This wrapper is by definition for multiple nodes, so we cannot return one
 	const getNode = () => undefined;
-	const getNodeUnsafe = () => undefined;
+	const tryGetNode = () => undefined;
 
 	return new Proxy({} as T, {
 		get(target, prop) {
@@ -81,8 +81,8 @@ export function createMultiCCAPIWrapper<T extends CCAPI>(apiInstances: T[]): T {
 					return isSupported;
 				case "getNode":
 					return getNode;
-				case "getNodeUnsafe":
-					return getNodeUnsafe;
+				case "tryGetNode":
+					return tryGetNode;
 				case "isSetValueOptimistic":
 					return isSetValueOptimistic;
 				case "supportsCommand":

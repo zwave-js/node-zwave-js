@@ -47,8 +47,8 @@ const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new SoundSwitchCCConfigurationReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new SoundSwitchCCConfigurationReport({
+				nodeId: controller.ownNodeId,
 				defaultToneId:
 					(self.state.get(StateKeys.defaultToneId) as number)
 						?? capabilities.defaultToneId,
@@ -87,8 +87,8 @@ const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new SoundSwitchCCTonesNumberReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new SoundSwitchCCTonesNumberReport({
+				nodeId: controller.ownNodeId,
 				toneCount: capabilities.tones.length,
 			});
 			return { action: "sendCC", cc };
@@ -108,8 +108,8 @@ const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
 			};
 			const tone = capabilities.tones[receivedCC.toneId - 1];
 			if (tone) {
-				const cc = new SoundSwitchCCToneInfoReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				const cc = new SoundSwitchCCToneInfoReport({
+					nodeId: controller.ownNodeId,
 					toneId: receivedCC.toneId,
 					...tone,
 				});
@@ -176,14 +176,11 @@ const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
 						self.state.delete(StateKeys.state);
 
 						// Tell the controller that we're done playing
-						const cc = new SoundSwitchCCTonePlayReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								toneId: 0,
-								volume: 0,
-							},
-						);
+						const cc = new SoundSwitchCCTonePlayReport({
+							nodeId: controller.ownNodeId,
+							toneId: 0,
+							volume: 0,
+						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
 								ackRequested: false,
@@ -207,14 +204,11 @@ const respondToSoundSwitchTonePlayGet: MockNodeBehavior = {
 				StateKeys.state,
 			) as SoundSwitchState | undefined;
 
-			const cc = new SoundSwitchCCTonePlayReport(
-				self.host,
-				{
-					nodeId: controller.host.ownNodeId,
-					toneId: currentState?.toneId ?? 0,
-					volume: currentState?.volume ?? 0,
-				},
-			);
+			const cc = new SoundSwitchCCTonePlayReport({
+				nodeId: controller.ownNodeId,
+				toneId: currentState?.toneId ?? 0,
+				volume: currentState?.volume ?? 0,
+			});
 
 			return { action: "sendCC", cc };
 		}
