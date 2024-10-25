@@ -53,7 +53,7 @@ export class MockController {
 		this.serial.on("write", async (data) => {
 			// Execute hooks for inspecting the raw data first
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostData?.(this.host, this, data)) {
+				if (await behavior.onHostData?.(this, data)) {
 					return;
 				}
 			}
@@ -562,7 +562,6 @@ export interface MockControllerBehavior {
 	 * Return `true` to indicate that the data has been handled and should not be processed further.
 	 */
 	onHostData?: (
-		host: ZWaveHost,
 		controller: MockController,
 		data: Buffer,
 	) => Promise<boolean | undefined> | boolean | undefined;

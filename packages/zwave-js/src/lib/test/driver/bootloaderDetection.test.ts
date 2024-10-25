@@ -14,7 +14,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const sendBootloaderMessageInChunks: MockControllerBehavior = {
-				async onHostData(host, self, ctrl) {
+				async onHostData(self, ctrl) {
 					// if (
 					// 	ctrl.length === 1
 					// 	&& (ctrl[0] === MessageHeaders.NAK || ctrl[0] === 0x32)
