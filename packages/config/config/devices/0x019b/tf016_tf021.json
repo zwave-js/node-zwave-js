@@ -223,11 +223,45 @@
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 210
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "10 seconds",
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Temperature Report Change Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
 		}
 	],
 	"compat": {
 		// The device reports its relay state via the Basic CC
-		"mapBasicReport": false
+		"mapBasicReport": false,
+		// Supervision reports are sent from the root device instead of endpoints
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
 	},
 	"metadata": {
 		"inclusion": "To include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start adding the device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",

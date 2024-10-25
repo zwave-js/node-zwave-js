@@ -158,7 +158,9 @@ export class ZWaveSerialPortBase extends PassThrough {
 			if (this.mode == undefined) {
 				// If we haven't figured out the startup mode yet,
 				// inspect the chunk to see if it contains the bootloader preamble
-				const str = (data as Buffer).toString("ascii").trim();
+				const str = (data as Buffer).toString("ascii")
+					// like .trim(), but including null bytes
+					.replaceAll(/^[\s\0]+|[\s\0]+$/g, "");
 				this.mode = str.startsWith(bootloaderMenuPreamble)
 					? ZWaveSerialMode.Bootloader
 					: ZWaveSerialMode.SerialAPI;

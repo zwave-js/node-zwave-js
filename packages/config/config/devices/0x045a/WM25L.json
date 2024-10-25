@@ -1,0 +1,245 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "WM25L",
+	"description": "Smartwings Smart Motor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x050b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Multilevel Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Multilevel Start/Stop",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Enable Manual Pull-Start",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close",
+					"value": 0
+				},
+				{
+					"label": "Open",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Set Motor Direction",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forward",
+					"value": 1
+				},
+				{
+					"label": "Reverse",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Manually Set Open Borders",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel",
+					"value": 0
+				},
+				{
+					"label": "Start",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Manually Set Close Borders",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel",
+					"value": 0
+				},
+				{
+					"label": "Start",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Set Motor Status",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open (Up)",
+					"value": 1
+				},
+				{
+					"label": "Close (Down)",
+					"value": 2
+				},
+				{
+					"label": "Stop",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Calibrate Travel Point",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Up travel point",
+					"value": 1
+				},
+				{
+					"label": "Down travel point",
+					"value": 2
+				},
+				{
+					"label": "Third travel point",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Delete Travel Point",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Delete all travel",
+					"value": 0
+				},
+				{
+					"label": "Delete up travel",
+					"value": 1
+				},
+				{
+					"label": "Delete down travel",
+					"value": 2
+				},
+				{
+					"label": "Delete third travel",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Low Battery Level Alarm Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 10
+		},
+		{
+			"#": "9",
+			"label": "Battery Auto Report Interval Time",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600
+		},
+		{
+			"#": "10",
+			"label": "Battery Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5
+		},
+		{
+			"#": "11",
+			"label": "Curtain Status Report Command Setting",
+			"valueSize": 1,
+			"defaultValue": 6,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Send Multilevel Switch Report",
+					"value": 2
+				},
+				{
+					"label": "Send Window Covering Report",
+					"value": 3
+				},
+				{
+					"label": "Send Basic Report and Multilevel Switch Report",
+					"value": 4
+				},
+				{
+					"label": "Send Basic Report and Window Covering Report",
+					"value": 5
+				},
+				{
+					"label": "Send Multilevel Switch Report and Window Covering Report",
+					"value": 6
+				},
+				{
+					"label": "Send Basic Report and Multilevel Switch Report and Window Covering Report",
+					"value": 7
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Follow the user guide of hub to enter inclusion mode.\nPress and hold the Config Button more than 6s, enter Include Mode",
+		"exclusion": "Follow the user guide of hub to enter exclusion mode.\nPress and hold the Config Button more than 6s, enter Exclusion Mode",
+		"reset": "Press and hold the Config Button more than 10s. The Curtain will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

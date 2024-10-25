@@ -50,7 +50,14 @@ export class MockController {
 		this.serial = options.serial;
 		// Pipe the serial data through a parser, so we get complete message buffers or headers out the other end
 		this.serialParser = new SerialAPIParser();
-		this.serial.on("write", (data) => {
+		this.serial.on("write", async (data) => {
+			// Execute hooks for inspecting the raw data first
+			for (const behavior of this.behaviors) {
+				if (await behavior.onHostData?.(this.host, this, data)) {
+					return;
+				}
+			}
+			// Then parse the data normally
 			this.serialParser.write(data);
 		});
 		this.serialParser.on("data", (data) => this.serialOnData(data));
@@ -550,6 +557,15 @@ export class MockController {
 }
 
 export interface MockControllerBehavior {
+	/**
+	 * Can be used to inspect raw data received from the host before it is processed by the serial parser and the mock controller.
+	 * Return `true` to indicate that the data has been handled and should not be processed further.
+	 */
+	onHostData?: (
+		host: ZWaveHost,
+		controller: MockController,
+		data: Buffer,
+	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
 	onHostMessage?: (
 		controller: MockController,

@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 13.10.1 (2024-10-25)
+### Bugfixes
+* Correct unit of Meter CC values (#7322)
+* Bootloader mode is now detected even when short chunks of data are received (#7318)
+* Corrected the wording of idle/busy queue logging (#7309)
+
+### Config file changes
+* Add Heatit Z-TEMP3 (#7179)
+* Add new parameters 17 and 18 for HeatIt TF016_TF021 FW 1.92 (#7287)
+* Disable Supervision for Heatit TF021 (#7321)
+* Add ZVIDAR WB04V Smartwings Day Night Shades (#7319)
+* Add ZVIDAR WM25L Smartwings Smart Motor (#7312)
+* Add ZVIDAR ZW881 Multi-Protocol Gateway (#7311)
+* Add include, exclude, and wakeup instructions for VCZ1 (#7307)
+* Add new Product ID to Namron 16A Switch (#7301)
+* Add Minoston MP24Z 800LR Outdoor Smart Plug - 2 Outlet (#7302)
+
 ## 13.10.0 (2024-10-24)
 ### Features
 * `mock-server` now supports putting the simulated controller into add and remove mode (#7314)
