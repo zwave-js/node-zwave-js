@@ -227,7 +227,15 @@
 	],
 	"compat": {
 		// The device reports its relay state via the Basic CC
-		"mapBasicReport": false
+		"mapBasicReport": false,
+		// Supervision reports are sent from the root device instead of endpoints
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
 	},
 	"metadata": {
 		"inclusion": "To include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start adding the device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
