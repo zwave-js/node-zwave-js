@@ -3,10 +3,12 @@
 	"manufacturerId": "0x045a",
 	"label": "WB04V",
 	"description": "Smartwings Day Night Shades",
-	"devices": [{
-		"productType": "0x0004",
-		"productId": "0x0509"
-	}],
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0509"
+		}
+	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
@@ -18,38 +20,39 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "On/Off Control:EP1",
+			"label": "On/Off Control: EP1",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Multilevel Set:EP1",
+			"label": "Multilevel Set: EP1",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Multilevel Start/Stop:EP1",
+			"label": "Multilevel Start/Stop: EP1",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "On/Off Control:EP2",
+			"label": "On/Off Control: EP2",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Multilevel Set:EP2",
+			"label": "Multilevel Set: EP2",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Multilevel Start/Stop:EP2",
+			"label": "Multilevel Start/Stop: EP2",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
-    {
+		{
 			"#": "1",
-			"label": "Motor 1:Set Direction",
+			"label": "Motor 1: Set Direction",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Forward",
 					"value": 1
 				},
@@ -61,11 +64,12 @@
 		},
 		{
 			"#": "2",
-			"label": "Motor 2:Set Direction",
+			"label": "Motor 2: Set Direction",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Forward",
 					"value": 1
 				},
@@ -77,11 +81,12 @@
 		},
 		{
 			"#": "3",
-			"label": "Motor 1:Set Status",
+			"label": "Motor 1: Set Status",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Open (Up)",
 					"value": 1
 				},
@@ -97,11 +102,12 @@
 		},
 		{
 			"#": "4",
-			"label": "Motor 2:Set Status",
+			"label": "Motor 2: Set Status",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Open (Up)",
 					"value": 1
 				},
@@ -117,11 +123,12 @@
 		},
 		{
 			"#": "5",
-			"label": "Motor 1:Set Travel Point",
+			"label": "Motor 1: Set Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Up travel point",
 					"value": 1
 				},
@@ -137,11 +144,12 @@
 		},
 		{
 			"#": "6",
-			"label": "Motor 2:Set Travel Point",
+			"label": "Motor 2: Set Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Up travel point",
 					"value": 1
 				},
@@ -157,11 +165,12 @@
 		},
 		{
 			"#": "7",
-			"label": "Motor 1:Run Travel Point",
+			"label": "Motor 1: Run Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Up travel point",
 					"value": 1
 				},
@@ -177,11 +186,12 @@
 		},
 		{
 			"#": "8",
-			"label": "Motor 2:Run Travel Point",
+			"label": "Motor 2: Run Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Up travel point",
 					"value": 1
 				},
@@ -197,11 +207,12 @@
 		},
 		{
 			"#": "9",
-			"label": "Motor 1:Delete Travel Point",
+			"label": "Motor 1: Delete Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Delete all travel",
 					"value": 0
 				},
@@ -221,11 +232,12 @@
 		},
 		{
 			"#": "10",
-			"label": "Motor 2:Delete Travel Point",
+			"label": "Motor 2: Delete Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Delete all travel",
 					"value": 0
 				},
@@ -245,7 +257,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Motor 1:Set Moving Way",
+			"label": "Motor 1: Set Moving Way",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 19,
@@ -253,7 +265,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Motor 2:Set Moving Way",
+			"label": "Motor 2: Set Moving Way",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 19,
@@ -292,7 +304,8 @@
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "Send nothing",
 					"value": 0
 				},
@@ -328,8 +341,8 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Follow the user guide of hub to enter inclusion mode.\nPress and hold the Config Button more than 6s, enter  Include Mode",
+		"inclusion": "Follow the user guide of hub to enter inclusion mode.\nPress and hold the Config Button more than 6s, enter Include Mode",
 		"exclusion": "Follow the user guide of hub to enter exclusion mode.\nPress and hold the Config Button more than 6s, enter Exclusion Mode",
-		"reset": "Press and hold the Config Button more than 10s. The Curtain will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Press and hold the Config Button more than 10s. The Curtain will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }
