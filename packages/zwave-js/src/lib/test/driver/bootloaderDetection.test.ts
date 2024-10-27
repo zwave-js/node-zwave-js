@@ -19,12 +19,13 @@ integrationTest(
 					// 	ctrl.length === 1
 					// 	&& (ctrl[0] === MessageHeaders.NAK || ctrl[0] === 0x32)
 					// ) {
+					// I've seen logs with as few as 5 bytes in the first chunk
 					self.serial.emitData(
-						Buffer.from("\0\r\nGecko Bootloa", "ascii"),
+						Buffer.from("\0\r\nGeck", "ascii"),
 					);
 					await wait(20);
 					self.serial.emitData(Buffer.from(
-						`der v2.05.01
+						`o Bootloader v2.05.01
 1. upload gbl
 2. run
 3. ebl info

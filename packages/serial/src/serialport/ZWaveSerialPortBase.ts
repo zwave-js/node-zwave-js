@@ -161,9 +161,25 @@ export class ZWaveSerialPortBase extends PassThrough {
 				const str = (data as Buffer).toString("ascii")
 					// like .trim(), but including null bytes
 					.replaceAll(/^[\s\0]+|[\s\0]+$/g, "");
-				this.mode = str.startsWith(bootloaderMenuPreamble)
-					? ZWaveSerialMode.Bootloader
-					: ZWaveSerialMode.SerialAPI;
+
+				if (str.startsWith(bootloaderMenuPreamble)) {
+					// We're sure we're in bootloader mode
+					this.mode = ZWaveSerialMode.Bootloader;
+				} else if (
+					(data as Buffer).every((b) =>
+						b === 0x00
+						|| b === 0x0a
+						|| b === 0x0d
+						|| (b >= 0x20 && b <= 0x7e)
+					) && (data as Buffer).some((b) => b >= 0x20 && b <= 0x7e)
+				) {
+					// Only printable line breaks, null bytes and at least one printable ASCII character
+					// --> We're pretty sure we're in bootloader mode
+					this.mode = ZWaveSerialMode.Bootloader;
+				} else {
+					// We're in Serial API mode
+					this.mode = ZWaveSerialMode.SerialAPI;
+				}
 			}
 
 			// On Windows, writing to the parsers immediately seems to lag the event loop
