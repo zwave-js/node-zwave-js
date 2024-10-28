@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.10.2 (2024-10-28)
 ### Bugfixes
 * Bootloader mode is now detected in more difficult cases (#7327)
 
