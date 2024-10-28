@@ -18,7 +18,7 @@ import {
 	ccCaps,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {

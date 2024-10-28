@@ -27,13 +27,13 @@ import {
 import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName, throttle } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { randomBytes } from "node:crypto";
+import { setTimeout as wait } from "node:timers/promises";
 import { type Task, type TaskBuilder, TaskPriority } from "../../driver/Task";
 import { type Transaction } from "../../driver/Transaction";
 import { SchedulePollMixin } from "./60_ScheduledPoll";
@@ -465,7 +465,10 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 						// If we've resumed the previous file, there's no need to resume the next one too
 						shouldResume = false;
 
-						yield () => wait(conservativeWaitTime * 1000, true);
+						yield () =>
+							wait(conservativeWaitTime * 1000, undefined, {
+								ref: false,
+							});
 					}
 				}
 

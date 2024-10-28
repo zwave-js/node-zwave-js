@@ -1,8 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import test from "ava";
+import { setTimeout as wait } from "node:timers/promises";
 import {
 	type TaskBuilder,
 	TaskInterruptBehavior,

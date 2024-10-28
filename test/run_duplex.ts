@@ -1,5 +1,5 @@
-import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
+import { setTimeout as _wait } from "node:timers/promises";
 import "reflect-metadata";
 import { Driver, RFRegion } from "zwave-js";
 

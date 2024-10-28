@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/serial/serialapi";
 import { SoftResetRequest } from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { setTimeout as wait } from "node:timers/promises";
 import Sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 

@@ -224,7 +224,6 @@ import {
 	pick,
 	stringify,
 } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
@@ -234,6 +233,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
 import path from "node:path";
+import { setTimeout as wait } from "node:timers/promises";
 import semver from "semver";
 import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
@@ -5914,7 +5914,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 				options.interval - (Date.now() - lastStart),
 			);
 			await Promise.race([
-				wait(waitDurationMs, true),
+				wait(waitDurationMs, undefined, { ref: false }),
 				this._abortLinkReliabilityCheckPromise,
 			]);
 		}
