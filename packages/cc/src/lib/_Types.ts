@@ -676,7 +676,7 @@ export interface DoorLockLoggingRecord {
 	eventType: DoorLockLoggingEventType;
 	label: string;
 	userId?: number;
-	userCode?: string | Buffer;
+	userCode?: string | Uint8Array;
 }
 
 export enum DoorLockLoggingRecordStatus {

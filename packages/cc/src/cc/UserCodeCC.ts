@@ -22,7 +22,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
-import { Bytes } from "@zwave-js/shared/safe";
+import { Bytes, isUint8Array, uint8ArrayToString } from "@zwave-js/shared/safe";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -191,7 +191,7 @@ function setUserCodeMetadata(
 	this: UserCodeCC,
 	ctx: GetValueDB & GetSupportedCCVersion,
 	userId: number,
-	userCode?: string | Bytes,
+	userCode?: string | Uint8Array,
 ) {
 	const statusValue = UserCodeCCValues.userIdStatus(userId);
 	const codeValue = UserCodeCCValues.userCode(userId);
@@ -223,7 +223,7 @@ function setUserCodeMetadata(
 	});
 
 	const codeMetadata: ValueMetadata = {
-		...(Bytes.isBuffer(userCode)
+		...(isUint8Array(userCode)
 			? ValueMetadata.Buffer
 			: ValueMetadata.String),
 		minLength: 4,
@@ -263,8 +263,8 @@ function persistUserCode(
 }
 
 /** Formats a user code in a way that's safe to print in public logs */
-export function userCodeToLogString(userCode: string | Bytes): string {
-	if (userCode === "") return "(empty)";
+export function userCodeToLogString(userCode: string | Uint8Array): string {
+	if (userCode.length === 0) return "(empty)";
 	return "*".repeat(userCode.length);
 }
 
@@ -378,7 +378,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						propertyKey,
 					);
 				}
-				if (typeof value !== "string" && !Bytes.isBuffer(value)) {
+				if (typeof value !== "string" && !isUint8Array(value)) {
 					throwWrongValueType(
 						this.ccId,
 						property,
@@ -530,7 +530,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserIDStatus,
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>,
-		userCode: string | Bytes,
+		userCode: string | Uint8Array,
 	): Promise<SupervisionResult | undefined> {
 		if (userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
@@ -647,9 +647,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			} else if (code.userIdStatus === UserIDStatus.Available) {
 				code.userCode = undefined;
 			} else if (supportedASCIIChars) {
+				const userCodeString = typeof code.userCode === "string"
+					? code.userCode
+					: uint8ArrayToString(code.userCode);
 				if (
 					!validateCode(
-						code.userCode.toString("ascii"),
+						userCodeString,
 						supportedASCIIChars,
 					)
 				) {
@@ -1201,10 +1204,10 @@ export class UserCodeCC extends CommandClass {
 		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
-	): MaybeNotKnown<string | Bytes> {
+	): MaybeNotKnown<string | Uint8Array> {
 		return ctx
 			.getValueDB(endpoint.nodeId)
-			.getValue<string | Bytes>(
+			.getValue<string | Uint8Array>(
 				UserCodeCCValues.userCode(userId).endpoint(endpoint.index),
 			);
 	}
@@ -1228,7 +1231,7 @@ export type UserCodeCCSetOptions =
 			UserIDStatus,
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>;
-		userCode: string | Bytes;
+		userCode: string | Uint8Array;
 	};
 
 @CCCommand(UserCodeCommand.Set)
@@ -1301,7 +1304,7 @@ export class UserCodeCCSet extends UserCodeCC {
 
 	public userId: number;
 	public userIdStatus: UserIDStatus;
-	public userCode: string | Bytes;
+	public userCode: string | Uint8Array;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.concat([
@@ -2045,7 +2048,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 					code.userIdStatus,
 					code.userCode?.length ?? 0,
 				]),
-				Bytes.isBuffer(code.userCode)
+				isUint8Array(code.userCode)
 					? code.userCode
 					: Bytes.from(code.userCode ?? "", "ascii"),
 			]);

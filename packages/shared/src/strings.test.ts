@@ -1,6 +1,13 @@
 import test from "ava";
 
-import { cpp2js, isPrintableASCIIWithWhitespace, num2hex } from "./strings";
+import { Bytes } from "./Bytes";
+import {
+	cpp2js,
+	isPrintableASCIIWithWhitespace,
+	num2hex,
+	stringToUint8ArrayUTF16BE,
+	uint8ArrayToStringUTF16BE,
+} from "./strings";
 
 test("cpp2js() -> should truncate null-terminated strings", (t) => {
 	const testCases = [
@@ -50,5 +57,19 @@ test("isPrintableASCIIWithWhitespace() -> should return true for ASCII strings t
 	] as const;
 	for (const [inp, result] of testCases) {
 		t.is(isPrintableASCIIWithWhitespace(inp), result);
+	}
+});
+
+test("stringToUint8ArrayUTF16BE / uint8ArrayToStringUTF16BE", (t) => {
+	const testCases = [
+		["a", [0x00, 0x61]],
+		["\u00e4", [0x00, 0xe4]],
+		["🐔", [0xd8, 0x3d, 0xdc, 0x14]],
+	] as const;
+	for (const [inp, out] of testCases) {
+		// One way
+		t.deepEqual(stringToUint8ArrayUTF16BE(inp), Bytes.from(out));
+		// And back
+		t.is(uint8ArrayToStringUTF16BE(Bytes.from(out)), inp);
 	}
 });

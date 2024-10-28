@@ -45,7 +45,7 @@ import type {
 	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
-import { Bytes } from "@zwave-js/shared/safe";
+import { Bytes, isUint8Array } from "@zwave-js/shared/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -1166,7 +1166,7 @@ export class NotificationCCReport extends NotificationCC {
 	public notificationEvent: number | undefined;
 
 	public eventParameters:
-		| Bytes
+		| Uint8Array
 		| Duration
 		| Record<string, number>
 		| number
@@ -1238,7 +1238,7 @@ export class NotificationCCReport extends NotificationCC {
 				if (!found) {
 					message["state parameters"] = num2hex(this.eventParameters);
 				}
-			} else if (Bytes.isBuffer(this.eventParameters)) {
+			} else if (isUint8Array(this.eventParameters)) {
 				message["event parameters"] = buffer2hex(this.eventParameters);
 			} else if (this.eventParameters instanceof Duration) {
 				message["event parameters"] = this.eventParameters.toString();
@@ -1287,7 +1287,7 @@ export class NotificationCCReport extends NotificationCC {
 		// Parse the event parameters if possible
 		if (valueConfig.parameter?.type === "duration") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Bytes.isBuffer(this.eventParameters)) {
+			if (!isUint8Array(this.eventParameters)) {
 				return;
 			}
 			// The parameters contain a Duration
@@ -1296,7 +1296,7 @@ export class NotificationCCReport extends NotificationCC {
 			);
 		} else if (valueConfig.parameter?.type === "commandclass") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Bytes.isBuffer(this.eventParameters)) {
+			if (!isUint8Array(this.eventParameters)) {
 				return;
 			}
 			// The parameters **should** contain a CC, however there might be some exceptions
@@ -1351,7 +1351,7 @@ export class NotificationCCReport extends NotificationCC {
 						isZWaveError(e)
 						&& e.code
 							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
-						&& Bytes.isBuffer(this.eventParameters)
+						&& isUint8Array(this.eventParameters)
 					) {
 						const { ccId, ccCommand } = CCRaw.parse(
 							this.eventParameters,
@@ -1381,12 +1381,14 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		} else if (valueConfig.parameter?.type === "value") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Bytes.isBuffer(this.eventParameters)) {
+			if (!isUint8Array(this.eventParameters)) {
 				return;
 			}
 			// The parameters contain a named value
 			this.eventParameters = {
-				[valueConfig.parameter.propertyName]: this.eventParameters
+				[valueConfig.parameter.propertyName]: Bytes.view(
+					this.eventParameters,
+				)
 					.readUIntBE(
 						0,
 						this.eventParameters.length,
@@ -1394,7 +1396,7 @@ export class NotificationCCReport extends NotificationCC {
 			};
 		} else if (valueConfig.parameter?.type === "enum") {
 			// The parameters may contain an enum value
-			this.eventParameters = Bytes.isBuffer(this.eventParameters)
+			this.eventParameters = isUint8Array(this.eventParameters)
 					&& this.eventParameters.length === 1
 				? this.eventParameters[0]
 				: undefined;
@@ -1422,7 +1424,7 @@ export class NotificationCCReport extends NotificationCC {
 				);
 			} else if (
 				this.eventParameters != undefined
-				&& !Bytes.isBuffer(this.eventParameters)
+				&& !isUint8Array(this.eventParameters)
 			) {
 				throw new ZWaveError(
 					`When sending Notification CC reports, the event parameters can only be buffers!`,

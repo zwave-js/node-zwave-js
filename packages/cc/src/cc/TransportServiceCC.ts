@@ -353,7 +353,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 					ZWaveErrorCodes.PacketFormat_InvalidPayload,
 				);
 			}
-			partial.partialDatagram.copy(datagram, offset);
+			datagram.set(partial.partialDatagram, offset);
 		}
 
 		// and deserialize the CC

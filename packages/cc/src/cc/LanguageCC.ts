@@ -225,9 +225,13 @@ export class LanguageCCSet extends LanguageCC {
 	}
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = new Bytes(!!this._country ? 5 : 3);
-		this.payload.write(this._language, 0, "ascii");
-		if (!!this._country) this.payload.write(this._country, 3, "ascii");
+		this.payload = Bytes.from(this._language, "ascii");
+		if (this._country) {
+			this.payload = Bytes.concat([
+				this.payload,
+				Bytes.from(this._country, "ascii"),
+			]);
+		}
 		return super.serialize(ctx);
 	}
 
@@ -261,10 +265,10 @@ export class LanguageCCReport extends LanguageCC {
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCReport {
 		validatePayload(raw.payload.length >= 3);
-		const language = raw.payload.toString("ascii", 0, 3);
+		const language = raw.payload.subarray(0, 3).toString("ascii");
 		let country: MaybeNotKnown<string>;
 		if (raw.payload.length >= 5) {
-			country = raw.payload.toString("ascii", 3, 5);
+			country = raw.payload.subarray(3, 5).toString("ascii");
 		}
 
 		return new LanguageCCReport({

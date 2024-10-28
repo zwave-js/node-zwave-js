@@ -263,11 +263,11 @@ export function encodeBitMask(
 	values: readonly number[],
 	maxValue: number = Math.max(...values),
 	startValue: number = 1,
-): Uint8Array {
+): Bytes {
 	if (!Number.isFinite(maxValue)) return Bytes.from([0]);
 
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
-	const ret = new Uint8Array(numBytes).fill(0);
+	const ret = new Bytes(numBytes).fill(0);
 	for (let val = startValue; val <= maxValue; val++) {
 		if (!values.includes(val)) continue;
 		const byteNum = (val - startValue) >>> 3; // id / 8
@@ -288,14 +288,14 @@ export function parseLongRangeNodeBitMask(
 	return parseBitMask(mask, startValue);
 }
 
-export function encodeNodeBitMask(nodeIDs: readonly number[]): Uint8Array {
+export function encodeNodeBitMask(nodeIDs: readonly number[]): Bytes {
 	return encodeBitMask(nodeIDs, MAX_NODES_LR);
 }
 
 export function encodeLongRangeNodeBitMask(
 	nodeIDs: readonly number[],
 	startValue: number,
-): Uint8Array {
+): Bytes {
 	return encodeBitMask(
 		nodeIDs,
 		startValue + NUM_LR_NODES_PER_SEGMENT - 1,

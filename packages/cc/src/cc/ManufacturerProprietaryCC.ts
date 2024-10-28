@@ -150,7 +150,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		ctx: CCParsingContext,
 	): ManufacturerProprietaryCC {
 		validatePayload(raw.payload.length >= 1);
-		const manufacturerId = raw.payload.readUint16BE(0);
+		const manufacturerId = raw.payload.readUInt16BE(0);
 		// Try to parse the proprietary command
 		const PCConstructor = getManufacturerProprietaryCCConstructor(
 			manufacturerId,

@@ -5,7 +5,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import { type CCParsingContext } from "@zwave-js/host";
-import { Bytes } from "@zwave-js/shared/safe";
 import { CCAPI } from "../lib/API";
 import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {

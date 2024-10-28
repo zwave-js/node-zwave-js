@@ -496,12 +496,10 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				: 0;
 		this.payload = new Bytes(1 + manufacturerDataLength);
 		this.payload[0] = (manufacturerDataLength << 5) + (this.mode & 0b11111);
-		if (manufacturerDataLength) {
-			this.manufacturerData!.copy(
-				this.payload,
+		if (manufacturerDataLength && this.manufacturerData) {
+			this.payload.set(
+				this.manufacturerData.subarray(0, manufacturerDataLength),
 				1,
-				0,
-				manufacturerDataLength,
 			);
 		}
 		return super.serialize(ctx);

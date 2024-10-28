@@ -78,7 +78,7 @@ test("encodeSwitchpoint() should throw when the switchpoint state is undefined",
 });
 
 test("decodeSwitchpoint() should work correctly", (t) => {
-	t.deepEqual(decodeSwitchpoint(Buffer.from([15, 37, 0])), {
+	t.deepEqual(decodeSwitchpoint(Uint8Array.from([15, 37, 0])), {
 		hour: 15,
 		minute: 37,
 		state: 0,
