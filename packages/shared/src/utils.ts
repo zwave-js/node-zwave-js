@@ -1,4 +1,5 @@
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { Bytes } from "./Bytes";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
@@ -77,8 +78,8 @@ export function isEnumMember(enumeration: unknown, value: number): boolean {
 }
 
 /** Skips the first n bytes of a buffer and returns the rest */
-export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.subarray(n));
+export function skipBytes(buf: Bytes, n: number): Bytes {
+	return Bytes.from(buf.subarray(n));
 }
 
 /**

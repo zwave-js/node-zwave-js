@@ -6,12 +6,12 @@ import { MessageHeaders } from "../message/MessageHeaders";
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message
  */
-function containsCompleteMessage(data?: Buffer): boolean {
+function containsCompleteMessage(data?: Uint8Array): boolean {
 	return !!data && data.length >= 5 && data.length >= getMessageLength(data);
 }
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
-function getMessageLength(data: Buffer): number {
+function getMessageLength(data: Uint8Array): number {
 	const remainingLength = data[1];
 	return remainingLength + 2;
 }
