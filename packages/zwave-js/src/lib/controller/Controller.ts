@@ -370,7 +370,6 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
@@ -378,6 +377,7 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "node:crypto";
+import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -3221,7 +3221,7 @@ export class ZWaveController
 
 			for (const task of tasks) {
 				const result = await Promise.race([
-					wait(S0_TIMEOUT, true).then(() => false as const),
+					wait(S0_TIMEOUT, false as const, { ref: false }),
 					task().catch(() => false as const),
 				]);
 				if (result === false) {
@@ -3500,7 +3500,7 @@ export class ZWaveController
 
 			// TODO: Validate client-side auth if requested
 			const grantResult = await Promise.race([
-				wait(inclusionTimeouts.TAI1, true).then(() => false as const),
+				wait(inclusionTimeouts.TAI1, false as const, { ref: false }),
 				userCallbacks
 					.grantSecurityClasses({
 						securityClasses: supportedKeys,
@@ -3597,7 +3597,7 @@ export class ZWaveController
 					pinResult = inclusionOptions.dsk.slice(0, 5);
 				} else {
 					pinResult = await Promise.race([
-						wait(tai2RemainingMs, true).then(() => false as const),
+						wait(tai2RemainingMs, false as const, { ref: false }),
 						userCallbacks
 							.validateDSKAndEnterPIN(dsk)
 							// ignore errors in application callbacks

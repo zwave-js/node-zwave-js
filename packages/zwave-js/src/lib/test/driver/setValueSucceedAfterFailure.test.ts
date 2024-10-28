@@ -6,7 +6,7 @@ import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 // Repro for https://github.com/home-assistant/core/issues/98491

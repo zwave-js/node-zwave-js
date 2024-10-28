@@ -5,8 +5,8 @@ import {
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
+import { setTimeout as wait } from "node:timers/promises";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
