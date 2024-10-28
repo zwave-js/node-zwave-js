@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared";
 import test from "ava";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
@@ -113,22 +114,22 @@ test("encodeFloatWithScale() -> should correctly encode the scale", (t) => {
 		{
 			scale: 0b00,
 			value: 0,
-			expected: Uint8Array.from([0b00000001, 0]),
+			expected: Bytes.from([0b00000001, 0]),
 		},
 		{
 			scale: 0b01,
 			value: 0,
-			expected: Uint8Array.from([0b00001001, 0]),
+			expected: Bytes.from([0b00001001, 0]),
 		},
 		{
 			scale: 0b10,
 			value: 0,
-			expected: Uint8Array.from([0b00010001, 0]),
+			expected: Bytes.from([0b00010001, 0]),
 		},
 		{
 			scale: 0b11,
 			value: 0,
-			expected: Uint8Array.from([0b00011001, 0]),
+			expected: Bytes.from([0b00011001, 0]),
 		},
 	];
 	for (const { scale, value, expected } of tests) {
@@ -155,12 +156,12 @@ test("encodeFloatWithScale() -> should correctly detect the necessary precision 
 		{
 			value: 1.5,
 			scale: 0b00,
-			expected: Uint8Array.from([0b00100001, 15]),
+			expected: Bytes.from([0b00100001, 15]),
 		},
 		{
 			value: -2128.394905,
 			scale: 0b01,
-			expected: Uint8Array.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
+			expected: Bytes.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
 		},
 	];
 	for (const { scale, value, expected } of tests) {
@@ -174,20 +175,20 @@ test("encodeFloatWithScale() -> should use the specified override options", (t) 
 			scale: 0b00,
 			value: 0,
 			override: { size: 2 }, // Force 2 bytes for the value
-			expected: Uint8Array.from([0b000_00_010, 0, 0]),
+			expected: Bytes.from([0b000_00_010, 0, 0]),
 		},
 		{
 			scale: 0b01,
 			value: 100,
 			override: { precision: 2 }, // Force 2 decimal digits
 			// resulting in 2 bytes size
-			expected: Uint8Array.from([0b010_01_010, 0x27, 0x10]),
+			expected: Bytes.from([0b010_01_010, 0x27, 0x10]),
 		},
 		{
 			scale: 0b10,
 			value: 100,
 			override: { precision: 1, size: 3 },
-			expected: Uint8Array.from([0b001_10_011, 0, 0x03, 0xe8]),
+			expected: Bytes.from([0b001_10_011, 0, 0x03, 0xe8]),
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {
@@ -201,7 +202,7 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 			scale: 0b10,
 			value: 100,
 			override: { precision: 1, size: 1 }, // invalid, this requires a size of at least 2
-			expected: Uint8Array.from([0b001_10_010, 0x03, 0xe8]),
+			expected: Bytes.from([0b001_10_010, 0x03, 0xe8]),
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {

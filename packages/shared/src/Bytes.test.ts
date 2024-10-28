@@ -21,7 +21,7 @@ test("writeUIntBE works as expected", (t) => {
 });
 
 test("readUIntLE works as expected", (t) => {
-	const b = Bytes.fromString("deaddebeaddeefbeadde", "hex");
+	const b = Bytes.from("deaddebeaddeefbeadde", "hex");
 	const v1 = b.readUIntLE(0, 1);
 	const v2 = b.readUIntLE(1, 2);
 	const v3 = b.readUIntLE(3, 3);
@@ -33,7 +33,7 @@ test("readUIntLE works as expected", (t) => {
 });
 
 test("readUIntBE works as expected", (t) => {
-	const b = Bytes.fromString("dedeaddeadbedeadbeef", "hex");
+	const b = Bytes.from("dedeaddeadbedeadbeef", "hex");
 	const v1 = b.readUIntBE(0, 1);
 	const v2 = b.readUIntBE(1, 2);
 	const v3 = b.readUIntBE(3, 3);
@@ -63,7 +63,7 @@ test("writeIntBE works as expected", (t) => {
 });
 
 test("readIntLE works as expected", (t) => {
-	const b = Bytes.fromString("81828384858687888990", "hex");
+	const b = Bytes.from("81828384858687888990", "hex");
 	const v1 = b.readIntLE(0, 1);
 	const v2 = b.readIntLE(1, 2);
 	const v3 = b.readIntLE(3, 3);
@@ -75,7 +75,7 @@ test("readIntLE works as expected", (t) => {
 });
 
 test("readIntBE works as expected", (t) => {
-	const b = Bytes.fromString("81828384858687888990", "hex");
+	const b = Bytes.from("81828384858687888990", "hex");
 	const v1 = b.readIntBE(0, 1);
 	const v2 = b.readIntBE(1, 2);
 	const v3 = b.readIntBE(3, 3);
@@ -101,4 +101,14 @@ test("Buffer.concat works as expected", (t) => {
 	// Shorter total length
 	const b6 = Bytes.concat([b1, b2, b3], 8);
 	t.is(uint8ArrayToHex(b6), "0102030405060708");
+});
+
+test("subarray works multiple times in a row", (t) => {
+	const b = Bytes.from([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	const b1 = b.subarray(1, 4); // 2, 3, 4
+	const b2 = b1.subarray(1, 2); // 3
+	t.is(uint8ArrayToHex(b1), "020304");
+	t.is(uint8ArrayToHex(b2), "03");
+
+	t.is(b2.readInt8(0), 3);
 });

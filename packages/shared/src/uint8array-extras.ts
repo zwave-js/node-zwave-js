@@ -59,9 +59,22 @@ function isArrayBuffer(value: unknown): value is ArrayBuffer {
 	return isType(value, ArrayBuffer, arrayBufferStringified);
 }
 
+function isArrayLike(value: unknown): value is ArrayLike<number> {
+	return typeof value === "object"
+		&& value !== null
+		&& "length" in value
+		&& typeof value.length === "number";
+}
+
 export function isUint8ArrayOrArrayBuffer(
 	value: unknown,
 ): value is Uint8Array | ArrayBuffer {
+	return isUint8Array(value) || isArrayBuffer(value);
+}
+
+export function isUint8ArrayOrArrayLike(
+	value: unknown,
+): value is Uint8Array | ArrayLike<number> {
 	return isUint8Array(value) || isArrayBuffer(value);
 }
 
@@ -91,6 +104,16 @@ export function assertUint8ArrayOrArrayBuffer(
 	if (!isUint8ArrayOrArrayBuffer(value)) {
 		throw new TypeError(
 			`Expected \`Uint8Array\` or \`ArrayBuffer\`, got \`${typeof value}\``,
+		);
+	}
+}
+
+export function assertUint8ArrayOrArrayLike(
+	value: unknown,
+): asserts value is Uint8Array | ArrayLike<number> {
+	if (!isUint8Array(value) && !isArrayLike(value)) {
+		throw new TypeError(
+			`Expected \`Uint8Array\` or a numeric array, got \`${typeof value}\``,
 		);
 	}
 }
@@ -153,9 +176,21 @@ export function concatUint8Arrays(
 
 	let offset = 0;
 	for (let array of arrays) {
-		assertUint8Array(array);
-		if (offset + array.length > totalLength) {
-			array = array.subarray(0, totalLength - offset);
+		if (isUint8Array(array)) {
+			if (offset + array.length > totalLength) {
+				array = array.subarray(0, totalLength - offset);
+			}
+		} else if (isArrayLike(array)) {
+			if (offset + array.length > totalLength) {
+				array = Uint8Array.from(array).subarray(
+					0,
+					totalLength - offset,
+				);
+			}
+		} else {
+			throw new TypeError(
+				`Expected \`Uint8Array\` or a numeric array, got \`${typeof array}\``,
+			);
 		}
 		returnValue.set(array, offset);
 		offset += array.length;

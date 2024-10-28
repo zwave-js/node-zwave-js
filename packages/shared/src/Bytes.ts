@@ -75,6 +75,7 @@ export class Bytes extends Uint8Array {
 				case "ascii":
 				case "utf-8":
 				case "utf8":
+				case undefined:
 					return Bytes.view(stringToUint8Array(data));
 				case "hex":
 					return Bytes.view(hexToUint8Array(data));
@@ -225,6 +226,10 @@ export class Bytes extends Uint8Array {
 		return Bytes.view(concatUint8Arrays(list, totalLength));
 	}
 
+	private getDataView(): DataView {
+		return new DataView(this.buffer, this.byteOffset, this.byteLength);
+	}
+
 	/**
 	 * Writes `value` to `buf` at the specified `offset` as big-endian.
 	 *
@@ -246,7 +251,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeBigInt64BE(value: bigint, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setBigInt64(offset, value, false);
 		return offset + 8;
 	}
@@ -272,7 +277,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeBigInt64LE(value: bigint, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setBigInt64(offset, value, true);
 		return offset + 8;
 	}
@@ -296,7 +301,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeBigUInt64BE(value: bigint, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setBigUint64(offset, value, false);
 		return offset + 8;
 	}
@@ -321,7 +326,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeBigUInt64LE(value: bigint, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setBigUint64(offset, value, true);
 		return offset + 8;
 	}
@@ -555,7 +560,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUInt8(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setUint8(offset, value);
 		return offset + 1;
 	}
@@ -580,7 +585,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUInt16LE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setUint16(offset, value, true);
 		return offset + 2;
 	}
@@ -605,7 +610,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUInt16BE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setUint16(offset, value, false);
 		return offset + 2;
 	}
@@ -629,7 +634,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUInt32LE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setUint32(offset, value, true);
 		return offset + 4;
 	}
@@ -653,7 +658,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUInt32BE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setUint32(offset, value, false);
 		return offset + 4;
 	}
@@ -681,7 +686,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeInt8(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setInt8(offset, value);
 		return offset + 1;
 	}
@@ -707,7 +712,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeInt16LE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setInt16(offset, value, true);
 		return offset + 2;
 	}
@@ -733,7 +738,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeInt16BE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setInt16(offset, value, false);
 		return offset + 2;
 	}
@@ -759,7 +764,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeInt32LE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setInt32(offset, value, true);
 		return offset + 4;
 	}
@@ -785,7 +790,7 @@ export class Bytes extends Uint8Array {
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeInt32BE(value: number, offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		view.setInt32(offset, value, false);
 		return offset + 4;
 	}
@@ -805,7 +810,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy: `0 <= offset <= buf.length - 8`.
 	 */
 	readBigUInt64BE(offset: number = 0): bigint {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getBigUint64(offset, false);
 	}
 	/**
@@ -823,7 +828,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy: `0 <= offset <= buf.length - 8`.
 	 */
 	readBigUInt64LE(offset: number = 0): bigint {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getBigUint64(offset, true);
 	}
 	/**
@@ -835,7 +840,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy: `0 <= offset <= buf.length - 8`.
 	 */
 	readBigInt64BE(offset: number = 0): bigint {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getBigInt64(offset, false);
 	}
 	/**
@@ -847,7 +852,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy: `0 <= offset <= buf.length - 8`.
 	 */
 	readBigInt64LE(offset: number = 0): bigint {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getBigInt64(offset, true);
 	}
 	/**
@@ -1054,7 +1059,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 1`.
 	 */
 	readUInt8(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getUint8(offset);
 	}
 	/**
@@ -1076,7 +1081,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 2`.
 	 */
 	readUInt16LE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getUint16(offset, true);
 	}
 	/**
@@ -1096,7 +1101,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 2`.
 	 */
 	readUInt16BE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getUint16(offset, false);
 	}
 	/**
@@ -1116,7 +1121,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 4`.
 	 */
 	readUInt32LE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getUint32(offset, true);
 	}
 	/**
@@ -1134,7 +1139,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 4`.
 	 */
 	readUInt32BE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getUint32(offset, false);
 	}
 	/**
@@ -1158,7 +1163,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 1`.
 	 */
 	readInt8(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getInt8(offset);
 	}
 	/**
@@ -1180,7 +1185,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 2`.
 	 */
 	readInt16LE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getInt16(offset, true);
 	}
 	/**
@@ -1200,7 +1205,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 2`.
 	 */
 	readInt16BE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getInt16(offset, false);
 	}
 	/**
@@ -1222,7 +1227,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 4`.
 	 */
 	readInt32LE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getInt32(offset, true);
 	}
 	/**
@@ -1242,7 +1247,7 @@ export class Bytes extends Uint8Array {
 	 * @param [offset=0] Number of bytes to skip before starting to read. Must satisfy `0 <= offset <= buf.length - 4`.
 	 */
 	readInt32BE(offset: number = 0): number {
-		const view = new DataView(this.buffer);
+		const view = this.getDataView();
 		return view.getInt32(offset, false);
 	}
 }

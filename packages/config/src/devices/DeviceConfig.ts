@@ -1,5 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	Bytes,
 	type JSONObject,
 	enumFilesRecursive,
 	formatId,
@@ -763,7 +764,7 @@ export class DeviceConfig {
 	/**
 	 * Returns a hash code that can be used to check whether a device config has changed enough to require a re-interview.
 	 */
-	public getHash(): Buffer {
+	public getHash(): Uint8Array {
 		// We only need to compare the information that is persisted elsewhere:
 		// - config parameters
 		// - functional association settings
@@ -902,7 +903,7 @@ export class DeviceConfig {
 		hashable = sortObject(hashable);
 
 		// And create a hash from it. This does not need to be cryptographically secure, just good enough to detect changes.
-		const buffer = Buffer.from(JSON.stringify(hashable), "utf8");
+		const buffer = Bytes.from(JSON.stringify(hashable), "utf8");
 		const md5 = createHash("md5");
 		return md5.update(buffer).digest();
 	}
