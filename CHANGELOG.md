@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Bootloader mode is now detected in more difficult cases (#7327)
+
 ## 13.10.1 (2024-10-25)
 ### Bugfixes
 * Correct unit of Meter CC values (#7322)
