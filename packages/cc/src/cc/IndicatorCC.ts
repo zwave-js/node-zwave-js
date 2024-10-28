@@ -21,6 +21,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
@@ -951,10 +952,10 @@ export class IndicatorCCSet extends IndicatorCC {
 	public indicator0Value: number | undefined;
 	public values: IndicatorObject[] | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (this.values != undefined) {
 			// V2+
-			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
+			this.payload = Bytes.alloc(2 + 3 * this.values.length, 0);
 			// Byte 0 is the legacy value
 			const objCount = this.values.length & MAX_INDICATOR_OBJECTS;
 			this.payload[1] = objCount;
@@ -971,7 +972,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			}
 		} else {
 			// V1
-			this.payload = Buffer.from([this.indicator0Value ?? 0]);
+			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
 		return super.serialize(ctx);
 	}
@@ -1172,10 +1173,10 @@ export class IndicatorCCReport extends IndicatorCC {
 		this.setValue(ctx, valueV2, value.value);
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (this.values != undefined) {
 			// V2+
-			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
+			this.payload = Bytes.alloc(2 + 3 * this.values.length, 0);
 			// Byte 0 is the legacy value
 			const objCount = this.values.length & MAX_INDICATOR_OBJECTS;
 			this.payload[1] = objCount;
@@ -1192,7 +1193,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			}
 		} else {
 			// V1
-			this.payload = Buffer.from([this.indicator0Value ?? 0]);
+			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
 		return super.serialize(ctx);
 	}
@@ -1251,9 +1252,9 @@ export class IndicatorCCGet extends IndicatorCC {
 
 	public indicatorId: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (this.indicatorId != undefined) {
-			this.payload = Buffer.from([this.indicatorId]);
+			this.payload = Bytes.from([this.indicatorId]);
 		}
 		return super.serialize(ctx);
 	}
@@ -1334,12 +1335,12 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const bitmask = this.supportedProperties.length > 0
 			? encodeBitMask(this.supportedProperties, undefined, 0)
-			: Buffer.from([]);
-		this.payload = Buffer.concat([
-			Buffer.from([
+			: Bytes.from([]);
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this.indicatorId,
 				this.nextIndicatorId,
 				bitmask.length,
@@ -1410,8 +1411,8 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.indicatorId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.indicatorId]);
 		return super.serialize(ctx);
 	}
 
@@ -1478,10 +1479,10 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		const description = Buffer.from(this.description, "utf8");
-		this.payload = Buffer.concat([
-			Buffer.from([this.indicatorId, description.length]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		const description = Bytes.from(this.description, "utf8");
+		this.payload = Bytes.concat([
+			Bytes.from([this.indicatorId, description.length]),
 			description,
 		]);
 		return super.serialize(ctx);
@@ -1544,8 +1545,8 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.indicatorId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.indicatorId]);
 		return super.serialize(ctx);
 	}
 

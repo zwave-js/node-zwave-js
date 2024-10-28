@@ -45,6 +45,7 @@ import type {
 	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -953,8 +954,8 @@ export class NotificationCCSet extends NotificationCC {
 	public notificationType: number;
 	public notificationStatus: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.notificationType,
 			this.notificationStatus ? 0xff : 0x00,
 		]);
@@ -979,7 +980,7 @@ export type NotificationCCReportOptions = {
 	notificationType?: number;
 	notificationEvent?: number;
 	notificationStatus?: number;
-	eventParameters?: Buffer;
+	eventParameters?: Bytes;
 	sequenceNumber?: number;
 };
 
@@ -1033,12 +1034,10 @@ export class NotificationCCReport extends NotificationCC {
 
 		const containsSeqNum = !!(raw.payload[6] & 0b1000_0000);
 		const numEventParams = raw.payload[6] & 0b11111;
-		let eventParameters: Buffer | undefined;
+		let eventParameters: Bytes | undefined;
 		if (numEventParams > 0) {
 			validatePayload(raw.payload.length >= 7 + numEventParams);
-			eventParameters = Buffer.from(
-				raw.payload.subarray(7, 7 + numEventParams),
-			);
+			eventParameters = raw.payload.subarray(7, 7 + numEventParams);
 		}
 		let sequenceNumber: number | undefined;
 		if (containsSeqNum) {
@@ -1167,7 +1166,7 @@ export class NotificationCCReport extends NotificationCC {
 	public notificationEvent: number | undefined;
 
 	public eventParameters:
-		| Buffer
+		| Bytes
 		| Duration
 		| Record<string, number>
 		| number
@@ -1239,7 +1238,7 @@ export class NotificationCCReport extends NotificationCC {
 				if (!found) {
 					message["state parameters"] = num2hex(this.eventParameters);
 				}
-			} else if (Buffer.isBuffer(this.eventParameters)) {
+			} else if (Bytes.isBuffer(this.eventParameters)) {
 				message["event parameters"] = buffer2hex(this.eventParameters);
 			} else if (this.eventParameters instanceof Duration) {
 				message["event parameters"] = this.eventParameters.toString();
@@ -1288,7 +1287,7 @@ export class NotificationCCReport extends NotificationCC {
 		// Parse the event parameters if possible
 		if (valueConfig.parameter?.type === "duration") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Buffer.isBuffer(this.eventParameters)) {
+			if (!Bytes.isBuffer(this.eventParameters)) {
 				return;
 			}
 			// The parameters contain a Duration
@@ -1297,7 +1296,7 @@ export class NotificationCCReport extends NotificationCC {
 			);
 		} else if (valueConfig.parameter?.type === "commandclass") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Buffer.isBuffer(this.eventParameters)) {
+			if (!Bytes.isBuffer(this.eventParameters)) {
 				return;
 			}
 			// The parameters **should** contain a CC, however there might be some exceptions
@@ -1352,7 +1351,7 @@ export class NotificationCCReport extends NotificationCC {
 						isZWaveError(e)
 						&& e.code
 							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
-						&& Buffer.isBuffer(this.eventParameters)
+						&& Bytes.isBuffer(this.eventParameters)
 					) {
 						const { ccId, ccCommand } = CCRaw.parse(
 							this.eventParameters,
@@ -1382,7 +1381,7 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		} else if (valueConfig.parameter?.type === "value") {
 			// This only makes sense if the event parameters are a buffer
-			if (!Buffer.isBuffer(this.eventParameters)) {
+			if (!Bytes.isBuffer(this.eventParameters)) {
 				return;
 			}
 			// The parameters contain a named value
@@ -1395,7 +1394,7 @@ export class NotificationCCReport extends NotificationCC {
 			};
 		} else if (valueConfig.parameter?.type === "enum") {
 			// The parameters may contain an enum value
-			this.eventParameters = Buffer.isBuffer(this.eventParameters)
+			this.eventParameters = Bytes.isBuffer(this.eventParameters)
 					&& this.eventParameters.length === 1
 				? this.eventParameters[0]
 				: undefined;
@@ -1412,7 +1411,7 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (this.notificationType != undefined) {
 			if (
 				this.notificationEvent == undefined
@@ -1423,7 +1422,7 @@ export class NotificationCCReport extends NotificationCC {
 				);
 			} else if (
 				this.eventParameters != undefined
-				&& !Buffer.isBuffer(this.eventParameters)
+				&& !Bytes.isBuffer(this.eventParameters)
 			) {
 				throw new ZWaveError(
 					`When sending Notification CC reports, the event parameters can only be buffers!`,
@@ -1434,7 +1433,7 @@ export class NotificationCCReport extends NotificationCC {
 			const controlByte =
 				(this.sequenceNumber != undefined ? 0b1000_0000 : 0)
 				| ((this.eventParameters?.length ?? 0) & 0b11111);
-			this.payload = Buffer.from([
+			this.payload = Bytes.from([
 				0,
 				0,
 				0,
@@ -1444,19 +1443,19 @@ export class NotificationCCReport extends NotificationCC {
 				controlByte,
 			]);
 			if (this.eventParameters) {
-				this.payload = Buffer.concat([
+				this.payload = Bytes.concat([
 					this.payload,
 					this.eventParameters,
 				]);
 			}
 			if (this.sequenceNumber != undefined) {
-				this.payload = Buffer.concat([
+				this.payload = Bytes.concat([
 					this.payload,
-					Buffer.from([this.sequenceNumber]),
+					Bytes.from([this.sequenceNumber]),
 				]);
 			}
 		} else {
-			this.payload = Buffer.from([
+			this.payload = Bytes.from([
 				this.alarmType ?? 0x00,
 				this.alarmLevel ?? 0x00,
 			]);
@@ -1520,11 +1519,11 @@ export class NotificationCCGet extends NotificationCC {
 	public notificationType: number | undefined;
 	public notificationEvent: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const notificationEvent = this.notificationEvent === 0xff
 			? 0x00
 			: this.notificationEvent;
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.alarmType ?? 0x00,
 			this.notificationType ?? 0xff,
 			notificationEvent ?? 0x00,
@@ -1606,14 +1605,14 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	@ccValue(NotificationCCValues.supportedNotificationTypes)
 	public supportedNotificationTypes: number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const bitMask = encodeBitMask(
 			this.supportedNotificationTypes,
 			Math.max(...this.supportedNotificationTypes),
 			0,
 		);
-		this.payload = Buffer.concat([
-			Buffer.from([
+		this.payload = Bytes.concat([
+			Bytes.from([
 				(this.supportsV1Alarm ? 0b1000_0000 : 0) | bitMask.length,
 			]),
 			bitMask,
@@ -1747,8 +1746,8 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	public notificationType: number;
 	public supportedEvents: number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.notificationType, 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.notificationType, 0]);
 		if (this.supportedEvents.length > 0) {
 			const bitMask = encodeBitMask(
 				this.supportedEvents,
@@ -1756,7 +1755,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 				0,
 			);
 			this.payload[1] = bitMask.length;
-			this.payload = Buffer.concat([this.payload, bitMask]);
+			this.payload = Bytes.concat([this.payload, bitMask]);
 		}
 
 		return super.serialize(ctx);
@@ -1813,8 +1812,8 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 
 	public notificationType: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.notificationType]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.notificationType]);
 		return super.serialize(ctx);
 	}
 

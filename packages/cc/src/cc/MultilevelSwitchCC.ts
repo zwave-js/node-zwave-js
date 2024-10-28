@@ -19,6 +19,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -657,8 +658,8 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public targetValue: number;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.targetValue,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
@@ -744,8 +745,8 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	@ccValue(MultilevelSwitchCCValues.currentValue)
 	public currentValue: MaybeUnknown<number> | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.currentValue ?? 0xfe,
 			this.targetValue ?? 0xfe,
 			(this.duration ?? Duration.default()).serializeReport(),
@@ -834,10 +835,10 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public ignoreStartLevel: boolean;
 	public direction: keyof typeof LevelChangeDirection;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			controlByte,
 			this.startLevel,
 			(this.duration ?? Duration.default()).serializeSet(),
@@ -915,8 +916,8 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.switchType & 0b11111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.switchType & 0b11111]);
 		return super.serialize(ctx);
 	}
 

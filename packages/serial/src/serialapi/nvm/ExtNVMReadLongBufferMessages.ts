@@ -64,7 +64,7 @@ export class ExtNVMReadLongBufferRequest extends Message {
 	public length: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(5);
+		this.payload = new Buffer(5);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.length, 3);
 		return super.serialize(ctx);

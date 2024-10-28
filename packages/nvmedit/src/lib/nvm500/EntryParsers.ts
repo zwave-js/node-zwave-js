@@ -37,7 +37,7 @@ export function parseNVMDescriptor(
 }
 
 export function encodeNVMDescriptor(descriptor: NVMDescriptor): Buffer {
-	const ret = Buffer.allocUnsafe(12);
+	const ret = new Buffer(12);
 	ret.writeUInt16BE(descriptor.manufacturerID, 0);
 	ret.writeUInt16BE(descriptor.firmwareID, 2);
 	ret.writeUInt16BE(descriptor.productType, 4);
@@ -75,7 +75,7 @@ export function parseNVMModuleDescriptor(
 export function encodeNVMModuleDescriptor(
 	descriptior: NVMModuleDescriptor,
 ): Buffer {
-	const ret = Buffer.allocUnsafe(5);
+	const ret = new Buffer(5);
 	ret.writeUInt16BE(descriptior.size, 0);
 	ret[2] = descriptior.type;
 	const versionParts = descriptior.version.split(".").map((i) => parseInt(i));

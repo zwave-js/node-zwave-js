@@ -1,3 +1,4 @@
+import { Buffer } from "@zwave-js/shared";
 import ava, { type TestFn } from "ava";
 import { PassThrough } from "node:stream";
 import { setTimeout as wait } from "node:timers/promises";

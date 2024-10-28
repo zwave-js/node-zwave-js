@@ -47,7 +47,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 	public shadowNodeIds: number[];
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(1);
+		this.payload = new Buffer(1);
 		this.payload = encodeBitMask(
 			this.shadowNodeIds,
 			LONG_RANGE_SHADOW_NODE_IDS_START

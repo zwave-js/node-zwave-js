@@ -57,7 +57,7 @@ export class GetControllerIdResponse extends Message {
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.ownNodeId, ctx.nodeIdType);
-		const homeId = Buffer.allocUnsafe(4);
+		const homeId = new Buffer(4);
 		homeId.writeUInt32BE(this.homeId, 0);
 
 		this.payload = Buffer.concat([homeId, nodeId]);

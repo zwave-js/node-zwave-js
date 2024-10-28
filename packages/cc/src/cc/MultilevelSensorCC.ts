@@ -40,6 +40,7 @@ import type {
 	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { type AllOrNone, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -752,9 +753,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.type]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.type]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
 		return super.serialize(ctx);
@@ -826,12 +827,12 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public sensorType: number | undefined;
 	public scale: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (
 			this.sensorType != undefined
 			&& this.scale != undefined
 		) {
-			this.payload = Buffer.from([
+			this.payload = Bytes.from([
 				this.sensorType,
 				(this.scale & 0b11) << 3,
 			]);
@@ -896,7 +897,7 @@ export class MultilevelSensorCCSupportedSensorReport
 	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: readonly number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(this.supportedSensorTypes);
 		return super.serialize(ctx);
 	}
@@ -941,7 +942,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		validatePayload(raw.payload.length >= 2);
 		const sensorType = raw.payload[0];
 		const supportedScales = parseBitMask(
-			Buffer.from([raw.payload[1] & 0b1111]),
+			Bytes.from([raw.payload[1] & 0b1111]),
 			0,
 		);
 
@@ -961,9 +962,9 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	)
 	public readonly supportedScales: readonly number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.sensorType]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.sensorType]),
 			encodeBitMask(this.supportedScales, 4, 0),
 		]);
 		return super.serialize(ctx);
@@ -1018,8 +1019,8 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 
 	public sensorType: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.sensorType]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.sensorType]);
 		return super.serialize(ctx);
 	}
 

@@ -19,6 +19,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -399,7 +400,7 @@ export interface EntryControlCCNotificationOptions {
 	sequenceNumber: number;
 	dataType: EntryControlDataTypes;
 	eventType: EntryControlEventTypes;
-	eventData?: string | Buffer;
+	eventData?: string | Bytes;
 }
 
 @CCCommand(EntryControlCommand.Notification)
@@ -428,7 +429,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 		validatePayload(eventDataLength >= 0 && eventDataLength <= 32);
 		const offset = 4;
 		validatePayload(raw.payload.length >= offset + eventDataLength);
-		let eventData: string | Buffer | undefined;
+		let eventData: string | Bytes | undefined;
 		if (eventDataLength > 0) {
 			// We shouldn't need to check this, since the specs are pretty clear which format to expect.
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
@@ -438,7 +439,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 				ctx.sourceNodeId,
 			)?.compat?.disableStrictEntryControlDataValidation;
 
-			eventData = Buffer.from(
+			eventData = Bytes.from(
 				raw.payload.subarray(offset, offset + eventDataLength),
 			);
 			switch (dataType) {
@@ -491,7 +492,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly sequenceNumber: number;
 	public readonly dataType: EntryControlDataTypes;
 	public readonly eventType: EntryControlEventTypes;
-	public readonly eventData?: Buffer | string;
+	public readonly eventData?: Bytes | string;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -786,8 +787,8 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public readonly keyCacheSize: number;
 	public readonly keyCacheTimeout: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.keyCacheSize, this.keyCacheTimeout]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.keyCacheSize, this.keyCacheTimeout]);
 		return super.serialize(ctx);
 	}
 

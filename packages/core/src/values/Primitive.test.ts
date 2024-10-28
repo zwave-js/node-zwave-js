@@ -78,10 +78,10 @@ test("parseMaybeNumber() -> should return undefined otherwise", (t) => {
 
 test("parseFloatWithScale() -> should correctly extract the scale", (t) => {
 	const tests = [
-		{ payload: Buffer.from([0b00000001, 0]), expected: 0b00 },
-		{ payload: Buffer.from([0b00001001, 0]), expected: 0b01 },
-		{ payload: Buffer.from([0b00010001, 0]), expected: 0b10 },
-		{ payload: Buffer.from([0b00011001, 0]), expected: 0b11 },
+		{ payload: Uint8Array.from([0b00000001, 0]), expected: 0b00 },
+		{ payload: Uint8Array.from([0b00001001, 0]), expected: 0b01 },
+		{ payload: Uint8Array.from([0b00010001, 0]), expected: 0b10 },
+		{ payload: Uint8Array.from([0b00011001, 0]), expected: 0b11 },
 	];
 	for (const { payload, expected } of tests) {
 		t.is(parseFloatWithScale(payload).scale, expected);
@@ -91,12 +91,12 @@ test("parseFloatWithScale() -> should correctly extract the scale", (t) => {
 test("parseFloatWithScale() -> should correctly extract the value", (t) => {
 	const tests = [
 		{
-			payload: Buffer.from([0b00100001, 15]),
+			payload: Uint8Array.from([0b00100001, 15]),
 			expected: 1.5,
 			numDigits: 1,
 		},
 		{
-			payload: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
+			payload: Uint8Array.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
 			expected: -2128.394905,
 			numDigits: 6,
 		},
@@ -113,22 +113,22 @@ test("encodeFloatWithScale() -> should correctly encode the scale", (t) => {
 		{
 			scale: 0b00,
 			value: 0,
-			expected: Buffer.from([0b00000001, 0]),
+			expected: Uint8Array.from([0b00000001, 0]),
 		},
 		{
 			scale: 0b01,
 			value: 0,
-			expected: Buffer.from([0b00001001, 0]),
+			expected: Uint8Array.from([0b00001001, 0]),
 		},
 		{
 			scale: 0b10,
 			value: 0,
-			expected: Buffer.from([0b00010001, 0]),
+			expected: Uint8Array.from([0b00010001, 0]),
 		},
 		{
 			scale: 0b11,
 			value: 0,
-			expected: Buffer.from([0b00011001, 0]),
+			expected: Uint8Array.from([0b00011001, 0]),
 		},
 	];
 	for (const { scale, value, expected } of tests) {
@@ -155,12 +155,12 @@ test("encodeFloatWithScale() -> should correctly detect the necessary precision 
 		{
 			value: 1.5,
 			scale: 0b00,
-			expected: Buffer.from([0b00100001, 15]),
+			expected: Uint8Array.from([0b00100001, 15]),
 		},
 		{
 			value: -2128.394905,
 			scale: 0b01,
-			expected: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
+			expected: Uint8Array.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
 		},
 	];
 	for (const { scale, value, expected } of tests) {
@@ -174,20 +174,20 @@ test("encodeFloatWithScale() -> should use the specified override options", (t) 
 			scale: 0b00,
 			value: 0,
 			override: { size: 2 }, // Force 2 bytes for the value
-			expected: Buffer.from([0b000_00_010, 0, 0]),
+			expected: Uint8Array.from([0b000_00_010, 0, 0]),
 		},
 		{
 			scale: 0b01,
 			value: 100,
 			override: { precision: 2 }, // Force 2 decimal digits
 			// resulting in 2 bytes size
-			expected: Buffer.from([0b010_01_010, 0x27, 0x10]),
+			expected: Uint8Array.from([0b010_01_010, 0x27, 0x10]),
 		},
 		{
 			scale: 0b10,
 			value: 100,
 			override: { precision: 1, size: 3 },
-			expected: Buffer.from([0b001_10_011, 0, 0x03, 0xe8]),
+			expected: Uint8Array.from([0b001_10_011, 0, 0x03, 0xe8]),
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {
@@ -201,7 +201,7 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 			scale: 0b10,
 			value: 100,
 			override: { precision: 1, size: 1 }, // invalid, this requires a size of at least 2
-			expected: Buffer.from([0b001_10_010, 0x03, 0xe8]),
+			expected: Uint8Array.from([0b001_10_010, 0x03, 0xe8]),
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {
@@ -219,8 +219,8 @@ test("encodeFloatWithScale() -> should throw when the value cannot be represente
 });
 test("parseBitMask() -> should correctly convert a bit mask into a numeric array", (t) => {
 	const tests = [
-		{ mask: Buffer.from([0b10111001]), expected: [1, 4, 5, 6, 8] },
-		{ mask: Buffer.from([0b11, 0b110]), expected: [1, 2, 10, 11] },
+		{ mask: Uint8Array.from([0b10111001]), expected: [1, 4, 5, 6, 8] },
+		{ mask: Uint8Array.from([0b11, 0b110]), expected: [1, 2, 10, 11] },
 	];
 	for (const { mask, expected } of tests) {
 		t.deepEqual(parseBitMask(mask), expected);
@@ -230,22 +230,22 @@ test("parseBitMask() -> should correctly convert a bit mask into a numeric array
 test("parseBitMask() -> should take the 2nd parameter into account when calculating the resulting values", (t) => {
 	const tests = [
 		{
-			mask: Buffer.from([0b10111001]),
+			mask: Uint8Array.from([0b10111001]),
 			startValue: 0,
 			expected: [0, 3, 4, 5, 7],
 		},
 		{
-			mask: Buffer.from([0b10111001]),
+			mask: Uint8Array.from([0b10111001]),
 			startValue: 1,
 			expected: [1, 4, 5, 6, 8],
 		},
 		{
-			mask: Buffer.from([0b10111001]),
+			mask: Uint8Array.from([0b10111001]),
 			startValue: 2,
 			expected: [2, 5, 6, 7, 9],
 		},
 		{
-			mask: Buffer.from([0b11, 0b110]),
+			mask: Uint8Array.from([0b11, 0b110]),
 			startValue: 3,
 			expected: [3, 4, 12, 13],
 		},
@@ -260,12 +260,12 @@ test("encodeBitMask() -> should correctly convert a numeric array into a bit mas
 		{
 			values: [1, 4, 5, 6, 8],
 			max: 8,
-			expected: Buffer.from([0b10111001]),
+			expected: Uint8Array.from([0b10111001]),
 		},
 		{
 			values: [1, 2, 10, 11],
 			max: 16,
-			expected: Buffer.from([0b11, 0b110]),
+			expected: Uint8Array.from([0b11, 0b110]),
 		},
 	];
 	for (const { values, max, expected } of tests) {
@@ -289,13 +289,13 @@ test("encodeBitMask() -> should respect the startValue too", (t) => {
 			values: [2, 4, 8],
 			max: 11,
 			startValue: 2,
-			expected: Buffer.from([0b01000101, 0]),
+			expected: Uint8Array.from([0b01000101, 0]),
 		},
 		{
 			values: [0, 2, 10, 11],
 			max: 19,
 			startValue: 0,
-			expected: Buffer.from([0b101, 0b1100, 0]),
+			expected: Uint8Array.from([0b101, 0b1100, 0]),
 		},
 	];
 	for (const { values, max, startValue, expected } of tests) {

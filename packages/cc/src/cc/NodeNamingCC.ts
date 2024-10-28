@@ -15,6 +15,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -298,13 +299,13 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 
 	public name: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const encoding = isASCII(this.name) ? "ascii" : "utf16le";
-		this.payload = Buffer.allocUnsafe(
+		this.payload = new Bytes(
 			1 + this.name.length * (encoding === "ascii" ? 1 : 2),
 		);
 		this.payload[0] = encoding === "ascii" ? 0x0 : 0x2;
-		let nameAsBuffer = Buffer.from(this.name, encoding);
+		let nameAsBuffer = Bytes.from(this.name, encoding);
 		if (encoding === "utf16le") {
 			// Z-Wave expects UTF16 BE
 			nameAsBuffer = nameAsBuffer.swap16();
@@ -409,13 +410,13 @@ export class NodeNamingAndLocationCCLocationSet
 
 	public location: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const encoding = isASCII(this.location) ? "ascii" : "utf16le";
-		this.payload = Buffer.allocUnsafe(
+		this.payload = new Bytes(
 			1 + this.location.length * (encoding === "ascii" ? 1 : 2),
 		);
 		this.payload[0] = encoding === "ascii" ? 0x0 : 0x2;
-		let locationAsBuffer = Buffer.from(this.location, encoding);
+		let locationAsBuffer = Bytes.from(this.location, encoding);
 		if (encoding === "utf16le") {
 			// Z-Wave expects UTF16 BE
 			locationAsBuffer = locationAsBuffer.swap16();

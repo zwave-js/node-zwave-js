@@ -6,6 +6,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
@@ -64,28 +65,28 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	@validateArgs()
 	public async sendData(
 		manufacturerId: number,
-		data?: Buffer,
+		data?: Bytes,
 	): Promise<void> {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpointIndex: this.endpoint.index,
 			manufacturerId,
 		});
-		cc.payload = data ?? Buffer.allocUnsafe(0);
+		cc.payload = data ?? new Bytes();
 
 		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
+	public async sendAndReceiveData(manufacturerId: number, data?: Bytes) {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpointIndex: this.endpoint.index,
 			manufacturerId,
 			unspecifiedExpectsResponse: true,
 		});
-		cc.payload = data ?? Buffer.allocUnsafe(0);
+		cc.payload = data ?? new Bytes();
 
 		const response = await this.host.sendCommand<
 			ManufacturerProprietaryCC
@@ -186,14 +187,14 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return this.manufacturerId;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
 		(this.ccCommand as unknown as number) = (manufacturerId >>> 8) & 0xff;
 		// The 2nd byte is in the payload
-		this.payload = Buffer.concat([
-			Buffer.from([
+		this.payload = Bytes.concat([
+			Bytes.from([
 				// 2nd byte of manufacturerId
 				manufacturerId & 0xff,
 			]),

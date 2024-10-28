@@ -17,6 +17,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -520,10 +521,10 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.groupId, this.name.length]),
-			Buffer.from(this.name, "utf8"),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.groupId, this.name.length]),
+			Bytes.from(this.name, "utf8"),
 		]);
 		return super.serialize(ctx);
 	}
@@ -569,8 +570,8 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupId]);
 		return super.serialize(ctx);
 	}
 
@@ -663,8 +664,8 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.alloc(1 + this.groups.length * 7, 0);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.alloc(1 + this.groups.length * 7, 0);
 
 		this.payload[0] = (this.isListMode ? 0b1000_0000 : 0)
 			| (this.hasDynamicInfo ? 0b0100_0000 : 0)
@@ -673,7 +674,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		for (let i = 0; i < this.groups.length; i++) {
 			const offset = 1 + i * 7;
 			this.payload[offset] = this.groups[i].groupId;
-			this.payload.writeUint16BE(this.groups[i].profile, offset + 2);
+			this.payload.writeUInt16BE(this.groups[i].profile, offset + 2);
 			// The remaining bytes are zero
 		}
 
@@ -754,11 +755,11 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public listMode?: boolean;
 	public groupId?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const isListMode = this.listMode === true;
 		const optionByte = (this.refreshCache ? 0b1000_0000 : 0)
 			| (isListMode ? 0b0100_0000 : 0);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			optionByte,
 			isListMode ? 0 : this.groupId!,
 		]);
@@ -836,10 +837,10 @@ export class AssociationGroupInfoCCCommandListReport
 	)
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// To make it easier to encode possible extended CCs, we first
 		// allocate as much space as we may need, then trim it again
-		this.payload = Buffer.allocUnsafe(2 + this.commands.size * 3);
+		this.payload = new Bytes(2 + this.commands.size * 3);
 		this.payload[0] = this.groupId;
 		let offset = 2;
 		for (const [ccId, commands] of this.commands) {
@@ -912,8 +913,8 @@ export class AssociationGroupInfoCCCommandListGet
 	public allowCache: boolean;
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.allowCache ? 0b1000_0000 : 0,
 			this.groupId,
 		]);

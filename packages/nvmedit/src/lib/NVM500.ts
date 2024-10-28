@@ -369,12 +369,12 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 				return Buffer.from([data as number]);
 			case NVMEntryType.Word:
 			case NVMEntryType.NVMModuleSize: {
-				const ret = Buffer.allocUnsafe(2);
+				const ret = new Buffer(2);
 				ret.writeUInt16BE(data as number, 0);
 				return ret;
 			}
 			case NVMEntryType.DWord: {
-				const ret = Buffer.allocUnsafe(4);
+				const ret = new Buffer(4);
 				ret.writeUInt32BE(data as number, 0);
 				return ret;
 			}

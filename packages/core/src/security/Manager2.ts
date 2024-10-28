@@ -17,15 +17,15 @@ import {
 import { CtrDRBG } from "./ctr_drbg";
 
 interface NetworkKeys {
-	pnk: Buffer;
-	keyCCM: Buffer;
-	keyMPAN: Buffer;
-	personalizationString: Buffer;
+	pnk: Uint8Array;
+	keyCCM: Uint8Array;
+	keyMPAN: Uint8Array;
+	personalizationString: Uint8Array;
 }
 
 interface TempNetworkKeys {
-	keyCCM: Buffer;
-	personalizationString: Buffer;
+	keyCCM: Uint8Array;
+	personalizationString: Uint8Array;
 }
 
 export enum SPANState {
@@ -52,12 +52,12 @@ export type SPANTableEntry =
 	| {
 		// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
 		type: SPANState.RemoteEI;
-		receiverEI: Buffer;
+		receiverEI: Uint8Array;
 	}
 	| {
 		// We've sent the other node our receiver's entropy input, but we didn't receive its sender's EI yet
 		type: SPANState.LocalEI;
-		receiverEI: Buffer;
+		receiverEI: Uint8Array;
 	}
 	| {
 		// We've established an SPAN with the other node
@@ -66,7 +66,7 @@ export type SPANTableEntry =
 		rng: CtrDRBG;
 		/** The most recent generated SPAN */
 		currentSPAN?: {
-			nonce: Buffer;
+			nonce: Uint8Array;
 			expires: number;
 		};
 	};
@@ -77,7 +77,7 @@ export type MPANTableEntry =
 	}
 	| {
 		type: MPANState.MPAN;
-		currentMPAN: Buffer;
+		currentMPAN: Uint8Array;
 	};
 
 export interface MulticastGroup {
@@ -98,7 +98,7 @@ export class SecurityManager2 {
 			false,
 			crypto.randomBytes(32),
 			undefined,
-			Buffer.alloc(32, 0),
+			new Uint8Array(32).fill(0),
 		);
 	}
 
@@ -113,7 +113,7 @@ export class SecurityManager2 {
 	private ownSequenceNumbers = new Map<number, number>();
 	private peerSequenceNumbers = new Map<number, number[]>();
 	/** A map of the inner MPAN states for each multicast group we manage */
-	private mpanStates = new Map<number, Buffer>();
+	private mpanStates = new Map<number, Uint8Array>();
 	/** MPANs used to decrypt multicast messages from other nodes. Peer Node ID -> Multicast Group -> MPAN */
 	private peerMPANs = new Map<number, Map<number, MPANTableEntry>>();
 	/** A map of permanent network keys per security class */
@@ -126,7 +126,7 @@ export class SecurityManager2 {
 	private getNextMulticastGroupId = createWrappingCounter(255);
 
 	/** Sets the PNK for a given security class and derives the encryption keys from it */
-	public setKey(securityClass: SecurityClass, key: Buffer): void {
+	public setKey(securityClass: SecurityClass, key: Uint8Array): void {
 		if (key.length !== 16) {
 			throw new ZWaveError(
 				`The network key must consist of 16 bytes!`,
@@ -257,7 +257,7 @@ export class SecurityManager2 {
 	 * Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input
 	 * @param receiver The node this nonce is for. If none is given, the nonce is not stored.
 	 */
-	public generateNonce(receiver: number | undefined): Buffer {
+	public generateNonce(receiver: number | undefined): Uint8Array {
 		const receiverEI = this.rng.generate(16);
 		if (receiver != undefined) {
 			this.spanTable.set(receiver, {
@@ -293,8 +293,8 @@ export class SecurityManager2 {
 	public initializeSPAN(
 		peerNodeId: number,
 		securityClass: SecurityClass,
-		senderEI: Buffer,
-		receiverEI: Buffer,
+		senderEI: Uint8Array,
+		receiverEI: Uint8Array,
 	): void {
 		if (senderEI.length !== 16 || receiverEI.length !== 16) {
 			throw new ZWaveError(
@@ -323,8 +323,8 @@ export class SecurityManager2 {
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeTempSPAN(
 		peerNodeId: number,
-		senderEI: Buffer,
-		receiverEI: Buffer,
+		senderEI: Uint8Array,
+		receiverEI: Uint8Array,
 	): void {
 		if (senderEI.length !== 16 || receiverEI.length !== 16) {
 			throw new ZWaveError(
@@ -379,7 +379,7 @@ export class SecurityManager2 {
 		}
 	}
 
-	public storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void {
+	public storeRemoteEI(peerNodeId: number, remoteEI: Uint8Array): void {
 		if (remoteEI.length !== 16) {
 			throw new ZWaveError(
 				`The entropy input must consist of 16 bytes`,
@@ -396,7 +396,7 @@ export class SecurityManager2 {
 	 * Generates the next nonce for the given peer and returns it.
 	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
 	 */
-	public nextNonce(peerNodeId: number, store?: boolean): Buffer {
+	public nextNonce(peerNodeId: number, store?: boolean): Uint8Array {
 		const spanState = this.spanTable.get(peerNodeId);
 		if (spanState?.type !== SPANState.SPAN) {
 			throw new ZWaveError(
@@ -442,13 +442,13 @@ export class SecurityManager2 {
 		return seq;
 	}
 
-	public getInnerMPANState(groupId: number): Buffer | undefined {
+	public getInnerMPANState(groupId: number): Uint8Array | undefined {
 		return this.mpanStates.get(groupId);
 	}
 
 	public getMulticastKeyAndIV(groupId: number): {
-		key: Buffer;
-		iv: Buffer;
+		key: Uint8Array;
+		iv: Uint8Array;
 	} {
 		const group = this.getMulticastGroup(groupId);
 
@@ -488,7 +488,7 @@ export class SecurityManager2 {
 	/**
 	 * Generates the next nonce for the given peer and returns it.
 	 */
-	public nextPeerMPAN(peerNodeId: number, groupId: number): Buffer {
+	public nextPeerMPAN(peerNodeId: number, groupId: number): Uint8Array {
 		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
 		if (mpanState.type !== MPANState.MPAN) {
 			throw new ZWaveError(

@@ -77,7 +77,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	public supportedFunctionTypes: FunctionType[];
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(8 + NUM_FUNCTION_BYTES);
+		this.payload = new Buffer(8 + NUM_FUNCTION_BYTES);
 
 		const firmwareBytes = this.firmwareVersion
 			.split(".", 2)

@@ -17,6 +17,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -390,8 +391,8 @@ export class SceneActuatorConfigurationCCSet
 	public dimmingDuration: Duration;
 	public level?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 			this.level != undefined ? 0b1000_0000 : 0,
@@ -556,8 +557,8 @@ export class SceneActuatorConfigurationCCGet
 
 	public sceneId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.sceneId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.sceneId]);
 		return super.serialize(ctx);
 	}
 

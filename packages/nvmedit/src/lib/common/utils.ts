@@ -59,7 +59,7 @@ export async function nvmReadBuffer(
 	position: number,
 	length: number,
 ): Promise<Buffer> {
-	const ret = Buffer.allocUnsafe(length);
+	const ret = new Buffer(length);
 	const chunkSize = await io.determineChunkSize();
 	let offset = 0;
 	while (offset < length) {

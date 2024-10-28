@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	MAX_NODES_LR,
 	NUM_LR_NODES_PER_SEGMENT,
@@ -77,7 +78,7 @@ export function maybeUnknownToString<T>(
  * Parses a floating point value with a scale from a buffer.
  */
 export function parseFloatWithScale(
-	payload: Buffer,
+	payload: Uint8Array,
 	allowEmpty?: false,
 ): {
 	value: number;
@@ -90,7 +91,7 @@ export function parseFloatWithScale(
  * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
  */
 export function parseFloatWithScale(
-	payload: Buffer,
+	payload: Uint8Array,
 	allowEmpty: true,
 ): {
 	value?: number;
@@ -103,7 +104,7 @@ export function parseFloatWithScale(
  * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
  */
 export function parseFloatWithScale(
-	payload: Buffer,
+	payload: Uint8Array,
 	allowEmpty: boolean = false,
 ): {
 	value?: number;
@@ -111,15 +112,16 @@ export function parseFloatWithScale(
 	bytesRead: number;
 } {
 	validatePayload(payload.length >= 1);
-	const precision = (payload[0] & 0b111_00_000) >>> 5;
-	const scale = (payload[0] & 0b000_11_000) >>> 3;
-	const size = payload[0] & 0b111;
+	const buffer = Bytes.view(payload);
+	const precision = (buffer[0] & 0b111_00_000) >>> 5;
+	const scale = (buffer[0] & 0b000_11_000) >>> 3;
+	const size = buffer[0] & 0b111;
 	if (allowEmpty && size === 0) {
 		validatePayload(precision === 0, scale === 0);
 		return { bytesRead: 1 };
 	} else {
-		validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
-		const value = payload.readIntBE(1, size) / Math.pow(10, precision);
+		validatePayload(size >= 1, size <= 4, buffer.length >= 1 + size);
+		const value = buffer.readIntBE(1, size) / Math.pow(10, precision);
 		return { value, scale, bytesRead: 1 + size };
 	}
 }
@@ -219,7 +221,7 @@ export function encodeFloatWithScale(
 		size?: number;
 		precision?: number;
 	} = {},
-): Buffer {
+): Bytes {
 	const precision = override.precision ?? Math.min(getPrecision(value), 7);
 	value = Math.round(value * Math.pow(10, precision));
 	let size: number | undefined = getMinIntegerSize(value, true);
@@ -231,7 +233,7 @@ export function encodeFloatWithScale(
 	} else if (override.size != undefined && override.size > size) {
 		size = override.size;
 	}
-	const ret = Buffer.allocUnsafe(1 + size);
+	const ret = new Bytes(1 + size);
 	ret[0] = ((precision & 0b111) << 5)
 		| ((scale & 0b11) << 3)
 		| (size & 0b111);
@@ -241,7 +243,7 @@ export function encodeFloatWithScale(
 
 /** Parses a bit mask into a numeric array */
 export function parseBitMask(
-	mask: Buffer,
+	mask: Uint8Array | ArrayLike<number>,
 	startValue: number = 1,
 	numBits: number = mask.length * 8,
 ): number[] {
@@ -261,11 +263,11 @@ export function encodeBitMask(
 	values: readonly number[],
 	maxValue: number = Math.max(...values),
 	startValue: number = 1,
-): Buffer {
-	if (!Number.isFinite(maxValue)) return Buffer.from([0]);
+): Bytes {
+	if (!Number.isFinite(maxValue)) return Bytes.from([0]);
 
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
-	const ret = Buffer.alloc(numBytes, 0);
+	const ret = Bytes.alloc(numBytes, 0);
 	for (let val = startValue; val <= maxValue; val++) {
 		if (!values.includes(val)) continue;
 		const byteNum = (val - startValue) >>> 3; // id / 8
@@ -275,25 +277,25 @@ export function encodeBitMask(
 	return ret;
 }
 
-export function parseNodeBitMask(mask: Buffer): number[] {
+export function parseNodeBitMask(mask: Uint8Array): number[] {
 	return parseBitMask(mask.subarray(0, NUM_NODEMASK_BYTES));
 }
 
 export function parseLongRangeNodeBitMask(
-	mask: Buffer,
+	mask: Uint8Array | ArrayLike<number>,
 	startValue: number,
 ): number[] {
 	return parseBitMask(mask, startValue);
 }
 
-export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {
+export function encodeNodeBitMask(nodeIDs: readonly number[]): Bytes {
 	return encodeBitMask(nodeIDs, MAX_NODES_LR);
 }
 
 export function encodeLongRangeNodeBitMask(
 	nodeIDs: readonly number[],
 	startValue: number,
-): Buffer {
+): Bytes {
 	return encodeBitMask(
 		nodeIDs,
 		startValue + NUM_LR_NODES_PER_SEGMENT - 1,

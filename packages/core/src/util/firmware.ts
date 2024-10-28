@@ -1,4 +1,5 @@
-import { getErrorMessage } from "@zwave-js/shared";
+import { getErrorMessage, isUint8Array } from "@zwave-js/shared";
+import { Bytes } from "@zwave-js/shared/safe";
 import * as crypto from "node:crypto";
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -7,11 +8,11 @@ import { CRC16_CCITT } from "./crc";
 
 const firmwareIndicators = {
 	// All aeotec updater exes contain this text
-	aeotec: Buffer.from("Zensys.ZWave", "utf8"),
+	aeotec: Bytes.from("Zensys.ZWave", "utf8"),
 	// This seems to be the standard beginning of a gecko bootloader firmware
 	gecko: 0xeb17a603,
 	// Encrypted HEC firmware files
-	hec: Buffer.from("HSENC2", "ascii"),
+	hec: Bytes.from("HSENC2", "ascii"),
 };
 
 /**
@@ -22,27 +23,28 @@ const firmwareIndicators = {
  */
 export function guessFirmwareFileFormat(
 	filename: string,
-	rawData: Buffer,
+	rawData: Uint8Array,
 ): FirmwareFileFormat {
 	filename = filename.toLowerCase();
+	const rawBuffer = Bytes.view(rawData);
 
 	if (filename.endsWith(".bin")) {
 		return "bin";
 	} else if (
 		(filename.endsWith(".exe") || filename.endsWith(".ex_"))
-		&& rawData.includes(firmwareIndicators.aeotec)
+		&& rawBuffer.includes(firmwareIndicators.aeotec)
 	) {
 		return "aeotec";
 	} else if (/\.(hex|ota|otz)$/.test(filename)) {
 		return filename.slice(-3) as FirmwareFileFormat;
 	} else if (
 		filename.endsWith(".gbl")
-		&& rawData.readUInt32BE(0) === firmwareIndicators.gecko
+		&& rawBuffer.readUInt32BE(0) === firmwareIndicators.gecko
 	) {
 		return "gecko";
 	} else if (
 		filename.endsWith(".hec")
-		&& rawData
+		&& rawBuffer
 			.subarray(0, firmwareIndicators.hec.length)
 			.equals(firmwareIndicators.hec)
 	) {
@@ -66,7 +68,7 @@ export function guessFirmwareFileFormat(
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
  */
 export function extractFirmware(
-	rawData: Buffer,
+	rawData: Bytes,
 	format: FirmwareFileFormat,
 ): Firmware {
 	switch (format) {
@@ -106,11 +108,11 @@ export function extractFirmware(
 	}
 }
 
-function extractFirmwareRAW(data: Buffer): Firmware {
+function extractFirmwareRAW(data: Bytes): Firmware {
 	return { data };
 }
 
-function extractFirmwareAeotec(data: Buffer): Firmware {
+function extractFirmwareAeotec(data: Bytes): Firmware {
 	// Check if this is an EXE file
 	if (data.readUInt16BE(0) !== 0x4d5a) {
 		throw new ZWaveError(
@@ -125,7 +127,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	let numControlBytes = 8;
 
 	// Some exe files also contain a 2-byte checksum. The method "ImageCalcCrc16" is used to compute the checksum
-	if (data.includes(Buffer.from("ImageCalcCrc16", "ascii"))) {
+	if (data.includes(Bytes.from("ImageCalcCrc16", "ascii"))) {
 		numControlBytes += 2;
 	}
 
@@ -158,7 +160,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	if (numControlBytes === 10) {
 		const checksum = data.readUInt16BE(data.length - 10);
 		const actualChecksum = CRC16_CCITT(
-			Buffer.concat([firmwareData, firmwareNameBytes]),
+			Bytes.concat([firmwareData, firmwareNameBytes]),
 			0xfe95,
 		);
 		if (checksum !== actualChecksum) {
@@ -205,18 +207,18 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	return ret;
 }
 
-function extractFirmwareHEX(dataHEX: Buffer | string): Firmware {
+function extractFirmwareHEX(dataHEX: Uint8Array | string): Firmware {
 	try {
-		if (Buffer.isBuffer(dataHEX)) {
-			dataHEX = dataHEX.toString("ascii");
+		if (isUint8Array(dataHEX)) {
+			dataHEX = Bytes.view(dataHEX).toString("ascii");
 		}
 		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(dataHEX);
 		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
-		let data: Buffer = Buffer.from([]);
+		let data: Bytes = Bytes.from([]);
 		for (const [offset, chunk] of memMap.entries()) {
-			data = Buffer.concat([
+			data = Bytes.concat([
 				data,
-				Buffer.alloc(offset - data.length, 0xff),
+				Bytes.alloc(offset - data.length, 0xff),
 				chunk,
 			]);
 		}
@@ -233,21 +235,21 @@ function extractFirmwareHEX(dataHEX: Buffer | string): Firmware {
 	}
 }
 
-function extractFirmwareHEC(data: Buffer): Firmware {
+function extractFirmwareHEC(data: Bytes): Firmware {
 	const key =
 		"d7a68def0f4a1241940f6cb8017121d15f0e2682e258c9f7553e706e834923b7";
 	const iv = "0e6519297530583708612a2823663844";
 	const decipher = crypto.createDecipheriv(
 		"aes-256-cbc",
-		Buffer.from(key, "hex"),
-		Buffer.from(iv, "hex"),
+		Bytes.from(key, "hex"),
+		Bytes.from(iv, "hex"),
 	);
 
-	const ciphertext = Buffer.from(
+	const ciphertext = Bytes.from(
 		data.subarray(6).toString("ascii"),
 		"base64",
 	);
-	const plaintext = Buffer.concat([
+	const plaintext = Bytes.concat([
 		decipher.update(ciphertext),
 		decipher.final(),
 	])

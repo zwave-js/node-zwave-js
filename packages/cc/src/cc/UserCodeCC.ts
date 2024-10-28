@@ -22,6 +22,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -161,7 +162,7 @@ export const UserCodeCCValues = Object.freeze({
 	}),
 });
 
-function parseExtendedUserCode(payload: Buffer): {
+function parseExtendedUserCode(payload: Bytes): {
 	code: UserCode;
 	bytesRead: number;
 } {
@@ -190,7 +191,7 @@ function setUserCodeMetadata(
 	this: UserCodeCC,
 	ctx: GetValueDB & GetSupportedCCVersion,
 	userId: number,
-	userCode?: string | Buffer,
+	userCode?: string | Bytes,
 ) {
 	const statusValue = UserCodeCCValues.userIdStatus(userId);
 	const codeValue = UserCodeCCValues.userCode(userId);
@@ -222,7 +223,7 @@ function setUserCodeMetadata(
 	});
 
 	const codeMetadata: ValueMetadata = {
-		...(Buffer.isBuffer(userCode)
+		...(Bytes.isBuffer(userCode)
 			? ValueMetadata.Buffer
 			: ValueMetadata.String),
 		minLength: 4,
@@ -239,7 +240,7 @@ function persistUserCode(
 	ctx: GetValueDB & GetSupportedCCVersion,
 	userId: number,
 	userIdStatus: UserIDStatus,
-	userCode: string | Buffer,
+	userCode: string | Bytes,
 ) {
 	const statusValue = UserCodeCCValues.userIdStatus(userId);
 	const codeValue = UserCodeCCValues.userCode(userId);
@@ -262,7 +263,7 @@ function persistUserCode(
 }
 
 /** Formats a user code in a way that's safe to print in public logs */
-export function userCodeToLogString(userCode: string | Buffer): string {
+export function userCodeToLogString(userCode: string | Bytes): string {
 	if (userCode === "") return "(empty)";
 	return "*".repeat(userCode.length);
 }
@@ -377,7 +378,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						propertyKey,
 					);
 				}
-				if (typeof value !== "string" && !Buffer.isBuffer(value)) {
+				if (typeof value !== "string" && !Bytes.isBuffer(value)) {
 					throwWrongValueType(
 						this.ccId,
 						property,
@@ -529,7 +530,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserIDStatus,
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>,
-		userCode: string | Buffer,
+		userCode: string | Bytes,
 	): Promise<SupervisionResult | undefined> {
 		if (userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
@@ -1200,10 +1201,10 @@ export class UserCodeCC extends CommandClass {
 		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
-	): MaybeNotKnown<string | Buffer> {
+	): MaybeNotKnown<string | Bytes> {
 		return ctx
 			.getValueDB(endpoint.nodeId)
-			.getValue<string | Buffer>(
+			.getValue<string | Bytes>(
 				UserCodeCCValues.userCode(userId).endpoint(endpoint.index),
 			);
 	}
@@ -1227,7 +1228,7 @@ export type UserCodeCCSetOptions =
 			UserIDStatus,
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>;
-		userCode: string | Buffer;
+		userCode: string | Bytes;
 	};
 
 @CCCommand(UserCodeCommand.Set)
@@ -1300,13 +1301,13 @@ export class UserCodeCCSet extends UserCodeCC {
 
 	public userId: number;
 	public userIdStatus: UserIDStatus;
-	public userCode: string | Buffer;
+	public userCode: string | Bytes;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.userId, this.userIdStatus]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.userId, this.userIdStatus]),
 			typeof this.userCode === "string"
-				? Buffer.from(this.userCode, "ascii")
+				? Bytes.from(this.userCode, "ascii")
 				: this.userCode,
 		]);
 		return super.serialize(ctx);
@@ -1328,7 +1329,7 @@ export class UserCodeCCSet extends UserCodeCC {
 export interface UserCodeCCReportOptions {
 	userId: number;
 	userIdStatus: UserIDStatus;
-	userCode?: string | Buffer;
+	userCode?: string | Bytes;
 }
 
 @CCCommand(UserCodeCommand.Report)
@@ -1349,7 +1350,7 @@ export class UserCodeCCReport extends UserCodeCC
 		validatePayload(raw.payload.length >= 2);
 		const userId = raw.payload[0];
 		const userIdStatus: UserIDStatus = raw.payload[1];
-		let userCode: string | Buffer;
+		let userCode: string | Bytes;
 
 		if (
 			raw.payload.length === 2
@@ -1390,7 +1391,7 @@ export class UserCodeCCReport extends UserCodeCC
 
 	public readonly userId: number;
 	public readonly userIdStatus: UserIDStatus;
-	public readonly userCode: string | Buffer;
+	public readonly userCode: string | Bytes;
 
 	public persistValues(ctx: PersistValuesContext): boolean {
 		if (!super.persistValues(ctx)) return false;
@@ -1405,16 +1406,16 @@ export class UserCodeCCReport extends UserCodeCC
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		let userCodeBuffer: Buffer;
+	public serialize(ctx: CCEncodingContext): Bytes {
+		let userCodeBuffer: Bytes;
 		if (typeof this.userCode === "string") {
-			userCodeBuffer = Buffer.from(this.userCode, "ascii");
+			userCodeBuffer = Bytes.from(this.userCode, "ascii");
 		} else {
 			userCodeBuffer = this.userCode;
 		}
 
-		this.payload = Buffer.concat([
-			Buffer.from([this.userId, this.userIdStatus]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.userId, this.userIdStatus]),
 			userCodeBuffer,
 		]);
 		return super.serialize(ctx);
@@ -1464,8 +1465,8 @@ export class UserCodeCCGet extends UserCodeCC {
 
 	public userId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId]);
 		return super.serialize(ctx);
 	}
 
@@ -1517,8 +1518,8 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(3);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(3);
 		// If the node implements more than 255 users, this field MUST be set to 255
 		this.payload[0] = Math.min(255, this.supportedUsers);
 		this.payload.writeUInt16BE(this.supportedUsers, 1);
@@ -1620,7 +1621,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		offset += 1;
 
 		validatePayload(raw.payload.length >= offset + keysBitMaskLength);
-		const supportedASCIIChars = Buffer.from(
+		const supportedASCIIChars = Bytes.from(
 			parseBitMask(
 				raw.payload.subarray(offset, offset + keysBitMaskLength),
 				0,
@@ -1664,7 +1665,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const supportedStatusesBitmask = encodeBitMask(
 			this.supportedUserIDStatuses,
 			undefined,
@@ -1690,12 +1691,12 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		const supportedKeysBitmask = encodeBitMask(keysAsNumbers, undefined, 0);
 		const controlByte3 = supportedKeysBitmask.length & 0b000_11111;
 
-		this.payload = Buffer.concat([
-			Buffer.from([controlByte1]),
+		this.payload = Bytes.concat([
+			Bytes.from([controlByte1]),
 			supportedStatusesBitmask,
-			Buffer.from([controlByte2]),
+			Bytes.from([controlByte2]),
 			supportedKeypadModesBitmask,
-			Buffer.from([controlByte3]),
+			Bytes.from([controlByte3]),
 			supportedKeysBitmask,
 		]);
 		return super.serialize(ctx);
@@ -1762,8 +1763,8 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 
 	public keypadMode: KeypadMode;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.keypadMode]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.keypadMode]);
 		return super.serialize(ctx);
 	}
 
@@ -1826,8 +1827,8 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.keypadMode]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.keypadMode]);
 		return super.serialize(ctx);
 	}
 
@@ -1879,10 +1880,10 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 
 	public adminCode: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.adminCode.length & 0b1111]),
-			Buffer.from(this.adminCode, "ascii"),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.adminCode.length & 0b1111]),
+			Bytes.from(this.adminCode, "ascii"),
 		]);
 		return super.serialize(ctx);
 	}
@@ -1929,10 +1930,10 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.adminCode)
 	public readonly adminCode: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.adminCode.length & 0b1111]),
-			Buffer.from(this.adminCode, "ascii"),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.adminCode.length & 0b1111]),
+			Bytes.from(this.adminCode, "ascii"),
 		]);
 		return super.serialize(ctx);
 	}
@@ -1979,8 +1980,8 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.userCodeChecksum, 0);
 		return super.serialize(ctx);
 	}
@@ -2035,24 +2036,24 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 
 	public userCodes: UserCodeCCSetOptions[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const userCodeBuffers = this.userCodes.map((code) => {
-			const ret = Buffer.concat([
-				Buffer.from([
+			const ret = Bytes.concat([
+				Bytes.from([
 					0,
 					0,
 					code.userIdStatus,
 					code.userCode?.length ?? 0,
 				]),
-				Buffer.isBuffer(code.userCode)
+				Bytes.isBuffer(code.userCode)
 					? code.userCode
-					: Buffer.from(code.userCode ?? "", "ascii"),
+					: Bytes.from(code.userCode ?? "", "ascii"),
 			]);
 			ret.writeUInt16BE(code.userId, 0);
 			return ret;
 		});
-		this.payload = Buffer.concat([
-			Buffer.from([this.userCodes.length]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.userCodes.length]),
 			...userCodeBuffers,
 		]);
 		return super.serialize(ctx);
@@ -2188,8 +2189,8 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public userId: number;
 	public reportMore: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([0, 0, this.reportMore ? 1 : 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([0, 0, this.reportMore ? 1 : 0]);
 		this.payload.writeUInt16BE(this.userId, 0);
 		return super.serialize(ctx);
 	}

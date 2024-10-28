@@ -15,6 +15,7 @@
  *   https://github.com/netroby/jdk9-dev/blob/master/jdk/src/java.base/share/classes/sun/security/provider/CtrDrbg.java
  */
 
+import { Bytes } from "@zwave-js/shared/safe";
 import { increment } from "./bufferUtils";
 import { encryptAES128ECB } from "./crypto";
 
@@ -25,15 +26,15 @@ export class CtrDRBG {
 	constructor(
 		bits: 128,
 		derivation: boolean,
-		entropy?: Buffer,
-		nonce?: Buffer,
-		pers?: Buffer,
+		entropy?: Uint8Array,
+		nonce?: Uint8Array,
+		pers?: Uint8Array,
 	) {
-		this.ctr = Buffer.alloc(16, 0);
+		this.ctr = new Uint8Array(16).fill(0);
 		this.keySize = bits >>> 3;
 		this.blkSize = 16;
 		this.entSize = this.keySize + this.blkSize;
-		this.slab = Buffer.alloc(this.entSize);
+		this.slab = new Uint8Array(this.entSize);
 		this.K = this.slab.subarray(0, this.keySize);
 		this.V = this.slab.subarray(this.keySize);
 		this.derivation = derivation;
@@ -44,23 +45,23 @@ export class CtrDRBG {
 	}
 
 	/** The internal counter */
-	private ctr: Buffer;
+	private ctr: Uint8Array;
 	private readonly keySize: number;
 	private readonly blkSize: number;
 	private readonly entSize: number;
-	private slab: Buffer;
-	private K: Buffer;
-	private V: Buffer;
+	private slab: Uint8Array;
+	private K: Uint8Array;
+	private V: Uint8Array;
 	private readonly derivation: boolean;
 	// private rounds: number;
 	private initialized: boolean;
 
 	init(
-		entropy: Buffer,
-		nonce: Buffer = Buffer.alloc(0),
-		pers: Buffer = Buffer.alloc(0),
+		entropy: Uint8Array,
+		nonce: Uint8Array = new Uint8Array(),
+		pers: Uint8Array = new Uint8Array(),
 	): this {
-		let seed: Buffer;
+		let seed: Uint8Array;
 
 		if (this.derivation) {
 			seed = this.derive(entropy, nonce, pers);
@@ -73,16 +74,15 @@ export class CtrDRBG {
 				throw new Error("Personalization string is too long.");
 			}
 
-			seed = Buffer.alloc(this.entSize, 0);
-
-			entropy.copy(seed, 0);
-			nonce.copy(seed, entropy.length);
+			seed = new Uint8Array(this.entSize).fill(0);
+			seed.set(entropy, 0);
+			seed.set(nonce, entropy.length);
 
 			for (let i = 0; i < pers.length; i++) seed[i] ^= pers[i];
 		}
 
 		this.slab.fill(0);
-		this.V.copy(this.ctr, 0);
+		this.ctr.set(this.V, 0);
 		this.update(seed);
 		this.initialized = true;
 		// this.rounds = 1;
@@ -90,11 +90,11 @@ export class CtrDRBG {
 		return this;
 	}
 
-	reseed(entropy: Buffer, add: Buffer = Buffer.alloc(0)): this {
+	reseed(entropy: Uint8Array, add: Uint8Array = new Uint8Array()): this {
 		// if (this.rounds === 0)
 		if (!this.initialized) throw new Error("DRBG not initialized.");
 
-		let seed: Buffer;
+		let seed: Uint8Array;
 
 		if (this.derivation) {
 			seed = this.derive(entropy, add);
@@ -103,8 +103,8 @@ export class CtrDRBG {
 				throw new Error("Additional data is too long.");
 			}
 
-			seed = Buffer.alloc(this.entSize, 0x00);
-			entropy.copy(seed, 0);
+			seed = new Uint8Array(this.entSize).fill(0x00);
+			seed.set(entropy, 0);
 			for (let i = 0; i < add.length; i++) seed[i] ^= add[i];
 		}
 
@@ -114,12 +114,12 @@ export class CtrDRBG {
 		return this;
 	}
 
-	private next(): Buffer {
+	private next(): Uint8Array {
 		increment(this.ctr);
 		return encryptAES128ECB(this.ctr, this.K);
 	}
 
-	generate(len: number, add?: Buffer): Buffer {
+	generate(len: number, add?: Uint8Array): Uint8Array {
 		// if (this.rounds === 0)
 		if (!this.initialized) throw new Error("DRBG not initialized.");
 
@@ -137,11 +137,11 @@ export class CtrDRBG {
 		}
 
 		const blocks = Math.ceil(len / this.blkSize);
-		const out = Buffer.alloc(blocks * this.blkSize);
+		const out = new Uint8Array(blocks * this.blkSize);
 
 		for (let i = 0; i < blocks; i++) {
 			const ciphertext = this.next();
-			ciphertext.copy(out, i * this.blkSize);
+			out.set(ciphertext, i * this.blkSize);
 		}
 
 		this.update(add);
@@ -155,27 +155,27 @@ export class CtrDRBG {
 	 * Helpers
 	 */
 
-	update(seed: Buffer = Buffer.alloc(0)): this {
+	update(seed: Uint8Array = new Uint8Array()): this {
 		if (seed.length > this.entSize) throw new Error("Seed is too long.");
 
-		const newSlab = Buffer.alloc(this.slab.length, 0);
+		const newSlab = new Uint8Array(this.slab.length).fill(0);
 		// this.slab.fill(0);
 
 		for (let i = 0; i < this.entSize; i += this.blkSize) {
-			this.next().copy(newSlab, i);
+			newSlab.set(this.next(), i);
 			// ciphertext.copy(this.slab, i);
 		}
 
 		// for (let i = 0; i < seed.length; i++) this.slab[i] ^= seed[i];
 		for (let i = 0; i < seed.length; i++) newSlab[i] ^= seed[i];
 
-		newSlab.copy(this.slab, 0);
-		this.V.copy(this.ctr, 0);
+		this.slab.set(newSlab, 0);
+		this.ctr.set(this.V, 0);
 
 		return this;
 	}
 
-	serialize(...input: Buffer[]): Buffer {
+	serialize(...input: Uint8Array[]): Uint8Array {
 		const N = this.entSize;
 
 		let L = 0;
@@ -187,36 +187,41 @@ export class CtrDRBG {
 		if (size % this.blkSize) size += this.blkSize - (size % this.blkSize);
 
 		// S = IV || (L || N || input || 0x80 || 0x00...)
-		const S = Buffer.alloc(size, 0x00);
+		const S = new Uint8Array(size).fill(0x00);
+		const view = Bytes.view(S);
 
 		let pos = this.blkSize;
-		S.writeUInt32BE(L, pos);
+		view.writeUInt32BE(L, pos);
 		pos += 4;
-		S.writeUInt32BE(N, pos);
+		view.writeUInt32BE(N, pos);
 		pos += 4;
 
-		for (const item of input) pos += item.copy(S, pos);
+		for (const item of input) {
+			S.set(item, pos);
+			pos += item.length;
+		}
 
 		S[pos++] = 0x80;
 
 		return S;
 	}
 
-	derive(...input: Buffer[]): Buffer {
+	derive(...input: Uint8Array[]): Uint8Array {
 		const S = this.serialize(...input);
+		const view = Bytes.view(S);
 		const N = S.length / this.blkSize;
-		const K = Buffer.alloc(this.keySize);
+		const K = new Uint8Array(this.keySize);
 		const blocks = Math.ceil(this.entSize / this.blkSize);
-		const slab = Buffer.alloc(blocks * this.blkSize);
-		const out = Buffer.alloc(blocks * this.blkSize);
-		const chain = Buffer.alloc(this.blkSize);
+		const slab = new Uint8Array(blocks * this.blkSize);
+		const out = new Uint8Array(blocks * this.blkSize);
+		const chain = new Uint8Array(this.blkSize);
 
 		for (let i = 0; i < K.length; i++) K[i] = i;
 
 		for (let i = 0; i < blocks; i++) {
 			chain.fill(0);
 
-			S.writeUInt32BE(i, 0);
+			view.writeUInt32BE(i, 0);
 
 			// chain = BCC(K, IV || S)
 			for (let j = 0; j < N; j++) {
@@ -225,11 +230,10 @@ export class CtrDRBG {
 				}
 
 				// encrypt in-place
-				encryptAES128ECB(chain, K).copy(chain, 0);
+				chain.set(encryptAES128ECB(chain, K), 0);
 				// ctx.encrypt(chain, 0, chain, 0);
 			}
-
-			chain.copy(slab, i * this.blkSize);
+			slab.set(chain, i * this.blkSize);
 		}
 
 		const k = slab.subarray(0, this.keySize);
@@ -237,9 +241,9 @@ export class CtrDRBG {
 
 		for (let i = 0; i < blocks; i++) {
 			// encrypt in-place
-			encryptAES128ECB(x, k).copy(x, 0);
+			x.set(encryptAES128ECB(x, k), 0);
 			// ctx.encrypt(x, 0, x, 0);
-			x.copy(out, i * this.blkSize);
+			out.set(x, i * this.blkSize);
 		}
 
 		return out.subarray(0, this.entSize);

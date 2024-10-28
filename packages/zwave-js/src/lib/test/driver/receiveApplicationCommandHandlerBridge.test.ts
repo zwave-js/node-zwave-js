@@ -21,7 +21,7 @@ test.beforeEach(async (t) => {
 
 	const { driver, serialport } = await createAndStartDriver({
 		securityKeys: {
-			S0_Legacy: Buffer.alloc(16, 0),
+			S0_Legacy: new Uint8Array(16).fill(0),
 		},
 	});
 

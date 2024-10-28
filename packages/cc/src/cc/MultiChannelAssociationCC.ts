@@ -21,6 +21,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -110,10 +111,10 @@ const MULTI_CHANNEL_ASSOCIATION_MARKER = 0x00;
 function serializeMultiChannelAssociationDestination(
 	nodeIds: number[],
 	endpoints: EndpointAddress[],
-): Buffer {
+): Bytes {
 	const nodeAddressBytes = nodeIds.length;
 	const endpointAddressBytes = endpoints.length * 2;
-	const payload = Buffer.allocUnsafe(
+	const payload = new Bytes(
 		// node addresses
 		nodeAddressBytes
 			// endpoint marker
@@ -145,7 +146,7 @@ function serializeMultiChannelAssociationDestination(
 	return payload;
 }
 
-function deserializeMultiChannelAssociationDestination(data: Buffer): {
+function deserializeMultiChannelAssociationDestination(data: Bytes): {
 	nodeIds: number[];
 	endpoints: EndpointAddress[];
 } {
@@ -165,7 +166,7 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 		const isBitMask = !!(data[i + 1] & 0b1000_0000);
 		const destination = data[i + 1] & 0b0111_1111;
 		const endpoint = isBitMask
-			? parseBitMask(Buffer.from([destination]))
+			? parseBitMask(Bytes.from([destination]))
 			: destination;
 
 		endpoints.push({ nodeId, endpoint });
@@ -667,9 +668,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public nodeIds: number[];
 	public endpoints: EndpointAddress[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.groupId]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.groupId]),
 			serializeMultiChannelAssociationDestination(
 				this.nodeIds,
 				this.endpoints,
@@ -738,9 +739,9 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public nodeIds?: number[];
 	public endpoints?: EndpointAddress[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.groupId || 0]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.groupId || 0]),
 			serializeMultiChannelAssociationDestination(
 				this.nodeIds || [],
 				this.endpoints || [],
@@ -858,13 +859,13 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const destinations = serializeMultiChannelAssociationDestination(
 			this.nodeIds,
 			this.endpoints,
 		);
-		this.payload = Buffer.concat([
-			Buffer.from([
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this.groupId,
 				this.maxNodes,
 				this.reportsToFollow,
@@ -923,8 +924,8 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupId]);
 		return super.serialize(ctx);
 	}
 
@@ -971,8 +972,8 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 	@ccValue(MultiChannelAssociationCCValues.groupCount)
 	public readonly groupCount: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupCount]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupCount]);
 		return super.serialize(ctx);
 	}
 

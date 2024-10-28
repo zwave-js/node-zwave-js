@@ -85,7 +85,7 @@ export class ZnifferMessage {
 		} else {
 			this.type = options.messageType;
 			this.functionType = options.functionType;
-			this.payload = options.payload || Buffer.allocUnsafe(0);
+			this.payload = options.payload || new Buffer();
 		}
 	}
 
@@ -105,7 +105,7 @@ export class ZnifferMessage {
 				this.payload,
 			]);
 		} else if (this.type === ZnifferMessageType.Data) {
-			const ret = Buffer.allocUnsafe(this.payload.length + 1);
+			const ret = new Buffer(this.payload.length + 1);
 			ret[0] = this.type;
 			this.payload.copy(ret, 1);
 			this.payload[9] = this.payload.length - 10;
@@ -243,7 +243,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 				// This always seems to contain the same 2 bytes
 				// There is no checksum
 				this.checksumOK = true;
-				this.payload = Buffer.alloc(0);
+				this.payload = new Buffer();
 			} else {
 				validatePayload.fail(
 					`Unsupported frame type ${

@@ -25,7 +25,7 @@ export class SerialAPIParser extends Transform {
 		super({ readableObjectMode: true });
 	}
 
-	private receiveBuffer = Buffer.allocUnsafe(0);
+	private receiveBuffer = new Buffer();
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibble: boolean = false;

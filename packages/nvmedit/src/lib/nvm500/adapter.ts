@@ -109,7 +109,7 @@ export class NVM500Adapter implements NVMAdapter {
 					"EX_NVM_HOME_ID_far",
 				);
 				if (homeId == undefined) return;
-				const ret = Buffer.alloc(4, 0);
+				const ret = new Uint8Array(4).fill(0);
 				// FIXME: BE? LE?
 				ret.writeUInt32BE(homeId, 0);
 				return ret;
@@ -119,7 +119,7 @@ export class NVM500Adapter implements NVMAdapter {
 				// 500 series stores the home ID as a number
 				const homeId = await this.getOnly<number>("NVM_HOMEID_far");
 				if (homeId == undefined) return;
-				const ret = Buffer.alloc(4, 0);
+				const ret = new Uint8Array(4).fill(0);
 				// FIXME: BE? LE?
 				ret.writeUInt32BE(homeId, 0);
 				return ret;

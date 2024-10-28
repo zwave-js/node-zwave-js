@@ -728,7 +728,7 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public measured0dBm: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+		this.payload = new Buffer(2);
 		// The values are in 0.1 dBm
 		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
@@ -899,7 +899,7 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 	public measured0dBm: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(4);
+		this.payload = new Buffer(4);
 		// The values are in 0.1 dBm
 		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
@@ -1059,7 +1059,7 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	public limit: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+		this.payload = new Buffer(2);
 		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 

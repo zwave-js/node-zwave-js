@@ -1084,7 +1084,7 @@ export async function nvm500ToJSON(
 		domain: "controller",
 		type: "learnedHomeId",
 	});
-	if (learnedHomeId?.equals(Buffer.alloc(4, 0))) {
+	if (learnedHomeId?.equals(new Uint8Array(4).fill(0))) {
 		learnedHomeId = undefined;
 	}
 
@@ -1223,7 +1223,7 @@ export async function jsonToNVM(
 	const nvmSize = sharedFileSystem
 		? ZWAVE_SHARED_NVM_SIZE
 		: (ZWAVE_APPLICATION_NVM_SIZE + ZWAVE_PROTOCOL_NVM_SIZE);
-	const ret = Buffer.allocUnsafe(nvmSize);
+	const ret = new Buffer(nvmSize);
 	const io = new NVMMemoryIO(ret);
 	const nvm3 = new NVM3(io);
 	await nvm3.erase(json.meta);
@@ -1523,7 +1523,7 @@ export async function jsonToNVM500(
 	const { layout, nvmSize } = resolveLayout(impl.layout);
 
 	// Erase the NVM and set some basic information
-	const ret = Buffer.allocUnsafe(nvmSize);
+	const ret = new Buffer(nvmSize);
 	const io = new NVMMemoryIO(ret);
 	const nvm = new NVM500(io);
 	await nvm.erase({

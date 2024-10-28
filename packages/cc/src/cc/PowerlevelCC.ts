@@ -15,6 +15,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
@@ -259,8 +260,8 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public timeout?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
 		return super.serialize(ctx);
 	}
 
@@ -321,8 +322,8 @@ export class PowerlevelCCReport extends PowerlevelCC {
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
 		return super.serialize(ctx);
 	}
 
@@ -384,8 +385,8 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public testFrameCount: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.testNodeId, this.powerlevel, 0, 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.testNodeId, this.powerlevel, 0, 0]);
 		this.payload.writeUInt16BE(this.testFrameCount, 2);
 		return super.serialize(ctx);
 	}
@@ -442,8 +443,8 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public status: PowerlevelTestStatus;
 	public acknowledgedFrames: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.testNodeId,
 			this.status,
 			// Placeholder for acknowledged frames

@@ -128,7 +128,7 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 	public offset: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(3);
+		this.payload = new Buffer(3);
 		this.payload[0] = this.length;
 		this.payload.writeUInt16BE(this.offset, 1);
 
@@ -195,7 +195,7 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 	public buffer: Buffer;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(3 + this.buffer.length);
+		this.payload = new Buffer(3 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt16BE(this.offset, 1);
 		this.buffer.copy(this.payload, 3);

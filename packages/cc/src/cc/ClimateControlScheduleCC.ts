@@ -15,6 +15,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -247,7 +248,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public switchPoints: Switchpoint[];
 	public weekday: Weekday;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// Make sure we have exactly 9 entries
 		const allSwitchPoints = this.switchPoints.slice(0, 9); // maximum 9
 		while (allSwitchPoints.length < 9) {
@@ -257,8 +258,8 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 				state: "Unused",
 			});
 		}
-		this.payload = Buffer.concat([
-			Buffer.from([this.weekday & 0b111]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.weekday & 0b111]),
 			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
 		return super.serialize(ctx);
@@ -393,8 +394,8 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 
 	public weekday: Weekday;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.weekday & 0b111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.weekday & 0b111]);
 		return super.serialize(ctx);
 	}
 
@@ -551,8 +552,8 @@ export class ClimateControlScheduleCCOverrideSet
 	public overrideType: ScheduleOverrideType;
 	public overrideState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.overrideType & 0b11,
 			encodeSetbackState(this.overrideState),
 		]);

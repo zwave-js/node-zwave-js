@@ -16,6 +16,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -169,8 +170,8 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	@ccValue(SceneActivationCCValues.dimmingDuration)
 	public dimmingDuration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.sceneId,
 			this.dimmingDuration?.serializeSet() ?? 0xff,
 		]);

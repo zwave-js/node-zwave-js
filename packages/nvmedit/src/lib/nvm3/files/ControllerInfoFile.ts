@@ -122,7 +122,7 @@ export class ControllerInfoFile extends NVMFile {
 
 	public serialize(): NVM3Object & { data: Buffer } {
 		if (this.lastNodeIdLR != undefined) {
-			this.payload = Buffer.allocUnsafe(22);
+			this.payload = new Buffer(22);
 			this.homeId.copy(this.payload, 0);
 			this.payload.writeUInt16LE(this.nodeId, 4);
 			this.payload.writeUInt16LE(this.staticControllerNodeId, 6);

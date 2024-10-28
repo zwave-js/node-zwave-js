@@ -26,6 +26,7 @@ import type {
 	GetNode,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
 import { type CCRaw, CommandClass } from "../lib/CommandClass";
@@ -338,9 +339,9 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				(this.moreUpdatesFollow ? 0b1_0_000000 : 0)
 				| (this.requestWakeUpOnDemand ? 0b0_1_000000 : 0)
 				| (this.sessionId & 0b111111),
@@ -349,9 +350,9 @@ export class SupervisionCCReport extends SupervisionCC {
 		]);
 
 		if (this.duration) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([this.duration.serializeReport()]),
+				Bytes.from([this.duration.serializeReport()]),
 			]);
 		}
 		return super.serialize(ctx);
@@ -433,10 +434,10 @@ export class SupervisionCCGet extends SupervisionCC {
 	public sessionId: number;
 	public encapsulated: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const encapCC = this.encapsulated.serialize(ctx);
-		this.payload = Buffer.concat([
-			Buffer.from([
+		this.payload = Bytes.concat([
+			Bytes.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0)
 				| (this.sessionId & 0b111111),
 				encapCC.length,

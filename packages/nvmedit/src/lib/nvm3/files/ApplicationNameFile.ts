@@ -34,7 +34,7 @@ export class ApplicationNameFile extends NVMFile {
 	public serialize(): NVM3Object & { data: Buffer } {
 		// Return a zero-terminated string with a fixed length of 30 bytes
 		const nameAsString = Buffer.from(this.name, "utf8");
-		this.payload = Buffer.alloc(30, 0);
+		this.payload = new Uint8Array(30).fill(0);
 		nameAsString.subarray(0, this.payload.length - 1).copy(this.payload);
 		return super.serialize();
 	}

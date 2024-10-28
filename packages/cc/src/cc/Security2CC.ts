@@ -42,6 +42,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { isArray } from "alcalzone-shared/typeguards";
 import { setTimeout as wait } from "node:timers/promises";
@@ -75,7 +76,7 @@ import { MultiChannelCC } from "./MultiChannelCC";
 import { SecurityCC } from "./SecurityCC";
 import { TransportServiceCC } from "./TransportServiceCC";
 
-function securityClassToBitMask(key: SecurityClass): Buffer {
+function securityClassToBitMask(key: SecurityClass): Bytes {
 	return encodeBitMask(
 		[key],
 		SecurityClass.S0_Legacy,
@@ -83,7 +84,7 @@ function securityClassToBitMask(key: SecurityClass): Buffer {
 	);
 }
 
-function bitMaskToSecurityClass(buffer: Buffer, offset: number): SecurityClass {
+function bitMaskToSecurityClass(buffer: Bytes, offset: number): SecurityClass {
 	const keys = parseBitMask(
 		buffer.subarray(offset, offset + 1),
 		SecurityClass.S2_Unauthenticated,
@@ -97,13 +98,13 @@ function getAuthenticationData(
 	destination: number,
 	homeId: number,
 	commandLength: number,
-	unencryptedPayload: Buffer,
-): Buffer {
+	unencryptedPayload: Bytes,
+): Bytes {
 	const nodeIdSize =
 		isLongRangeNodeId(sendingNodeId) || isLongRangeNodeId(destination)
 			? 2
 			: 1;
-	const ret = Buffer.allocUnsafe(
+	const ret = new Bytes(
 		2 * nodeIdSize + 6 + unencryptedPayload.length,
 	);
 	let offset = 0;
@@ -160,10 +161,10 @@ const MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP = 1;
 
 // @publicAPI
 export interface DecryptionResult {
-	plaintext: Buffer;
+	plaintext: Bytes;
 	authOK: boolean;
-	key?: Buffer;
-	iv?: Buffer;
+	key?: Bytes;
+	iv?: Bytes;
 	securityClass: SecurityClass | undefined;
 }
 
@@ -218,15 +219,15 @@ function decryptSinglecast(
 	sendingNodeId: number,
 	curSequenceNumber: number,
 	prevSequenceNumber: number,
-	ciphertext: Buffer,
-	authData: Buffer,
-	authTag: Buffer,
+	ciphertext: Bytes,
+	authData: Bytes,
+	authTag: Bytes,
 	spanState: SPANTableEntry & {
 		type: SPANState.SPAN | SPANState.LocalEI;
 	},
 	extensions: Security2Extension[],
 ): DecryptionResult {
-	const decryptWithNonce = (nonce: Buffer) => {
+	const decryptWithNonce = (nonce: Bytes) => {
 		const { keyCCM: key } = securityManager.getKeysForNode(
 			sendingNodeId,
 		);
@@ -378,7 +379,7 @@ function decryptSinglecast(
 
 	// Nothing worked, fail the decryption
 	return {
-		plaintext: Buffer.from([]),
+		plaintext: Bytes.from([]),
 		authOK: false,
 		securityClass: undefined,
 	};
@@ -388,9 +389,9 @@ function decryptMulticast(
 	sendingNodeId: number,
 	securityManager: SecurityManager2,
 	groupId: number,
-	ciphertext: Buffer,
-	authData: Buffer,
-	authTag: Buffer,
+	ciphertext: Bytes,
+	authData: Bytes,
+	authTag: Bytes,
 ): DecryptionResult {
 	const iv = securityManager.nextPeerMPAN(
 		sendingNodeId,
@@ -451,7 +452,7 @@ function getMulticastGroupId(
 }
 
 /** Returns the Sender's Entropy Input if this command contains an SPAN extension */
-function getSenderEI(extensions: Security2Extension[]): Buffer | undefined {
+function getSenderEI(extensions: Security2Extension[]): Bytes | undefined {
 	const spanExtension = extensions.find(
 		(e) => e instanceof SPANExtension,
 	);
@@ -578,7 +579,7 @@ export class Security2CCAPI extends CCAPI {
 	/** Sends the given MPAN to the node */
 	public async sendMPAN(
 		groupId: number,
-		innerMPANState: Buffer,
+		innerMPANState: Bytes,
 	): Promise<boolean> {
 		this.assertSupportsCommand(
 			Security2Command,
@@ -795,7 +796,7 @@ export class Security2CCAPI extends CCAPI {
 	}
 
 	public async sendPublicKey(
-		publicKey: Buffer,
+		publicKey: Bytes,
 		includingNode: boolean = true,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -830,7 +831,7 @@ export class Security2CCAPI extends CCAPI {
 
 	public async sendNetworkKey(
 		securityClass: SecurityClass,
-		networkKey: Buffer,
+		networkKey: Bytes,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			Security2Command,
@@ -1375,7 +1376,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		const extensions: Security2Extension[] = [];
 		let mustDiscardCommand = false;
 
-		const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
+		const parseExtensions = (buffer: Bytes, wasEncrypted: boolean) => {
 			while (true) {
 				if (buffer.length < offset + 2) {
 					// An S2 extension was expected, but the buffer is too short
@@ -1574,10 +1575,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 		}
 
-		let plaintext: Buffer | undefined;
+		let plaintext: Bytes | undefined;
 		let authOK = false;
-		let key: Buffer | undefined;
-		let iv: Buffer | undefined;
+		let key: Bytes | undefined;
+		let iv: Bytes | undefined;
 		let decryptionSecurityClass: SecurityClass | undefined;
 
 		// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
@@ -1692,12 +1693,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public readonly securityClass?: SecurityClass;
 
 	// Only used for testing/debugging purposes
-	private key?: Buffer;
-	private iv?: Buffer;
-	private authData?: Buffer;
-	private authTag?: Buffer;
-	private ciphertext?: Buffer;
-	private plaintext?: Buffer;
+	private key?: Bytes;
+	private iv?: Bytes;
+	private authData?: Bytes;
+	private authTag?: Bytes;
+	private ciphertext?: Bytes;
+	private plaintext?: Bytes;
 
 	public readonly verifyDelivery: boolean = true;
 
@@ -1735,7 +1736,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
-	public getSenderEI(): Buffer | undefined {
+	public getSenderEI(): Bytes | undefined {
 		return getSenderEI(this.extensions);
 	}
 
@@ -1813,7 +1814,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const securityManager = assertSecurityTX(ctx, this.nodeId);
 		this.ensureSequenceNumber(securityManager);
 
@@ -1827,8 +1828,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			e.isEncrypted()
 		);
 
-		const unencryptedPayload = Buffer.concat([
-			Buffer.from([
+		const unencryptedPayload = Bytes.concat([
+			Bytes.from([
 				this.sequenceNumber,
 				(encryptedExtensions.length > 0 ? 0b10 : 0)
 				| (unencryptedExtensions.length > 0 ? 1 : 0),
@@ -1838,8 +1839,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			),
 		]);
 		const serializedCC = this.encapsulated?.serialize(ctx)
-			?? Buffer.from([]);
-		const plaintextPayload = Buffer.concat([
+			?? Bytes.from([]);
+		const plaintextPayload = Bytes.concat([
 			...encryptedExtensions.map((e, index) =>
 				e.serialize(index < encryptedExtensions.length - 1)
 			),
@@ -1860,8 +1861,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			unencryptedPayload,
 		);
 
-		let key: Buffer;
-		let iv: Buffer;
+		let key: Bytes;
+		let iv: Bytes;
 
 		if (this.isSinglecast()) {
 			// Singlecast:
@@ -1900,7 +1901,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		this.authTag = authTag;
 		this.ciphertext = ciphertextPayload;
 
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			unencryptedPayload,
 			ciphertextPayload,
 			authTag,
@@ -1982,7 +1983,7 @@ export type Security2CCNonceReportOptions =
 		| {
 			MOS: boolean;
 			SOS: true;
-			receiverEI: Buffer;
+			receiverEI: Bytes;
 		}
 		| {
 			MOS: true;
@@ -2069,18 +2070,18 @@ export class Security2CCNonceReport extends Security2CC {
 
 	public readonly SOS: boolean;
 	public readonly MOS: boolean;
-	public readonly receiverEI?: Buffer;
+	public readonly receiverEI?: Bytes;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const securityManager = assertSecurityTX(ctx, this.nodeId);
 		this.ensureSequenceNumber(securityManager);
 
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.sequenceNumber,
 			(this.MOS ? 0b10 : 0) + (this.SOS ? 0b1 : 0),
 		]);
 		if (this.SOS) {
-			this.payload = Buffer.concat([this.payload, this.receiverEI!]);
+			this.payload = Bytes.concat([this.payload, this.receiverEI!]);
 		}
 		return super.serialize(ctx);
 	}
@@ -2151,11 +2152,11 @@ export class Security2CCNonceGet extends Security2CC {
 		}
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const securityManager = assertSecurityTX(ctx, this.nodeId);
 		this.ensureSequenceNumber(securityManager);
 
-		this.payload = Buffer.from([this.sequenceNumber]);
+		this.payload = Bytes.from([this.sequenceNumber]);
 		return super.serialize(ctx);
 	}
 
@@ -2236,9 +2237,9 @@ export class Security2CCKEXReport extends Security2CC {
 	public readonly supportedECDHProfiles: readonly ECDHProfiles[];
 	public readonly requestedKeys: readonly SecurityClass[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this._reserved
 				+ (this.requestCSA ? 0b10 : 0)
 				+ (this.echo ? 0b1 : 0),
@@ -2372,9 +2373,9 @@ export class Security2CCKEXSet extends Security2CC {
 	public selectedECDHProfile: ECDHProfiles;
 	public grantedKeys: SecurityClass[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this._reserved
 				+ (this.permitCSA ? 0b10 : 0)
 				+ (this.echo ? 0b1 : 0),
@@ -2443,8 +2444,8 @@ export class Security2CCKEXFail extends Security2CC {
 
 	public failType: KEXFailType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.failType]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.failType]);
 		return super.serialize(ctx);
 	}
 
@@ -2459,7 +2460,7 @@ export class Security2CCKEXFail extends Security2CC {
 // @publicAPI
 export interface Security2CCPublicKeyReportOptions {
 	includingNode: boolean;
-	publicKey: Buffer;
+	publicKey: Bytes;
 }
 
 @CCCommand(Security2Command.PublicKeyReport)
@@ -2478,7 +2479,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 	): Security2CCPublicKeyReport {
 		validatePayload(raw.payload.length >= 17);
 		const includingNode = !!(raw.payload[0] & 0b1);
-		const publicKey: Buffer = raw.payload.subarray(1);
+		const publicKey: Bytes = raw.payload.subarray(1);
 
 		return new Security2CCPublicKeyReport({
 			nodeId: ctx.sourceNodeId,
@@ -2488,11 +2489,11 @@ export class Security2CCPublicKeyReport extends Security2CC {
 	}
 
 	public includingNode: boolean;
-	public publicKey: Buffer;
+	public publicKey: Bytes;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.includingNode ? 1 : 0]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.includingNode ? 1 : 0]),
 			this.publicKey,
 		]);
 		return super.serialize(ctx);
@@ -2512,7 +2513,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 // @publicAPI
 export interface Security2CCNetworkKeyReportOptions {
 	grantedKey: SecurityClass;
-	networkKey: Buffer;
+	networkKey: Bytes;
 }
 
 @CCCommand(Security2Command.NetworkKeyReport)
@@ -2544,10 +2545,10 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 	}
 
 	public grantedKey: SecurityClass;
-	public networkKey: Buffer;
+	public networkKey: Bytes;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
 			securityClassToBitMask(this.grantedKey),
 			this.networkKey,
 		]);
@@ -2603,7 +2604,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 
 	public requestedKey: SecurityClass;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = securityClassToBitMask(this.requestedKey);
 		return super.serialize(ctx);
 	}
@@ -2658,8 +2659,8 @@ export class Security2CCTransferEnd extends Security2CC {
 	public keyVerified: boolean;
 	public keyRequestComplete: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			(this.keyVerified ? 0b10 : 0) + (this.keyRequestComplete ? 0b1 : 0),
 		]);
 		return super.serialize(ctx);
@@ -2709,7 +2710,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 
 	public readonly supportedCCs: CommandClasses[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeCCList(this.supportedCCs, []);
 		return super.serialize(ctx);
 	}

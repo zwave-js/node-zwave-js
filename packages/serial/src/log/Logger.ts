@@ -54,7 +54,7 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	/**
 	 * Logs receipt of unexpected data while waiting for an ACK, NAK, CAN, or data frame
 	 */
-	public discarded(data: Buffer): void {
+	public discarded(data: Uint8Array): void {
 		if (this.isVisible()) {
 			const direction: DataDirection = "inbound";
 			this.logger.log({
@@ -94,11 +94,11 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	 * @param direction The direction the data was sent
 	 * @param data The data that was transmitted or received
 	 */
-	public data(direction: DataDirection, data: Buffer): void {
+	public data(direction: DataDirection, data: Uint8Array): void {
 		if (this.isVisible()) {
 			this.logger.log({
 				level: SERIAL_LOGLEVEL,
-				message: `0x${data.toString("hex")}`,
+				message: buffer2hex(data),
 				secondaryTags: `(${data.length} bytes)`,
 				direction: getDirectionPrefix(direction),
 				context: {

@@ -19,6 +19,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -369,8 +370,8 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public mode: ThermostatFanMode;
 	public off: boolean | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			(this.off ? 0b1000_0000 : 0)
 			| (this.mode & 0b1111),
 		]);

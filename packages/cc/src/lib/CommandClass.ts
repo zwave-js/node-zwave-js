@@ -47,6 +47,7 @@ import type {
 	LookupManufacturer,
 } from "@zwave-js/host";
 import {
+	Bytes,
 	type JSONObject,
 	buffer2hex,
 	getEnumMemberName,
@@ -81,7 +82,7 @@ import {
 export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
-	payload?: Buffer;
+	payload?: Bytes;
 }
 
 // Defines the necessary traits an endpoint passed to a CC instance must have
@@ -156,30 +157,30 @@ export class CCRaw {
 	public constructor(
 		public ccId: CommandClasses,
 		public ccCommand: number | undefined,
-		public payload: Buffer,
+		public payload: Bytes,
 	) {}
 
-	public static parse(data: Buffer): CCRaw {
+	public static parse(data: Uint8Array): CCRaw {
 		const { ccId, bytesRead: ccIdLength } = parseCCId(data);
 		// There are so few exceptions that we can handle them here manually
 		if (ccId === CommandClasses["No Operation"]) {
-			return new CCRaw(ccId, undefined, Buffer.allocUnsafe(0));
+			return new CCRaw(ccId, undefined, new Bytes());
 		}
 		let ccCommand: number | undefined = data[ccIdLength];
-		let payload = data.subarray(ccIdLength + 1);
+		let payload = Bytes.view(data.subarray(ccIdLength + 1));
 		if (ccId === CommandClasses["Transport Service"]) {
 			// Transport Service only uses the higher 5 bits for the command
 			// and re-uses the lower 3 bits of the ccCommand as payload
-			payload = Buffer.concat([
-				Buffer.from([ccCommand & 0b111]),
+			payload = Bytes.concat([
+				Bytes.from([ccCommand & 0b111]),
 				payload,
 			]);
 			ccCommand = ccCommand & 0b11111_000;
 		} else if (ccId === CommandClasses["Manufacturer Proprietary"]) {
 			// ManufacturerProprietaryCC has no CC command, so the first
 			// payload byte is stored in ccCommand.
-			payload = Buffer.concat([
-				Buffer.from([ccCommand]),
+			payload = Bytes.concat([
+				Bytes.from([ccCommand]),
 				payload,
 			]);
 			ccCommand = undefined;
@@ -188,7 +189,7 @@ export class CCRaw {
 		return new CCRaw(ccId, ccCommand, payload);
 	}
 
-	public withPayload(payload: Buffer): CCRaw {
+	public withPayload(payload: Bytes): CCRaw {
 		return new CCRaw(this.ccId, this.ccCommand, payload);
 	}
 }
@@ -202,7 +203,7 @@ export class CommandClass implements CCId {
 			endpointIndex = 0,
 			ccId = getCommandClass(this),
 			ccCommand = getCCCommand(this),
-			payload = Buffer.allocUnsafe(0),
+			payload = new Bytes(),
 		} = options;
 
 		this.nodeId = nodeId;
@@ -213,7 +214,7 @@ export class CommandClass implements CCId {
 	}
 
 	public static parse(
-		data: Buffer,
+		data: Uint8Array,
 		ctx: CCParsingContext,
 	): CommandClass {
 		const raw = CCRaw.parse(data);
@@ -288,8 +289,7 @@ export class CommandClass implements CCId {
 	/** The ID of the target node(s) */
 	public nodeId!: number | MulticastDestination;
 
-	// Work around https://github.com/Microsoft/TypeScript/issues/27555
-	public payload!: Buffer;
+	public payload: Bytes;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
@@ -352,10 +352,10 @@ export class CommandClass implements CCId {
 	 * Serializes this CommandClass to be embedded in a message payload or another CC
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"]) {
-			return Buffer.from([this.ccId]);
+			return Bytes.from([this.ccId]);
 		} else if (this.ccCommand == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Command Class without a command",
@@ -365,11 +365,11 @@ export class CommandClass implements CCId {
 
 		const payloadLength = this.payload.length;
 		const ccIdLength = this.isExtended() ? 2 : 1;
-		const data = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
+		const data = new Bytes(ccIdLength + 1 + payloadLength);
 		data.writeUIntBE(this.ccId, 0, ccIdLength);
 		data[ccIdLength] = this.ccCommand;
 		if (payloadLength > 0 /* implies payload != undefined */) {
-			this.payload.copy(data, 1 + ccIdLength);
+			data.set(this.payload, 1 + ccIdLength);
 		}
 		return data;
 	}

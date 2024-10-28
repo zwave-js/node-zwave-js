@@ -6438,7 +6438,7 @@ ${handlers.length} left`,
 	}
 
 	/** Sends a raw datagram to the serialport (if that is open) */
-	private async writeSerial(data: Buffer): Promise<void> {
+	private async writeSerial(data: Uint8Array): Promise<void> {
 		return this.serial?.writeAsync(data);
 	}
 

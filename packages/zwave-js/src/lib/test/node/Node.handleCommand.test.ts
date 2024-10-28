@@ -109,7 +109,7 @@ test.serial(
 				52,
 			]),
 			// Required padding for ASCII
-			Buffer.alloc(12, 0xff),
+			new Uint8Array(12).fill(0xff),
 		]);
 
 		const command = CommandClass.parse(

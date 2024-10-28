@@ -262,7 +262,7 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 				),
 			};
 			if (capabilities.supportsUserCodeChecksum) {
-				let data = Buffer.allocUnsafe(0);
+				let data = new Buffer();
 				for (let i = 1; i <= capabilities.numUsers; i++) {
 					const status = self.state.get(
 						StateKeys.userIdStatus(i),
@@ -277,7 +277,7 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 					) {
 						continue;
 					}
-					const tmp = Buffer.allocUnsafe(3 + code.length);
+					const tmp = new Buffer(3 + code.length);
 					tmp.writeUInt16BE(i, 0);
 					tmp[2] = status;
 					if (typeof code === "string") {

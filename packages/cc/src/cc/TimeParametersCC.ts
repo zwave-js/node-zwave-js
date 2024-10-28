@@ -20,6 +20,7 @@ import type {
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -391,12 +392,12 @@ export class TimeParametersCCSet extends TimeParametersCC {
 	public dateAndTime: Date;
 	private useLocalTime?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
 			!!this.useLocalTime,
 		);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			// 2 bytes placeholder for year
 			0,
 			0,

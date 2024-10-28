@@ -38,6 +38,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	type AllOrNone,
 	getEnumMemberName,
@@ -196,7 +197,7 @@ function getValueLabel(
 	return ret;
 }
 
-function parseMeterValueAndInfo(data: Buffer, offset: number): {
+function parseMeterValueAndInfo(data: Bytes, offset: number): {
 	type: number;
 	rateType: RateType;
 	scale1: number;
@@ -231,7 +232,7 @@ function encodeMeterValueAndInfo(
 	rateType: RateType,
 	scale: number,
 	value: number,
-): { data: Buffer; floatParams: FloatParameters; scale2: number | undefined } {
+): { data: Bytes; floatParams: FloatParameters; scale2: number | undefined } {
 	// We need at least 2 bytes
 
 	const scale1 = scale >= 7 ? 7 : scale & 0b111;
@@ -251,7 +252,7 @@ function encodeMeterValueAndInfo(
 	);
 
 	return {
-		data: Buffer.concat([Buffer.from([typeByte]), valueBytes]),
+		data: Bytes.concat([Bytes.from([typeByte]), valueBytes]),
 		floatParams: pick(floatParams, ["precision", "size"]),
 		scale2,
 	};
@@ -259,7 +260,7 @@ function encodeMeterValueAndInfo(
 
 function parseScale(
 	scale1: number,
-	data: Buffer,
+	data: Bytes,
 	scale2Offset: number,
 ): number {
 	if (scale1 === 7) {
@@ -932,8 +933,8 @@ export class MeterCCReport extends MeterCC {
 			) {
 				const { value: prevValue } = parseFloatWithScale(
 					// This float is split in the payload
-					Buffer.concat([
-						Buffer.from([raw.payload[1]]),
+					Bytes.concat([
+						Bytes.from([raw.payload[1]]),
 						raw.payload.subarray(offset),
 					]),
 				);
@@ -1045,7 +1046,7 @@ export class MeterCCReport extends MeterCC {
 	public rateType: RateType;
 	public deltaTime: MaybeUnknown<number>;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const { data: typeAndValue, floatParams, scale2 } =
 			encodeMeterValueAndInfo(
 				this.type,
@@ -1055,10 +1056,10 @@ export class MeterCCReport extends MeterCC {
 			);
 
 		const deltaTime = this.deltaTime ?? 0xffff;
-		const deltaTimeBytes = Buffer.allocUnsafe(2);
+		const deltaTimeBytes = new Bytes(2);
 		deltaTimeBytes.writeUInt16BE(deltaTime, 0);
 
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			typeAndValue,
 			deltaTimeBytes,
 		]);
@@ -1071,16 +1072,16 @@ export class MeterCCReport extends MeterCC {
 				floatParams,
 			).subarray(1);
 
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				prevValueBytes,
 			]);
 		}
 
 		if (scale2 != undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([scale2]),
+				Bytes.from([scale2]),
 			]);
 		}
 
@@ -1159,7 +1160,7 @@ export class MeterCCGet extends MeterCC {
 	public rateType: RateType | undefined;
 	public scale: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		let scale1: number;
 		let scale2: number | undefined;
 		let bufferLength = 0;
@@ -1187,7 +1188,7 @@ export class MeterCCGet extends MeterCC {
 			bufferLength = Math.max(bufferLength, 1);
 		}
 
-		this.payload = Buffer.alloc(bufferLength, 0);
+		this.payload = Bytes.alloc(bufferLength, 0);
 		this.payload[0] = (rateTypeFlags << 6) | (scale1 << 3);
 		if (scale2) this.payload[1] = scale2;
 
@@ -1257,8 +1258,8 @@ export class MeterCCSupportedReport extends MeterCC {
 			// The bitmask is the original payload byte plus all following bytes
 			// Since the first byte only has 7 bits, we need to reduce all following bits by 1
 			supportedScales = parseBitMask(
-				Buffer.concat([
-					Buffer.from([raw.payload[1] & 0b0_1111111]),
+				Bytes.concat([
+					Bytes.from([raw.payload[1] & 0b0_1111111]),
 					raw.payload.subarray(3, 3 + extraBytes),
 				]),
 				0,
@@ -1266,13 +1267,13 @@ export class MeterCCSupportedReport extends MeterCC {
 		} else {
 			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
 			supportedScales = parseBitMask(
-				Buffer.from([raw.payload[1]]),
+				Bytes.from([raw.payload[1]]),
 				0,
 			);
 		}
 		// This is only present in V4+
 		const supportedRateTypes: RateType[] = parseBitMask(
-			Buffer.from([(raw.payload[0] & 0b0_11_00000) >>> 5]),
+			Bytes.from([(raw.payload[0] & 0b0_11_00000) >>> 5]),
 			1,
 		);
 
@@ -1333,7 +1334,7 @@ export class MeterCCSupportedReport extends MeterCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const typeByte = (this.type & 0b0_00_11111)
 			| (this.supportedRateTypes.includes(RateType.Consumed)
 				? 0b0_01_00000
@@ -1353,15 +1354,15 @@ export class MeterCCSupportedReport extends MeterCC {
 		const scalesByte1 = (supportedScales[0] >>> 1)
 			| (supportedScales.length > 1 ? 0b1000_0000 : 0);
 
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			typeByte,
 			scalesByte1,
 		]);
 		if (supportedScales.length > 1) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([supportedScales.length - 1]),
-				Buffer.from(supportedScales.subarray(1)),
+				Bytes.from([supportedScales.length - 1]),
+				Bytes.from(supportedScales.subarray(1)),
 			]);
 		}
 
@@ -1446,7 +1447,7 @@ export class MeterCCReset extends MeterCC {
 	public rateType: RateType | undefined;
 	public targetValue: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (
 			this.type != undefined
 			&& this.scale != undefined
@@ -1463,9 +1464,9 @@ export class MeterCCReset extends MeterCC {
 			this.payload = typeAndValue;
 
 			if (scale2 != undefined) {
-				this.payload = Buffer.concat([
+				this.payload = Bytes.concat([
 					this.payload,
-					Buffer.from([scale2]),
+					Bytes.from([scale2]),
 				]);
 			}
 		}

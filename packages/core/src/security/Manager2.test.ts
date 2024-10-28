@@ -1,3 +1,4 @@
+import { isUint8Array } from "@zwave-js/shared";
 import test from "ava";
 import * as crypto from "node:crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
@@ -46,7 +47,7 @@ test("nextNonce() -> should generate a 13-byte nonce otherwise", (t) => {
 	});
 
 	const ret = man.nextNonce(2);
-	t.true(Buffer.isBuffer(ret));
+	t.true(isUint8Array(ret));
 	t.is(ret.length, 13);
 });
 
@@ -71,8 +72,8 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 			man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
-				Buffer.alloc(15),
-				Buffer.alloc(16),
+				new Uint8Array(15),
+				new Uint8Array(16),
 			),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -86,8 +87,8 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 			man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
-				Buffer.alloc(16),
-				Buffer.alloc(1),
+				new Uint8Array(16),
+				new Uint8Array(1),
 			),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -106,8 +107,8 @@ test("initializeSPAN() -> should throw if the node has not been assigned a secur
 			man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
-				Buffer.alloc(16),
-				Buffer.alloc(16),
+				new Uint8Array(16),
+				new Uint8Array(16),
 			),
 		{
 			errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
@@ -126,8 +127,8 @@ test("initializeSPAN() -> should throw if the keys for the node's security class
 			man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
-				Buffer.alloc(16),
-				Buffer.alloc(16),
+				new Uint8Array(16),
+				new Uint8Array(16),
 			),
 		{
 			errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
@@ -148,8 +149,8 @@ test("initializeSPAN() -> should not throw otherwise", (t) => {
 		man.initializeSPAN(
 			nodeId,
 			SecurityClass.S2_Authenticated,
-			Buffer.alloc(16),
-			Buffer.alloc(16),
+			new Uint8Array(16),
+			new Uint8Array(16),
 		)
 	);
 });
@@ -158,7 +159,7 @@ test("setKeys() -> throws if the network key does not have length 16", (t) => {
 	const man = new SecurityManager2();
 	assertZWaveError(
 		t,
-		() => man.setKey(SecurityClass.S2_Authenticated, Buffer.alloc(15)),
+		() => man.setKey(SecurityClass.S2_Authenticated, new Uint8Array(15)),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
 			messageMatches: "16 bytes",
@@ -169,7 +170,7 @@ test("setKeys() -> throws if the network key does not have length 16", (t) => {
 
 test("setKeys() -> throws if the security class is not valid", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.setKey(-1 as any, Buffer.alloc(16)), {
+	assertZWaveError(t, () => man.setKey(-1 as any, new Uint8Array(16)), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: "security class",
 	});
@@ -279,7 +280,7 @@ test("getMulticastKeyAndIV() -> should generate a 13-byte IV otherwise", (t) => 
 
 	const ret = man.getMulticastKeyAndIV(groupId).iv;
 
-	t.true(Buffer.isBuffer(ret));
+	t.true(isUint8Array(ret));
 	t.is(ret.length, 13);
 });
 

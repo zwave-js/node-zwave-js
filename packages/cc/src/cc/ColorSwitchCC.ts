@@ -22,6 +22,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	getEnumMemberName,
 	isEnumMember,
@@ -713,7 +714,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(
 			this.supportedColorComponents,
 			15, // fixed 2 bytes
@@ -858,15 +859,15 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.colorComponent,
 			this.currentValue,
 		]);
 		if (this.targetValue != undefined && this.duration != undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([
+				Bytes.from([
 					this.targetValue ?? 0xfe,
 					(this.duration ?? Duration.default()).serializeReport(),
 				]),
@@ -942,8 +943,8 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		this._colorComponent = value;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this._colorComponent]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this._colorComponent]);
 		return super.serialize(ctx);
 	}
 
@@ -1023,9 +1024,9 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public colorTable: ColorTable;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const populatedColorCount = Object.keys(this.colorTable).length;
-		this.payload = Buffer.allocUnsafe(
+		this.payload = new Bytes(
 			1 + populatedColorCount * 2 + 1,
 		);
 		this.payload[0] = populatedColorCount & 0b11111;
@@ -1138,10 +1139,10 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public colorComponent: ColorComponent;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			controlByte,
 			this.colorComponent,
 			this.startLevel,
@@ -1212,8 +1213,8 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 
 	public readonly colorComponent: ColorComponent;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.colorComponent]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.colorComponent]);
 		return super.serialize(ctx);
 	}
 

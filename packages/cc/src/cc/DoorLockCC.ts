@@ -21,6 +21,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -858,8 +859,8 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 
 	public mode: DoorLockMode;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.mode]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.mode]);
 		return super.serialize(ctx);
 	}
 
@@ -1328,7 +1329,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public twistAssist?: boolean;
 	public blockToBlock?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const insideHandles = isArray(
 				this.insideHandlesCanOpenDoorConfiguration,
 			)
@@ -1358,7 +1359,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 		const flags = (this.twistAssist ? 0b1 : 0)
 			| (this.blockToBlock ? 0b10 : 0);
 
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.operationType,
 			handles,
 			lockTimeoutMinutes,

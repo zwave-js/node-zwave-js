@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import { createHash } from "node:crypto";
 import { Protocols } from "../capabilities/Protocols";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -144,7 +145,7 @@ function parseTLVData(type: ProvisioningInformationType, data: string) {
 		}
 
 		case ProvisioningInformationType.UUID16: {
-			const buffer = Buffer.allocUnsafe(16);
+			const buffer = new Bytes(16);
 			// Only format 0 is supported here
 			const presentationFormat = readLevel(data, 0);
 			if (presentationFormat !== 0) return;
@@ -160,7 +161,7 @@ function parseTLVData(type: ProvisioningInformationType, data: string) {
 		}
 
 		case ProvisioningInformationType.SupportedProtocols: {
-			const bitMask = Buffer.from([
+			const bitMask = Uint8Array.from([
 				data.length === 2
 					? readLevel(data, 0)
 					: data.length === 3
@@ -234,13 +235,13 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	const checksum = readUInt16(qr, 4);
 	// The checksum covers the remaining data
 	const hash = createHash("sha1");
-	hash.update(Buffer.from(qr.slice(9), "ascii"));
+	hash.update(Bytes.from(qr.slice(9), "ascii"));
 	const expectedChecksum = hash.digest().readUInt16BE(0);
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 
 	const requestedKeysBitmask = readUInt8(qr, 9);
 	const requestedSecurityClasses = parseBitMask(
-		Buffer.from([requestedKeysBitmask]),
+		[requestedKeysBitmask],
 		SecurityClass.S2_Unauthenticated,
 	);
 	if (!requestedSecurityClasses.every((k) => k in SecurityClass)) {
@@ -248,7 +249,7 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	}
 
 	let offset = 12;
-	const dsk = Buffer.allocUnsafe(16);
+	const dsk = new Bytes(16);
 	for (let dskBlock = 0; dskBlock < 8; dskBlock++) {
 		const block = readUInt16(qr, offset);
 		dsk.writeUInt16BE(block, dskBlock * 2);

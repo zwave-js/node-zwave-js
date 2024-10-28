@@ -63,7 +63,7 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 	public buffer: Buffer;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(5 + this.buffer.length);
+		this.payload = new Buffer(5 + this.buffer.length);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 		this.buffer.copy(this.payload, 5);

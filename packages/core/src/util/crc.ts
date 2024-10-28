@@ -1,5 +1,8 @@
 // Implementation based on SDS13782
-export function CRC16_CCITT(data: Buffer, startValue: number = 0x1d0f): number {
+export function CRC16_CCITT(
+	data: Uint8Array,
+	startValue: number = 0x1d0f,
+): number {
 	let crc = startValue;
 	const poly = 0x1021;
 

@@ -7720,7 +7720,7 @@ export class ZWaveController
 			);
 		}
 
-		const ret = Buffer.allocUnsafe(size);
+		const ret = new Buffer(size);
 		let offset = 0;
 		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
@@ -7778,7 +7778,7 @@ export class ZWaveController
 		// Open NVM for reading
 		const size = await open();
 
-		const ret = Buffer.allocUnsafe(size);
+		const ret = new Buffer(size);
 		let offset = 0;
 		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
@@ -9043,7 +9043,7 @@ export class ZWaveController
 			// For the first part of the bootstrapping, a temporary key needs to be used
 			this.driver["_securityManager"] = new SecurityManager({
 				ownNodeId: this._ownNodeId!,
-				networkKey: Buffer.alloc(16, 0),
+				networkKey: new Uint8Array(16).fill(0),
 				nonceTimeout: this.driver.options.timeouts.nonce,
 			});
 

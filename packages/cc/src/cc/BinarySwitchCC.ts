@@ -20,6 +20,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -339,8 +340,8 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	public targetValue: boolean;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.targetValue ? 0xff : 0x00,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
@@ -425,14 +426,14 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
 		if (this.targetValue !== undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([
+				Bytes.from([
 					encodeMaybeBoolean(this.targetValue),
 					(this.duration ?? Duration.default()).serializeReport(),
 				]),

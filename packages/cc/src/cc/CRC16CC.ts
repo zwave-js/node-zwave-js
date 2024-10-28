@@ -22,9 +22,10 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 
+import { Bytes } from "@zwave-js/shared/safe";
 import { CRC16Command } from "../lib/_Types";
 
-const headerBuffer = Buffer.from([
+const headerBuffer = Bytes.from([
 	CommandClasses["CRC-16 Encapsulation"],
 	CRC16Command.CommandEncapsulation,
 ]);
@@ -144,10 +145,10 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 
 	public encapsulated: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const commandBuffer = this.encapsulated.serialize(ctx);
 		// Reserve 2 bytes for the CRC
-		this.payload = Buffer.concat([commandBuffer, Buffer.allocUnsafe(2)]);
+		this.payload = Bytes.concat([commandBuffer, new Bytes(2)]);
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation

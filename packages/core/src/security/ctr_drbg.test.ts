@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -25,7 +26,7 @@ function getVectors(alg: string) {
 
 			for (let j = 1; j < items.length; j++) {
 				const key = items[j].split(" = ")[0];
-				const value = Buffer.from(items[j].split(" = ")[1], "hex");
+				const value = Bytes.from(items[j].split(" = ")[1], "hex");
 
 				if (vector[key]) vector[key] = [vector[key], value];
 				else vector[key] = value;

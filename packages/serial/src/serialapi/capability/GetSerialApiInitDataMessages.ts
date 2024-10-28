@@ -139,7 +139,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			chipType = this.zwaveChipType;
 		}
 
-		this.payload = Buffer.allocUnsafe(
+		this.payload = new Buffer(
 			3 + NUM_NODEMASK_BYTES + (chipType ? 2 : 0),
 		);
 

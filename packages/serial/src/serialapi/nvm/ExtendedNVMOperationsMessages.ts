@@ -140,7 +140,7 @@ export class ExtendedNVMOperationsReadRequest
 	public offset: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(5);
+		this.payload = new Buffer(5);
 		this.payload[0] = this.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 
@@ -209,7 +209,7 @@ export class ExtendedNVMOperationsWriteRequest
 	public buffer: Buffer;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(1 + 4 + this.buffer.length);
+		this.payload = new Buffer(1 + 4 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 		this.buffer.copy(this.payload, 5);

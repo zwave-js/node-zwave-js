@@ -407,7 +407,7 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(7);
+		this.payload = new Buffer(7);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.blockLength, 3);
 		this.payload.writeUInt16BE(this.crcSeed, 5);
@@ -556,7 +556,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	public buffer: Buffer;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([Buffer.allocUnsafe(5), this.buffer]);
+		this.payload = Buffer.concat([new Buffer(5), this.buffer]);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 

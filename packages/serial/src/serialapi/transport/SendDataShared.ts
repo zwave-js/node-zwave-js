@@ -168,7 +168,7 @@ export function serializableTXReportToTXReport(
 }
 
 export function encodeTXReport(report: SerializableTXReport): Buffer {
-	const ret = Buffer.alloc(24, 0);
+	const ret = new Uint8Array(24).fill(0);
 	ret.writeUInt16BE(report.txTicks, 0);
 	ret[2] = report.repeaterNodeIds?.length ?? 0;
 	ret.writeInt8(report.ackRSSI ?? RssiError.NotAvailable, 3);

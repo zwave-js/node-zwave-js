@@ -22,7 +22,7 @@ test.beforeEach(async (t) => {
 		loadConfiguration: false,
 		skipNodeInterview: true,
 		securityKeys: {
-			S0_Legacy: Buffer.alloc(16, 0xff),
+			S0_Legacy: new Uint8Array(16).fill(0xff),
 		},
 		beforeStartup(mockPort) {
 			const controller = new MockController({ serial: mockPort });

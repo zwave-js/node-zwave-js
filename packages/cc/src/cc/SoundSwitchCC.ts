@@ -17,6 +17,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
@@ -498,8 +499,8 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 
 	public toneCount: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.toneCount]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.toneCount]);
 		return super.serialize(ctx);
 	}
 
@@ -559,10 +560,10 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly duration: number;
 	public readonly name: string;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.toneId, 0, 0, this.name.length]),
-			Buffer.from(this.name, "utf8"),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.toneId, 0, 0, this.name.length]),
+			Bytes.from(this.name, "utf8"),
 		]);
 		this.payload.writeUInt16BE(this.duration, 1);
 		return super.serialize(ctx);
@@ -620,8 +621,8 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 
 	public toneId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.toneId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.toneId]);
 		return super.serialize(ctx);
 	}
 
@@ -668,8 +669,8 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public defaultVolume: number;
 	public defaultToneId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.defaultVolume, this.defaultToneId]);
 		return super.serialize(ctx);
 	}
 
@@ -721,8 +722,8 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.defaultToneId)
 	public defaultToneId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.defaultVolume, this.defaultToneId]);
 		return super.serialize(ctx);
 	}
 
@@ -780,8 +781,8 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public toneId: ToneId | number;
 	public volume?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.toneId, this.volume ?? 0]);
 		return super.serialize(ctx);
 	}
 
@@ -841,8 +842,8 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.toneId, this.volume ?? 0]);
 		return super.serialize(ctx);
 	}
 

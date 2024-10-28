@@ -18,6 +18,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -223,8 +224,8 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = value;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(!!this._country ? 5 : 3);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(!!this._country ? 5 : 3);
 		this.payload.write(this._language, 0, "ascii");
 		if (!!this._country) this.payload.write(this._country, 3, "ascii");
 		return super.serialize(ctx);

@@ -168,7 +168,7 @@ export class Security2Extension {
 		} else {
 			this.type = getExtensionType(this);
 			this.critical = options.critical;
-			this.payload = options.payload ?? Buffer.allocUnsafe(0);
+			this.payload = options.payload ?? new Buffer();
 		}
 	}
 

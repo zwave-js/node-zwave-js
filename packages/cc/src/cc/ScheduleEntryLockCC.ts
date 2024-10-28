@@ -21,6 +21,7 @@ import type {
 } from "@zwave-js/host";
 import {
 	type AllOrNone,
+	Bytes,
 	formatDate,
 	formatTime,
 	getEnumMemberName,
@@ -956,8 +957,8 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	public userId: number;
 	public enabled: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId, this.enabled ? 0x01 : 0x00]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId, this.enabled ? 0x01 : 0x00]);
 		return super.serialize(ctx);
 	}
 
@@ -1002,8 +1003,8 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 
 	public enabled: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.enabled ? 0x01 : 0x00]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.enabled ? 0x01 : 0x00]);
 		return super.serialize(ctx);
 	}
 
@@ -1062,8 +1063,8 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 	@ccValue(ScheduleEntryLockCCValues.numDailyRepeatingSlots)
 	public numDailyRepeatingSlots: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.numWeekDaySlots,
 			this.numYearDaySlots,
 			this.numDailyRepeatingSlots ?? 0,
@@ -1176,8 +1177,8 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.action,
 			this.userId,
 			this.slotId,
@@ -1340,8 +1341,8 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.userId,
 			this.slotId,
 			this.weekday ?? 0xff,
@@ -1419,8 +1420,8 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	public userId: number;
 	public slotId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId, this.slotId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId, this.slotId]);
 		return super.serialize(ctx);
 	}
 
@@ -1540,8 +1541,8 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.action,
 			this.userId,
 			this.slotId,
@@ -1756,8 +1757,8 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.userId,
 			this.slotId,
 			this.startYear ?? 0xff,
@@ -1843,8 +1844,8 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	public userId: number;
 	public slotId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId, this.slotId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId, this.slotId]);
 		return super.serialize(ctx);
 	}
 
@@ -1892,7 +1893,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	public standardOffset: number;
 	public dstOffset: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeTimezone({
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
@@ -1943,7 +1944,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 	public standardOffset: number;
 	public dstOffset: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeTimezone({
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
@@ -2058,17 +2059,17 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 	public durationHour?: number;
 	public durationMinute?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.action, this.userId, this.slotId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.action, this.userId, this.slotId]);
 		if (this.action === ScheduleEntryLockSetAction.Set) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				encodeBitMask(
 					this.weekdays!,
 					ScheduleEntryLockWeekday.Saturday,
 					ScheduleEntryLockWeekday.Sunday,
 				),
-				Buffer.from([
+				Bytes.from([
 					this.startHour!,
 					this.startMinute!,
 					this.durationHour!,
@@ -2077,7 +2078,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			]);
 		} else {
 			// Not sure if this is correct
-			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0xff)]);
+			this.payload = Bytes.concat([this.payload, Bytes.alloc(5, 0xff)]);
 		}
 
 		return super.serialize(ctx);
@@ -2210,17 +2211,17 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId, this.slotId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId, this.slotId]);
 		if (this.weekdays) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				encodeBitMask(
 					this.weekdays,
 					ScheduleEntryLockWeekday.Saturday,
 					ScheduleEntryLockWeekday.Sunday,
 				),
-				Buffer.from([
+				Bytes.from([
 					this.startHour!,
 					this.startMinute!,
 					this.durationHour!,
@@ -2229,7 +2230,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			]);
 		} else {
 			// Not sure if this is correct, but at least we won't parse it incorrectly ourselves when setting everything to 0
-			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0)]);
+			this.payload = Bytes.concat([this.payload, Bytes.alloc(5, 0)]);
 		}
 
 		return super.serialize(ctx);
@@ -2305,8 +2306,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 	public userId: number;
 	public slotId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.userId, this.slotId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.userId, this.slotId]);
 		return super.serialize(ctx);
 	}
 

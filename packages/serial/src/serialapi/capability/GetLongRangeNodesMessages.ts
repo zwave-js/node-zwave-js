@@ -111,7 +111,7 @@ export class GetLongRangeNodesResponse extends Message {
 	public nodeIds: readonly number[];
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(
+		this.payload = new Buffer(
 			3 + NUM_LR_NODEMASK_SEGMENT_BYTES,
 		);
 

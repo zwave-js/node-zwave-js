@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import { sum } from "@zwave-js/shared/safe";
 import { NodeIDType } from "../consts";
 import { type BasicDeviceClass } from "../index_safe";
@@ -11,7 +12,7 @@ export interface ApplicationNodeInformation {
 }
 
 export function parseApplicationNodeInformation(
-	nif: Buffer,
+	nif: Bytes,
 ): ApplicationNodeInformation {
 	validatePayload(nif.length >= 2);
 	return {
@@ -23,10 +24,10 @@ export function parseApplicationNodeInformation(
 
 export function encodeApplicationNodeInformation(
 	nif: ApplicationNodeInformation,
-): Buffer {
+): Bytes {
 	const ccList = encodeCCList(nif.supportedCCs, []);
-	return Buffer.concat([
-		Buffer.from([nif.genericDeviceClass, nif.specificDeviceClass]),
+	return Bytes.concat([
+		Bytes.from([nif.genericDeviceClass, nif.specificDeviceClass]),
 		ccList,
 	]);
 }
@@ -37,7 +38,7 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 }
 
 export function parseNodeUpdatePayload(
-	nif: Buffer,
+	nif: Bytes,
 	nodeIdType: NodeIDType = NodeIDType.Short,
 ): NodeUpdatePayload {
 	let offset = 0;
@@ -61,12 +62,12 @@ export function parseNodeUpdatePayload(
 export function encodeNodeUpdatePayload(
 	nif: NodeUpdatePayload,
 	nodeIdType: NodeIDType = NodeIDType.Short,
-): Buffer {
+): Bytes {
 	const ccList = encodeCCList(nif.supportedCCs, []);
 	const nodeId = encodeNodeID(nif.nodeId, nodeIdType);
-	return Buffer.concat([
+	return Bytes.concat([
 		nodeId,
-		Buffer.from([
+		Bytes.from([
 			3 + ccList.length,
 			nif.basicDeviceClass,
 			nif.genericDeviceClass,
@@ -85,15 +86,16 @@ export function isExtendedCCId(ccId: CommandClasses): boolean {
  * @param offset The offset at which the CC id is located
  */
 export function parseCCId(
-	payload: Buffer,
+	payload: Uint8Array,
 	offset: number = 0,
 ): { ccId: CommandClasses; bytesRead: number } {
 	const isExtended = isExtendedCCId(payload[offset]);
 	validatePayload(payload.length >= offset + (isExtended ? 2 : 1));
+	const view = Bytes.view(payload);
 	if (isExtended) {
-		return { ccId: payload.readUInt16BE(offset), bytesRead: 2 };
+		return { ccId: view.readUInt16BE(offset), bytesRead: 2 };
 	} else {
-		return { ccId: payload.readUInt8(offset), bytesRead: 1 };
+		return { ccId: view.readUInt8(offset), bytesRead: 1 };
 	}
 }
 
@@ -103,7 +105,7 @@ export function parseCCId(
  */
 export function encodeCCId(
 	ccId: CommandClasses,
-	payload: Buffer,
+	payload: Bytes,
 	offset: number = 0,
 ): number {
 	if (isExtendedCCId(ccId)) {
@@ -115,7 +117,7 @@ export function encodeCCId(
 	}
 }
 
-export function parseCCList(payload: Buffer): {
+export function parseCCList(payload: Bytes): {
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
@@ -143,13 +145,13 @@ export function parseCCList(payload: Buffer): {
 export function encodeCCList(
 	supportedCCs: readonly CommandClasses[],
 	controlledCCs: readonly CommandClasses[],
-): Buffer {
+): Bytes {
 	const bufferLength =
 		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
 		+ (controlledCCs.length > 0 ? 1 : 0) // support/control mark
 		+ sum(controlledCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)));
 
-	const ret = Buffer.allocUnsafe(bufferLength);
+	const ret = new Bytes(bufferLength);
 	let offset = 0;
 	for (const cc of supportedCCs) {
 		offset += encodeCCId(cc, ret, offset);
@@ -214,7 +216,7 @@ export type NodeInformationFrame =
 	& ApplicationNodeInformation;
 
 export function parseNodeProtocolInfo(
-	buffer: Buffer,
+	buffer: Bytes,
 	offset: number,
 	isLongRange: boolean = false,
 ): NodeProtocolInfo {
@@ -298,10 +300,10 @@ export function parseNodeProtocolInfo(
 export function encodeNodeProtocolInfo(
 	info: NodeProtocolInfo,
 	isLongRange: boolean = false,
-): Buffer {
+): Bytes {
 	// Technically a lot of these fields are reserved/unused in Z-Wave Long Range,
 	// but the only thing where it really matters is the speed bitmask.
-	const ret = Buffer.alloc(3, 0);
+	const ret = Bytes.alloc(3, 0);
 	// Byte 0 and 2
 	if (info.isListening) ret[0] |= 0b10_000_000;
 	if (info.isRouting) ret[0] |= 0b01_000_000;
@@ -330,7 +332,7 @@ export function encodeNodeProtocolInfo(
 }
 
 export function parseNodeProtocolInfoAndDeviceClass(
-	buffer: Buffer,
+	buffer: Bytes,
 	isLongRange: boolean = false,
 ): {
 	info: NodeProtocolInfoAndDeviceClass;
@@ -365,13 +367,13 @@ export function parseNodeProtocolInfoAndDeviceClass(
 export function encodeNodeProtocolInfoAndDeviceClass(
 	info: NodeProtocolInfoAndDeviceClass,
 	isLongRange: boolean = false,
-): Buffer {
-	return Buffer.concat([
+): Bytes {
+	return Bytes.concat([
 		encodeNodeProtocolInfo(
 			{ ...info, hasSpecificDeviceClass: true },
 			isLongRange,
 		),
-		Buffer.from([
+		Bytes.from([
 			info.basicDeviceClass,
 			info.genericDeviceClass,
 			info.specificDeviceClass,
@@ -380,7 +382,7 @@ export function encodeNodeProtocolInfoAndDeviceClass(
 }
 
 export function parseNodeInformationFrame(
-	buffer: Buffer,
+	buffer: Bytes,
 	isLongRange: boolean = false,
 ): NodeInformationFrame {
 	const result = parseNodeProtocolInfoAndDeviceClass(
@@ -390,7 +392,7 @@ export function parseNodeInformationFrame(
 	const info = result.info;
 	let offset = result.bytesRead;
 
-	let ccList: Buffer;
+	let ccList: Bytes;
 	if (isLongRange) {
 		const ccListLength = buffer[offset];
 		offset += 1;
@@ -411,7 +413,7 @@ export function parseNodeInformationFrame(
 export function encodeNodeInformationFrame(
 	info: NodeInformationFrame,
 	isLongRange: boolean = false,
-): Buffer {
+): Bytes {
 	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(
 		info,
 		isLongRange,
@@ -419,14 +421,14 @@ export function encodeNodeInformationFrame(
 
 	let ccList = encodeCCList(info.supportedCCs, []);
 	if (isLongRange) {
-		ccList = Buffer.concat([Buffer.from([ccList.length]), ccList]);
+		ccList = Bytes.concat([Bytes.from([ccList.length]), ccList]);
 	}
 
-	return Buffer.concat([protocolInfo, ccList]);
+	return Bytes.concat([protocolInfo, ccList]);
 }
 
 export function parseNodeID(
-	buffer: Buffer,
+	buffer: Bytes,
 	type: NodeIDType = NodeIDType.Short,
 	offset: number = 0,
 ): {
@@ -441,8 +443,8 @@ export function parseNodeID(
 export function encodeNodeID(
 	nodeId: number,
 	type: NodeIDType = NodeIDType.Short,
-): Buffer {
-	const ret = Buffer.allocUnsafe(type);
+): Bytes {
+	const ret = new Bytes(type);
 	ret.writeUIntBE(nodeId, 0, type);
 	return ret;
 }

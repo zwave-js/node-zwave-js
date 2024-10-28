@@ -12,6 +12,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -208,8 +209,8 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public setbackState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.setbackType & 0b11,
 			encodeSetbackState(this.setbackState),
 		]);
@@ -272,8 +273,8 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public readonly setbackState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.setbackType & 0b11,
 			encodeSetbackState(this.setbackState),
 		]);

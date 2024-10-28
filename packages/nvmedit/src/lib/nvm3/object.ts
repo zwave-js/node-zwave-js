@@ -43,7 +43,7 @@ export function serializeObject(obj: NVM3Object): Buffer {
 		? NVM3_OBJ_HEADER_SIZE_LARGE
 		: NVM3_OBJ_HEADER_SIZE_SMALL;
 	const dataLength = obj.data?.length ?? 0;
-	const ret = Buffer.allocUnsafe(dataLength + headerSize);
+	const ret = new Buffer(dataLength + headerSize);
 
 	// Write header
 	if (isLarge) {

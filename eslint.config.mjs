@@ -155,6 +155,17 @@ export default tseslint.config(
 			"unicorn/prefer-string-slice": "error",
 			"unicorn/prefer-string-starts-ends-with": "error",
 			"unicorn/prefer-string-replace-all": "error",
+
+			// Prefer our own Buffer implementation (compatible with native Uint8array)
+			// See https://sindresorhus.com/blog/goodbye-nodejs-buffer for the reason behind this
+			"no-restricted-globals": [
+				"error",
+				{
+					name: "Buffer",
+					message:
+						"Use Uint8Array or the Bytes implementation from @zwave-js/shared instead.",
+				},
+			],
 		},
 	},
 	// Disable unnecessarily strict rules for test files

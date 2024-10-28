@@ -1,5 +1,5 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
-import { Mixin } from "@zwave-js/shared";
+import { Bytes, Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "node:events";
 import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "../log/Logger";
@@ -17,7 +17,7 @@ export type ZWaveSerialChunk =
 	| MessageHeaders.ACK
 	| MessageHeaders.NAK
 	| MessageHeaders.CAN
-	| Buffer;
+	| Uint8Array;
 
 export enum ZWaveSerialMode {
 	SerialAPI,
@@ -27,7 +27,7 @@ export enum ZWaveSerialMode {
 export interface ZWaveSerialPortEventCallbacks {
 	error: (e: Error) => void;
 	data: (data: ZWaveSerialChunk) => void;
-	discardedData: (data: Buffer) => void;
+	discardedData: (data: Uint8Array) => void;
 	bootloaderData: (data: BootloaderChunk) => void;
 }
 
@@ -156,9 +156,10 @@ export class ZWaveSerialPortBase extends PassThrough {
 		// Check the incoming messages and route them to the correct parser
 		this.serial.on("data", (data) => {
 			if (this.mode == undefined) {
+				const buffer = Bytes.view(data as Uint8Array);
 				// If we haven't figured out the startup mode yet,
 				// inspect the chunk to see if it contains the bootloader preamble
-				const str = (data as Buffer).toString("ascii")
+				const str = buffer.toString("ascii")
 					// like .trim(), but including null bytes
 					.replaceAll(/^[\s\0]+|[\s\0]+$/g, "");
 
@@ -166,12 +167,12 @@ export class ZWaveSerialPortBase extends PassThrough {
 					// We're sure we're in bootloader mode
 					this.mode = ZWaveSerialMode.Bootloader;
 				} else if (
-					(data as Buffer).every((b) =>
+					buffer.every((b) =>
 						b === 0x00
 						|| b === 0x0a
 						|| b === 0x0d
 						|| (b >= 0x20 && b <= 0x7e)
-					) && (data as Buffer).some((b) => b >= 0x20 && b <= 0x7e)
+					) && buffer.some((b) => b >= 0x20 && b <= 0x7e)
 				) {
 					// Only printable line breaks, null bytes and at least one printable ASCII character
 					// --> We're pretty sure we're in bootloader mode
@@ -234,7 +235,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 		return this._isOpen;
 	}
 
-	public async writeAsync(data: Buffer): Promise<void> {
+	public async writeAsync(data: Uint8Array): Promise<void> {
 		if (!this.isOpen) {
 			throw new Error("The serial port is not open!");
 		}

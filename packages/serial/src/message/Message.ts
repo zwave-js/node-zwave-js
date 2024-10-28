@@ -87,7 +87,7 @@ export function hasNodeId<T extends Message>(msg: T): msg is T & HasNodeId {
 }
 
 /** Returns the number of bytes the first message in the buffer occupies */
-function getMessageLength(data: Buffer): number {
+function getMessageLength(data: Uint8Array): number {
 	const remainingLength = data[1];
 	return remainingLength + 2;
 }
@@ -99,7 +99,7 @@ export class MessageRaw {
 		public readonly payload: Buffer,
 	) {}
 
-	public static parse(data: Buffer): MessageRaw {
+	public static parse(data: Uint8Array): MessageRaw {
 		// SOF, length, type, commandId and checksum must be present
 		if (!data.length || data.length < 5) {
 			throw new ZWaveError(
@@ -161,7 +161,7 @@ export class Message {
 			// Fall back to decorated response/callback types if none is given
 			expectedResponse = getExpectedResponse(this),
 			expectedCallback = getExpectedCallback(this),
-			payload = Buffer.allocUnsafe(0),
+			payload = new Buffer(),
 			callbackId,
 		} = options;
 
@@ -187,7 +187,7 @@ export class Message {
 	}
 
 	public static parse(
-		data: Buffer,
+		data: Uint8Array,
 		ctx: MessageParsingContext,
 	): Message {
 		const raw = MessageRaw.parse(data);
@@ -266,7 +266,7 @@ export class Message {
 	/** Serializes this message into a Buffer */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const ret = Buffer.allocUnsafe(this.payload.length + 5);
+		const ret = new Buffer(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
 		ret[1] = this.payload.length + 3;
@@ -446,7 +446,7 @@ export class Message {
 }
 
 /** Computes the checksum for a serialized message as defined in the Z-Wave specs */
-function computeChecksum(message: Buffer): number {
+function computeChecksum(message: Uint8Array): number {
 	let ret = 0xff;
 	// exclude SOF and checksum byte from the computation
 	for (let i = 1; i < message.length - 1; i++) {

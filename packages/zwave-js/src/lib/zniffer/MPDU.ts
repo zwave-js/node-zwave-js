@@ -752,7 +752,7 @@ export class SearchResultExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 		];
 
 		// This frame contains no payload
-		this.payload = Buffer.allocUnsafe(0);
+		this.payload = new Buffer();
 	}
 
 	/** The node ID that sent the explorer frame that's being answered here */

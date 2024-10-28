@@ -38,7 +38,7 @@ export class NVMFile {
 			if (typeof fileId === "number") {
 				this.fileId = fileId;
 			}
-			this.payload = Buffer.allocUnsafe(0);
+			this.payload = new Buffer();
 		}
 	}
 

@@ -122,7 +122,7 @@ export class SerialAPIStartedRequest extends Message {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const numCCBytes = ccList.length;
 
-		this.payload = Buffer.allocUnsafe(6 + numCCBytes + 1);
+		this.payload = new Buffer(6 + numCCBytes + 1);
 		this.payload[0] = this.wakeUpReason;
 		this.payload[1] = this.watchdogEnabled ? 0b1 : 0;
 		this.payload[2] = this.isListening ? 0b10_000_000 : 0;

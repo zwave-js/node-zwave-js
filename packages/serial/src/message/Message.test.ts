@@ -1,5 +1,6 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import { Buffer } from "@zwave-js/shared";
 import test from "ava";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes } from "./Message";

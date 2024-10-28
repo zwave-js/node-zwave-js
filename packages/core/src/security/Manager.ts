@@ -4,14 +4,14 @@ import { randomBytes } from "node:crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encryptAES128ECB } from "./crypto";
 
-const authKeyBase = Buffer.alloc(16, 0x55);
-const encryptionKeyBase = Buffer.alloc(16, 0xaa);
+const authKeyBase = new Uint8Array(16).fill(0x55);
+const encryptionKeyBase = new Uint8Array(16).fill(0xaa);
 
-export function generateAuthKey(networkKey: Buffer): Buffer {
+export function generateAuthKey(networkKey: Uint8Array): Uint8Array {
 	return encryptAES128ECB(authKeyBase, networkKey);
 }
 
-export function generateEncryptionKey(networkKey: Buffer): Buffer {
+export function generateEncryptionKey(networkKey: Uint8Array): Uint8Array {
 	return encryptAES128ECB(encryptionKeyBase, networkKey);
 }
 
@@ -22,13 +22,13 @@ interface NonceKey {
 }
 
 interface NonceEntry {
-	nonce: Buffer;
+	nonce: Uint8Array;
 	/** The node this nonce was created for */
 	receiver: number;
 }
 
 export interface SecurityManagerOptions {
-	networkKey: Buffer;
+	networkKey: Uint8Array;
 	ownNodeId: number;
 	nonceTimeout: number;
 }
@@ -47,11 +47,11 @@ export class SecurityManager {
 	private ownNodeId: number;
 	private nonceTimeout: number;
 
-	private _networkKey!: Buffer;
-	public get networkKey(): Buffer {
+	private _networkKey!: Uint8Array;
+	public get networkKey(): Uint8Array {
 		return this._networkKey;
 	}
-	public set networkKey(v: Buffer) {
+	public set networkKey(v: Uint8Array) {
 		if (v.length !== 16) {
 			throw new ZWaveError(
 				`The network key must be 16 bytes long!`,
@@ -63,13 +63,13 @@ export class SecurityManager {
 		this._encryptionKey = generateEncryptionKey(this._networkKey);
 	}
 
-	private _authKey!: Buffer;
-	public get authKey(): Buffer {
+	private _authKey!: Uint8Array;
+	public get authKey(): Uint8Array {
 		return this._authKey;
 	}
 
-	private _encryptionKey!: Buffer;
-	public get encryptionKey(): Buffer {
+	private _encryptionKey!: Uint8Array;
+	public get encryptionKey(): Uint8Array {
 		return this._encryptionKey;
 	}
 
@@ -94,8 +94,8 @@ export class SecurityManager {
 	}
 
 	/** Generates a nonce for the current node */
-	public generateNonce(receiver: number, length: number): Buffer {
-		let nonce: Buffer;
+	public generateNonce(receiver: number, length: number): Uint8Array {
+		let nonce: Uint8Array;
 		let nonceId: number;
 		do {
 			nonce = randomBytes(length);
@@ -106,7 +106,7 @@ export class SecurityManager {
 		return nonce;
 	}
 
-	public getNonceId(nonce: Buffer): number {
+	public getNonceId(nonce: Uint8Array): number {
 		return nonce[0];
 	}
 
@@ -162,7 +162,7 @@ export class SecurityManager {
 		this.deleteNonceInternal(key);
 	}
 
-	public getNonce(id: number | NonceKey): Buffer | undefined {
+	public getNonce(id: number | NonceKey): Uint8Array | undefined {
 		return this._nonceStore.get(this.normalizeId(id))?.nonce;
 	}
 
@@ -170,7 +170,7 @@ export class SecurityManager {
 		return this._nonceStore.has(this.normalizeId(id));
 	}
 
-	public getFreeNonce(nodeId: number): Buffer | undefined {
+	public getFreeNonce(nodeId: number): Uint8Array | undefined {
 		// Iterate through the known free nonce IDs to find one for the given node
 		for (const key of this._freeNonceIDs) {
 			const nonceKey = JSON.parse(key) as NonceKey;
