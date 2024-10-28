@@ -5,6 +5,7 @@ import {
 	encodeCCList,
 	parseCCList,
 } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared";
 import { SUC_UPDATE_ENTRY_SIZE, SUC_UPDATE_NODEPARM_MAX } from "../../consts";
 
 export interface SUCUpdateEntry {
@@ -15,7 +16,7 @@ export interface SUCUpdateEntry {
 }
 
 export function parseSUCUpdateEntry(
-	buffer: Buffer,
+	buffer: Uint8Array,
 	offset: number,
 ): SUCUpdateEntry | undefined {
 	const slice = buffer.subarray(offset, offset + SUC_UPDATE_ENTRY_SIZE);
@@ -37,8 +38,8 @@ export function parseSUCUpdateEntry(
 
 export function encodeSUCUpdateEntry(
 	entry: SUCUpdateEntry | undefined,
-): Buffer {
-	const ret = Buffer.alloc(SUC_UPDATE_ENTRY_SIZE, 0);
+): Bytes {
+	const ret = new Bytes(SUC_UPDATE_ENTRY_SIZE).fill(0);
 	if (entry) {
 		ret[0] = entry.nodeId;
 		ret[1] = entry.changeType;
@@ -49,7 +50,7 @@ export function encodeSUCUpdateEntry(
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-		ccList.copy(ret, 2);
+		ret.set(ccList, 2);
 	}
 	return ret;
 }

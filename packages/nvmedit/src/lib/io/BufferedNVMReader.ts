@@ -1,8 +1,9 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import { type NVMAccess, type NVMIO } from "../common/definitions";
 
 interface BufferedChunk {
 	offset: number;
-	data: Buffer;
+	data: Uint8Array;
 }
 
 export class BufferedNVMReader implements NVMIO {
@@ -32,7 +33,7 @@ export class BufferedNVMReader implements NVMIO {
 	private async readBuffered(
 		alignedOffset: number,
 		chunkSize: number,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		let buffered = this._buffer.find((chunk) =>
 			chunk.offset === alignedOffset
 		);
@@ -50,7 +51,7 @@ export class BufferedNVMReader implements NVMIO {
 	async read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		// Limit the read size to the chunk size. This ensures we have to deal with maximum 2 chunks or read requests
 		const chunkSize = await this.determineChunkSize();
 		length = Math.min(length, chunkSize);
@@ -61,12 +62,12 @@ export class BufferedNVMReader implements NVMIO {
 			- (offset + length) % chunkSize;
 
 		// Read one or two chunks, depending on how many are needed
-		const chunks: Buffer[] = [];
+		const chunks: Uint8Array[] = [];
 		chunks.push(await this.readBuffered(firstChunkStart, chunkSize));
 		if (secondChunkStart > firstChunkStart) {
 			chunks.push(await this.readBuffered(secondChunkStart, chunkSize));
 		}
-		const alignedBuffer = Buffer.concat(chunks);
+		const alignedBuffer = Bytes.concat(chunks);
 
 		// Then slice out the section we need
 		const endOfFile = offset + length >= this.size;
@@ -83,7 +84,7 @@ export class BufferedNVMReader implements NVMIO {
 
 	async write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }> {
 		const ret = await this._inner.write(offset, data);
 

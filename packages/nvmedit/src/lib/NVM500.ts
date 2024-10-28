@@ -5,6 +5,7 @@ import {
 	encodeBitMask,
 	parseBitMask,
 } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
 import { type Route, encodeRoute, parseRoute } from "./common/routeCache";
 import {
@@ -162,11 +163,13 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 			if (entry.type === NVMEntryType.NVMDescriptor) {
 				const entryData = await this.readRawEntry(resolvedEntry);
 				// NVMDescriptor is always a single entry
-				nvmDescriptor = parseNVMDescriptor(entryData[0]);
+				nvmDescriptor = parseNVMDescriptor(Bytes.view(entryData[0]));
 			} else if (entry.type === NVMEntryType.NVMModuleDescriptor) {
 				const entryData = await this.readRawEntry(resolvedEntry);
 				// NVMModuleDescriptor is always a single entry
-				const descriptor = parseNVMModuleDescriptor(entryData[0]);
+				const descriptor = parseNVMModuleDescriptor(
+					Bytes.view(entryData[0]),
+				);
 				if (descriptor.size !== moduleSize) {
 					throw new ZWaveError(
 						"NVM module descriptor size does not match module size!",
@@ -251,7 +254,7 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 	private async readSingleRawEntry(
 		entry: ResolvedNVMEntry,
 		index: number,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		if (index >= entry.count) {
 			throw new ZWaveError(
 				`Index out of range. Tried to read entry ${index} of ${entry.count}.`,
@@ -267,8 +270,8 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 
 	private async readRawEntry(
 		entry: ResolvedNVMEntry,
-	): Promise<Buffer[]> {
-		const ret: Buffer[] = [];
+	): Promise<Uint8Array[]> {
+		const ret: Uint8Array[] = [];
 		const nvmData = await nvmReadBuffer(
 			this._io,
 			entry.offset,
@@ -282,7 +285,7 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 		return ret;
 	}
 
-	private parseEntry(type: NVMEntryType, data: Buffer): NVMData {
+	private parseEntry(type: NVMEntryType, data: Bytes): NVMData {
 		switch (type) {
 			case NVMEntryType.Byte:
 				return data.readUInt8(0);
@@ -322,16 +325,18 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 	private async readEntry(
 		entry: ResolvedNVMEntry,
 	): Promise<NVMData[]> {
-		const data: Buffer[] = await this.readRawEntry(entry);
-		return data.map((buffer) => this.parseEntry(entry.type, buffer));
+		const data: Uint8Array[] = await this.readRawEntry(entry);
+		return data.map((buffer) =>
+			this.parseEntry(entry.type, Bytes.view(buffer))
+		);
 	}
 
 	private async readSingleEntry(
 		entry: ResolvedNVMEntry,
 		index: number,
 	): Promise<NVMData> {
-		const data: Buffer = await this.readSingleRawEntry(entry, index);
-		return this.parseEntry(entry.type, data);
+		const data = await this.readSingleRawEntry(entry, index);
+		return this.parseEntry(entry.type, Bytes.view(data));
 	}
 
 	public async get(property: NVMEntryName): Promise<NVMData[] | undefined> {
@@ -361,34 +366,31 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 		type: NVMEntryType,
 		data: NVMData,
 		entrySize?: number,
-	): Buffer {
+	): Bytes {
 		const size = entrySize ?? NVMEntrySizes[type];
 
 		switch (type) {
 			case NVMEntryType.Byte:
-				return Buffer.from([data as number]);
+				return Bytes.from([data as number]);
 			case NVMEntryType.Word:
 			case NVMEntryType.NVMModuleSize: {
-				const ret = new Buffer(2);
+				const ret = new Bytes(2);
 				ret.writeUInt16BE(data as number, 0);
 				return ret;
 			}
 			case NVMEntryType.DWord: {
-				const ret = new Buffer(4);
+				const ret = new Bytes(4);
 				ret.writeUInt32BE(data as number, 0);
 				return ret;
 			}
 			case NVMEntryType.NodeInfo:
 				return data
 					? encodeNVM500NodeInfo(data as NVM500NodeInfo)
-					: Buffer.alloc(size, 0);
+					: new Bytes(size).fill(0);
 			case NVMEntryType.NodeMask: {
-				const ret = Buffer.alloc(size, 0);
+				const ret = new Bytes(size).fill(0);
 				if (data) {
-					encodeBitMask(data as number[], MAX_NODES, 1).copy(
-						ret,
-						0,
-					);
+					ret.set(encodeBitMask(data as number[], MAX_NODES, 1), 0);
 				}
 				return ret;
 			}
@@ -403,14 +405,14 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 			case NVMEntryType.NVMDescriptor:
 				return encodeNVMDescriptor(data as NVMDescriptor);
 			case NVMEntryType.Buffer:
-				return data as Buffer;
+				return data as Bytes;
 		}
 	}
 
 	private async writeSingleRawEntry(
 		entry: ResolvedNVMEntry,
 		index: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<void> {
 		if (index >= entry.count) {
 			throw new ZWaveError(
@@ -427,12 +429,12 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 
 	private async writeRawEntry(
 		entry: ResolvedNVMEntry,
-		data: Buffer[],
+		data: Uint8Array[],
 	): Promise<void> {
 		await nvmWriteBuffer(
 			this._io,
 			entry.offset,
-			Buffer.concat(data),
+			Bytes.concat(data),
 		);
 	}
 
@@ -498,7 +500,7 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 					data.push(value);
 					break;
 				case NVMEntryType.Buffer:
-					data.push(Buffer.alloc(size, value));
+					data.push(new Uint8Array(size).fill(value));
 					break;
 				case NVMEntryType.NodeMask:
 					data.push(new Array(size).fill(value));
@@ -528,7 +530,11 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 		options: NVM500EraseOptions,
 	): Promise<void> {
 		// Blank NVM with 0xff
-		await nvmWriteBuffer(this._io, 0, Buffer.alloc(options.nvmSize, 0xff));
+		await nvmWriteBuffer(
+			this._io,
+			0,
+			new Uint8Array(options.nvmSize).fill(0xff),
+		);
 
 		// Compute module sizes
 		const layoutEntries = Array.from(options.layout.values());

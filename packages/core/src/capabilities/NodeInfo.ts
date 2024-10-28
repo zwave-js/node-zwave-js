@@ -117,7 +117,7 @@ export function encodeCCId(
 	}
 }
 
-export function parseCCList(payload: Bytes): {
+export function parseCCList(payload: Uint8Array): {
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
@@ -216,7 +216,7 @@ export type NodeInformationFrame =
 	& ApplicationNodeInformation;
 
 export function parseNodeProtocolInfo(
-	buffer: Bytes,
+	buffer: Uint8Array,
 	offset: number,
 	isLongRange: boolean = false,
 ): NodeProtocolInfo {
@@ -332,7 +332,7 @@ export function encodeNodeProtocolInfo(
 }
 
 export function parseNodeProtocolInfoAndDeviceClass(
-	buffer: Bytes,
+	buffer: Uint8Array,
 	isLongRange: boolean = false,
 ): {
 	info: NodeProtocolInfoAndDeviceClass;
@@ -382,7 +382,7 @@ export function encodeNodeProtocolInfoAndDeviceClass(
 }
 
 export function parseNodeInformationFrame(
-	buffer: Bytes,
+	buffer: Uint8Array,
 	isLongRange: boolean = false,
 ): NodeInformationFrame {
 	const result = parseNodeProtocolInfoAndDeviceClass(
@@ -392,7 +392,7 @@ export function parseNodeInformationFrame(
 	const info = result.info;
 	let offset = result.bytesRead;
 
-	let ccList: Bytes;
+	let ccList: Uint8Array;
 	if (isLongRange) {
 		const ccListLength = buffer[offset];
 		offset += 1;
@@ -428,7 +428,7 @@ export function encodeNodeInformationFrame(
 }
 
 export function parseNodeID(
-	buffer: Bytes,
+	buffer: Uint8Array,
 	type: NodeIDType = NodeIDType.Short,
 	offset: number = 0,
 ): {
@@ -436,7 +436,7 @@ export function parseNodeID(
 	bytesRead: number;
 } {
 	validatePayload(buffer.length >= offset + type);
-	const nodeId = buffer.readUIntBE(offset, type);
+	const nodeId = Bytes.view(buffer).readUIntBE(offset, type);
 	return { nodeId, bytesRead: type };
 }
 

@@ -3,7 +3,7 @@ import {
 	ZWaveErrorCodes,
 	stripUndefined,
 } from "@zwave-js/core/safe";
-import { buffer2hex } from "@zwave-js/shared";
+import { Bytes, buffer2hex } from "@zwave-js/shared";
 import type { NVM3Object } from "../object";
 import {
 	NVMFile,
@@ -17,7 +17,7 @@ import {
 export type ControllerInfoFileOptions =
 	& NVMFileCreationOptions
 	& {
-		homeId: Buffer;
+		homeId: Uint8Array;
 		nodeId: number;
 		lastNodeId: number;
 		staticControllerNodeId: number;
@@ -82,7 +82,7 @@ export class ControllerInfoFile extends NVMFile {
 				);
 			}
 		} else {
-			this.homeId = options.homeId;
+			this.homeId = Bytes.view(options.homeId);
 			this.nodeId = options.nodeId;
 			this.lastNodeId = options.lastNodeId;
 			this.staticControllerNodeId = options.staticControllerNodeId;
@@ -104,7 +104,7 @@ export class ControllerInfoFile extends NVMFile {
 		}
 	}
 
-	public homeId: Buffer;
+	public homeId: Bytes;
 	public nodeId: number;
 	public lastNodeId: number;
 	public staticControllerNodeId: number;
@@ -120,10 +120,10 @@ export class ControllerInfoFile extends NVMFile {
 	public primaryLongRangeChannelId?: number;
 	public dcdcConfig?: number;
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		if (this.lastNodeIdLR != undefined) {
-			this.payload = new Buffer(22);
-			this.homeId.copy(this.payload, 0);
+			this.payload = new Bytes(22);
+			this.payload.set(this.homeId, 0);
 			this.payload.writeUInt16LE(this.nodeId, 4);
 			this.payload.writeUInt16LE(this.staticControllerNodeId, 6);
 			this.payload.writeUInt16LE(this.lastNodeIdLR, 8);
@@ -139,9 +139,9 @@ export class ControllerInfoFile extends NVMFile {
 			this.payload[21] = this.dcdcConfig!;
 		} else {
 			// V0
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.homeId,
-				Buffer.from([
+				Bytes.from([
 					this.nodeId,
 					this.lastNodeId,
 					this.staticControllerNodeId,

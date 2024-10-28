@@ -58,7 +58,7 @@ export class NVMFileIO implements NVMIO {
 	async read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		if (this._handle == undefined) {
 			throw new ZWaveError(
 				"The NVM file is not open",
@@ -66,7 +66,7 @@ export class NVMFileIO implements NVMIO {
 			);
 		}
 		const readResult = await this._handle.read({
-			buffer: Buffer.alloc(length),
+			buffer: new Uint8Array(length),
 			position: offset,
 		});
 
@@ -79,7 +79,7 @@ export class NVMFileIO implements NVMIO {
 
 	async write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }> {
 		if (this._handle == undefined) {
 			throw new ZWaveError(

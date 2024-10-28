@@ -3,11 +3,11 @@ import { NVMAccess, type NVMIO } from "../common/definitions";
 
 /** An im-memory implementation of NVMIO */
 export class NVMMemoryIO implements NVMIO {
-	public constructor(buffer: Buffer) {
+	public constructor(buffer: Uint8Array) {
 		this._buffer = buffer;
 	}
 
-	private _buffer: Buffer;
+	private _buffer: Uint8Array;
 
 	open(_access: NVMAccess.Read | NVMAccess.Write): Promise<NVMAccess> {
 		// Nothing to do
@@ -30,7 +30,7 @@ export class NVMMemoryIO implements NVMIO {
 	read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		return Promise.resolve({
 			buffer: this._buffer.subarray(offset, offset + length),
 			endOfFile: offset + length >= this._buffer.length,
@@ -39,7 +39,7 @@ export class NVMMemoryIO implements NVMIO {
 
 	write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }> {
 		if (offset + data.length > this.size) {
 			throw new ZWaveError(
@@ -48,7 +48,7 @@ export class NVMMemoryIO implements NVMIO {
 			);
 		}
 
-		data.copy(this._buffer, offset, 0, data.length);
+		this._buffer.set(data, offset);
 		return Promise.resolve({
 			bytesWritten: data.length,
 			endOfFile: offset + data.length >= this._buffer.length,

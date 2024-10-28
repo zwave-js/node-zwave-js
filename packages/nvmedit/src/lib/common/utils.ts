@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import type { NVMIO } from "./definitions";
 
 export async function nvmReadUInt32LE(
@@ -5,7 +6,8 @@ export async function nvmReadUInt32LE(
 	position: number,
 ): Promise<number> {
 	const { buffer } = await io.read(position, 4);
-	return buffer.readUInt32LE(0);
+	const bytes = Bytes.view(buffer);
+	return bytes.readUInt32LE(0);
 }
 
 export async function nvmReadUInt16LE(
@@ -13,7 +15,8 @@ export async function nvmReadUInt16LE(
 	position: number,
 ): Promise<number> {
 	const { buffer } = await io.read(position, 2);
-	return buffer.readUInt16LE(0);
+	const bytes = Bytes.view(buffer);
+	return bytes.readUInt16LE(0);
 }
 
 export async function nvmReadUInt32BE(
@@ -21,7 +24,8 @@ export async function nvmReadUInt32BE(
 	position: number,
 ): Promise<number> {
 	const { buffer } = await io.read(position, 4);
-	return buffer.readUInt32BE(0);
+	const bytes = Bytes.view(buffer);
+	return bytes.readUInt32BE(0);
 }
 
 export async function nvmReadUInt16BE(
@@ -29,7 +33,8 @@ export async function nvmReadUInt16BE(
 	position: number,
 ): Promise<number> {
 	const { buffer } = await io.read(position, 2);
-	return buffer.readUInt16BE(0);
+	const bytes = Bytes.view(buffer);
+	return bytes.readUInt16BE(0);
 }
 
 export async function nvmReadUInt8(
@@ -37,13 +42,14 @@ export async function nvmReadUInt8(
 	position: number,
 ): Promise<number> {
 	const { buffer } = await io.read(position, 1);
-	return buffer.readUInt8(0);
+	const bytes = Bytes.view(buffer);
+	return bytes.readUInt8(0);
 }
 
 export async function nvmWriteBuffer(
 	io: NVMIO,
 	position: number,
-	buffer: Buffer,
+	buffer: Uint8Array,
 ): Promise<void> {
 	const chunkSize = await io.determineChunkSize();
 	let offset = 0;
@@ -58,8 +64,8 @@ export async function nvmReadBuffer(
 	io: NVMIO,
 	position: number,
 	length: number,
-): Promise<Buffer> {
-	const ret = new Buffer(length);
+): Promise<Uint8Array> {
+	const ret = new Uint8Array(length);
 	const chunkSize = await io.determineChunkSize();
 	let offset = 0;
 	while (offset < length) {
@@ -67,7 +73,7 @@ export async function nvmReadBuffer(
 			position + offset,
 			Math.min(chunkSize, length - offset),
 		);
-		buffer.copy(ret, offset);
+		ret.set(buffer, offset);
 		offset += buffer.length;
 		if (endOfFile) break;
 	}

@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared";
 import {
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,
@@ -33,17 +34,17 @@ export interface NVM3Object {
 	type: ObjectType;
 	fragmentType: FragmentType;
 	key: number;
-	data?: Buffer;
+	data?: Uint8Array;
 }
 
-export function serializeObject(obj: NVM3Object): Buffer {
+export function serializeObject(obj: NVM3Object): Uint8Array {
 	const isLarge = obj.type === ObjectType.DataLarge
 		|| obj.type === ObjectType.CounterLarge;
 	const headerSize = isLarge
 		? NVM3_OBJ_HEADER_SIZE_LARGE
 		: NVM3_OBJ_HEADER_SIZE_SMALL;
 	const dataLength = obj.data?.length ?? 0;
-	const ret = new Buffer(dataLength + headerSize);
+	const ret = new Bytes(dataLength + headerSize);
 
 	// Write header
 	if (isLarge) {
@@ -77,7 +78,7 @@ export function serializeObject(obj: NVM3Object): Buffer {
 
 	// Write data
 	if (obj.data) {
-		obj.data.copy(ret, headerSize);
+		ret.set(obj.data, headerSize);
 	}
 	return ret;
 }

@@ -3,6 +3,7 @@ import {
 	encodeNodeProtocolInfo,
 	parseNodeProtocolInfo,
 } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { padStart } from "alcalzone-shared/strings";
 import type { NVMModuleType } from "./shared";
 
@@ -16,7 +17,7 @@ export interface NVMDescriptor {
 }
 
 export function parseNVMDescriptor(
-	buffer: Buffer,
+	buffer: Bytes,
 	offset: number = 0,
 ): NVMDescriptor {
 	return {
@@ -36,8 +37,8 @@ export function parseNVMDescriptor(
 	};
 }
 
-export function encodeNVMDescriptor(descriptor: NVMDescriptor): Buffer {
-	const ret = new Buffer(12);
+export function encodeNVMDescriptor(descriptor: NVMDescriptor): Bytes {
+	const ret = new Bytes(12);
 	ret.writeUInt16BE(descriptor.manufacturerID, 0);
 	ret.writeUInt16BE(descriptor.firmwareID, 2);
 	ret.writeUInt16BE(descriptor.productType, 4);
@@ -62,7 +63,7 @@ export interface NVMModuleDescriptor {
 }
 
 export function parseNVMModuleDescriptor(
-	buffer: Buffer,
+	buffer: Bytes,
 	offset: number = 0,
 ): NVMModuleDescriptor {
 	return {
@@ -74,8 +75,8 @@ export function parseNVMModuleDescriptor(
 
 export function encodeNVMModuleDescriptor(
 	descriptior: NVMModuleDescriptor,
-): Buffer {
-	const ret = new Buffer(5);
+): Bytes {
+	const ret = new Bytes(5);
 	ret.writeUInt16BE(descriptior.size, 0);
 	ret[2] = descriptior.type;
 	const versionParts = descriptior.version.split(".").map((i) => parseInt(i));
@@ -92,7 +93,7 @@ export interface NVM500NodeInfo
 }
 
 export function parseNVM500NodeInfo(
-	buffer: Buffer,
+	buffer: Uint8Array,
 	offset: number,
 ): NVM500NodeInfo {
 	const { hasSpecificDeviceClass, ...protocolInfo } = parseNodeProtocolInfo(
@@ -110,13 +111,13 @@ export function parseNVM500NodeInfo(
 	};
 }
 
-export function encodeNVM500NodeInfo(nodeInfo: NVM500NodeInfo): Buffer {
-	return Buffer.concat([
+export function encodeNVM500NodeInfo(nodeInfo: NVM500NodeInfo): Bytes {
+	return Bytes.concat([
 		encodeNodeProtocolInfo({
 			...nodeInfo,
 			hasSpecificDeviceClass: !!nodeInfo.specificDeviceClass,
 		}),
-		Buffer.from([
+		Bytes.from([
 			nodeInfo.genericDeviceClass,
 			nodeInfo.specificDeviceClass ?? 0,
 		]),

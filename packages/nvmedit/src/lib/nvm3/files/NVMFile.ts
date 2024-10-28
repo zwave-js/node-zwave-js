@@ -1,6 +1,11 @@
 import { createSimpleReflectionDecorator } from "@zwave-js/core";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import { type TypedClassDecorator, num2hex } from "@zwave-js/shared";
+import {
+	Bytes,
+	type TypedClassDecorator,
+	isUint8Array,
+	num2hex,
+} from "@zwave-js/shared";
 import { FragmentType, NVM3_MAX_OBJ_SIZE_SMALL, ObjectType } from "../consts";
 import type { NVM3Object } from "../object";
 
@@ -10,13 +15,13 @@ export interface NVMFileBaseOptions {
 }
 export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
 	fileId: number;
-	data: Buffer;
+	data: Bytes;
 }
 
 export function gotDeserializationOptions(
 	options: NVMFileOptions,
 ): options is NVMFileDeserializationOptions {
-	return "data" in options && Buffer.isBuffer(options.data);
+	return "data" in options && isUint8Array(options.data);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -38,11 +43,11 @@ export class NVMFile {
 			if (typeof fileId === "number") {
 				this.fileId = fileId;
 			}
-			this.payload = new Buffer();
+			this.payload = new Bytes();
 		}
 	}
 
-	protected payload: Buffer;
+	protected payload: Bytes;
 	public fileId: number = 0;
 	public fileVersion: string;
 
@@ -51,7 +56,7 @@ export class NVMFile {
 	 */
 	public static from(
 		fileId: number,
-		data: Buffer,
+		data: Uint8Array,
 		fileVersion: string,
 	): NVMFile {
 		const Constructor = getNVMFileConstructor(fileId)!;
@@ -65,7 +70,7 @@ export class NVMFile {
 	/**
 	 * Serializes this NVMFile into an NVM Object
 	 */
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		if (!this.fileId) {
 			throw new Error("The NVM file ID must be set before serializing");
 		}

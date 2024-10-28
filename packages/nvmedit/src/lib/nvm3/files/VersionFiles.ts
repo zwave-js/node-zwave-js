@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared";
 import type { NVM3Object } from "../object";
 import {
 	NVMFile,
@@ -38,8 +39,8 @@ export class VersionFile extends NVMFile {
 	public minor: number;
 	public patch: number;
 
-	public serialize(): NVM3Object & { data: Buffer } {
-		this.payload = Buffer.from([
+	public serialize(): NVM3Object & { data: Bytes } {
+		this.payload = Bytes.from([
 			this.patch,
 			this.minor,
 			this.major,
