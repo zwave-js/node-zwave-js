@@ -1,6 +1,7 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
+import { pathExists } from "@zwave-js/shared";
 import ava, { type ExecutionContext, type TestFn } from "ava";
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import semver from "semver";
@@ -21,7 +22,7 @@ const ownVersion = require("../package.json").version;
 
 test.before(async (t) => {
 	const tempDir = path.join(tmpdir(), "zwavejs_test");
-	await fs.ensureDir(tempDir);
+	await fs.mkdir(tempDir, { recursive: true });
 	t.context.tempDir = tempDir;
 
 	const logContainer = new ZWaveLogContainer({ enabled: false });
@@ -31,11 +32,12 @@ test.before(async (t) => {
 });
 
 test.beforeEach(async (t) => {
-	await fs.emptyDir(t.context.tempDir);
+	await fs.rm(t.context.tempDir, { recursive: true, force: true });
+	await fs.mkdir(t.context.tempDir, { recursive: true });
 });
 
 test.after.always(async (t) => {
-	await fs.remove(t.context.tempDir);
+	await fs.rm(t.context.tempDir, { recursive: true, force: true });
 });
 
 test.serial(
@@ -48,7 +50,7 @@ test.serial(
 		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		await syncExternalConfigDir(logger);
 
-		t.true(await fs.pathExists(configDir));
+		t.true(await pathExists(configDir));
 		t.is(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
 			ownVersion,
@@ -66,16 +68,16 @@ test.serial(
 		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		const otherVersion = semver.inc(ownVersion, "major");
 
-		await fs.ensureDir(configDir);
+		await fs.mkdir(configDir, { recursive: true });
 		await fs.writeFile(
 			path.join(configDir, "version"),
-			otherVersion,
+			otherVersion!,
 			"utf8",
 		);
 
 		await syncExternalConfigDir(logger);
 
-		t.true(await fs.pathExists(configDir));
+		t.true(await pathExists(configDir));
 
 		t.is(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
@@ -94,7 +96,7 @@ test.serial(
 		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		const otherVersion = semver.inc(ownVersion, "prerelease")!;
 
-		await fs.ensureDir(configDir);
+		await fs.mkdir(configDir, { recursive: true });
 		await fs.writeFile(
 			path.join(configDir, "version"),
 			otherVersion,
@@ -103,7 +105,7 @@ test.serial(
 
 		await syncExternalConfigDir(logger);
 
-		t.true(await fs.pathExists(configDir));
+		t.true(await pathExists(configDir));
 
 		t.is(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
@@ -137,7 +139,7 @@ test.serial(
 
 		const cm = new ConfigManager({ logContainer });
 		await cm.loadAll();
-		t.true(await fs.pathExists(configDir));
+		t.true(await pathExists(configDir));
 
 		// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
 		const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
@@ -162,47 +164,46 @@ async function testDeviceConfigPriorityDir(
 
 	// Set up a dummy structure in the priority dir
 	const priorityDir = path.join(tempDir, "priority");
-	await fs.ensureDir(priorityDir);
-	await fs.ensureDir(path.join(priorityDir, "templates"));
-	await fs.writeJSON(
+	await fs.mkdir(path.join(priorityDir, "templates"), { recursive: true });
+	let json: any = {
+		manufacturer: "AEON Labs",
+		manufacturerId: "0x0086",
+		label: "ZW100",
+		description: "MultiSensor 6",
+		devices: [
+			{
+				productType: "0x0002",
+				productId: "0x0064",
+			},
+		],
+		firmwareVersion: {
+			min: "0.0",
+			max: "255.255",
+		},
+		paramInformation: [
+			{
+				"#": "1",
+				$import: "templates/template.json#test",
+			},
+		],
+	};
+	await fs.writeFile(
 		path.join(priorityDir, "aeotec.json"),
-		{
-			manufacturer: "AEON Labs",
-			manufacturerId: "0x0086",
-			label: "ZW100",
-			description: "MultiSensor 6",
-			devices: [
-				{
-					productType: "0x0002",
-					productId: "0x0064",
-				},
-			],
-			firmwareVersion: {
-				min: "0.0",
-				max: "255.255",
-			},
-			paramInformation: [
-				{
-					"#": "1",
-					$import: "templates/template.json#test",
-				},
-			],
-		},
-		{ encoding: "utf8", spaces: 4 },
+		JSON.stringify(json, null, 4),
 	);
-	await fs.writeJSON(
-		path.join(priorityDir, "templates/template.json"),
-		{
-			test: {
-				label: "Test",
-				valueSize: 1,
-				minValue: 1,
-				maxValue: 2,
-				defaultValue: 1,
-				unsigned: true,
-			},
+	json = {
+		test: {
+			label: "Test",
+			valueSize: 1,
+			minValue: 1,
+			maxValue: 2,
+			defaultValue: 1,
+			unsigned: true,
 		},
-		{ encoding: "utf8", spaces: 4 },
+	};
+	await fs.writeFile(
+		path.join(priorityDir, "templates/template.json"),
+		JSON.stringify(json, null, 4),
 	);
 
 	// And load the file
@@ -213,7 +214,7 @@ async function testDeviceConfigPriorityDir(
 	await cm.loadAll();
 
 	if (useExternalConfig) {
-		t.true(await fs.pathExists(externalConfigDir!));
+		t.true(await pathExists(externalConfigDir!));
 	}
 
 	// Load the dummy device

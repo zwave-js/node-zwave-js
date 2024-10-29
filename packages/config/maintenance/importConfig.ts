@@ -15,15 +15,16 @@ import {
 	getErrorMessage,
 	num2hex,
 	padVersion,
+	readJSON,
 	stringify,
 } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as JSONC from "comment-json";
-import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import { AssertionError, ok } from "node:assert";
 import * as child from "node:child_process";
+import fs from "node:fs/promises";
 import * as path from "node:path";
 import { promisify } from "node:util";
 import { compare } from "semver";
@@ -201,15 +202,16 @@ async function downloadOZWConfig(): Promise<string> {
 	const { got } = await import("got");
 
 	// create tmp directory if missing
-	await fs.ensureDir(ozwTempDir);
+	await fs.mkdir(ozwTempDir, { recursive: true });
 
 	// this will return a stream in `data` that we pipe into write stream
 	// to store the file in `tmpDir`
 	const data = got.stream.get(ozwTarUrl);
 
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		const fileDest = path.join(ozwTempDir, ozwTarName);
-		const stream = fs.createWriteStream(fileDest);
+		const handle = await fs.open(fileDest, "w");
+		const stream = handle.createWriteStream();
 		data.pipe(stream);
 		let hasError = false;
 		stream.on("error", (err) => {
@@ -238,9 +240,9 @@ async function extractConfigFromTar(): Promise<void> {
 
 /** Delete all files in `tmpDir` */
 async function cleanTmpDirectory(): Promise<void> {
-	await fs.remove(ozwTempDir);
-	await fs.remove(ohTempDir);
-	await fs.remove(zwaTempDir);
+	await fs.rm(ozwTempDir, { recursive: true, force: true });
+	await fs.rm(ohTempDir, { recursive: true, force: true });
+	await fs.rm(zwaTempDir, { recursive: true, force: true });
 	console.log("temporary directories cleaned");
 }
 
@@ -570,11 +572,12 @@ async function parseOZWProduct(
 
 	// Load the existing config so we can merge it with the updated information
 	let existingDevice: Record<string, any> | undefined;
-
-	if (await fs.pathExists(fileNameAbsolute)) {
-		existingDevice = JSON5.parse(
-			await fs.readFile(fileNameAbsolute, "utf8"),
-		);
+	const existingDeviceFileContents = await fs.readFile(
+		fileNameAbsolute,
+		"utf8",
+	).catch(() => undefined);
+	if (existingDeviceFileContents) {
+		existingDevice = JSON5.parse(existingDeviceFileContents);
 	}
 
 	// Parse the OZW xml file
@@ -754,7 +757,7 @@ async function parseOZWProduct(
 				parsedParam.options = [];
 				for (const item of items) {
 					if (
-						!parsedParam.options.find(
+						!parsedParam.options.some(
 							(v: any) => v.value === item.value,
 						)
 					) {
@@ -823,7 +826,7 @@ async function parseOZWProduct(
 	}
 	// create the target dir for this config file if doesn't exists
 	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
-	await fs.ensureDir(manufacturerDir);
+	await fs.mkdir(manufacturerDir, { recursive: true });
 
 	// write the updated configuration file
 	const output = stringify(normalizeConfig(newConfig), "\t") + "\n";
@@ -933,7 +936,7 @@ async function parseZWAFiles(): Promise<void> {
  */
 function combineDeviceFiles(json: Record<string, any>[]) {
 	for (const file of json) {
-		const identifier = file.Identifier ? file.Identifier : "Unknown";
+		const identifier = file.Identifier || "Unknown";
 		const normalizedIdentifier = normalizeIdentifier(identifier);
 		file.Identifier = normalizedIdentifier[0];
 		file.OriginalIdentifier = normalizedIdentifier[1];
@@ -1251,12 +1254,14 @@ async function parseZWAProduct(
 
 	// Load the existing config so we can merge it with the updated information
 	let existingDevice: Record<string, any> | undefined;
+	const existingDeviceFileContents = await fs.readFile(
+		fileNameAbsolute,
+		"utf8",
+	).catch(() => undefined);
 
 	try {
-		if (await fs.pathExists(fileNameAbsolute)) {
-			existingDevice = JSONC.parse(
-				await fs.readFile(fileNameAbsolute, "utf8"),
-			);
+		if (existingDeviceFileContents) {
+			existingDevice = JSONC.parse(existingDeviceFileContents) as any;
 		}
 	} catch (e) {
 		console.log(
@@ -1567,7 +1572,7 @@ async function parseZWAProduct(
 
 	// Create the dir if necessary
 	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
-	await fs.ensureDir(manufacturerDir);
+	await fs.mkdir(manufacturerDir, { recursive: true });
 
 	let output = JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 
@@ -1592,7 +1597,7 @@ async function maintenanceParse(): Promise<void> {
 	const zwaData = [];
 
 	// Load the zwa files
-	await fs.ensureDir(zwaTempDir);
+	await fs.mkdir(zwaTempDir, { recursive: true });
 	const zwaFiles = await enumFilesRecursive(
 		zwaTempDir,
 		(file) => file.endsWith(".json"),
@@ -1601,7 +1606,7 @@ async function maintenanceParse(): Promise<void> {
 		// zWave Alliance numbering isn't always continuous and an html page is
 		// returned when a device number doesn't. Test for and delete such files.
 		try {
-			zwaData.push(await fs.readJSON(file, { encoding: "utf8" }));
+			zwaData.push(await readJSON(file));
 		} catch {
 			await fs.unlink(file);
 		}
@@ -1754,7 +1759,7 @@ async function retrieveZWADeviceIds(
  * @param IDs If given, only these IDs are downloaded
  */
 async function downloadDevicesZWA(IDs: number[]): Promise<void> {
-	await fs.ensureDir(zwaTempDir);
+	await fs.mkdir(zwaTempDir, { recursive: true });
 	for (let i = 0; i < IDs.length; i++) {
 		process.stdout.write(
 			`Fetching device config ${i + 1} of ${IDs.length}...`,
@@ -1783,7 +1788,7 @@ async function downloadDevicesOH(IDs?: number[]): Promise<void> {
 		process.stdout.write("\r\x1b[K");
 	}
 
-	await fs.ensureDir(ohTempDir);
+	await fs.mkdir(ohTempDir, { recursive: true });
 	for (let i = 0; i < IDs.length; i++) {
 		process.stdout.write(
 			`Fetching device config ${i + 1} of ${IDs.length}...`,
@@ -1822,7 +1827,7 @@ async function downloadManufacturersOH(): Promise<void> {
 		]),
 	);
 
-	await fs.ensureDir(ohTempDir);
+	await fs.mkdir(ohTempDir, { recursive: true });
 	await fs.writeFile(
 		importedManufacturersPath,
 		stringify(manufacturers, "\t"),
@@ -1934,7 +1939,7 @@ async function parseOHConfigFile(
 			// The supportsZwavePlus key is obsolete
 			// ret.supportsZWavePlus = true;
 		}
-	} catch (e) {
+	} catch {
 		console.error(filename);
 		process.exit(1);
 	}

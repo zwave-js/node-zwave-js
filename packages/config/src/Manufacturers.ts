@@ -1,8 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes, isZWaveError } from "@zwave-js/core";
-import { formatId, stringify } from "@zwave-js/shared";
+import { formatId, pathExists, stringify } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { configDir, externalConfigDir } from "./utils";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe";
@@ -25,7 +25,7 @@ export async function loadManufacturersInternal(
 		);
 	}
 	try {
-		const fileContents = await readFile(configPath, "utf8");
+		const fileContents = await fs.readFile(configPath, "utf8");
 		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig(
@@ -54,7 +54,7 @@ export async function loadManufacturersInternal(
 
 		return manufacturers;
 	} catch (e) {
-		if (isZWaveError(e)) {
+		if (isZWaveError(e) || ((e as any).code === "ENOENT")) {
 			throw e;
 		} else {
 			throwInvalidConfig("manufacturers");
@@ -79,5 +79,5 @@ export async function saveManufacturersInternal(
 	}
 
 	const configPath = path.join(configDir, "manufacturers.json");
-	await writeFile(configPath, stringify(data, "\t") + "\n");
+	await fs.writeFile(configPath, stringify(data, "\t") + "\n");
 }

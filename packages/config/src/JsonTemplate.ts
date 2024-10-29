@@ -1,8 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { pathExists } from "@zwave-js/shared";
 import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import * as fs from "fs-extra";
 import JSON5 from "json5";
+import fs from "node:fs/promises";
 import * as path from "node:path";
 
 const IMPORT_KEY = "$import";
@@ -24,7 +25,7 @@ export async function readJsonWithTemplate(
 	filename: string,
 	rootDirs?: string | string[],
 ): Promise<Record<string, unknown>> {
-	if (!(await fs.pathExists(filename))) {
+	if (!(await pathExists(filename))) {
 		throw new ZWaveError(
 			`Could not open config file ${filename}: not found!`,
 			ZWaveErrorCodes.Config_NotFound,
@@ -224,7 +225,7 @@ async function resolveJsonImports(
 								rootDir,
 								importFilename.slice(2),
 							);
-							if (await fs.pathExists(newFilename)) {
+							if (await pathExists(newFilename)) {
 								break;
 							} else {
 								// Try the next

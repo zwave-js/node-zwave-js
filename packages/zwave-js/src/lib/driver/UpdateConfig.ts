@@ -1,9 +1,13 @@
 import { type PackageManager, detectPackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { getErrorMessage } from "@zwave-js/shared";
+import {
+	copyFilesRecursive,
+	getErrorMessage,
+	readJSON,
+} from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
-import fs from "fs-extra";
+import fs from "node:fs/promises";
 import os from "node:os";
 import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
@@ -204,8 +208,9 @@ export async function installConfigUpdateInDocker(
 	const extractedDir = path.join(tmpDir, "extracted");
 
 	try {
-		await fs.ensureDir(tmpDir);
-		const fstream = fs.createWriteStream(tarFilename, { autoClose: true });
+		await fs.mkdir(tmpDir, { recursive: true });
+		const handle = await fs.open(tarFilename, "w");
+		const fstream = handle.createWriteStream({ autoClose: true });
 		const response = got.stream.get(url);
 		response.pipe(fstream);
 
@@ -236,7 +241,8 @@ export async function installConfigUpdateInDocker(
 
 	// Extract it into a temporary folder, then overwrite the config node_modules with it
 	try {
-		await fs.emptyDir(extractedDir);
+		await fs.rm(extractedDir, { recursive: true, force: true });
+		await fs.mkdir(extractedDir, { recursive: true });
 		await execa("tar", [
 			"--strip-components=1",
 			"-xzf",
@@ -247,16 +253,12 @@ export async function installConfigUpdateInDocker(
 		// How we install now depends on whether we're installing into the external config dir.
 		// If we are, we just need to copy the `devices` subdirectory. If not, copy the entire extracted dir
 		if (external) {
-			await fs.emptyDir(external.configDir);
-			await fs.copy(
+			await fs.rm(external.configDir, { recursive: true, force: true });
+			await fs.mkdir(external.configDir, { recursive: true });
+			await copyFilesRecursive(
 				path.join(extractedDir, "config"),
 				external.configDir,
-				{
-					filter: async (src: string) => {
-						if (!(await fs.stat(src)).isFile()) return true;
-						return src.endsWith(".json");
-					},
-				},
+				(src) => src.endsWith(".json"),
 			);
 			const externalVersionFilename = path.join(
 				external.configDir,
@@ -264,7 +266,7 @@ export async function installConfigUpdateInDocker(
 			);
 			await fs.writeFile(externalVersionFilename, newVersion, "utf8");
 		} else {
-			await fs.remove(configModuleDir);
+			await fs.rm(configModuleDir, { recursive: true, force: true });
 			await fs.rename(extractedDir, configModuleDir);
 		}
 	} catch {
@@ -279,21 +281,16 @@ export async function installConfigUpdateInDocker(
 	if (!external) {
 		try {
 			const packageJsonPath = require.resolve("zwave-js/package.json");
-			const json = await fs.readJSON(packageJsonPath, {
-				encoding: "utf8",
-			});
+			const json = await readJSON(packageJsonPath);
 			json.dependencies["@zwave-js/config"] = newVersion;
-			await fs.writeJSON(packageJsonPath, json, {
-				encoding: "utf8",
-				spaces: 2,
-			});
+			await fs.writeFile(packageJsonPath, JSON.stringify(json, null, 2));
 		} catch {
 			// ignore
 		}
 	}
 
 	// Clean up the temp dir and ignore errors
-	void fs.remove(tmpDir).catch(() => {
+	void fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {
 		// ignore
 	});
 

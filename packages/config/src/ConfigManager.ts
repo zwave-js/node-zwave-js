@@ -4,8 +4,7 @@ import {
 	ZWaveLogContainer,
 	isZWaveError,
 } from "@zwave-js/core";
-import { getErrorMessage } from "@zwave-js/shared";
-import { pathExists } from "fs-extra";
+import { getErrorMessage, pathExists } from "@zwave-js/shared";
 import path from "node:path";
 import { ConfigLogger } from "./Logger";
 import {

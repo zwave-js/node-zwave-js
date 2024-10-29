@@ -1,5 +1,5 @@
 import { extractFirmware, guessFirmwareFileFormat } from "@zwave-js/core";
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 
 void (async () => {
 	const filename = process.argv[2];

@@ -5,7 +5,7 @@
  */
 
 import { formatWithDprint } from "@zwave-js/maintenance";
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import * as path from "node:path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;

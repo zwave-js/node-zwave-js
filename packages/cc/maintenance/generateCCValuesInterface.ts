@@ -5,8 +5,8 @@
  */
 
 import { formatWithDprint } from "@zwave-js/maintenance";
-import * as fs from "fs-extra";
-import * as path from "path";
+import fs from "node:fs/promises";
+import * as path from "node:path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const valuesDefinitionRegex = /export const ([^\s]+CCValues) =/;
@@ -63,7 +63,7 @@ export async function generateCCValuesInterface(): Promise<void> {
 				`\t${name}: typeof import("${
 					path
 						.relative(libDir, ccDir)
-						.replace(/\\/g, "/")
+						.replaceAll("\\", "/")
 				}/${file}").${className};`,
 		).join("\n")
 		+ "\n"

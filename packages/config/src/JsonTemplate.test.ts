@@ -1,6 +1,6 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import { readJsonWithTemplate } from "./JsonTemplate";
@@ -8,17 +8,17 @@ import { readJsonWithTemplate } from "./JsonTemplate";
 const mockDir = path.join(tmpdir(), `zwave-js-template-test`);
 
 async function mockFs(files: Record<string, string>): Promise<void> {
-	await fs.ensureDir(mockDir);
+	await fs.mkdir(mockDir, { recursive: true });
 	for (const [name, content] of Object.entries(files)) {
 		const relative = name.replace(/^\//, "./");
 		const filename = path.join(mockDir, relative);
 		const dirname = path.join(mockDir, path.dirname(relative));
-		await fs.ensureDir(dirname);
+		await fs.mkdir(dirname, { recursive: true });
 		await fs.writeFile(filename, content);
 	}
 }
 mockFs.restore = async (): Promise<void> => {
-	await fs.remove(mockDir);
+	await fs.rm(mockDir, { recursive: true, force: true });
 };
 
 test.before(() => mockFs.restore());

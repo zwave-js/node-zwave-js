@@ -10,10 +10,9 @@ import {
 	stringify,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import * as fs from "fs-extra";
-import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import { createHash } from "node:crypto";
+import fs from "node:fs/promises";
 import path from "node:path";
 import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
@@ -196,7 +195,7 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 	// ...or if cannot be parsed
 	if (!needsUpdate) {
 		try {
-			const fileContents = await readFile(indexPath, "utf8");
+			const fileContents = await fs.readFile(indexPath, "utf8");
 			index = JSON5.parse(fileContents);
 			mtimeIndex = (await fs.stat(indexPath)).mtime;
 		} catch {
@@ -241,7 +240,7 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 		);
 		// Save the index to disk
 		try {
-			await writeFile(
+			await fs.writeFile(
 				path.join(indexPath),
 				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
 ${stringify(index, "\t")}

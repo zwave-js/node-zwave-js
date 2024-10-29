@@ -1,8 +1,8 @@
 // Test runner that automatically chooses which workspace to run tests in
 
 import execa from "execa";
-import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
+import { readJSON } from "../packages/shared/src/fs";
 
 const repoRoot = path.join(__dirname, "..");
 
@@ -11,7 +11,7 @@ const filenames = process.argv
 	// ignore flags
 	.filter((arg) => !arg.startsWith("-"))
 	// normalize slashes
-	.map((arg) => arg.replace(/[\\\/]/g, path.sep))
+	.map((arg) => arg.replaceAll(/[\\\/]/g, path.sep))
 	// Normalize the path to be relative to the repo root
 	.map((arg) => path.resolve(repoRoot, arg))
 	.map((arg) => path.relative(repoRoot, arg))
@@ -42,7 +42,7 @@ async function runFiles() {
 	for (const [workspaceFolder, filenames] of filenamesMap) {
 		console.log(`Running tests in ${workspaceFolder}...`);
 
-		const packageJson = await fs.readJSON(
+		const packageJson = await readJSON(
 			path.join(repoRoot, workspaceFolder, "package.json"),
 		);
 		const workspaceName = packageJson.name;
@@ -58,7 +58,7 @@ async function runFiles() {
 				cwd: repoRoot,
 				stdio: "inherit",
 			});
-		} catch (e) {
+		} catch {
 			hasErrors = true;
 		}
 	}

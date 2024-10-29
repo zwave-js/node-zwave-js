@@ -1,5 +1,6 @@
+import { readJSON } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
-import fs from "fs-extra";
+import fs from "node:fs/promises";
 import "reflect-metadata";
 import yargs from "yargs";
 import {
@@ -56,7 +57,7 @@ void yargs
 					process.exit(1);
 				}
 			}
-			await fs.writeJSON(argv.out, json, { spaces: "\t" });
+			await fs.writeFile(argv.out, JSON.stringify(json, null, "\t"));
 			console.error(`NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);
@@ -93,7 +94,7 @@ void yargs
 			const { protocolVersion } = argv;
 			const versionIs500 = /^\d\.\d+$/.test(protocolVersion);
 
-			const json = await fs.readJson(argv.in);
+			const json = await readJSON(argv.in);
 			const jsonIs500 = json.format === 500;
 			if (versionIs500 && !jsonIs500) {
 				console.error(
@@ -153,9 +154,9 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 					},
 				}),
 		async (argv) => {
-			const json500 = await fs.readJson(argv.in);
+			const json500 = await readJSON(argv.in);
 			const json700 = json500To700(json500, argv.truncate);
-			await fs.writeJSON(argv.out, json700, { spaces: "\t" });
+			await fs.writeFile(argv.out, JSON.stringify(json700, null, "\t"));
 			console.error(`700-series NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);
@@ -178,9 +179,9 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 				},
 			}),
 		async (argv) => {
-			const json700 = await fs.readJson(argv.in);
+			const json700 = await readJSON(argv.in);
 			const json500 = json700To500(json700);
-			await fs.writeJSON(argv.out, json500, { spaces: "\t" });
+			await fs.writeFile(argv.out, JSON.stringify(json500, null, "\t"));
 			console.error(`500-series NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);

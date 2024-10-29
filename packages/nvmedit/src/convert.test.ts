@@ -1,6 +1,8 @@
+import { readJSON } from "@zwave-js/shared";
 import { cloneDeep } from "@zwave-js/shared/safe";
 import test, { type ExecutionContext } from "ava";
-import fs from "fs-extra";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import { jsonToNVM, migrateNVM } from ".";
 import {
@@ -29,7 +31,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const data = await fs.readFile(path.join(fixturesDir, file));
+			const data = await fsp.readFile(path.join(fixturesDir, file));
 			const json = await nvmToJSON(data);
 			t.snapshot(json);
 		});
@@ -44,7 +46,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const jsonInput: NVMJSON = await fs.readJson(
+			const jsonInput: NVMJSON = await readJSON(
 				path.join(fixturesDir, file),
 			);
 			const nvm = await jsonToNVM(
@@ -71,7 +73,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
+			const nvmIn = await fsp.readFile(path.join(fixturesDir, file));
 
 			const version = /_(\d+\.\d+\.\d+)[_.]/.exec(file)![1];
 			const json = await nvmToJSON(nvmIn);
@@ -90,7 +92,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const data = await fs.readFile(path.join(fixturesDir, file));
+			const data = await fsp.readFile(path.join(fixturesDir, file));
 			const json = await nvm500ToJSON(data);
 			t.snapshot(json);
 		});
@@ -124,7 +126,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
+			const nvmIn = await fsp.readFile(path.join(fixturesDir, file));
 
 			// const lib = /_(static|bridge)_/.exec(file)![1];
 			const json = await nvm500ToJSON(nvmIn);
@@ -146,7 +148,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const json500: NVM500JSON = await fs.readJson(
+			const json500: NVM500JSON = await readJSON(
 				path.join(fixturesDir, file),
 			);
 			const json700 = json500To700(json500, true);
@@ -163,7 +165,7 @@ function bufferEquals(
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const json500: NVM500JSON = await fs.readJson(
+			const json500: NVM500JSON = await readJSON(
 				path.join(fixturesDir, file),
 			);
 			const json700 = json500To700(json500, true);
@@ -193,12 +195,12 @@ function bufferEquals(
 test("700 to 700 migration shortcut", async (t) => {
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
 
-	const nvmSource = await fs.readFile(
+	const nvmSource = await fsp.readFile(
 		// cannot use 7.11.bin because it has an invalid combination of protocol
 		// and application version
 		path.join(fixturesDir, "ctrlr_backup_700_7.12.bin"),
 	);
-	const nvmTarget = await fs.readFile(
+	const nvmTarget = await fsp.readFile(
 		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
 	);
 	const converted = await migrateNVM(nvmSource, nvmTarget);

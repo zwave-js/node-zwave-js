@@ -1,10 +1,25 @@
 import test, { type ExecutionContext } from "ava";
-import fsExtra from "fs-extra";
+import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { ConfigManager } from "./ConfigManager";
 
-const readFileStub = sinon.stub(fsExtra, "readFile");
-const pathExistsStub = sinon.stub(fsExtra, "pathExists");
+const readFileStub = sinon.stub();
+const pathExistsStub = sinon.stub();
+
+// load the ConfigManager with stubbed out filesystem
+const { ConfigManager } = proxyquire<typeof import("./ConfigManager")>(
+	"./ConfigManager",
+	{
+		"node:fs/promises": {
+			readFile: readFileStub,
+			"@global": true,
+		},
+		"@zwave-js/shared": {
+			pathExists: pathExistsStub,
+			"@global": true,
+		},
+	},
+);
+type ConfigManager = import("./ConfigManager").ConfigManager;
 
 {
 	async function prepareTest(t: ExecutionContext): Promise<ConfigManager> {

@@ -4,7 +4,7 @@
 
 const { ConfigManager } = require("@zwave-js/config");
 const JSONC = require("comment-json");
-const fs = require("fs-extra");
+const fs = require("node:fs/promises");
 const { formatWithDprint } = require("./utils");
 
 /**

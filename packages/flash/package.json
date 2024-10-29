@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
-    "fs-extra": "^11.2.0",
     "yargs": "^17.7.2",
     "zwave-js": "workspace:*"
   },
@@ -45,7 +44,6 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.55",
     "@types/yargs": "^17.0.33",
     "del-cli": "^6.0.0",

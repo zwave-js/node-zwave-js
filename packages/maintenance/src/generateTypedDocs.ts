@@ -5,8 +5,8 @@
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red, yellow } from "ansi-colors";
-import * as fs from "fs-extra";
-import * as path from "node:path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { isMainThread } from "node:worker_threads";
 import Piscina from "piscina";
 import {
@@ -663,8 +663,8 @@ async function generateCCDocs(
 		return false;
 	}
 
-	await fs.remove(ccDocsDir);
-	await fs.ensureDir(ccDocsDir);
+	await fs.rm(ccDocsDir, { recursive: true, force: true });
+	await fs.mkdir(ccDocsDir, { recursive: true });
 
 	// Find CC APIs
 	const ccFiles = program.getSourceFiles("packages/cc/src/cc/**/*CC.ts");

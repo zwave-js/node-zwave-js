@@ -179,6 +179,7 @@ import {
 	mergeDeep,
 	noop,
 	num2hex,
+	pathExists,
 	pick,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -188,9 +189,9 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import fsExtra from "fs-extra";
 import { randomBytes } from "node:crypto";
 import type { EventEmitter } from "node:events";
+import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { URL } from "node:url";
@@ -327,7 +328,20 @@ const defaultOptions: ZWaveOptions = {
 		queryAllUserCodes: false,
 	},
 	storage: {
-		driver: fsExtra,
+		driver: {
+			async ensureDir(path) {
+				await fs.mkdir(path, { recursive: true });
+			},
+			pathExists(path) {
+				return pathExists(path);
+			},
+			readFile(file, encoding) {
+				return fs.readFile(file, { encoding });
+			},
+			writeFile(file, data, options) {
+				return fs.writeFile(file, data, options);
+			},
+		},
 		cacheDir: path.resolve(libraryRootDir, "cache"),
 		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
 		throttle: "normal",
@@ -1192,14 +1206,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// Put symlinks to the serial ports first if possible
 			if (os.platform() === "linux") {
 				const dir = "/dev/serial/by-id";
-				const symlinks = await fsExtra.readdir(dir).catch(() => []);
+				const symlinks = await fs.readdir(dir).catch(() => []);
 
 				for (const l of symlinks) {
 					try {
 						const fullPath = path.join(dir, l);
 						const target = path.join(
 							dir,
-							await fsExtra.readlink(fullPath),
+							await fs.readlink(fullPath),
 						);
 						if (!target.startsWith("/dev/tty")) continue;
 
