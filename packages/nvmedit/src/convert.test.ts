@@ -1,5 +1,5 @@
 import { cloneDeep } from "@zwave-js/shared/safe";
-import test from "ava";
+import test, { type ExecutionContext } from "ava";
 import fs from "fs-extra";
 import path from "node:path";
 import { jsonToNVM, migrateNVM } from ".";
@@ -12,6 +12,14 @@ import {
 	nvmToJSON,
 } from "./convert";
 import type { NVM500JSON } from "./nvm500/NVMParser";
+
+function bufferEquals(
+	t: ExecutionContext,
+	actual: Uint8Array,
+	expected: Uint8Array,
+) {
+	t.deepEqual(actual.buffer, expected.buffer);
+}
 
 {
 	const suite = "700-series, binary to JSON";
@@ -69,7 +77,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			const json = await nvmToJSON(nvmIn);
 			const nvmOut = await jsonToNVM(json, version);
 
-			t.deepEqual(nvmOut, nvmIn);
+			bufferEquals(t, nvmOut, nvmIn);
 		});
 	}
 }
@@ -125,7 +133,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 				json.controller.protocolVersion,
 			);
 
-			t.deepEqual(nvmOut, nvmIn);
+			bufferEquals(t, nvmOut, nvmIn);
 		});
 	}
 }
@@ -195,5 +203,5 @@ test("700 to 700 migration shortcut", async (t) => {
 	);
 	const converted = await migrateNVM(nvmSource, nvmTarget);
 
-	t.deepEqual(converted, nvmSource);
+	bufferEquals(t, converted, nvmSource);
 });
