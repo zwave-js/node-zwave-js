@@ -1,7 +1,7 @@
 import { WakeUpCCWakeUpNotification } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("Assume a node to be awake at the start of a re-interview", {
@@ -60,7 +60,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 		const interviewCompleted = new Promise<void>((resolve) => {
 			node.on("interview completed", () => resolve());
 		});
-		const wait10s = wait(10000, undefined, { ref: false });
+		const wait10s = wait(10000, true);
 		await Promise.race([interviewCompleted, wait10s]);
 
 		t.pass();

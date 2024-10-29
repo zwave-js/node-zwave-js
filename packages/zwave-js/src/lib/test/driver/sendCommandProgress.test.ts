@@ -3,8 +3,8 @@ import { CommandClasses, TransactionState } from "@zwave-js/core";
 import sinon from "sinon";
 
 import { getEnumMemberName } from "@zwave-js/shared";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

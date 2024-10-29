@@ -8,8 +8,8 @@ import {
 import { FunctionType } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
+import { wait } from "alcalzone-shared/async";
 import ava, { type ExecutionContext, type TestFn } from "ava";
-import { setTimeout as wait } from "node:timers/promises";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { createAndStartDriver } from "../test/utils";

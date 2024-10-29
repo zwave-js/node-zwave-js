@@ -2,8 +2,8 @@ import { BasicCCGet, BasicCCSet } from "@zwave-js/cc";
 import { MessagePriority, NodeStatus } from "@zwave-js/core";
 import { type SendDataRequest } from "@zwave-js/serial/serialapi";
 import { MOCK_FRAME_ACK_TIMEOUT, MockZWaveFrameType } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 // Repro from #1078
@@ -54,7 +54,7 @@ integrationTest(
 			t.is(
 				await Promise.race([
 					basicSetPromise1,
-					wait(MOCK_FRAME_ACK_TIMEOUT + 100, "timeout"),
+					wait(MOCK_FRAME_ACK_TIMEOUT + 100).then(() => "timeout"),
 				]),
 				"timeout",
 			);

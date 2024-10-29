@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared";
 import { type MockControllerBehavior } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

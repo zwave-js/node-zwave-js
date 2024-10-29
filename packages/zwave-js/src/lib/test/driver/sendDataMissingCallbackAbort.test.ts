@@ -1,6 +1,6 @@
 import { FunctionType } from "@zwave-js/serial";
 import { type MockControllerBehavior } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,

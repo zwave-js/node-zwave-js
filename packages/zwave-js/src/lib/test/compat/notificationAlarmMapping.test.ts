@@ -4,7 +4,7 @@ import {
 } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 

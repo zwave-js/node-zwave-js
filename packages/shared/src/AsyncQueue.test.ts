@@ -1,5 +1,5 @@
+import { wait } from "alcalzone-shared/async";
 import test from "ava";
-import { setTimeout as wait } from "node:timers/promises";
 import { AsyncQueue } from "./AsyncQueue";
 
 test("can be iterated over after adding items", async (t) => {

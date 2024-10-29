@@ -6,12 +6,12 @@ import {
 	type MockNode,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import test, { type ExecutionContext } from "ava";
 import fs from "fs-extra";
 import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "../driver/Driver";
 import type { PartialZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";

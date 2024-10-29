@@ -11,8 +11,8 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 // Repro from #1107
@@ -186,7 +186,7 @@ integrationTest(
 			driver.driverLog.sendQueue(driver["queue"]);
 
 			let result: any = await Promise.race([
-				wait(5000, "timeout"),
+				wait(5000).then(() => "timeout"),
 				queryBasicPromise1.catch(() => "error"),
 			]);
 			// The first command should have been sent
@@ -207,7 +207,7 @@ integrationTest(
 			driver.driverLog.sendQueue(driver["queue"]);
 
 			result = await Promise.race([
-				wait(5000, "timeout"),
+				wait(5000).then(() => "timeout"),
 				queryBasicPromise2.catch(() => "error"),
 			]);
 
@@ -283,7 +283,7 @@ integrationTest(
 			driver.driverLog.sendQueue(driver["queue"]);
 
 			let result = await Promise.race([
-				wait(500, "timeout"),
+				wait(500).then(() => "timeout"),
 				commandToNode17.then(() => "ok"),
 			]);
 			t.is(result, "ok");
@@ -312,7 +312,7 @@ integrationTest(
 
 			// And the first command should be sent
 			result = await Promise.race([
-				wait(500, "timeout"),
+				wait(500).then(() => "timeout"),
 				commandToNode10.then(() => "ok"),
 			]);
 			t.is(result, "ok");
