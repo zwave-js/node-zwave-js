@@ -114,6 +114,38 @@ function visitBufferType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	});
 }
 
+function visitUint8ArrayType(
+	type: ts.ObjectType,
+	visitorContext: VisitorContext,
+) {
+	const name = VisitorTypeName.visitType(type, visitorContext, {
+		type: "type-check",
+	});
+	const f = visitorContext.factory;
+	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+		return VisitorUtils.createAssertionFunction(
+			f.createPrefixUnaryExpression(
+				ts.SyntaxKind.ExclamationToken,
+				f.createCallExpression(
+					f.createPropertyAccessExpression(
+						f.createCallExpression(
+							f.createIdentifier("require"),
+							undefined,
+							[f.createStringLiteral("@zwave-js/shared/safe")],
+						),
+						f.createIdentifier("isUint8Array"),
+					),
+					undefined,
+					[VisitorUtils.objectIdentifier],
+				),
+			),
+			{ type: "uint8array" },
+			name,
+			visitorContext,
+		);
+	});
+}
+
 function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
@@ -687,6 +719,8 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 			return visitDateType(type, visitorContext);
 		} else if (VisitorUtils.checkIsNodeBuffer(type)) {
 			return visitBufferType(type, visitorContext);
+		} else if (VisitorUtils.checkIsUint8Array(type)) {
+			return visitUint8ArrayType(type, visitorContext);
 		} else if (VisitorUtils.checkIsIgnoredIntrinsic(type)) {
 			// This is an intrinsic type we can't check properly, so we just ignore it.
 			return VisitorUtils.getIgnoredTypeFunction(visitorContext);

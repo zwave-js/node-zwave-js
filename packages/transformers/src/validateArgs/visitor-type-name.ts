@@ -110,6 +110,8 @@ function visitObjectType(
 		return visitTupleObjectType(type, visitorContext, mode);
 	} else if (checkIsNodeBuffer(type)) {
 		return "_buffer";
+	} else if (VisitorUtils.checkIsUint8Array(type)) {
+		return "_uint8array";
 	} else if (
 		visitorContext.checker.getIndexTypeOfType(type, ts.IndexKind.Number)
 	) {
