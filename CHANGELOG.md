@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Disable Supervision for Everspring SE813 (#7333)
+
 ## 13.10.2 (2024-10-28)
 ### Bugfixes
 * Bootloader mode is now detected in more difficult cases (#7327)
