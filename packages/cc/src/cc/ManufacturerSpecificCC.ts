@@ -13,6 +13,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -270,8 +271,8 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	@ccValue(ManufacturerSpecificCCValues.productId)
 	public readonly productId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(6);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(6);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.productType, 2);
 		this.payload.writeUInt16BE(this.productId, 4);
@@ -388,8 +389,8 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 
 	public deviceIdType: DeviceIdType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([(this.deviceIdType || 0) & 0b111]);
 		return super.serialize(ctx);
 	}
 

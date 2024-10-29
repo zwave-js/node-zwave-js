@@ -1,4 +1,5 @@
 import { NODE_ID_MAX, encodeBitMask, parseBitMask } from "@zwave-js/core/safe";
+import { type Bytes } from "@zwave-js/shared/safe";
 import type { NVM3Object } from "../object";
 import {
 	NVMFile,
@@ -33,7 +34,7 @@ export class ProtocolNodeMaskFile extends NVMFile {
 		this.nodeIdSet = new Set(value);
 	}
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		this.payload = encodeBitMask([...this.nodeIdSet], NODE_ID_MAX);
 		return super.serialize();
 	}
@@ -125,7 +126,7 @@ export class ProtocolLRNodeListFile extends NVMFile {
 		this.nodeIdSet = new Set(value);
 	}
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		// There are only 128 bytes for the bitmask, so the LR node IDs only go up to 1279
 		this.payload = encodeBitMask([...this.nodeIdSet], 1279, 256);
 		return super.serialize();

@@ -11,6 +11,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -221,8 +222,8 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	@ccValue(ZWavePlusCCValues.userIcon)
 	public userIcon: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.zwavePlusVersion,
 			this.roleType,
 			this.nodeType,

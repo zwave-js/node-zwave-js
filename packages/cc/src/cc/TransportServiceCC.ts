@@ -13,6 +13,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
 	type CCRaw,
@@ -61,8 +62,8 @@ export class TransportServiceCC extends CommandClass
 export interface TransportServiceCCFirstSegmentOptions {
 	datagramSize: number;
 	sessionId: number;
-	headerExtension?: Buffer | undefined;
-	partialDatagram: Buffer;
+	headerExtension?: Uint8Array | undefined;
+	partialDatagram: Uint8Array;
 }
 
 /** @publicAPI */
@@ -102,7 +103,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		validatePayload(raw.payload.length >= 6); // 2 bytes dgram size, 1 byte sessid/ext, 1+ bytes payload, 2 bytes checksum
 
 		// Verify the CRC
-		const headerBuffer = Buffer.from([
+		const headerBuffer = Bytes.from([
 			CommandClasses["Transport Service"],
 			TransportServiceCommand.FirstSegment | raw.payload[0],
 		]);
@@ -119,14 +120,17 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 
 		// If there is a header extension, read it
 		const hasHeaderExtension = !!(raw.payload[2] & 0b1000);
-		let headerExtension: Buffer | undefined;
+		let headerExtension: Uint8Array | undefined;
 
 		if (hasHeaderExtension) {
 			const extLength = raw.payload[3];
 			headerExtension = raw.payload.subarray(4, 4 + extLength);
 			payloadOffset += 1 + extLength;
 		}
-		const partialDatagram: Buffer = raw.payload.subarray(payloadOffset, -2);
+		const partialDatagram: Uint8Array = raw.payload.subarray(
+			payloadOffset,
+			-2,
+		);
 
 		// A node supporting the Transport Service Command Class, version 2
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
@@ -143,36 +147,36 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 
 	public datagramSize: number;
 	public sessionId: number;
-	public headerExtension: Buffer | undefined;
-	public partialDatagram: Buffer;
+	public headerExtension: Uint8Array | undefined;
+	public partialDatagram: Uint8Array;
 	public encapsulated!: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
 
 		const ext = !!this.headerExtension && this.headerExtension.length >= 1;
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.datagramSize & 0xff,
 			((this.sessionId & 0b1111) << 4) | (ext ? 0b1000 : 0),
 		]);
 		if (ext) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([this.headerExtension!.length]),
+				Bytes.from([this.headerExtension!.length]),
 				this.headerExtension!,
 			]);
 		}
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			this.payload,
 			this.partialDatagram,
-			Buffer.alloc(2, 0), // checksum
+			Bytes.alloc(2, 0), // checksum
 		]);
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
-		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
+		const headerBuffer = Bytes.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
 		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
@@ -245,7 +249,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		validatePayload(raw.payload.length >= 7); // 2 bytes dgram size, 1 byte sessid/ext/offset, 1 byte offset, 1+ bytes payload, 2 bytes checksum
 
 		// Verify the CRC
-		const headerBuffer = Buffer.from([
+		const headerBuffer = Bytes.from([
 			CommandClasses["Transport Service"],
 			TransportServiceCommand.SubsequentSegment | raw.payload[0],
 		]);
@@ -264,14 +268,14 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 
 		// If there is a header extension, read it
 		const hasHeaderExtension = !!(raw.payload[2] & 0b1000);
-		let headerExtension: Buffer | undefined;
+		let headerExtension: Bytes | undefined;
 
 		if (hasHeaderExtension) {
 			const extLength = raw.payload[4];
 			headerExtension = raw.payload.subarray(5, 5 + extLength);
 			payloadOffset += 1 + extLength;
 		}
-		const partialDatagram: Buffer = raw.payload.subarray(payloadOffset, -2);
+		const partialDatagram: Bytes = raw.payload.subarray(payloadOffset, -2);
 
 		// A node supporting the Transport Service Command Class, version 2
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
@@ -290,8 +294,8 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public datagramSize: number;
 	public datagramOffset: number;
 	public sessionId: number;
-	public headerExtension: Buffer | undefined;
-	public partialDatagram: Buffer;
+	public headerExtension: Uint8Array | undefined;
+	public partialDatagram: Uint8Array;
 
 	// This can only be received
 	private _encapsulated!: CommandClass;
@@ -340,7 +344,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		ctx: CCParsingContext,
 	): void {
 		// Concat the CC buffers
-		const datagram = Buffer.allocUnsafe(this.datagramSize);
+		const datagram = new Bytes(this.datagramSize);
 		for (const partial of [...partials, this]) {
 			// Ensure that we don't try to write out-of-bounds
 			const offset = partial instanceof TransportServiceCCFirstSegment
@@ -352,7 +356,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 					ZWaveErrorCodes.PacketFormat_InvalidPayload,
 				);
 			}
-			partial.partialDatagram.copy(datagram, offset);
+			datagram.set(partial.partialDatagram, offset);
 		}
 
 		// and deserialize the CC
@@ -360,13 +364,13 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		this._encapsulated.encapsulatingCC = this as any;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
 
 		const ext = !!this.headerExtension && this.headerExtension.length >= 1;
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.datagramSize & 0xff,
 			((this.sessionId & 0b1111) << 4)
 			| (ext ? 0b1000 : 0)
@@ -374,21 +378,21 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			this.datagramOffset & 0xff,
 		]);
 		if (ext) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([this.headerExtension!.length]),
+				Bytes.from([this.headerExtension!.length]),
 				this.headerExtension!,
 			]);
 		}
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			this.payload,
 			this.partialDatagram,
-			Buffer.alloc(2, 0), // checksum
+			Bytes.alloc(2, 0), // checksum
 		]);
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
-		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
+		const headerBuffer = Bytes.from([this.ccId, this.ccCommand]);
 		let crc = CRC16_CCITT(headerBuffer);
 		crc = CRC16_CCITT(this.payload.subarray(0, -2), crc);
 		// Write the checksum into the last two bytes of the payload
@@ -474,8 +478,8 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public sessionId: number;
 	public datagramOffset: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			((this.sessionId & 0b1111) << 4)
 			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
@@ -523,8 +527,8 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 
 	public sessionId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([(this.sessionId & 0b1111) << 4]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([(this.sessionId & 0b1111) << 4]);
 		return super.serialize(ctx);
 	}
 
@@ -565,8 +569,8 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 
 	public pendingSegments: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.pendingSegments]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.pendingSegments]);
 		return super.serialize(ctx);
 	}
 

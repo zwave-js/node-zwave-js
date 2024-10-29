@@ -8,6 +8,6 @@ export type FirmwareFileFormat =
 	| "bin";
 
 export interface Firmware {
-	data: Buffer;
+	data: Uint8Array;
 	firmwareTarget?: number;
 }

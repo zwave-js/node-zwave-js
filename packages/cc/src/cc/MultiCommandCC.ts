@@ -11,6 +11,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import { type CCRaw, CommandClass } from "../lib/CommandClass";
@@ -145,15 +146,15 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		const buffers: Buffer[] = [];
-		buffers.push(Buffer.from([this.encapsulated.length]));
+	public serialize(ctx: CCEncodingContext): Bytes {
+		const buffers: Bytes[] = [];
+		buffers.push(Bytes.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
 			const cmdBuffer = cmd.serialize(ctx);
-			buffers.push(Buffer.from([cmdBuffer.length]));
+			buffers.push(Bytes.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
-		this.payload = Buffer.concat(buffers);
+		this.payload = Bytes.concat(buffers);
 		return super.serialize(ctx);
 	}
 

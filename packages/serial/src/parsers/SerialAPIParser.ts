@@ -1,4 +1,4 @@
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../log/Logger";
 import { MessageHeaders } from "../message/MessageHeaders";
@@ -6,12 +6,12 @@ import { MessageHeaders } from "../message/MessageHeaders";
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message
  */
-function containsCompleteMessage(data?: Buffer): boolean {
+function containsCompleteMessage(data?: Uint8Array): boolean {
 	return !!data && data.length >= 5 && data.length >= getMessageLength(data);
 }
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
-function getMessageLength(data: Buffer): number {
+function getMessageLength(data: Uint8Array): number {
 	const remainingLength = data[1];
 	return remainingLength + 2;
 }
@@ -19,13 +19,13 @@ function getMessageLength(data: Buffer): number {
 export class SerialAPIParser extends Transform {
 	constructor(
 		private logger?: SerialLogger,
-		private onDiscarded?: (data: Buffer) => void,
+		private onDiscarded?: (data: Uint8Array) => void,
 	) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
 
-	private receiveBuffer = Buffer.allocUnsafe(0);
+	private receiveBuffer = new Bytes();
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibble: boolean = false;
@@ -35,7 +35,7 @@ export class SerialAPIParser extends Transform {
 		encoding: string,
 		callback: TransformCallback,
 	): void {
-		this.receiveBuffer = Buffer.concat([this.receiveBuffer, chunk]);
+		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
 		while (this.receiveBuffer.length > 0) {
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
@@ -101,7 +101,7 @@ export class SerialAPIParser extends Transform {
 					}
 				}
 				// Continue with the next valid byte
-				this.receiveBuffer = skipBytes(this.receiveBuffer, skip);
+				this.receiveBuffer = this.receiveBuffer.subarray(skip);
 				continue;
 			}
 
@@ -113,7 +113,7 @@ export class SerialAPIParser extends Transform {
 				const msgLength = getMessageLength(this.receiveBuffer);
 				// emit it and slice the read bytes from the buffer
 				const msg = this.receiveBuffer.subarray(0, msgLength);
-				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
+				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
 
 				this.logger?.data("inbound", msg);
 				this.push(msg);
@@ -121,9 +121,4 @@ export class SerialAPIParser extends Transform {
 		}
 		callback();
 	}
-}
-
-/** Skips the first n bytes of a buffer and returns the rest */
-export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.subarray(n));
 }

@@ -21,7 +21,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum ExtendedNVMOperationsCommand {
 	Open = 0x00,
@@ -46,9 +46,9 @@ export class ExtendedNVMOperationsRequest extends Message {
 	// This must be set in subclasses
 	public command!: ExtendedNVMOperationsCommand;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.command]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.command]),
 			this.payload,
 		]);
 
@@ -139,8 +139,8 @@ export class ExtendedNVMOperationsReadRequest
 	public length: number;
 	public offset: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(5);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(5);
 		this.payload[0] = this.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 
@@ -164,7 +164,7 @@ export class ExtendedNVMOperationsReadRequest
 
 export interface ExtendedNVMOperationsWriteRequestOptions {
 	offset: number;
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 export class ExtendedNVMOperationsWriteRequest
@@ -206,13 +206,13 @@ export class ExtendedNVMOperationsWriteRequest
 	}
 
 	public offset: number;
-	public buffer: Buffer;
+	public buffer: Uint8Array;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(1 + 4 + this.buffer.length);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(1 + 4 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt32BE(this.offset, 1);
-		this.buffer.copy(this.payload, 5);
+		this.payload.set(this.buffer, 5);
 		return super.serialize(ctx);
 	}
 
@@ -235,7 +235,7 @@ export class ExtendedNVMOperationsWriteRequest
 export interface ExtendedNVMOperationsResponseOptions {
 	status: ExtendedNVMOperationStatus;
 	offsetOrSize: number;
-	bufferOrBitmask: Buffer;
+	bufferOrBitmask: Uint8Array;
 }
 
 @messageTypes(MessageType.Response, FunctionType.ExtendedNVMOperations)
@@ -271,14 +271,14 @@ export class ExtendedNVMOperationsResponse extends Message
 		// - Read command: the read NVM data
 		// - Write/Close command: nothing
 		// - Open command: bit mask of supported sub-commands
-		let bufferOrBitmask: Buffer;
+		let bufferOrBitmask: Uint8Array;
 		if (dataLength > 0 && raw.payload.length >= offset + dataLength) {
 			bufferOrBitmask = raw.payload.subarray(
 				offset,
 				offset + dataLength,
 			);
 		} else {
-			bufferOrBitmask = Buffer.from([]);
+			bufferOrBitmask = new Uint8Array();
 		}
 
 		return new this({
@@ -297,7 +297,7 @@ export class ExtendedNVMOperationsResponse extends Message
 
 	public readonly status: ExtendedNVMOperationStatus;
 	public readonly offsetOrSize: number;
-	public readonly bufferOrBitmask: Buffer;
+	public readonly bufferOrBitmask: Uint8Array;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {

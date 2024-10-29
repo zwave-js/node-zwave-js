@@ -4,7 +4,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
-import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared/safe";
+import {
+	type AllOrNone,
+	Bytes,
+	getEnumMemberName,
+} from "@zwave-js/shared/safe";
 import semver from "semver";
 import type { NVM3Object } from "../object";
 import {
@@ -43,8 +47,8 @@ export class ApplicationRFConfigFile extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length === 3 || this.payload.length === 6) {
 				this.rfRegion = this.payload[0];
-				this.txPower = this.payload.readIntLE(1, 1) / 10;
-				this.measured0dBm = this.payload.readIntLE(2, 1) / 10;
+				this.txPower = this.payload.readInt8(1) / 10;
+				this.measured0dBm = this.payload.readInt8(2) / 10;
 				if (this.payload.length === 6) {
 					this.enablePTI = this.payload[3];
 					this.maxTXPower = this.payload.readInt16LE(4) / 10;
@@ -85,12 +89,11 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public maxTXPower?: number;
 	public nodeIdType?: NodeIDType;
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		if (semver.lt(this.fileVersion, "7.18.1")) {
-			this.payload = Buffer.alloc(
+			this.payload = new Bytes(
 				semver.gte(this.fileVersion, "7.15.3") ? 6 : 3,
-				0,
-			);
+			).fill(0);
 			this.payload[0] = this.rfRegion;
 			this.payload.writeIntLE(this.txPower * 10, 1, 1);
 			this.payload.writeIntLE(this.measured0dBm * 10, 2, 1);
@@ -99,14 +102,14 @@ export class ApplicationRFConfigFile extends NVMFile {
 				this.payload.writeInt16LE((this.maxTXPower ?? 0) * 10, 4);
 			}
 		} else if (semver.lt(this.fileVersion, "7.21.0")) {
-			this.payload = Buffer.alloc(8, 0);
+			this.payload = new Bytes(8).fill(0);
 			this.payload[0] = this.rfRegion;
 			this.payload.writeInt16LE(this.txPower * 10, 1);
 			this.payload.writeInt16LE(this.measured0dBm * 10, 3);
 			this.payload[5] = this.enablePTI ?? 0;
 			this.payload.writeInt16LE((this.maxTXPower ?? 0) * 10, 6);
 		} else {
-			this.payload = Buffer.alloc(9, 0);
+			this.payload = new Bytes(9).fill(0);
 			this.payload[0] = this.rfRegion;
 			this.payload.writeInt16LE(this.txPower * 10, 1);
 			this.payload.writeInt16LE(this.measured0dBm * 10, 3);

@@ -21,6 +21,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -206,7 +207,7 @@ export const VersionCCValues = Object.freeze({
 	}),
 });
 
-function parseVersion(buffer: Buffer): string {
+function parseVersion(buffer: Uint8Array): string {
 	if (buffer[0] === 0 && buffer[1] === 0 && buffer[2] === 0) return "unused";
 	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }
@@ -722,8 +723,8 @@ export class VersionCCReport extends VersionCC {
 	@ccValue(VersionCCValues.hardwareVersion)
 	public readonly hardwareVersion: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.libraryType,
 			...this.protocolVersion
 				.split(".")
@@ -738,7 +739,7 @@ export class VersionCCReport extends VersionCC {
 		]);
 
 		if (this.firmwareVersions.length > 1) {
-			const firmwaresBuffer = Buffer.allocUnsafe(
+			const firmwaresBuffer = new Bytes(
 				(this.firmwareVersions.length - 1) * 2,
 			);
 			for (let i = 1; i < this.firmwareVersions.length; i++) {
@@ -748,7 +749,7 @@ export class VersionCCReport extends VersionCC {
 				firmwaresBuffer[2 * (i - 1)] = major;
 				firmwaresBuffer[2 * (i - 1) + 1] = minor;
 			}
-			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
+			this.payload = Bytes.concat([this.payload, firmwaresBuffer]);
 		}
 
 		return super.serialize(ctx);
@@ -811,8 +812,8 @@ export class VersionCCCommandClassReport extends VersionCC {
 	public ccVersion: number;
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.requestedCC, this.ccVersion]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.requestedCC, this.ccVersion]);
 		return super.serialize(ctx);
 	}
 
@@ -868,8 +869,8 @@ export class VersionCCCommandClassGet extends VersionCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.requestedCC]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.requestedCC]);
 		return super.serialize(ctx);
 	}
 
@@ -913,8 +914,8 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
 	public supportsZWaveSoftwareGet: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
 		]);
 		return super.serialize(ctx);

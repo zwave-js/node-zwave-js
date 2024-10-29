@@ -10,15 +10,16 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 import * as nodeUtils from "../../node/utils";
 import { type CreateTestNodeOptions, createTestNode } from "../mocks";
 
 const host = createTestingHost();
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses.Basic, // CC
 		]),
 		payload,
@@ -28,7 +29,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the Get command should serialize correctly", (t) => {
 	const basicCC = new BasicCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BasicCommand.Get, // CC Command
 		]),
 	);
@@ -37,7 +38,7 @@ test("the Get command should serialize correctly", (t) => {
 
 test("the Get command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BasicCommand.Get, // CC Command
 		]),
 	);
@@ -55,7 +56,7 @@ test("the Set command should serialize correctly", (t) => {
 		targetValue: 55,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BasicCommand.Set, // CC Command
 			55, // target value
 		]),
@@ -65,7 +66,7 @@ test("the Set command should serialize correctly", (t) => {
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BasicCommand.Report, // CC Command
 			55, // current value
 		]),
@@ -83,7 +84,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BasicCommand.Report, // CC Command
 			55, // current value
 			66, // target value
@@ -104,7 +105,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of BasicCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const basicCC = CommandClass.parse(
 		serializedCC,

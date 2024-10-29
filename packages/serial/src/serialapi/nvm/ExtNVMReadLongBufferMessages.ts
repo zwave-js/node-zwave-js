@@ -16,7 +16,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMReadLongBufferRequestOptions {
 	offset: number;
@@ -63,8 +63,8 @@ export class ExtNVMReadLongBufferRequest extends Message {
 	public offset: number;
 	public length: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(5);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(5);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.length, 3);
 		return super.serialize(ctx);
@@ -82,7 +82,7 @@ export class ExtNVMReadLongBufferRequest extends Message {
 }
 
 export interface ExtNVMReadLongBufferResponseOptions {
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 @messageTypes(MessageType.Response, FunctionType.ExtNVMReadLongBuffer)
@@ -105,7 +105,7 @@ export class ExtNVMReadLongBufferResponse extends Message {
 		});
 	}
 
-	public readonly buffer: Buffer;
+	public readonly buffer: Uint8Array;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {

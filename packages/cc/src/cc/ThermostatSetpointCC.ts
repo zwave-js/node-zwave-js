@@ -24,6 +24,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -585,12 +586,12 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public value: number;
 	public scale: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		// If a config file overwrites how the float should be encoded, use that information
 		const override = ctx.getDeviceConfig?.(this.nodeId as number)
 			?.compat?.overrideFloatEncoding;
-		this.payload = Buffer.concat([
-			Buffer.from([this.setpointType & 0b1111]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
 		]);
 		return super.serialize(ctx);
@@ -693,9 +694,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.type & 0b1111]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.type & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
 		return super.serialize(ctx);
@@ -757,8 +758,8 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.setpointType & 0b1111]);
 		return super.serialize(ctx);
 	}
 
@@ -848,10 +849,10 @@ export class ThermostatSetpointCCCapabilitiesReport
 	public minValueScale: number;
 	public maxValueScale: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const min = encodeFloatWithScale(this.minValue, this.minValueScale);
 		const max = encodeFloatWithScale(this.maxValue, this.maxValueScale);
-		this.payload = Buffer.concat([Buffer.from([this.type]), min, max]);
+		this.payload = Bytes.concat([Bytes.from([this.type]), min, max]);
 		return super.serialize(ctx);
 	}
 
@@ -902,8 +903,8 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.setpointType & 0b1111]);
 		return super.serialize(ctx);
 	}
 
@@ -966,7 +967,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)
 	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(
 			// Encode as interpretation A
 			this.supportedSetpointTypes

@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import { num2hex } from "@zwave-js/shared";
+import { buffer2hex, num2hex } from "@zwave-js/shared";
 import { type NVM3 } from "../NVM3";
 import { FragmentType, ObjectType, PageStatus } from "./consts";
 import { NVMFile } from "./files/NVMFile";
@@ -113,7 +113,7 @@ function dumpObject(
 	if (obj.data) {
 		console.log(
 			`${prefix}  data: ${
-				obj.data.toString("hex")
+				buffer2hex(obj.data)
 			} (${obj.data.length} bytes)`,
 		);
 	}

@@ -11,7 +11,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { cpp2js } from "@zwave-js/shared";
+import { Bytes, cpp2js } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
@@ -52,10 +52,10 @@ export class GetControllerVersionResponse extends Message {
 	public controllerType: ZWaveLibraryTypes;
 	public libraryVersion: string;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from(`${this.libraryVersion}\0`, "ascii"),
-			Buffer.from([this.controllerType]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from(`${this.libraryVersion}\0`, "ascii"),
+			Bytes.from([this.controllerType]),
 		]);
 
 		return super.serialize(ctx);

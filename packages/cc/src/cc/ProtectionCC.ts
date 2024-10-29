@@ -20,6 +20,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -530,8 +531,8 @@ export class ProtectionCCSet extends ProtectionCC {
 	public local: LocalProtectionState;
 	public rf?: RFProtectionState;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.local & 0b1111,
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
 		]);
@@ -808,8 +809,8 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 
 	public exclusiveControlNodeId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.exclusiveControlNodeId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.exclusiveControlNodeId]);
 		return super.serialize(ctx);
 	}
 
@@ -900,8 +901,8 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 
 	public timeout: Timeout;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.timeout.serialize()]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.timeout.serialize()]);
 		return super.serialize(ctx);
 	}
 

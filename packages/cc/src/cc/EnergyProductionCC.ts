@@ -14,7 +14,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -250,9 +250,9 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.parameter]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.parameter]),
 			encodeFloatWithScale(this.value, this.scale.key),
 		]);
 		return super.serialize(ctx);
@@ -313,8 +313,8 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 
 	public parameter: EnergyProductionParameter;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.parameter]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.parameter]);
 		return super.serialize(ctx);
 	}
 

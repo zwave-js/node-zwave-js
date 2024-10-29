@@ -1,4 +1,5 @@
 import { MAX_NODES, MAX_REPEATERS } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	EMPTY_ROUTECACHE_FILL,
 	ROUTECACHE_SIZE,
@@ -50,9 +51,9 @@ export class RouteCacheFileV0 extends NVMFile {
 
 	public routeCache: RouteCache;
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		this.fileId = nodeIdToRouteCacheFileIDV0(this.routeCache.nodeId);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			encodeRoute(this.routeCache.lwr),
 			encodeRoute(this.routeCache.nlwr),
 		]);
@@ -120,16 +121,14 @@ export class RouteCacheFileV1 extends NVMFile {
 
 	public routeCaches: RouteCache[];
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		// The route infos must be sorted by node ID
 		this.routeCaches.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.routeCaches[0].nodeId;
 		this.fileId = nodeIdToRouteCacheFileIDV1(minNodeId);
 
-		this.payload = Buffer.alloc(
-			ROUTECACHES_PER_FILE_V1 * ROUTECACHE_SIZE,
-			EMPTY_ROUTECACHE_FILL,
-		);
+		this.payload = new Bytes(ROUTECACHES_PER_FILE_V1 * ROUTECACHE_SIZE)
+			.fill(EMPTY_ROUTECACHE_FILL);
 
 		const minFileNodeId =
 			Math.floor((minNodeId - 1) / ROUTECACHES_PER_FILE_V1)
@@ -139,10 +138,11 @@ export class RouteCacheFileV1 extends NVMFile {
 		for (const routeCache of this.routeCaches) {
 			const offset = (routeCache.nodeId - minFileNodeId)
 				* ROUTECACHE_SIZE;
-			Buffer.concat([
+			const routes = Bytes.concat([
 				encodeRoute(routeCache.lwr),
 				encodeRoute(routeCache.nlwr),
-			]).copy(this.payload, offset);
+			]);
+			this.payload.set(routes, offset);
 		}
 
 		return super.serialize();

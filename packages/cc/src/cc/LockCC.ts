@@ -16,6 +16,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -210,8 +211,8 @@ export class LockCCSet extends LockCC {
 
 	public locked: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.locked ? 1 : 0]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.locked ? 1 : 0]);
 		return super.serialize(ctx);
 	}
 

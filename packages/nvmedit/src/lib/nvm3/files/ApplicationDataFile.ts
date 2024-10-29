@@ -1,3 +1,4 @@
+import { type Bytes } from "@zwave-js/shared/safe";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -8,7 +9,7 @@ import {
 } from "./NVMFile";
 
 export interface ApplicationDataFileOptions extends NVMFileCreationOptions {
-	applicationData: Buffer;
+	applicationData: Bytes;
 }
 
 export const ApplicationDataFileID = 200;
@@ -26,10 +27,10 @@ export class ApplicationDataFile extends NVMFile {
 	}
 
 	// Just binary data
-	public get applicationData(): Buffer {
+	public get applicationData(): Bytes {
 		return this.payload;
 	}
-	public set applicationData(value: Buffer) {
+	public set applicationData(value: Bytes) {
 		this.payload = value;
 	}
 }

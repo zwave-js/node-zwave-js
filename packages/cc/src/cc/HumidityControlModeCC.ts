@@ -18,6 +18,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -309,8 +310,8 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 
 	public mode: HumidityControlMode;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.mode & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.mode & 0b1111]);
 		return super.serialize(ctx);
 	}
 

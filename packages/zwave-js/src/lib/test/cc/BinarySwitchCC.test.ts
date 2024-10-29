@@ -8,11 +8,12 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Binary Switch"], // CC
 		]),
 		payload,
@@ -22,7 +23,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the Get command should serialize correctly", (t) => {
 	const cc = new BinarySwitchCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySwitchCommand.Get, // CC Command
 		]),
 	);
@@ -35,7 +36,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		targetValue: false,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySwitchCommand.Set, // CC Command
 			0x00, // target value
 			0xff, // default duration
@@ -58,7 +59,7 @@ test("the Set command should serialize correctly", (t) => {
 		duration,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySwitchCommand.Set, // CC Command
 			0xff, // target value,
 			duration.serializeSet(),
@@ -75,7 +76,7 @@ test("the Set command should serialize correctly", (t) => {
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySwitchCommand.Report, // CC Command
 			0xff, // current value
 		]),
@@ -93,7 +94,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySwitchCommand.Report, // CC Command
 			0xff, // current value
 			0x00, // target value
@@ -114,7 +115,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

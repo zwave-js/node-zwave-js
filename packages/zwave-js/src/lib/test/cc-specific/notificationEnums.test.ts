@@ -53,7 +53,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x0f,
 				notificationEvent: 0x01,
-				eventParameters: Buffer.from([0x00]), // Off / Closed
+				eventParameters: Uint8Array.from([0x00]), // Off / Closed
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -70,7 +70,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x0f,
 				notificationEvent: 0x01,
-				eventParameters: Buffer.from([0x01]), // On / Open
+				eventParameters: Uint8Array.from([0x01]), // On / Open
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -128,7 +128,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x16,
-				eventParameters: Buffer.from([0x00]), // open in regular position
+				eventParameters: Uint8Array.from([0x00]), // open in regular position
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -145,7 +145,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x16,
-				eventParameters: Buffer.from([0x01]), // open in tilt position
+				eventParameters: Uint8Array.from([0x01]), // open in tilt position
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -244,7 +244,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x01]), // ... in tilt position
+			eventParameters: Uint8Array.from([0x01]), // ... in tilt position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -263,7 +263,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x00]), // ... in regular position
+			eventParameters: Uint8Array.from([0x00]), // ... in regular position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -350,7 +350,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x00]), // ... in regular position
+			eventParameters: Uint8Array.from([0x00]), // ... in regular position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -370,7 +370,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x01]), // ... in tilt position
+			eventParameters: Uint8Array.from([0x01]), // ... in tilt position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -391,7 +391,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x00]), // ... in regular position
+			eventParameters: Uint8Array.from([0x00]), // ... in regular position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -410,7 +410,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x01]), // ... in tilt position
+			eventParameters: Uint8Array.from([0x01]), // ... in tilt position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -447,7 +447,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
-			eventParameters: Buffer.from([0x01]), // ... in tilt position
+			eventParameters: Uint8Array.from([0x01]), // ... in tilt position
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {
@@ -524,7 +524,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x05,
 				notificationEvent: 0x07,
-				eventParameters: Buffer.from([0x02]), // Below low threshold
+				eventParameters: Uint8Array.from([0x02]), // Below low threshold
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {

@@ -51,6 +51,6 @@ test.after.always(async (t) => {
 
 test.serial(`supportsCommand() returns NOT_KNOWN by default`, (t) => {
 	const { node2, driver } = t.context;
-	const API = new DummyCCAPI(node2);
+	const API = new DummyCCAPI(driver, node2);
 	t.is(API.supportsCommand(null as any), NOT_KNOWN);
 });

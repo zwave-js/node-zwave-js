@@ -8,11 +8,12 @@ import {
 	TimeCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses.Time, // CC
 		]),
 		payload,
@@ -22,7 +23,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the TimeGet command should serialize correctly", (t) => {
 	const cc = new TimeCCTimeGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
@@ -31,7 +32,7 @@ test("the TimeGet command should serialize correctly", (t) => {
 
 test("the TimeReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			TimeCommand.TimeReport, // CC Command
 			14,
 			23,
@@ -52,7 +53,7 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 test("the DateGet command should serialize correctly", (t) => {
 	const cc = new TimeCCDateGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
@@ -61,7 +62,7 @@ test("the DateGet command should serialize correctly", (t) => {
 
 test("the DateReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			TimeCommand.DateReport, // CC Command
 			0x07,
 			0xc5,
@@ -82,7 +83,7 @@ test("the DateReport command should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of TimeCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

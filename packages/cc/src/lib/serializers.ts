@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import { clamp } from "alcalzone-shared/math";
 import type {
 	SetbackSpecialState,
@@ -44,7 +45,7 @@ export function decodeSetbackState(val: number): SetbackState | undefined {
  * @publicAPI
  * Decodes a switch point used in a ClimateControlScheduleCC
  */
-export function decodeSwitchpoint(data: Buffer): Switchpoint {
+export function decodeSwitchpoint(data: Uint8Array): Switchpoint {
 	return {
 		hour: data[0] & 0b000_11111,
 		minute: data[1] & 0b00_111111,
@@ -56,14 +57,14 @@ export function decodeSwitchpoint(data: Buffer): Switchpoint {
  * @publicAPI
  * Encodes a switch point to use in a ClimateControlScheduleCC
  */
-export function encodeSwitchpoint(point: Switchpoint): Buffer {
+export function encodeSwitchpoint(point: Switchpoint): Bytes {
 	if (point.state == undefined) {
 		throw new ZWaveError(
 			"The given Switchpoint is not valid!",
 			ZWaveErrorCodes.CC_Invalid,
 		);
 	}
-	return Buffer.from([
+	return Bytes.from([
 		point.hour & 0b000_11111,
 		point.minute & 0b00_111111,
 		encodeSetbackState(point.state),
@@ -74,7 +75,7 @@ export function encodeSwitchpoint(point: Switchpoint): Buffer {
  * @publicAPI
  * Decodes timezone information used in time related CCs
  */
-export function parseTimezone(data: Buffer): Timezone {
+export function parseTimezone(data: Uint8Array): Timezone {
 	const hourSign = !!(data[0] & 0b1000_0000);
 	const hour = data[0] & 0b0111_1111;
 	const minute = data[1];
@@ -93,7 +94,7 @@ export function parseTimezone(data: Buffer): Timezone {
  * @publicAPI
  * Decodes timezone information used in time related CCs
  */
-export function encodeTimezone(tz: Timezone): Buffer {
+export function encodeTimezone(tz: Timezone): Bytes {
 	if (
 		Math.abs(tz.standardOffset) >= 24 * 60
 		|| Math.abs(tz.dstOffset) >= 24 * 60
@@ -111,7 +112,7 @@ export function encodeTimezone(tz: Timezone): Buffer {
 	const deltaMinutes = Math.abs(delta);
 	const deltaSign = delta < 0 ? 1 : 0;
 
-	return Buffer.from([
+	return Bytes.from([
 		(hourSign << 7) | (hour & 0b0111_1111),
 		minutes,
 		(deltaSign << 7) | (deltaMinutes & 0b0111_1111),

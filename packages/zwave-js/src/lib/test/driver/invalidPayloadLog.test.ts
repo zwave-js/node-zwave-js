@@ -5,7 +5,7 @@ import {
 import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import type { ThrowingMap } from "@zwave-js/shared";
+import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
 import { setTimeout as wait } from "node:timers/promises";
@@ -98,13 +98,13 @@ test("when an invalid CC is received, this is printed in the logs", async (t) =>
 	node33["isFrequentListening"] = false;
 	node33.markAsAlive();
 
-	const ACK = Buffer.from([MessageHeaders.ACK]);
+	const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 	//  « [Node 033] [REQ] [ApplicationCommand]
 	//    └─[BinarySensorCCReport]
 	//        type:  Motion
 	//        value: true
-	serialport.receiveData(Buffer.from("010800040021043003e5", "hex"));
+	serialport.receiveData(Bytes.from("010800040021043003e5", "hex"));
 	await wait(10);
 	assertMessage(t, spyTransport, {
 		callNumber: 1,

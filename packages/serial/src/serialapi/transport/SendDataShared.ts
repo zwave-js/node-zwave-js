@@ -11,6 +11,7 @@ import {
 	rssiToString,
 	stripUndefined,
 } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
 import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages";
 import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
@@ -54,8 +55,8 @@ export type TransmitReport =
 
 // const RSSI_RESERVED_START = 11;
 
-export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
-	const ret = payload.readInt8(offset);
+export function parseRSSI(payload: Uint8Array, offset: number = 0): RSSI {
+	const ret = Bytes.view(payload).readInt8(offset);
 	// Filter out reserved values
 	// TODO: Figure out for which controllers this is relevant
 	// if (
@@ -68,16 +69,19 @@ export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
 }
 
 export function tryParseRSSI(
-	payload: Buffer,
+	payload: Uint8Array,
 	offset: number = 0,
 ): RSSI | undefined {
 	if (payload.length <= offset) return;
 	return parseRSSI(payload, offset);
 }
 
-function parseTXPower(payload: Buffer, offset: number = 0): number | undefined {
+function parseTXPower(
+	payload: Uint8Array,
+	offset: number = 0,
+): number | undefined {
 	if (payload.length <= offset) return;
-	const ret = payload.readInt8(offset);
+	const ret = Bytes.view(payload).readInt8(offset);
 	if (ret >= -127 && ret <= 126) return ret;
 }
 
@@ -87,42 +91,43 @@ function parseTXPower(payload: Buffer, offset: number = 0): number | undefined {
  */
 export function parseTXReport(
 	includeACK: boolean,
-	payload: Buffer,
+	payload: Uint8Array,
 ): TXReport | undefined {
-	if (payload.length < 17) return;
-	const numRepeaters = payload[2];
+	const buffer = Bytes.view(payload);
+	if (buffer.length < 17) return;
+	const numRepeaters = buffer[2];
 	const ret: TXReport = {
-		txTicks: payload.readUInt16BE(0),
-		ackRSSI: includeACK ? parseRSSI(payload, 3) : undefined,
+		txTicks: buffer.readUInt16BE(0),
+		ackRSSI: includeACK ? parseRSSI(buffer, 3) : undefined,
 		ackRepeaterRSSI: includeACK
 			? [
-				parseRSSI(payload, 4),
-				parseRSSI(payload, 5),
-				parseRSSI(payload, 6),
-				parseRSSI(payload, 7),
+				parseRSSI(buffer, 4),
+				parseRSSI(buffer, 5),
+				parseRSSI(buffer, 6),
+				parseRSSI(buffer, 7),
 			]
 			: undefined,
-		ackChannelNo: includeACK ? payload[8] : undefined,
-		txChannelNo: payload[9],
-		routeSchemeState: payload[10],
-		repeaterNodeIds: [payload[11], payload[12], payload[13], payload[14]],
-		beam1000ms: !!(payload[15] & 0b0100_0000),
-		beam250ms: !!(payload[15] & 0b0010_0000),
-		routeSpeed: payload[15] & 0b0000_0111,
-		routingAttempts: payload[16],
+		ackChannelNo: includeACK ? buffer[8] : undefined,
+		txChannelNo: buffer[9],
+		routeSchemeState: buffer[10],
+		repeaterNodeIds: [buffer[11], buffer[12], buffer[13], buffer[14]],
+		beam1000ms: !!(buffer[15] & 0b0100_0000),
+		beam250ms: !!(buffer[15] & 0b0010_0000),
+		routeSpeed: buffer[15] & 0b0000_0111,
+		routingAttempts: buffer[16],
 		// These might be missing:
-		failedRouteLastFunctionalNodeId: payload[17],
-		failedRouteFirstNonFunctionalNodeId: payload[18],
-		txPower: parseTXPower(payload, 19),
-		measuredNoiseFloor: tryParseRSSI(payload, 20),
+		failedRouteLastFunctionalNodeId: buffer[17],
+		failedRouteFirstNonFunctionalNodeId: buffer[18],
+		txPower: parseTXPower(buffer, 19),
+		measuredNoiseFloor: tryParseRSSI(buffer, 20),
 		destinationAckTxPower: includeACK
-			? parseTXPower(payload, 21)
+			? parseTXPower(buffer, 21)
 			: undefined,
 		destinationAckMeasuredRSSI: includeACK
-			? tryParseRSSI(payload, 22)
+			? tryParseRSSI(buffer, 22)
 			: undefined,
 		destinationAckMeasuredNoiseFloor: includeACK
-			? tryParseRSSI(payload, 23)
+			? tryParseRSSI(buffer, 23)
 			: undefined,
 	};
 	// Remove unused repeaters from arrays
@@ -167,8 +172,8 @@ export function serializableTXReportToTXReport(
 	};
 }
 
-export function encodeTXReport(report: SerializableTXReport): Buffer {
-	const ret = Buffer.alloc(24, 0);
+export function encodeTXReport(report: SerializableTXReport): Uint8Array {
+	const ret = new Bytes(24).fill(0);
 	ret.writeUInt16BE(report.txTicks, 0);
 	ret[2] = report.repeaterNodeIds?.length ?? 0;
 	ret.writeInt8(report.ackRSSI ?? RssiError.NotAvailable, 3);

@@ -355,11 +355,13 @@ import {
 } from "@zwave-js/serial/serialapi";
 import type { TransmitReport } from "@zwave-js/serial/serialapi";
 import {
+	Bytes,
 	Mixin,
 	type ReadonlyObjectKeyMap,
 	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
+	areUint8ArraysEqual,
 	cloneDeep,
 	createThrowingMap,
 	flatMap,
@@ -556,11 +558,11 @@ export class ZWaveController
 		return this._ownNodeId;
 	}
 
-	private _dsk: Buffer | undefined;
+	private _dsk: Uint8Array | undefined;
 	/**
 	 * The device specific key (DSK) of the controller in binary format.
 	 */
-	public get dsk(): Buffer {
+	public get dsk(): Uint8Array {
 		if (this._dsk == undefined) {
 			const keyPair = this.driver.getLearnModeAuthenticatedKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
@@ -847,7 +849,7 @@ export class ZWaveController
 	}
 
 	/** Returns the node with the given DSK */
-	public getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined {
+	public getNodeByDSK(dsk: Uint8Array | string): ZWaveNode | undefined {
 		try {
 			if (typeof dsk === "string") dsk = dskFromString(dsk);
 		} catch (e) {
@@ -860,7 +862,7 @@ export class ZWaveController
 			throw e;
 		}
 		for (const node of this._nodes.values()) {
-			if (node.dsk?.equals(dsk)) return node;
+			if (node.dsk && Bytes.view(node.dsk).equals(dsk)) return node;
 		}
 	}
 
@@ -2658,7 +2660,8 @@ export class ZWaveController
 			// Check if the node is on the provisioning list
 			const entry = this.provisioningList.find((entry) => {
 				if (
-					!nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+					!areUint8ArraysEqual(
+						nwiHomeIdFromDSK(dskFromString(entry.dsk)),
 						msg.nwiHomeId,
 					)
 				) {
@@ -3562,7 +3565,7 @@ export class ZWaveController
 				await abort();
 				return SecurityBootstrapFailure.NodeCanceled;
 			}
-			const nodePublicKey = pubKeyResponse.publicKey;
+			const nodePublicKey = Bytes.from(pubKeyResponse.publicKey);
 
 			// This is the starting point of the timer TAI2.
 			const timerStartTAI2 = Date.now();
@@ -7287,7 +7290,7 @@ export class ZWaveController
 	 */
 	private async firmwareUpdateNVMWrite(
 		offset: number,
-		buffer: Buffer,
+		buffer: Uint8Array,
 	): Promise<void> {
 		await this.driver.sendMessage<FirmwareUpdateNVM_WriteResponse>(
 			new FirmwareUpdateNVM_WriteRequest({
@@ -7362,7 +7365,7 @@ export class ZWaveController
 	public async externalNVMReadBuffer(
 		offset: number,
 		length: number,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		const ret = await this.driver.sendMessage<ExtNVMReadLongBufferResponse>(
 			new ExtNVMReadLongBufferRequest({
 				offset,
@@ -7382,7 +7385,7 @@ export class ZWaveController
 	public async externalNVMReadBuffer700(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
 			new NVMOperationsReadRequest({
 				offset,
@@ -7420,7 +7423,7 @@ export class ZWaveController
 	public async externalNVMReadBufferExt(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
 		>(
@@ -7465,7 +7468,7 @@ export class ZWaveController
 	 */
 	public async externalNVMWriteBuffer(
 		offset: number,
-		buffer: Buffer,
+		buffer: Uint8Array,
 	): Promise<boolean> {
 		const ret = await this.driver.sendMessage<
 			ExtNVMWriteLongBufferResponse
@@ -7490,7 +7493,7 @@ export class ZWaveController
 	 */
 	public async externalNVMWriteBuffer700(
 		offset: number,
-		buffer: Buffer,
+		buffer: Uint8Array,
 	): Promise<{ endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
 			new NVMOperationsWriteRequest({
@@ -7531,7 +7534,7 @@ export class ZWaveController
 	 */
 	public async externalNVMWriteBufferExt(
 		offset: number,
-		buffer: Buffer,
+		buffer: Uint8Array,
 	): Promise<{ endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
@@ -7671,7 +7674,7 @@ export class ZWaveController
 	 */
 	public async backupNVMRaw(
 		onProgress?: (bytesRead: number, total: number) => void,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		this.driver.controllerLog.print("Backing up NVM...");
 
 		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
@@ -7685,7 +7688,7 @@ export class ZWaveController
 		// Disable watchdog to prevent resets during NVM access
 		await this.stopWatchdog();
 
-		let ret: Buffer;
+		let ret: Uint8Array;
 		try {
 			if (this.sdkVersionGte("7.0")) {
 				ret = await this.backupNVMRaw700(onProgress);
@@ -7711,7 +7714,7 @@ export class ZWaveController
 
 	private async backupNVMRaw500(
 		onProgress?: (bytesRead: number, total: number) => void,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
 		if (!size) {
 			throw new ZWaveError(
@@ -7720,7 +7723,7 @@ export class ZWaveController
 			);
 		}
 
-		const ret = Buffer.allocUnsafe(size);
+		const ret = new Bytes(size);
 		let offset = 0;
 		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
@@ -7736,7 +7739,7 @@ export class ZWaveController
 				chunkSize = 48;
 				continue;
 			}
-			chunk.copy(ret, offset);
+			ret.set(chunk, offset);
 			offset += chunk.length;
 			if (chunkSize > chunk.length) chunkSize = chunk.length;
 
@@ -7748,12 +7751,12 @@ export class ZWaveController
 
 	private async backupNVMRaw700(
 		onProgress?: (bytesRead: number, total: number) => void,
-	): Promise<Buffer> {
+	): Promise<Uint8Array> {
 		let open: () => Promise<number>;
 		let read: (
 			offset: number,
 			length: number,
-		) => Promise<{ buffer: Buffer; endOfFile: boolean }>;
+		) => Promise<{ buffer: Uint8Array; endOfFile: boolean }>;
 		let close: () => Promise<void>;
 
 		if (
@@ -7778,7 +7781,7 @@ export class ZWaveController
 		// Open NVM for reading
 		const size = await open();
 
-		const ret = Buffer.allocUnsafe(size);
+		const ret = new Bytes(size);
 		let offset = 0;
 		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
@@ -7795,7 +7798,7 @@ export class ZWaveController
 					chunkSize = 48;
 					continue;
 				}
-				chunk.copy(ret, offset);
+				ret.set(chunk, offset);
 				offset += chunk.length;
 				if (chunkSize > chunk.length) chunkSize = chunk.length;
 
@@ -7825,7 +7828,7 @@ export class ZWaveController
 	 * @param restoreProgress Can be used to monitor the progress of the restore operation, which may take several seconds up to a few minutes depending on the NVM size
 	 */
 	public async restoreNVM(
-		nvmData: Buffer,
+		nvmData: Uint8Array,
 		convertProgress?: (bytesRead: number, total: number) => void,
 		restoreProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
@@ -7849,7 +7852,7 @@ export class ZWaveController
 			this.driver.controllerLog.print(
 				"Converting NVM to target format...",
 			);
-			let targetNVM: Buffer;
+			let targetNVM: Uint8Array;
 			if (this.sdkVersionGte("7.0")) {
 				targetNVM = await this.backupNVMRaw700(convertProgress);
 			} else {
@@ -7893,7 +7896,7 @@ export class ZWaveController
 	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
 	 */
 	public async restoreNVMRaw(
-		nvmData: Buffer,
+		nvmData: Uint8Array,
 		onProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
 		this.driver.controllerLog.print("Restoring NVM...");
@@ -7953,7 +7956,7 @@ export class ZWaveController
 	}
 
 	private async restoreNVMRaw500(
-		nvmData: Buffer,
+		nvmData: Uint8Array,
 		onProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
 		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
@@ -7965,7 +7968,7 @@ export class ZWaveController
 		} else if (size !== nvmData.length) {
 			// This might be a converted NVM buffer which contains only the first relevant part.
 			// The first two bytes must point to the last byte in the buffer then
-			const actualSize = 1 + nvmData.readUInt16BE(0);
+			const actualSize = 1 + Bytes.view(nvmData).readUInt16BE(0);
 			if (actualSize !== nvmData.length) {
 				throw new ZWaveError(
 					"The given data does not match the NVM size - cannot restore!",
@@ -7974,13 +7977,15 @@ export class ZWaveController
 			}
 
 			// Now we only need to figure out which part of the NVM needs to be overwritten when restoring
-			const oldSize = 1
-				+ (await this.externalNVMReadBuffer(0, 2)).readUInt16BE(0);
+			const firstTwoNVMBytes = Bytes.view(
+				await this.externalNVMReadBuffer(0, 2),
+			);
+			const oldSize = 1 + firstTwoNVMBytes.readUInt16BE(0);
 			if (oldSize > actualSize) {
 				// Pad the rest with 0xff
-				nvmData = Buffer.concat([
+				nvmData = Bytes.concat([
 					nvmData,
-					Buffer.alloc(oldSize - actualSize, 0xff),
+					Bytes.alloc(oldSize - actualSize, 0xff),
 				]);
 			}
 		}
@@ -8004,17 +8009,17 @@ export class ZWaveController
 	}
 
 	private async restoreNVMRaw700(
-		nvmData: Buffer,
+		nvmData: Uint8Array,
 		onProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
 		let open: () => Promise<number>;
 		let read: (
 			offset: number,
 			length: number,
-		) => Promise<{ buffer: Buffer; endOfFile: boolean }>;
+		) => Promise<{ buffer: Uint8Array; endOfFile: boolean }>;
 		let write: (
 			offset: number,
-			buffer: Buffer,
+			buffer: Uint8Array,
 		) => Promise<{ endOfFile: boolean }>;
 		let close: () => Promise<void>;
 
@@ -8442,7 +8447,7 @@ export class ZWaveController
 	 * **WARNING:** A failure during this process may put your controller in recovery mode, rendering it unusable until a correct firmware image is uploaded. Use at your own risk!
 	 */
 	public async firmwareUpdateOTW(
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<ControllerFirmwareUpdateResult> {
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
@@ -8487,7 +8492,7 @@ export class ZWaveController
 	}
 
 	private async firmwareUpdateOTW500(
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<ControllerFirmwareUpdateResult> {
 		this._firmwareUpdateInProgress = true;
 		let turnedRadioOff = false;
@@ -8575,7 +8580,7 @@ export class ZWaveController
 	}
 
 	private async firmwareUpdateOTW700(
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<ControllerFirmwareUpdateResult> {
 		this._firmwareUpdateInProgress = true;
 		let destroy = false;
@@ -8619,9 +8624,11 @@ export class ZWaveController
 			const BLOCK_SIZE = 128;
 			if (data.length % BLOCK_SIZE !== 0) {
 				// Pad the data to a multiple of BLOCK_SIZE
-				data = Buffer.concat([
+				data = Bytes.concat([
 					data,
-					Buffer.alloc(BLOCK_SIZE - (data.length % BLOCK_SIZE), 0xff),
+					new Bytes(BLOCK_SIZE - (data.length % BLOCK_SIZE)).fill(
+						0xff,
+					),
 				]);
 			}
 			const numFragments = Math.ceil(data.length / BLOCK_SIZE);
@@ -9043,7 +9050,7 @@ export class ZWaveController
 			// For the first part of the bootstrapping, a temporary key needs to be used
 			this.driver["_securityManager"] = new SecurityManager({
 				ownNodeId: this._ownNodeId!,
-				networkKey: Buffer.alloc(16, 0),
+				networkKey: new Uint8Array(16).fill(0),
 				nonceTimeout: this.driver.options.timeouts.nonce,
 			});
 
@@ -9188,7 +9195,7 @@ export class ZWaveController
 			return SecurityBootstrapFailure.NoKeysConfigured;
 		}
 
-		const receivedKeys = new Map<SecurityClass, Buffer>();
+		const receivedKeys = new Map<SecurityClass, Uint8Array>();
 
 		const deleteTempKey = () => {
 			// Whatever happens, no further communication needs the temporary key
@@ -9333,7 +9340,7 @@ export class ZWaveController
 				? this.driver.getLearnModeAuthenticatedKeyPair()
 				: generateECDHKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
-			const transmittedPublicKey = Buffer.from(publicKey);
+			const transmittedPublicKey = Bytes.from(publicKey);
 			if (requiresAuthentication) {
 				// Authentication requires obfuscating the public key
 				transmittedPublicKey.writeUInt16BE(0x0000, 0);

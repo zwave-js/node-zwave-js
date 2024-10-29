@@ -27,7 +27,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 export enum SerialAPISetupCommand {
 	Unsupported = 0x00,
@@ -123,9 +123,9 @@ export class SerialAPISetupRequest extends Message {
 
 	public command: SerialAPISetupCommand;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.command]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.command]),
 			this.payload,
 		]);
 
@@ -352,8 +352,8 @@ export class SerialAPISetup_SetTXStatusReportRequest
 
 	public enabled: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.enabled ? 0xff : 0x00]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.enabled ? 0xff : 0x00]);
 
 		return super.serialize(ctx);
 	}
@@ -440,8 +440,8 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 
 	public nodeIdType: NodeIDType;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.nodeIdType]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.nodeIdType]);
 
 		return super.serialize(ctx);
 	}
@@ -568,8 +568,8 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.region]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.region]);
 		return super.serialize(ctx);
 	}
 
@@ -727,8 +727,8 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		// The values are in 0.1 dBm
 		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
@@ -898,8 +898,8 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(4);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(4);
 		// The values are in 0.1 dBm
 		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
@@ -1058,8 +1058,8 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	/** The maximum LR TX power in dBm */
 	public limit: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
@@ -1285,8 +1285,8 @@ export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.region]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.region]);
 		return super.serialize(ctx);
 	}
 

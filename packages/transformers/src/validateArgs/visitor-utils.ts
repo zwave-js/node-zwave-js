@@ -84,6 +84,18 @@ export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
 	);
 }
 
+export function checkIsUint8Array(type: ts.ObjectType): boolean {
+	return (
+		type.symbol !== undefined
+		&& type.symbol.valueDeclaration !== undefined
+		&& type.symbol.name === "Uint8Array"
+		&& !!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration)
+			& ts.ModifierFlags.Ambient
+		)
+	);
+}
+
 export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
 	return (
 		type.symbol !== undefined

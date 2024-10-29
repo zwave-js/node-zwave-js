@@ -16,6 +16,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -399,8 +400,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public type: BinarySensorType;
 	public value: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.value ? 0xff : 0x00, this.type]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.value ? 0xff : 0x00, this.type]);
 		return super.serialize(ctx);
 	}
 
@@ -459,8 +460,8 @@ export class BinarySensorCCGet extends BinarySensorCC {
 
 	public sensorType: BinarySensorType | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.sensorType ?? BinarySensorType.Any]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.sensorType ?? BinarySensorType.Any]);
 		return super.serialize(ctx);
 	}
 
@@ -516,7 +517,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	@ccValue(BinarySensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: BinarySensorType[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(
 			this.supportedSensorTypes.filter((t) => t !== BinarySensorType.Any),
 			undefined,

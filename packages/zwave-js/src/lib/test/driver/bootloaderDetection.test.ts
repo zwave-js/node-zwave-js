@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
@@ -21,10 +22,10 @@ integrationTest(
 					// ) {
 					// I've seen logs with as few as 5 bytes in the first chunk
 					self.serial.emitData(
-						Buffer.from("\0\r\nGeck", "ascii"),
+						Bytes.from("\0\r\nGeck", "ascii"),
 					);
 					await wait(20);
-					self.serial.emitData(Buffer.from(
+					self.serial.emitData(Bytes.from(
 						`o Bootloader v2.05.01
 1. upload gbl
 2. run

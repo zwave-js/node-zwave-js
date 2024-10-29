@@ -11,14 +11,15 @@ import {
 import { HumidityControlModeCCValues } from "@zwave-js/cc/HumidityControlModeCC";
 import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
 const host = createTestingHost();
 const nodeId = 2;
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Humidity Control Mode"], // CC
 		]),
 		payload,
@@ -30,7 +31,7 @@ test("the Get command should serialize correctly", (t) => {
 		nodeId,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
@@ -43,7 +44,7 @@ test("the Set command should serialize correctly", (t) => {
 		mode: HumidityControlMode.Auto,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.Set, // CC Command
 			0x03, // target value
 		]),
@@ -53,7 +54,7 @@ test("the Set command should serialize correctly", (t) => {
 
 test("the Report command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
@@ -69,7 +70,7 @@ test("the Report command should be deserialized correctly", (t) => {
 
 test("the Report command should set the correct value", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
@@ -89,7 +90,7 @@ test("the Report command should set the correct value", (t) => {
 
 test("the Report command should set the correct metadata", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
@@ -115,7 +116,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 		nodeId,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
@@ -124,7 +125,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.SupportedReport, // CC Command
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
@@ -143,7 +144,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 
 test("the SupportedReport command should set the correct metadata", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			HumidityControlModeCommand.SupportedReport, // CC Command
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),

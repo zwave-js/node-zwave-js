@@ -11,6 +11,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)
@@ -83,8 +84,8 @@ export class GetControllerCapabilitiesResponse extends Message {
 	public isStaticUpdateController: boolean;
 	public noNodesIncluded: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			(this.isSecondary ? ControllerCapabilityFlags.Secondary : 0)
 			| (this.isUsingHomeIdFromOtherNetwork
 				? ControllerCapabilityFlags.OnOtherNetwork

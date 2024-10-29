@@ -166,13 +166,16 @@ import {
 } from "@zwave-js/serial/serialapi";
 import {
 	AsyncQueue,
+	Bytes,
 	type ThrowingMap,
 	TypedEventEmitter,
+	areUint8ArraysEqual,
 	buffer2hex,
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
 	isDocker,
+	isUint8Array,
 	mergeDeep,
 	noop,
 	num2hex,
@@ -419,7 +422,7 @@ function checkOptions(options: ZWaveOptions): void {
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
-			if (keys.findIndex(([, k]) => k.equals(key)) !== i) {
+			if (keys.findIndex(([, k]) => areUint8ArraysEqual(k, key)) !== i) {
 				throw new ZWaveError(
 					`The security key for class ${secClass} was used multiple times!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
@@ -992,7 +995,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public getLearnModeAuthenticatedKeyPair(): KeyPair {
 		if (this._learnModeAuthenticatedKeyPair == undefined) {
 			// Try restoring from cache
-			const privateKey = this.cacheGet<Buffer>(
+			const privateKey = this.cacheGet<Uint8Array>(
 				cacheKeys.controller.privateKey,
 			);
 			if (privateKey) {
@@ -1834,11 +1837,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				].map(
 					(sc) => ([
 						sc,
-						this.cacheGet<Buffer>(
+						this.cacheGet<Uint8Array>(
 							cacheKeys.controller.securityKeysLongRange(sc),
 						),
-					] as [SecurityClass, Buffer | undefined]),
-				).filter((v): v is [SecurityClass, Buffer] =>
+					] as [SecurityClass, Uint8Array | undefined]),
+				).filter((v): v is [SecurityClass, Uint8Array] =>
 					v[1] != undefined
 				);
 				if (securityKeysLongRange.length) {
@@ -1878,7 +1881,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					);
 				}
 			} else {
-				const s0Key = this.cacheGet<Buffer>(
+				const s0Key = this.cacheGet<Uint8Array>(
 					cacheKeys.controller.securityKeys(SecurityClass.S0_Legacy),
 				);
 				if (s0Key) {
@@ -1908,11 +1911,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				const securityKeys = securityClassOrder.map(
 					(sc) => ([
 						sc,
-						this.cacheGet<Buffer>(
+						this.cacheGet<Uint8Array>(
 							cacheKeys.controller.securityKeys(sc),
 						),
-					] as [SecurityClass, Buffer | undefined]),
-				).filter((v): v is [SecurityClass, Buffer] =>
+					] as [SecurityClass, Uint8Array | undefined]),
+				).filter((v): v is [SecurityClass, Uint8Array] =>
 					v[1] != undefined
 				);
 				if (securityKeys.length) {
@@ -2785,7 +2788,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				event: ccArgs.eventLabel,
 			};
 			if (ccArgs.parameters) {
-				if (Buffer.isBuffer(ccArgs.parameters)) {
+				if (isUint8Array(ccArgs.parameters)) {
 					msg.parameters = buffer2hex(ccArgs.parameters);
 				} else if (ccArgs.parameters instanceof Duration) {
 					msg.duration = ccArgs.parameters.toString();
@@ -3273,7 +3276,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// Preserve the private key for the authenticated learn mode ECDH key pair
-		const oldPrivateKey = this.cacheGet<Buffer>(
+		const oldPrivateKey = this.cacheGet<Uint8Array>(
 			cacheKeys.controller.privateKey,
 		);
 
@@ -3490,7 +3493,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 */
 	private async serialport_onData(
 		data:
-			| Buffer
+			| Uint8Array
 			| MessageHeaders.ACK
 			| MessageHeaders.CAN
 			| MessageHeaders.NAK,
@@ -3762,7 +3765,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/** Handles a decoding error and returns the desired reply to the stick */
 	private handleDecodeError(
 		e: Error,
-		data: Buffer,
+		data: Uint8Array,
 		msg: Message | undefined,
 	): MessageHeaders | undefined {
 		if (isZWaveError(e)) {
@@ -3817,8 +3820,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 								typeof e.context === "string"
 									? ` (Reason: ${e.context})`
 									: ""
-							}:
-0x${data.toString("hex")}`,
+							}:\n${buffer2hex(data)}`,
 							"warn",
 						);
 					}
@@ -6434,11 +6436,11 @@ ${handlers.length} left`,
 	 */
 	private writeHeader(header: MessageHeaders): Promise<void> {
 		// ACK, CAN, NAK
-		return this.writeSerial(Buffer.from([header]));
+		return this.writeSerial(Uint8Array.from([header]));
 	}
 
 	/** Sends a raw datagram to the serialport (if that is open) */
-	private async writeSerial(data: Buffer): Promise<void> {
+	private async writeSerial(data: Uint8Array): Promise<void> {
 		return this.serial?.writeAsync(data);
 	}
 
@@ -7277,7 +7279,7 @@ ${handlers.length} left`,
 
 			// It would be nicer to not hardcode the command here, but since we're switching stream parsers
 			// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
-			const promise = this.writeSerial(Buffer.from("01030027db", "hex"));
+			const promise = this.writeSerial(Bytes.from("01030027db", "hex"));
 			this.serial!.mode = ZWaveSerialMode.Bootloader;
 			await promise;
 

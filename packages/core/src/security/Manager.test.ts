@@ -1,9 +1,11 @@
+/* eslint-disable no-restricted-globals -- crypto methods return Buffers */
+import { isUint8Array } from "@zwave-js/shared";
 import test from "ava";
 import crypto, { randomBytes } from "node:crypto";
 import sinon from "sinon";
 import { SecurityManager } from "./Manager";
 
-const networkKey = Buffer.from([
+const networkKey = Uint8Array.from([
 	1,
 	2,
 	3,
@@ -27,9 +29,9 @@ const options = { networkKey, ownNodeId, nonceTimeout: 500 };
 test("constructor() -> should set the network key, auth key and encryption key", (t) => {
 	const man = new SecurityManager(options);
 	t.deepEqual(man.networkKey, networkKey);
-	t.true(Buffer.isBuffer(man.authKey));
+	t.true(isUint8Array(man.authKey));
 	t.is(man.authKey.length, 16);
-	t.true(Buffer.isBuffer(man.encryptionKey));
+	t.true(isUint8Array(man.encryptionKey));
 	t.is(man.encryptionKey.length, 16);
 });
 
@@ -37,7 +39,7 @@ test("constructor() -> should throw if the network key doesn't have length 16", 
 	t.throws(
 		() =>
 			new SecurityManager({
-				networkKey: Buffer.from([]),
+				networkKey: new Uint8Array(),
 				ownNodeId: 1,
 				nonceTimeout: 500,
 			}),
@@ -52,9 +54,9 @@ test("generateNonce() should return a random Buffer of the given length", (t) =>
 	const nonce2 = man.generateNonce(2, 8);
 	const nonce3 = man.generateNonce(2, 8);
 
-	t.true(Buffer.isBuffer(nonce1));
-	t.true(Buffer.isBuffer(nonce2));
-	t.true(Buffer.isBuffer(nonce3));
+	t.true(isUint8Array(nonce1));
+	t.true(isUint8Array(nonce2));
+	t.true(isUint8Array(nonce3));
 
 	t.is(nonce1.length, 8);
 	t.is(nonce2.length, 8);
@@ -162,7 +164,7 @@ test("setNonce() -> should store a given nonce to be retrieved later", (t) => {
 	const man = new SecurityManager(options);
 
 	t.is(man.getNonce(1), undefined);
-	const nonce: Buffer = randomBytes(8);
+	const nonce = randomBytes(8);
 	nonce[0] = 1;
 	man.setNonce(1, { nonce, receiver: 2 });
 	t.deepEqual(man.getNonce(1), nonce);
@@ -171,7 +173,7 @@ test("setNonce() -> should store a given nonce to be retrieved later", (t) => {
 test("setNonce -> the nonces should timeout after the given timeout", (t) => {
 	const clock = sinon.useFakeTimers(Date.now());
 	const man = new SecurityManager(options);
-	const nonce: Buffer = randomBytes(8);
+	const nonce = randomBytes(8);
 	const nonceId = nonce[0];
 	man.setNonce(nonceId, { nonce, receiver: 2 });
 	t.deepEqual(man.getNonce(nonceId), nonce);
@@ -183,7 +185,7 @@ test("setNonce -> the nonces should timeout after the given timeout", (t) => {
 
 test("setNonce -> should mark the nonce as free", (t) => {
 	const man = new SecurityManager(options);
-	const nonce: Buffer = randomBytes(8);
+	const nonce = randomBytes(8);
 	nonce[0] = 1;
 	man.setNonce(
 		{
@@ -200,7 +202,7 @@ test("setNonce -> should mark the nonce as free", (t) => {
 test("setNonce -> when a free nonce expires, it should no longer be free", (t) => {
 	const clock = sinon.useFakeTimers(Date.now());
 	const man = new SecurityManager(options);
-	const nonce: Buffer = randomBytes(8);
+	const nonce = randomBytes(8);
 	man.setNonce(
 		{
 			issuer: 2,
@@ -220,7 +222,7 @@ test("hasNonce() -> should return whether a nonce id is in the database", (t) =>
 
 	// Manually set
 	t.false(man.hasNonce(1));
-	const nonce1: Buffer = randomBytes(8);
+	const nonce1 = randomBytes(8);
 	nonce1[0] = 1;
 	man.setNonce(1, { nonce: nonce1, receiver: 2 });
 	t.true(man.hasNonce(1));
@@ -279,7 +281,7 @@ test("deleteAllNoncesForReceiver -> should only delete the nonces for the given 
 
 test("getFreeNonce() -> should reserve the nonce", (t) => {
 	const man = new SecurityManager(options);
-	const nonce: Buffer = randomBytes(8);
+	const nonce = randomBytes(8);
 	nonce[0] = 1;
 	man.setNonce(
 		{
@@ -298,7 +300,7 @@ test("nonces should be stored separately for each node", (t) => {
 	const nonce1 = man.generateNonce(3, 8);
 	const nonceId1 = man.getNonceId(nonce1);
 	// Create a nonce with the same nonceId but with another issuer
-	const nonce2: Buffer = randomBytes(8);
+	const nonce2 = randomBytes(8);
 	nonce2[0] = nonceId1;
 
 	const id2 = { issuer: 4, nonceId: nonceId1 };

@@ -128,7 +128,7 @@ export class MockServer {
 			socket.pipe(this.serialport);
 			this.serialport.on("data", (chunk) => {
 				if (typeof chunk === "number") {
-					socket.write(Buffer.from([chunk]));
+					socket.write(Uint8Array.from([chunk]));
 				} else {
 					socket.write(chunk);
 				}

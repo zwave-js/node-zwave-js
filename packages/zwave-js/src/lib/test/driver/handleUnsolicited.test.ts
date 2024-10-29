@@ -1,7 +1,7 @@
 import { BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import { type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
+import { Bytes, type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
 import ava, { type TestFn } from "ava";
 import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "../../driver/Driver";
@@ -63,8 +63,8 @@ test.serial(
 		const valueId = BasicCCValues.currentValue.id;
 		t.is(node2.getValue(valueId), undefined);
 
-		const ACK = Buffer.from([MessageHeaders.ACK]);
-		serialport.receiveData(Buffer.from("01090004000203200105d7", "hex"));
+		const ACK = Uint8Array.from([MessageHeaders.ACK]);
+		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
@@ -97,7 +97,7 @@ test.serial(
 		const valueId = BasicCCValues.currentValue.id;
 		t.is(node2.getValue(valueId), undefined);
 
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 		// Step 1: Send a ping and receive the response
 		node2.ping();
@@ -108,7 +108,7 @@ test.serial(
 		//   └─[NoOperationCC]
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010800130201002501c3", "hex"),
+			Bytes.from("010800130201002501c3", "hex"),
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
@@ -117,7 +117,7 @@ test.serial(
 
 		// We're now waiting for a response. The next command must not get lost
 
-		serialport.receiveData(Buffer.from("01090004000203200105d7", "hex"));
+		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
@@ -150,7 +150,7 @@ test.serial(
 		const valueId = BasicCCValues.currentValue.id;
 		t.is(node2.getValue(valueId), undefined);
 
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 		// Step 1: Send a ping and receive the response
 		node2.ping();
@@ -161,7 +161,7 @@ test.serial(
 		//   └─[NoOperationCC]
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010800130201002501c3", "hex"),
+			Bytes.from("010800130201002501c3", "hex"),
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
@@ -170,7 +170,7 @@ test.serial(
 
 		// « [RES] [SendData]
 		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
 		t.deepEqual(serialport.lastWrite, ACK);
 
@@ -178,7 +178,7 @@ test.serial(
 
 		// We're now waiting for a callback. The next command must not get lost
 
-		serialport.receiveData(Buffer.from("01090004000203200105d7", "hex"));
+		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5

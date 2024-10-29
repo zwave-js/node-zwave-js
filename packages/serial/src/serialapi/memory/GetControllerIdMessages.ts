@@ -12,7 +12,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerId)
 @expectedResponse(FunctionType.GetControllerId)
@@ -55,12 +55,12 @@ export class GetControllerIdResponse extends Message {
 	public homeId: number;
 	public ownNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const nodeId = encodeNodeID(this.ownNodeId, ctx.nodeIdType);
-		const homeId = Buffer.allocUnsafe(4);
+		const homeId = new Bytes(4);
 		homeId.writeUInt32BE(this.homeId, 0);
 
-		this.payload = Buffer.concat([homeId, nodeId]);
+		this.payload = Bytes.concat([homeId, nodeId]);
 
 		return super.serialize(ctx);
 	}

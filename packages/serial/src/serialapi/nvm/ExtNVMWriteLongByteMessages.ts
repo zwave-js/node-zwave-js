@@ -16,7 +16,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMWriteLongByteRequestOptions {
 	offset: number;
@@ -62,8 +62,8 @@ export class ExtNVMWriteLongByteRequest extends Message {
 	public offset: number;
 	public byte: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(4);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(4);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload[3] = this.byte;
 		return super.serialize(ctx);

@@ -1,4 +1,4 @@
-import { cpp2js } from "@zwave-js/shared";
+import { Bytes, cpp2js } from "@zwave-js/shared";
 import { type NVM3Object } from "../object";
 import {
 	NVMFile,
@@ -31,11 +31,11 @@ export class ApplicationNameFile extends NVMFile {
 
 	public name: string;
 
-	public serialize(): NVM3Object & { data: Buffer } {
+	public serialize(): NVM3Object & { data: Bytes } {
 		// Return a zero-terminated string with a fixed length of 30 bytes
-		const nameAsString = Buffer.from(this.name, "utf8");
-		this.payload = Buffer.alloc(30, 0);
-		nameAsString.subarray(0, this.payload.length - 1).copy(this.payload);
+		const nameAsString = Bytes.from(this.name, "utf8");
+		this.payload = new Bytes(30).fill(0);
+		this.payload.set(nameAsString.subarray(0, this.payload.length), 0);
 		return super.serialize();
 	}
 }

@@ -17,6 +17,7 @@ import {
 	UserCodeCCUsersNumberReport,
 } from "@zwave-js/cc/UserCodeCC";
 import { CRC16_CCITT, CommandClasses } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared";
 import {
 	type MockNodeBehavior,
 	type UserCodeCCCapabilities,
@@ -262,14 +263,14 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 				),
 			};
 			if (capabilities.supportsUserCodeChecksum) {
-				let data = Buffer.allocUnsafe(0);
+				let data = new Bytes();
 				for (let i = 1; i <= capabilities.numUsers; i++) {
 					const status = self.state.get(
 						StateKeys.userIdStatus(i),
 					) as UserIDStatus;
 					let code = (self.state.get(StateKeys.userCode(i)) ?? "") as
 						| string
-						| Buffer;
+						| Bytes;
 					if (
 						status === undefined
 						|| status === UserIDStatus.Available
@@ -277,14 +278,14 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 					) {
 						continue;
 					}
-					const tmp = Buffer.allocUnsafe(3 + code.length);
+					const tmp = new Bytes(3 + code.length);
 					tmp.writeUInt16BE(i, 0);
 					tmp[2] = status;
 					if (typeof code === "string") {
-						code = Buffer.from(code, "ascii");
+						code = Bytes.from(code, "ascii");
 					}
-					code.copy(tmp, 3);
-					data = Buffer.concat([data, tmp]);
+					tmp.set(code, 3);
+					data = Bytes.concat([data, tmp]);
 				}
 
 				const checksum = data.length > 0 ? CRC16_CCITT(data) : 0x0000;

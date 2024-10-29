@@ -1,3 +1,4 @@
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 import { CommandClasses } from "./CommandClasses";
 import {
@@ -6,7 +7,7 @@ import {
 } from "./NodeInfo";
 
 test("parseApplicationNodeInformation() should parse correctly", (t) => {
-	const payload = Buffer.from([
+	const payload = Bytes.from([
 		0x01, // Remote Controller
 		0x02, // Portable Scene Controller
 		// Supported CCs
@@ -27,7 +28,7 @@ test("parseApplicationNodeInformation() should parse correctly", (t) => {
 });
 
 test("parseNodeUpdatePayload() should parse correctly", (t) => {
-	const payload = Buffer.from([
+	const payload = Bytes.from([
 		5, // NodeID
 		5, // remaining length
 		0x03, // Slave
@@ -51,7 +52,7 @@ test("parseNodeUpdatePayload() should parse correctly", (t) => {
 });
 
 test("parseNodeUpdatePayload() parses extended CCs correctly", (t) => {
-	const payload = Buffer.from([
+	const payload = Bytes.from([
 		5, // NodeID
 		9, // remaining length
 		0x03,

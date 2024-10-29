@@ -15,6 +15,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	type AllOrNone,
 	getEnumMemberName,
@@ -190,7 +191,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	public async sendFirmwareFragment(
 		fragmentNumber: number,
 		isLastFragment: boolean,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
@@ -436,8 +437,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer)
 	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.alloc(
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.alloc(
 			12 + 2 * this.additionalFirmwareIDs.length,
 		);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
@@ -640,8 +641,8 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.alloc(11, 0);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.alloc(11, 0);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
@@ -740,7 +741,7 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 export interface FirmwareUpdateMetaDataCCReportOptions {
 	isLast: boolean;
 	reportNumber: number;
-	firmwareData: Buffer;
+	firmwareData: Uint8Array;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.Report)
@@ -772,11 +773,11 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 
 	public isLast: boolean;
 	public reportNumber: number;
-	public firmwareData: Buffer;
+	public firmwareData: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		const commandBuffer = Buffer.concat([
-			Buffer.allocUnsafe(2), // placeholder for report number
+	public serialize(ctx: CCEncodingContext): Bytes {
+		const commandBuffer = Bytes.concat([
+			new Bytes(2), // placeholder for report number
 			this.firmwareData,
 		]);
 		commandBuffer.writeUInt16BE(
@@ -790,11 +791,11 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		if (ccVersion >= 2) {
 			// Compute and save the CRC16 in the payload
 			// The CC header is included in the CRC computation
-			let crc = CRC16_CCITT(Buffer.from([this.ccId, this.ccCommand]));
+			let crc = CRC16_CCITT(Bytes.from([this.ccId, this.ccCommand]));
 			crc = CRC16_CCITT(commandBuffer, crc);
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				commandBuffer,
-				Buffer.allocUnsafe(2),
+				new Bytes(2),
 			]);
 			this.payload.writeUInt16BE(crc, this.payload.length - 2);
 		} else {
@@ -1001,8 +1002,8 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public firmwareTarget: number;
 	public hardwareVersion?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(8);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
@@ -1123,8 +1124,8 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	public fragmentSize: number;
 	public hardwareVersion: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(8);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload[4] = this.firmwareTarget;

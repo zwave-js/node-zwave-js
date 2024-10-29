@@ -22,7 +22,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { type Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 export interface GetPriorityRouteRequestOptions {
 	destinationNodeId: number;
@@ -53,7 +53,7 @@ export class GetPriorityRouteRequest extends Message {
 
 	public destinationNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(
 			this.destinationNodeId,
 			ctx.nodeIdType,

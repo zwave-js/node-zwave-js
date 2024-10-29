@@ -19,7 +19,7 @@ const instances = new Map<string, MockSerialPort>();
 class MockBinding extends PassThrough {}
 
 interface MockSerialPortEventCallbacks extends ZWaveSerialPortEventCallbacks {
-	write: (data: Buffer) => void;
+	write: (data: Uint8Array) => void;
 }
 
 type MockSerialPortEvents = Extract<keyof MockSerialPortEventCallbacks, string>;
@@ -82,7 +82,7 @@ export class MockSerialPort extends ZWaveSerialPort {
 	}
 	public readonly closeStub = sinon.stub().resolves();
 
-	public receiveData(data: Buffer): void {
+	public receiveData(data: Uint8Array): void {
 		this.serial.emit("data", data);
 	}
 
@@ -90,15 +90,15 @@ export class MockSerialPort extends ZWaveSerialPort {
 		this.emit("error", err);
 	}
 
-	public writeAsync(data: Buffer): Promise<void> {
+	public writeAsync(data: Uint8Array): Promise<void> {
 		this._lastWrite = data;
 		this.emit("write", data);
 		return this.writeStub(data);
 	}
 	public readonly writeStub = sinon.stub();
 
-	private _lastWrite: string | number[] | Buffer | undefined;
-	public get lastWrite(): string | number[] | Buffer | undefined {
+	private _lastWrite: string | number[] | Uint8Array | undefined;
+	public get lastWrite(): string | number[] | Uint8Array | undefined {
 		return this._lastWrite;
 	}
 }
@@ -112,7 +112,7 @@ export async function createAndOpenMockedZWaveSerialPort(
 	SerialPortMockBinding.reset();
 	SerialPortMockBinding.createPort(path, {
 		record: true,
-		readyData: Buffer.from([]),
+		readyData: new Uint8Array(),
 	});
 
 	const port = new ZWaveSerialPort(

@@ -17,6 +17,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -272,8 +273,8 @@ export class TimeCCTimeReport extends TimeCC {
 	public minute: number;
 	public second: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.hour & 0b11111,
 			this.minute,
 			this.second,
@@ -337,8 +338,8 @@ export class TimeCCDateReport extends TimeCC {
 	public month: number;
 	public day: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			// 2 bytes placeholder for year
 			0,
 			0,
@@ -410,13 +411,13 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
 				dstOffset: this.dstOffset,
 			}),
-			Buffer.from([
+			Bytes.from([
 				this.dstStartDate.getUTCMonth() + 1,
 				this.dstStartDate.getUTCDate(),
 				this.dstStartDate.getUTCHours(),
@@ -499,13 +500,13 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
 				dstOffset: this.dstOffset,
 			}),
-			Buffer.from([
+			Bytes.from([
 				this.dstStartDate.getUTCMonth() + 1,
 				this.dstStartDate.getUTCDate(),
 				this.dstStartDate.getUTCHours(),

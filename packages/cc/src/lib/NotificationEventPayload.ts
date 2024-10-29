@@ -2,7 +2,10 @@ import type { Duration } from "@zwave-js/core";
 import type { CommandClass } from "./CommandClass";
 
 export interface NotificationEventPayload {
-	toNotificationEventParameters(): Buffer | Duration | Record<string, number>;
+	toNotificationEventParameters():
+		| Uint8Array
+		| Duration
+		| Record<string, number>;
 }
 
 /**

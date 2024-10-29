@@ -11,7 +11,13 @@ import {
 	isZWaveError,
 	stripUndefined,
 } from "@zwave-js/core/safe";
-import { cloneDeep, num2hex, pick } from "@zwave-js/shared/safe";
+import {
+	Bytes,
+	buffer2hex,
+	cloneDeep,
+	num2hex,
+	pick,
+} from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
 import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
@@ -554,7 +560,7 @@ export function nvmObjectsToJSON(
 	const controller: NVMJSONController = {
 		protocolVersion,
 		applicationVersion,
-		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
+		homeId: buffer2hex(controllerInfoFile.homeId),
 		...pick(controllerInfoFile, controllerProps),
 		...pick(applicationTypeFile, [
 			"isListening",
@@ -664,7 +670,7 @@ function nvmJSONControllerToFileOptions(
 	ctrlr: NVMJSONController,
 ): ControllerInfoFileOptions {
 	const ret = {
-		homeId: Buffer.from(ctrlr.homeId.replace(/^0x/, ""), "hex"),
+		homeId: Bytes.from(ctrlr.homeId.replace(/^0x/, ""), "hex"),
 		nodeId: ctrlr.nodeId,
 		lastNodeId: ctrlr.lastNodeId,
 		staticControllerNodeId: ctrlr.staticControllerNodeId,
@@ -673,7 +679,7 @@ function nvmJSONControllerToFileOptions(
 		maxNodeId: ctrlr.maxNodeId,
 		reservedId: ctrlr.reservedId,
 		systemState: ctrlr.systemState,
-	} as ControllerInfoFileOptions;
+	} as unknown as ControllerInfoFileOptions;
 	if (ctrlr.sucAwarenessPushNeeded != undefined) {
 		// @ts-expect-error We're dealing with a conditional object here
 		// TS doesn't like that.
@@ -698,7 +704,7 @@ function nvmJSONControllerToFileOptions(
 
 /** Reads an NVM buffer of a 700+ series stick and returns its JSON representation */
 export async function nvmToJSON(
-	buffer: Buffer,
+	buffer: Uint8Array,
 	debugLogs: boolean = false,
 ): Promise<NVMJSONWithMeta> {
 	const io = new NVMMemoryIO(buffer);
@@ -900,7 +906,7 @@ export async function nvmToJSON(
 	const controller: NVMJSONController = {
 		protocolVersion,
 		applicationVersion,
-		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
+		homeId: buffer2hex(controllerInfoFile.homeId),
 		...pick(controllerInfoFile, [
 			"nodeId",
 			"lastNodeId",
@@ -942,7 +948,9 @@ export async function nvmToJSON(
 			}
 			: {}),
 		sucUpdateEntries,
-		applicationData: applicationData?.toString("hex") ?? null,
+		applicationData:
+			(applicationData && Bytes.view(applicationData).toString("hex"))
+				?? null,
 		applicationName: applicationName ?? null,
 	};
 
@@ -979,7 +987,7 @@ export async function nvmToJSON(
 
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
 export async function nvm500ToJSON(
-	buffer: Buffer,
+	buffer: Uint8Array,
 ): Promise<Required<NVM500JSON>> {
 	const io = new NVMMemoryIO(buffer);
 	const nvm = new NVM500(io);
@@ -1084,7 +1092,7 @@ export async function nvm500ToJSON(
 		domain: "controller",
 		type: "learnedHomeId",
 	});
-	if (learnedHomeId?.equals(Buffer.alloc(4, 0))) {
+	if (learnedHomeId?.length === 4 && learnedHomeId.every((b) => b === 0)) {
 		learnedHomeId = undefined;
 	}
 
@@ -1172,9 +1180,9 @@ export async function nvm500ToJSON(
 	const controller: NVM500JSONController = {
 		protocolVersion: info.nvmDescriptor.protocolVersion,
 		applicationVersion: info.nvmDescriptor.firmwareVersion,
-		ownHomeId: `0x${ownHomeId.toString("hex")}`,
+		ownHomeId: buffer2hex(ownHomeId),
 		learnedHomeId: learnedHomeId
-			? `0x${learnedHomeId.toString("hex")}`
+			? buffer2hex(learnedHomeId)
 			: null,
 		nodeId: ownNodeId,
 		lastNodeId,
@@ -1195,7 +1203,9 @@ export async function nvm500ToJSON(
 		},
 		preferredRepeaters,
 		commandClasses,
-		applicationData: applicationData?.toString("hex") ?? null,
+		applicationData:
+			(applicationData && Bytes.view(applicationData).toString("hex"))
+				?? null,
 	};
 
 	return {
@@ -1209,7 +1219,7 @@ export async function nvm500ToJSON(
 export async function jsonToNVM(
 	json: NVMJSON,
 	targetSDKVersion: string,
-): Promise<Buffer> {
+): Promise<Uint8Array> {
 	const parsedVersion = semver.parse(targetSDKVersion);
 	if (!parsedVersion) {
 		throw new ZWaveError(
@@ -1223,7 +1233,7 @@ export async function jsonToNVM(
 	const nvmSize = sharedFileSystem
 		? ZWAVE_SHARED_NVM_SIZE
 		: (ZWAVE_APPLICATION_NVM_SIZE + ZWAVE_PROTOCOL_NVM_SIZE);
-	const ret = Buffer.allocUnsafe(nvmSize);
+	const ret = new Uint8Array(nvmSize);
 	const io = new NVMMemoryIO(ret);
 	const nvm3 = new NVM3(io);
 	await nvm3.erase(json.meta);
@@ -1365,7 +1375,7 @@ export async function jsonToNVM(
 	if (target.controller.applicationData) {
 		await adapter.set(
 			{ domain: "controller", type: "applicationData" },
-			Buffer.from(target.controller.applicationData, "hex"),
+			Bytes.from(target.controller.applicationData, "hex"),
 		);
 	}
 
@@ -1505,7 +1515,7 @@ export async function jsonToNVM(
 export async function jsonToNVM500(
 	json: Required<NVM500JSON>,
 	protocolVersion: string,
-): Promise<Buffer> {
+): Promise<Uint8Array> {
 	// Try to find a matching implementation
 	const impl = nvm500Impls.find(
 		(p) =>
@@ -1523,7 +1533,7 @@ export async function jsonToNVM500(
 	const { layout, nvmSize } = resolveLayout(impl.layout);
 
 	// Erase the NVM and set some basic information
-	const ret = Buffer.allocUnsafe(nvmSize);
+	const ret = new Uint8Array(nvmSize);
 	const io = new NVMMemoryIO(ret);
 	const nvm = new NVM500(io);
 	await nvm.erase({
@@ -1550,12 +1560,12 @@ export async function jsonToNVM500(
 
 	await adapter.set(
 		{ domain: "controller", type: "homeId" },
-		Buffer.from(c.ownHomeId.replace(/^0x/, ""), "hex"),
+		Bytes.from(c.ownHomeId.replace(/^0x/, ""), "hex"),
 	);
 	await adapter.set(
 		{ domain: "controller", type: "learnedHomeId" },
 		c.learnedHomeId
-			? Buffer.from(c.learnedHomeId.replace(/^0x/, ""), "hex")
+			? Bytes.from(c.learnedHomeId.replace(/^0x/, ""), "hex")
 			: undefined,
 	);
 
@@ -1639,7 +1649,7 @@ export async function jsonToNVM500(
 	if (c.applicationData) {
 		await adapter.set(
 			{ domain: "controller", type: "applicationData" },
-			Buffer.from(c.applicationData, "hex"),
+			Bytes.from(c.applicationData, "hex"),
 		);
 	}
 
@@ -1730,7 +1740,7 @@ export function json500To700(
 
 	let applicationData: string | null = null;
 	if (source.controller.applicationData) {
-		let raw = Buffer.from(source.controller.applicationData, "hex");
+		let raw = Bytes.from(source.controller.applicationData, "hex");
 		// Find actual start and end of application data, ignoring zeroes
 		let start = 0;
 		while (start < raw.length && raw[start] === 0) {
@@ -1899,9 +1909,9 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 
 /** Converts the given source NVM into a format that is compatible with the given target NVM */
 export async function migrateNVM(
-	sourceNVM: Buffer,
-	targetNVM: Buffer,
-): Promise<Buffer> {
+	sourceNVM: Uint8Array,
+	targetNVM: Uint8Array,
+): Promise<Uint8Array> {
 	let source: ParsedNVM;
 	let target: ParsedNVM;
 	let sourceProtocolFileFormat: number | undefined;

@@ -20,6 +20,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -156,13 +157,13 @@ export class ThermostatModeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined>;
 	public async set(
 		mode: (typeof ThermostatMode)["Manufacturer specific"],
-		manufacturerData: Buffer | string,
+		manufacturerData: Uint8Array | string,
 	): Promise<SupervisionResult | undefined>;
 
 	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
-		manufacturerData?: Buffer | string,
+		manufacturerData?: Uint8Array | string,
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
@@ -180,7 +181,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			manufacturerData = Buffer.from(manufacturerData, "hex");
+			manufacturerData = Bytes.from(manufacturerData, "hex");
 		}
 
 		const cc = new ThermostatModeCCSet({
@@ -317,7 +318,7 @@ export type ThermostatModeCCSetOptions =
 	}
 	| {
 		mode: (typeof ThermostatMode)["Manufacturer specific"];
-		manufacturerData: Buffer;
+		manufacturerData: Uint8Array;
 	};
 
 @CCCommand(ThermostatModeCommand.Set)
@@ -360,17 +361,17 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	}
 
 	public mode: ThermostatMode;
-	public manufacturerData?: Buffer;
+	public manufacturerData?: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const manufacturerData =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
 				? this.manufacturerData
-				: Buffer.from([]);
+				: new Uint8Array();
 		const manufacturerDataLength = manufacturerData.length;
-		this.payload = Buffer.concat([
-			Buffer.from([
+		this.payload = Bytes.concat([
+			Bytes.from([
 				((manufacturerDataLength & 0b111) << 5) + (this.mode & 0b11111),
 			]),
 			manufacturerData,
@@ -403,7 +404,7 @@ export type ThermostatModeCCReportOptions =
 	}
 	| {
 		mode: (typeof ThermostatMode)["Manufacturer specific"];
-		manufacturerData?: Buffer;
+		manufacturerData?: Uint8Array;
 	};
 
 @CCCommand(ThermostatModeCommand.Report)
@@ -485,22 +486,20 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 	public readonly mode: ThermostatMode;
 
 	@ccValue(ThermostatModeCCValues.manufacturerData)
-	public readonly manufacturerData: Buffer | undefined;
+	public readonly manufacturerData: Uint8Array | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const manufacturerDataLength =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
 				? Math.min(0b111, this.manufacturerData.length)
 				: 0;
-		this.payload = Buffer.allocUnsafe(1 + manufacturerDataLength);
+		this.payload = new Bytes(1 + manufacturerDataLength);
 		this.payload[0] = (manufacturerDataLength << 5) + (this.mode & 0b11111);
-		if (manufacturerDataLength) {
-			this.manufacturerData!.copy(
-				this.payload,
+		if (manufacturerDataLength && this.manufacturerData) {
+			this.payload.set(
+				this.manufacturerData.subarray(0, manufacturerDataLength),
 				1,
-				0,
-				manufacturerDataLength,
 			);
 		}
 		return super.serialize(ctx);
@@ -572,7 +571,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	@ccValue(ThermostatModeCCValues.supportedModes)
 	public readonly supportedModes: ThermostatMode[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(
 			this.supportedModes,
 			ThermostatMode["Manufacturer specific"],

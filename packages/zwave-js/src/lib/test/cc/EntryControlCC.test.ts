@@ -13,11 +13,12 @@ import {
 	EntryControlEventTypes,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Entry Control"], // CC
 		]),
 		payload,
@@ -26,8 +27,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 test("the Notification command should deserialize correctly", (t) => {
 	const data = buildCCBuffer(
-		Buffer.concat([
-			Buffer.from([
+		Bytes.concat([
+			Uint8Array.from([
 				EntryControlCommand.Notification, // CC Command
 				0x1,
 				0x2,
@@ -39,7 +40,7 @@ test("the Notification command should deserialize correctly", (t) => {
 				52,
 			]),
 			// Required padding for ASCII
-			Buffer.alloc(12, 0xff),
+			new Uint8Array(12).fill(0xff),
 		]),
 	);
 
@@ -60,7 +61,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
@@ -74,7 +75,7 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 		keyCacheTimeout: 2,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.ConfigurationSet, // CC Command
 			0x1,
 			0x2,
@@ -85,7 +86,7 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 
 test("the ConfigurationReport command should be deserialize correctly", (t) => {
 	const data = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.ConfigurationReport, // CC Command
 			0x1,
 			0x2,
@@ -107,7 +108,7 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
@@ -116,7 +117,7 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 
 test("the EventSupportedReport command should be deserialize correctly", (t) => {
 	const data = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.EventSupportedReport, // CC Command
 			1,
 			0b00000100,
@@ -154,7 +155,7 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 test("the KeySupportedGet command should serialize correctly", (t) => {
 	const cc = new EntryControlCCKeySupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
@@ -163,7 +164,7 @@ test("the KeySupportedGet command should serialize correctly", (t) => {
 
 test("the KeySupportedReport command should be deserialize correctly", (t) => {
 	const data = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			EntryControlCommand.KeySupportedReport, // CC Command
 			1,
 			0b01011010,

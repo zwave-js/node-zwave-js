@@ -9,11 +9,12 @@ import {
 	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Binary Sensor"], // CC
 		]),
 		payload,
@@ -23,7 +24,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the Get command should serialize correctly (no sensor type)", (t) => {
 	const cc = new BinarySensorCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySensorCommand.Get, // CC Command
 			BinarySensorType.Any, // sensor type
 		]),
@@ -37,14 +38,14 @@ test("the Get command should serialize correctly", (t) => {
 		sensorType: BinarySensorType.CO,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([BinarySensorCommand.Get, BinarySensorType.CO]),
+		Uint8Array.from([BinarySensorCommand.Get, BinarySensorType.CO]),
 	);
 	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySensorCommand.Report, // CC Command
 			0xff, // current value
 		]),
@@ -60,7 +61,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySensorCommand.Report, // CC Command
 			0x00, // current value
 			BinarySensorType.CO2,
@@ -79,7 +80,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 test("the SupportedGet command should serialize correctly", (t) => {
 	const cc = new BinarySensorCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySensorCommand.SupportedGet, // CC Command
 		]),
 	);
@@ -88,7 +89,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			BinarySensorCommand.SupportedReport, // CC Command
 			0b10101010,
 			0b10,
@@ -111,7 +112,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of BinarySensorCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

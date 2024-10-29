@@ -12,11 +12,12 @@ import {
 	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Association Group Information"], // CC
 		]),
 		payload,
@@ -29,7 +30,7 @@ test("the NameGet command should serialize correctly", (t) => {
 		groupId: 7,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.NameGet, // CC Command
 			7, // group id
 		]),
@@ -39,7 +40,7 @@ test("the NameGet command should serialize correctly", (t) => {
 
 test("the NameReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.NameReport, // CC Command
 			7, // group id
 			6, // name length
@@ -70,7 +71,7 @@ test("the InfoGet command should serialize correctly (no flag set)", (t) => {
 		refreshCache: false,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.InfoGet, // CC Command
 			0, // flags
 			7, // group id
@@ -87,7 +88,7 @@ test("the InfoGet command should serialize correctly (refresh cache flag set)", 
 		refreshCache: true,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.InfoGet, // CC Command
 			0b1000_0000, // flags
 			7, // group id
@@ -104,7 +105,7 @@ test("the InfoGet command should serialize correctly (list mode flag set)", (t) 
 		refreshCache: false,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.InfoGet, // CC Command
 			0b0100_0000, // flags
 			0, // group id is ignored
@@ -115,7 +116,7 @@ test("the InfoGet command should serialize correctly (list mode flag set)", (t) 
 
 test("the Info Report command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.InfoReport, // CC Command
 			0b1100_0000 | 2, // Flags | group count
 			1, // group id
@@ -162,7 +163,7 @@ test("the CommandListGet command should serialize correctly", (t) => {
 		allowCache: true,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.CommandListGet, // CC Command
 			0b1000_0000, // allow cache
 			6, // group id
@@ -173,7 +174,7 @@ test("the CommandListGet command should serialize correctly", (t) => {
 
 test("the CommandListReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			AssociationGroupInfoCommand.CommandListReport, // CC Command
 			7, // group id
 			5, // list length in bytes
@@ -202,7 +203,7 @@ test("the CommandListReport command should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of AssociationGroupInfoCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

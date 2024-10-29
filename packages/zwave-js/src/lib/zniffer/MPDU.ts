@@ -25,6 +25,7 @@ import {
 import { parseRSSI } from "@zwave-js/serial/serialapi";
 import {
 	type AllOrNone,
+	Bytes,
 	buffer2hex,
 	pick,
 	staticExtends,
@@ -103,7 +104,7 @@ function formatRoute(
 }
 
 export interface MPDUOptions {
-	data: Buffer;
+	data: Bytes;
 	frameInfo: ZnifferFrameInfo;
 }
 
@@ -114,7 +115,7 @@ export interface MPDU {
 	ackRequested: boolean;
 	headerType: MPDUHeaderType;
 	sequenceNumber: number;
-	payload: Buffer;
+	payload: Bytes;
 }
 
 export function parseMPDU(
@@ -201,7 +202,7 @@ export class LongRangeMPDU implements MPDU {
 	public readonly sequenceNumber: number;
 	public readonly noiseFloor: RSSI;
 	public readonly txPower: number;
-	public payload!: Buffer;
+	public payload!: Bytes;
 
 	public static from(msg: ZnifferDataMessage): LongRangeMPDU {
 		return new LongRangeMPDU({
@@ -397,8 +398,8 @@ export class ZWaveMPDU implements MPDU {
 	public readonly beamingInfo: BeamingInfo;
 	public readonly sequenceNumber: number;
 
-	protected readonly destinationBuffer!: Buffer;
-	public payload!: Buffer;
+	protected readonly destinationBuffer!: Bytes;
+	public payload!: Bytes;
 
 	public static from(msg: ZnifferDataMessage): ZWaveMPDU {
 		return new ZWaveMPDU({
@@ -752,7 +753,7 @@ export class SearchResultExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 		];
 
 		// This frame contains no payload
-		this.payload = Buffer.allocUnsafe(0);
+		this.payload = new Bytes();
 	}
 
 	/** The node ID that sent the explorer frame that's being answered here */
@@ -907,7 +908,7 @@ export class LongRangeBeamStart {
 
 		const txPower = data[1] >>> 4;
 		this.txPower = longRangeBeamPowerToDBm(txPower);
-		this.destinationNodeId = data.readUint16BE(1) & 0x0fff;
+		this.destinationNodeId = data.readUInt16BE(1) & 0x0fff;
 		this.homeIdHash = data[3];
 	}
 
@@ -987,7 +988,7 @@ export type ZWaveFrame =
 				type: ZWaveFrameType.Singlecast;
 				destinationNodeId: number;
 				ackRequested: boolean;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			}
 			// Only present in routed frames:
 			& AllOrNone<
@@ -1026,13 +1027,13 @@ export type ZWaveFrame =
 			type: ZWaveFrameType.Broadcast;
 			destinationNodeId: typeof NODE_ID_BROADCAST;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Multicast frame, not routed
 			type: ZWaveFrameType.Multicast;
 			destinationNodeIds: number[];
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Ack frame, not routed
@@ -1043,7 +1044,7 @@ export type ZWaveFrame =
 			// Different kind of explorer frames
 			& ({
 				type: ZWaveFrameType.ExplorerNormal;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			} | {
 				type: ZWaveFrameType.ExplorerSearchResult;
 				searchingNodeId: number;
@@ -1053,7 +1054,7 @@ export type ZWaveFrame =
 			} | {
 				type: ZWaveFrameType.ExplorerInclusionRequest;
 				networkHomeId: number;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			})
 			// Common fields for all explorer frames
 			& {
@@ -1092,7 +1093,7 @@ export type LongRangeFrame =
 			// Singlecast frame
 			type: LongRangeFrameType.Singlecast;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Broadcast frame. This is technically a singlecast frame,
@@ -1100,13 +1101,13 @@ export type LongRangeFrame =
 			type: LongRangeFrameType.Broadcast;
 			destinationNodeId: typeof NODE_ID_BROADCAST_LR;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Acknowledgement frame
 			type: LongRangeFrameType.Ack;
 			incomingRSSI: RSSI;
-			payload: Buffer;
+			payload: Uint8Array;
 		}
 	);
 
@@ -1170,7 +1171,7 @@ export type CorruptedFrame = {
 
 	protocolDataRate: ZnifferProtocolDataRate;
 
-	payload: Buffer;
+	payload: Uint8Array;
 };
 
 export function mpduToFrame(mpdu: MPDU, payloadCC?: CommandClass): Frame {

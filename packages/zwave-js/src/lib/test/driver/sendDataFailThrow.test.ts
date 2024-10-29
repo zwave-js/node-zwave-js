@@ -1,7 +1,7 @@
 import { BasicCCSet } from "@zwave-js/cc";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import type { ThrowingMap } from "@zwave-js/shared";
+import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import ava, { type TestFn } from "ava";
 import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "../../driver/Driver";
@@ -65,7 +65,7 @@ test.serial(
 		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 		const command = new BasicCCSet({
 			nodeId: 2,
@@ -83,7 +83,7 @@ test.serial(
 		//     └─ targetValue: 99
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010a00130203200163250181", "hex"),
+			Bytes.from("010a00130203200163250181", "hex"),
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
@@ -92,7 +92,7 @@ test.serial(
 
 		// « [RES] [SendData]
 		//     was sent: true
-		serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
 		t.deepEqual(serialport.lastWrite, ACK);
 
@@ -101,7 +101,7 @@ test.serial(
 		// « [REQ] [SendData]
 		//   callback id:     1
 		//   transmit status: NoACK
-		serialport.receiveData(Buffer.from("0107001301010002e9", "hex"));
+		serialport.receiveData(Bytes.from("0107001301010002e9", "hex"));
 		t.deepEqual(serialport.lastWrite, ACK);
 
 		await t.throwsAsync(promise);
@@ -130,7 +130,7 @@ test.serial(
 		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
-		const ACK = Buffer.from([MessageHeaders.ACK]);
+		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 		const command = new BasicCCSet({
 			nodeId: 2,
@@ -150,7 +150,7 @@ test.serial(
 		//     └─ targetValue: 99
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010f00a90102032001632500000000013f", "hex"),
+			Bytes.from("010f00a90102032001632500000000013f", "hex"),
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
@@ -159,7 +159,7 @@ test.serial(
 
 		// « [RES] [SendDataBridge]
 		//     was sent: true
-		serialport.receiveData(Buffer.from("010401a90152", "hex"));
+		serialport.receiveData(Bytes.from("010401a90152", "hex"));
 		// » [ACK]
 		t.deepEqual(serialport.lastWrite, ACK);
 
@@ -169,7 +169,7 @@ test.serial(
 		//   callback id:     1
 		//   transmit status: NoACK
 		serialport.receiveData(
-			Buffer.from(
+			Bytes.from(
 				"011800a90101019e007f7f7f7f7f0101070000000002070000ac",
 				"hex",
 			),

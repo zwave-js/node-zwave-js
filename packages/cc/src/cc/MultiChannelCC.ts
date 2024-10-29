@@ -24,6 +24,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
@@ -861,8 +862,8 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
 	public aggregatedCount: MaybeNotKnown<number>;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			(this.countIsDynamic ? 0b10000000 : 0)
 			| (this.identicalCapabilities ? 0b01000000 : 0),
 			this.individualCount & 0b01111111,
@@ -977,9 +978,9 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	public readonly isDynamic: boolean;
 	public readonly wasRemoved: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				(this.endpointIndex & 0b01111111)
 				| (this.isDynamic ? 0b10000000 : 0),
 			]),
@@ -1049,8 +1050,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.requestedEndpoint & 0b01111111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.requestedEndpoint & 0b01111111]);
 		return super.serialize(ctx);
 	}
 
@@ -1112,14 +1113,14 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public foundEndpoints: number[];
 	public reportsToFollow: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this.reportsToFollow,
 				this.genericClass,
 				this.specificClass,
 			]),
-			Buffer.from(this.foundEndpoints.map((e) => e & 0b01111111)),
+			Bytes.from(this.foundEndpoints.map((e) => e & 0b01111111)),
 		]);
 		return super.serialize(ctx);
 	}
@@ -1199,8 +1200,8 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public genericClass: number;
 	public specificClass: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.genericClass, this.specificClass]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.genericClass, this.specificClass]);
 		return super.serialize(ctx);
 	}
 
@@ -1307,8 +1308,8 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.requestedEndpoint & 0b0111_1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.requestedEndpoint & 0b0111_1111]);
 		return super.serialize(ctx);
 	}
 
@@ -1418,7 +1419,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			destination = raw.payload[1] & 0b0111_1111;
 			if (isBitMask) {
 				destination = parseBitMask(
-					Buffer.from([destination]),
+					Bytes.from([destination]),
 				) as any;
 			}
 		}
@@ -1436,7 +1437,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: MultiChannelCCDestination;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (
 			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
 				?.treatDestinationEndpointAsSource
@@ -1452,8 +1453,8 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			? this.destination & 0b0111_1111
 			// The destination is a bit mask
 			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
-		this.payload = Buffer.concat([
-			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.endpointIndex & 0b0111_1111, destination]),
 			this.encapsulated.serialize(ctx),
 		]);
 		return super.serialize(ctx);
@@ -1564,8 +1565,8 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.requestedCC]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.requestedCC]);
 		return super.serialize(ctx);
 	}
 
@@ -1642,9 +1643,9 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 	public encapsulated!: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.endpointIndex]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.endpointIndex]),
 			this.encapsulated.serialize(ctx),
 		]);
 		return super.serialize(ctx);

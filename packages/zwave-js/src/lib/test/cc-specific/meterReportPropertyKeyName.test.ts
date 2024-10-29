@@ -1,5 +1,6 @@
 // repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 
+import { Bytes } from "@zwave-js/shared";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -22,7 +23,7 @@ integrationTest(
 			await Promise.all([
 				valueAddedPromise,
 				mockController.sendToHost(
-					Buffer.from(
+					Bytes.from(
 						"0116000400020e3202214400013707012d00013707d5004d",
 						"hex",
 					),

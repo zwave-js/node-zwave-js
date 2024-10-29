@@ -20,6 +20,7 @@ import type {
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -539,8 +540,8 @@ export class AssociationCCSet extends AssociationCC {
 	public groupId: number;
 	public nodeIds: number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupId, ...this.nodeIds]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupId, ...this.nodeIds]);
 		return super.serialize(ctx);
 	}
 
@@ -598,8 +599,8 @@ export class AssociationCCRemove extends AssociationCC {
 	public groupId?: number;
 	public nodeIds?: number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.groupId || 0,
 			...(this.nodeIds || []),
 		]);
@@ -692,8 +693,8 @@ export class AssociationCCReport extends AssociationCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.groupId,
 			this.maxNodes,
 			this.reportsToFollow,
@@ -748,8 +749,8 @@ export class AssociationCCGet extends AssociationCC {
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupId]);
 		return super.serialize(ctx);
 	}
 
@@ -792,8 +793,8 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	@ccValue(AssociationCCValues.groupCount)
 	public groupCount: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupCount]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupCount]);
 		return super.serialize(ctx);
 	}
 
@@ -839,8 +840,8 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 
 	public group: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.group]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.group]);
 		return super.serialize(ctx);
 	}
 

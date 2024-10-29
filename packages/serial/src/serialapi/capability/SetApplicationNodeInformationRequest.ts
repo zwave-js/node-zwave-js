@@ -14,7 +14,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 
 export interface SetApplicationNodeInformationRequestOptions
 	extends MessageBaseOptions
@@ -46,10 +46,10 @@ export class SetApplicationNodeInformationRequest extends Message {
 	public supportedCCs: CommandClasses[];
 	public controlledCCs: CommandClasses[];
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const ccListLength = Math.min(ccList.length, 35);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.isListening ? 0x01 : 0, // APPLICATION_NODEINFO_LISTENING
 			this.genericDeviceClass,
 			this.specificDeviceClass,

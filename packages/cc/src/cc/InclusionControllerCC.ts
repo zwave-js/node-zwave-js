@@ -10,7 +10,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
@@ -124,8 +124,8 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public step: InclusionControllerStep;
 	public status: InclusionControllerStatus;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.step, this.status]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.step, this.status]);
 		return super.serialize(ctx);
 	}
 
@@ -181,8 +181,8 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public includedNodeId: number;
 	public step: InclusionControllerStep;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.includedNodeId, this.step]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.includedNodeId, this.step]);
 		return super.serialize(ctx);
 	}
 

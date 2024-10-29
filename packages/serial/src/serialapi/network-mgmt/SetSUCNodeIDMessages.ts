@@ -23,6 +23,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 
 export enum SetSUCNodeIdStatus {
 	Succeeded = 0x05,
@@ -86,12 +87,12 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 
 	private _ownNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
-			Buffer.from([
+			Bytes.from([
 				this.enableSUC ? 0x01 : 0x00,
 				this.transmitOptions,
 				this.enableSIS ? 0x01 : 0x00,

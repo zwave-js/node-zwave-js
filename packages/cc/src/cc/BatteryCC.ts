@@ -26,6 +26,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -564,12 +565,12 @@ export class BatteryCCReport extends BatteryCC {
 	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.isLow ? 0xff : this.level]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.isLow ? 0xff : this.level]);
 		if (this.chargingStatus != undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
-				Buffer.from([
+				Bytes.from([
 					(this.chargingStatus << 6)
 					+ (this.rechargeable ? 0b0010_0000 : 0)
 					+ (this.backup ? 0b0001_0000 : 0)

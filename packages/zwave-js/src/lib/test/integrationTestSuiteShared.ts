@@ -1,4 +1,5 @@
 import { type MockPortBinding } from "@zwave-js/serial/mock";
+import { Bytes } from "@zwave-js/shared/safe";
 import {
 	MockController,
 	type MockControllerOptions,
@@ -39,16 +40,16 @@ export function prepareDriver(
 			}
 			: {}),
 		securityKeys: {
-			S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
-			S2_Unauthenticated: Buffer.from(
+			S0_Legacy: Bytes.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+			S2_Unauthenticated: Bytes.from(
 				"11111111111111111111111111111111",
 				"hex",
 			),
-			S2_Authenticated: Buffer.from(
+			S2_Authenticated: Bytes.from(
 				"22222222222222222222222222222222",
 				"hex",
 			),
-			S2_AccessControl: Buffer.from(
+			S2_AccessControl: Bytes.from(
 				"33333333333333333333333333333333",
 				"hex",
 			),

@@ -21,7 +21,7 @@ if (!port || !filename) {
 
 const verbose = !!argv.verbose;
 
-let firmware: Buffer;
+let firmware: Uint8Array;
 
 const driver = new Driver(port, {
 	logConfig: verbose
@@ -99,7 +99,7 @@ async function flash() {
 }
 
 async function main() {
-	let rawFile: Buffer;
+	let rawFile: Uint8Array;
 	try {
 		const fullPath = path.isAbsolute(filename)
 			? filename

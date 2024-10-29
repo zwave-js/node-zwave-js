@@ -10,6 +10,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { type Bytes } from "@zwave-js/shared/safe";
 
 export interface LongRangeShadowNodeIDsRequestOptions {
 	shadowNodeIds: number[];
@@ -46,8 +47,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 
 	public shadowNodeIds: number[];
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(1);
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeBitMask(
 			this.shadowNodeIds,
 			LONG_RANGE_SHADOW_NODE_IDS_START

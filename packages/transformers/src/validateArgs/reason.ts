@@ -45,6 +45,10 @@ export interface ExpectedBuffer {
 	type: "buffer";
 }
 
+export interface ExpectedUint8Array {
+	type: "uint8array";
+}
+
 export interface ExpectedClass {
 	type: "class";
 	name: string;
@@ -118,6 +122,7 @@ export type Reason =
 	| ExpectedObject
 	| ExpectedDate
 	| ExpectedBuffer
+	| ExpectedUint8Array
 	| ExpectedClass
 	| ExpectedNonPrimitive
 	| MissingObjectProperty

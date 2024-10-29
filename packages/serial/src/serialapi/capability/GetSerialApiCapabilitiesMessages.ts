@@ -11,6 +11,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
@@ -76,8 +77,8 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	public productId: number;
 	public supportedFunctionTypes: FunctionType[];
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(8 + NUM_FUNCTION_BYTES);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(8 + NUM_FUNCTION_BYTES);
 
 		const firmwareBytes = this.firmwareVersion
 			.split(".", 2)
@@ -93,7 +94,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			this.supportedFunctionTypes,
 			NUM_FUNCTIONS,
 		);
-		functionBitMask.copy(this.payload, 8);
+		this.payload.set(functionBitMask, 8);
 
 		return super.serialize(ctx);
 	}

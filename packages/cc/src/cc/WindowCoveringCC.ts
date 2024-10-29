@@ -17,6 +17,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -716,7 +717,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	@ccValue(WindowCoveringCCValues.supportedParameters)
 	public readonly supportedParameters: readonly WindowCoveringParameter[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const bitmask = encodeBitMask(
 			this.supportedParameters,
 			undefined,
@@ -724,8 +725,8 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 		).subarray(0, 15);
 		const numBitmaskBytes = bitmask.length & 0b1111;
 
-		this.payload = Buffer.concat([
-			Buffer.from([numBitmaskBytes]),
+		this.payload = Bytes.concat([
+			Bytes.from([numBitmaskBytes]),
 			bitmask.subarray(0, numBitmaskBytes),
 		]);
 
@@ -866,8 +867,8 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.parameter]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.parameter]);
 		return super.serialize(ctx);
 	}
 
@@ -940,9 +941,9 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	}[];
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const numEntries = this.targetValues.length & 0b11111;
-		this.payload = Buffer.allocUnsafe(2 + numEntries * 2);
+		this.payload = new Bytes(2 + numEntries * 2);
 
 		this.payload[0] = numEntries;
 		for (let i = 0; i < numEntries; i++) {
@@ -1020,8 +1021,8 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.direction === "down" ? 0b0100_0000 : 0b0000_0000,
 			this.parameter,
 			(this.duration ?? Duration.default()).serializeSet(),
@@ -1077,8 +1078,8 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.parameter]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.parameter]);
 		return super.serialize(ctx);
 	}
 

@@ -17,7 +17,7 @@ import type {
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
-import { pick } from "@zwave-js/shared";
+import { Bytes, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import {
@@ -283,7 +283,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		}
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		if (this.fibaroCCId == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Fibaro CC without a Fibaro CC ID",
@@ -295,8 +295,8 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				ZWaveErrorCodes.CC_Invalid,
 			);
 		}
-		this.payload = Buffer.concat([
-			Buffer.from([this.fibaroCCId, this.fibaroCCCommand]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
 		]);
 		return super.serialize(ctx);
@@ -398,10 +398,10 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public position: number | undefined;
 	public tilt: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const controlByte = (this.position != undefined ? 0b10 : 0)
 			| (this.tilt != undefined ? 0b01 : 0);
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			controlByte,
 			this.position ?? 0,
 			this.tilt ?? 0,

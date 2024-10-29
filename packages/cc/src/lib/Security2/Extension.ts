@@ -5,9 +5,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import {
+	Bytes,
 	type TypedClassDecorator,
 	buffer2hex,
 	getEnumMemberName,
+	isUint8Array,
 } from "@zwave-js/shared/safe";
 import "reflect-metadata";
 
@@ -138,11 +140,11 @@ export function validateS2Extension(
 
 interface Security2ExtensionCreationOptions {
 	critical: boolean;
-	payload?: Buffer;
+	payload?: Uint8Array;
 }
 
 interface Security2ExtensionDeserializationOptions {
-	data: Buffer;
+	data: Uint8Array;
 }
 
 type Security2ExtensionOptions =
@@ -152,7 +154,7 @@ type Security2ExtensionOptions =
 function gotDeserializationOptions(
 	options: Record<string, any>,
 ): options is Security2ExtensionDeserializationOptions {
-	return "data" in options && Buffer.isBuffer(options.data);
+	return "data" in options && isUint8Array(options.data);
 }
 
 export class Security2Extension {
@@ -168,22 +170,22 @@ export class Security2Extension {
 		} else {
 			this.type = getExtensionType(this);
 			this.critical = options.critical;
-			this.payload = options.payload ?? Buffer.allocUnsafe(0);
+			this.payload = options.payload ?? new Uint8Array();
 		}
 	}
 
 	public type: S2ExtensionType;
 	public critical: boolean;
 	public readonly moreToFollow?: boolean;
-	public payload: Buffer;
+	public payload: Uint8Array;
 
 	public isEncrypted(): boolean {
 		return false;
 	}
 
-	public serialize(moreToFollow: boolean): Buffer {
-		return Buffer.concat([
-			Buffer.from([
+	public serialize(moreToFollow: boolean): Bytes {
+		return Bytes.concat([
+			Bytes.from([
 				2 + this.payload.length,
 				(moreToFollow ? 0b1000_0000 : 0)
 				| (this.critical ? 0b0100_0000 : 0)
@@ -195,7 +197,7 @@ export class Security2Extension {
 
 	/** Returns the number of bytes the first extension in the buffer occupies */
 	public static getExtensionLength(
-		data: Buffer,
+		data: Uint8Array,
 	): { expected?: number; actual: number } {
 		const actual = data[0];
 		let expected: number | undefined;
@@ -230,14 +232,14 @@ export class Security2Extension {
 	 * It is assumed that the buffer has been checked beforehand
 	 */
 	public static getConstructor(
-		data: Buffer,
+		data: Uint8Array,
 	): Security2ExtensionConstructor<Security2Extension> {
 		const type = data[1] & 0b11_1111;
 		return getS2ExtensionConstructor(type) ?? Security2Extension;
 	}
 
 	/** Creates an instance of the S2 extension that is serialized in the given buffer */
-	public static from(data: Buffer): Security2Extension {
+	public static from(data: Uint8Array): Security2Extension {
 		const Constructor = Security2Extension.getConstructor(data);
 		try {
 			const ret = new Constructor({ data });
@@ -258,7 +260,7 @@ export class Security2Extension {
 · type: ${getEnumMemberName(S2ExtensionType, this.type)}`;
 		if (this.payload.length > 0) {
 			ret += `
-  payload: 0x${this.payload.toString("hex")}`;
+  payload: ${buffer2hex(this.payload)}`;
 		}
 		return ret;
 	}
@@ -268,7 +270,7 @@ export class InvalidExtension extends Security2Extension {
 }
 
 interface SPANExtensionOptions {
-	senderEI: Buffer;
+	senderEI: Uint8Array;
 }
 
 @extensionType(S2ExtensionType.SPAN)
@@ -294,25 +296,25 @@ export class SPANExtension extends Security2Extension {
 		}
 	}
 
-	public senderEI: Buffer;
+	public senderEI: Uint8Array;
 
 	public static readonly expectedLength = 18;
 
-	public serialize(moreToFollow: boolean): Buffer {
+	public serialize(moreToFollow: boolean): Bytes {
 		this.payload = this.senderEI;
 		return super.serialize(moreToFollow);
 	}
 
 	public toLogEntry(): string {
 		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
-		ret += `  sender EI: 0x${this.senderEI.toString("hex")}`;
+		ret += `  sender EI: ${buffer2hex(this.senderEI)}`;
 		return ret;
 	}
 }
 
 interface MPANExtensionOptions {
 	groupId: number;
-	innerMPANState: Buffer;
+	innerMPANState: Uint8Array;
 }
 
 @extensionType(S2ExtensionType.MPAN)
@@ -341,7 +343,7 @@ export class MPANExtension extends Security2Extension {
 	}
 
 	public groupId: number;
-	public innerMPANState: Buffer;
+	public innerMPANState: Uint8Array;
 
 	public isEncrypted(): boolean {
 		return true;
@@ -349,9 +351,9 @@ export class MPANExtension extends Security2Extension {
 
 	public static readonly expectedLength = 19;
 
-	public serialize(moreToFollow: boolean): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.groupId]),
+	public serialize(moreToFollow: boolean): Bytes {
+		this.payload = Bytes.concat([
+			[this.groupId],
 			this.innerMPANState,
 		]);
 		return super.serialize(moreToFollow);
@@ -394,8 +396,8 @@ export class MGRPExtension extends Security2Extension {
 
 	public static readonly expectedLength = 3;
 
-	public serialize(moreToFollow: boolean): Buffer {
-		this.payload = Buffer.from([this.groupId]);
+	public serialize(moreToFollow: boolean): Bytes {
+		this.payload = Bytes.from([this.groupId]);
 		return super.serialize(moreToFollow);
 	}
 

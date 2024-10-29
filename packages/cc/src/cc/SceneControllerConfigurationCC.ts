@@ -19,6 +19,7 @@ import type {
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -523,8 +524,8 @@ export class SceneControllerConfigurationCCSet
 	public sceneId: number;
 	public dimmingDuration: Duration;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.groupId,
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
@@ -666,8 +667,8 @@ export class SceneControllerConfigurationCCGet
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.groupId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.groupId]);
 		return super.serialize(ctx);
 	}
 

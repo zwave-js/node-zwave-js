@@ -3,7 +3,7 @@ export interface FileSystem {
 	ensureDir(path: string): Promise<void>;
 	writeFile(
 		file: string,
-		data: string | Buffer,
+		data: string | Uint8Array,
 		options?:
 			| {
 				encoding: BufferEncoding;

@@ -17,6 +17,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 
 export interface GetRoutingInfoRequestOptions {
 	nodeId: number;
@@ -41,13 +42,13 @@ export class GetRoutingInfoRequest extends Message {
 	public removeNonRepeaters: boolean;
 	public removeBadLinks: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const nodeId = encodeNodeID(this.sourceNodeId, ctx.nodeIdType);
 		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
 			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
-			Buffer.from([
+			Bytes.from([
 				optionsByte,
 				0, // callbackId - this must be 0 as per the docs
 			]),

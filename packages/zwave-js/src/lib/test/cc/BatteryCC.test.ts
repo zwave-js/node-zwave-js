@@ -8,11 +8,12 @@ import {
 	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared";
 import test from "ava";
 
 test("the Get command should serialize correctly", (t) => {
 	const batteryCC = new BatteryCCGet({ nodeId: 1 });
-	const expected = Buffer.from([
+	const expected = Bytes.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Get, // CC Command
 	]);
@@ -20,7 +21,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Report command (v1) should be deserialized correctly: when the battery is not low", (t) => {
-	const ccData = Buffer.from([
+	const ccData = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Report, // CC Command
 		55, // current value
@@ -36,7 +37,7 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 });
 
 test("the Report command (v1) should be deserialized correctly: when the battery is low", (t) => {
-	const ccData = Buffer.from([
+	const ccData = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Report, // CC Command
 		0xff, // current value
@@ -52,7 +53,7 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 });
 
 test("the Report command (v2) should be deserialized correctly: all flags set", (t) => {
-	const ccData = Buffer.from([
+	const ccData = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Report, // CC Command
 		55, // current value
@@ -73,7 +74,7 @@ test("the Report command (v2) should be deserialized correctly: all flags set", 
 });
 
 test("the Report command (v2) should be deserialized correctly: charging status", (t) => {
-	const ccData = Buffer.from([
+	const ccData = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Report, // CC Command
 		55,
@@ -90,7 +91,7 @@ test("the Report command (v2) should be deserialized correctly: charging status"
 });
 
 test("the Report command (v2) should be deserialized correctly: recharge or replace", (t) => {
-	const ccData = Buffer.from([
+	const ccData = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Report, // CC Command
 		55,
@@ -107,7 +108,7 @@ test("the Report command (v2) should be deserialized correctly: recharge or repl
 });
 
 test("deserializing an unsupported command should return an unspecified version of BatteryCC", (t) => {
-	const serializedCC = Buffer.from([
+	const serializedCC = Uint8Array.from([
 		CommandClasses.Battery, // CC
 		255, // not a valid command
 	]);

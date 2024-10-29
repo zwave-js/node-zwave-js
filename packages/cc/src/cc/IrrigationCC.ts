@@ -21,6 +21,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -1665,7 +1666,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public rainSensorPolarity?: IrrigationSensorPolarity;
 	public moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		let polarity = 0;
 		if (this.rainSensorPolarity != undefined) polarity |= 0b1;
 		if (this.moistureSensorPolarity != undefined) polarity |= 0b10;
@@ -1676,11 +1677,11 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			// Valid bit
 			polarity |= 0b1000_0000;
 		}
-		this.payload = Buffer.concat([
-			Buffer.from([this.masterValveDelay]),
+		this.payload = Bytes.concat([
+			Bytes.from([this.masterValveDelay]),
 			encodeFloatWithScale(this.highPressureThreshold, 0 /* kPa */),
 			encodeFloatWithScale(this.lowPressureThreshold, 0 /* kPa */),
-			Buffer.from([polarity]),
+			Bytes.from([polarity]),
 		]);
 		return super.serialize(ctx);
 	}
@@ -2047,8 +2048,8 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 
 	public valveId: ValveId;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
@@ -2118,9 +2119,9 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([
 				this.valveId === "master" ? 1 : 0,
 				this.valveId === "master" ? 1 : this.valveId || 1,
 				Math.floor(this.nominalCurrentHighThreshold / 10),
@@ -2129,7 +2130,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 			encodeFloatWithScale(this.maximumFlow, 0 /* l/h */),
 			encodeFloatWithScale(this.highFlowThreshold, 0 /* l/h */),
 			encodeFloatWithScale(this.lowFlowThreshold, 0 /* l/h */),
-			Buffer.from([
+			Bytes.from([
 				(this.useRainSensor ? 0b1 : 0)
 				| (this.useMoistureSensor ? 0b10 : 0),
 			]),
@@ -2370,8 +2371,8 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 
 	public valveId: ValveId;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
@@ -2423,8 +2424,8 @@ export class IrrigationCCValveRun extends IrrigationCC {
 	public valveId: ValveId;
 	public duration: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 			0,
@@ -2485,8 +2486,8 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 	public tableId: number;
 	public entries: ValveTableEntry[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(1 + this.entries.length * 3);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(1 + this.entries.length * 3);
 		this.payload[0] = this.tableId;
 		for (let i = 0; i < this.entries.length; i++) {
 			const entry = this.entries[i];
@@ -2621,8 +2622,8 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 
 	public tableId: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.tableId]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.tableId]);
 		return super.serialize(ctx);
 	}
 
@@ -2674,8 +2675,8 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 
 	public tableIDs: number[];
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from(this.tableIDs);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from(this.tableIDs);
 		return super.serialize(ctx);
 	}
 
@@ -2727,8 +2728,8 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 
 	public duration?: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.duration ?? 255]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.duration ?? 255]);
 		return super.serialize(ctx);
 	}
 

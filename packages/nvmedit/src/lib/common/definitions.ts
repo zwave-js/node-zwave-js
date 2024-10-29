@@ -46,7 +46,7 @@ export interface NVMIO {
 	read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }>;
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }>;
 
 	/**
 	 * Writes a chunk of data with the given length from the NVM.
@@ -54,7 +54,7 @@ export interface NVMIO {
 	 */
 	write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }>;
 
 	/** Closes the NVM */
@@ -115,7 +115,7 @@ export type ControllerNVMPropertyTypes = Expand<
 		protocolVersion: string;
 		protocolFileFormat: number;
 		applicationVersion: string;
-		applicationData: Buffer;
+		applicationData: Uint8Array;
 		preferredRepeaters?: number[];
 		sucUpdateEntries: SUCUpdateEntry[];
 		appRouteLock: number[];
@@ -133,7 +133,7 @@ export type ControllerNVMPropertyTypes = Expand<
 	}>
 	// 500 series only
 	& Partial<{
-		learnedHomeId: Buffer;
+		learnedHomeId: Uint8Array;
 		commandClasses: CommandClasses[];
 		systemState: number;
 		watchdogStarted: number;

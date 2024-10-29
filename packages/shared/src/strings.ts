@@ -1,4 +1,6 @@
 import { padStart } from "alcalzone-shared/strings";
+import { Bytes } from "./Bytes";
+import { uint8ArrayToHex } from "./uint8array-extras";
 
 /** Translates a null-terminated (C++) string to JS */
 export function cpp2js(str: string): string {
@@ -45,9 +47,12 @@ export function stringify(arg: unknown, space: 4 | "\t" = 4): string {
  * @param buffer The value to be formatted as hexadecimal
  * @param uppercase Whether uppercase letters should be used
  */
-export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {
+export function buffer2hex(
+	buffer: Uint8Array,
+	uppercase: boolean = false,
+): string {
 	if (buffer.length === 0) return "(empty)";
-	let ret = buffer.toString("hex");
+	let ret = uint8ArrayToHex(buffer);
 	if (uppercase) ret = ret.toUpperCase();
 	return "0x" + ret;
 }
@@ -84,4 +89,24 @@ export function formatDate(year: number, month: number, day: number): string {
 			"0",
 		)
 	}-${padStart(day.toString(), 2, "0")}`;
+}
+
+export function stringToUint8ArrayUTF16BE(str: string): Uint8Array {
+	// TextEncoder only supports UTF-8, so we have to do this manually
+	const ret = new Bytes(str.length * 2);
+	for (let i = 0; i < str.length; i++) {
+		const code = str.charCodeAt(i);
+		ret.writeUInt16BE(code, i * 2);
+	}
+	return ret;
+}
+
+export function uint8ArrayToStringUTF16BE(arr: Uint8Array): string {
+	// TextDecoder only supports UTF-8, so we have to do this manually
+	let ret = "";
+	const view = Bytes.view(arr);
+	for (let i = 0; i < arr.length; i += 2) {
+		ret += String.fromCharCode(view.readUInt16BE(i));
+	}
+	return ret;
 }

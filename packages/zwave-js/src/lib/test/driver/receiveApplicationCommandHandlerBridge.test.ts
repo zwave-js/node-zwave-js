@@ -1,7 +1,7 @@
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import type { ThrowingMap } from "@zwave-js/shared";
+import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import ava, { type TestFn } from "ava";
 import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "../../driver/Driver";
@@ -21,7 +21,7 @@ test.beforeEach(async (t) => {
 
 	const { driver, serialport } = await createAndStartDriver({
 		securityKeys: {
-			S0_Legacy: Buffer.alloc(16, 0),
+			S0_Legacy: new Uint8Array(16).fill(0),
 		},
 	});
 
@@ -73,7 +73,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 	});
 	node3.markAsAlive();
 
-	const ACK = Buffer.from([MessageHeaders.ACK]);
+	const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 	const getNoncePromise = node3.commandClasses.Security.getNonce();
 	await wait(1);
@@ -83,7 +83,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 	// └─[SecurityCCNonceGet]
 	t.deepEqual(
 		serialport.lastWrite,
-		Buffer.from("0109001303029840250118", "hex"),
+		Bytes.from("0109001303029840250118", "hex"),
 	);
 	await wait(10);
 	serialport.receiveData(ACK);
@@ -92,7 +92,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 
 	// « [RES] [SendData]
 	//     was sent: true
-	serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+	serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 	// » [ACK]
 	t.deepEqual(serialport.lastWrite, ACK);
 
@@ -102,7 +102,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 	//     callback id:     1
 	//     transmit status: OK
 	serialport.receiveData(
-		Buffer.from(
+		Bytes.from(
 			"011800130100000100c17f7f7f7f000003000000000301000034",
 			"hex",
 		),
@@ -114,10 +114,10 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 
 	// BridgeApplicationCommandRequest
 	serialport.receiveData(
-		Buffer.from("011300a80001030a98803e55e4b714973b9e00c18b", "hex"),
+		Bytes.from("011300a80001030a98803e55e4b714973b9e00c18b", "hex"),
 	);
 	// » [ACK]
 	t.deepEqual(serialport.lastWrite, ACK);
 
-	t.deepEqual(await getNoncePromise, Buffer.from("3e55e4b714973b9e", "hex"));
+	t.deepEqual(await getNoncePromise, Bytes.from("3e55e4b714973b9e", "hex"));
 });

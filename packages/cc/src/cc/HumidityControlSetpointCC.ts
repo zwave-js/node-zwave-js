@@ -23,6 +23,7 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -551,9 +552,9 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public value: number;
 	public scale: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.setpointType & 0b1111]),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
 		return super.serialize(ctx);
@@ -716,8 +717,8 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.setpointType & 0b1111]);
 		return super.serialize(ctx);
 	}
 
@@ -825,7 +826,7 @@ export class HumidityControlSetpointCCScaleSupportedReport
 	): HumidityControlSetpointCCScaleSupportedReport {
 		validatePayload(raw.payload.length >= 1);
 		const supportedScales = parseBitMask(
-			Buffer.from([raw.payload[0] & 0b1111]),
+			Bytes.from([raw.payload[0] & 0b1111]),
 			0,
 		);
 
@@ -886,8 +887,8 @@ export class HumidityControlSetpointCCScaleSupportedGet
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.setpointType & 0b1111]);
 		return super.serialize(ctx);
 	}
 
@@ -1033,8 +1034,8 @@ export class HumidityControlSetpointCCCapabilitiesGet
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.setpointType & 0b1111]);
 		return super.serialize(ctx);
 	}
 

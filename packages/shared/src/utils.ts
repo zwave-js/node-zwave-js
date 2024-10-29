@@ -76,11 +76,6 @@ export function isEnumMember(enumeration: unknown, value: number): boolean {
 	return typeof (enumeration as any)[value] === "string";
 }
 
-/** Skips the first n bytes of a buffer and returns the rest */
-export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.subarray(n));
-}
-
 /**
  * Returns a throttled version of the given function. No matter how often the throttled version is called,
  * the underlying function is only called at maximum every `intervalMs` milliseconds.

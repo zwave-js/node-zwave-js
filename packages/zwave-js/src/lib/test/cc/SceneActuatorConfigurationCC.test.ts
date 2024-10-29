@@ -7,11 +7,12 @@ import {
 	SceneActuatorConfigurationCommand,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Scene Actuator Configuration"], // CC
 		]),
 		payload,
@@ -24,7 +25,7 @@ test("the Get command should serialize correctly", (t) => {
 		sceneId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			SceneActuatorConfigurationCommand.Get, // CC Command
 			1,
 		]),
@@ -40,7 +41,7 @@ test("the Set command should serialize correctly with level", (t) => {
 		dimmingDuration: Duration.parseSet(0x05)!,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			SceneActuatorConfigurationCommand.Set, // CC Command
 			2,
 			0x05, // dimmingDuration
@@ -59,7 +60,7 @@ test("the Set command should serialize correctly with undefined level", (t) => {
 		dimmingDuration: Duration.parseSet(0x05)!,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			SceneActuatorConfigurationCommand.Set, // CC Command
 			2, // nodeId
 			0x05, // dimmingDuration
@@ -72,7 +73,7 @@ test("the Set command should serialize correctly with undefined level", (t) => {
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			SceneActuatorConfigurationCommand.Report, // CC Command
 			55, // sceneId
 			0x50, // level
@@ -92,7 +93,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of SceneActuatorConfigurationCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

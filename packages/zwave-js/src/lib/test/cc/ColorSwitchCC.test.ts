@@ -18,11 +18,12 @@ import {
 	assertZWaveError,
 } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Color Switch"], // CC
 		]),
 		payload,
@@ -34,7 +35,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
@@ -43,7 +44,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 
 test("the SupportedReport command should deserialize correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.SupportedReport, // CC Command
 			0b0001_1111,
 			0b0000_0001,
@@ -76,7 +77,7 @@ test("the Get command should serialize correctly", (t) => {
 		colorComponent: ColorComponent.Red,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.Get, // CC Command
 			2, // Color Component
 		]),
@@ -86,7 +87,7 @@ test("the Get command should serialize correctly", (t) => {
 
 test("the Report command should deserialize correctly (version 1)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
 			0b0000_0010, // color: red
 			0b1111_1111, // value: 255
@@ -106,7 +107,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 
 test("the Report command should deserialize correctly (version 3)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
 			0b0000_0010, // color: red
 			0b1000_0000, // currentValue: 128
@@ -135,7 +136,7 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 	});
 
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.Set, // CC Command
 			// WARN: This is sensitive to the order in which javascript serializes the colorTable keys.
 			0b0000_0010, // reserved + count
@@ -165,7 +166,7 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 	});
 
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.Set, // CC Command
 			// WARN: This is sensitive to the order in which javascript serializes the colorTable keys.
 			0b0000_0010, // reserved + count
@@ -195,7 +196,7 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 		duration: new Duration(1, "seconds"),
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.StartLevelChange,
 			0b0010_0000, // up/down: 0, ignoreStartLevel: 1
 			0b0000_0010, // color: red
@@ -219,7 +220,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 	});
 
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ColorSwitchCommand.StopLevelChange, // CC Command
 			0b0000_0010, // color: red
 		]),

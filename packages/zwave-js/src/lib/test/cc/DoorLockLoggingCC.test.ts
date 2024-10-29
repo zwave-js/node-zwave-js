@@ -8,11 +8,12 @@ import {
 	DoorLockLoggingEventType,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Door Lock Logging"], // CC
 		]),
 		payload,
@@ -24,7 +25,7 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
@@ -33,7 +34,7 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 
 test("the RecordsCountReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockLoggingCommand.RecordsSupportedReport, // CC Command
 			0x14, // max records supported (20)
 		]),
@@ -53,7 +54,7 @@ test("the RecordGet command should serialize correctly", (t) => {
 		recordNumber: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockLoggingCommand.RecordGet, // CC Command
 			1, // Record Number
 		]),
@@ -63,7 +64,7 @@ test("the RecordGet command should serialize correctly", (t) => {
 
 test("the RecordReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockLoggingCommand.RecordReport, // CC Command
 			7, // record number
 			0x07, // year 1/2

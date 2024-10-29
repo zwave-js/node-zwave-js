@@ -4,14 +4,13 @@ import {
 	RouteProtocolDataRate,
 	protocolDataRateMask,
 } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 
 const ROUTE_SIZE = MAX_REPEATERS + 1;
 export const ROUTECACHE_SIZE = 2 * ROUTE_SIZE;
 export const EMPTY_ROUTECACHE_FILL = 0xff;
-export const emptyRouteCache = Buffer.alloc(
-	ROUTECACHE_SIZE,
-	EMPTY_ROUTECACHE_FILL,
-);
+export const emptyRouteCache = new Uint8Array(ROUTECACHE_SIZE)
+	.fill(EMPTY_ROUTECACHE_FILL);
 
 enum Beaming {
 	"1000ms" = 0x40,
@@ -30,7 +29,7 @@ export interface RouteCache {
 	nlwr: Route;
 }
 
-export function parseRoute(buffer: Buffer, offset: number): Route {
+export function parseRoute(buffer: Uint8Array, offset: number): Route {
 	const routeConf = buffer[offset + MAX_REPEATERS];
 	const ret: Route = {
 		beaming: (Beaming[routeConf & 0x60] ?? false) as FLiRS,
@@ -43,8 +42,8 @@ export function parseRoute(buffer: Buffer, offset: number): Route {
 	return ret;
 }
 
-export function encodeRoute(route: Route | undefined): Buffer {
-	const ret = Buffer.alloc(ROUTE_SIZE, 0);
+export function encodeRoute(route: Route | undefined): Bytes {
+	const ret = new Bytes(ROUTE_SIZE).fill(0);
 	if (route) {
 		if (route.repeaterNodeIDs) {
 			for (

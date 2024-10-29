@@ -23,7 +23,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)
@@ -77,7 +77,7 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase {
 	public nodeId: number;
 	public destinationNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		const destinationNodeId = encodeNodeID(
@@ -85,10 +85,10 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase {
 			ctx.nodeIdType,
 		);
 
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
 			destinationNodeId,
-			Buffer.from([this.callbackId]),
+			Bytes.from([this.callbackId]),
 		]);
 
 		return super.serialize(ctx);

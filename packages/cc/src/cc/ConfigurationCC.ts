@@ -38,6 +38,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -279,7 +280,7 @@ function reInterpretSignedValue(
 	targetFormat: ConfigValueFormat,
 ): ConfigValue {
 	// Re-interpret the value with the new format
-	const raw = Buffer.allocUnsafe(valueSize);
+	const raw = new Bytes(valueSize);
 	serializeValue(raw, 0, valueSize, ConfigValueFormat.SignedInteger, value);
 	return parseValue(raw, valueSize, targetFormat);
 }
@@ -1753,10 +1754,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.parameter, this.valueSize & 0b111]),
-			Buffer.allocUnsafe(this.valueSize),
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.parameter, this.valueSize & 0b111]),
+			new Bytes(this.valueSize),
 		]);
 		serializeValue(
 			this.payload,
@@ -1826,8 +1827,8 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	public parameter: number;
 	public allowUnexpectedResponse: boolean;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.from([this.parameter]);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = Bytes.from([this.parameter]);
 		return super.serialize(ctx);
 	}
 
@@ -1906,10 +1907,10 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	public valueFormat: ConfigValueFormat | undefined;
 	public value: ConfigValue | undefined;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const valueSize = this.resetToDefault ? 1 : this.valueSize!;
 		const payloadLength = 2 + valueSize;
-		this.payload = Buffer.alloc(payloadLength, 0);
+		this.payload = Bytes.alloc(payloadLength, 0);
 		this.payload[0] = this.parameter;
 		this.payload[1] = (this.resetToDefault ? 0b1000_0000 : 0)
 			| (valueSize & 0b111);
@@ -2069,10 +2070,10 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return this._handshake;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
+	public serialize(ctx: CCEncodingContext): Bytes {
 		const valueSize = this._resetToDefault ? 1 : this.valueSize;
 		const payloadLength = 4 + valueSize * this.parameters.length;
-		this.payload = Buffer.alloc(payloadLength, 0);
+		this.payload = Bytes.alloc(payloadLength, 0);
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
 		this.payload[3] = (this._resetToDefault ? 0b1000_0000 : 0)
@@ -2320,8 +2321,8 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return this._parameters;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(3);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(3);
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
 		return super.serialize(ctx);
@@ -2417,12 +2418,12 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		const nameBuffer = Buffer.from(this.name, "utf8");
-		this.payload = Buffer.allocUnsafe(3 + nameBuffer.length);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		const nameBuffer = Bytes.from(this.name, "utf8");
+		this.payload = new Bytes(3 + nameBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
-		nameBuffer.copy(this.payload, 3);
+		this.payload.set(nameBuffer, 3);
 
 		return super.serialize(ctx);
 	}
@@ -2483,8 +2484,8 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize(ctx);
 	}
@@ -2592,12 +2593,12 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		const infoBuffer = Buffer.from(this.info, "utf8");
-		this.payload = Buffer.allocUnsafe(3 + infoBuffer.length);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		const infoBuffer = Bytes.from(this.info, "utf8");
+		this.payload = new Bytes(3 + infoBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
-		infoBuffer.copy(this.payload, 3);
+		this.payload.set(infoBuffer, 3);
 
 		return super.serialize(ctx);
 	}
@@ -2658,8 +2659,8 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize(ctx);
 	}
@@ -2906,8 +2907,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public isAdvanced: MaybeNotKnown<boolean>;
 	public noBulkSupport: MaybeNotKnown<boolean>;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(
 			3 // preamble
 				+ 3 * this.valueSize // min, max, default value
 				+ 2 // next parameter
@@ -3020,8 +3021,8 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
+	public serialize(ctx: CCEncodingContext): Bytes {
+		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize(ctx);
 	}
@@ -3063,7 +3064,7 @@ function isSafeValue(
 
 /** Interprets values from the payload depending on the value format */
 function parseValue(
-	raw: Buffer,
+	raw: Bytes,
 	size: number,
 	format: ConfigValueFormat,
 ): ConfigValue {
@@ -3110,7 +3111,7 @@ function tryCatchOutOfBoundsError(
 
 /** Serializes values into the payload according to the value format */
 function serializeValue(
-	payload: Buffer,
+	payload: Bytes,
 	offset: number,
 	size: number,
 	format: ConfigValueFormat,

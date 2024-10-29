@@ -1,5 +1,6 @@
 import { CRC16_CCITT, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { XModemMessageHeaders } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 export enum BootloaderState {
 	Menu,
@@ -9,7 +10,7 @@ export enum BootloaderState {
 /** Encapsulates information about the currently active bootloader */
 export class Bootloader {
 	public constructor(
-		private writeSerial: (data: Buffer) => Promise<void>,
+		private writeSerial: (data: Uint8Array) => Promise<void>,
 		public readonly version: string,
 		options: { num: number; option: string }[],
 	) {
@@ -40,33 +41,33 @@ export class Bootloader {
 
 	public async beginUpload(): Promise<void> {
 		await this.writeSerial(
-			Buffer.from(this.uploadOption.toString(), "ascii"),
+			Bytes.from(this.uploadOption.toString(), "ascii"),
 		);
 	}
 
 	public async runApplication(): Promise<void> {
-		await this.writeSerial(Buffer.from(this.runOption.toString(), "ascii"));
+		await this.writeSerial(Bytes.from(this.runOption.toString(), "ascii"));
 	}
 
 	public async uploadFragment(
 		fragmentNumber: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<void> {
-		const command = Buffer.concat([
-			Buffer.from([
+		const command = Bytes.concat([
+			Bytes.from([
 				XModemMessageHeaders.SOF,
 				fragmentNumber & 0xff,
 				0xff - (fragmentNumber & 0xff),
 			]),
 			data,
-			Buffer.allocUnsafe(2),
+			new Bytes(2),
 		]);
-		command.writeUint16BE(CRC16_CCITT(data, 0x0000), command.length - 2);
+		command.writeUInt16BE(CRC16_CCITT(data, 0x0000), command.length - 2);
 
 		await this.writeSerial(command);
 	}
 
 	public async finishUpload(): Promise<void> {
-		await this.writeSerial(Buffer.from([XModemMessageHeaders.EOT]));
+		await this.writeSerial(Bytes.from([XModemMessageHeaders.EOT]));
 	}
 }

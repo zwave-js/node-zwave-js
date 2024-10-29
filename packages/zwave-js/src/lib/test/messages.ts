@@ -1,8 +1,9 @@
 import type { Message } from "@zwave-js/serial";
 import { MessageType } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 
 const defaultImplementations = {
-	serialize: () => Buffer.from([1, 2, 3]),
+	serialize: () => Bytes.from([1, 2, 3]),
 	tryGetNode: () => undefined,
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),

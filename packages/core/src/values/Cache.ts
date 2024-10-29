@@ -1,4 +1,9 @@
-import type { JSONObject } from "@zwave-js/shared";
+import {
+	type JSONObject,
+	hexToUint8Array,
+	isUint8Array,
+	uint8ArrayToHex,
+} from "@zwave-js/shared/safe";
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Duration } from "./Duration";
@@ -48,10 +53,10 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 				: valueAsJSON),
 			[SPECIAL_TYPE_KEY]: "duration",
 		};
-	} else if (Buffer.isBuffer(value)) {
+	} else if (isUint8Array(value)) {
 		return {
 			[SPECIAL_TYPE_KEY]: "buffer",
-			data: value.toString("hex"),
+			data: uint8ArrayToHex(value),
 		};
 	} else if (
 		typeof value === "number"
@@ -86,7 +91,7 @@ export function deserializeCacheValue(value: SerializedValue): unknown {
 		} else if (specialType === "duration") {
 			return new Duration(value.value ?? 1, value.unit);
 		} else if (specialType === "buffer") {
-			return Buffer.from(value.data, "hex");
+			return hexToUint8Array(value.data);
 		}
 	}
 	return value;

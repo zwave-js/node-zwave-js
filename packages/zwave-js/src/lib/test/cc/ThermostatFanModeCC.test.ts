@@ -7,11 +7,12 @@ import {
 	ThermostatFanModeCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Thermostat Fan Mode"], // CC
 		]),
 		payload,
@@ -21,7 +22,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the Get command should serialize correctly", (t) => {
 	const cc = new ThermostatFanModeCCGet({ nodeId: 5 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ThermostatFanModeCommand.Get, // CC Command
 		]),
 	);
@@ -35,7 +36,7 @@ test("the Set command should serialize correctly (off = false)", (t) => {
 		off: false,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ThermostatFanModeCommand.Set, // CC Command
 			0x04, // target value
 		]),
@@ -50,7 +51,7 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 		off: true,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ThermostatFanModeCommand.Set, // CC Command
 			0b1000_0100, // target value
 		]),
@@ -60,7 +61,7 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 
 test("the Report command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			ThermostatFanModeCommand.Report, // CC Command
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),

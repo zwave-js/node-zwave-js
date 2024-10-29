@@ -41,7 +41,7 @@ export type SerialAPICommandError =
 
 export interface SerialAPICommandContext {
 	msg: Message;
-	data: Buffer;
+	data: Uint8Array;
 	attempts: number;
 	maxAttempts: number;
 	lastError?: SerialAPICommandError;
@@ -88,7 +88,7 @@ export type SerialAPICommandDoneData =
 
 export interface SerialAPICommandServiceImplementations {
 	timestamp: () => number;
-	sendData: (data: Buffer) => Promise<void>;
+	sendData: (data: Uint8Array) => Promise<void>;
 	sendDataAbort: () => Promise<void>;
 	notifyRetry: (
 		lastError: SerialAPICommandError | undefined,
@@ -141,7 +141,7 @@ export type SerialAPICommandMachineParams = {
 
 export function getSerialAPICommandMachineConfig(
 	message: Message,
-	messageData: Buffer,
+	messageData: Uint8Array,
 	{
 		timestamp,
 		logOutgoingMessage,
@@ -450,7 +450,7 @@ export function getSerialAPICommandMachineOptions(
 
 export function createSerialAPICommandMachine(
 	message: Message,
-	messageData: Buffer,
+	messageData: Uint8Array,
 	implementations: SerialAPICommandServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {

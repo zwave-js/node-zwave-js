@@ -4,6 +4,7 @@ import {
 } from "@zwave-js/core";
 import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
 import { pseudoRandomBytes } from "node:crypto";
@@ -113,7 +114,7 @@ for (const msg of ["ACK", "NAK", "CAN"] as const) {
 
 test.serial("logs raw data correctly: short buffer, inbound", (t) => {
 	const { serialLogger, spyTransport } = t.context;
-	serialLogger.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
+	serialLogger.data("inbound", Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8]));
 	const alignRight = " ".repeat(80 - 30);
 	assertMessage(t, spyTransport, {
 		message: `« 0x0102030405060708 ${alignRight}(8 bytes)`,
@@ -122,7 +123,7 @@ test.serial("logs raw data correctly: short buffer, inbound", (t) => {
 
 test.serial("logs raw data correctly: short buffer, outbound", (t) => {
 	const { serialLogger, spyTransport } = t.context;
-	serialLogger.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
+	serialLogger.data("outbound", Uint8Array.from([0x55, 4, 3, 2, 1]));
 	const alignRight = " ".repeat(80 - 24);
 	assertMessage(t, spyTransport, {
 		message: `» 0x5504030201 ${alignRight}(5 bytes)`,
@@ -162,7 +163,7 @@ test.serial("correctly groups very long lines", (t) => {
 
 test.serial("logs discarded data correctly", (t) => {
 	const { serialLogger, spyTransport } = t.context;
-	serialLogger.discarded(Buffer.from("02020202020202", "hex"));
+	serialLogger.discarded(Bytes.from("02020202020202", "hex"));
 	const alignRight = " ".repeat(80 - 53);
 	assertMessage(t, spyTransport, {
 		message:

@@ -90,7 +90,7 @@ export class NVM3Adapter implements NVMAdapter {
 	} | undefined;
 
 	/** A list of pending changes that haven't been written to the NVM yet. `null` indicates a deleted entry. */
-	private _pendingChanges: Map<number, Buffer | null> = new Map();
+	private _pendingChanges: Map<number, Uint8Array | null> = new Map();
 
 	private getFileVersion(fileId: number): string {
 		if (
@@ -174,7 +174,7 @@ export class NVM3Adapter implements NVMAdapter {
 		if (!skipInit && !this._initialized) await this.init();
 
 		// Prefer pending changes over the actual NVM, so changes can be composed
-		let data: Buffer | null | undefined;
+		let data: Uint8Array | null | undefined;
 		if (this._pendingChanges.has(fileId)) {
 			data = this._pendingChanges.get(fileId);
 		} else {

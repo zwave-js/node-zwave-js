@@ -96,7 +96,7 @@ export interface NVMEntry {
 export type ResolvedNVMEntry = Required<NVMEntry>;
 
 export type NVMData =
-	| Buffer
+	| Uint8Array
 	| number
 	| NVMDescriptor
 	| number[]
