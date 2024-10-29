@@ -1396,7 +1396,7 @@ export class ZWaveProtocolCCAssignSUCReturnRoutePriority
 
 // @publicAPI
 export interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions {
-	nwiHomeId: Bytes;
+	nwiHomeId: Uint8Array;
 }
 
 @CCCommand(ZWaveProtocolCommand.SmartStartIncludedNodeInformation)
@@ -1423,7 +1423,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 		ctx: CCParsingContext,
 	): ZWaveProtocolCCSmartStartIncludedNodeInformation {
 		validatePayload(raw.payload.length >= 4);
-		const nwiHomeId: Bytes = raw.payload.subarray(0, 4);
+		const nwiHomeId = raw.payload.subarray(0, 4);
 
 		return new ZWaveProtocolCCSmartStartIncludedNodeInformation({
 			nodeId: ctx.sourceNodeId,
@@ -1431,7 +1431,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 		});
 	}
 
-	public nwiHomeId: Bytes;
+	public nwiHomeId: Uint8Array;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from(this.nwiHomeId);

@@ -215,7 +215,7 @@ function extractFirmwareHEX(dataHEX: Uint8Array | string): Firmware {
 		}
 		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(dataHEX);
 		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
-		let data: Bytes = Bytes.from([]);
+		let data: Bytes = new Bytes();
 		for (const [offset, chunk] of memMap.entries()) {
 			data = Bytes.concat([
 				data,

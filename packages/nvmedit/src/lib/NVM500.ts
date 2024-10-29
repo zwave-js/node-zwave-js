@@ -163,12 +163,12 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 			if (entry.type === NVMEntryType.NVMDescriptor) {
 				const entryData = await this.readRawEntry(resolvedEntry);
 				// NVMDescriptor is always a single entry
-				nvmDescriptor = parseNVMDescriptor(Bytes.view(entryData[0]));
+				nvmDescriptor = parseNVMDescriptor(entryData[0]);
 			} else if (entry.type === NVMEntryType.NVMModuleDescriptor) {
 				const entryData = await this.readRawEntry(resolvedEntry);
 				// NVMModuleDescriptor is always a single entry
 				const descriptor = parseNVMModuleDescriptor(
-					Bytes.view(entryData[0]),
+					entryData[0],
 				);
 				if (descriptor.size !== moduleSize) {
 					throw new ZWaveError(

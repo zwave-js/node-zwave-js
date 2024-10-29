@@ -12,7 +12,7 @@ export interface ApplicationNodeInformation {
 }
 
 export function parseApplicationNodeInformation(
-	nif: Bytes,
+	nif: Uint8Array,
 ): ApplicationNodeInformation {
 	validatePayload(nif.length >= 2);
 	return {
@@ -38,7 +38,7 @@ export interface NodeUpdatePayload extends ApplicationNodeInformation {
 }
 
 export function parseNodeUpdatePayload(
-	nif: Bytes,
+	nif: Uint8Array,
 	nodeIdType: NodeIDType = NodeIDType.Short,
 ): NodeUpdatePayload {
 	let offset = 0;

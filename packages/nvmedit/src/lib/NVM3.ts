@@ -773,10 +773,11 @@ async function readPageHeader(
 }
 
 function tryGetVersionAndEraseCount(
-	header: Bytes,
+	header: Uint8Array,
 ): { version: number; eraseCount: number } {
-	const version = header.readUInt16LE(0);
-	const magic = header.readUInt16LE(2);
+	const buffer = Bytes.view(header);
+	const version = buffer.readUInt16LE(0);
+	const magic = buffer.readUInt16LE(2);
 	if (magic !== NVM3_PAGE_MAGIC) {
 		throw new ZWaveError(
 			"Not a valid NVM3 page!",
@@ -791,12 +792,12 @@ function tryGetVersionAndEraseCount(
 	}
 
 	// The erase counter is saved twice, once normally, once inverted
-	let eraseCount = header.readUInt32LE(4);
+	let eraseCount = buffer.readUInt32LE(4);
 	const eraseCountCode = eraseCount >>> NVM3_PAGE_COUNTER_SIZE;
 	eraseCount &= NVM3_PAGE_COUNTER_MASK;
 	validateBergerCode(eraseCount, eraseCountCode, NVM3_PAGE_COUNTER_SIZE);
 
-	let eraseCountInv = header.readUInt32LE(8);
+	let eraseCountInv = buffer.readUInt32LE(8);
 	const eraseCountInvCode = eraseCountInv >>> NVM3_PAGE_COUNTER_SIZE;
 	eraseCountInv &= NVM3_PAGE_COUNTER_MASK;
 	validateBergerCode(
@@ -826,7 +827,7 @@ async function isValidPageHeaderAtOffset(
 	const { buffer } = await io.read(offset, NVM3_PAGE_HEADER_SIZE);
 
 	try {
-		tryGetVersionAndEraseCount(Bytes.view(buffer));
+		tryGetVersionAndEraseCount(buffer);
 		return true;
 	} catch {
 		return false;

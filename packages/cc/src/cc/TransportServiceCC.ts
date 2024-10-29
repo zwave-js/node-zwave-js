@@ -120,14 +120,17 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 
 		// If there is a header extension, read it
 		const hasHeaderExtension = !!(raw.payload[2] & 0b1000);
-		let headerExtension: Bytes | undefined;
+		let headerExtension: Uint8Array | undefined;
 
 		if (hasHeaderExtension) {
 			const extLength = raw.payload[3];
 			headerExtension = raw.payload.subarray(4, 4 + extLength);
 			payloadOffset += 1 + extLength;
 		}
-		const partialDatagram: Bytes = raw.payload.subarray(payloadOffset, -2);
+		const partialDatagram: Uint8Array = raw.payload.subarray(
+			payloadOffset,
+			-2,
+		);
 
 		// A node supporting the Transport Service Command Class, version 2
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.

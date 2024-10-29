@@ -560,7 +560,7 @@ export function nvmObjectsToJSON(
 	const controller: NVMJSONController = {
 		protocolVersion,
 		applicationVersion,
-		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
+		homeId: buffer2hex(controllerInfoFile.homeId),
 		...pick(controllerInfoFile, controllerProps),
 		...pick(applicationTypeFile, [
 			"isListening",
@@ -906,7 +906,7 @@ export async function nvmToJSON(
 	const controller: NVMJSONController = {
 		protocolVersion,
 		applicationVersion,
-		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
+		homeId: buffer2hex(controllerInfoFile.homeId),
 		...pick(controllerInfoFile, [
 			"nodeId",
 			"lastNodeId",

@@ -197,7 +197,7 @@ function getValueLabel(
 	return ret;
 }
 
-function parseMeterValueAndInfo(data: Bytes, offset: number): {
+function parseMeterValueAndInfo(data: Uint8Array, offset: number): {
 	type: number;
 	rateType: RateType;
 	scale1: number;
@@ -260,7 +260,7 @@ function encodeMeterValueAndInfo(
 
 function parseScale(
 	scale1: number,
-	data: Bytes,
+	data: Uint8Array,
 	scale2Offset: number,
 ): number {
 	if (scale1 === 7) {

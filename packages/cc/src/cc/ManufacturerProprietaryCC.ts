@@ -65,28 +65,28 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	@validateArgs()
 	public async sendData(
 		manufacturerId: number,
-		data?: Bytes,
+		data?: Uint8Array,
 	): Promise<void> {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpointIndex: this.endpoint.index,
 			manufacturerId,
 		});
-		cc.payload = data ?? new Bytes();
+		cc.payload = data ? Bytes.view(data) : new Bytes();
 
 		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async sendAndReceiveData(manufacturerId: number, data?: Bytes) {
+	public async sendAndReceiveData(manufacturerId: number, data?: Uint8Array) {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpointIndex: this.endpoint.index,
 			manufacturerId,
 			unspecifiedExpectsResponse: true,
 		});
-		cc.payload = data ?? new Bytes();
+		cc.payload = data ? Bytes.view(data) : new Bytes();
 
 		const response = await this.host.sendCommand<
 			ManufacturerProprietaryCC

@@ -1338,7 +1338,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		const bitmask = this.supportedProperties.length > 0
 			? encodeBitMask(this.supportedProperties, undefined, 0)
-			: Bytes.from([]);
+			: new Bytes();
 		this.payload = Bytes.concat([
 			Bytes.from([
 				this.indicatorId,

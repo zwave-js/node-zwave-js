@@ -491,7 +491,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly sequenceNumber: number;
 	public readonly dataType: EntryControlDataTypes;
 	public readonly eventType: EntryControlEventTypes;
-	public readonly eventData?: Bytes | string;
+	public readonly eventData?: Uint8Array | string;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {

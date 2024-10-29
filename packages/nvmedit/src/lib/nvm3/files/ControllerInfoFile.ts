@@ -104,7 +104,7 @@ export class ControllerInfoFile extends NVMFile {
 		}
 	}
 
-	public homeId: Bytes;
+	public homeId: Uint8Array;
 	public nodeId: number;
 	public lastNodeId: number;
 	public staticControllerNodeId: number;

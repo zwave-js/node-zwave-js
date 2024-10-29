@@ -207,7 +207,7 @@ export const VersionCCValues = Object.freeze({
 	}),
 });
 
-function parseVersion(buffer: Bytes): string {
+function parseVersion(buffer: Uint8Array): string {
 	if (buffer[0] === 0 && buffer[1] === 0 && buffer[2] === 0) return "unused";
 	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }

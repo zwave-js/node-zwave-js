@@ -17,9 +17,10 @@ export interface NVMDescriptor {
 }
 
 export function parseNVMDescriptor(
-	buffer: Bytes,
+	data: Uint8Array,
 	offset: number = 0,
 ): NVMDescriptor {
+	const buffer = Bytes.view(data);
 	return {
 		manufacturerID: buffer.readUInt16BE(offset),
 		firmwareID: buffer.readUInt16BE(offset + 2),
@@ -63,9 +64,10 @@ export interface NVMModuleDescriptor {
 }
 
 export function parseNVMModuleDescriptor(
-	buffer: Bytes,
+	data: Uint8Array,
 	offset: number = 0,
 ): NVMModuleDescriptor {
+	const buffer = Bytes.view(data);
 	return {
 		size: buffer.readUInt16BE(offset),
 		type: buffer[offset + 2],

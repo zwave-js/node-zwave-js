@@ -86,7 +86,7 @@ test("computeMAC() -> should work correctly (part 2)", (t) => {
 test("computeCMAC() -> should work correctly (part 1)", (t) => {
 	// Test vector taken from https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_CMAC.pdf
 	const key = Bytes.from("2B7E151628AED2A6ABF7158809CF4F3C", "hex");
-	const plaintext = Bytes.from([]);
+	const plaintext = new Bytes();
 	const expected = Bytes.from("BB1D6929E95937287FA37D129B756746", "hex");
 
 	t.deepEqual(computeCMAC(plaintext, key), expected);

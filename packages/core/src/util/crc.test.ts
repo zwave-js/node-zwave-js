@@ -5,7 +5,7 @@ import { CRC16_CCITT } from "./crc";
 // Test cases based on http://srecord.sourceforge.net/crc16-ccitt.html
 
 test("CRC16_CCITT() works correctly -> input: (empty)", (t) => {
-	t.is(CRC16_CCITT(Bytes.from([])), 0x1d0f);
+	t.is(CRC16_CCITT(new Bytes()), 0x1d0f);
 });
 
 test("CRC16_CCITT() works correctly -> input: A", (t) => {

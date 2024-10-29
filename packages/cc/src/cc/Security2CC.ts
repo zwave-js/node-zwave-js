@@ -1842,7 +1842,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			),
 		]);
 		const serializedCC = this.encapsulated?.serialize(ctx)
-			?? Bytes.from([]);
+			?? new Bytes();
 		const plaintextPayload = Bytes.concat([
 			...encryptedExtensions.map((e, index) =>
 				e.serialize(index < encryptedExtensions.length - 1)

@@ -146,7 +146,7 @@ function serializeMultiChannelAssociationDestination(
 	return payload;
 }
 
-function deserializeMultiChannelAssociationDestination(data: Bytes): {
+function deserializeMultiChannelAssociationDestination(data: Uint8Array): {
 	nodeIds: number[];
 	endpoints: EndpointAddress[];
 } {

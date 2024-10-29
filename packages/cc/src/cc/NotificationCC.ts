@@ -1034,7 +1034,7 @@ export class NotificationCCReport extends NotificationCC {
 
 		const containsSeqNum = !!(raw.payload[6] & 0b1000_0000);
 		const numEventParams = raw.payload[6] & 0b11111;
-		let eventParameters: Bytes | undefined;
+		let eventParameters: Uint8Array | undefined;
 		if (numEventParams > 0) {
 			validatePayload(raw.payload.length >= 7 + numEventParams);
 			eventParameters = raw.payload.subarray(7, 7 + numEventParams);
