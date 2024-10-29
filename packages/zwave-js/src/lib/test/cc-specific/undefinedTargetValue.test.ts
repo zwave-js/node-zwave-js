@@ -4,8 +4,8 @@ import {
 } from "@zwave-js/cc/BinarySwitchCC";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

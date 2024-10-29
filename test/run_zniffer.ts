@@ -1,4 +1,4 @@
-import { setTimeout as _wait } from "node:timers/promises";
+import { wait as _wait } from "alcalzone-shared/async";
 import "reflect-metadata";
 import { Zniffer } from "zwave-js";
 

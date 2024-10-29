@@ -50,11 +50,11 @@ import {
 } from "@zwave-js/serial/serialapi";
 import { type ContainsCC, containsCC } from "@zwave-js/serial/serialapi";
 import { getErrorMessage } from "@zwave-js/shared";
+import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { setTimeout as wait } from "node:timers/promises";
 import type { Driver } from "./Driver";
 import type { MessageGenerator } from "./Transaction";
 
@@ -332,7 +332,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation<
 				if (isFirstTransferredSegment) {
 					isFirstTransferredSegment = false;
 				} else if (segmentDelay) {
-					await wait(segmentDelay, undefined, { ref: false });
+					await wait(segmentDelay, true);
 				}
 				const segment = unsentSegments.shift()!;
 
@@ -409,7 +409,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation<
 						level: "debug",
 					});
 
-					await wait(waitTime, undefined, { ref: false });
+					await wait(waitTime, true);
 					continue attempts;
 				}
 

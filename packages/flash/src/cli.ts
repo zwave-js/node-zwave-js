@@ -1,7 +1,7 @@
 import { ZWaveErrorCodes, isZWaveError } from "@zwave-js/core/safe";
+import { wait } from "alcalzone-shared/async";
 import fs from "fs-extra";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import yargs from "yargs";
 import {
 	ControllerFirmwareUpdateStatus,

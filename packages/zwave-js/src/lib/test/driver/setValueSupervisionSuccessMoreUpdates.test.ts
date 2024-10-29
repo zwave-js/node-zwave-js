@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
 import { integrationTest } from "../integrationTestSuite";
 

@@ -1,7 +1,7 @@
 import { BinarySwitchCCSet, BinarySwitchCCValues } from "@zwave-js/cc";
 import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
 import { MockZWaveFrameType, ccCaps } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 // Regression test for #5844

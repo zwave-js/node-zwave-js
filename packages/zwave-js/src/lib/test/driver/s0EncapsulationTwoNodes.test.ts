@@ -15,7 +15,7 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { setTimeout as wait } from "node:timers/promises";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
 integrationTest(

@@ -20,8 +20,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { setTimeout as wait } from "node:timers/promises";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
