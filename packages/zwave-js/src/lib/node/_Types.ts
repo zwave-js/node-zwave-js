@@ -168,7 +168,7 @@ export interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	dataType: EntryControlDataTypes;
 	/** A human-readable label for the data type */
 	dataTypeLabel: string;
-	eventData?: Buffer | string;
+	eventData?: Uint8Array | string;
 }
 
 /**

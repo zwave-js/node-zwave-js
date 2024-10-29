@@ -7,11 +7,12 @@ import {
 	LanguageCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses.Language, // CC
 		]),
 		payload,
@@ -21,7 +22,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 test("the Get command should serialize correctly", (t) => {
 	const cc = new LanguageCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			LanguageCommand.Get, // CC Command
 		]),
 	);
@@ -34,7 +35,7 @@ test("the Set command should serialize correctly (w/o country code)", (t) => {
 		language: "deu",
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			LanguageCommand.Set, // CC Command
 			// "deu"
 			0x64,
@@ -52,7 +53,7 @@ test("the Set command should serialize correctly (w/ country code)", (t) => {
 		country: "DE",
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			LanguageCommand.Set, // CC Command
 			// "deu"
 			0x64,
@@ -68,7 +69,7 @@ test("the Set command should serialize correctly (w/ country code)", (t) => {
 
 test("the Report command should be deserialized correctly (w/o country code)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			LanguageCommand.Report, // CC Command
 			// "deu"
 			0x64,
@@ -88,7 +89,7 @@ test("the Report command should be deserialized correctly (w/o country code)", (
 
 test("the Report command should be deserialized correctly (w/ country code)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			LanguageCommand.Report, // CC Command
 			// "deu"
 			0x64,
@@ -111,7 +112,7 @@ test("the Report command should be deserialized correctly (w/ country code)", (t
 
 test("deserializing an unsupported command should return an unspecified version of LanguageCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

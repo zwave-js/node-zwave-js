@@ -7,7 +7,7 @@ import {
 } from "@zwave-js/core";
 import { FunctionType } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
-import type { ThrowingMap } from "@zwave-js/shared";
+import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import ava, { type ExecutionContext, type TestFn } from "ava";
 import { setTimeout as wait } from "node:timers/promises";
 import { ZWaveController } from "../controller/Controller";
@@ -61,7 +61,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const broadcast = driver.controller.getBroadcastNode();
-		assertZWaveError(t, () => broadcast.createAPI(0xbada55), {
+		assertZWaveError(t, () => broadcast.createAPI(0xbada55 as any), {
 			errorCode: ZWaveErrorCodes.CC_NoAPI,
 			messageMatches: "no associated API",
 		});
@@ -277,7 +277,7 @@ test.serial(
 		//   └─[BasicCCSet]
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010a0013ff0320016325017c", "hex"),
+			Bytes.from("010a0013ff0320016325017c", "hex"),
 		);
 	},
 );
@@ -297,7 +297,7 @@ test.serial(
 		//   └─[BasicCCSet]
 		t.deepEqual(
 			serialport.lastWrite,
-			Buffer.from("010c001402020303200163250181", "hex"),
+			Bytes.from("010c001402020303200163250181", "hex"),
 		);
 	},
 );

@@ -191,7 +191,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	public async sendFirmwareFragment(
 		fragmentNumber: number,
 		isLastFragment: boolean,
-		data: Bytes,
+		data: Uint8Array,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
@@ -741,7 +741,7 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 export interface FirmwareUpdateMetaDataCCReportOptions {
 	isLast: boolean;
 	reportNumber: number;
-	firmwareData: Bytes;
+	firmwareData: Uint8Array;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.Report)
@@ -773,7 +773,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 
 	public isLast: boolean;
 	public reportNumber: number;
-	public firmwareData: Bytes;
+	public firmwareData: Uint8Array;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		const commandBuffer = Bytes.concat([

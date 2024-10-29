@@ -16,11 +16,12 @@ import {
 	isEncapsulatingCommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Multi Channel"], // CC
 		]),
 		payload,
@@ -39,7 +40,7 @@ test("is an encapsulating CommandClass", (t) => {
 test("the EndPointGet command should serialize correctly", (t) => {
 	const cc = new MultiChannelCCEndPointGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelCommand.EndPointGet, // CC Command
 		]),
 	);
@@ -52,7 +53,7 @@ test("the CapabilityGet command should serialize correctly", (t) => {
 		requestedEndpoint: 7,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelCommand.CapabilityGet, // CC Command
 			7, // EndPoint
 		]),
@@ -67,7 +68,7 @@ test("the EndPointFind command should serialize correctly", (t) => {
 		specificClass: 0x02,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelCommand.EndPointFind, // CC Command
 			0x01, // genericClass
 			0x02, // specificClass
@@ -84,7 +85,7 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 	});
 	cc = MultiChannelCC.encapsulate(cc);
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelCommand.CommandEncapsulation, // CC Command
 			0, // source EP
 			7, // destination
@@ -102,7 +103,7 @@ test("the AggregatedMembersGet command should serialize correctly", (t) => {
 		requestedEndpoint: 6,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelCommand.AggregatedMembersGet, // CC Command
 			6, // EndPoint
 		]),
@@ -131,7 +132,7 @@ test("the CommandEncapsulation command should also accept V1CommandEncapsulation
 // test("the Report command (v2) should be deserialized correctly", (t) => {
 // 	const ccData = buildCCBuffer(
 // 		1,
-// 		Buffer.from([
+// 		Uint8Array.from([
 // 			MultiChannelCommand.Report, // CC Command
 // 			55, // current value
 // 			66, // target value
@@ -148,7 +149,7 @@ test("the CommandEncapsulation command should also accept V1CommandEncapsulation
 
 test("deserializing an unsupported command should return an unspecified version of MultiChannelCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

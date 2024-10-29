@@ -15,44 +15,93 @@ import {
 	ZnifferMessageType,
 } from "./Constants";
 
-export type ZnifferMessageConstructor<T extends ZnifferMessage> = new (
-	options: ZnifferMessageOptions,
-) => T;
-
-export type DeserializingZnifferMessageConstructor<T extends ZnifferMessage> =
-	new (
-		options: ZnifferMessageDeserializationOptions,
-	) => T;
-
-export interface ZnifferMessageDeserializationOptions {
-	data: Bytes;
-}
-
-/**
- * Tests whether the given message constructor options contain a buffer for deserialization
- */
-function gotDeserializationOptions(
-	options: Record<any, any> | undefined,
-): options is ZnifferMessageDeserializationOptions {
-	return options != undefined && options.data instanceof Bytes;
-}
+export type ZnifferMessageConstructor<T extends ZnifferMessage> =
+	& typeof ZnifferMessage
+	& {
+		new (
+			options: ZnifferMessageOptions,
+		): T;
+	};
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ZnifferMessageBaseOptions {
 	// Intentionally empty
 }
 
-export interface ZnifferMessageCreationOptions
-	extends ZnifferMessageBaseOptions
-{
-	messageType: ZnifferMessageType;
+export interface ZnifferMessageOptions extends ZnifferMessageBaseOptions {
+	type: ZnifferMessageType;
 	functionType?: ZnifferFunctionType;
 	payload?: Bytes;
 }
 
-export type ZnifferMessageOptions =
-	| ZnifferMessageCreationOptions
-	| ZnifferMessageDeserializationOptions;
+export class ZnifferMessageRaw {
+	public constructor(
+		public readonly type: ZnifferMessageType,
+		public readonly functionType: ZnifferFunctionType | undefined,
+		public readonly payload: Bytes,
+	) {}
+
+	public static parse(data: Uint8Array): ZnifferMessageRaw {
+		// Assume that we're dealing with a complete frame
+		const type = data[0];
+		if (type === ZnifferMessageType.Command) {
+			const functionType = data[1];
+			const length = data[2];
+			const payload = Bytes.view(data.subarray(3, 3 + length));
+
+			return new ZnifferMessageRaw(type, functionType, payload);
+		} else if (type === ZnifferMessageType.Data) {
+			// The ZnifferParser takes care of segmenting frames, so here we
+			// only cut off the type byte from the payload
+			const payload = Bytes.view(data.subarray(1));
+			return new ZnifferMessageRaw(type, undefined, payload);
+		} else {
+			throw new ZWaveError(
+				`Invalid Zniffer message type ${type as any}`,
+				ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			);
+		}
+	}
+
+	public withPayload(payload: Bytes): ZnifferMessageRaw {
+		return new ZnifferMessageRaw(this.type, this.functionType, payload);
+	}
+}
+
+/**
+ * Retrieves the correct constructor for the next message in the given Buffer.
+ * It is assumed that the buffer has been checked beforehand
+ */
+function getZnifferMessageConstructor(
+	raw: ZnifferMessageRaw,
+): ZnifferMessageConstructor<ZnifferMessage> {
+	// We hardcode the list of constructors here, since the Zniffer protocol has
+	// a very limited list of messages
+	if (raw.type === ZnifferMessageType.Command) {
+		switch (raw.functionType) {
+			case ZnifferFunctionType.GetVersion:
+				return ZnifferGetVersionResponse as any;
+			case ZnifferFunctionType.SetFrequency:
+				return ZnifferSetFrequencyResponse;
+			case ZnifferFunctionType.GetFrequencies:
+				return ZnifferGetFrequenciesResponse as any;
+			case ZnifferFunctionType.Start:
+				return ZnifferStartResponse;
+			case ZnifferFunctionType.Stop:
+				return ZnifferStopResponse;
+			case ZnifferFunctionType.SetBaudRate:
+				return ZnifferSetBaudRateResponse;
+			case ZnifferFunctionType.GetFrequencyInfo:
+				return ZnifferGetFrequencyInfoResponse as any;
+			default:
+				return ZnifferMessage;
+		}
+	} else if (raw.type === ZnifferMessageType.Data) {
+		return ZnifferDataMessage as any;
+	} else {
+		return ZnifferMessage;
+	}
+}
 
 /**
  * Represents a Zniffer message for communication with the serial interface
@@ -61,37 +110,31 @@ export class ZnifferMessage {
 	public constructor(
 		options: ZnifferMessageOptions,
 	) {
-		// decide which implementation we follow
-		if (gotDeserializationOptions(options)) {
-			// #1: deserialize from payload
-			const payload = options.data;
+		this.type = options.type;
+		this.functionType = options.functionType;
+		this.payload = options.payload || new Bytes();
+	}
 
-			// Assume that we're dealing with a complete frame
-			this.type = payload[0];
-			if (this.type === ZnifferMessageType.Command) {
-				this.functionType = payload[1];
-				const length = payload[2];
-				this.payload = payload.subarray(3, 3 + length);
-			} else if (this.type === ZnifferMessageType.Data) {
-				// The ZnifferParser takes care of segmenting frames, so here we
-				// only cut off the type byte from the payload
-				this.payload = payload.subarray(1);
-			} else {
-				throw new ZWaveError(
-					`Invalid Zniffer message type ${this.type as any}`,
-					ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				);
-			}
-		} else {
-			this.type = options.messageType;
-			this.functionType = options.functionType;
-			this.payload = options.payload || new Bytes();
-		}
+	public static parse(
+		data: Uint8Array,
+	): ZnifferMessage {
+		const raw = ZnifferMessageRaw.parse(data);
+		const Constructor = getZnifferMessageConstructor(raw);
+		return Constructor.from(raw);
+	}
+
+	/** Creates an instance of the message that is serialized in the given buffer */
+	public static from(raw: ZnifferMessageRaw): ZnifferMessage {
+		return new this({
+			type: raw.type,
+			functionType: raw.functionType,
+			payload: raw.payload,
+		});
 	}
 
 	public type: ZnifferMessageType;
 	public functionType?: ZnifferFunctionType;
-	public payload: Bytes; // TODO: Length limit 255
+	public payload: Bytes;
 
 	/** Serializes this message into a Buffer */
 	public serialize(): Bytes {
@@ -123,52 +166,6 @@ export class ZnifferMessage {
 			);
 		}
 	}
-
-	/**
-	 * Retrieves the correct constructor for the next message in the given Buffer.
-	 * It is assumed that the buffer has been checked beforehand
-	 */
-	public static getConstructor(
-		data: Uint8Array,
-	): ZnifferMessageConstructor<ZnifferMessage> {
-		const type = data[0];
-		// We hardcode the list of constructors here, since the Zniffer protocol has
-		// a very limited list of messages
-		if (type === ZnifferMessageType.Command) {
-			const functionType = data[1];
-			switch (functionType) {
-				case ZnifferFunctionType.GetVersion:
-					return ZnifferGetVersionResponse;
-				case ZnifferFunctionType.SetFrequency:
-					return ZnifferSetFrequencyResponse;
-				case ZnifferFunctionType.GetFrequencies:
-					return ZnifferGetFrequenciesResponse;
-				case ZnifferFunctionType.Start:
-					return ZnifferStartResponse;
-				case ZnifferFunctionType.Stop:
-					return ZnifferStopResponse;
-				case ZnifferFunctionType.SetBaudRate:
-					return ZnifferSetBaudRateResponse;
-				case ZnifferFunctionType.GetFrequencyInfo:
-					return ZnifferGetFrequencyInfoResponse;
-				default:
-					return ZnifferMessage;
-			}
-		} else if (type === ZnifferMessageType.Data) {
-			return ZnifferDataMessage;
-		} else {
-			return ZnifferMessage;
-		}
-	}
-
-	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(
-		options: ZnifferMessageDeserializationOptions,
-	): ZnifferMessage {
-		const Constructor = ZnifferMessage.getConstructor(options.data);
-		const ret = new Constructor(options);
-		return ret;
-	}
 }
 
 function computeChecksumXOR(buffer: Uint8Array): number {
@@ -188,81 +185,112 @@ export interface ZnifferFrameInfo {
 	rssi?: RSSI;
 }
 
+export interface ZnifferDataMessageOptions {
+	frameType: ZnifferFrameType;
+	channel: number;
+	protocolDataRate: ZnifferProtocolDataRate;
+	region: number;
+	rssiRaw: number;
+	payload: Bytes;
+	checksumOK: boolean;
+}
+
 export class ZnifferDataMessage extends ZnifferMessage
 	implements ZnifferFrameInfo
 {
-	public constructor(options: ZnifferMessageOptions) {
-		super(options);
+	public constructor(
+		options: ZnifferDataMessageOptions & ZnifferMessageBaseOptions,
+	) {
+		super({
+			type: ZnifferMessageType.Data,
+			payload: options.payload,
+		});
 
-		if (gotDeserializationOptions(options)) {
-			this.frameType = this.payload[0];
-			// bytes 1-2 are 0
-			this.channel = this.payload[3] >>> 5;
-			this.protocolDataRate = this.payload[3] & 0b11111;
-			const checksumLength =
-				this.protocolDataRate >= ZnifferProtocolDataRate.ZWave_100k
-					? 2
-					: 1;
-			this.region = this.payload[4];
-			this.rssiRaw = this.payload[5];
+		this.frameType = options.frameType;
+		this.channel = options.channel;
+		this.protocolDataRate = options.protocolDataRate;
+		this.region = options.region;
+		this.rssiRaw = options.rssiRaw;
+		this.checksumOK = options.checksumOK;
+	}
 
-			if (this.frameType === ZnifferFrameType.Data) {
-				validatePayload.withReason(
-					`ZnifferDataMessage[6] = ${this.payload[6]}`,
-				)(this.payload[6] === 0x21);
-				validatePayload.withReason(
-					`ZnifferDataMessage[7] = ${this.payload[7]}`,
-				)(this.payload[7] === 0x03);
-				// Length is already validated, so we just skip the length byte
+	public static from(raw: ZnifferMessageRaw): ZnifferDataMessage {
+		const frameType: ZnifferFrameType = raw.payload[0];
 
-				const mpduOffset = 9;
-				const checksum = this.payload.readUIntBE(
-					this.payload.length - checksumLength,
-					checksumLength,
+		// bytes 1-2 are 0
+		const channel = raw.payload[3] >>> 5;
+		const protocolDataRate: ZnifferProtocolDataRate = raw.payload[3]
+			& 0b11111;
+		const checksumLength =
+			protocolDataRate >= ZnifferProtocolDataRate.ZWave_100k
+				? 2
+				: 1;
+		const region = raw.payload[4];
+		const rssiRaw = raw.payload[5];
+		let checksumOK: boolean;
+		let payload: Bytes;
+
+		if (frameType === ZnifferFrameType.Data) {
+			validatePayload.withReason(
+				`ZnifferDataMessage[6] = ${raw.payload[6]}`,
+			)(raw.payload[6] === 0x21);
+			validatePayload.withReason(
+				`ZnifferDataMessage[7] = ${raw.payload[7]}`,
+			)(raw.payload[7] === 0x03);
+			// Length is already validated, so we just skip the length byte
+
+			const mpduOffset = 9;
+			const checksum = raw.payload.readUIntBE(
+				raw.payload.length - checksumLength,
+				checksumLength,
+			);
+
+			// Compute checksum over the entire MPDU
+			const expectedChecksum = checksumLength === 1
+				? computeChecksumXOR(
+					raw.payload.subarray(mpduOffset, -checksumLength),
+				)
+				: CRC16_CCITT(
+					raw.payload.subarray(mpduOffset, -checksumLength),
 				);
 
-				// Compute checksum over the entire MPDU
-				const expectedChecksum = checksumLength === 1
-					? computeChecksumXOR(
-						this.payload.subarray(mpduOffset, -checksumLength),
-					)
-					: CRC16_CCITT(
-						this.payload.subarray(mpduOffset, -checksumLength),
-					);
+			checksumOK = checksum === expectedChecksum;
+			payload = raw.payload.subarray(
+				mpduOffset,
+				-checksumLength,
+			);
+		} else if (
+			frameType === ZnifferFrameType.BeamStart
+		) {
+			validatePayload.withReason(
+				`ZnifferDataMessage[6] = ${raw.payload[6]}`,
+			)(raw.payload[6] === 0x55);
 
-				this.checksumOK = checksum === expectedChecksum;
-				this.payload = this.payload.subarray(
-					mpduOffset,
-					-checksumLength,
-				);
-			} else if (
-				this.frameType === ZnifferFrameType.BeamStart
-			) {
-				validatePayload.withReason(
-					`ZnifferDataMessage[6] = ${this.payload[6]}`,
-				)(this.payload[6] === 0x55);
-
-				// There is no checksum
-				this.checksumOK = true;
-				this.payload = this.payload.subarray(6);
-			} else if (this.frameType === ZnifferFrameType.BeamStop) {
-				// This always seems to contain the same 2 bytes
-				// There is no checksum
-				this.checksumOK = true;
-				this.payload = new Bytes();
-			} else {
-				validatePayload.fail(
-					`Unsupported frame type ${
-						getEnumMemberName(ZnifferFrameType, this.frameType)
-					}`,
-				);
-			}
+			// There is no checksum
+			checksumOK = true;
+			payload = raw.payload.subarray(6);
+		} else if (frameType === ZnifferFrameType.BeamStop) {
+			// This always seems to contain the same 2 bytes
+			// There is no checksum
+			checksumOK = true;
+			payload = new Bytes();
 		} else {
-			throw new ZWaveError(
-				`Sending ${this.constructor.name} is not supported!`,
-				ZWaveErrorCodes.Driver_NotSupported,
+			validatePayload.fail(
+				`Unsupported frame type ${
+					getEnumMemberName(ZnifferFrameType, frameType)
+				}`,
 			);
 		}
+
+		return new this({
+			frameType,
+			channel,
+			protocolDataRate,
+			region,
+			rssiRaw,
+			payload,
+			checksumOK,
+		});
 	}
 
 	public readonly frameType: ZnifferFrameType;
@@ -277,26 +305,45 @@ export class ZnifferDataMessage extends ZnifferMessage
 export class ZnifferGetVersionRequest extends ZnifferMessage {
 	public constructor() {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.GetVersion,
 		});
 	}
 }
 
-export class ZnifferGetVersionResponse extends ZnifferMessage {
-	public constructor(options: ZnifferMessageOptions) {
-		super(options);
+export interface ZnifferGetVersionResponseOptions {
+	chipType: string | UnknownZWaveChipType;
+	majorVersion: number;
+	minorVersion: number;
+}
 
-		if (gotDeserializationOptions(options)) {
-			this.chipType = getZWaveChipType(this.payload[0], this.payload[1]);
-			this.majorVersion = this.payload[2];
-			this.minorVersion = this.payload[3];
-		} else {
-			throw new ZWaveError(
-				`Sending ${this.constructor.name} is not supported!`,
-				ZWaveErrorCodes.Driver_NotSupported,
-			);
-		}
+export class ZnifferGetVersionResponse extends ZnifferMessage {
+	public constructor(
+		options: ZnifferGetVersionResponseOptions & ZnifferMessageBaseOptions,
+	) {
+		super({
+			type: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetVersion,
+		});
+
+		this.chipType = options.chipType;
+		this.majorVersion = options.majorVersion;
+		this.minorVersion = options.minorVersion;
+	}
+
+	public static from(raw: ZnifferMessageRaw): ZnifferGetVersionResponse {
+		const chipType: string | UnknownZWaveChipType = getZWaveChipType(
+			raw.payload[0],
+			raw.payload[1],
+		);
+		const majorVersion = raw.payload[2];
+		const minorVersion = raw.payload[3];
+
+		return new this({
+			chipType,
+			majorVersion,
+			minorVersion,
+		});
 	}
 
 	public readonly chipType: string | UnknownZWaveChipType;
@@ -311,7 +358,7 @@ export interface ZnifferSetFrequencyRequestOptions {
 export class ZnifferSetFrequencyRequest extends ZnifferMessage {
 	public constructor(options: ZnifferSetFrequencyRequestOptions) {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.SetFrequency,
 		});
 
@@ -332,26 +379,42 @@ export class ZnifferSetFrequencyResponse extends ZnifferMessage {
 export class ZnifferGetFrequenciesRequest extends ZnifferMessage {
 	public constructor() {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.GetFrequencies,
 		});
 	}
 }
-export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
-	public constructor(options: ZnifferMessageOptions) {
-		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.currentFrequency = this.payload[0];
-			this.supportedFrequencies = [
-				...this.payload.subarray(1),
-			];
-		} else {
-			throw new ZWaveError(
-				`Sending ${this.constructor.name} is not supported!`,
-				ZWaveErrorCodes.Driver_NotSupported,
-			);
-		}
+export interface ZnifferGetFrequenciesResponseOptions {
+	currentFrequency: number;
+	supportedFrequencies: number[];
+}
+
+export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
+	public constructor(
+		options:
+			& ZnifferGetFrequenciesResponseOptions
+			& ZnifferMessageBaseOptions,
+	) {
+		super({
+			type: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetFrequencies,
+		});
+
+		this.currentFrequency = options.currentFrequency;
+		this.supportedFrequencies = options.supportedFrequencies;
+	}
+
+	public static from(raw: ZnifferMessageRaw): ZnifferGetFrequenciesResponse {
+		const currentFrequency = raw.payload[0];
+		const supportedFrequencies = [
+			...raw.payload.subarray(1),
+		];
+
+		return new this({
+			currentFrequency,
+			supportedFrequencies,
+		});
 	}
 
 	public readonly currentFrequency: number;
@@ -361,7 +424,7 @@ export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
 export class ZnifferStartRequest extends ZnifferMessage {
 	public constructor() {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.Start,
 		});
 	}
@@ -373,7 +436,7 @@ export class ZnifferStartResponse extends ZnifferMessage {
 export class ZnifferStopRequest extends ZnifferMessage {
 	public constructor() {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.Stop,
 		});
 	}
@@ -390,7 +453,7 @@ export interface ZnifferSetBaudRateRequestOptions {
 export class ZnifferSetBaudRateRequest extends ZnifferMessage {
 	public constructor(options: ZnifferSetBaudRateRequestOptions) {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.SetBaudRate,
 		});
 
@@ -415,7 +478,7 @@ export interface ZnifferGetFrequencyInfoRequestOptions {
 export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
 	public constructor(options: ZnifferGetFrequencyInfoRequestOptions) {
 		super({
-			messageType: ZnifferMessageType.Command,
+			type: ZnifferMessageType.Command,
 			functionType: ZnifferFunctionType.GetFrequencyInfo,
 		});
 
@@ -430,22 +493,42 @@ export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
 	}
 }
 
-export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
-	public constructor(options: ZnifferMessageOptions) {
-		super(options);
+export interface ZnifferGetFrequencyInfoResponseOptions {
+	frequency: number;
+	numChannels: number;
+	frequencyName: string;
+}
 
-		if (gotDeserializationOptions(options)) {
-			this.frequency = this.payload[0];
-			this.numChannels = this.payload[1];
-			this.frequencyName = this.payload
-				.subarray(2)
-				.toString("ascii");
-		} else {
-			throw new ZWaveError(
-				`Sending ${this.constructor.name} is not supported!`,
-				ZWaveErrorCodes.Driver_NotSupported,
-			);
-		}
+export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
+	public constructor(
+		options:
+			& ZnifferGetFrequencyInfoResponseOptions
+			& ZnifferMessageBaseOptions,
+	) {
+		super({
+			type: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetFrequencyInfo,
+		});
+
+		this.frequency = options.frequency;
+		this.numChannels = options.numChannels;
+		this.frequencyName = options.frequencyName;
+	}
+
+	public static from(
+		raw: ZnifferMessageRaw,
+	): ZnifferGetFrequencyInfoResponse {
+		const frequency = raw.payload[0];
+		const numChannels = raw.payload[1];
+		const frequencyName: string = raw.payload
+			.subarray(2)
+			.toString("ascii");
+
+		return new this({
+			frequency,
+			numChannels,
+			frequencyName,
+		});
 	}
 
 	public readonly frequency: number;

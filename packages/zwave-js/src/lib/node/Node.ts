@@ -213,6 +213,7 @@ import {
 } from "@zwave-js/serial/serialapi";
 import { containsCC } from "@zwave-js/serial/serialapi";
 import {
+	Bytes,
 	Mixin,
 	type TypedEventEmitter,
 	cloneDeep,
@@ -234,6 +235,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
 import path from "node:path";
 import { setTimeout as wait } from "node:timers/promises";
+import { isUint8Array } from "node:util/types";
 import semver from "semver";
 import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
@@ -338,11 +340,11 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	 * The device specific key (DSK) of this node in binary format.
 	 * This is only set if included with Security S2.
 	 */
-	public get dsk(): Buffer | undefined {
+	public get dsk(): Uint8Array | undefined {
 		return this.driver.cacheGet(cacheKeys.node(this.id).dsk);
 	}
 	/** @internal */
-	public set dsk(value: Buffer | undefined) {
+	public set dsk(value: Uint8Array | undefined) {
 		const cacheKey = cacheKeys.node(this.id).dsk;
 		this.driver.cacheSet(cacheKey, value);
 	}
@@ -549,11 +551,11 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	 * @internal
 	 * The hash of the device config that was applied during the last interview.
 	 */
-	public get deviceConfigHash(): Buffer | undefined {
+	public get deviceConfigHash(): Uint8Array | undefined {
 		return this.driver.cacheGet(cacheKeys.node(this.id).deviceConfigHash);
 	}
 
-	private set deviceConfigHash(value: Buffer | undefined) {
+	private set deviceConfigHash(value: Uint8Array | undefined) {
 		this.driver.cacheSet(cacheKeys.node(this.id).deviceConfigHash, value);
 	}
 
@@ -4390,7 +4392,7 @@ protocol version:      ${this.protocolVersion}`;
 			if (value === 0) {
 				// Generic idle notification, this contains a value to be reset
 				if (
-					Buffer.isBuffer(command.eventParameters)
+					isUint8Array(command.eventParameters)
 					&& command.eventParameters.length
 				) {
 					// The target value is the first byte of the event parameters
@@ -6284,7 +6286,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 		// If it was, a change in hash means the config has changed
 		if (actualHash && this.deviceConfigHash) {
-			return !actualHash.equals(this.deviceConfigHash);
+			return !Bytes.view(actualHash).equals(this.deviceConfigHash);
 		}
 		return true;
 	}

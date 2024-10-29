@@ -70,7 +70,7 @@ export class SerialNVMIO500 implements NVMIO {
 	async read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		// Ensure we're not reading out of bounds
 		const size = this.size;
 		if (offset < 0 || offset >= size) {
@@ -96,7 +96,7 @@ export class SerialNVMIO500 implements NVMIO {
 
 	async write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }> {
 		// Ensure we're not writing out of bounds
 		const size = this.size;
@@ -162,10 +162,10 @@ export class SerialNVMIO700 implements NVMIO {
 	private _read: (
 		offset: number,
 		length: number,
-	) => Promise<{ buffer: Buffer; endOfFile: boolean }>;
+	) => Promise<{ buffer: Uint8Array; endOfFile: boolean }>;
 	private _write: (
 		offset: number,
-		buffer: Buffer,
+		buffer: Uint8Array,
 	) => Promise<{ endOfFile: boolean }>;
 	private _close: () => Promise<void>;
 
@@ -209,7 +209,7 @@ export class SerialNVMIO700 implements NVMIO {
 	async read(
 		offset: number,
 		length: number,
-	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+	): Promise<{ buffer: Uint8Array; endOfFile: boolean }> {
 		// Ensure we're not reading out of bounds
 		const size = this.size;
 		if (offset < 0 || offset >= size) {
@@ -229,7 +229,7 @@ export class SerialNVMIO700 implements NVMIO {
 
 	async write(
 		offset: number,
-		data: Buffer,
+		data: Uint8Array,
 	): Promise<{ bytesWritten: number; endOfFile: boolean }> {
 		// Ensure we're not writing out of bounds
 		const size = this.size;

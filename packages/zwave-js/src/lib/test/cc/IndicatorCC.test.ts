@@ -9,12 +9,13 @@ import {
 import { IndicatorCCValues } from "@zwave-js/cc/IndicatorCC";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 import { createTestNode } from "../mocks";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses.Indicator, // CC
 		]),
 		payload,
@@ -26,7 +27,7 @@ const host = createTestingHost();
 test("the Get command (V1) should serialize correctly", (t) => {
 	const cc = new IndicatorCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Get, // CC Command
 		]),
 	);
@@ -39,7 +40,7 @@ test("the Get command (V2) should serialize correctly", (t) => {
 		indicatorId: 5,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Get, // CC Command
 			5,
 		]),
@@ -53,7 +54,7 @@ test("the Set command (v1) should serialize correctly", (t) => {
 		value: 23,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Set, // CC Command
 			23, // value
 		]),
@@ -78,7 +79,7 @@ test("the Set command (v2) should serialize correctly", (t) => {
 		],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Set, // CC Command
 			0,
 			2, // object count
@@ -95,7 +96,7 @@ test("the Set command (v2) should serialize correctly", (t) => {
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Report, // CC Command
 			55, // value
 		]),
@@ -112,7 +113,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			IndicatorCommand.Report, // CC Command
 			0,
 			2, // object count
@@ -149,7 +150,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 
 test("deserializing an unsupported command should return an unspecified version of IndicatorCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

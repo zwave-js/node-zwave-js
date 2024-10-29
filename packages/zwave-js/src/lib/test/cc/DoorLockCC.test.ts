@@ -15,11 +15,12 @@ import {
 import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Door Lock"], // CC
 		]),
 		payload,
@@ -43,7 +44,7 @@ valueDB2.setValue(DoorLockCCValues.latchSupported.id, true);
 test("the OperationGet command should serialize correctly", (t) => {
 	const cc = new DoorLockCCOperationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
@@ -56,7 +57,7 @@ test("the OperationSet command should serialize correctly", (t) => {
 		mode: DoorLockMode.OutsideUnsecured,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.OperationSet, // CC Command
 			0x20, // target value
 		]),
@@ -66,7 +67,7 @@ test("the OperationSet command should serialize correctly", (t) => {
 
 test("the OperationReport command (v1-v3) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.OperationReport, // CC Command
 			DoorLockMode.InsideUnsecuredWithTimeout, // lock mode
 			0b1000_0010, // handles mode
@@ -94,7 +95,7 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 
 test("the OperationReport command (v4) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.OperationReport, // CC Command
 			DoorLockMode.OutsideUnsecured, // lock mode
 			0b0100_1111, // handles mode
@@ -133,7 +134,7 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 test("the ConfigurationGet command should serialize correctly", (t) => {
 	const cc = new DoorLockCCConfigurationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
@@ -142,7 +143,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 
 test("the ConfigurationReport command (v1-v3) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
 			DoorLockOperationType.Timed, // operation type
 			0b1000_0010, // handles mode
@@ -178,7 +179,7 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 
 test("the ConfigurationReport command must ignore invalid timeouts (constant)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
 			DoorLockOperationType.Constant, // operation type
 			0b1000_0010, // handles mode
@@ -197,7 +198,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 
 test("the ConfigurationReport command must ignore invalid timeouts (invalid minutes)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
 			DoorLockOperationType.Constant, // operation type
 			0b1000_0010, // handles mode
@@ -216,7 +217,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 
 test("the ConfigurationReport command must ignore invalid timeouts (invalid seconds)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
 			DoorLockOperationType.Constant, // operation type
 			0b1000_0010, // handles mode
@@ -235,7 +236,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 
 test("the ConfigurationReport command (v4) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
 			DoorLockOperationType.Timed, // operation type
 			0b1000_0010, // handles mode
@@ -274,7 +275,7 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 		twistAssist: true,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.ConfigurationSet, // CC Command
 			DoorLockOperationType.Timed,
 			0b1110_0101,
@@ -293,7 +294,7 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 test("the CapabilitiesGet command should serialize correctly", (t) => {
 	const cc = new DoorLockCCCapabilitiesGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
@@ -302,7 +303,7 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 
 test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			DoorLockCommand.CapabilitiesReport, // CC Command
 			1, // bit mask length
 			0b110, // operation types
@@ -343,7 +344,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 // test("the Report command (v2) should be deserialized correctly", (t) => {
 // 	const ccData = buildCCBuffer(
 // 		1,
-// 		Buffer.from([
+// 		Uint8Array.from([
 // 			DoorLockCommand.Report, // CC Command
 // 			55, // current value
 // 			66, // target value
@@ -361,7 +362,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 // test("deserializing an unsupported command should return an unspecified version of DoorLockCC", (t) => {
 // 	const serializedCC = buildCCBuffer(
 // 		1,
-// 		Buffer.from([255]), // not a valid command
+// 		Uint8Array.from([255]), // not a valid command
 // 	);
 // 	const cc: any = new DoorLockCC({
 // 		data: serializedCC,

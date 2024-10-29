@@ -459,15 +459,14 @@ export class EntryControlCCNotification extends EntryControlCC {
 							eventDataLength === 16 || eventDataLength === 32,
 						);
 					}
-					// Using toString("ascii") converts the padding bytes 0xff to 0x7f
 					eventData = eventData.toString("ascii");
 					if (!noStrictValidation) {
 						validatePayload(
-							/^[\u0000-\u007f]+[\u007f]*$/.test(eventData),
+							/^[\u0000-\u007f]+[\u00ff]*$/.test(eventData),
 						);
 					}
-					// Trim padding
-					eventData = eventData.replace(/[\u007f]*$/, "");
+					// Trim 0xff padding bytes
+					eventData = eventData.replace(/[\u00ff]*$/, "");
 					break;
 				case EntryControlDataTypes.MD5:
 					// MD5 16 byte binary data encoded as a MD5 hash value.

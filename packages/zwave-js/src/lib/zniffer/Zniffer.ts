@@ -58,6 +58,7 @@ import {
 	isZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
 import {
+	Bytes,
 	TypedEventEmitter,
 	getEnumMemberName,
 	isEnumMember,
@@ -94,8 +95,8 @@ const logo: string = `
 export interface ZnifferEventCallbacks {
 	ready: () => void;
 	error: (err: Error) => void;
-	frame: (frame: Frame, rawData: Buffer) => void;
-	"corrupted frame": (err: CorruptedFrame, rawData: Buffer) => void;
+	frame: (frame: Frame, rawData: Uint8Array) => void;
+	"corrupted frame": (err: CorruptedFrame, rawData: Uint8Array) => void;
 }
 
 export type ZnifferEvents = Extract<keyof ZnifferEventCallbacks, string>;
@@ -172,14 +173,14 @@ function tryConvertRSSI(
 
 interface CapturedData {
 	timestamp: Date;
-	rawData: Buffer;
-	frameData: Buffer;
+	rawData: Uint8Array;
+	frameData: Uint8Array;
 	parsedFrame?: Frame | CorruptedFrame;
 }
 
 export interface CapturedFrame {
 	timestamp: Date;
-	frameData: Buffer;
+	frameData: Uint8Array;
 	parsedFrame: Frame | CorruptedFrame;
 }
 
@@ -455,11 +456,11 @@ supported frequencies: ${
 	 * Is called when the serial port has received a Zniffer frame
 	 */
 	private serialport_onData(
-		data: Buffer,
+		data: Uint8Array,
 	): void {
 		let msg: ZnifferMessage | undefined;
 		try {
-			msg = ZnifferMessage.from({ data });
+			msg = ZnifferMessage.parse(data);
 		} catch (e: any) {
 			console.error(e);
 			return;
@@ -946,9 +947,9 @@ supported frequencies: ${
 	 */
 	public getCaptureAsZLFBuffer(
 		frameFilter?: (frame: CapturedFrame) => boolean,
-	): Buffer {
+	): Uint8Array {
 		// Mimics the current Zniffer software, without using features like sessions and comments
-		const header = Buffer.alloc(2048, 0);
+		const header = new Bytes(2048).fill(0);
 		header[0] = 0x68; // zniffer version
 		header.writeUInt16BE(0x2312, 0x07fe); // checksum
 		let filteredFrames = this._capturedFrames;
@@ -964,7 +965,7 @@ supported frequencies: ${
 				})
 			);
 		}
-		return Buffer.concat([
+		return Bytes.concat([
 			header,
 			...filteredFrames.map(captureToZLFEntry),
 		]);
@@ -1014,8 +1015,8 @@ supported frequencies: ${
 
 function captureToZLFEntry(
 	capture: CapturedData,
-): Buffer {
-	const buffer = Buffer.alloc(14 + capture.rawData.length, 0);
+): Uint8Array {
+	const buffer = new Bytes(14 + capture.rawData.length).fill(0);
 	// Convert the date to a .NET datetime
 	let ticks = BigInt(capture.timestamp.getTime()) * 10000n
 		+ 621355968000000000n;
@@ -1027,7 +1028,7 @@ function captureToZLFEntry(
 	buffer[8] = direction | 0x01; // dir + session ID
 	buffer[9] = capture.rawData.length;
 	// bytes 10-12 are empty
-	capture.rawData.copy(buffer, 13);
+	buffer.set(capture.rawData, 13);
 	buffer[buffer.length - 1] = 0xfe; // end of frame
 	return buffer;
 }

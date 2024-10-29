@@ -1,6 +1,7 @@
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import {
+	Bytes,
 	type ThrowingMap,
 	createThrowingMap,
 	getEnumMemberName,
@@ -99,7 +100,7 @@ for (
 				}
 				t.is(node4.status, initialStatus);
 
-				const ACK = Buffer.from([MessageHeaders.ACK]);
+				const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
 				const pingPromise = node4.ping();
 				await wait(1);
@@ -109,7 +110,7 @@ for (
 				//   └─[NoOperationCC]
 				t.deepEqual(
 					serialport.lastWrite,
-					Buffer.from("010800130401002501c5", "hex"),
+					Bytes.from("010800130401002501c5", "hex"),
 				);
 				await wait(10);
 				serialport.receiveData(ACK);
@@ -118,7 +119,7 @@ for (
 
 				// « [RES] [SendData]
 				//     was sent: true
-				serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+				serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 				// » [ACK]
 				t.deepEqual(serialport.lastWrite, ACK);
 
@@ -128,7 +129,7 @@ for (
 				//     callback id:     1
 				//     transmit status: OK
 				serialport.receiveData(
-					Buffer.from(
+					Bytes.from(
 						"011800130100000100bd7f7f7f7f010103000000000201000049",
 						"hex",
 					),

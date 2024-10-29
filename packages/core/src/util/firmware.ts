@@ -68,7 +68,7 @@ export function guessFirmwareFileFormat(
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
  */
 export function extractFirmware(
-	rawData: Bytes,
+	rawData: Uint8Array,
 	format: FirmwareFileFormat,
 ): Firmware {
 	switch (format) {
@@ -108,13 +108,14 @@ export function extractFirmware(
 	}
 }
 
-function extractFirmwareRAW(data: Bytes): Firmware {
+function extractFirmwareRAW(data: Uint8Array): Firmware {
 	return { data };
 }
 
-function extractFirmwareAeotec(data: Bytes): Firmware {
+function extractFirmwareAeotec(data: Uint8Array): Firmware {
+	const buffer = Bytes.view(data);
 	// Check if this is an EXE file
-	if (data.readUInt16BE(0) !== 0x4d5a) {
+	if (buffer.readUInt16BE(0) !== 0x4d5a) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (not an executable)!",
 			ZWaveErrorCodes.Argument_Invalid,
@@ -122,22 +123,22 @@ function extractFirmwareAeotec(data: Bytes): Firmware {
 	}
 
 	// The exe file contains the firmware data and filename at the end
-	const firmwareStart = data.readUInt32BE(data.length - 8);
-	const firmwareLength = data.readUInt32BE(data.length - 4);
+	const firmwareStart = buffer.readUInt32BE(buffer.length - 8);
+	const firmwareLength = buffer.readUInt32BE(buffer.length - 4);
 	let numControlBytes = 8;
 
 	// Some exe files also contain a 2-byte checksum. The method "ImageCalcCrc16" is used to compute the checksum
-	if (data.includes(Bytes.from("ImageCalcCrc16", "ascii"))) {
+	if (buffer.includes(Bytes.from("ImageCalcCrc16", "ascii"))) {
 		numControlBytes += 2;
 	}
 
 	// Some files don't have such a strict alignment - in that case fall back to ignoring the non-aligned control bytes
 	switch (true) {
 		case firmwareStart + firmwareLength
-			=== data.length - 256 - numControlBytes:
+			=== buffer.length - 256 - numControlBytes:
 			// all good
 			break;
-		case firmwareStart + firmwareLength === data.length - 256 - 8:
+		case firmwareStart + firmwareLength === buffer.length - 256 - 8:
 			numControlBytes = 8;
 			break;
 		default:
@@ -147,18 +148,18 @@ function extractFirmwareAeotec(data: Bytes): Firmware {
 			);
 	}
 
-	const firmwareData = data.subarray(
+	const firmwareData = buffer.subarray(
 		firmwareStart,
 		firmwareStart + firmwareLength,
 	);
 
-	const firmwareNameBytes = data
-		.subarray(data.length - 256 - numControlBytes)
+	const firmwareNameBytes = buffer
+		.subarray(buffer.length - 256 - numControlBytes)
 		.subarray(0, 256);
 
 	// Some exe files contain a CRC-16 checksum, extract that too and check it
 	if (numControlBytes === 10) {
-		const checksum = data.readUInt16BE(data.length - 10);
+		const checksum = buffer.readUInt16BE(buffer.length - 10);
 		const actualChecksum = CRC16_CCITT(
 			Bytes.concat([firmwareData, firmwareNameBytes]),
 			0xfe95,
@@ -235,7 +236,7 @@ function extractFirmwareHEX(dataHEX: Uint8Array | string): Firmware {
 	}
 }
 
-function extractFirmwareHEC(data: Bytes): Firmware {
+function extractFirmwareHEC(data: Uint8Array): Firmware {
 	const key =
 		"d7a68def0f4a1241940f6cb8017121d15f0e2682e258c9f7553e706e834923b7";
 	const iv = "0e6519297530583708612a2823663844";
@@ -246,7 +247,7 @@ function extractFirmwareHEC(data: Bytes): Firmware {
 	);
 
 	const ciphertext = Bytes.from(
-		data.subarray(6).toString("ascii"),
+		Bytes.view(data.subarray(6)).toString("ascii"),
 		"base64",
 	);
 	const plaintext = Bytes.concat([

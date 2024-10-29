@@ -62,8 +62,8 @@ export class TransportServiceCC extends CommandClass
 export interface TransportServiceCCFirstSegmentOptions {
 	datagramSize: number;
 	sessionId: number;
-	headerExtension?: Bytes | undefined;
-	partialDatagram: Bytes;
+	headerExtension?: Uint8Array | undefined;
+	partialDatagram: Uint8Array;
 }
 
 /** @publicAPI */
@@ -144,8 +144,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 
 	public datagramSize: number;
 	public sessionId: number;
-	public headerExtension: Bytes | undefined;
-	public partialDatagram: Bytes;
+	public headerExtension: Uint8Array | undefined;
+	public partialDatagram: Uint8Array;
 	public encapsulated!: CommandClass;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -291,8 +291,8 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public datagramSize: number;
 	public datagramOffset: number;
 	public sessionId: number;
-	public headerExtension: Bytes | undefined;
-	public partialDatagram: Bytes;
+	public headerExtension: Uint8Array | undefined;
+	public partialDatagram: Uint8Array;
 
 	// This can only be received
 	private _encapsulated!: CommandClass;

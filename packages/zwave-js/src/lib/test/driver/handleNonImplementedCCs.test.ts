@@ -1,5 +1,6 @@
 import { CommandClass } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -26,7 +27,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02, // Get
-				payload: Buffer.from([0x00, 0x01]), // Technically invalid
+				payload: Uint8Array.from([0x00, 0x01]), // Technically invalid
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -38,7 +39,7 @@ integrationTest(
 			t.like(result, {
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02,
-				payload: Buffer.from([0x00, 0x01]),
+				payload: Bytes.from([0x00, 0x01]),
 			});
 		},
 	},

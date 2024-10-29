@@ -9,11 +9,12 @@ import {
 	MultiChannelAssociationCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Multi Channel Association"], // CC
 		]),
 		payload,
@@ -25,7 +26,7 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.SupportedGroupingsGet, // CC Command
 		]),
 	);
@@ -34,7 +35,7 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 
 test("the SupportedGroupingsReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.SupportedGroupingsReport, // CC Command
 			7, // # of groups
 		]),
@@ -55,7 +56,7 @@ test("the Set command should serialize correctly (node IDs only)", (t) => {
 		nodeIds: [1, 2, 5],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Set, // CC Command
 			5, // group id
 			// Node IDs
@@ -83,7 +84,7 @@ test("the Set command should serialize correctly (endpoint addresses only)", (t)
 		],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Set, // CC Command
 			5, // group id
 			0, // Endpoint marker
@@ -115,7 +116,7 @@ test("the Set command should serialize correctly (both options)", (t) => {
 		],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Set, // CC Command
 			5, // group id
 			// Node IDs:
@@ -140,7 +141,7 @@ test("the Get command should serialize correctly", (t) => {
 		groupId: 9,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Get, // CC Command
 			9, // group ID
 		]),
@@ -150,7 +151,7 @@ test("the Get command should serialize correctly", (t) => {
 
 test("the Report command should be deserialized correctly (node IDs only)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
 			5, // group id
 			9, // max nodes
@@ -176,7 +177,7 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 
 test("the Report command should be deserialized correctly (endpoint addresses only)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
 			5, // group id
 			9, // max nodes
@@ -211,7 +212,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 
 test("the Report command should be deserialized correctly (both options)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
 			5, // group id
 			9, // max nodes
@@ -254,7 +255,7 @@ test("the Remove command should serialize correctly (node IDs only)", (t) => {
 		nodeIds: [1, 2, 5],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Remove, // CC Command
 			5, // group id
 			// Node IDs
@@ -282,7 +283,7 @@ test("the Remove command should serialize correctly (endpoint addresses only)", 
 		],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Remove, // CC Command
 			5, // group id
 			0, // Endpoint marker
@@ -314,7 +315,7 @@ test("the Remove command should serialize correctly (both options)", (t) => {
 		],
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Remove, // CC Command
 			5, // group id
 			// Node IDs:
@@ -339,7 +340,7 @@ test("the Remove command should serialize correctly (both empty)", (t) => {
 		groupId: 5,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MultiChannelAssociationCommand.Remove, // CC Command
 			5, // group id
 		]),
@@ -350,7 +351,7 @@ test("the Remove command should serialize correctly (both empty)", (t) => {
 // test("deserializing an unsupported command should return an unspecified version of MultiChannelAssociationCC", (t) => {
 // 	const serializedCC = buildCCBuffer(
 // 		1,
-// 		Buffer.from([255]), // not a valid command
+// 		Uint8Array.from([255]), // not a valid command
 // 	);
 // 	const cc: any = new MultiChannelAssociationCC({
 // 		data: serializedCC,

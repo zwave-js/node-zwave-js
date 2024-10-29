@@ -11,11 +11,12 @@ import {
 	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Central Scene"], // CC
 		]),
 		payload,
@@ -27,7 +28,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
@@ -40,7 +41,7 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 		slowRefresh: true,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.ConfigurationSet, // CC Command
 			0b1000_0000,
 		]),
@@ -54,7 +55,7 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 		slowRefresh: false,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.ConfigurationSet, // CC Command
 			0,
 		]),
@@ -64,7 +65,7 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 
 test("the ConfigurationReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.ConfigurationReport, // CC Command
 			0b1000_0000,
 		]),
@@ -83,7 +84,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
@@ -92,7 +93,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.SupportedReport, // CC Command
 			2, // # of scenes
 			0b1_0000_10_0, // slow refresh, 2 bytes per scene, not identical
@@ -118,7 +119,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 
 test("the Notification command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.Notification, // CC Command
 			7, // sequence number
 			0b1000_0000 | CentralSceneKeys.KeyPressed4x, // slow refresh
@@ -140,7 +141,7 @@ test("the Notification command should be deserialized correctly", (t) => {
 
 test("the Notification command should be deserialized correctly (KeyHeldDown)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			CentralSceneCommand.Notification, // CC Command
 			7, // sequence number
 			0b1000_0000 | CentralSceneKeys.KeyHeldDown, // slow refresh
@@ -161,7 +162,7 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 
 test("deserializing an unsupported command should return an unspecified version of CentralSceneCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

@@ -63,7 +63,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -87,7 +87,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -111,7 +111,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc1 = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -124,7 +124,7 @@ test.serial(
 			{ sourceNodeId: 2 } as any,
 		) as AssociationCCReport;
 		const cc2 = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -189,7 +189,7 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
-	cc["decryptedCCBytes"] = Buffer.from([
+	cc["decryptedCCBytes"] = Uint8Array.from([
 		CommandClasses.Association,
 		AssociationCommand.Report,
 		1,
@@ -212,7 +212,7 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
-	cc["decryptedCCBytes"] = Buffer.from([
+	cc["decryptedCCBytes"] = Uint8Array.from([
 		CommandClasses.Association,
 		AssociationCommand.Report,
 		1,
@@ -233,7 +233,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -263,7 +263,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -293,7 +293,7 @@ test.serial(
 	(t) => {
 		const { driver } = t.context;
 		const cc = CommandClass.parse(
-			Buffer.from([
+			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -321,7 +321,7 @@ test.serial(
 test.serial("passes other errors during merging through", (t) => {
 	const { driver } = t.context;
 	const cc = CommandClass.parse(
-		Buffer.from([
+		Uint8Array.from([
 			CommandClasses.Association,
 			AssociationCommand.Report,
 			1,

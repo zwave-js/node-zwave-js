@@ -1,7 +1,7 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
-import { mergeDeep } from "@zwave-js/shared";
+import { Bytes, mergeDeep } from "@zwave-js/shared";
 import test from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
@@ -182,11 +182,11 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 		() => {
 			driver = new Driver("/dev/test", {
 				securityKeys: {
-					S0_Legacy: Buffer.from(
+					S0_Legacy: Bytes.from(
 						"0102030405060708090a0b0c0d0e0f10",
 						"hex",
 					),
-					S2_Unauthenticated: Buffer.from(
+					S2_Unauthenticated: Bytes.from(
 						"0102030405060708090a0b0c0d0e0f10",
 						"hex",
 					),
@@ -371,7 +371,7 @@ test("The exported driver presets work", (t) => {
 // 	// 	);
 // 	// 	t.true(resolvedSpy.notCalled);
 // 	// 	// receive the ACK
-// 	// 	await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+// 	// 	await serialport.receiveData(Uint8Array.from([MessageHeaders.ACK]));
 
 // 	// 	const msg = await promise;
 // 	// 	expect(msg).toBeInstanceOf(MockResponseMessage);

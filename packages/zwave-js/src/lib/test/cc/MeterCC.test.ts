@@ -15,13 +15,14 @@ import {
 	assertZWaveError,
 } from "@zwave-js/core";
 import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 import * as nodeUtils from "../../node/utils";
 import { createTestNode } from "../mocks";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses.Meter, // CC
 		]),
 		payload,
@@ -34,7 +35,7 @@ const node2 = createTestNode(host, { id: 2 });
 test("the Get command (V1) should serialize correctly", (t) => {
 	const cc = new MeterCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Get, // CC Command
 		]),
 	);
@@ -50,7 +51,7 @@ test("the Get command (V1) should serialize correctly", (t) => {
 test("the Get command (V2) should serialize correctly", (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x03 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Get, // CC Command
 			0b11_000, // Scale
 		]),
@@ -67,7 +68,7 @@ test("the Get command (V2) should serialize correctly", (t) => {
 test("the Get command (V3) should serialize correctly", (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x06 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Get, // CC Command
 			0b110_000, // Scale
 		]),
@@ -84,7 +85,7 @@ test("the Get command (V3) should serialize correctly", (t) => {
 test("the Get command (V4) should serialize correctly", (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x0f });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Get, // CC Command
 			0b111_000, // Scale 1
 			0x1, // Scale 2
@@ -102,7 +103,7 @@ test("the Get command (V4) should serialize correctly", (t) => {
 test("the SupportedGet command should serialize correctly", (t) => {
 	const cc = new MeterCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.SupportedGet, // CC Command
 		]),
 	);
@@ -112,7 +113,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 test("the Reset command (V2) should serialize correctly", (t) => {
 	const cc = new MeterCCReset({ nodeId: 1 });
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Reset, // CC Command
 		]),
 	);
@@ -128,7 +129,7 @@ test("the Reset command (V6) should serialize correctly", (t) => {
 		targetValue: 12.3,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Reset, // CC Command
 			0b0_00_00111, // scale (2), rate type, type
 			0b001_11_001, // precision, scale, size
@@ -140,7 +141,7 @@ test("the Reset command (V6) should serialize correctly", (t) => {
 
 test("the Report command (V1) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0x03, // Meter type
 			0b001_10_001, // precision, scale, size
@@ -163,7 +164,7 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 
 test("the Report command (V2) should be deserialized correctly (no time delta)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b0_10_00011, // Rate type, Meter type
 			0b001_10_001, // precision, scale, size
@@ -188,7 +189,7 @@ test("the Report command (V2) should be deserialized correctly (no time delta)",
 
 test("the Report command (V2) should be deserialized correctly (with time delta)", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b0_10_00011, // Rate type, Meter type
 			0b001_10_001, // precision, scale, size
@@ -214,7 +215,7 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 
 test("the Report command (V3) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b1_10_00001, // Scale(2), Rate type, Meter type
 			0b001_10_001, // precision, Scale (1:0), size
@@ -235,7 +236,7 @@ test("the Report command (V3) should be deserialized correctly", (t) => {
 
 test("the Report command (V4) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b1_10_00001, // Scale(2), Rate type, Meter type
 			0b001_11_001, // precision, Scale (1:0), size
@@ -257,7 +258,7 @@ test("the Report command (V4) should be deserialized correctly", (t) => {
 
 test("the Report command should validate that a known meter type is given", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b1_10_11111, // Scale(2), Rate type, Meter type
 			0b001_11_001, // precision, Scale (1:0), size
@@ -283,7 +284,7 @@ test("the Report command should validate that a known meter type is given", (t) 
 
 test("the Report command should validate that a known meter scale is given", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.Report, // CC Command
 			0b1_10_00100, // Scale(2), Rate type, Meter type
 			0b001_11_001, // precision, Scale (1:0), size
@@ -322,7 +323,7 @@ test("the value IDs should be translated correctly", (t) => {
 
 test("the SupportedReport command (V2/V3) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.SupportedReport, // CC Command
 			0b1_00_10101, // supports reset, type
 			0b01101110, // supported scales
@@ -342,7 +343,7 @@ test("the SupportedReport command (V2/V3) should be deserialized correctly", (t)
 
 test("the SupportedReport command (V4/V5) should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			MeterCommand.SupportedReport, // CC Command
 			0b1_10_10101, // supports reset, rate types,type
 			0b1_0000001, // more scale types, supported scales
@@ -365,7 +366,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 
 // test("the SupportedReport command (V4/V5) should be deserialized correctly", (t) => {
 // 	const ccData = buildCCBuffer(
-// 		Buffer.from([
+// 		Uint8Array.from([
 // 			MeterCommand.SupportedReport, // CC Command
 // 			0b1_10_10101, // supports reset, rate types,type
 // 			0b1_0000001, // more scale types, supported scales
@@ -387,7 +388,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 
 test("deserializing an unsupported command should return an unspecified version of MeterCC", (t) => {
 	const serializedCC = buildCCBuffer(
-		Buffer.from([255]), // not a valid command
+		Uint8Array.from([255]), // not a valid command
 	);
 	const cc = CommandClass.parse(
 		serializedCC,

@@ -37,7 +37,7 @@ export function createAndStartDriverWithMockPort(
 		MockBinding.reset();
 		MockBinding.createPort(portAddress, {
 			record: true,
-			readyData: Buffer.from([]),
+			readyData: new Uint8Array(),
 		});
 
 		// This will be called when the driver has opened the serial port

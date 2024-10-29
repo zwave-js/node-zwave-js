@@ -7,6 +7,7 @@ import {
 	InvalidCC,
 	isEncapsulatingCommandClass,
 } from "@zwave-js/cc";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
 test("should be detected as an encapsulating CC", (t) => {
@@ -23,7 +24,7 @@ test("should match the specs", (t) => {
 	const basicCCGet = new BasicCCGet({ nodeId: 1 });
 	const crc16 = CRC16CC.encapsulate(basicCCGet);
 	const serialized = crc16.serialize({} as any);
-	const expected = Buffer.from("560120024d26", "hex");
+	const expected = Bytes.from("560120024d26", "hex");
 	t.deepEqual(serialized, expected);
 });
 

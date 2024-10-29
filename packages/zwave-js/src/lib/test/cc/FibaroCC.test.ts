@@ -6,11 +6,12 @@ import {
 	FibaroVenetianBlindCCSet,
 } from "@zwave-js/cc/manufacturerProprietary/FibaroCC";
 import { CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
 
-function buildCCBuffer(payload: Buffer): Buffer {
-	return Buffer.concat([
-		Buffer.from([
+function buildCCBuffer(payload: Uint8Array): Uint8Array {
+	return Bytes.concat([
+		Uint8Array.from([
 			CommandClasses["Manufacturer Proprietary"], // CC
 			// Manufacturer ID
 			0x01,
@@ -28,7 +29,7 @@ test("the Set Tilt command should serialize correctly", (t) => {
 		tilt: 99,
 	});
 	const expected = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			FibaroVenetianBlindCCCommand.Set,
 			0x01, // with Tilt, no Position
 			0x00, // Position
@@ -40,7 +41,7 @@ test("the Set Tilt command should serialize correctly", (t) => {
 
 test("the Report command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
-		Buffer.from([
+		Uint8Array.from([
 			FibaroVenetianBlindCCCommand.Report,
 			0x03, // with Tilt and Position
 			0x00, // Position
@@ -78,7 +79,7 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 	});
 	const ccResponse = CommandClass.parse(
 		buildCCBuffer(
-			Buffer.from([
+			Uint8Array.from([
 				FibaroVenetianBlindCCCommand.Report,
 				0x03, // with Tilt and Position
 				0x01, // Position
@@ -97,7 +98,7 @@ test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) =
 	});
 	const ccResponse = CommandClass.parse(
 		buildCCBuffer(
-			Buffer.from([
+			Uint8Array.from([
 				FibaroVenetianBlindCCCommand.Report,
 				0x03, // with Tilt and Position
 				0x01, // Position

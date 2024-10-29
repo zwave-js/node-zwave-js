@@ -2,6 +2,7 @@ import { CommandClass, EntryControlCommand } from "@zwave-js/cc";
 import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
 import { type EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import { type CommandClassInfo, CommandClasses } from "@zwave-js/core";
+import { Bytes } from "@zwave-js/shared";
 import test from "ava";
 import sinon from "sinon";
 import type { Driver } from "../../driver/Driver";
@@ -95,8 +96,8 @@ test.serial(
 		const spy = sinon.spy();
 		node.on("notification", spy);
 
-		const buf = Buffer.concat([
-			Buffer.from([
+		const buf = Bytes.concat([
+			[
 				CommandClasses["Entry Control"],
 				EntryControlCommand.Notification, // CC Command
 				0x5,
@@ -107,7 +108,7 @@ test.serial(
 				50,
 				51,
 				52,
-			]),
+			],
 			// Required padding for ASCII
 			new Uint8Array(12).fill(0xff),
 		]);

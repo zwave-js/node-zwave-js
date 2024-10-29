@@ -213,7 +213,7 @@ export class MockController {
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private async serialOnData(
 		data:
-			| Buffer
+			| Uint8Array
 			| MessageHeaders.ACK
 			| MessageHeaders.CAN
 			| MessageHeaders.NAK,
@@ -385,7 +385,7 @@ export class MockController {
 
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
 	private sendHeaderToHost(data: MessageHeaders): void {
-		this.serial.emitData(Buffer.from([data]));
+		this.serial.emitData(Uint8Array.from([data]));
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
@@ -393,7 +393,7 @@ export class MockController {
 		msg: Message,
 		fromNode?: MockNode,
 	): Promise<void> {
-		let data: Buffer;
+		let data: Uint8Array;
 		if (fromNode) {
 			data = msg.serialize({
 				nodeIdType: this.encodingContext.nodeIdType,
@@ -410,7 +410,7 @@ export class MockController {
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
-	public async sendToHost(data: Buffer): Promise<void> {
+	public async sendToHost(data: Uint8Array): Promise<void> {
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
@@ -423,7 +423,7 @@ export class MockController {
 		if (this.corruptACK) {
 			const highNibble = randomInt(1, 0xf) << 4;
 			this.serial.emitData(
-				Buffer.from([highNibble | MessageHeaders.ACK]),
+				Uint8Array.from([highNibble | MessageHeaders.ACK]),
 			);
 		} else {
 			this.sendHeaderToHost(MessageHeaders.ACK);
@@ -563,7 +563,7 @@ export interface MockControllerBehavior {
 	 */
 	onHostData?: (
 		controller: MockController,
-		data: Buffer,
+		data: Uint8Array,
 	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
 	onHostMessage?: (

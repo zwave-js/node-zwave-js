@@ -640,7 +640,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 
 	/** Kicks off a firmware update of a single target. Returns whether the node accepted resuming and non-secure transfer */
 	private async *beginFirmwareUpdateInternal(
-		data: Buffer,
+		data: Uint8Array,
 		target: number,
 		meta: FirmwareUpdateMetaData,
 		fragmentSize: number,
@@ -761,7 +761,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 
 	private async sendCorruptedFirmwareUpdateReport(
 		reportNum: number,
-		fragment: Buffer,
+		fragment: Uint8Array,
 		nonSecureTransfer: boolean = false,
 	): Promise<void> {
 		try {
@@ -792,7 +792,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 	}
 
 	private async *doFirmwareUpdateInternal(
-		data: Buffer,
+		data: Uint8Array,
 		fragmentSize: number,
 		nonSecureTransfer: boolean,
 		abortContext: AbortFirmwareUpdateContext,

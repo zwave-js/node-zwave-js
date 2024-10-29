@@ -980,7 +980,7 @@ export type NotificationCCReportOptions = {
 	notificationType?: number;
 	notificationEvent?: number;
 	notificationStatus?: number;
-	eventParameters?: Bytes;
+	eventParameters?: Uint8Array;
 	sequenceNumber?: number;
 };
 

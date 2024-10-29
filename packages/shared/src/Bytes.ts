@@ -46,18 +46,18 @@ export class Bytes extends Uint8Array {
 		data: Uint8Array | ArrayBuffer | ArrayLike<number> | Iterable<number>,
 	): Bytes;
 
-	public static from(
-		arrayLike: Iterable<number>,
-		mapfn?: (v: number, k: number) => number,
-		thisArg?: any,
-	): Bytes;
-
 	/**
 	 * Creates a new Buffer containing the given JavaScript string {str}.
 	 * If provided, the {encoding} parameter identifies the character encoding.
 	 * If not provided, {encoding} defaults to 'utf8'.
 	 */
 	public static from(data: string, encoding?: BufferEncoding): Bytes;
+
+	public static from(
+		arrayLike: Iterable<number>,
+		mapfn?: (v: number, k: number) => number,
+		thisArg?: any,
+	): Bytes;
 
 	public static from(
 		data:

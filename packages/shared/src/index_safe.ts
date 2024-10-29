@@ -11,6 +11,7 @@ export * from "./inheritance";
 export * from "./strings";
 export * from "./types";
 export {
+	areUint8ArraysEqual,
 	assertUint8Array,
 	hexToUint8Array,
 	isUint8Array,

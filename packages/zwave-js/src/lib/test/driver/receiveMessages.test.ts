@@ -1,5 +1,6 @@
 import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
+import { Bytes } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver";
@@ -56,7 +57,7 @@ test.serial(
 	async (t) => {
 		const { controller } = t.context;
 		// This buffer contains a SendData transmit report and a ManufacturerSpecific report
-		const data = Buffer.from(
+		const data = Bytes.from(
 			"010700130f000002e6010e000400020872050086000200828e",
 			"hex",
 		);

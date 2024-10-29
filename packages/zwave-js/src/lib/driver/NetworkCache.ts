@@ -12,7 +12,7 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
-import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "node:path";
 import {
@@ -362,10 +362,10 @@ function tryParseAssociationAddress(
 
 function tryParseBuffer(
 	value: unknown,
-): Buffer | undefined {
+): Uint8Array | undefined {
 	if (typeof value === "string") {
 		try {
-			return Buffer.from(value, "hex");
+			return Bytes.from(value, "hex");
 		} catch {
 			// ignore
 		}
@@ -528,7 +528,7 @@ export function serializeNetworkCacheValue(
 			return ret;
 		}
 		case "dsk": {
-			return dskToString(value as Buffer);
+			return dskToString(value as Uint8Array);
 		}
 		case "lastSeen": {
 			// Dates are stored as timestamps
@@ -536,13 +536,13 @@ export function serializeNetworkCacheValue(
 		}
 
 		case "deviceConfigHash": {
-			return (value as Buffer).toString("hex");
+			return Bytes.view(value as Uint8Array).toString("hex");
 		}
 	}
 
 	// Other dynamic properties
 	if (key.startsWith("controller.securityKeys.")) {
-		return (value as Buffer).toString("hex");
+		return Bytes.view(value as Uint8Array).toString("hex");
 	}
 
 	// Other fixed properties
@@ -583,7 +583,7 @@ export function serializeNetworkCacheValue(
 			return ret;
 		}
 		case cacheKeys.controller.privateKey: {
-			return (value as Buffer).toString("hex");
+			return Bytes.view(value as Uint8Array).toString("hex");
 		}
 	}
 

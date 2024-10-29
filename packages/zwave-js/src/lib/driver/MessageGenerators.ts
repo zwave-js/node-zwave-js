@@ -524,7 +524,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation<
 	let additionalTimeoutMs: number | undefined;
 
 	// Try to get a free nonce before requesting a new one
-	let nonce: Buffer | undefined = secMan.getFreeNonce(nodeId);
+	let nonce: Uint8Array | undefined = secMan.getFreeNonce(nodeId);
 	if (!nonce) {
 		// No free nonce, request a new one
 		const cc = new SecurityCCNonceGet({

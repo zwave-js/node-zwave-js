@@ -82,7 +82,7 @@ import {
 export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
-	payload?: Bytes;
+	payload?: Uint8Array;
 }
 
 // Defines the necessary traits an endpoint passed to a CC instance must have
@@ -203,14 +203,14 @@ export class CommandClass implements CCId {
 			endpointIndex = 0,
 			ccId = getCommandClass(this),
 			ccCommand = getCCCommand(this),
-			payload = new Bytes(),
+			payload = new Uint8Array(),
 		} = options;
 
 		this.nodeId = nodeId;
 		this.endpointIndex = endpointIndex;
 		this.ccId = ccId;
 		this.ccCommand = ccCommand;
-		this.payload = payload;
+		this.payload = Bytes.view(payload);
 	}
 
 	public static parse(
@@ -435,7 +435,7 @@ export class CommandClass implements CCId {
 			ret.ccCommand = num2hex(this.ccCommand);
 		}
 		if (this.payload.length > 0) {
-			ret.payload = "0x" + this.payload.toString("hex");
+			ret.payload = buffer2hex(this.payload);
 		}
 		return ret;
 	}
