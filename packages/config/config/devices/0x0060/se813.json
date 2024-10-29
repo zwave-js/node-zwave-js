@@ -48,6 +48,16 @@
 			]
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device responds with a status of Fail to all supervised requests
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.",
