@@ -221,6 +221,7 @@ import {
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
+	isUint8Array,
 	noop,
 	pick,
 	stringify,
