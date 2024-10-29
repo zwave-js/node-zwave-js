@@ -16,6 +16,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 
 export enum RemoveFailedNodeStartFlags {
 	OK = 0,
@@ -77,10 +78,10 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	/** The node that should be removed */
 	public failedNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
-		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
+		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
 		return super.serialize(ctx);
 	}
 }

@@ -16,11 +16,11 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMWriteLongBufferRequestOptions {
 	offset: number;
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 @messageTypes(MessageType.Request, FunctionType.ExtNVMWriteLongBuffer)
@@ -60,13 +60,13 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 	}
 
 	public offset: number;
-	public buffer: Buffer;
+	public buffer: Uint8Array;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = new Buffer(5 + this.buffer.length);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(5 + this.buffer.length);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
-		this.buffer.copy(this.payload, 5);
+		this.payload.set(this.buffer, 5);
 		return super.serialize(ctx);
 	}
 

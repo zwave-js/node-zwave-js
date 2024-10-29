@@ -20,7 +20,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum FirmwareUpdateNVMCommand {
 	Init = 0x00,
@@ -105,9 +105,9 @@ export class FirmwareUpdateNVMRequest extends Message {
 
 	public command: FirmwareUpdateNVMCommand;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.command]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.command]),
 			this.payload,
 		]);
 
@@ -255,8 +255,8 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 
 	public newImage: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.newImage ? 1 : 0]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.newImage ? 1 : 0]);
 
 		return super.serialize(ctx);
 	}
@@ -406,8 +406,8 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 		return 30000;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = new Buffer(7);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(7);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.blockLength, 3);
 		this.payload.writeUInt16BE(this.crcSeed, 5);
@@ -524,7 +524,7 @@ export class FirmwareUpdateNVM_IsValidCRC16Response
 
 export interface FirmwareUpdateNVM_WriteRequestOptions {
 	offset: number;
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 @subCommandRequest(FirmwareUpdateNVMCommand.Write)
@@ -553,12 +553,13 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	}
 
 	public offset: number;
-	public buffer: Buffer;
+	public buffer: Uint8Array;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([new Buffer(5), this.buffer]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(5 + this.buffer.length);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
+		this.payload.set(this.buffer, 5);
 
 		return super.serialize(ctx);
 	}

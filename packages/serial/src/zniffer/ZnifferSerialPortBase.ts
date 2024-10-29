@@ -8,8 +8,8 @@ import { type ZWaveSerialPortImplementation } from "../serialport/ZWaveSerialPor
 
 export interface ZnifferSerialPortEventCallbacks {
 	error: (e: Error) => void;
-	data: (data: Buffer) => void;
-	discardedData: (data: Buffer) => void;
+	data: (data: Uint8Array) => void;
+	discardedData: (data: Uint8Array) => void;
 }
 
 export type ZnifferSerialPortEvents = Extract<
@@ -66,7 +66,7 @@ export class ZnifferSerialPortBase extends PassThrough {
 
 	// Allow strongly-typed async iteration
 	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<
-		Buffer
+		Uint8Array
 	>;
 
 	constructor(
@@ -161,7 +161,7 @@ export class ZnifferSerialPortBase extends PassThrough {
 		return this._isOpen;
 	}
 
-	public async writeAsync(data: Buffer): Promise<void> {
+	public async writeAsync(data: Uint8Array): Promise<void> {
 		if (!this.isOpen) {
 			throw new Error("The serial port is not open!");
 		}

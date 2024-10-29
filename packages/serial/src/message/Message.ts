@@ -18,7 +18,11 @@ import type {
 	GetSupportedCCVersion,
 	HostIDs,
 } from "@zwave-js/host";
-import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
+import {
+	Bytes,
+	type JSONObject,
+	type TypedClassDecorator,
+} from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { FunctionType, MessageType } from "./Constants";
 import { MessageHeaders } from "./MessageHeaders";
@@ -50,7 +54,7 @@ export interface MessageOptions extends MessageBaseOptions {
 	functionType?: FunctionType;
 	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
 	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
-	payload?: Buffer;
+	payload?: Bytes;
 }
 
 export interface MessageEncodingContext
@@ -96,7 +100,7 @@ export class MessageRaw {
 	public constructor(
 		public readonly type: MessageType,
 		public readonly functionType: FunctionType,
-		public readonly payload: Buffer,
+		public readonly payload: Bytes,
 	) {}
 
 	public static parse(data: Uint8Array): MessageRaw {
@@ -136,12 +140,12 @@ export class MessageRaw {
 		const type: MessageType = data[2];
 		const functionType: FunctionType = data[3];
 		const payloadLength = messageLength - 5;
-		const payload = data.subarray(4, 4 + payloadLength);
+		const payload = Bytes.view(data.subarray(4, 4 + payloadLength));
 
 		return new MessageRaw(type, functionType, payload);
 	}
 
-	public withPayload(payload: Buffer): MessageRaw {
+	public withPayload(payload: Bytes): MessageRaw {
 		return new MessageRaw(this.type, this.functionType, payload);
 	}
 }
@@ -161,7 +165,7 @@ export class Message {
 			// Fall back to decorated response/callback types if none is given
 			expectedResponse = getExpectedResponse(this),
 			expectedCallback = getExpectedCallback(this),
-			payload = new Buffer(),
+			payload = new Bytes(),
 			callbackId,
 		} = options;
 
@@ -223,7 +227,7 @@ export class Message {
 		| typeof Message
 		| ResponsePredicate
 		| undefined;
-	public payload: Buffer; // TODO: Length limit 255
+	public payload: Bytes; // TODO: Length limit 255
 
 	/** Used to map requests to callbacks */
 	public callbackId: number | undefined;
@@ -265,15 +269,15 @@ export class Message {
 
 	/** Serializes this message into a Buffer */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		const ret = new Buffer(this.payload.length + 5);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		const ret = new Bytes(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
 		ret[1] = this.payload.length + 3;
 		// write the remaining data
 		ret[2] = this.type;
 		ret[3] = this.functionType;
-		this.payload.copy(ret, 4);
+		ret.set(this.payload, 4);
 		// followed by the checksum
 		ret[ret.length - 1] = computeChecksum(ret);
 		return ret;

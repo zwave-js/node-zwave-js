@@ -31,7 +31,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
@@ -67,7 +67,7 @@ export type SendDataRequestOptions<
 		| { command: CCType }
 		| {
 			nodeId: number;
-			serializedCC: Buffer;
+			serializedCC: Uint8Array;
 		}
 	)
 	& {
@@ -159,8 +159,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		return this.command?.nodeId ?? this._nodeId;
 	}
 
-	public serializedCC: Buffer | undefined;
-	public serializeCC(ctx: CCEncodingContext): Buffer {
+	public serializedCC: Uint8Array | undefined;
+	public serializeCC(ctx: CCEncodingContext): Uint8Array {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -179,18 +179,18 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(
 			this.command?.nodeId ?? this._nodeId,
 			ctx.nodeIdType,
 		);
 		const serializedCC = this.serializeCC(ctx);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
-			Buffer.from([serializedCC.length]),
+			Bytes.from([serializedCC.length]),
 			serializedCC,
-			Buffer.from([this.transmitOptions, this.callbackId]),
+			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
 		return super.serialize(ctx);
@@ -271,14 +271,14 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	public transmitStatus: TransmitStatus;
 	public txReport: TXReport | undefined;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.callbackId,
 			this.transmitStatus,
 		]);
 		if (this.txReport) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				encodeTXReport(this.txReport),
 			]);
@@ -335,8 +335,8 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 
 	public wasSent: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.wasSent ? 1 : 0]);
 		return super.serialize(ctx);
 	}
 
@@ -372,7 +372,7 @@ export type SendDataMulticastRequestOptions<CCType extends CommandClass> =
 		| { command: CCType }
 		| {
 			nodeIds: MulticastDestination;
-			serializedCC: Buffer;
+			serializedCC: Uint8Array;
 		}
 	)
 	& {
@@ -479,8 +479,8 @@ export class SendDataMulticastRequest<
 		return undefined;
 	}
 
-	public serializedCC: Buffer | undefined;
-	public serializeCC(ctx: CCEncodingContext): Buffer {
+	public serializedCC: Uint8Array | undefined;
+	public serializeCC(ctx: CCEncodingContext): Uint8Array {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -499,19 +499,19 @@ export class SendDataMulticastRequest<
 		this.callbackId = undefined;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const serializedCC = this.serializeCC(ctx);
 		const destinationNodeIDs = (this.command?.nodeId ?? this.nodeIds)
 			.map((id) => encodeNodeID(id, ctx.nodeIdType));
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			// # of target nodes, not # of bytes
-			Buffer.from([destinationNodeIDs.length]),
+			Bytes.from([destinationNodeIDs.length]),
 			...destinationNodeIDs,
-			Buffer.from([serializedCC.length]),
+			Bytes.from([serializedCC.length]),
 			// payload
 			serializedCC,
-			Buffer.from([this.transmitOptions, this.callbackId]),
+			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
 		return super.serialize(ctx);
@@ -565,9 +565,9 @@ export class SendDataMulticastRequestTransmitReport
 
 	public transmitStatus: TransmitStatus;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
+		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
 		return super.serialize(ctx);
 	}
 
@@ -617,8 +617,8 @@ export class SendDataMulticastResponse extends Message
 
 	public wasSent: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.wasSent ? 1 : 0]);
 		return super.serialize(ctx);
 	}
 

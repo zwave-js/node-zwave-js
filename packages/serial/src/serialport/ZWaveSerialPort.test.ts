@@ -1,4 +1,4 @@
-import { Buffer } from "@zwave-js/shared";
+import { Bytes } from "@zwave-js/shared/safe";
 import ava, { type TestFn } from "ava";
 import { PassThrough } from "node:stream";
 import { setTimeout as wait } from "node:timers/promises";
@@ -18,7 +18,7 @@ const test = ava as TestFn<TestContext>;
 async function waitForData(port: {
 	once: (event: "data", callback: (data: any) => void) => any;
 }): Promise<
-	MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer
+	MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Uint8Array
 > {
 	return new Promise((resolve) => {
 		port.once("data", resolve);
@@ -49,8 +49,8 @@ test("isOpen returns false after closing", async (t) => {
 test("passes written data through unchanged", async (t) => {
 	const { port, binding } = t.context;
 	const buffers = [
-		Buffer.from([1, 2, 3]),
-		Buffer.from("abcdef1234567890", "hex"),
+		Bytes.from([1, 2, 3]),
+		Bytes.from("abcdef1234567890", "hex"),
 	];
 	for (const buffer of buffers) {
 		await port.writeAsync(buffer);
@@ -62,21 +62,21 @@ test("write rejects if the port is not open", async (t) => {
 	const { port } = t.context;
 	await port.close();
 	await t.throwsAsync(() =>
-		port.writeAsync(Buffer.from([MessageHeaders.ACK]))
+		port.writeAsync(Bytes.from([MessageHeaders.ACK]))
 	);
 });
 
 test("emit an event for each single-byte message that was read", async (t) => {
 	const { port, binding } = t.context;
-	binding.emitData(Buffer.from([MessageHeaders.ACK]));
+	binding.emitData(Bytes.from([MessageHeaders.ACK]));
 	let data = await waitForData(port);
 	t.deepEqual(data, MessageHeaders.ACK);
 
-	binding.emitData(Buffer.from([MessageHeaders.CAN]));
+	binding.emitData(Bytes.from([MessageHeaders.CAN]));
 	data = await waitForData(port);
 	t.deepEqual(data, MessageHeaders.CAN);
 
-	binding.emitData(Buffer.from([MessageHeaders.NAK]));
+	binding.emitData(Bytes.from([MessageHeaders.NAK]));
 	data = await waitForData(port);
 	t.deepEqual(data, MessageHeaders.NAK);
 });
@@ -84,7 +84,7 @@ test("emit an event for each single-byte message that was read", async (t) => {
 test("emits a series of events when multiple single-byte messages are received", async (t) => {
 	const { port, binding } = t.context;
 	binding.emitData(
-		Buffer.from([
+		Bytes.from([
 			MessageHeaders.ACK,
 			MessageHeaders.CAN,
 			MessageHeaders.NAK,
@@ -107,7 +107,7 @@ test("emits a series of events when multiple single-byte messages are received",
 test("skips all invalid/unexpected data", async (t) => {
 	const { port, binding } = t.context;
 	binding.emitData(
-		Buffer.from([
+		Bytes.from([
 			MessageHeaders.ACK,
 			MessageHeaders.CAN,
 			0xff,
@@ -134,7 +134,7 @@ test("skips all invalid/unexpected data", async (t) => {
 test("skips all invalid/unexpected data (test 2)", async (t) => {
 	const { port, binding } = t.context;
 	binding.emitData(
-		Buffer.from([
+		Bytes.from([
 			MessageHeaders.ACK,
 			MessageHeaders.CAN,
 			0xff,
@@ -144,7 +144,7 @@ test("skips all invalid/unexpected data (test 2)", async (t) => {
 		]),
 	);
 	setTimeout(() => {
-		binding.emitData(Buffer.from([MessageHeaders.NAK]));
+		binding.emitData(Bytes.from([MessageHeaders.NAK]));
 	}, 10);
 
 	let count = 0;
@@ -161,7 +161,7 @@ test("skips all invalid/unexpected data (test 2)", async (t) => {
 });
 test("emits a buffer when a message is received", async (t) => {
 	const { port, binding } = t.context;
-	const data = Buffer.from([
+	const data = Bytes.from([
 		MessageHeaders.SOF,
 		0x05, // remaining length
 		0xff,
@@ -178,7 +178,7 @@ test("emits a buffer when a message is received", async (t) => {
 
 test("may be consumed with an async iterator", async (t) => {
 	const { port, binding } = t.context;
-	const data = Buffer.from([
+	const data = Bytes.from([
 		MessageHeaders.ACK,
 		MessageHeaders.CAN,
 		0xff,
@@ -205,7 +205,7 @@ test("can be piped into", async (t) => {
 	passThrough.pipe(port);
 
 	return new Promise((resolve) => {
-		const data = Buffer.from([1, 2, 3, 4, 5]);
+		const data = Bytes.from([1, 2, 3, 4, 5]);
 		passThrough.write(data, (err) => {
 			t.falsy(err);
 			// I see no better way of forcing the write to bubble through the streams
@@ -222,6 +222,7 @@ test("can be piped to a reader", async (t) => {
 	const stream = new PassThrough();
 	port.pipe(stream);
 
+	// eslint-disable-next-line no-restricted-globals -- Serialport uses Node.js Buffers
 	const expected = Buffer.from([0x01, 0x03, 0xff, 0xff, 0xff]);
 	binding.emitData(expected);
 
@@ -238,7 +239,7 @@ test("can be unpiped again", async (t) => {
 	port.pipe(stream);
 	port.unpipe();
 
-	const expected = Buffer.from([0x01, 0x03, 0xff, 0xff, 0xff]);
+	const expected = Bytes.from([0x01, 0x03, 0xff, 0xff, 0xff]);
 	binding.emitData(expected);
 
 	await wait(1);

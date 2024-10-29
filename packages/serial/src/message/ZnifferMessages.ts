@@ -8,7 +8,7 @@ import {
 	getZWaveChipType,
 	validatePayload,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 import {
 	ZnifferFrameType,
 	ZnifferFunctionType,
@@ -25,7 +25,7 @@ export type DeserializingZnifferMessageConstructor<T extends ZnifferMessage> =
 	) => T;
 
 export interface ZnifferMessageDeserializationOptions {
-	data: Buffer;
+	data: Bytes;
 }
 
 /**
@@ -34,7 +34,7 @@ export interface ZnifferMessageDeserializationOptions {
 function gotDeserializationOptions(
 	options: Record<any, any> | undefined,
 ): options is ZnifferMessageDeserializationOptions {
-	return options != undefined && Buffer.isBuffer(options.data);
+	return options != undefined && options.data instanceof Bytes;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -47,7 +47,7 @@ export interface ZnifferMessageCreationOptions
 {
 	messageType: ZnifferMessageType;
 	functionType?: ZnifferFunctionType;
-	payload?: Buffer;
+	payload?: Bytes;
 }
 
 export type ZnifferMessageOptions =
@@ -85,19 +85,19 @@ export class ZnifferMessage {
 		} else {
 			this.type = options.messageType;
 			this.functionType = options.functionType;
-			this.payload = options.payload || new Buffer();
+			this.payload = options.payload || new Bytes();
 		}
 	}
 
 	public type: ZnifferMessageType;
 	public functionType?: ZnifferFunctionType;
-	public payload: Buffer; // TODO: Length limit 255
+	public payload: Bytes; // TODO: Length limit 255
 
 	/** Serializes this message into a Buffer */
-	public serialize(): Buffer {
+	public serialize(): Bytes {
 		if (this.type === ZnifferMessageType.Command) {
-			return Buffer.concat([
-				Buffer.from([
+			return Bytes.concat([
+				Bytes.from([
 					this.type,
 					this.functionType!,
 					this.payload.length,
@@ -105,10 +105,16 @@ export class ZnifferMessage {
 				this.payload,
 			]);
 		} else if (this.type === ZnifferMessageType.Data) {
-			const ret = new Buffer(this.payload.length + 1);
-			ret[0] = this.type;
-			this.payload.copy(ret, 1);
-			this.payload[9] = this.payload.length - 10;
+			const ret = Bytes.concat([
+				[this.type],
+				this.payload,
+			]);
+			ret[9] = this.payload.length - 10;
+			// FIXME: Is this correct? It used to be
+			// const ret = new Bytes(this.payload.length + 1);
+			// ret[0] = this.type;
+			// this.payload.copy(ret, 1);
+			// this.payload[9] = this.payload.length - 10;
 			return ret;
 		} else {
 			throw new ZWaveError(
@@ -123,7 +129,7 @@ export class ZnifferMessage {
 	 * It is assumed that the buffer has been checked beforehand
 	 */
 	public static getConstructor(
-		data: Buffer,
+		data: Uint8Array,
 	): ZnifferMessageConstructor<ZnifferMessage> {
 		const type = data[0];
 		// We hardcode the list of constructors here, since the Zniffer protocol has
@@ -165,7 +171,7 @@ export class ZnifferMessage {
 	}
 }
 
-function computeChecksumXOR(buffer: Buffer): number {
+function computeChecksumXOR(buffer: Uint8Array): number {
 	let ret = 0xff;
 	for (let i = 0; i < buffer.length; i++) {
 		ret ^= buffer[i];
@@ -243,7 +249,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 				// This always seems to contain the same 2 bytes
 				// There is no checksum
 				this.checksumOK = true;
-				this.payload = new Buffer();
+				this.payload = new Bytes();
 			} else {
 				validatePayload.fail(
 					`Unsupported frame type ${
@@ -314,8 +320,8 @@ export class ZnifferSetFrequencyRequest extends ZnifferMessage {
 
 	public frequency: number;
 
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.frequency]);
+	public serialize(): Bytes {
+		this.payload = Bytes.from([this.frequency]);
 		return super.serialize();
 	}
 }
@@ -393,8 +399,8 @@ export class ZnifferSetBaudRateRequest extends ZnifferMessage {
 
 	public baudrate: 0;
 
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.baudrate]);
+	public serialize(): Bytes {
+		this.payload = Bytes.from([this.baudrate]);
 		return super.serialize();
 	}
 }
@@ -418,8 +424,8 @@ export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
 
 	public frequency: number;
 
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.frequency]);
+	public serialize(): Bytes {
+		this.payload = Bytes.from([this.frequency]);
 		return super.serialize();
 	}
 }

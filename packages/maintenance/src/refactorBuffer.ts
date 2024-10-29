@@ -1,28 +1,46 @@
 import fs from "node:fs/promises";
-import { Project } from "ts-morph";
+import { Project, SyntaxKind } from "ts-morph";
 
 async function main() {
 	const project = new Project({
 		tsConfigFilePath: "packages/zwave-js/tsconfig.json",
 	});
 
-	const sourceFiles = project.getSourceFiles() /*.filter((file) =>
-		file.getBaseNameWithoutExtension().endsWith("CC")
-	)*/;
+	const sourceFiles = project.getSourceFiles().filter((file) =>
+		file.getFilePath().includes("/serialapi/")
+	);
 	for (const file of sourceFiles) {
-		const bufferImports = file.getImportDeclarations().filter((i) =>
-			i.getModuleSpecifierValue() === "@zwave-js/shared"
-		).map((i) => {
-			return i.getNamedImports().find((n) => n.getName() === "Buffer");
-		}).filter((i) => i != undefined);
+		const hasBytesImport = file.getImportDeclarations().some((i) =>
+			i.getModuleSpecifierValue().startsWith("@zwave-js/shared")
+			&& i.getNamedImports().some((n) => n.getName() === "Bytes")
+		);
 
-		if (!bufferImports.length) continue;
+		const usesBytesImport = file.getDescendantsOfKind(SyntaxKind.Identifier)
+			.some((i) => i.getText() === "Bytes");
 
-		bufferImports.forEach((i) => {
-			i.renameAlias("Bytes");
-			i.setName("Bytes");
-			i.removeAliasWithRename();
-		});
+		if (file.getBaseName().includes("DeleteSUCReturnRouteMessages")) {
+			debugger;
+		}
+
+		if (hasBytesImport || !usesBytesImport) {
+			continue;
+		}
+
+		const existing = file.getImportDeclaration((decl) =>
+			decl.getModuleSpecifierValue().startsWith("@zwave-js/shared")
+		);
+		if (!existing) {
+			file.addImportDeclaration({
+				moduleSpecifier: "@zwave-js/shared",
+				namedImports: [{
+					name: "Bytes",
+				}],
+			});
+		} else {
+			existing.addNamedImport({
+				name: "Bytes",
+			});
+		}
 
 		await file.save();
 	}

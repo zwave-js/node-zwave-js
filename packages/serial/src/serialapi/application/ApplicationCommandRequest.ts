@@ -21,6 +21,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 import { type MessageWithCC } from "../utils";
 
 export enum ApplicationCommandStatusFlags {
@@ -43,7 +44,7 @@ export type ApplicationCommandRequestOptions =
 		| { command: CommandClass }
 		| {
 			nodeId: number;
-			serializedCC: Buffer;
+			serializedCC: Uint8Array;
 		}
 	)
 	& {
@@ -153,8 +154,8 @@ export class ApplicationCommandRequest extends Message
 		return this._nodeId ?? super.getNodeId();
 	}
 
-	public serializedCC: Buffer | undefined;
-	public serializeCC(ctx: CCEncodingContext): Buffer {
+	public serializedCC: Uint8Array | undefined;
+	public serializeCC(ctx: CCEncodingContext): Uint8Array {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -167,7 +168,7 @@ export class ApplicationCommandRequest extends Message
 		return this.serializedCC;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const statusByte = (this.frameType === "broadcast"
 			? ApplicationCommandStatusFlags.TypeBroad
 			: this.frameType === "multicast"
@@ -180,10 +181,10 @@ export class ApplicationCommandRequest extends Message
 			this.getNodeId() ?? ctx.ownNodeId,
 			ctx.nodeIdType,
 		);
-		this.payload = Buffer.concat([
-			Buffer.from([statusByte]),
+		this.payload = Bytes.concat([
+			[statusByte],
 			nodeId,
-			Buffer.from([serializedCC.length]),
+			[serializedCC.length],
 			serializedCC,
 		]);
 

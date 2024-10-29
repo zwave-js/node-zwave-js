@@ -23,7 +23,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
@@ -68,10 +68,10 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase {
 
 	public nodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
-		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
+		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
 
 		return super.serialize(ctx);
 	}

@@ -24,6 +24,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 
 export interface GetNodeProtocolInfoRequestOptions {
@@ -57,7 +58,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 	// but this is a message to the controller
 	public requestedNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(this.requestedNodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}
@@ -166,7 +167,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const protocolInfo = encodeNodeProtocolInfo({
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
@@ -179,9 +180,9 @@ export class GetNodeProtocolInfoResponse extends Message {
 			supportsBeaming: this.supportsBeaming,
 			hasSpecificDeviceClass: this.specificDeviceClass !== 0,
 		});
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			protocolInfo,
-			Buffer.from([
+			Bytes.from([
 				this.basicDeviceClass,
 				this.genericDeviceClass,
 				this.specificDeviceClass,

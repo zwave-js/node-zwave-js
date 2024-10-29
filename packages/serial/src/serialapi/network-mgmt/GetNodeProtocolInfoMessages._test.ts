@@ -101,7 +101,7 @@ export default foo;
 // 	});
 
 // 	// TODO: Pick up an actual message from OZW to test this
-// 	// const rawBuf = Buffer.from("011001155a2d5761766520342e3035000197", "hex");
+// 	// const rawBuf = Bytes.from("011001155a2d5761766520342e3035000197", "hex");
 // 	// const parsed = new GetNodeProtocolInfo(undefined);
 // 	// parsed.deserialize(rawBuf);
 

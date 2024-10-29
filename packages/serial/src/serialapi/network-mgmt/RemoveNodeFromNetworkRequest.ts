@@ -20,6 +20,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 
 export enum RemoveNodeType {
 	Any = 1,
@@ -131,13 +132,13 @@ export class RemoveNodeFromNetworkRequest
 	/** Whether to exclude network wide */
 	public networkWide: boolean = false;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
 		if (this.networkWide) data |= RemoveNodeFlags.NetworkWide;
 
-		this.payload = Buffer.from([data, this.callbackId]);
+		this.payload = Bytes.from([data, this.callbackId]);
 
 		return super.serialize(ctx);
 	}
@@ -221,11 +222,11 @@ export class RemoveNodeFromNetworkRequestStatusReport
 		return this.status !== RemoveNodeStatus.Failed;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId, this.status]);
+		this.payload = Bytes.from([this.callbackId, this.status]);
 		if (this.statusContext?.nodeId != undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				encodeNodeID(this.statusContext.nodeId, ctx.nodeIdType),
 			]);

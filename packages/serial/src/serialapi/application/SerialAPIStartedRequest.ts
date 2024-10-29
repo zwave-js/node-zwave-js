@@ -15,7 +15,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum SerialAPIWakeUpReason {
 	/** The Z-Wave API Module has been woken up by reset or external interrupt. */
@@ -118,18 +118,18 @@ export class SerialAPIStartedRequest extends Message {
 	public controlledCCs: CommandClasses[];
 	public supportsLongRange: boolean = false;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const numCCBytes = ccList.length;
 
-		this.payload = new Buffer(6 + numCCBytes + 1);
+		this.payload = new Bytes(6 + numCCBytes + 1);
 		this.payload[0] = this.wakeUpReason;
 		this.payload[1] = this.watchdogEnabled ? 0b1 : 0;
 		this.payload[2] = this.isListening ? 0b10_000_000 : 0;
 		this.payload[3] = this.genericDeviceClass;
 		this.payload[4] = this.specificDeviceClass;
 		this.payload[5] = numCCBytes;
-		ccList.copy(this.payload, 6);
+		this.payload.set(ccList, 6);
 		this.payload[6 + numCCBytes] = this.supportsLongRange ? 0b1 : 0;
 
 		return super.serialize(ctx);

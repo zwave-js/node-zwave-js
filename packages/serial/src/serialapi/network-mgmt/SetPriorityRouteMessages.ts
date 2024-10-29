@@ -23,7 +23,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared";
+import { type AllOrNone, Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 export type SetPriorityRouteRequestOptions =
 	& {
@@ -81,7 +81,7 @@ export class SetPriorityRouteRequest extends Message {
 	public repeaters: number[] | undefined;
 	public routeSpeed: ZWaveDataRate | undefined;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const nodeId = encodeNodeID(
 			this.destinationNodeId,
 			ctx.nodeIdType,
@@ -91,9 +91,9 @@ export class SetPriorityRouteRequest extends Message {
 			this.payload = nodeId;
 		} else {
 			// Set the priority route
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				nodeId,
-				Buffer.from([
+				Bytes.from([
 					this.repeaters[0] ?? 0,
 					this.repeaters[1] ?? 0,
 					this.repeaters[2] ?? 0,

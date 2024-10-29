@@ -19,6 +19,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 export interface SetRFReceiveModeRequestOptions {
 	/** Whether the stick should receive (true) or not (false) */
@@ -50,8 +51,8 @@ export class SetRFReceiveModeRequest extends Message {
 
 	public enabled: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.enabled ? 0x01 : 0x00]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.enabled ? 0x01 : 0x00]);
 
 		return super.serialize(ctx);
 	}

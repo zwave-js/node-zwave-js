@@ -23,7 +23,7 @@ import {
 	type SuccessIndicator,
 	messageTypes,
 } from "@zwave-js/serial";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up
@@ -91,9 +91,9 @@ export class ApplicationUpdateRequest extends Message {
 
 	public readonly updateType: ApplicationUpdateTypes;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.updateType]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.updateType]),
 			this.payload,
 		]);
 		return super.serialize(ctx);
@@ -135,7 +135,7 @@ export class ApplicationUpdateRequestWithNodeInfo
 	public nodeId: number;
 	public nodeInformation: NodeUpdatePayload;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeUpdatePayload(
 			this.nodeInformation,
 			ctx.nodeIdType,
@@ -198,7 +198,7 @@ export class ApplicationUpdateRequestNodeRemoved
 
 export interface ApplicationUpdateRequestSmartStartHomeIDReceivedBaseOptions {
 	remoteNodeId: number;
-	nwiHomeId: Buffer;
+	nwiHomeId: Uint8Array;
 	basicDeviceClass: BasicDeviceClass;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
@@ -237,7 +237,7 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 		offset += nodeIdBytes;
 		// next byte is rxStatus
 		offset++;
-		const nwiHomeId: Buffer = raw.payload.subarray(offset, offset + 4);
+		const nwiHomeId = raw.payload.subarray(offset, offset + 4);
 		offset += 4;
 		const ccLength = raw.payload[offset++];
 		const basicDeviceClass: BasicDeviceClass = raw.payload[offset++];
@@ -258,7 +258,7 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 	}
 
 	public readonly remoteNodeId: number;
-	public readonly nwiHomeId: Buffer;
+	public readonly nwiHomeId: Uint8Array;
 
 	public readonly basicDeviceClass: BasicDeviceClass;
 	public readonly genericDeviceClass: number;

@@ -25,6 +25,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
 @expectedResponse(FunctionType.GetSerialApiInitData)
@@ -131,7 +132,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	public zwaveChipType?: string | UnknownZWaveChipType;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		let chipType: UnknownZWaveChipType | undefined;
 		if (typeof this.zwaveChipType === "string") {
 			chipType = getChipTypeAndVersion(this.zwaveChipType);
@@ -139,7 +140,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			chipType = this.zwaveChipType;
 		}
 
-		this.payload = new Buffer(
+		this.payload = new Bytes(
 			3 + NUM_NODEMASK_BYTES + (chipType ? 2 : 0),
 		);
 
@@ -159,7 +160,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 		this.payload[2] = NUM_NODEMASK_BYTES;
 		const nodeBitMask = encodeBitMask(this.nodeIds, MAX_NODES);
-		nodeBitMask.copy(this.payload, 3);
+		this.payload.set(nodeBitMask, 3);
 
 		if (chipType) {
 			this.payload[3 + NUM_NODEMASK_BYTES] = chipType.type;

@@ -90,7 +90,7 @@ export class BootloaderScreenParser extends Transform {
 			const charCode = this.receiveBuffer.charCodeAt(0);
 			if (!isFlowControl(charCode)) break;
 
-			this.logger?.data("inbound", Buffer.from([charCode]));
+			this.logger?.data("inbound", Uint8Array.from([charCode]));
 			this.push(charCode);
 			this.receiveBuffer = this.receiveBuffer.slice(1);
 		}

@@ -1,4 +1,4 @@
-import { num2hex } from "@zwave-js/shared";
+import { Bytes, num2hex } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../log/Logger";
 import { MessageHeaders } from "../message/MessageHeaders";
@@ -19,13 +19,13 @@ function getMessageLength(data: Uint8Array): number {
 export class SerialAPIParser extends Transform {
 	constructor(
 		private logger?: SerialLogger,
-		private onDiscarded?: (data: Buffer) => void,
+		private onDiscarded?: (data: Uint8Array) => void,
 	) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
 
-	private receiveBuffer = new Buffer();
+	private receiveBuffer = new Bytes();
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibble: boolean = false;
@@ -35,7 +35,7 @@ export class SerialAPIParser extends Transform {
 		encoding: string,
 		callback: TransformCallback,
 	): void {
-		this.receiveBuffer = Buffer.concat([this.receiveBuffer, chunk]);
+		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
 		while (this.receiveBuffer.length > 0) {
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
@@ -101,7 +101,7 @@ export class SerialAPIParser extends Transform {
 					}
 				}
 				// Continue with the next valid byte
-				this.receiveBuffer = skipBytes(this.receiveBuffer, skip);
+				this.receiveBuffer = this.receiveBuffer.subarray(skip);
 				continue;
 			}
 
@@ -113,7 +113,7 @@ export class SerialAPIParser extends Transform {
 				const msgLength = getMessageLength(this.receiveBuffer);
 				// emit it and slice the read bytes from the buffer
 				const msg = this.receiveBuffer.subarray(0, msgLength);
-				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
+				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
 
 				this.logger?.data("inbound", msg);
 				this.push(msg);
@@ -121,9 +121,4 @@ export class SerialAPIParser extends Transform {
 		}
 		callback();
 	}
-}
-
-/** Skips the first n bytes of a buffer and returns the rest */
-export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.subarray(n));
 }

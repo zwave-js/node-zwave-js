@@ -1,6 +1,6 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
-import { Buffer } from "@zwave-js/shared";
+import { Bytes } from "@zwave-js/shared";
 import test from "ava";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes } from "./Message";
@@ -8,7 +8,7 @@ import { Message, messageTypes } from "./Message";
 test("should deserialize and serialize correctly", (t) => {
 	// actual messages from OZW
 	const okayMessages = [
-		Buffer.from([
+		Bytes.from([
 			0x01,
 			0x09,
 			0x00,
@@ -21,9 +21,9 @@ test("should deserialize and serialize correctly", (t) => {
 			0x0b,
 			0xca,
 		]),
-		Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
-		Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
-		Buffer.from([
+		Bytes.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
+		Bytes.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
+		Bytes.from([
 			0x01,
 			0x0a,
 			0x00,
@@ -46,7 +46,7 @@ test("should deserialize and serialize correctly", (t) => {
 
 test("should serialize correctly when the payload is null", (t) => {
 	// synthetic message
-	const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
+	const expected = Bytes.from([0x01, 0x03, 0x00, 0xff, 0x03]);
 	const message = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
@@ -56,34 +56,34 @@ test("should serialize correctly when the payload is null", (t) => {
 
 test("should throw the correct error when parsing a faulty message", (t) => {
 	// fake messages to produce certain errors
-	const brokenMessages: [Buffer, string, ZWaveErrorCodes][] = [
+	const brokenMessages: [Bytes, string, ZWaveErrorCodes][] = [
 		// too short (<5 bytes)
 		[
-			Buffer.from([0x01, 0x02, 0x00, 0x00]),
+			Bytes.from([0x01, 0x02, 0x00, 0x00]),
 			"truncated",
 			ZWaveErrorCodes.PacketFormat_Truncated,
 		],
 		// no SOF
 		[
-			Buffer.from([0x00, 0x03, 0x00, 0x00, 0x00]),
+			Bytes.from([0x00, 0x03, 0x00, 0x00, 0x00]),
 			"start with SOF",
 			ZWaveErrorCodes.PacketFormat_Invalid,
 		],
 		// too short for the provided data length
 		[
-			Buffer.from([0x01, 0x04, 0x00, 0x00, 0x00]),
+			Bytes.from([0x01, 0x04, 0x00, 0x00, 0x00]),
 			"truncated",
 			ZWaveErrorCodes.PacketFormat_Truncated,
 		],
 		// invalid checksum
 		[
-			Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]),
+			Bytes.from([0x01, 0x03, 0x00, 0x00, 0x00]),
 			"checksum",
 			ZWaveErrorCodes.PacketFormat_Checksum,
 		],
 		// invalid checksum (once more with a real packet)
 		[
-			Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x98]),
+			Bytes.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x98]),
 			"checksum",
 			ZWaveErrorCodes.PacketFormat_Checksum,
 		],
@@ -114,7 +114,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	const msg2 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
-		payload: Buffer.from("aabbcc", "hex"),
+		payload: Bytes.from("aabbcc", "hex"),
 	});
 	const json2 = {
 		name: msg2.constructor.name,
@@ -138,7 +138,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 		expectedResponse: FunctionType.GetControllerVersion,
-		payload: Buffer.from("aabbcc", "hex"),
+		payload: Bytes.from("aabbcc", "hex"),
 	});
 	const json4 = {
 		name: msg4.constructor.name,
@@ -155,7 +155,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 });
 
 test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
-	const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
+	const unknown = Bytes.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
 	t.is(
 		Message.parse(unknown, {} as any).constructor,
 		Message,

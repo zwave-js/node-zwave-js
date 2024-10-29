@@ -21,7 +21,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
@@ -84,10 +84,10 @@ export class DeleteSUCReturnRouteRequest
 	public nodeId: number;
 	public readonly disableCallbackFunctionTypeCheck?: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
-		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
+		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
 
 		return super.serialize(ctx);
 	}
@@ -125,8 +125,8 @@ export class DeleteSUCReturnRouteResponse extends Message
 
 	public readonly wasExecuted: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.wasExecuted ? 0x01 : 0]);
 		return super.serialize(ctx);
 	}
 
@@ -179,9 +179,9 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 
 	public readonly transmitStatus: TransmitStatus;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
+		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
 		return super.serialize(ctx);
 	}
 

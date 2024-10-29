@@ -30,7 +30,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
 export enum AddNodeType {
 	Any = 1,
@@ -67,8 +67,8 @@ export interface AddNodeToNetworkRequestOptions {
 }
 
 export interface AddNodeDSKToNetworkRequestOptions {
-	nwiHomeId: Buffer;
-	authHomeId: Buffer;
+	nwiHomeId: Uint8Array;
+	authHomeId: Uint8Array;
 	highPower?: boolean;
 	networkWide?: boolean;
 	protocol?: Protocols;
@@ -171,13 +171,13 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include network wide */
 	public networkWide: boolean = false;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		let data: number = this.addNodeType || AddNodeType.Any;
 		if (this.highPower) data |= AddNodeFlags.HighPower;
 		if (this.networkWide) data |= AddNodeFlags.NetworkWide;
 
-		this.payload = Buffer.from([data, this.callbackId]);
+		this.payload = Bytes.from([data, this.callbackId]);
 
 		return super.serialize(ctx);
 	}
@@ -208,13 +208,13 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 }
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		const control: number = AddNodeType.SmartStartListen
 			| AddNodeFlags.NetworkWide;
 		// The Serial API does not send a callback, so disable waiting for one
 		this.callbackId = 0;
 
-		this.payload = Buffer.from([control, this.callbackId]);
+		this.payload = Bytes.from([control, this.callbackId]);
 		return super.serialize(ctx);
 	}
 
@@ -242,8 +242,8 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	}
 
 	/** The home IDs of node to add */
-	public nwiHomeId: Buffer;
-	public authHomeId: Buffer;
+	public nwiHomeId: Uint8Array;
+	public authHomeId: Uint8Array;
 	/** Whether to use high power */
 	public highPower: boolean;
 	/** Whether to include network wide */
@@ -251,7 +251,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include as long-range or not */
 	public protocol: Protocols;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
@@ -260,8 +260,8 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			control |= AddNodeFlags.ProtocolLongRange;
 		}
 
-		this.payload = Buffer.concat([
-			Buffer.from([control, this.callbackId]),
+		this.payload = Bytes.concat([
+			Bytes.from([control, this.callbackId]),
 			this.nwiHomeId,
 			this.authHomeId,
 		]);
@@ -378,11 +378,11 @@ export class AddNodeToNetworkRequestStatusReport
 	public readonly status: AddNodeStatus;
 	public readonly statusContext: AddNodeStatusContext | undefined;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId, this.status]);
+		this.payload = Bytes.from([this.callbackId, this.status]);
 		if (this.statusContext?.basicDeviceClass != undefined) {
-			this.payload = Buffer.concat([
+			this.payload = Bytes.concat([
 				this.payload,
 				encodeNodeUpdatePayload(
 					this.statusContext as NodeUpdatePayload,

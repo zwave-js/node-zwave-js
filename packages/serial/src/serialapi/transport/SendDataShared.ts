@@ -11,6 +11,7 @@ import {
 	rssiToString,
 	stripUndefined,
 } from "@zwave-js/core/safe";
+import { Bytes } from "@zwave-js/shared/safe";
 import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
 import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages";
 import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
@@ -54,7 +55,7 @@ export type TransmitReport =
 
 // const RSSI_RESERVED_START = 11;
 
-export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
+export function parseRSSI(payload: Bytes, offset: number = 0): RSSI {
 	const ret = payload.readInt8(offset);
 	// Filter out reserved values
 	// TODO: Figure out for which controllers this is relevant
@@ -68,14 +69,14 @@ export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
 }
 
 export function tryParseRSSI(
-	payload: Buffer,
+	payload: Bytes,
 	offset: number = 0,
 ): RSSI | undefined {
 	if (payload.length <= offset) return;
 	return parseRSSI(payload, offset);
 }
 
-function parseTXPower(payload: Buffer, offset: number = 0): number | undefined {
+function parseTXPower(payload: Bytes, offset: number = 0): number | undefined {
 	if (payload.length <= offset) return;
 	const ret = payload.readInt8(offset);
 	if (ret >= -127 && ret <= 126) return ret;
@@ -87,7 +88,7 @@ function parseTXPower(payload: Buffer, offset: number = 0): number | undefined {
  */
 export function parseTXReport(
 	includeACK: boolean,
-	payload: Buffer,
+	payload: Bytes,
 ): TXReport | undefined {
 	if (payload.length < 17) return;
 	const numRepeaters = payload[2];
@@ -167,8 +168,8 @@ export function serializableTXReportToTXReport(
 	};
 }
 
-export function encodeTXReport(report: SerializableTXReport): Buffer {
-	const ret = new Uint8Array(24).fill(0);
+export function encodeTXReport(report: SerializableTXReport): Uint8Array {
+	const ret = new Bytes(24).fill(0);
 	ret.writeUInt16BE(report.txTicks, 0);
 	ret[2] = report.repeaterNodeIds?.length ?? 0;
 	ret.writeInt8(report.ackRSSI ?? RssiError.NotAvailable, 3);

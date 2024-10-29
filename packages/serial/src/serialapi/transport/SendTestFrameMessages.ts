@@ -21,7 +21,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.SendTestFrame)
 @priority(MessagePriority.Normal)
@@ -78,12 +78,12 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public testNodeId: number;
 	public powerlevel: Powerlevel;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.testNodeId, ctx.nodeIdType);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
-			Buffer.from([
+			Bytes.from([
 				this.powerlevel,
 				this.callbackId,
 			]),

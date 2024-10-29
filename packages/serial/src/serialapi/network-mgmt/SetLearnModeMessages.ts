@@ -19,7 +19,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
 const LEARN_MODE_EMPTY_NODE_ID = 0xef; // who knows why...
 
@@ -87,9 +87,9 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 
 	public intent: LearnModeIntent;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([
+		this.payload = Bytes.from([
 			this.intent,
 			this.callbackId,
 		]);
@@ -151,7 +151,7 @@ export class SetLearnModeResponse extends Message implements SuccessIndicator {
 export interface SetLearnModeCallbackOptions {
 	status: LearnModeStatus;
 	assignedNodeId: number;
-	statusMessage?: Buffer;
+	statusMessage?: Uint8Array;
 }
 
 export class SetLearnModeCallback extends SetLearnModeRequestBase
@@ -176,7 +176,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 		const callbackId = raw.payload[0];
 		const status: LearnModeStatus = raw.payload[1];
 		const assignedNodeId = raw.payload[2];
-		let statusMessage: Buffer | undefined;
+		let statusMessage: Uint8Array | undefined;
 		if (raw.payload.length > 3) {
 			const msgLength = raw.payload[3];
 			statusMessage = raw.payload.subarray(4, 4 + msgLength);
@@ -192,7 +192,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 
 	public readonly status: LearnModeStatus;
 	public readonly assignedNodeId: number;
-	public readonly statusMessage?: Buffer;
+	public readonly statusMessage?: Uint8Array;
 
 	isOK(): boolean {
 		return this.status !== LearnModeStatus.Failed;

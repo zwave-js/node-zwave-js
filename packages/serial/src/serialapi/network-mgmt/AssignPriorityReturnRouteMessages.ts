@@ -24,7 +24,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.AssignPriorityReturnRoute)
 @priority(MessagePriority.Normal)
@@ -99,17 +99,17 @@ export class AssignPriorityReturnRouteRequest
 	public repeaters: number[];
 	public routeSpeed: ZWaveDataRate;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		const destinationNodeId = encodeNodeID(
 			this.destinationNodeId,
 			ctx.nodeIdType,
 		);
-		this.payload = Buffer.concat([
+		this.payload = Bytes.concat([
 			nodeId,
 			destinationNodeId,
-			Buffer.from([
+			Bytes.from([
 				this.repeaters[0] ?? 0,
 				this.repeaters[1] ?? 0,
 				this.repeaters[2] ?? 0,

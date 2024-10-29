@@ -32,7 +32,7 @@ export type BridgeApplicationCommandRequestOptions =
 		| { command: CommandClass }
 		| {
 			nodeId: number;
-			serializedCC: Buffer;
+			serializedCC: Uint8Array;
 		}
 	)
 	& {
@@ -163,7 +163,7 @@ export class BridgeApplicationCommandRequest extends Message
 
 	public readonly ownNodeId: number;
 
-	public readonly serializedCC: Buffer | undefined;
+	public readonly serializedCC: Uint8Array | undefined;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: CommandClass | undefined;

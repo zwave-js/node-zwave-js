@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals -- The serialport typings require a Node.js Buffer */
 /* eslint-disable @typescript-eslint/require-await */
 // Clone of https://github.com/serialport/binding-mock with support for emitting events on the written side
 
@@ -10,15 +11,15 @@ import type {
 	SetOptions,
 	UpdateOptions,
 } from "@serialport/bindings-interface";
-import { TypedEventEmitter } from "@zwave-js/shared";
+import { Bytes, TypedEventEmitter, isUint8Array } from "@zwave-js/shared";
 
 export interface MockPortInternal {
-	data: Buffer;
+	data: Uint8Array;
 	// echo: boolean;
 	// record: boolean;
 	info: PortInfo;
 	maxReadSize: number;
-	readyData?: Buffer;
+	readyData?: Uint8Array;
 	openOpt?: OpenOptions;
 	instance?: MockPortBinding;
 }
@@ -26,7 +27,7 @@ export interface MockPortInternal {
 export interface CreatePortOptions {
 	echo?: boolean;
 	record?: boolean;
-	readyData?: Buffer;
+	readyData?: Uint8Array;
 	maxReadSize?: number;
 	manufacturer?: string;
 	vendorId?: string;
@@ -78,7 +79,7 @@ export const MockBinding: MockBindingInterface = {
 		};
 
 		ports[path] = {
-			data: Buffer.alloc(0),
+			data: new Uint8Array(),
 			// echo: optWithDefaults.echo,
 			// record: optWithDefaults.record,
 			readyData: optWithDefaults.readyData,
@@ -150,7 +151,7 @@ export const MockBinding: MockBindingInterface = {
 };
 
 interface MockPortBindingEvents {
-	write: (data: Buffer) => void;
+	write: (data: Uint8Array) => void;
 	close: () => void;
 }
 
@@ -163,8 +164,8 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 	readonly openOptions: Required<OpenOptions>;
 	readonly port: MockPortInternal;
 	private pendingRead: null | ((err: null | Error) => void);
-	lastWrite: null | Buffer;
-	recording: Buffer;
+	lastWrite: null | Uint8Array;
+	recording: Uint8Array;
 	writeOperation: null | Promise<void>;
 	isOpen: boolean;
 	serialNumber?: string;
@@ -177,7 +178,7 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 		this.pendingRead = null;
 		this.isOpen = true;
 		this.lastWrite = null;
-		this.recording = Buffer.alloc(0);
+		this.recording = new Uint8Array();
 		this.writeOperation = null; // in flight promise or null
 		this.serialNumber = port.info.serialNumber;
 
@@ -192,12 +193,12 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 	}
 
 	// Emit data on a mock port
-	emitData(data: Buffer | string): void {
+	emitData(data: Uint8Array | string): void {
 		if (!this.isOpen || !this.port) {
 			throw new Error("Port must be open to pretend to receive data");
 		}
-		const bufferData = Buffer.isBuffer(data) ? data : Buffer.from(data);
-		this.port.data = Buffer.concat([this.port.data, bufferData]);
+		const bufferData = isUint8Array(data) ? data : Bytes.from(data);
+		this.port.data = Bytes.concat([this.port.data, bufferData]);
 		if (this.pendingRead) {
 			process.nextTick(this.pendingRead);
 			this.pendingRead = null;
@@ -216,7 +217,7 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 
 		port.openOpt = undefined;
 		// reset data on close
-		port.data = Buffer.alloc(0);
+		port.data = new Uint8Array();
 		this.serialNumber = undefined;
 		this.isOpen = false;
 		if (this.pendingRead) {
@@ -268,11 +269,20 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 		}
 		if (this.port.data.length <= 0) {
 			return new Promise((resolve, reject) => {
-				this.pendingRead = (err) => {
+				this.pendingRead = async (err) => {
 					if (err) {
 						return reject(err);
 					}
-					this.read(buffer, offset, length).then(resolve, reject);
+					try {
+						const readResult = await this.read(
+							buffer,
+							offset,
+							length,
+						);
+						resolve(readResult);
+					} catch (e) {
+						reject(e as Error);
+					}
 				};
 			});
 		}
@@ -282,14 +292,14 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 			: this.port.maxReadSize;
 
 		const data = this.port.data.subarray(0, lengthToRead);
-		const bytesRead = data.copy(buffer, offset);
+		buffer.set(data, offset);
 		this.port.data = this.port.data.subarray(lengthToRead);
-		return { bytesRead, buffer };
+		return { bytesRead: data.length, buffer };
 	}
 
-	async write(buffer: Buffer): Promise<void> {
-		if (!Buffer.isBuffer(buffer)) {
-			throw new TypeError("\"buffer\" is not a Buffer");
+	async write(buffer: Uint8Array): Promise<void> {
+		if (!isUint8Array(buffer)) {
+			throw new TypeError("\"buffer\" is not a Uint8Array");
 		}
 
 		if (!this.isOpen || !this.port) {
@@ -307,7 +317,7 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 				return;
 				// throw new Error("Write canceled");
 			}
-			const data = (this.lastWrite = Buffer.from(buffer)); // copy
+			const data = (this.lastWrite = Bytes.from(buffer)); // copy
 			this.emit("write", data);
 
 			// if (this.port.record) {
@@ -383,7 +393,7 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 			throw new Error("Port is not open");
 		}
 		await resolveNextTick();
-		this.port.data = Buffer.alloc(0);
+		this.port.data = new Uint8Array();
 	}
 
 	async drain(): Promise<void> {

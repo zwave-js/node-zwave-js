@@ -18,7 +18,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.GetLongRangeChannel)
 @expectedResponse(FunctionType.GetLongRangeChannel)
@@ -109,8 +109,8 @@ export class SetLongRangeChannelRequest extends Message {
 
 	public channel: LongRangeChannel;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.channel]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.channel]);
 		return super.serialize(ctx);
 	}
 

@@ -18,6 +18,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
@@ -55,8 +56,8 @@ export class RequestNodeInfoResponse extends Message
 		return this.wasSent;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.from([this.wasSent ? 0x01 : 0]);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.from([this.wasSent ? 0x01 : 0]);
 		return super.serialize(ctx);
 	}
 
@@ -117,7 +118,7 @@ export class RequestNodeInfoRequest extends Message {
 		return false;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}

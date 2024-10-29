@@ -19,7 +19,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum NVMOperationsCommand {
 	Open = 0x00,
@@ -43,9 +43,9 @@ export class NVMOperationsRequest extends Message {
 	// This must be set in subclasses
 	public command!: NVMOperationsCommand;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.command]),
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = Bytes.concat([
+			Bytes.from([this.command]),
 			this.payload,
 		]);
 
@@ -127,8 +127,8 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 	public length: number;
 	public offset: number;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = new Buffer(3);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(3);
 		this.payload[0] = this.length;
 		this.payload.writeUInt16BE(this.offset, 1);
 
@@ -152,7 +152,7 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 
 export interface NVMOperationsWriteRequestOptions {
 	offset: number;
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 export class NVMOperationsWriteRequest extends NVMOperationsRequest {
@@ -192,13 +192,13 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 	}
 
 	public offset: number;
-	public buffer: Buffer;
+	public buffer: Uint8Array;
 
-	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = new Buffer(3 + this.buffer.length);
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.payload = new Bytes(3 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt16BE(this.offset, 1);
-		this.buffer.copy(this.payload, 3);
+		this.payload.set(this.buffer, 3);
 		return super.serialize(ctx);
 	}
 
@@ -221,7 +221,7 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 export interface NVMOperationsResponseOptions {
 	status: NVMOperationStatus;
 	offsetOrSize: number;
-	buffer: Buffer;
+	buffer: Uint8Array;
 }
 
 @messageTypes(MessageType.Response, FunctionType.NVMOperations)
@@ -252,11 +252,11 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 
 		const dataLength = raw.payload[1];
 		// The response to the write command contains the offset and written data length, but no data
-		let buffer: Buffer;
+		let buffer: Uint8Array;
 		if (dataLength > 0 && raw.payload.length >= 4 + dataLength) {
 			buffer = raw.payload.subarray(4, 4 + dataLength);
 		} else {
-			buffer = Buffer.from([]);
+			buffer = new Uint8Array();
 		}
 
 		return new this({
@@ -275,7 +275,7 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 
 	public readonly status: NVMOperationStatus;
 	public readonly offsetOrSize: number;
-	public readonly buffer: Buffer;
+	public readonly buffer: Uint8Array;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {

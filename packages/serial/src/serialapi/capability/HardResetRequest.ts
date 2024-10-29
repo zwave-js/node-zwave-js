@@ -12,6 +12,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared/safe";
 
 @messageTypes(MessageType.Request, FunctionType.HardReset)
 @priority(MessagePriority.Controller)
@@ -30,9 +31,9 @@ export class HardResetRequestBase extends Message {
 
 @expectedCallback(FunctionType.HardReset)
 export class HardResetRequest extends HardResetRequestBase {
-	public serialize(ctx: MessageEncodingContext): Buffer {
+	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
-		this.payload = Buffer.from([this.callbackId]);
+		this.payload = Bytes.from([this.callbackId]);
 		return super.serialize(ctx);
 	}
 
