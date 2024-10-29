@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.10.3 (2024-10-29)
 ### Config file changes
 * Disable Supervision for Everspring SE813 (#7333)
 
