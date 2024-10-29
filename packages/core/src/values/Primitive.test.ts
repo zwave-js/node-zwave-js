@@ -261,12 +261,12 @@ test("encodeBitMask() -> should correctly convert a numeric array into a bit mas
 		{
 			values: [1, 4, 5, 6, 8],
 			max: 8,
-			expected: Uint8Array.from([0b10111001]),
+			expected: Bytes.from([0b10111001]),
 		},
 		{
 			values: [1, 2, 10, 11],
 			max: 16,
-			expected: Uint8Array.from([0b11, 0b110]),
+			expected: Bytes.from([0b11, 0b110]),
 		},
 	];
 	for (const { values, max, expected } of tests) {
@@ -290,13 +290,13 @@ test("encodeBitMask() -> should respect the startValue too", (t) => {
 			values: [2, 4, 8],
 			max: 11,
 			startValue: 2,
-			expected: Uint8Array.from([0b01000101, 0]),
+			expected: Bytes.from([0b01000101, 0]),
 		},
 		{
 			values: [0, 2, 10, 11],
 			max: 19,
 			startValue: 0,
-			expected: Uint8Array.from([0b101, 0b1100, 0]),
+			expected: Bytes.from([0b101, 0b1100, 0]),
 		},
 	];
 	for (const { values, max, startValue, expected } of tests) {
