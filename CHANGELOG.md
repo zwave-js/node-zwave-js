@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.0.0-beta.1 (2024-10-30)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
 * Replace Node.js Buffer with `Uint8Array` portable replacement class `Bytes` (#7332)
 * `zwave-js` no longer loops up the package version at runtime (#7344)
