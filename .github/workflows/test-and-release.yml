@@ -113,6 +113,9 @@ jobs:
         node -e 'require("@zwave-js/serial/safe")'
         node -e 'require("@zwave-js/shared/safe")'
 
+        echo "Testing version exports..."
+        node -e 'assert.equal(require("@zwave-js/config").PACKAGE_VERSION, require("@zwave-js/config/package.json").version)'
+
   # ===================
 
   lint:
