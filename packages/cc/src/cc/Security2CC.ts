@@ -1420,7 +1420,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 				offset += extensionLength;
 
-				const ext = Security2Extension.from(extensionData);
+				const ext = Security2Extension.parse(extensionData);
 
 				switch (validateS2Extension(ext, wasEncrypted)) {
 					case ValidateS2ExtensionResult.OK:
