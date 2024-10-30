@@ -12,6 +12,7 @@ import {
 	loadManufacturersInternal,
 	saveManufacturersInternal,
 } from "./Manufacturers";
+import { PACKAGE_VERSION } from "./_version";
 import {
 	ConditionalDeviceConfig,
 	type DeviceConfig,
@@ -26,7 +27,6 @@ import {
 	configDir,
 	externalConfigDir,
 	getDeviceEntryPredicate,
-	getEmbeddedConfigVersion,
 	syncExternalConfigDir,
 } from "./utils";
 
@@ -41,9 +41,7 @@ export class ConfigManager {
 			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
-		this._configVersion =
-			// eslint-disable-next-line @typescript-eslint/no-require-imports
-			require("@zwave-js/config/package.json").version;
+		this._configVersion = PACKAGE_VERSION;
 	}
 
 	private _configVersion: string;
@@ -85,7 +83,7 @@ export class ConfigManager {
 			this._configVersion = syncResult.version;
 		} else {
 			this._useExternalConfig = false;
-			this._configVersion = await getEmbeddedConfigVersion();
+			this._configVersion = PACKAGE_VERSION;
 		}
 		this.logger.print(`version ${this._configVersion}`, "info");
 

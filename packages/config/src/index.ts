@@ -2,6 +2,7 @@
 export * from "./ConfigManager";
 export * from "./Logger_safe";
 export * from "./Manufacturers";
+export { PACKAGE_VERSION } from "./_version";
 export * from "./devices/AssociationConfig";
 export * from "./devices/CompatConfig";
 export * from "./devices/DeviceConfig";
