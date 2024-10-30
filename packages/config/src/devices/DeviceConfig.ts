@@ -6,6 +6,7 @@ import {
 	formatId,
 	num2hex,
 	padVersion,
+	pathExists,
 	pick,
 	stringify,
 } from "@zwave-js/shared";
