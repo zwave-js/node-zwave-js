@@ -52,12 +52,7 @@ export class ZWaveLogContainer extends winston.Container {
 		maxFiles: 7,
 		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
-		filename: require.main
-			? path.join(
-				path.dirname(require.main.filename),
-				`zwavejs_%DATE%.log`,
-			)
-			: path.join(__dirname, "../../..", `zwavejs_%DATE%.log`),
+		filename: path.join(process.cwd(), `zwavejs_%DATE%.log`),
 		forceConsole: false,
 	};
 

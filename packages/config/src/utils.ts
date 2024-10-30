@@ -7,7 +7,10 @@ import { PACKAGE_VERSION } from "./_version";
 import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";
 
 /** The absolute path of the embedded configuration directory */
-export const configDir = path.resolve(__dirname, "../config");
+export const configDir = path.resolve(
+	path.dirname(require.resolve("@zwave-js/config/package.json")),
+	"config",
+);
 /** The (optional) absolute path of an external configuration directory */
 export function externalConfigDir(): string | undefined {
 	return process.env.ZWAVEJS_EXTERNAL_CONFIG;
