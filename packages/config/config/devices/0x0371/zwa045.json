@@ -1,0 +1,271 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA045",
+	"description": "TriSensor 8",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x002d",
+			"zwaveAllianceId": 5016
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Over Heat",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Under Heat",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Over Light",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Under Light",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Temperature",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Motion Untrigger Time",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Motion Sensitivity",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Motion Group Control",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Motion Group Value Setting",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 65280,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Motion Group Control Requirement",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 30000,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Over Heat Group Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 270,
+			"maxValue": 850,
+			"defaultValue": 270,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Under Heat Group Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 155,
+			"maxValue": 155,
+			"defaultValue": 155,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Over Light Group Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 2000,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Under Light Group Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Low Battery Threshold",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Threshold Check Enable/Disable",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Temperature Threshold",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Lux Threshold",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 250,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Threshold Check Time",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 60,
+			"maxValue": 65535,
+			"defaultValue": 900,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Sensor Limit Control",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "20",
+			"label": "Temperature Upper Limit",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 280,
+			"maxValue": 1000,
+			"defaultValue": 280,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Temperature Lower Limit",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Lux Upper Limit",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 1000,
+			"unsigned": true
+		},
+		{
+			"#": "23",
+			"label": "Set Lux Lower Limit Level",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "24",
+			"label": "Temperature Scale",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "25",
+			"label": "Automatic Interval Time",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your main Controller/ Gateway into adding mode.\n2. Press the Action Button on product 3 times",
+		"exclusion": "1. Turn your main Controller/ gateway into removing mode.\n2. Press the Action Button on product 3 times",
+		"reset": "Press and hold the Action Button on product for 12 seconds and then release"
+	}
+}
