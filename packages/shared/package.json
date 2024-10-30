@@ -43,8 +43,7 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "alcalzone-shared": "^4.0.8",
-    "fs-extra": "^11.2.0"
+    "alcalzone-shared": "^4.0.8"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
@@ -57,7 +56,6 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.9",
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.55",
     "@types/sinon": "^17.0.3",
     "ava": "^6.1.3",

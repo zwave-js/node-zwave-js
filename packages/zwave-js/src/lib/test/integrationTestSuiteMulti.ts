@@ -1,5 +1,5 @@
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { noop } from "@zwave-js/shared";
+import { copyFilesRecursive, noop } from "@zwave-js/shared";
 import {
 	type MockController,
 	type MockControllerOptions,
@@ -8,8 +8,8 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import test, { type ExecutionContext } from "ava";
-import fs from "fs-extra";
 import crypto from "node:crypto";
+import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { Driver } from "../driver/Driver";
@@ -85,11 +85,12 @@ function suite(
 		}
 
 		// Make sure every test is starting fresh
-		await fs.emptyDir(cacheDir).catch(noop);
+		await fs.rm(cacheDir, { recursive: true, force: true }).catch(noop);
+		await fs.mkdir(cacheDir, { recursive: true });
 
 		// And potentially provision the cache
 		if (provisioningDirectory) {
-			await fs.copy(provisioningDirectory, cacheDir);
+			await copyFilesRecursive(provisioningDirectory, cacheDir);
 		}
 
 		({ driver, continueStartup, mockPort } = await prepareDriver(
@@ -169,7 +170,10 @@ function suite(
 			await wait(100);
 
 			await driver.destroy();
-			if (!debug) await fs.emptyDir(cacheDir).catch(noop);
+			if (!debug) {
+				await fs.rm(cacheDir, { recursive: true, force: true })
+					.catch(noop);
+			}
 		});
 
 		await prepareTest();

@@ -1,5 +1,5 @@
 import { JsonlDB } from "@alcalzone/jsonl-db";
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import { highResTimestamp } from "../packages/core/src/util/date";
 import { ValueDB, indexDBsByNode } from "../packages/core/src/values/ValueDB";
 
@@ -81,8 +81,8 @@ const valueDBs = new Map<number, ValueDB>();
 
 	await values.close();
 	await metadata.close();
-	await fs.remove("test.values.jsonl");
-	await fs.remove("test.metadata.jsonl");
+	await fs.rm("test.values.jsonl");
+	await fs.rm("test.metadata.jsonl");
 })().catch(() => {
 	/* ignore */
 });

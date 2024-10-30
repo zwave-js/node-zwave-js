@@ -1,5 +1,10 @@
-import { formatId, padVersion } from "@zwave-js/shared";
-import * as fs from "fs-extra";
+import {
+	copyFilesRecursive,
+	formatId,
+	padVersion,
+	readJSON,
+} from "@zwave-js/shared";
+import fs from "node:fs/promises";
 import path from "node:path";
 import * as semver from "semver";
 import type { ConfigLogger } from "./Logger";
@@ -40,7 +45,7 @@ export function getDeviceEntryPredicate(
 }
 
 export async function getEmbeddedConfigVersion(): Promise<string> {
-	return (await fs.readJSON(path.join(__dirname, "../package.json"))).version;
+	return (await readJSON(path.join(__dirname, "../package.json"))).version;
 }
 
 export type SyncExternalConfigDirResult =
@@ -63,7 +68,7 @@ export async function syncExternalConfigDir(
 
 	// Make sure the config dir exists
 	try {
-		await fs.ensureDir(extConfigDir);
+		await fs.mkdir(extConfigDir, { recursive: true });
 	} catch {
 		logger.print(
 			`Synchronizing external config dir failed - directory could not be created`,
@@ -110,13 +115,13 @@ export async function syncExternalConfigDir(
 	// Wipe and override the external dir
 	try {
 		logger.print(`Synchronizing external config dir ${extConfigDir}...`);
-		await fs.emptyDir(extConfigDir);
-		await fs.copy(configDir, extConfigDir, {
-			filter: async (src: string) => {
-				if (!(await fs.stat(src)).isFile()) return true;
-				return src.endsWith(".json");
-			},
-		});
+		await fs.rm(extConfigDir, { recursive: true, force: true });
+		await fs.mkdir(extConfigDir, { recursive: true });
+		await copyFilesRecursive(
+			configDir,
+			extConfigDir,
+			(src) => src.endsWith(".json"),
+		);
 		await fs.writeFile(externalVersionFilename, currentVersion, "utf8");
 		externalVersion = currentVersion;
 	} catch {

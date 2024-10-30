@@ -1,6 +1,6 @@
 import test from "ava";
 import execa from "execa";
-import fs from "fs-extra";
+import fs from "node:fs/promises";
 import path from "node:path";
 
 const fixturesDir = path.join(__dirname, "../test/fixtures");

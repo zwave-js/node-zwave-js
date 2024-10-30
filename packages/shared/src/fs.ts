@@ -1,4 +1,4 @@
-import * as fs from "fs-extra";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { getErrorMessage } from ".";
 
@@ -12,9 +12,9 @@ export async function enumFilesRecursive(
 		for (const f of filesAndDirs) {
 			const fullPath = path.join(rootDir, f);
 
-			if (fs.statSync(fullPath).isDirectory()) {
+			if ((await fs.stat(fullPath)).isDirectory()) {
 				ret.push(...(await enumFilesRecursive(fullPath, predicate)));
-			} else if (predicate?.(fullPath)) {
+			} else if (predicate == undefined || predicate(fullPath)) {
 				ret.push(fullPath);
 			}
 		}
@@ -25,4 +25,29 @@ export async function enumFilesRecursive(
 	}
 
 	return ret;
+}
+
+export async function copyFilesRecursive(
+	sourceDir: string,
+	targetDir: string,
+	predicate?: (filename: string) => boolean,
+): Promise<void> {
+	const files = await enumFilesRecursive(sourceDir, predicate);
+	for (const file of files) {
+		const relative = path.relative(sourceDir, file);
+		const target = path.join(targetDir, relative);
+		await fs.mkdir(path.dirname(target), { recursive: true });
+		await fs.copyFile(file, target);
+	}
+}
+
+export async function readJSON<T = any>(filename: string): Promise<T> {
+	const data = await fs.readFile(filename, "utf8");
+	return JSON.parse(data);
+}
+
+export async function pathExists(filename: string): Promise<boolean> {
+	return fs.access(filename)
+		.then(() => true)
+		.catch(() => false);
 }

@@ -48,7 +48,6 @@
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.8",
-    "fs-extra": "^11.2.0",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.3",
     "yargs": "^17.7.2"
@@ -64,7 +63,6 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.9",
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.55",
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.33",

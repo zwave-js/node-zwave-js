@@ -5,7 +5,7 @@ import {
 	SerialPortMock,
 } from "@zwave-js/serial/mock";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import fs from "fs-extra";
+import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import type { SerialPort } from "serialport";
@@ -167,7 +167,7 @@ export async function createAndStartTestingDriver(
 	const originalDestroy = driver.destroy.bind(driver);
 	driver.destroy = async () => {
 		await originalDestroy();
-		await fs.remove(cacheDir);
+		await fs.rm(cacheDir, { recursive: true, force: true });
 	};
 
 	return new Promise((resolve) => {

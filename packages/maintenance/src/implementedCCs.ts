@@ -3,10 +3,10 @@ import "reflect-metadata";
 
 import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import * as c from "ansi-colors";
-import * as fs from "fs-extra";
-import * as path from "node:path";
-import * as yargs from "yargs";
+import c from "ansi-colors";
+import fs from "node:fs/promises";
+import path from "node:path";
+import yargs from "yargs";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
