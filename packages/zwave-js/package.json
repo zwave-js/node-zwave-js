@@ -85,6 +85,7 @@
   },
   "scripts": {
     "ts": "node -r esbuild-register --conditions=@@dev",
+    "codegen": "yarn ts maintenance/codegen.ts",
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",

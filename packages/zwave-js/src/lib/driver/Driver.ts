@@ -222,6 +222,7 @@ import {
 	containsSerializedCC,
 	isCommandRequest,
 } from "@zwave-js/serial/serialapi";
+import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version";
 import { type ZWaveNodeBase } from "../node/mixins/00_Base";
 import { type NodeWakeup } from "../node/mixins/30_Wakeup";
 import { type NodeValues } from "../node/mixins/40_Values";
@@ -272,13 +273,8 @@ import type {
 } from "./ZWaveOptions";
 import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
-const packageJsonPath = require.resolve("zwave-js/package.json");
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const packageJson = require(packageJsonPath);
-const libraryRootDir = path.dirname(packageJsonPath);
-export const libVersion: string = packageJson.version;
-export const libName: string = packageJson.name;
+export const libVersion: string = PACKAGE_VERSION;
+export const libName: string = PACKAGE_NAME;
 
 // This is made with cfonts:
 const libNameString = `
@@ -342,7 +338,7 @@ const defaultOptions: ZWaveOptions = {
 				return fs.writeFile(file, data, options);
 			},
 		},
-		cacheDir: path.resolve(libraryRootDir, "cache"),
+		cacheDir: path.join(process.cwd(), "cache"),
 		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
 		throttle: "normal",
 	},
@@ -904,7 +900,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public get configVersion(): string {
 		return (
 			this.configManager?.configVersion
-				?? packageJson?.dependencies?.["@zwave-js/config"]
+				// eslint-disable-next-line @typescript-eslint/no-require-imports
+				?? require("zwave-js/package.json")?.dependencies
+					?.["@zwave-js/config"]
 				?? libVersion
 		);
 	}

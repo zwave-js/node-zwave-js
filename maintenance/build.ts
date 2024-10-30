@@ -18,7 +18,7 @@ const needsNoCodegen = [
 	"@zwave-js/transformers",
 ];
 
-const hasCodegen = ["@zwave-js/cc", "@zwave-js/config"];
+const hasCodegen = ["@zwave-js/cc", "@zwave-js/config", "zwave-js"];
 
 // zwave-js is the main entry point, but there are projects that depend on it
 const dependsOnZwaveJs = [

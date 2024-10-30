@@ -115,6 +115,8 @@ jobs:
 
         echo "Testing version exports..."
         node -e 'assert.equal(require("@zwave-js/config").PACKAGE_VERSION, require("@zwave-js/config/package.json").version)'
+        node -e 'assert.equal(require("zwave-js").libVersion, require("zwave-js/package.json").version)'
+        node -e 'assert.equal(require("zwave-js").libName, require("zwave-js/package.json").name)'
 
   # ===================
 
