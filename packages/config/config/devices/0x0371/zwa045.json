@@ -1,0 +1,401 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA045",
+	"description": "TriSensor 8",
+	"devices": [
+		{
+			// EU version
+			"productType": "0x0002",
+			"productId": "0x002d",
+			"zwaveAllianceId": 5016
+		},
+		{
+			// US version
+			"productType": "0x0102",
+			"productId": "0x002d"
+		},
+		{
+			// AU version
+			"productType": "0x0202",
+			"productId": "0x002d"
+		},
+		{
+			// HK version
+			"productType": "0x0302",
+			"productId": "0x002d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Over Heat",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Under Heat",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Over Light",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Under Light",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Temperature",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Motion Untrigger Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 60
+		},
+		{
+			"#": "4",
+			"label": "Motion Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Motion Group: Basic Set Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Motion: On (0xff) / no motion: Off (0x00)",
+					"value": 0
+				},
+				{
+					"label": "Motion: Off (0x00) / no motion: On (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Motion only: On (0xff)",
+					"value": 2
+				},
+				{
+					"label": "Motion only: Off (0x00)",
+					"value": 3
+				},
+				{
+					"label": "No motion only: Off (0x00)",
+					"value": 4
+				},
+				{
+					"label": "No motion only: On (0xff)",
+					"value": 5
+				},
+				{
+					"label": "Custom (Parameter 8)",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "8[0xff00]",
+			"label": "Motion Group: Custom Basic Set Value (Motion Detected)",
+			"description": "Applicable when parameter 7 is set to Custom (value 6). Allowable range: 0-99, 255",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "8[0x00ff]",
+			"label": "Motion Group: Custom Basic Set Value (No Motion)",
+			"description": "Applicable when parameter 7 is set to Custom (value 6). Allowable range: 0-99, 255",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Motion Group: Brightness Threshold",
+			"description": "Commands will only be sent when the ambient light level is below this threshold.",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 30000
+		},
+		{
+			"#": "10",
+			// US-specific:
+			"$if": "productType === 0x0102",
+			"label": "Over Heat Group Threshold",
+			"description": "Devices in Group 3 will be turned on if the temperature is >= this value and turned off below.",
+			"valueSize": 2,
+			"unit": "0.1 °F",
+			"minValue": 806,
+			"maxValue": 1850,
+			"defaultValue": 806
+		},
+		{
+			"#": "11",
+			// US-specific:
+			"$if": "productType === 0x0102",
+			"label": "Under Heat Group Threshold",
+			"description": "Devices in Group 4 will be turned on if the temperature is <= this value and turned off above.",
+			"valueSize": 2,
+			"unit": "0.1 °F",
+			"minValue": 140,
+			"maxValue": 600,
+			"defaultValue": 600
+		},
+		{
+			"#": "10",
+			// Other regions:
+			"label": "Over Heat Group Threshold",
+			"description": "Devices in Group 3 will be turned on if the temperature is >= this value and turned off below.",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 270,
+			"maxValue": 850,
+			"defaultValue": 270
+		},
+		{
+			"#": "11",
+			// Other regions:
+			"label": "Under Heat Group Threshold",
+			"description": "Devices in Group 4 will be turned on if the temperature is <= this value and turned off above.",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": -100,
+			"maxValue": 155,
+			"defaultValue": 155
+		},
+		{
+			"#": "12",
+			"label": "Over Light Group Threshold",
+			"description": "Devices in Group 5 will be turned on if the brightness is >= this value and turned off below.",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 2000
+		},
+		{
+			"#": "13",
+			"label": "Under Light Group Threshold",
+			"description": "Devices in Group 6 will be turned on if the brightness is <= this value and turned off above.",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100
+		},
+		{
+			"#": "14",
+			"label": "Low Battery Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold-Based Sensor Reports"
+		},
+		{
+			"#": "24",
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0, // 1 in US
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Temperature Reports: Change Threshold",
+			"valueSize": 1,
+			"unit": "0.1 (°C/°F)",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Brightness Reports: Change Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 250,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Threshold Check Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 60,
+			"maxValue": 65535,
+			"defaultValue": 900,
+			"unsigned": true
+		},
+		{
+			"#": "19[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Temperature Reports: Send Above Upper Limit"
+		},
+		{
+			"#": "20",
+			// US-version only:
+			"$if": "productType === 0x0102",
+			"label": "Temperature Reports: Upper Limit",
+			"valueSize": 2,
+			"unit": "0.1 (°C/°F)",
+			"minValue": 824,
+			"maxValue": 2120,
+			"defaultValue": 824
+		},
+		{
+			"#": "20",
+			// Other regions:
+			"label": "Temperature Reports: Upper Limit",
+			"valueSize": 2,
+			"unit": "0.1 (°C/°F)",
+			"minValue": 280,
+			"maxValue": 1000,
+			"defaultValue": 280
+		},
+		{
+			"#": "19[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Temperature Reports: Send Below Lower Limit"
+		},
+		{
+			"#": "21",
+			// US-version only:
+			"$if": "productType === 0x0102",
+			"label": "Temperature Reports: Lower Limit",
+			"valueSize": 2,
+			"unit": "0.1 (°C/°F)",
+			"minValue": -400,
+			"maxValue": 320,
+			"defaultValue": 320
+		},
+		{
+			"#": "21",
+			// Other regions:
+			"label": "Temperature Reports: Lower Limit",
+			"valueSize": 2,
+			"unit": "0.1 (°C/°F)",
+			"minValue": -400,
+			"maxValue": 0,
+			"defaultValue": 0
+		},
+		{
+			"#": "19[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Brightness Reports: Send Above Upper Limit"
+		},
+		{
+			"#": "22",
+			"label": "Brightness Reports: Upper Limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 1000
+		},
+		{
+			"#": "19[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Brightness Reports: Send Below Lower Limit"
+		},
+		{
+			"#": "23",
+			"label": "Brightness Reports: Lower Limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100
+		},
+		{
+			"#": "25",
+			"label": "Sensor Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your main Controller/ Gateway into adding mode.\n2. Press the Action Button on product 3 times",
+		"exclusion": "1. Turn your main Controller/ gateway into removing mode.\n2. Press the Action Button on product 3 times",
+		"reset": "Press and hold the Action Button on product for 12 seconds and then release"
+	}
+}
