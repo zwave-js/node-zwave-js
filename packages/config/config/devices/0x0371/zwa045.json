@@ -165,9 +165,9 @@
 			"maxValue": 30000,
 			"defaultValue": 30000
 		},
-		// US-specific:
 		{
 			"#": "10",
+			// US-specific:
 			"$if": "productType === 0x0102",
 			"label": "Over Heat Group Threshold",
 			"description": "Devices in Group 3 will be turned on if the temperature is >= this value and turned off below.",
@@ -179,6 +179,7 @@
 		},
 		{
 			"#": "11",
+			// US-specific:
 			"$if": "productType === 0x0102",
 			"label": "Under Heat Group Threshold",
 			"description": "Devices in Group 4 will be turned on if the temperature is <= this value and turned off above.",
@@ -188,10 +189,9 @@
 			"maxValue": 600,
 			"defaultValue": 600
 		},
-		// Other regions:
 		{
 			"#": "10",
-			"$if": "productType !== 0x0102",
+			// Other regions:
 			"label": "Over Heat Group Threshold",
 			"description": "Devices in Group 3 will be turned on if the temperature is >= this value and turned off below.",
 			"valueSize": 2,
@@ -202,7 +202,7 @@
 		},
 		{
 			"#": "11",
-			"$if": "productType !== 0x0102",
+			// Other regions:
 			"label": "Under Heat Group Threshold",
 			"description": "Devices in Group 4 will be turned on if the temperature is <= this value and turned off above.",
 			"valueSize": 2,
@@ -323,7 +323,6 @@
 		{
 			"#": "20",
 			// Other regions:
-			"$if": "productType !== 0x0102",
 			"label": "Temperature Reports: Upper Limit",
 			"valueSize": 2,
 			"unit": "0.1 (°C/°F)",
@@ -350,7 +349,6 @@
 		{
 			"#": "21",
 			// Other regions:
-			"$if": "productType !== 0x0102",
 			"label": "Temperature Reports: Lower Limit",
 			"valueSize": 2,
 			"unit": "0.1 (°C/°F)",
