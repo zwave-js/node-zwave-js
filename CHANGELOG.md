@@ -4,11 +4,32 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
+* Replace Node.js Buffer with `Uint8Array` portable replacement class `Bytes` (#7332)
+* `zwave-js` no longer loops up the package version at runtime (#7344)
+* Changed some paths to be relative to `process.cwd()` instead of source location (#7345)
+
+### Config file changes
+* Add Aeotec TriSensor 8 (#7342)
+
+### Changes under the hood
+* Removed dependency on `fs-extra` in favor of `node:fs/promises` (#7335)
+* `@zwave-js/config` no longer loops up the package version at runtime (#7343)
+
 ## 14.0.0-beta.0 (2024-10-25)
 In this release, a lot of the internal API was refactored to decrease interdependencies. Technically this results in a huge list of breaking changes, but most of those should not affect any application, unless very low-level APIs are frequently used. For example, Z-Wave JS UI and Z-Wave JS Server had just two small breaks.
 
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
 * Decouple CCs and messages from host, split parsing and creation, split ZWaveNode class (#7305)
+
+## 13.10.3 (2024-10-29)
+### Config file changes
+* Disable Supervision for Everspring SE813 (#7333)
+
+## 13.10.2 (2024-10-28)
+### Bugfixes
+* Bootloader mode is now detected in more difficult cases (#7327)
 
 ## 13.10.1 (2024-10-25)
 ### Bugfixes
