@@ -1,0 +1,242 @@
+{
+	"manufacturer": "HANK Electronics, Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "ZA-216001",
+	"description": "Ness Z-Wave Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0029",
+			"zwaveAllianceId": 4196
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"label": "Overload Protection",
+			"description": "Smart plug keep detecting the load power, once the ac current exceeds 11.5a for more than 5s, smart plug's relay will turn off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "The function is enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Device State After Power On",
+			"description": "Defines the state of the plug when the power is turned on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The smart plug will remain in the same state as it was before the power off",
+					"value": 0
+				},
+				{
+					"label": "The smart plug is turned on by default",
+					"value": 1
+				},
+				{
+					"label": "The smart plug is turned off by default",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Send Reports When Load Status Changes",
+			"description": "Defines whether to send report to the associated device (lifeline group) when the load status of the smart plug changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send basic report",
+					"value": 1
+				},
+				{
+					"label": "Send basic report only when load condition is not changed by Z-Wave command",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "The State of Indicator Light",
+			"description": "Define the corresponding state of the indicator light when the load changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The indicator light remains the same as the load on/off status. when the load is on, the light is on. when the load is off, the light is off",
+					"value": 0
+				},
+				{
+					"label": "Within 5 seconds after the operation load, the indicator light is consistent with the load on/off status, and then the indicator turns off",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "151",
+			"label": "Threshold of Power Report",
+			"description": "Set the power threshold. when the load power value exceeds this threshold, the smart plug will send a power report to the associated device (lifeline group)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0 - the function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "152",
+			"label": "Percentage Threshold For Power Reporting",
+			"description": "Set the power percentage threshold. when the load power percentage value exceeds this threshold, the smart plug will send a power report to the associated device (lifeline group)",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "171",
+			"label": "Frequency of Power Reports",
+			"description": "Defines how often power reports are sent to associated devices (lifeline group)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "172",
+			"label": "Frequency of Energy Reports",
+			"description": "Defines how often energy reports are sent to associated devices (lifeline group)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "173",
+			"label": "Frequency of Voltage Reports",
+			"description": "Defines how often voltage reports are sent to associated devices (lifeline group)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "174",
+			"label": "Frequency of Electric Current Reports",
+			"description": "Defines how often electric current reports are sent to associated devices (lifeline group)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "254",
+			"label": "Enable/Disable The Configuration Command",
+			"description": "Enable:the values of other parameters can be changed. disable:the values of other parameters cannot be changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Add for inclusion (non-security and security):\n1)Connect the power supply.\n2)Set the Z-Wave™ network main controller into learning mode.\n3)Triple click the Z-button, the LED indicator will be flashing 3 times in Blue.\n4)Smart Plug should be recognized and included into the Z-Wave™ network",
+		"exclusion": "1) Insert the Plug into a socket.\n2) Set the Z-Wave™ network controller into the exclusion mode. \n3) Triple click the Z button.\n4) LED will blink in blue for 3 times, and then start slow flashing to indicate that the remove for exclusion is successful. LED will indicate network status after it is removed from Z-Wave™ network",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nLong press the button for 20 seconds and the blue LED will speed up the flash and then LED will keep on for 3 seconds in blue and Smart Plug will send ”Device Reset Locally Notification” to the main controller and exclude from the Z-Wave™ network, this procedure will reset Smart Plug to factory default. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4196/Manual-SmartPlug.pdf"
+	}
+}
