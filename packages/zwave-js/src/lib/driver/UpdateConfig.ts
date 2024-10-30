@@ -199,16 +199,30 @@ export async function installConfigUpdateInDocker(
 	};
 
 	// Download tarball to a temporary directory
-	const tmpDir = path.join(os.tmpdir(), "zjs-config-update");
-	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
+	let tmpDir: string;
+	try {
+		tmpDir = await fs.mkdtemp(
+			path.join(os.tmpdir(), "zjs-config-update-"),
+		);
+	} catch (e) {
+		await freeLock();
+		throw new ZWaveError(
+			`Config update failed: Could not create temporary directory. Reason: ${
+				getErrorMessage(
+					e,
+				)
+			}`,
+			ZWaveErrorCodes.Config_Update_InstallFailed,
+		);
+	}
 
+	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
 	const configModuleDir = path.dirname(
 		require.resolve("@zwave-js/config/package.json"),
 	);
 	const extractedDir = path.join(tmpDir, "extracted");
 
 	try {
-		await fs.mkdir(tmpDir, { recursive: true });
 		const handle = await fs.open(tarFilename, "w");
 		const fstream = handle.createWriteStream({ autoClose: true });
 		const response = got.stream.get(url);
