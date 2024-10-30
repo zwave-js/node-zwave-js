@@ -35,8 +35,8 @@ const driver = new Driver(port, {
 		loadConfiguration: false,
 	},
 	storage: {
-		cacheDir: path.join(__dirname, "cache"),
-		lockDir: path.join(__dirname, "cache/locks"),
+		cacheDir: path.join(process.cwd(), "cache"),
+		lockDir: path.join(process.cwd(), "cache/locks"),
 	},
 	allowBootloaderOnly: true,
 })
