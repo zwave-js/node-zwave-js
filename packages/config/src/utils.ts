@@ -1,13 +1,9 @@
-import {
-	copyFilesRecursive,
-	formatId,
-	padVersion,
-	readJSON,
-} from "@zwave-js/shared";
+import { copyFilesRecursive, formatId, padVersion } from "@zwave-js/shared";
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as semver from "semver";
 import type { ConfigLogger } from "./Logger";
+import { PACKAGE_VERSION } from "./_version";
 import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";
 
 /** The absolute path of the embedded configuration directory */
@@ -44,10 +40,6 @@ export function getDeviceEntryPredicate(
 	};
 }
 
-export async function getEmbeddedConfigVersion(): Promise<string> {
-	return (await readJSON(path.join(__dirname, "../package.json"))).version;
-}
-
 export type SyncExternalConfigDirResult =
 	| {
 		success: false;
@@ -78,7 +70,7 @@ export async function syncExternalConfigDir(
 	}
 
 	const externalVersionFilename = path.join(extConfigDir, "version");
-	const currentVersion = await getEmbeddedConfigVersion();
+	const currentVersion = PACKAGE_VERSION;
 	const supportedRange = `>=${currentVersion} <${
 		semver.inc(
 			currentVersion,
