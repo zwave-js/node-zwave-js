@@ -1,0 +1,91 @@
+{
+	"manufacturer": "Ness Corporation Pty, Ltd.",
+	"manufacturerId": "0x0189",
+	"label": "ZA-116001",
+	"description": "Ness Z-Wave Door Strike Controller",
+	"devices": [
+		{
+			"productType": "0x0204",
+			"productId": "0x0101",
+			"zwaveAllianceId": 4520
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "The Relock Timer",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Function Options For Input Terminal Sw1",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Function Options For Input Terminal Sw2",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Battery Low Setting",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Battery Scheduled Report Interval",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 12,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "The 12v Dc Power Output Options",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "To add the device into the Z-Wave™ network:\n1) Power on device and ensure it has been factory defaulted.\n2) Set the primary controller into inclusion mode.\n3) Click the Action Button once the device enters the inclusion mode and the Red LED starts fast flashing.\nNote: Inclusion mode can be cancelled by clicking the Action Button once again before the device starts the learning process (controller has not yet started inclusion mode), the device exits the learning mode and Red LED stops fast flash.\n4) The inclusion is processing. \n5) If your Z-Wave controller supports S2 Access encryption and DSK, enter the first 5 digits of the DSK located at bottom of the QR image. \n6) If the inclusion is successful, the Red LED stops fast flashing and the Green LED turns on for 2 seconds",
+		"exclusion": "You may need to refer to your Z-Wave™ gateway’s instructions for removing devices.\nExclusion\nTo remove the device from the Z-Wave network:\n1) The device is powered \n2) Set the primary controller into exclusion mode.\n3) Click the Action Button once the device enters the inclusion mode and the Red LED starts fast flashing. Click the Action Button once again before the device starts the learning process (controller has not yet started inclusion mode), the device exits the learning mode and Red LED stops fast flash.\n4) If the exclusion is successful, the Red LED stops flashing and the Green LED turns on for 1 second",
+		"reset": "To Factory Default Ness Z-Wave DLC\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\nReset the device to factory Default:\n1) The device is powered\n2) Press and hold the action button down for 20 seconds. When the action button has been held for greater than 3 seconds, the Red LED starts fast flash, and the Fast flash will stop after 20 seconds. Once the action button is released, the Green LED will turn on for 1 second indicating that the device has been reset.\n3) Release the action button while the Red LED is fast flashing (before 20 seconds), the device reset will be cancelled, and the Red LED will stop fast flash"
+	}
+}
