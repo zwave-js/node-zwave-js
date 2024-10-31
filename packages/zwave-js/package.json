@@ -3,57 +3,57 @@
   "version": "14.0.0-beta.1",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "@@dev": "./src/index.ts",
-      "types": "./build/index.d.ts",
-      "default": "./build/index.js"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./safe": {
       "@@dev": "./src/index_safe.ts",
-      "types": "./build/index_safe.d.ts",
-      "default": "./build/index_safe.js"
+      "import": "./build/esm/index_safe.js",
+      "require": "./build/cjs/index_safe.js"
     },
     "./Controller": {
       "@@dev": "./src/Controller.ts",
-      "types": "./build/Controller.d.ts",
-      "default": "./build/Controller.js"
+      "import": "./build/esm/Controller.js",
+      "require": "./build/cjs/Controller.js"
     },
     "./Driver": {
       "@@dev": "./src/Driver.ts",
-      "types": "./build/Driver.d.ts",
-      "default": "./build/Driver.js"
+      "import": "./build/esm/Driver.js",
+      "require": "./build/cjs/Driver.js"
     },
     "./Error": {
       "@@dev": "./src/Error.ts",
-      "types": "./build/Error.d.ts",
-      "default": "./build/Error.js"
+      "import": "./build/esm/Error.js",
+      "require": "./build/cjs/Error.js"
     },
     "./Node": {
       "@@dev": "./src/Node.ts",
-      "types": "./build/Node.d.ts",
-      "default": "./build/Node.js"
+      "import": "./build/esm/Node.js",
+      "require": "./build/cjs/Node.js"
     },
     "./Testing": {
       "@@dev": "./src/Testing.ts",
-      "types": "./build/Testing.d.ts",
-      "default": "./build/Testing.js"
+      "import": "./build/esm/Testing.js",
+      "require": "./build/cjs/Testing.js"
     },
     "./Utils": {
       "@@dev": "./src/Utils.ts",
-      "types": "./build/Utils.d.ts",
-      "default": "./build/Utils.js"
+      "import": "./build/esm/Utils.js",
+      "require": "./build/cjs/Utils.js"
     },
     "./Values": {
       "@@dev": "./src/Values.ts",
-      "types": "./build/Values.d.ts",
-      "default": "./build/Values.js"
+      "import": "./build/esm/Values.js",
+      "require": "./build/cjs/Values.js"
     },
     "./Zniffer": {
       "@@dev": "./src/Zniffer.ts",
-      "types": "./build/Zniffer.d.ts",
-      "default": "./build/Zniffer.js"
+      "import": "./build/esm/Zniffer.js",
+      "require": "./build/cjs/Zniffer.js"
     },
     "./package.json": "./package.json"
   },
@@ -86,7 +86,8 @@
   "scripts": {
     "ts": "node -r esbuild-register --conditions=@@dev",
     "codegen": "yarn ts maintenance/codegen.ts",
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
@@ -121,6 +122,7 @@
     "xstate": "4.38.3"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.55",
     "@types/proper-lockfile": "^4.1.4",

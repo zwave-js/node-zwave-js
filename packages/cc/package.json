@@ -6,28 +6,28 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "@@dev": "./src/index.ts",
-      "types": "./build/index.d.ts",
-      "default": "./build/index.js"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./safe": {
       "@@dev": "./src/index_safe.ts",
-      "types": "./build/index_safe.d.ts",
-      "default": "./build/index_safe.js"
+      "import": "./build/esm/index_safe.js",
+      "require": "./build/cjs/index_safe.js"
     },
     "./cc": {
       "@@dev": "./src/cc/index.ts",
-      "types": "./build/cc/index.d.ts",
-      "default": "./build/cc/index.js"
+      "import": "./build/esm/cc/index.js",
+      "require": "./build/cjs/cc/index.js"
     },
     "./package.json": "./package.json",
     "./*": {
       "@@dev": "./src/cc/*.ts",
-      "types": "./build/cc/*.d.ts",
-      "default": "./build/cc/*.js"
+      "import": "./build/esm/cc/*.js",
+      "require": "./build/cjs/cc/*.js"
     }
   },
   "files": [
@@ -55,7 +55,8 @@
   "scripts": {
     "task": "yarn ts maintenance/_tasks.ts",
     "codegen": "yarn task codegen",
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "ts": "node -r esbuild-register --conditions=@@dev",
@@ -73,6 +74,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.55",
     "@zwave-js/maintenance": "workspace:*",

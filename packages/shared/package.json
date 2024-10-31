@@ -6,17 +6,17 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "@@dev": "./src/index.ts",
-      "types": "./build/index.d.ts",
-      "default": "./build/index.js"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./safe": {
       "@@dev": "./src/index_safe.ts",
-      "types": "./build/index_safe.d.ts",
-      "default": "./build/index_safe.js"
+      "import": "./build/esm/index_safe.js",
+      "require": "./build/cjs/index_safe.js"
     },
     "./package.json": "./package.json"
   },
@@ -46,7 +46,8 @@
     "alcalzone-shared": "^4.0.8"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
@@ -55,6 +56,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.55",
     "@types/sinon": "^17.0.3",

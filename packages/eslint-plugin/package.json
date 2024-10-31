@@ -30,13 +30,15 @@
     "node": ">= 18"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@types/eslint": "^9.6.1",
     "@typescript-eslint/utils": "^8.8.1",
     "@zwave-js/core": "workspace:*",

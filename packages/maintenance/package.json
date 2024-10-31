@@ -30,12 +30,14 @@
   },
   "scripts": {
     "ts": "node -r esbuild-register --conditions=@@dev",
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@dprint/formatter": "^0.4.1",
     "@dprint/json": "^0.19.3",
     "@dprint/markdown": "^0.17.8",

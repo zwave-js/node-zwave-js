@@ -5,27 +5,27 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "@@dev": "./src/index.ts",
-      "types": "./build/index.d.ts",
-      "default": "./build/index.js"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./safe": {
       "@@dev": "./src/index_safe.ts",
-      "types": "./build/index_safe.d.ts",
-      "default": "./build/index_safe.js"
+      "import": "./build/esm/index_safe.js",
+      "require": "./build/cjs/index_safe.js"
     },
     "./serialapi": {
       "@@dev": "./src/index_serialapi.ts",
-      "types": "./build/index_serialapi.d.ts",
-      "default": "./build/index_serialapi.js"
+      "import": "./build/esm/index_serialapi.js",
+      "require": "./build/cjs/index_serialapi.js"
     },
     "./mock": {
       "@@dev": "./src/index_mock.ts",
-      "types": "./build/index_mock.d.ts",
-      "default": "./build/index_mock.js"
+      "import": "./build/esm/index_mock.js",
+      "require": "./build/cjs/index_mock.js"
     },
     "./package.json": "./package.json"
   },
@@ -53,7 +53,8 @@
     "node": ">= 18"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
@@ -72,6 +73,7 @@
     "winston": "^3.15.0"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.2",
     "@microsoft/api-extractor": "^7.47.9",
     "@serialport/binding-mock": "^10.2.2",
     "@serialport/bindings-interface": "*",
