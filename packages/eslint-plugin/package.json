@@ -30,8 +30,7 @@
     "node": ">= 18"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
-    "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node18",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
