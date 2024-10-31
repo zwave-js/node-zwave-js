@@ -4,7 +4,7 @@ import { enumFilesRecursive } from "@zwave-js/shared";
 import * as JSONC from "comment-json";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatWithDprint } from "./dprint";
+import { formatWithDprint } from "./dprint.js";
 
 async function main() {
 	const devicesDir = path.join(__dirname, "../../config/config/devices");

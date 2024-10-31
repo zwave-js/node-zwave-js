@@ -1,7 +1,7 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import type { VisitorContext } from "./visitor-context";
-import * as VisitorUtils from "./visitor-utils";
+import type { VisitorContext } from "./visitor-context.js";
+import * as VisitorUtils from "./visitor-utils.js";
 
 function visitRegularObjectType() {
 	return false;

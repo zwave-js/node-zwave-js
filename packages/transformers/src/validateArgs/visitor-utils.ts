@@ -1,12 +1,12 @@
 import * as fs from "node:fs";
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import type { Reason } from "./reason";
+import type { Reason } from "./reason.js";
 import type {
 	FileSpecificVisitorContext,
 	PartialVisitorContext,
 	VisitorContext,
-} from "./visitor-context";
+} from "./visitor-context.js";
 
 /**
  * a pair of {@link ts.TemplateLiteralType.texts} and the `intrinsicName`s for {@link ts.TemplateLiteralType.types},

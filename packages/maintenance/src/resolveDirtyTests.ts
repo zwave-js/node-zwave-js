@@ -8,7 +8,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools";
+import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools.js";
 
 const reportFile = path.join(repoRoot, ".tmp", "dirty-tests.json");
 

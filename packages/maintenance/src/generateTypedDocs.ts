@@ -27,12 +27,12 @@ import {
 	type TypeLiteralNode,
 	type ts,
 } from "ts-morph";
-import { formatWithDprint } from "./dprint";
+import { formatWithDprint } from "./dprint.js";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
 	tsConfigFilePathForDocs as tsConfigFilePath,
-} from "./tsAPITools";
+} from "./tsAPITools.js";
 
 export function findSourceNode(
 	program: Project,

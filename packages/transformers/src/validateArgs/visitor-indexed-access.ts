@@ -1,12 +1,12 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import { sliceSet } from "./utils";
-import type { VisitorContext } from "./visitor-context";
-import * as VisitorIsNumber from "./visitor-is-number";
-import * as VisitorIsString from "./visitor-is-string";
-import * as VisitorTypeCheck from "./visitor-type-check";
-import * as VisitorTypeName from "./visitor-type-name";
-import * as VisitorUtils from "./visitor-utils";
+import { sliceSet } from "./utils.js";
+import type { VisitorContext } from "./visitor-context.js";
+import * as VisitorIsNumber from "./visitor-is-number.js";
+import * as VisitorIsString from "./visitor-is-string.js";
+import * as VisitorTypeCheck from "./visitor-type-check.js";
+import * as VisitorTypeName from "./visitor-type-name.js";
+import * as VisitorUtils from "./visitor-utils.js";
 
 function visitRegularObjectType(
 	type: ts.ObjectType,

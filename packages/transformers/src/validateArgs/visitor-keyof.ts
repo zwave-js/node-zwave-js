@@ -1,9 +1,9 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import type { VisitorContext } from "./visitor-context";
-import * as VisitorTypeName from "./visitor-type-name";
-import * as VisitorUtils from "./visitor-utils";
-import { getIntrinsicName } from "./visitor-utils";
+import type { VisitorContext } from "./visitor-context.js";
+import * as VisitorTypeName from "./visitor-type-name.js";
+import * as VisitorUtils from "./visitor-utils.js";
+import { getIntrinsicName } from "./visitor-utils.js";
 
 function visitUnionOrIntersectionType(
 	type: ts.UnionOrIntersectionType,

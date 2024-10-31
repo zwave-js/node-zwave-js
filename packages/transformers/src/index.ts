@@ -70,5 +70,5 @@ export function validateArgs(options?: ValidateArgsOptions): PropertyDecorator {
 	};
 }
 
-import transformer from "./validateArgs/transformer";
+import transformer from "./validateArgs/transformer.js";
 export default transformer;

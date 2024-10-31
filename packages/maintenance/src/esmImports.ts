@@ -3,7 +3,7 @@ import { Project } from "ts-morph";
 
 async function main() {
 	const project = new Project({
-		tsConfigFilePath: "packages/zwave-js/tsconfig.json",
+		tsConfigFilePath: "packages/maintenance/tsconfig.json",
 	});
 	// project.addSourceFilesAtPaths("packages/cc/src/cc/**/*CC.ts");
 
@@ -15,12 +15,26 @@ async function main() {
 			return exp.getModuleSpecifierValue()?.startsWith(".")
 				&& !exp.getModuleSpecifierValue()?.endsWith(".js");
 		});
-		if (relativeExports.length === 0) continue;
 
 		for (const exp of relativeExports) {
 			const oldPath = exp.getModuleSpecifierValue();
 			const newPath = oldPath + ".js";
 			exp.setModuleSpecifier(newPath);
+		}
+
+		const relativeImports = file.getImportDeclarations().filter((imp) => {
+			return imp.getModuleSpecifierValue()?.startsWith(".")
+				&& !imp.getModuleSpecifierValue()?.endsWith(".js");
+		});
+
+		for (const imp of relativeImports) {
+			const oldPath = imp.getModuleSpecifierValue();
+			const newPath = oldPath + ".js";
+			imp.setModuleSpecifier(newPath);
+		}
+
+		if (relativeImports.length === 0 && relativeExports.length === 0) {
+			continue;
 		}
 
 		await file.save();

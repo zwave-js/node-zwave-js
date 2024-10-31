@@ -15,7 +15,7 @@ import globrex from "globrex";
 import path from "node:path";
 import ts from "typescript";
 import yargs from "yargs";
-import { loadTSConfig, projectRoot } from "./tsAPITools";
+import { loadTSConfig, projectRoot } from "./tsAPITools.js";
 
 function relativeToProject(filename: string): string {
 	return path.relative(projectRoot, filename).replaceAll("\\", "/");

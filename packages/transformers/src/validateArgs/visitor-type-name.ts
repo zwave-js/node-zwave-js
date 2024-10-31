@@ -1,10 +1,10 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import type { VisitorContext } from "./visitor-context";
-import * as VisitorIndexedAccess from "./visitor-indexed-access";
-import * as VisitorKeyof from "./visitor-keyof";
-import * as VisitorUtils from "./visitor-utils";
-import { checkIsDateClass, checkIsNodeBuffer } from "./visitor-utils";
+import type { VisitorContext } from "./visitor-context.js";
+import * as VisitorIndexedAccess from "./visitor-indexed-access.js";
+import * as VisitorKeyof from "./visitor-keyof.js";
+import * as VisitorUtils from "./visitor-utils.js";
+import { checkIsDateClass, checkIsNodeBuffer } from "./visitor-utils.js";
 
 interface TypeCheckNameMode {
 	type: "type-check";
