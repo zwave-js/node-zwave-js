@@ -8,5 +8,5 @@
 		"rootDir": "../",
 		"newLine": "lf"
 	},
-	"include": ["*.ts", "../packages/*/src/**/*.ts"]
+	"include": ["*.ts", "*.mts", "../packages/*/src/**/*.ts"]
 }

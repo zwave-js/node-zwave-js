@@ -105,7 +105,7 @@
     "build:turbo": "yarn ts maintenance/build.ts",
     "watch": "yarn w build",
     "test:ts": "FORCE_COLOR=1 yarn turbo run test:ts ${TURBO_FLAGS:-'--concurrency=1'} --",
-    "test": "yarn ts maintenance/test.ts",
+    "test": "yarn ts maintenance/test.mts",
     "test:dirty:resolve": "yarn ts packages/maintenance/src/resolveDirtyTests.ts",
     "test:dirty": "yarn ts packages/maintenance/src/resolveDirtyTests.ts --run",
     "test:watch": "yarn w test:dirty",
