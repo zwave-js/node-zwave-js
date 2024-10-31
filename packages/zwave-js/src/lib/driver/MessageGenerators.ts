@@ -55,8 +55,8 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import type { Driver } from "./Driver";
-import type { MessageGenerator } from "./Transaction";
+import type { Driver } from "./Driver.js";
+import type { MessageGenerator } from "./Transaction.js";
 
 export type MessageGeneratorImplementation<T extends Message> = (
 	/** A reference to the driver */

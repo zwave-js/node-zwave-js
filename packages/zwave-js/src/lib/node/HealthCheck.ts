@@ -6,7 +6,7 @@ import type {
 	LifelineHealthCheckSummary,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
-} from "./_Types";
+} from "./_Types.js";
 
 export const healthCheckTestFrameCount = 10;
 

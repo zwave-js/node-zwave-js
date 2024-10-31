@@ -3,10 +3,10 @@ import { WakeUpCC } from "@zwave-js/cc/WakeUpCC";
 import { CommandClasses, InterviewStage } from "@zwave-js/core";
 import test from "ava";
 import sinon from "sinon";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { assertCC } from "../assertCC";
-import { createEmptyMockDriver } from "../mocks";
+import type { Driver } from "../../driver/Driver.js";
+import { ZWaveNode } from "../../node/Node.js";
+import { assertCC } from "../assertCC.js";
+import { createEmptyMockDriver } from "../mocks.js";
 
 const fakeDriver = createEmptyMockDriver();
 

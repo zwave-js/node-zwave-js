@@ -1,7 +1,7 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { padStart } from "alcalzone-shared/strings";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { isValidDSK } from "./shared_safe";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { isValidDSK } from "./shared_safe.js";
 
 export function dskToString(dsk: Uint8Array): string {
 	if (dsk.length !== 16) {

@@ -1,11 +1,11 @@
 import { CommandClasses, MessagePriority } from "@zwave-js/core/safe";
-import { PhysicalCCAPI } from "../lib/API";
-import { CommandClass } from "../lib/CommandClass";
+import { PhysicalCCAPI } from "../lib/API.js";
+import { CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	commandClass,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 
 // @noSetValueAPI This CC has no set-type commands
 // @noInterview There's nothing to interview here

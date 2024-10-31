@@ -6,7 +6,7 @@ import type { SerialPort } from "serialport";
 import type {
 	InclusionUserCallbacks,
 	JoinNetworkUserCallbacks,
-} from "../controller/Inclusion";
+} from "../controller/Inclusion.js";
 
 export interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */

@@ -16,11 +16,11 @@ import {
 	getCCName,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
-import { type Driver } from "../../driver/Driver";
-import { type DeviceClass } from "../DeviceClass";
-import { type ZWaveNodeValueEventCallbacks } from "../_Types";
-import * as nodeUtils from "../utils";
-import { NodeWakeupMixin } from "./30_Wakeup";
+import { type Driver } from "../../driver/Driver.js";
+import { type DeviceClass } from "../DeviceClass.js";
+import { type ZWaveNodeValueEventCallbacks } from "../_Types.js";
+import * as nodeUtils from "../utils.js";
+import { NodeWakeupMixin } from "./30_Wakeup.js";
 
 /** Defines functionality of Z-Wave nodes related to the value DB */
 export interface NodeValues {

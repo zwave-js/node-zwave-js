@@ -29,14 +29,14 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -46,9 +46,12 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { HumidityControlMode, HumidityControlModeCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import {
+	HumidityControlMode,
+	HumidityControlModeCommand,
+} from "../lib/_Types.js";
 
 export const HumidityControlModeCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Humidity Control Mode"], {

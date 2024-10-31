@@ -1,4 +1,4 @@
-import { type ValueType } from "../values/Metadata";
+import { type ValueType } from "../values/Metadata.js";
 
 export enum Indicator {
 	"Armed" = 0x01,

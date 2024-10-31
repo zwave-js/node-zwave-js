@@ -1,7 +1,7 @@
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import proxyquire from "proxyquire";
-import type { ZWaveOptions } from "../driver/ZWaveOptions";
+import type { ZWaveOptions } from "../driver/ZWaveOptions.js";
 
 // load the driver with stubbed out Serialport
 const { Driver } = proxyquire<typeof import("../driver/Driver")>(

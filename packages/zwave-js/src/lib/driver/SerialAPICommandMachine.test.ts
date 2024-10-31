@@ -18,14 +18,14 @@ import {
 	dummyMessageWithResponseWithCallback,
 	dummyResponseNOK,
 	dummyResponseOK,
-} from "../test/messages";
+} from "../test/messages.js";
 import {
 	type SerialAPICommandDoneData,
 	type SerialAPICommandInterpreter,
 	type SerialAPICommandMachineParams,
 	type SerialAPICommandServiceImplementations,
 	createSerialAPICommandMachine,
-} from "./SerialAPICommandMachine";
+} from "./SerialAPICommandMachine.js";
 
 interface AvaTestContext {
 	clock: sinon.SinonFakeTimers;

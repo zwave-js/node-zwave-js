@@ -3,7 +3,7 @@ import { type MockControllerBehavior } from "@zwave-js/testing";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
+} from "../../controller/MockControllerState.js";
 
 import { TransmitStatus } from "@zwave-js/core";
 import { SoftResetRequest } from "@zwave-js/serial/serialapi";
@@ -14,7 +14,7 @@ import {
 	SendDataRequestTransmitReport,
 	SendDataResponse,
 } from "@zwave-js/serial/serialapi";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 let shouldTimeOut: boolean;
 let lastCallbackId: number;

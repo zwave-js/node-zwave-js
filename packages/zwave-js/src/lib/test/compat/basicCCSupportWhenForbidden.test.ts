@@ -1,7 +1,7 @@
 import { BasicCCValues } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"On devices that MUST not support Basic CC, and treat Basic Set as a report, ONLY currentValue should be exposed",

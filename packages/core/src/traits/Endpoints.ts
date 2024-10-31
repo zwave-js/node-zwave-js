@@ -1,4 +1,4 @@
-import { type MulticastDestination } from "../consts/Transmission";
+import { type MulticastDestination } from "../consts/Transmission.js";
 
 /** Identifies an endpoint */
 export interface EndpointId {

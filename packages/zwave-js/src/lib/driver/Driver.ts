@@ -198,18 +198,18 @@ import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
 import { InterpreterStatus, interpret } from "xstate";
-import { ZWaveController } from "../controller/Controller";
-import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
-import { DriverLogger } from "../log/Driver";
-import type { Endpoint } from "../node/Endpoint";
-import type { ZWaveNode } from "../node/Node";
+import { ZWaveController } from "../controller/Controller.js";
+import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
+import { DriverLogger } from "../log/Driver.js";
+import type { Endpoint } from "../node/Endpoint.js";
+import type { ZWaveNode } from "../node/Node.js";
 import {
 	InterviewStage,
 	NodeStatus,
 	type ZWaveNodeEventCallbacks,
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
-} from "../node/_Types";
+} from "../node/_Types.js";
 
 import {
 	SendTestFrameRequest,
@@ -222,56 +222,56 @@ import {
 	containsSerializedCC,
 	isCommandRequest,
 } from "@zwave-js/serial/serialapi";
-import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version";
-import { type ZWaveNodeBase } from "../node/mixins/00_Base";
-import { type NodeWakeup } from "../node/mixins/30_Wakeup";
-import { type NodeValues } from "../node/mixins/40_Values";
-import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
-import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
+import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
+import { type ZWaveNodeBase } from "../node/mixins/00_Base.js";
+import { type NodeWakeup } from "../node/mixins/30_Wakeup.js";
+import { type NodeValues } from "../node/mixins/40_Values.js";
+import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll.js";
+import { reportMissingDeviceConfig } from "../telemetry/deviceConfig.js";
 import {
 	type AppInfo,
 	compileStatistics,
 	sendStatistics,
-} from "../telemetry/statistics";
-import { Bootloader } from "./Bootloader";
-import { createMessageGenerator } from "./MessageGenerators";
+} from "../telemetry/statistics.js";
+import { Bootloader } from "./Bootloader.js";
+import { createMessageGenerator } from "./MessageGenerators.js";
 import {
 	cacheKeys,
 	deserializeNetworkCacheValue,
 	migrateLegacyNetworkCache,
 	serializeNetworkCacheValue,
-} from "./NetworkCache";
-import { type SerialAPIQueueItem, TransactionQueue } from "./Queue";
+} from "./NetworkCache.js";
+import { type SerialAPIQueueItem, TransactionQueue } from "./Queue.js";
 import {
 	type SerialAPICommandDoneData,
 	type SerialAPICommandInterpreter,
 	createSerialAPICommandMachine,
-} from "./SerialAPICommandMachine";
+} from "./SerialAPICommandMachine.js";
 import {
 	type TransactionReducer,
 	type TransactionReducerResult,
 	createMessageDroppedUnexpectedError,
 	serialAPICommandErrorToZWaveError,
-} from "./StateMachineShared";
-import { TaskScheduler } from "./Task";
-import { throttlePresets } from "./ThrottlePresets";
-import { Transaction } from "./Transaction";
+} from "./StateMachineShared.js";
+import { TaskScheduler } from "./Task.js";
+import { throttlePresets } from "./ThrottlePresets.js";
+import { Transaction } from "./Transaction.js";
 import {
 	type TransportServiceRXInterpreter,
 	createTransportServiceRXMachine,
-} from "./TransportServiceMachine";
+} from "./TransportServiceMachine.js";
 import {
 	checkForConfigUpdates,
 	installConfigUpdate,
 	installConfigUpdateInDocker,
-} from "./UpdateConfig";
-import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent";
+} from "./UpdateConfig.js";
+import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent.js";
 import type {
 	EditableZWaveOptions,
 	PartialZWaveOptions,
 	ZWaveOptions,
-} from "./ZWaveOptions";
-import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
+} from "./ZWaveOptions.js";
+import { discoverRemoteSerialPorts } from "./mDNSDiscovery.js";
 
 export const libVersion: string = PACKAGE_VERSION;
 export const libName: string = PACKAGE_NAME;

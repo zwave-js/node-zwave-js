@@ -4,8 +4,8 @@ import { isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { configDir, externalConfigDir } from "./utils";
-import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe";
+import { configDir, externalConfigDir } from "./utils.js";
+import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe.js";
 
 export type ManufacturersMap = Map<number, string>;
 

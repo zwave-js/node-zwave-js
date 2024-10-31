@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"when a NonceReport does not get delivered, it does not block further nonce requests",

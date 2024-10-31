@@ -13,7 +13,7 @@ import type {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	FirmwareUpdateServiceResponse,
-} from "./_Types";
+} from "./_Types.js";
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
 import type { Headers, OptionsOfTextResponseBody } from "got";

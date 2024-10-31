@@ -5,7 +5,7 @@ import {
 	type NodeProtocolInfoAndDeviceClass,
 	NodeType,
 } from "@zwave-js/core";
-import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities.js";
 
 export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> =
 	| T

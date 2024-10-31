@@ -8,9 +8,9 @@ import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { MockController, MockNode } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
 interface TestContext {
 	driver: Driver;

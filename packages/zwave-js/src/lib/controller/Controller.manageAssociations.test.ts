@@ -7,7 +7,7 @@ import {
 import { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-import { type CreateTestNodeOptions, createTestNode } from "../test/mocks";
+import { type CreateTestNodeOptions, createTestNode } from "../test/mocks.js";
 
 test("associations between insecure nodes are allowed", (t) => {
 	// This test simulates two Zooz ZEN76 switches, included insecurely

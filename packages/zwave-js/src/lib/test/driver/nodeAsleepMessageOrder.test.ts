@@ -13,7 +13,7 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuiteMulti";
+import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 // Repro from #1107
 // Node 10's awake timer elapses before its ping is rejected,

@@ -53,8 +53,8 @@ import {
 	getCCValues,
 	getCommandClass,
 	getImplementedVersion,
-} from "./CommandClassDecorators";
-import { type CCValue, type StaticCCValue } from "./Values";
+} from "./CommandClassDecorators.js";
+import { type CCValue, type StaticCCValue } from "./Values.js";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 

@@ -1,7 +1,7 @@
 import { SecurityClass, assertZWaveError } from "@zwave-js/core";
 import test from "ava";
-import { ProvisioningEntryStatus } from "./Inclusion";
-import { assertProvisioningEntry } from "./utils";
+import { ProvisioningEntryStatus } from "./Inclusion.js";
+import { assertProvisioningEntry } from "./utils.js";
 
 // A valid DSK
 const dsk = "11111-22222-12345-54321-65535-00001-11111-22222";

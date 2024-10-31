@@ -55,7 +55,7 @@ import {
 	PhysicalCCAPI,
 	type PollValueImplementation,
 	throwUnsupportedProperty,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	CCRaw,
 	CommandClass,
@@ -64,7 +64,7 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -74,12 +74,12 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import { V } from "../lib/Values";
-import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
-import * as ccUtils from "../lib/utils";
-import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
+} from "../lib/CommandClassDecorators.js";
+import { isNotificationEventPayload } from "../lib/NotificationEventPayload.js";
+import { V } from "../lib/Values.js";
+import { NotificationCommand, UserCodeCommand } from "../lib/_Types.js";
+import * as ccUtils from "../lib/utils.js";
+import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC.js";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {

@@ -10,12 +10,12 @@ import path from "node:path";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "../../Utils";
+} from "../../Utils.js";
 import {
 	type CreateAndStartDriverWithMockPortResult,
 	createAndStartDriverWithMockPort,
-} from "../driver/DriverMock";
-import { type PartialZWaveOptions } from "../driver/ZWaveOptions";
+} from "../driver/DriverMock.js";
+import { type PartialZWaveOptions } from "../driver/ZWaveOptions.js";
 
 export function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),

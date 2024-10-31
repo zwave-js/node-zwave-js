@@ -1,8 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { assertNever } from "alcalzone-shared/helpers";
-import { SUC_MAX_UPDATES } from "../../consts";
-import { type NVM3 } from "../NVM3";
+import { SUC_MAX_UPDATES } from "../../consts.js";
+import { type NVM3 } from "../NVM3.js";
 import {
 	type ControllerNVMProperty,
 	type LRNodeNVMProperty,
@@ -10,8 +10,8 @@ import {
 	type NVMProperty,
 	type NVMPropertyToDataType,
 	type NodeNVMProperty,
-} from "../common/definitions";
-import { type RouteCache } from "../common/routeCache";
+} from "../common/definitions.js";
+import { type RouteCache } from "../common/routeCache.js";
 import {
 	type ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -68,7 +68,7 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "./files";
+} from "./files.js";
 
 const DEFAULT_FILE_VERSION = "7.0.0";
 

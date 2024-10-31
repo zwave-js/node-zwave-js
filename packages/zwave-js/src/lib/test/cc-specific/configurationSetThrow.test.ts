@@ -1,6 +1,6 @@
 import path from "node:path";
 import sinon from "sinon";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 

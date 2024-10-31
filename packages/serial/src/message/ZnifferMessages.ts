@@ -13,7 +13,7 @@ import {
 	ZnifferFrameType,
 	ZnifferFunctionType,
 	ZnifferMessageType,
-} from "./Constants";
+} from "./Constants.js";
 
 export type ZnifferMessageConstructor<T extends ZnifferMessage> =
 	& typeof ZnifferMessage

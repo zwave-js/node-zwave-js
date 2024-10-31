@@ -1,9 +1,9 @@
 import { type EventHandler } from "@zwave-js/shared";
-import { type StatisticsEventCallbacksWithSelf } from "../../driver/Statistics";
-import { type ZWaveNode } from "../Node";
-import { type NodeStatistics } from "../NodeStatistics";
-import { type ZWaveNodeEventCallbacks } from "../_Types";
-import { NodeSecurityMixin } from "./05_Security";
+import { type StatisticsEventCallbacksWithSelf } from "../../driver/Statistics.js";
+import { type ZWaveNode } from "../Node.js";
+import { type NodeStatistics } from "../NodeStatistics.js";
+import { type ZWaveNodeEventCallbacks } from "../_Types.js";
+import { NodeSecurityMixin } from "./05_Security.js";
 
 // This mixin is a slightly ugly workaround to allow other mixins to
 // interact with events which would normally take an instance of ZWaveNode

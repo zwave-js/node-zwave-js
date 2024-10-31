@@ -4,7 +4,7 @@ import {
 	SecurityClass,
 	SecurityManager2,
 } from "@zwave-js/core";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro for https://github.com/zwave-js/node-zwave-js/issues/6098
 

@@ -2,7 +2,7 @@
 
 import { Bytes } from "@zwave-js/shared";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When receiving a MeterCC::Report, the value event should contain the meter name in propertyKeyName",

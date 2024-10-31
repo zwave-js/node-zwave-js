@@ -1,7 +1,7 @@
 import { BasicCCValues } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Basic CC values should only include the compatEvent value if Basic CC is not supported, but the compat flag is set",

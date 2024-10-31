@@ -9,7 +9,7 @@ import {
 	TaskPriority,
 	type TaskReturnType,
 	TaskScheduler,
-} from "./Task";
+} from "./Task.js";
 
 test("The scheduler can be started and stopped", async (t) => {
 	const scheduler = new TaskScheduler();

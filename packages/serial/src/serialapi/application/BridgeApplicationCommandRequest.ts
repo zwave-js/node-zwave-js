@@ -23,9 +23,9 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { tryParseRSSI } from "../transport/SendDataShared";
-import { type MessageWithCC } from "../utils";
-import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
+import { tryParseRSSI } from "../transport/SendDataShared.js";
+import { type MessageWithCC } from "../utils.js";
+import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest.js";
 
 export type BridgeApplicationCommandRequestOptions =
 	& (

@@ -6,7 +6,7 @@ import type {
 	SetbackState,
 	Switchpoint,
 	Timezone,
-} from "./_Types";
+} from "./_Types.js";
 
 export const setbackSpecialStateValues: Record<SetbackSpecialState, number> = {
 	"Frost Protection": 0x79,

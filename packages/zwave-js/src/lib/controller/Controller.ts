@@ -380,27 +380,27 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "node:crypto";
-import type { Driver } from "../driver/Driver";
-import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
-import type { StatisticsEventCallbacks } from "../driver/Statistics";
-import { type TaskBuilder, TaskPriority } from "../driver/Task";
-import { DeviceClass } from "../node/DeviceClass";
-import { ZWaveNode } from "../node/Node";
-import { VirtualNode } from "../node/VirtualNode";
+import type { Driver } from "../driver/Driver.js";
+import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache.js";
+import type { StatisticsEventCallbacks } from "../driver/Statistics.js";
+import { type TaskBuilder, TaskPriority } from "../driver/Task.js";
+import { DeviceClass } from "../node/DeviceClass.js";
+import { ZWaveNode } from "../node/Node.js";
+import { VirtualNode } from "../node/VirtualNode.js";
 import {
 	InterviewStage,
 	type LifelineRoutes,
 	NodeStatus,
-} from "../node/_Types";
+} from "../node/_Types.js";
 import {
 	type ControllerStatistics,
 	ControllerStatisticsHost,
-} from "./ControllerStatistics";
-import { ZWaveFeature, minFeatureVersions } from "./Features";
+} from "./ControllerStatistics.js";
+import { ZWaveFeature, minFeatureVersions } from "./Features.js";
 import {
 	downloadFirmwareUpdate,
 	getAvailableFirmwareUpdates,
-} from "./FirmwareUpdateService";
+} from "./FirmwareUpdateService.js";
 import {
 	type ExclusionOptions,
 	ExclusionStrategy,
@@ -423,10 +423,10 @@ import {
 	type ReplaceNodeOptions,
 	SecurityBootstrapFailure,
 	type SmartStartProvisioningEntry,
-} from "./Inclusion";
-import { SerialNVMIO500, SerialNVMIO700 } from "./NVMIO";
-import { determineNIF } from "./NodeInformationFrame";
-import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
+} from "./Inclusion.js";
+import { SerialNVMIO500, SerialNVMIO700 } from "./NVMIO.js";
+import { determineNIF } from "./NodeInformationFrame.js";
+import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions.js";
 import {
 	type ControllerFirmwareUpdateProgress,
 	type ControllerFirmwareUpdateResult,
@@ -437,8 +437,8 @@ import {
 	type RebuildRoutesOptions,
 	type RebuildRoutesStatus,
 	type SDKVersion,
-} from "./_Types";
-import { assertProvisioningEntry, isRebuildRoutesTask } from "./utils";
+} from "./_Types.js";
+import { assertProvisioningEntry, isRebuildRoutesTask } from "./utils.js";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks

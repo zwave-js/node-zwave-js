@@ -20,13 +20,13 @@ import {
 	POLL_VALUE,
 	type PollValueImplementation,
 	throwUnsupportedProperty,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -34,13 +34,13 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	type SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
-} from "../lib/_Types";
-import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
+} from "../lib/_Types.js";
+import { decodeSetbackState, encodeSetbackState } from "../lib/serializers.js";
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together

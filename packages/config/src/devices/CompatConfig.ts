@@ -7,9 +7,9 @@ import {
 } from "@zwave-js/core/safe";
 import { type JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { throwInvalidConfig, tryParseCCId } from "../utils_safe";
-import { type ConditionalItem, conditionApplies } from "./ConditionalItem";
-import type { DeviceID } from "./shared";
+import { throwInvalidConfig, tryParseCCId } from "../utils_safe.js";
+import { type ConditionalItem, conditionApplies } from "./ConditionalItem.js";
+import type { DeviceID } from "./shared.js";
 
 export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
 	private valueIdRegex = /^\$value\$\[.+\]$/;

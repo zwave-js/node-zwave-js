@@ -12,18 +12,18 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 } from "@zwave-js/host/safe";
-import { CCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { CCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 
 import { Bytes } from "@zwave-js/shared/safe";
-import { CRC16Command } from "../lib/_Types";
+import { CRC16Command } from "../lib/_Types.js";
 
 const headerBuffer = Bytes.from([
 	CommandClasses["CRC-16 Encapsulation"],

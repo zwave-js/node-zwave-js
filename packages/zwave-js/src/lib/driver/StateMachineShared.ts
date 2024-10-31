@@ -29,8 +29,8 @@ import {
 	type InterpreterFrom,
 	type InterpreterOptions,
 } from "xstate";
-import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
-import type { Transaction } from "./Transaction";
+import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine.js";
+import type { Transaction } from "./Transaction.js";
 
 export function serialAPICommandErrorToZWaveError(
 	reason: (SerialAPICommandDoneData & { type: "failure" })["reason"],

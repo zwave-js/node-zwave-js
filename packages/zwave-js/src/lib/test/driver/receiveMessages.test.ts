@@ -3,8 +3,8 @@ import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { Bytes } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
 interface TestContext {
 	driver: Driver;

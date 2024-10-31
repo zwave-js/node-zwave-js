@@ -35,7 +35,7 @@ import {
 	ExplorerFrameCommand,
 	LongRangeFrameType,
 	ZWaveFrameType,
-} from "./_Types";
+} from "./_Types.js";
 
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {

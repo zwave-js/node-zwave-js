@@ -1,6 +1,6 @@
 import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
-import { NodeStatus } from "./_Types";
-import { type NodeNetworkRole } from "./mixins/01_NetworkRole";
+import { NodeStatus } from "./_Types.js";
+import { type NodeNetworkRole } from "./mixins/01_NetworkRole.js";
 
 export interface NodeStatusStateSchema {
 	states: {

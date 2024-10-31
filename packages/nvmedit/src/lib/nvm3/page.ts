@@ -7,9 +7,9 @@ import {
 	NVM3_PAGE_MAGIC,
 	type PageStatus,
 	type PageWriteSize,
-} from "./consts";
-import { type NVM3Object } from "./object";
-import { computeBergerCode } from "./utils";
+} from "./consts.js";
+import { type NVM3Object } from "./object.js";
+import { computeBergerCode } from "./utils.js";
 
 export interface NVM3PageHeader {
 	offset: number;

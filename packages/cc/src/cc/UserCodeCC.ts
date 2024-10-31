@@ -42,7 +42,7 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
@@ -50,7 +50,7 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -60,10 +60,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import type { NotificationEventPayload } from "../lib/NotificationEventPayload";
-import { V } from "../lib/Values";
-import { KeypadMode, UserCodeCommand, UserIDStatus } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import type { NotificationEventPayload } from "../lib/NotificationEventPayload.js";
+import { V } from "../lib/Values.js";
+import { KeypadMode, UserCodeCommand, UserIDStatus } from "../lib/_Types.js";
 
 export const UserCodeCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["User Code"], {

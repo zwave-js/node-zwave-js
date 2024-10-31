@@ -4,10 +4,10 @@ import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
-import { isFunctionSupported_NoBridge } from "./fixtures";
+import type { Driver } from "../../driver/Driver.js";
+import { ZWaveNode } from "../../node/Node.js";
+import { createAndStartDriver } from "../utils.js";
+import { isFunctionSupported_NoBridge } from "./fixtures.js";
 
 interface TestContext {
 	driver: Driver;

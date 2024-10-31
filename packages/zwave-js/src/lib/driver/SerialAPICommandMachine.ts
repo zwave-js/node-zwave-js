@@ -14,7 +14,7 @@ import {
 	createMachine,
 	raise,
 } from "xstate";
-import type { ZWaveOptions } from "./ZWaveOptions";
+import type { ZWaveOptions } from "./ZWaveOptions.js";
 
 export interface SerialAPICommandStateSchema {
 	states: {

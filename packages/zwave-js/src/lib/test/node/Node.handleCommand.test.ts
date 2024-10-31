@@ -5,13 +5,13 @@ import { type CommandClassInfo, CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
 import test from "ava";
 import sinon from "sinon";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
+import type { Driver } from "../../driver/Driver.js";
+import { ZWaveNode } from "../../node/Node.js";
 import {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
-} from "../../node/_Types";
-import { createEmptyMockDriver } from "../mocks";
+} from "../../node/_Types.js";
+import { createEmptyMockDriver } from "../mocks.js";
 
 const fakeDriver = createEmptyMockDriver();
 

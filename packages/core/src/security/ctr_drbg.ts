@@ -16,8 +16,8 @@
  */
 
 import { Bytes } from "@zwave-js/shared/safe";
-import { increment } from "./bufferUtils";
-import { encryptAES128ECB } from "./crypto";
+import { increment } from "./bufferUtils.js";
+import { encryptAES128ECB } from "./crypto.js";
 
 const MAX_GENERATE_LENGTH = 65536;
 // const RESEED_INTERVAL = 0x1000000000000;

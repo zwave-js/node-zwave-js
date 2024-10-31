@@ -5,7 +5,7 @@ import sinon from "sinon";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"The progress listener passed to sendCommand gets called with status updates",

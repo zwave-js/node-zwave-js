@@ -24,8 +24,8 @@ import {
 	type TypedClassDecorator,
 } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
-import { FunctionType, MessageType } from "./Constants";
-import { MessageHeaders } from "./MessageHeaders";
+import { FunctionType, MessageType } from "./Constants.js";
+import { MessageHeaders } from "./MessageHeaders.js";
 
 export type MessageConstructor<T extends Message> = typeof Message & {
 	new (options: MessageBaseOptions): T;

@@ -7,7 +7,7 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest("setValue without supervision: expect validation GET", {
 	// debug: true,

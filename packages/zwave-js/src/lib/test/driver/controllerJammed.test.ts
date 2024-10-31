@@ -20,9 +20,9 @@ import sinon from "sinon";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
-import { integrationTest } from "../integrationTestSuite";
-import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
+} from "../../controller/MockControllerState.js";
+import { integrationTest } from "../integrationTestSuite.js";
+import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti.js";
 
 let shouldFail = false;
 

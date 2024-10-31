@@ -1,7 +1,7 @@
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { throwInvalidConfig } from "../utils_safe";
-import { type ConditionalItem, conditionApplies } from "./ConditionalItem";
-import type { DeviceID } from "./shared";
+import { throwInvalidConfig } from "../utils_safe.js";
+import { type ConditionalItem, conditionApplies } from "./ConditionalItem.js";
+import type { DeviceID } from "./shared.js";
 
 type ToPrimitive<T extends string> = T extends "string" ? string
 	: T extends "number" ? number

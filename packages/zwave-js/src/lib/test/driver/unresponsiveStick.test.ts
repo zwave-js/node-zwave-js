@@ -8,7 +8,7 @@ import { SoftResetRequest } from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import Sinon from "sinon";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 let shouldRespond = true;
 

@@ -29,19 +29,19 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../../lib/API";
+} from "../../lib/API.js";
 import {
 	type CCRaw,
 	type CommandClassOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../../lib/CommandClass";
-import { expectedCCResponse } from "../../lib/CommandClassDecorators";
+} from "../../lib/CommandClass.js";
+import { expectedCCResponse } from "../../lib/CommandClassDecorators.js";
 import {
 	ManufacturerProprietaryCC,
 	ManufacturerProprietaryCCAPI,
-} from "../ManufacturerProprietaryCC";
+} from "../ManufacturerProprietaryCC.js";
 import {
 	fibaroCC,
 	fibaroCCCommand,
@@ -51,7 +51,7 @@ import {
 	getFibaroCCId,
 	manufacturerId,
 	manufacturerProprietaryAPI,
-} from "./Decorators";
+} from "./Decorators.js";
 
 export const MANUFACTURERID_FIBARO = 0x10f;
 

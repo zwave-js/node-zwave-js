@@ -1,4 +1,4 @@
-import { StatisticsHost } from "../driver/Statistics";
+import { StatisticsHost } from "../driver/Statistics.js";
 
 export class ControllerStatisticsHost
 	extends StatisticsHost<ControllerStatistics>

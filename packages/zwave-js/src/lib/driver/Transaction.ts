@@ -14,8 +14,8 @@ import {
 	compareNumberOrString,
 } from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
-import { NodeStatus } from "../node/_Types";
-import type { Driver } from "./Driver";
+import { NodeStatus } from "../node/_Types.js";
+import type { Driver } from "./Driver.js";
 
 export interface MessageGenerator {
 	parent: Transaction;

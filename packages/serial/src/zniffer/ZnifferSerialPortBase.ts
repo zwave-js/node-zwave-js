@@ -2,9 +2,9 @@ import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "node:events";
 import { PassThrough, type Readable, type Writable } from "node:stream";
-import { SerialLogger } from "../log/Logger";
-import { ZnifferParser } from "../parsers/ZnifferParser";
-import { type ZWaveSerialPortImplementation } from "../serialport/ZWaveSerialPortImplementation";
+import { SerialLogger } from "../log/Logger.js";
+import { ZnifferParser } from "../parsers/ZnifferParser.js";
+import { type ZWaveSerialPortImplementation } from "../serialport/ZWaveSerialPortImplementation.js";
 
 export interface ZnifferSerialPortEventCallbacks {
 	error: (e: Error) => void;

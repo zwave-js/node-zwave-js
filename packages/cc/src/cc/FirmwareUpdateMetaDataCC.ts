@@ -23,13 +23,13 @@ import {
 	pick,
 } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -38,8 +38,8 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
@@ -47,7 +47,7 @@ import {
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 // @noSetValueAPI There are no values to set here
 

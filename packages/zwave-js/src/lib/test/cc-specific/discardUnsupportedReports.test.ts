@@ -10,7 +10,7 @@ import {
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Discard Multilevel Sensor and Meter CC Reports on nodes and/or endpoints that do not support them",

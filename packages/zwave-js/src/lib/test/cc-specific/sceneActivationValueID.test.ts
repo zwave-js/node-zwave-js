@@ -1,5 +1,5 @@
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"a node that controls the Scene Activation CC should include the scene ID in getDefinedValueIDs()",

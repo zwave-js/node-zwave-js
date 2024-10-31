@@ -11,7 +11,7 @@ import {
 	evalOrStatic,
 } from "@zwave-js/shared/safe";
 import type { Overwrite } from "alcalzone-shared/types";
-import type { ValueIDProperties } from "./API";
+import type { ValueIDProperties } from "./API.js";
 
 // HINT: To fully view types for definitions created by this, open
 // node_modules/typescript/lib/tsserver.js and change the definition of

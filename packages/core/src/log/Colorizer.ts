@@ -1,7 +1,7 @@
 import colors from "ansi-colors";
 import { type TransformFunction, format } from "logform";
 import winston from "winston";
-import type { ZWaveLogInfo } from "./shared_safe";
+import type { ZWaveLogInfo } from "./shared_safe.js";
 const defaultColors = winston.config.npm.colors;
 
 // This is a placeholder

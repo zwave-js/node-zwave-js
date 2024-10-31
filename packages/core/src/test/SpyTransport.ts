@@ -3,7 +3,7 @@ import type { Assertions } from "ava";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
-import type { ZWaveLogInfo } from "../log/shared_safe";
+import type { ZWaveLogInfo } from "../log/shared_safe.js";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(

@@ -93,8 +93,8 @@ import {
 	MockControllerCommunicationState,
 	MockControllerInclusionState,
 	MockControllerStateKeys,
-} from "./MockControllerState";
-import { determineNIF } from "./NodeInformationFrame";
+} from "./MockControllerState.js";
+import { determineNIF } from "./NodeInformationFrame.js";
 
 function createLazySendDataPayload(
 	controller: MockController,

@@ -1,5 +1,5 @@
 import type { ExecutionContext } from "ava";
-import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 export interface AssertZWaveErrorOptions {
 	messageMatches?: string | RegExp;

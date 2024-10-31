@@ -1,10 +1,10 @@
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import { CommandClasses } from "@zwave-js/core";
 import ava, { type TestFn } from "ava";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
-import { ZWaveController } from "./Controller";
+import type { Driver } from "../driver/Driver.js";
+import { ZWaveNode } from "../node/Node.js";
+import { createEmptyMockDriver } from "../test/mocks.js";
+import { ZWaveController } from "./Controller.js";
 
 interface TestContext {
 	fakeDriver: Driver;

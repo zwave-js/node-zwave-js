@@ -1,6 +1,6 @@
 import { NODE_ID_MAX, encodeBitMask, parseBitMask } from "@zwave-js/core/safe";
 import { type Bytes } from "@zwave-js/shared/safe";
-import type { NVM3Object } from "../object";
+import type { NVM3Object } from "../object.js";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -8,7 +8,7 @@ import {
 	gotDeserializationOptions,
 	nvmFileID,
 	nvmSection,
-} from "./NVMFile";
+} from "./NVMFile.js";
 
 export interface ProtocolNodeMaskFileOptions extends NVMFileCreationOptions {
 	nodeIds: number[];

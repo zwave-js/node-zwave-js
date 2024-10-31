@@ -28,8 +28,8 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
-import { PhysicalCCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { PhysicalCCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -37,9 +37,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	shouldUseSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { SupervisionCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { SupervisionCommand } from "../lib/_Types.js";
 
 export const SupervisionCCValues = Object.freeze({
 	...V.defineDynamicCCValues(CommandClasses.Supervision, {

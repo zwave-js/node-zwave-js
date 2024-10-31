@@ -5,8 +5,8 @@ import { Bytes, mergeDeep } from "@zwave-js/shared";
 import test from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { PORT_ADDRESS, createAndStartDriver } from "../test/utils";
-import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions";
+import { PORT_ADDRESS, createAndStartDriver } from "../test/utils.js";
+import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions.js";
 
 // @messageTypes(MessageType.Request, 0xff)
 // class TestMessage extends Message {}

@@ -19,14 +19,14 @@ import {
 	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	CCCommand,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { TransportServiceCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { TransportServiceCommand } from "../lib/_Types.js";
 
 export const MAX_SEGMENT_SIZE = 39;
 

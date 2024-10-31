@@ -4,7 +4,7 @@ import { type SendDataRequest } from "@zwave-js/serial/serialapi";
 import { MOCK_FRAME_ACK_TIMEOUT, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro from #1078
 

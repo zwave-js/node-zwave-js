@@ -1,4 +1,4 @@
-import type { Message } from "./Message";
+import type { Message } from "./Message.js";
 
 /** Should be implemented by Serial API responses and callbacks which indicate success of the operation */
 export interface SuccessIndicator {

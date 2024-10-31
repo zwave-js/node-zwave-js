@@ -16,7 +16,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
+import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared.js";
 
 @messageTypes(MessageType.Request, FunctionType.GetBackgroundRSSI)
 @priority(MessagePriority.Normal)

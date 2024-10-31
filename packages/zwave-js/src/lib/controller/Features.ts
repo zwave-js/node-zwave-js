@@ -1,4 +1,4 @@
-import type { SDKVersion } from "./_Types";
+import type { SDKVersion } from "./_Types.js";
 
 /** A named list of Z-Wave features */
 export enum ZWaveFeature {

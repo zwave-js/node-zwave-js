@@ -12,8 +12,8 @@ import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
-import * as nodeUtils from "../../node/utils";
-import { type CreateTestNodeOptions, createTestNode } from "../mocks";
+import * as nodeUtils from "../../node/utils.js";
+import { type CreateTestNodeOptions, createTestNode } from "../mocks.js";
 
 const host = createTestingHost();
 

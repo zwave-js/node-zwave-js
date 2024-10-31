@@ -14,11 +14,11 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
-import type { Driver } from "../driver/Driver";
-import { createAndStartTestingDriver } from "../driver/DriverMock";
-import { TransactionQueue } from "../driver/Queue";
-import { Transaction } from "../driver/Transaction";
-import { DriverLogger } from "./Driver";
+import type { Driver } from "../driver/Driver.js";
+import { createAndStartTestingDriver } from "../driver/DriverMock.js";
+import { TransactionQueue } from "../driver/Queue.js";
+import { Transaction } from "../driver/Transaction.js";
+import { DriverLogger } from "./Driver.js";
 
 interface TestContext {
 	driver: Driver;

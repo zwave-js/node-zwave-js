@@ -25,8 +25,8 @@ import {
 	type LongRangeMPDU,
 	type ZWaveBeamStart,
 	type ZWaveMPDU,
-} from "../zniffer/MPDU";
-import { type Zniffer } from "../zniffer/Zniffer";
+} from "../zniffer/MPDU.js";
+import { type Zniffer } from "../zniffer/Zniffer.js";
 
 export const ZNIFFER_LABEL = "ZNIFFR";
 const ZNIFFER_LOGLEVEL = "info";

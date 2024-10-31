@@ -24,13 +24,13 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -40,15 +40,15 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	type AssociationAddress,
 	type EndpointAddress,
 	MultiChannelAssociationCommand,
-} from "../lib/_Types";
-import * as ccUtils from "../lib/utils";
-import { AssociationCCValues } from "./AssociationCC";
+} from "../lib/_Types.js";
+import * as ccUtils from "../lib/utils.js";
+import { AssociationCCValues } from "./AssociationCC.js";
 
 export const MultiChannelAssociationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multi Channel Association"], {

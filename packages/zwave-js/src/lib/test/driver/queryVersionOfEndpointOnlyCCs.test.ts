@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"The version of endpoint-only CCs gets queried during the interview",

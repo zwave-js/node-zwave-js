@@ -55,7 +55,7 @@ import {
 	staticExtends,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import type { CCAPIHost, CCAPINode, ValueIDProperties } from "./API";
+import type { CCAPIHost, CCAPINode, ValueIDProperties } from "./API.js";
 import {
 	getCCCommand,
 	getCCCommandConstructor,
@@ -66,18 +66,18 @@ import {
 	getCommandClass,
 	getExpectedCCResponse,
 	getImplementedVersion,
-} from "./CommandClassDecorators";
+} from "./CommandClassDecorators.js";
 import {
 	type EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
-} from "./EncapsulatingCommandClass";
+} from "./EncapsulatingCommandClass.js";
 import {
 	type CCValue,
 	type DynamicCCValue,
 	type StaticCCValue,
 	defaultCCValueOptions,
-} from "./Values";
+} from "./Values.js";
 
 export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID

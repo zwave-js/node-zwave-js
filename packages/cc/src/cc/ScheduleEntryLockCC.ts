@@ -28,13 +28,13 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -44,8 +44,8 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	ScheduleEntryLockCommand,
 	type ScheduleEntryLockDailyRepeatingSchedule,
@@ -56,9 +56,9 @@ import {
 	ScheduleEntryLockWeekday,
 	type ScheduleEntryLockYearDaySchedule,
 	type Timezone,
-} from "../lib/_Types";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
-import { UserCodeCC } from "./UserCodeCC";
+} from "../lib/_Types.js";
+import { encodeTimezone, parseTimezone } from "../lib/serializers.js";
+import { UserCodeCC } from "./UserCodeCC.js";
 
 export const ScheduleEntryLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Schedule Entry Lock"], {

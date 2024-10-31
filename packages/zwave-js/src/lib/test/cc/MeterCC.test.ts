@@ -17,8 +17,8 @@ import {
 import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
-import * as nodeUtils from "../../node/utils";
-import { createTestNode } from "../mocks";
+import * as nodeUtils from "../../node/utils.js";
+import { createTestNode } from "../mocks.js";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([

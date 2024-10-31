@@ -34,14 +34,14 @@ import {
 	PhysicalCCAPI,
 	type PollValueImplementation,
 	throwUnsupportedProperty,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -50,14 +50,14 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	BatteryChargingStatus,
 	BatteryCommand,
 	BatteryReplacementStatus,
-} from "../lib/_Types";
-import { NotificationCCValues } from "./NotificationCC";
+} from "../lib/_Types.js";
+import { NotificationCCValues } from "./NotificationCC.js";
 
 export const BatteryCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Battery, {

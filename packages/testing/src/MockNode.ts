@@ -11,15 +11,15 @@ import {
 import type { CCEncodingContext } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
-import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
-import type { MockController } from "./MockController";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities.js";
+import type { MockController } from "./MockController.js";
 import {
 	type MockEndpointCapabilities,
 	type MockNodeCapabilities,
 	type PartialCCCapabilities,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
-} from "./MockNodeCapabilities";
+} from "./MockNodeCapabilities.js";
 import {
 	type LazyMockZWaveFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
@@ -29,7 +29,7 @@ import {
 	type MockZWaveRequestFrame,
 	createMockZWaveAckFrame,
 	createMockZWaveRequestFrame,
-} from "./MockZWaveFrame";
+} from "./MockZWaveFrame.js";
 
 const defaultCCInfo: CommandClassInfo = {
 	isSupported: true,

@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 /** Ensures that the values array is consecutive */
 export function isConsecutiveArray(values: number[]): boolean {

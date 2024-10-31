@@ -1,6 +1,6 @@
 import { padVersion } from "@zwave-js/shared";
 import semver from "semver";
-import { type MaybeNotKnown } from "../values/Primitive";
+import { type MaybeNotKnown } from "../values/Primitive.js";
 
 /** Checks if the SDK version is greater than the given one */
 export function sdkVersionGt(

@@ -16,7 +16,7 @@ import {
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Responses to encapsulated requests use the same encapsulation (CRC-16)",

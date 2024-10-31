@@ -1,4 +1,4 @@
-import type { MaybeNotKnown } from "../values/Primitive";
+import type { MaybeNotKnown } from "../values/Primitive.js";
 
 export enum SecurityClass {
 	/**

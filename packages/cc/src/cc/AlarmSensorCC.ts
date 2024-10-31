@@ -20,14 +20,14 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -36,9 +36,9 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { AlarmSensorCommand, AlarmSensorType } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { AlarmSensorCommand, AlarmSensorType } from "../lib/_Types.js";
 
 export const AlarmSensorCCValues = Object.freeze({
 	...V.defineDynamicCCValues(CommandClasses["Alarm Sensor"], {

@@ -6,11 +6,11 @@ import {
 	isValidDSK,
 } from "@zwave-js/core/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { type Task } from "../driver/Task";
+import { type Task } from "../driver/Task.js";
 import {
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
-} from "./Inclusion";
+} from "./Inclusion.js";
 
 export function assertProvisioningEntry(
 	arg: any,

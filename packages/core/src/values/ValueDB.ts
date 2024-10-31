@@ -1,8 +1,12 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { TypedEventEmitter } from "@zwave-js/shared";
-import type { CommandClasses } from "../capabilities/CommandClasses";
-import { ZWaveError, ZWaveErrorCodes, isZWaveError } from "../error/ZWaveError";
-import type { ValueMetadata } from "../values/Metadata";
+import type { CommandClasses } from "../capabilities/CommandClasses.js";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	isZWaveError,
+} from "../error/ZWaveError.js";
+import type { ValueMetadata } from "../values/Metadata.js";
 import type {
 	MetadataUpdatedArgs,
 	SetValueOptions,
@@ -11,7 +15,7 @@ import type {
 	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
-} from "./_Types";
+} from "./_Types.js";
 
 type ValueAddedCallback = (args: ValueAddedArgs) => void;
 type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;

@@ -6,7 +6,7 @@ import {
 	type NodeStatusMachine,
 	type NodeStatusStateSchema,
 	createNodeStatusMachine,
-} from "./NodeStatusMachine";
+} from "./NodeStatusMachine.js";
 
 const testNodeNonSleeping = { canSleep: false } as any;
 const testNodeSleeping = { canSleep: true } as any;

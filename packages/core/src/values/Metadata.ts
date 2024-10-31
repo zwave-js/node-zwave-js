@@ -1,6 +1,6 @@
 import { getEnumMemberName } from "@zwave-js/shared/safe";
-import type { Duration } from "./Duration";
-import { IntegerLimits } from "./Primitive";
+import type { Duration } from "./Duration.js";
+import { IntegerLimits } from "./Primitive.js";
 
 const isIntegerRegex = /^\d+$/;
 

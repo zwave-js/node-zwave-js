@@ -1,9 +1,9 @@
 import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import type { ProtocolDataRate } from "../capabilities/Protocols";
-import { type SecurityClass } from "../security/SecurityClass";
-import type { CCId } from "../traits/CommandClasses";
-import { Duration } from "../values/Duration";
+import type { ProtocolDataRate } from "../capabilities/Protocols.js";
+import { type SecurityClass } from "../security/SecurityClass.js";
+import type { CCId } from "../traits/CommandClasses.js";
+import { Duration } from "../values/Duration.js";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {

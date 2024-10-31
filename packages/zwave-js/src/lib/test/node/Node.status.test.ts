@@ -2,11 +2,11 @@ import { NodeStatus } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
 import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
-import type { ZWaveNodeEvents } from "../../node/_Types";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
+import { ZWaveNode } from "../../node/Node.js";
+import type { ZWaveNodeEvents } from "../../node/_Types.js";
 
 interface TestContext {
 	driver: Driver;

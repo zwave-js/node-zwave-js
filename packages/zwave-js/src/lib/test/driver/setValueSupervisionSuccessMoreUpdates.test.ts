@@ -8,7 +8,7 @@ import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import sinon from "sinon";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	`Regression test for #4957: Treat Supervision Report with Success but "more updates follow" as final`,

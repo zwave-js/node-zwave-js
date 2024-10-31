@@ -22,7 +22,7 @@ import {
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 	// debug: true,

@@ -1,5 +1,5 @@
 import type { JsonlDBOptions } from "@alcalzone/jsonl-db";
-import type { ZWaveOptions } from "./ZWaveOptions";
+import type { ZWaveOptions } from "./ZWaveOptions.js";
 
 export const throttlePresets: Record<
 	ZWaveOptions["storage"]["throttle"],

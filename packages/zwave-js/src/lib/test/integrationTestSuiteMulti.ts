@@ -12,10 +12,10 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { Driver } from "../driver/Driver";
-import type { PartialZWaveOptions } from "../driver/ZWaveOptions";
-import type { ZWaveNode } from "../node/Node";
-import { prepareDriver, prepareMocks } from "./integrationTestSuiteShared";
+import type { Driver } from "../driver/Driver.js";
+import type { PartialZWaveOptions } from "../driver/ZWaveOptions.js";
+import type { ZWaveNode } from "../node/Node.js";
+import { prepareDriver, prepareMocks } from "./integrationTestSuiteShared.js";
 
 interface IntegrationTestOptions {
 	/** Enable debugging for this integration tests. When enabled, a driver logfile will be written and the test directory will not be deleted after each test. Default: false */

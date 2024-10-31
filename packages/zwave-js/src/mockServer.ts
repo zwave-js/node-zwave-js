@@ -46,8 +46,8 @@ import {
 	ProtocolVersion,
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "./Utils";
-import { type CommandClassDump, type NodeDump } from "./lib/node/Dump";
+} from "./Utils.js";
+import { type CommandClassDump, type NodeDump } from "./lib/node/Dump.js";
 
 export type MockServerControllerOptions =
 	& Pick<

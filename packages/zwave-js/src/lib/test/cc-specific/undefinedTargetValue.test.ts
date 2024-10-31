@@ -6,7 +6,7 @@ import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue",

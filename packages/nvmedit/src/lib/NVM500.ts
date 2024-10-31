@@ -6,14 +6,18 @@ import {
 	parseBitMask,
 } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
-import { type Route, encodeRoute, parseRoute } from "./common/routeCache";
+import { type NVM, NVMAccess, type NVMIO } from "./common/definitions.js";
+import { type Route, encodeRoute, parseRoute } from "./common/routeCache.js";
 import {
 	type SUCUpdateEntry,
 	encodeSUCUpdateEntry,
 	parseSUCUpdateEntry,
-} from "./common/sucUpdateEntry";
-import { nvmReadBuffer, nvmReadUInt16BE, nvmWriteBuffer } from "./common/utils";
+} from "./common/sucUpdateEntry.js";
+import {
+	nvmReadBuffer,
+	nvmReadUInt16BE,
+	nvmWriteBuffer,
+} from "./common/utils.js";
 import {
 	type NVM500NodeInfo,
 	type NVMDescriptor,
@@ -24,8 +28,8 @@ import {
 	parseNVM500NodeInfo,
 	parseNVMDescriptor,
 	parseNVMModuleDescriptor,
-} from "./nvm500/EntryParsers";
-import { nvm500Impls } from "./nvm500/impls";
+} from "./nvm500/EntryParsers.js";
+import { nvm500Impls } from "./nvm500/impls.js";
 import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,
@@ -39,7 +43,7 @@ import {
 	ROUTECACHE_VALID,
 	type ResolvedNVMEntry,
 	type ResolvedNVMLayout,
-} from "./nvm500/shared";
+} from "./nvm500/shared.js";
 
 export interface NVM500Info {
 	layout: ResolvedNVMLayout;

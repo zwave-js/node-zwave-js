@@ -1,23 +1,23 @@
 import type { JSONObject } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import { throwInvalidConfig } from "../utils_safe";
+import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type AssociationConfig,
 	ConditionalAssociationConfig,
-} from "./AssociationConfig";
+} from "./AssociationConfig.js";
 import {
 	type ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
-} from "./ConditionalItem";
-import type { ConditionalDeviceConfig } from "./DeviceConfig";
+} from "./ConditionalItem.js";
+import type { ConditionalDeviceConfig } from "./DeviceConfig.js";
 import {
 	type ConditionalParamInfoMap,
 	type ParamInfoMap,
 	parseConditionalParamInformationMap,
-} from "./ParamInformation";
-import type { DeviceID } from "./shared";
+} from "./ParamInformation.js";
+import type { DeviceID } from "./shared.js";
 
 export class ConditionalEndpointConfig
 	implements ConditionalItem<EndpointConfig>

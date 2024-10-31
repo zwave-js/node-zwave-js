@@ -6,7 +6,7 @@ import { ValueMetadata } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When receiving an NotificationCC::Report with known typa but an unknown event, the resulting value metadata should contain the ccSpecific field",

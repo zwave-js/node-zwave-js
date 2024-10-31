@@ -11,7 +11,7 @@ import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
-import { createTestNode } from "../mocks";
+import { createTestNode } from "../mocks.js";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([

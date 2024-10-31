@@ -4,8 +4,8 @@ import {
 	type ZWaveLogContainer,
 } from "@zwave-js/core";
 import * as net from "node:net";
-import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
-import { type ZWaveSocketOptions } from "./ZWaveSocketOptions";
+import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase.js";
+import { type ZWaveSocketOptions } from "./ZWaveSocketOptions.js";
 
 /** A version of the Z-Wave serial binding that works using a socket (TCP or IPC) */
 export class ZWaveSocket extends ZWaveSerialPortBase {

@@ -8,8 +8,8 @@ import {
 	topologicalSort,
 } from "@zwave-js/core";
 import test from "ava";
-import { ZWaveNode } from "../../node/Node";
-import { createEmptyMockDriver } from "../mocks";
+import { ZWaveNode } from "../../node/Node.js";
+import { createEmptyMockDriver } from "../mocks.js";
 
 test("the CC interviews happen in the correct order", (t) => {
 	require("@zwave-js/cc");

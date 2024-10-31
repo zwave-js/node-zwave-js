@@ -2,9 +2,9 @@ import { getErrorMessage, isUint8Array } from "@zwave-js/shared";
 import { Bytes } from "@zwave-js/shared/safe";
 import * as crypto from "node:crypto";
 import MemoryMap from "nrf-intel-hex";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import type { Firmware, FirmwareFileFormat } from "./_Types";
-import { CRC16_CCITT } from "./crc";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import type { Firmware, FirmwareFileFormat } from "./_Types.js";
+import { CRC16_CCITT } from "./crc.js";
 
 const firmwareIndicators = {
 	// All aeotec updater exes contain this text

@@ -1,16 +1,16 @@
 import { type JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { throwInvalidConfig } from "../utils_safe";
+import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
-} from "./ConditionalItem";
+} from "./ConditionalItem.js";
 import {
 	type ConditionalPrimitive,
 	parseConditionalPrimitive,
-} from "./ConditionalPrimitive";
-import type { DeviceID } from "./shared";
+} from "./ConditionalPrimitive.js";
+import type { DeviceID } from "./shared.js";
 
 export class ConditionalDeviceMetadata
 	implements ConditionalItem<DeviceMetadata>

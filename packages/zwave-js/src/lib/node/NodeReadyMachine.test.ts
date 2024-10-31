@@ -7,7 +7,7 @@ import {
 	type NodeReadyMachine,
 	type NodeReadyStateSchema,
 	createNodeReadyMachine,
-} from "./NodeReadyMachine";
+} from "./NodeReadyMachine.js";
 
 function startMachine(
 	t: ExecutionContext,

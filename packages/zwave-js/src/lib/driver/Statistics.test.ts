@@ -2,7 +2,7 @@
 import { Mixin } from "@zwave-js/shared";
 import test from "ava";
 import EventEmitter from "node:events";
-import { StatisticsHost } from "./Statistics";
+import { StatisticsHost } from "./Statistics.js";
 
 interface TestStatistics {
 	one: number;

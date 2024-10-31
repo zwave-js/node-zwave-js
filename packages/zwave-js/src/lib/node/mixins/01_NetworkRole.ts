@@ -8,8 +8,8 @@ import {
 	Protocols,
 	isLongRangeNodeId,
 } from "@zwave-js/core";
-import { cacheKeys } from "../../driver/NetworkCache";
-import { ZWaveNodeBase } from "./00_Base";
+import { cacheKeys } from "../../driver/NetworkCache.js";
+import { ZWaveNodeBase } from "./00_Base.js";
 
 export interface NodeNetworkRole {
 	/** Whether this node is always listening or not */

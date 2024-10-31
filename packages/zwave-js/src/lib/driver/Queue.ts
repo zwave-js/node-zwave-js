@@ -4,7 +4,7 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
-import { type Transaction } from "./Transaction";
+import { type Transaction } from "./Transaction.js";
 
 export interface TransactionQueueOptions {
 	name: string;

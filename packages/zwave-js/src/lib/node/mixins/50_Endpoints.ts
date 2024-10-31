@@ -8,10 +8,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { DeviceClass } from "../DeviceClass";
-import { Endpoint } from "../Endpoint";
-import * as nodeUtils from "../utils";
-import { NodeValuesMixin } from "./40_Values";
+import { DeviceClass } from "../DeviceClass.js";
+import { Endpoint } from "../Endpoint.js";
+import * as nodeUtils from "../utils.js";
+import { NodeValuesMixin } from "./40_Values.js";
 
 /** Defines functionality of Z-Wave nodes related to accessing endpoints and their capabilities */
 export interface Endpoints {

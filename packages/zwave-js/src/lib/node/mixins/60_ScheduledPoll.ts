@@ -10,9 +10,9 @@ import {
 import { type NodeSchedulePollOptions } from "@zwave-js/host";
 import { ObjectKeyMap } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
-import { type Driver } from "../../driver/Driver";
-import { type DeviceClass } from "../DeviceClass";
-import { EndpointsMixin } from "./50_Endpoints";
+import { type Driver } from "../../driver/Driver.js";
+import { type DeviceClass } from "../DeviceClass.js";
+import { EndpointsMixin } from "./50_Endpoints.js";
 
 export interface ScheduledPoll {
 	timeout: NodeJS.Timeout;

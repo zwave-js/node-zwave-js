@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import * as utils from "./lib/utils";
+import * as utils from "./lib/utils.js";
 
 export * from "./cc/index";
 export * from "./lib/API";

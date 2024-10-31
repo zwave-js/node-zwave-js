@@ -16,35 +16,35 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import semver from "semver";
-import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
-import type { ConfigLogger } from "../Logger";
-import { configDir, externalConfigDir } from "../utils";
-import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe";
+import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate.js";
+import type { ConfigLogger } from "../Logger.js";
+import { configDir, externalConfigDir } from "../utils.js";
+import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe.js";
 import {
 	type AssociationConfig,
 	ConditionalAssociationConfig,
-} from "./AssociationConfig";
-import { type CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
-import { evaluateDeep, validateCondition } from "./ConditionalItem";
+} from "./AssociationConfig.js";
+import { type CompatConfig, ConditionalCompatConfig } from "./CompatConfig.js";
+import { evaluateDeep, validateCondition } from "./ConditionalItem.js";
 import {
 	type ConditionalPrimitive,
 	parseConditionalPrimitive,
-} from "./ConditionalPrimitive";
+} from "./ConditionalPrimitive.js";
 import {
 	ConditionalDeviceMetadata,
 	type DeviceMetadata,
-} from "./DeviceMetadata";
+} from "./DeviceMetadata.js";
 import {
 	ConditionalEndpointConfig,
 	type EndpointConfig,
-} from "./EndpointConfig";
+} from "./EndpointConfig.js";
 import {
 	type ConditionalParamInfoMap,
 	type ParamInfoMap,
 	type ParamInformation,
 	parseConditionalParamInformationMap,
-} from "./ParamInformation";
-import type { DeviceID, FirmwareVersionRange } from "./shared";
+} from "./ParamInformation.js";
+import type { DeviceID, FirmwareVersionRange } from "./shared.js";
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;

@@ -18,9 +18,9 @@ import path from "node:path";
 import {
 	ProvisioningEntryStatus,
 	type SmartStartProvisioningEntry,
-} from "../controller/Inclusion";
-import { DeviceClass } from "../node/DeviceClass";
-import { InterviewStage } from "../node/_Types";
+} from "../controller/Inclusion.js";
+import { DeviceClass } from "../node/DeviceClass.js";
+import { InterviewStage } from "../node/_Types.js";
 
 /**
  * Defines the keys that are used to store certain properties in the network cache.

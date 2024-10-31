@@ -3,7 +3,7 @@ import { NodeStatus, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When a node does not respond because it is dead, the sendCommand() Promise and all pending commands get rejected (maxSendAttempts: 1)",

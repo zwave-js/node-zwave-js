@@ -3,7 +3,7 @@
 // import { CommandClasses } from "@zwave-js/core";
 // import { formatId } from "@zwave-js/shared";
 // import { isObject } from "alcalzone-shared/typeguards";
-import type { ZWaveNode } from "../node/Node";
+import type { ZWaveNode } from "../node/Node.js";
 
 // const missingDeviceConfigCache = new Set<string>();
 

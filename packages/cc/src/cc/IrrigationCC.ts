@@ -35,14 +35,14 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -52,15 +52,15 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	IrrigationCommand,
 	IrrigationSensorPolarity,
 	type ValveId,
 	type ValveTableEntry,
 	ValveType,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 export const IrrigationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Irrigation, {

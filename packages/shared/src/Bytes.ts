@@ -11,7 +11,7 @@ import {
 	uint8ArrayToBase64,
 	uint8ArrayToHex,
 	uint8ArrayToString,
-} from "./uint8array-extras";
+} from "./uint8array-extras.js";
 
 /** An almost drop-in replacement for the Node.js Buffer class that's compatible with the native Uint8Array */
 // See https://sindresorhus.com/blog/goodbye-nodejs-buffer for background

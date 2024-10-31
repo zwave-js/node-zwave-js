@@ -59,7 +59,7 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
@@ -67,7 +67,7 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -78,9 +78,9 @@ import {
 	getCommandClass,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { MeterCommand, type MeterReading, RateType } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { MeterCommand, type MeterReading, RateType } from "../lib/_Types.js";
 
 export const MeterCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Meter, {

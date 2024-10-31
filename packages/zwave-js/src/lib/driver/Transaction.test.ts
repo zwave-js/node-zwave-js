@@ -5,14 +5,14 @@ import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
 import { RemoveFailedNodeRequest } from "@zwave-js/serial/serialapi";
 import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import test from "ava";
-import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/_Types";
-import type { Driver } from "./Driver";
+import type { ZWaveNode } from "../node/Node.js";
+import { NodeStatus } from "../node/_Types.js";
+import type { Driver } from "./Driver.js";
 import {
 	type MessageGenerator,
 	Transaction,
 	type TransactionOptions,
-} from "./Transaction";
+} from "./Transaction.js";
 
 function createDummyMessageGenerator(msg: Message): MessageGenerator {
 	return {

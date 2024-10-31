@@ -24,8 +24,8 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+} from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -34,9 +34,9 @@ import {
 	commandClass,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { SceneActivationCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { SceneActivationCommand } from "../lib/_Types.js";
 
 export const SceneActivationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Scene Activation"], {

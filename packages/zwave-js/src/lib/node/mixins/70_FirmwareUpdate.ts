@@ -34,9 +34,13 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { randomBytes } from "node:crypto";
-import { type Task, type TaskBuilder, TaskPriority } from "../../driver/Task";
-import { type Transaction } from "../../driver/Transaction";
-import { SchedulePollMixin } from "./60_ScheduledPoll";
+import {
+	type Task,
+	type TaskBuilder,
+	TaskPriority,
+} from "../../driver/Task.js";
+import { type Transaction } from "../../driver/Transaction.js";
+import { SchedulePollMixin } from "./60_ScheduledPoll.js";
 
 interface AbortFirmwareUpdateContext {
 	abort: boolean;

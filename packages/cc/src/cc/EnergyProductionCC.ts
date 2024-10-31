@@ -21,14 +21,14 @@ import {
 	POLL_VALUE,
 	type PollValueImplementation,
 	throwUnsupportedProperty,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -36,14 +36,14 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	EnergyProductionCommand,
 	EnergyProductionParameter,
 	type EnergyProductionScale,
 	getEnergyProductionScale,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 export const EnergyProductionCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Energy Production"], {

@@ -4,7 +4,7 @@ import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When receiving a NotificationCC::Report with a lock operation, the current value for Door Lock CC should be updated accordingly",

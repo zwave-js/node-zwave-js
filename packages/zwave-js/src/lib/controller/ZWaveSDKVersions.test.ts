@@ -1,5 +1,5 @@
 import test from "ava";
-import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
+import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions.js";
 
 test("protocolVersionToSDKVersion() looks up the correct SDK version for a given protocol version", (t) => {
 	t.is(protocolVersionToSDKVersion("2.97"), "4.51.0");

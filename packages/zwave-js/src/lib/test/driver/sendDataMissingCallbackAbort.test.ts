@@ -4,7 +4,7 @@ import { wait } from "alcalzone-shared/async";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
+} from "../../controller/MockControllerState.js";
 
 import {
 	CommandClasses,
@@ -29,9 +29,9 @@ import {
 } from "@zwave-js/serial/serialapi";
 import path from "node:path";
 import Sinon from "sinon";
-import { determineNIF } from "../../controller/NodeInformationFrame";
-import { integrationTest } from "../integrationTestSuite";
-import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
+import { determineNIF } from "../../controller/NodeInformationFrame.js";
+import { integrationTest } from "../integrationTestSuite.js";
+import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti.js";
 
 let shouldTimeOut: boolean;
 

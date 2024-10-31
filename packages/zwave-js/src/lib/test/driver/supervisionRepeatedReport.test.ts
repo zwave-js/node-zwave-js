@@ -6,7 +6,7 @@ import {
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"value updates work correctly when SupervisionReport is repeated",

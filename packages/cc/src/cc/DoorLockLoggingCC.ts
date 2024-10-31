@@ -17,13 +17,13 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -32,15 +32,15 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
 	type DoorLockLoggingRecord,
 	DoorLockLoggingRecordStatus,
-} from "../lib/_Types";
-import { userCodeToLogString } from "./UserCodeCC";
+} from "../lib/_Types.js";
+import { userCodeToLogString } from "./UserCodeCC.js";
 
 interface DateSegments {
 	year: number;

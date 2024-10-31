@@ -7,7 +7,7 @@ import {
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro for https://github.com/home-assistant/core/issues/98491
 

@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"$imports from user-defined config files fall back to the internal DB",

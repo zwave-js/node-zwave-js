@@ -1,6 +1,6 @@
 import { NotificationCCValues } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses, type ValueMetadataNumeric } from "@zwave-js/core";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Notification types with multiple supported events preserve states for all of them",

@@ -10,10 +10,10 @@ import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import ava, { type ExecutionContext, type TestFn } from "ava";
-import { ZWaveController } from "../controller/Controller";
-import type { Driver } from "../driver/Driver";
-import { createAndStartDriver } from "../test/utils";
-import { ZWaveNode } from "./Node";
+import { ZWaveController } from "../controller/Controller.js";
+import type { Driver } from "../driver/Driver.js";
+import { createAndStartDriver } from "../test/utils.js";
+import { ZWaveNode } from "./Node.js";
 
 interface TestContext {
 	driver: Driver;

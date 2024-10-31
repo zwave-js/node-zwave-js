@@ -2,7 +2,7 @@ import { WakeUpCCWakeUpNotification } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest("Assume a node to be awake at the start of a re-interview", {
 	// debug: true,

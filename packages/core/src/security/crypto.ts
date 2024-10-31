@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import * as crypto from "node:crypto";
-import { leftShift1, xor, zeroPad } from "./bufferUtils";
+import { leftShift1, xor, zeroPad } from "./bufferUtils.js";
 
 function encrypt(
 	algorithm: string,

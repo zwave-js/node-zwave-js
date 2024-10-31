@@ -6,8 +6,12 @@ import {
 	isUint8Array,
 	num2hex,
 } from "@zwave-js/shared";
-import { FragmentType, NVM3_MAX_OBJ_SIZE_SMALL, ObjectType } from "../consts";
-import type { NVM3Object } from "../object";
+import {
+	FragmentType,
+	NVM3_MAX_OBJ_SIZE_SMALL,
+	ObjectType,
+} from "../consts.js";
+import type { NVM3Object } from "../object.js";
 
 export interface NVMFileBaseOptions {
 	fileId?: number;

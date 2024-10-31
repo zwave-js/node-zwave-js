@@ -4,7 +4,7 @@ import { wait } from "alcalzone-shared/async";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
+} from "../../controller/MockControllerState.js";
 
 import {
 	NodeStatus,
@@ -18,7 +18,7 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "@zwave-js/serial/serialapi";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 let shouldTimeOut: boolean;
 let lastCallbackId: number;
