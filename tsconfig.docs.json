@@ -2,7 +2,7 @@
 {
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
-		"customConditions": []
+		"customConditions": ["@@dev"]
 	},
 	"include": ["packages/**/src/**/*.ts"]
 }

@@ -36,7 +36,16 @@ import {
 	tsConfigFilePathForDocs as tsConfigFilePath,
 } from "./tsAPITools.js";
 
+// Support directly loading this file in a worker
+import { register } from "tsx/esm/api";
+register();
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const exportDeclarationCache = new Map<
+	string,
+	ReadonlyMap<string, ExportedDeclarations[]>
+>();
 
 export function findSourceNode(
 	program: Project,
@@ -44,8 +53,13 @@ export function findSourceNode(
 	identifier: string,
 ): ExportedDeclarations | undefined {
 	// Scan all source files
-	const file = program.getSourceFile(exportingFile);
-	return file?.getExportedDeclarations().get(identifier)?.[0];
+	if (!exportDeclarationCache.has(exportingFile)) {
+		const decls = program.getSourceFile(exportingFile)
+			?.getExportedDeclarations();
+		if (decls) exportDeclarationCache.set(exportingFile, decls);
+	}
+	return exportDeclarationCache.get(exportingFile)
+		?.get(identifier)?.[0];
 }
 
 export function stripComments(
@@ -727,7 +741,7 @@ async function generateCCDocs(
 
 async function main(): Promise<void> {
 	const piscina = new Piscina({
-		filename: path.join(__dirname, "generateTypedDocsWorker.js"),
+		filename: path.join(__dirname, "generateTypedDocs.ts"),
 		maxThreads: 4,
 	});
 
@@ -768,7 +782,10 @@ export async function processCC(
 	const program = getProgram();
 	const sourceFile = program.getSourceFileOrThrow(filename);
 	const dtsFile = program.addSourceFileAtPath(
-		filename.replace("/src/", "/build/").replace(/(?<!\.d)\.ts$/, ".d.ts"),
+		filename.replace("/src/", "/build/esm/").replace(
+			/(?<!\.d)\.ts$/,
+			".d.ts",
+		),
 	);
 	try {
 		return await processCCDocFile(sourceFile, dtsFile);

@@ -411,10 +411,12 @@ interface FileSystem {
 	ensureDir(path: string): Promise<void>;
 	writeFile(
 		file: string,
-		data: string | Buffer,
-		options?: {
-			encoding: BufferEncoding;
-		} | BufferEncoding,
+		data: string | Uint8Array,
+		options?:
+			| {
+				encoding: BufferEncoding;
+			}
+			| BufferEncoding,
 	): Promise<void>;
 	readFile(file: string, encoding: BufferEncoding): Promise<string>;
 	pathExists(path: string): Promise<boolean>;
@@ -488,6 +490,7 @@ interface SendMessageOptions {
 	 * For multi-stage messages, the callback may be called multiple times.
 	 */
 	onTXReport?: (report: TXReport) => void;
+
 	/** Will be called when the transaction for this message progresses. */
 	onProgress?: TransactionProgressListener;
 }
@@ -581,8 +584,6 @@ TX status reports are supported by the more modern controllers and contain detai
 interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
-	/** Number of repeaters used in the route to the destination, 0 for direct range */
-	numRepeaters: number;
 	/** RSSI value of the acknowledgement frame */
 	ackRSSI?: RSSI;
 	/** RSSI values of the incoming acknowledgement frame, measured by repeater 0...3 */
@@ -642,10 +643,10 @@ enum RssiError {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -830,18 +831,18 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * Specify the security keys to use for encryption (Z-Wave Classic). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
-		S2_AccessControl?: Buffer;
-		S2_Authenticated?: Buffer;
-		S2_Unauthenticated?: Buffer;
-		S0_Legacy?: Buffer;
+		S2_AccessControl?: Uint8Array;
+		S2_Authenticated?: Uint8Array;
+		S2_Unauthenticated?: Uint8Array;
+		S0_Legacy?: Uint8Array;
 	};
 
 	/**
 	 * Specify the security keys to use for encryption (Z-Wave Long Range). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeysLongRange?: {
-		S2_AccessControl?: Buffer;
-		S2_Authenticated?: Buffer;
+		S2_AccessControl?: Uint8Array;
+		S2_Authenticated?: Uint8Array;
 	};
 
 	/**

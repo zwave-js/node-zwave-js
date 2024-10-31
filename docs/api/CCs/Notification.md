@@ -8,7 +8,7 @@
 
 ```ts
 async getInternal(
-	options: NotificationCCGetSpecificOptions,
+	options: NotificationCCGetOptions,
 ): Promise<NotificationCCReport | undefined>;
 ```
 
@@ -25,7 +25,7 @@ async sendReport(
 ### `get`
 
 ```ts
-async get(options: NotificationCCGetSpecificOptions): Promise<Pick<NotificationCCReport, "notificationStatus" | "notificationEvent" | "alarmLevel" | "zensorNetSourceNodeId" | "eventParameters" | "sequenceNumber"> | undefined>;
+async get(options: NotificationCCGetOptions): Promise<Pick<NotificationCCReport, "notificationStatus" | "notificationEvent" | "alarmLevel" | "eventParameters" | "sequenceNumber"> | undefined>;
 ```
 
 ### `set`

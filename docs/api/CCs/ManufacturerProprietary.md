@@ -9,12 +9,12 @@
 ```ts
 async sendData(
 	manufacturerId: number,
-	data?: Buffer,
+	data?: Uint8Array,
 ): Promise<void>;
 ```
 
 ### `sendAndReceiveData`
 
 ```ts
-async sendAndReceiveData(manufacturerId: number, data?: Buffer): Promise<{ manufacturerId: number | undefined; data: Buffer; } | undefined>;
+async sendAndReceiveData(manufacturerId: number, data?: Uint8Array): Promise<{ manufacturerId: number | undefined; data: Bytes; } | undefined>;
 ```

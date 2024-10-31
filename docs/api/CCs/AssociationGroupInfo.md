@@ -26,7 +26,7 @@ async getGroupInfo(groupId: number, refreshCache: boolean = false): Promise<{ mo
 
 ```ts
 async reportGroupInfo(
-	options: AssociationGroupInfoCCInfoReportSpecificOptions,
+	options: AssociationGroupInfoCCInfoReportOptions,
 ): Promise<void>;
 ```
 

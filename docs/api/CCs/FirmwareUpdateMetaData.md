@@ -25,11 +25,11 @@ async reportMetaData(
 ```ts
 async requestUpdate(
 	options: FirmwareUpdateMetaDataCCRequestGetOptions,
-): Promise<FirmwareUpdateInitResult>;
+): Promise<void>;
 ```
 
 Requests the device to start the firmware update process.
-WARNING: This method may wait up to 60 seconds for a reply.
+This does not wait for the reply - that is up to the caller of this method.
 
 ### `sendFirmwareFragment`
 
@@ -37,7 +37,7 @@ WARNING: This method may wait up to 60 seconds for a reply.
 async sendFirmwareFragment(
 	fragmentNumber: number,
 	isLastFragment: boolean,
-	data: Buffer,
+	data: Uint8Array,
 ): Promise<void>;
 ```
 
