@@ -1,6 +1,9 @@
 // @ts-check
-const path = require("path");
-const fs = require("fs");
+import fs from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
+
+const require = createRequire(import.meta.url);
 
 const tsDirectory = path.dirname(require.resolve("typescript"));
 const tsLibPath = path.join(tsDirectory, "typescript.js");
