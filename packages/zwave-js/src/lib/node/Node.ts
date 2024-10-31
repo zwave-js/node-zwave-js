@@ -270,7 +270,7 @@ import {
 	type ZWaveNodeEventCallbacks,
 } from "./_Types.js";
 import { InterviewStage, NodeStatus } from "./_Types.js";
-import { ZWaveNodeMixins } from "./mixins.js";
+import { ZWaveNodeMixins } from "./mixins/index.js";
 import * as nodeUtils from "./utils.js";
 
 const MAX_ASSOCIATIONS = 1;

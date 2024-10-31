@@ -7,19 +7,15 @@ import {
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
+import type { Headers, OptionsOfTextResponseBody } from "got";
 import crypto from "node:crypto";
+import type PQueue from "p-queue";
 import type {
 	FirmwareUpdateDeviceID,
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	FirmwareUpdateServiceResponse,
 } from "./_Types.js";
-
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-import type { Headers, OptionsOfTextResponseBody } from "got";
-
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-import type PQueue from "p-queue";
 
 function serviceURL(): string {
 	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
