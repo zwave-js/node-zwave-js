@@ -1,7 +1,10 @@
 import { padVersion } from "@zwave-js/shared";
-import { type RulesLogic, add_operation, apply } from "json-logic-js";
 import * as semver from "semver";
 import { parse } from "./LogicParser.js";
+
+// The types are not correct:
+import { type RulesLogic, default as JsonLogic } from "json-logic-js";
+const { add_operation, apply } = JsonLogic;
 
 function tryOr<T extends (...args: any[]) => any>(
 	operation: T,
