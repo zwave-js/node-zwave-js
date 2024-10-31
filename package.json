@@ -92,7 +92,9 @@
   },
   "resolutions": {
     "minimist": "^1.2.6",
-    "colors": "1.4.0"
+    "colors": "1.4.0",
+    "@serialport/bindings-interface@npm:^1.2.1": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch",
+    "@serialport/bindings-interface@npm:1.2.2": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch"
   },
   "scripts": {
     "ts": "tsx --conditions=@@dev",

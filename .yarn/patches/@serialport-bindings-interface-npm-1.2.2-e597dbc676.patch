@@ -1,0 +1,22 @@
+diff --git a/dist/index-esm.mjs b/dist/index-esm.mjs
+deleted file mode 100644
+index 8b137891791fe96927ad78e64b0aad7bded08bdc..0000000000000000000000000000000000000000
+--- a/dist/index-esm.mjs
++++ /dev/null
+@@ -1 +0,0 @@
+-
+diff --git a/package.json b/package.json
+index 1f46c413862b1b4df9bc152a21f1c7405923074e..f0db3ef8b2643b5a37922dc5362c83e36abd4f87 100644
+--- a/package.json
++++ b/package.json
+@@ -4,10 +4,6 @@
+   "description": "SerialPort Bindings Typescript Types",
+   "types": "dist/index.d.ts",
+   "main": "./dist/index.js",
+-  "exports": {
+-    "require": "./dist/index.js",
+-    "default": "./dist/index-esm.mjs"
+-  },
+   "publishConfig": {
+     "access": "public"
+   },

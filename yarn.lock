@@ -1604,10 +1604,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/bindings-interface@npm:*, @serialport/bindings-interface@npm:1.2.2, @serialport/bindings-interface@npm:^1.2.1":
+"@serialport/bindings-interface@npm:1.2.2":
   version: 1.2.2
   resolution: "@serialport/bindings-interface@npm:1.2.2"
   checksum: 10/f0c0d67ed89582184d117cf2eb22c0b2d157604ca7a816851bcd8af0b447c68b587a8a21a61b7bda390ce142981bfb3115a7cf44c6c258a98c28fd9f0c30bcd6
+  languageName: node
+  linkType: hard
+
+"@serialport/bindings-interface@patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch":
+  version: 1.2.2
+  resolution: "@serialport/bindings-interface@patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch::version=1.2.2&hash=e2bd74"
+  checksum: 10/3e36ee3c08c7cfd62977243230976bc63b9bf64176f01b64603e4f1405b6ccafeb71cc938ce676f643d49edadf21d7a8928e1db9aad23d99434254d3ddfd3a43
   languageName: node
   linkType: hard
 
@@ -2467,7 +2474,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.1.2"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@serialport/binding-mock": "npm:^10.2.2"
-    "@serialport/bindings-interface": "npm:*"
+    "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch"
     "@serialport/stream": "npm:^12.0.0"
     "@types/node": "npm:^18.19.55"
     "@types/sinon": "npm:^17.0.3"
