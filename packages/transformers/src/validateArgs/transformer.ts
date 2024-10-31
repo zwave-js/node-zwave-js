@@ -1,12 +1,9 @@
 import ts from "typescript";
-import {
-	createGenericAssertFunction,
-	transformNode,
-} from "./transform-node.js";
+import { createGenericAssertFunction, transformNode } from "./transform-node";
 import type {
 	FileSpecificVisitorContext,
 	PartialVisitorContext,
-} from "./visitor-context.js";
+} from "./visitor-context";
 
 function getEmitDetailedErrors(options?: {
 	[Key: string]: unknown;

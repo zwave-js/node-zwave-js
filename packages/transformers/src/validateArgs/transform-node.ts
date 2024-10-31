@@ -1,17 +1,17 @@
-import type { ValidateArgsOptions } from "...js";
 import * as path from "node:path";
 import ts from "typescript";
-import { sliceMapValues } from "./utils.js";
+import type { ValidateArgsOptions } from "..";
+import { sliceMapValues } from "./utils";
 import type {
 	FileSpecificVisitorContext,
 	VisitorContext,
-} from "./visitor-context.js";
+} from "./visitor-context";
 import {
 	visitShortCircuit,
 	visitType,
 	visitUndefinedOrType,
-} from "./visitor-type-check.js";
-import * as VisitorUtils from "./visitor-utils.js";
+} from "./visitor-type-check";
+import * as VisitorUtils from "./visitor-utils";
 
 const possibleDecoratorLocations = [
 	path.resolve(path.join(__dirname, "../../build/index.d.ts")),

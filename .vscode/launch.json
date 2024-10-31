@@ -29,10 +29,8 @@
 			"name": "Debug locally",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"--conditions=@@dev",
 				"${workspaceFolder}/test/run.ts"
 			],
@@ -52,10 +50,8 @@
 			"name": "Debug primary and secondary",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"--conditions=@@dev",
 				"${workspaceFolder}/test/run_duplex.ts"
 			],
@@ -75,11 +71,9 @@
 			"name": "Generate typed docs",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -94,11 +88,9 @@
 			"name": "Decode message",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"--conditions=@@dev",
 				"${workspaceFolder}/test/decodeMessage.ts"
 			],
@@ -114,11 +106,9 @@
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
 				"--inspect=9229",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"--conditions=@@dev",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
@@ -131,10 +121,8 @@
 			"name": "Run Zniffer",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
-				"node",
+				"tsx",
 				"--async-stack-traces",
-				"-r",
-				"./maintenance/esbuild-register.js",
 				"--conditions=@@dev",
 				"${workspaceFolder}/test/run_zniffer.ts"
 			],

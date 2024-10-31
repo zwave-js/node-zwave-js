@@ -4,11 +4,13 @@
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
-import { red, yellow } from "ansi-colors";
+import c from "ansi-colors";
+import esMain from "es-main";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
-import Piscina from "piscina";
+import { Piscina } from "piscina";
 import {
 	type CommentRange,
 	type ExportedDeclarations,
@@ -33,6 +35,8 @@ import {
 	projectRoot,
 	tsConfigFilePathForDocs as tsConfigFilePath,
 } from "./tsAPITools.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function findSourceNode(
 	program: Project,
@@ -235,7 +239,7 @@ function stripQuotes(str: string): string {
 function expectLiteralString(strType: string, context: string): void {
 	if (strType === "string") {
 		console.warn(
-			yellow(
+			c.yellow(
 				`WARNING: Received type "string" where a string literal was expected.
 		Make sure to define this string or the entire object using "as const".
 		Context: ${context}`,
@@ -247,7 +251,7 @@ function expectLiteralString(strType: string, context: string): void {
 function expectLiteralNumber(numType: string, context: string): void {
 	if (numType === "number") {
 		console.warn(
-			yellow(
+			c.yellow(
 				`WARNING: Received type "number" where a number literal was expected.
 Make sure to define this number or the entire object using "as const".
 Context: ${context}`,
@@ -278,7 +282,7 @@ export async function processDocFile(
 		);
 		if (!sourceNode) {
 			console.error(
-				red(
+				c.red(
 					`${docFile}: Cannot find symbol ${range.symbol} in module ${range.module}!`,
 				),
 			);
@@ -658,7 +662,7 @@ async function generateCCDocs(
 	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
 	if (indexAutoGenStart === -1) {
 		console.error(
-			red(`Marker for auto-generation in CCs/index.md missing!`),
+			c.red(`Marker for auto-generation in CCs/index.md missing!`),
 		);
 		return false;
 	}
@@ -702,7 +706,7 @@ async function generateCCDocs(
 	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
 	if (sidebarAutoGenStart === -1) {
 		console.error(
-			red(`Marker for CC auto-generation in _sidebar.md missing!`),
+			c.red(`Marker for CC auto-generation in _sidebar.md missing!`),
 		);
 		return false;
 	}
@@ -775,7 +779,7 @@ export async function processCC(
 
 // If this is NOT run as a worker thread, execute the main function
 if (isMainThread) {
-	if (require.main === module) {
+	if (esMain(import.meta)) {
 		void main();
 	}
 }

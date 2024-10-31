@@ -3,9 +3,10 @@
 import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
 import { deflateSync } from "node:zlib";
+import { MAX_NODES_LR } from "../consts/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
-import { MAX_NODES_LR, encodeBitMask } from "../index_safe.js";
 import { highResTimestamp } from "../util/date.js";
+import { encodeBitMask } from "../values/Primitive.js";
 import { type S2SecurityClass, SecurityClass } from "./SecurityClass.js";
 import { increment } from "./bufferUtils.js";
 import {

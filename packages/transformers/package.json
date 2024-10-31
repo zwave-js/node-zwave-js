@@ -4,8 +4,7 @@
   "description": "zwave-js: compile-time transformers",
   "private": true,
   "keywords": [],
-  "type": "module",
-  "module": "build/index.js",
+  "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
@@ -37,7 +36,7 @@
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
-    "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
+    "test:dirty": "tsx ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
     "ava": "^6.1.3",

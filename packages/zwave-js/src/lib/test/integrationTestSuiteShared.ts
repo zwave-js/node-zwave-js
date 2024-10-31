@@ -7,6 +7,7 @@ import {
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
@@ -16,6 +17,8 @@ import {
 	createAndStartDriverWithMockPort,
 } from "../driver/DriverMock.js";
 import { type PartialZWaveOptions } from "../driver/ZWaveOptions.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),

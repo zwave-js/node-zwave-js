@@ -4,16 +4,20 @@ import test, { type ExecutionContext } from "ava";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
-import { jsonToNVM, migrateNVM } from ".";
+import { fileURLToPath } from "node:url";
 import {
 	type NVMJSON,
 	json500To700,
 	json700To500,
+	jsonToNVM,
 	jsonToNVM500,
+	migrateNVM,
 	nvm500ToJSON,
 	nvmToJSON,
-} from "./convert";
-import type { NVM500JSON } from "./nvm500/NVMParser";
+} from "./convert.js";
+import type { NVM500JSON } from "./nvm500/NVMParser.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function bufferEquals(
 	t: ExecutionContext,

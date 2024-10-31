@@ -46,15 +46,15 @@
   "scripts": {
     "codegen": "yarn ts maintenance/codegen.ts",
     "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
-    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
+    "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node18",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts && eslint --cache --cache-location .eslintcache/config -c config/eslint.config.mjs",
-    "ts": "node -r esbuild-register --conditions=@@dev",
+    "ts": "tsx --conditions=@@dev",
     "lint:ts": "eslint --cache --cache-location .eslintcache/ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
-    "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
+    "test:dirty": "tsx ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
@@ -81,14 +81,15 @@
     "ava": "^6.1.3",
     "comment-json": "^4.2.5",
     "del-cli": "^6.0.0",
+    "es-main": "^1.3.0",
     "esbuild": "0.24.0",
-    "esbuild-register": "^3.6.0",
     "got": "^13.0.0",
     "js-levenshtein": "^1.1.6",
     "peggy": "^3.0.2",
     "proxyquire": "^2.1.3",
     "sinon": "^19.0.2",
-    "ts-pegjs": "^4.2.1",
+    "ts-pegjs": "patch:ts-pegjs@npm%3A4.2.1#~/.yarn/patches/ts-pegjs-npm-4.2.1-0f567a1059.patch",
+    "tsx": "^4.19.2",
     "typescript": "5.6.2",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"

@@ -1,8 +1,13 @@
 import { formatWithDprint } from "@zwave-js/maintenance";
 import * as fs from "node:fs";
-import * as path from "node:path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import peggy from "peggy";
-import pegts from "ts-pegjs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// @ts-expect-error ts-pegjs has incorrect types
+const pegts = (await import("ts-pegjs")).default;
 
 //
 // Generate logic parser

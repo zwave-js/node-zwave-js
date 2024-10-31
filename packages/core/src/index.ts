@@ -7,7 +7,7 @@ export * from "./capabilities/Protocols.js";
 export * from "./capabilities/RFRegion.js";
 export * from "./capabilities/ZWaveApiVersion.js";
 export * from "./capabilities/ZWaveChipTypes.js";
-export * from "./consts.js";
+export * from "./consts/index.js";
 export * from "./error/ZWaveError.js";
 export * from "./log/Controller.js";
 export * from "./log/shared.js";

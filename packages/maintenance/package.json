@@ -4,6 +4,7 @@
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],
+  "type": "module",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "files": [
@@ -29,9 +30,9 @@
     "node": ">= 18"
   },
   "scripts": {
-    "ts": "node -r esbuild-register --conditions=@@dev",
+    "ts": "tsx --conditions=@@dev",
     "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
-    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
+    "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node18",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
@@ -52,14 +53,15 @@
     "cli-highlight": "^2.1.11",
     "del-cli": "^6.0.0",
     "dprint": "^0.47.2",
+    "es-main": "^1.3.0",
     "esbuild": "0.24.0",
-    "esbuild-register": "^3.6.0",
     "execa": "^5.1.1",
     "globrex": "^0.1.2",
     "json5": "^2.2.3",
     "piscina": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "ts-morph": "^24.0.0",
+    "tsx": "^4.19.2",
     "typescript": "5.6.2",
     "yargs": "^17.7.2"
   }

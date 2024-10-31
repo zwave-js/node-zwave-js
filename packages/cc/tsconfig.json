@@ -8,6 +8,6 @@
 			}
 		]
 	},
-	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
+	"include": ["maintenance/**/*.ts", "maintenance/**/*.mts", "src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

@@ -9,8 +9,9 @@ import {
 	projectRoot,
 } from "@zwave-js/maintenance";
 import { compareStrings } from "@zwave-js/shared";
+import esMain from "es-main";
 import fs from "node:fs/promises";
-import * as path from "node:path";
+import path from "node:path";
 import ts from "typescript";
 
 // Define where the CC index file is located
@@ -180,7 +181,7 @@ export async function generateCCExports(): Promise<void> {
 			// normalize to slashes
 			.replaceAll("\\", "/")
 			// TS imports may not end with ".ts"
-			.replace(/\.ts$/, "")
+			.replace(/\.ts$/, ".js")
 			// By passing the index file as "from", we get an erraneous "../" at the path start
 			.replace(/^\.\.\//, "./");
 		const typeExports = fileExports.filter((e) => e.typeOnly);
@@ -212,4 +213,4 @@ export async function generateCCExports(): Promise<void> {
 	}
 }
 
-if (require.main === module) void generateCCExports();
+if (esMain(import.meta)) void generateCCExports();

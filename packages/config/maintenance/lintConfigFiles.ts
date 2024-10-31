@@ -14,23 +14,27 @@ import {
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { green, red, white } from "ansi-colors";
+import c from "ansi-colors";
+import esMain from "es-main";
 import levenshtein from "js-levenshtein";
 import type { RulesLogic } from "json-logic-js";
 import * as path from "node:path";
-import type { ConditionalParamInfoMap, ParamInfoMap } from "../src";
-import { ConfigManager } from "../src/ConfigManager";
-import { parseLogic } from "../src/Logic";
+import { ConfigManager } from "../src/ConfigManager.js";
+import { parseLogic } from "../src/Logic.js";
 import {
 	ConditionalDeviceConfig,
 	type DeviceConfig,
-} from "../src/devices/DeviceConfig";
-import type { DeviceID } from "../src/devices/shared";
+} from "../src/devices/DeviceConfig.js";
+import {
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
+} from "../src/devices/ParamInformation.js";
+import type { DeviceID } from "../src/devices/shared.js";
 import {
 	configDir,
 	getDeviceEntryPredicate,
 	versionInRange,
-} from "../src/utils";
+} from "../src/utils.js";
 
 const configManager = new ConfigManager();
 
@@ -886,7 +890,7 @@ description: ${description}`,
 								)
 							} is invalid: min/maxValue is incompatible with valueSize ${value.valueSize} (min = ${limits.min}, max = ${limits.max}).
 Consider converting this parameter to unsigned using ${
-								white(
+								c.white(
 									`"unsigned": true`,
 								)
 							}!`,
@@ -1275,7 +1279,7 @@ export async function lintConfigFiles(): Promise<void> {
 		await lintDevices();
 
 		console.log();
-		console.log(green("The config files are valid!"));
+		console.log(c.green("The config files are valid!"));
 		console.log();
 		console.log(" ");
 	} catch (e: any) {
@@ -1285,9 +1289,9 @@ export async function lintConfigFiles(): Promise<void> {
 				lines.shift();
 			}
 			const message = lines.join("\n");
-			console.log(red(message));
+			console.log(c.red(message));
 		} else {
-			console.log(red(e.message));
+			console.log(c.red(e.message));
 		}
 		console.log();
 
@@ -1297,4 +1301,4 @@ export async function lintConfigFiles(): Promise<void> {
 	}
 }
 
-if (require.main === module) void lintConfigFiles();
+if (esMain(import.meta)) void lintConfigFiles();

@@ -1,4 +1,4 @@
-import { ansiRegex, stripColor } from "ansi-colors";
+import c from "ansi-colors";
 import type { Assertions } from "ava";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
@@ -7,12 +7,12 @@ import type { ZWaveLogInfo } from "../log/shared_safe.js";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
-	`^(${ansiRegex.source})?${timestampRegex.source}(${ansiRegex.source})? `,
+	`^(${c.ansiRegex.source})?${timestampRegex.source}(${c.ansiRegex.source})? `,
 	"gm",
 );
 const channelRegex = /(SERIAL|CNTRLR|DRIVER|RFLCTN)/g;
 const channelPrefixRegex = new RegExp(
-	`(${ansiRegex.source})?${channelRegex.source}(${ansiRegex.source})? `,
+	`(${c.ansiRegex.source})?${channelRegex.source}(${c.ansiRegex.source})? `,
 	"gm",
 );
 
@@ -57,7 +57,7 @@ export function assertMessage(
 	// By default ignore the color codes
 	const ignoreColor = options.ignoreColor !== false;
 	if (ignoreColor) {
-		actualMessage = stripColor(actualMessage);
+		actualMessage = c.stripColor(actualMessage);
 	}
 	// By default, strip away the timestamp and placeholder
 	if (options.ignoreTimestamp !== false) {
@@ -73,7 +73,7 @@ export function assertMessage(
 	}
 	if (typeof options.message === "string") {
 		if (ignoreColor) {
-			options.message = stripColor(options.message);
+			options.message = c.stripColor(options.message);
 		}
 		t.is(actualMessage, options.message);
 	}

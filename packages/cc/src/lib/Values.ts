@@ -578,79 +578,85 @@ export type StaticCCValueFactory<T> = (self: T) => StaticCCValue;
 // Do not edit it by hand or your changes will be lost
 export interface CCValues {
 	// AUTO GENERATION BELOW
-	"Alarm Sensor": typeof import("../cc/AlarmSensorCC").AlarmSensorCCValues;
-	Association: typeof import("../cc/AssociationCC").AssociationCCValues;
+	"Alarm Sensor": typeof import("../cc/AlarmSensorCC.js").AlarmSensorCCValues;
+	Association: typeof import("../cc/AssociationCC.js").AssociationCCValues;
 	"Association Group Information":
-		typeof import("../cc/AssociationGroupInfoCC").AssociationGroupInfoCCValues;
+		typeof import("../cc/AssociationGroupInfoCC.js").AssociationGroupInfoCCValues;
 	"Barrier Operator":
-		typeof import("../cc/BarrierOperatorCC").BarrierOperatorCCValues;
-	Basic: typeof import("../cc/BasicCC").BasicCCValues;
-	Battery: typeof import("../cc/BatteryCC").BatteryCCValues;
-	"Binary Sensor": typeof import("../cc/BinarySensorCC").BinarySensorCCValues;
-	"Binary Switch": typeof import("../cc/BinarySwitchCC").BinarySwitchCCValues;
-	"Central Scene": typeof import("../cc/CentralSceneCC").CentralSceneCCValues;
+		typeof import("../cc/BarrierOperatorCC.js").BarrierOperatorCCValues;
+	Basic: typeof import("../cc/BasicCC.js").BasicCCValues;
+	Battery: typeof import("../cc/BatteryCC.js").BatteryCCValues;
+	"Binary Sensor":
+		typeof import("../cc/BinarySensorCC.js").BinarySensorCCValues;
+	"Binary Switch":
+		typeof import("../cc/BinarySwitchCC.js").BinarySwitchCCValues;
+	"Central Scene":
+		typeof import("../cc/CentralSceneCC.js").CentralSceneCCValues;
 	"Climate Control Schedule":
-		typeof import("../cc/ClimateControlScheduleCC").ClimateControlScheduleCCValues;
-	"Color Switch": typeof import("../cc/ColorSwitchCC").ColorSwitchCCValues;
-	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
-	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
+		typeof import("../cc/ClimateControlScheduleCC.js").ClimateControlScheduleCCValues;
+	"Color Switch": typeof import("../cc/ColorSwitchCC.js").ColorSwitchCCValues;
+	Configuration:
+		typeof import("../cc/ConfigurationCC.js").ConfigurationCCValues;
+	"Door Lock": typeof import("../cc/DoorLockCC.js").DoorLockCCValues;
 	"Door Lock Logging":
-		typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+		typeof import("../cc/DoorLockLoggingCC.js").DoorLockLoggingCCValues;
 	"Energy Production":
-		typeof import("../cc/EnergyProductionCC").EnergyProductionCCValues;
-	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
+		typeof import("../cc/EnergyProductionCC.js").EnergyProductionCCValues;
+	"Entry Control":
+		typeof import("../cc/EntryControlCC.js").EntryControlCCValues;
 	"Firmware Update Meta Data":
-		typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
+		typeof import("../cc/FirmwareUpdateMetaDataCC.js").FirmwareUpdateMetaDataCCValues;
 	"Humidity Control Mode":
-		typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
+		typeof import("../cc/HumidityControlModeCC.js").HumidityControlModeCCValues;
 	"Humidity Control Operating State":
-		typeof import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCValues;
+		typeof import("../cc/HumidityControlOperatingStateCC.js").HumidityControlOperatingStateCCValues;
 	"Humidity Control Setpoint":
-		typeof import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCValues;
-	Indicator: typeof import("../cc/IndicatorCC").IndicatorCCValues;
-	Irrigation: typeof import("../cc/IrrigationCC").IrrigationCCValues;
-	Language: typeof import("../cc/LanguageCC").LanguageCCValues;
-	Lock: typeof import("../cc/LockCC").LockCCValues;
+		typeof import("../cc/HumidityControlSetpointCC.js").HumidityControlSetpointCCValues;
+	Indicator: typeof import("../cc/IndicatorCC.js").IndicatorCCValues;
+	Irrigation: typeof import("../cc/IrrigationCC.js").IrrigationCCValues;
+	Language: typeof import("../cc/LanguageCC.js").LanguageCCValues;
+	Lock: typeof import("../cc/LockCC.js").LockCCValues;
 	"Manufacturer Specific":
-		typeof import("../cc/ManufacturerSpecificCC").ManufacturerSpecificCCValues;
-	Meter: typeof import("../cc/MeterCC").MeterCCValues;
+		typeof import("../cc/ManufacturerSpecificCC.js").ManufacturerSpecificCCValues;
+	Meter: typeof import("../cc/MeterCC.js").MeterCCValues;
 	"Multi Channel Association":
-		typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
-	"Multi Channel": typeof import("../cc/MultiChannelCC").MultiChannelCCValues;
+		typeof import("../cc/MultiChannelAssociationCC.js").MultiChannelAssociationCCValues;
+	"Multi Channel":
+		typeof import("../cc/MultiChannelCC.js").MultiChannelCCValues;
 	"Multilevel Sensor":
-		typeof import("../cc/MultilevelSensorCC").MultilevelSensorCCValues;
+		typeof import("../cc/MultilevelSensorCC.js").MultilevelSensorCCValues;
 	"Multilevel Switch":
-		typeof import("../cc/MultilevelSwitchCC").MultilevelSwitchCCValues;
+		typeof import("../cc/MultilevelSwitchCC.js").MultilevelSwitchCCValues;
 	"Node Naming and Location":
-		typeof import("../cc/NodeNamingCC").NodeNamingAndLocationCCValues;
-	Notification: typeof import("../cc/NotificationCC").NotificationCCValues;
-	Protection: typeof import("../cc/ProtectionCC").ProtectionCCValues;
+		typeof import("../cc/NodeNamingCC.js").NodeNamingAndLocationCCValues;
+	Notification: typeof import("../cc/NotificationCC.js").NotificationCCValues;
+	Protection: typeof import("../cc/ProtectionCC.js").ProtectionCCValues;
 	"Scene Activation":
-		typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
+		typeof import("../cc/SceneActivationCC.js").SceneActivationCCValues;
 	"Scene Actuator Configuration":
-		typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
+		typeof import("../cc/SceneActuatorConfigurationCC.js").SceneActuatorConfigurationCCValues;
 	"Scene Controller Configuration":
-		typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+		typeof import("../cc/SceneControllerConfigurationCC.js").SceneControllerConfigurationCCValues;
 	"Schedule Entry Lock":
-		typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
-	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
-	Supervision: typeof import("../cc/SupervisionCC").SupervisionCCValues;
+		typeof import("../cc/ScheduleEntryLockCC.js").ScheduleEntryLockCCValues;
+	"Sound Switch": typeof import("../cc/SoundSwitchCC.js").SoundSwitchCCValues;
+	Supervision: typeof import("../cc/SupervisionCC.js").SupervisionCCValues;
 	"Thermostat Fan Mode":
-		typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
+		typeof import("../cc/ThermostatFanModeCC.js").ThermostatFanModeCCValues;
 	"Thermostat Fan State":
-		typeof import("../cc/ThermostatFanStateCC").ThermostatFanStateCCValues;
+		typeof import("../cc/ThermostatFanStateCC.js").ThermostatFanStateCCValues;
 	"Thermostat Mode":
-		typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
+		typeof import("../cc/ThermostatModeCC.js").ThermostatModeCCValues;
 	"Thermostat Operating State":
-		typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
+		typeof import("../cc/ThermostatOperatingStateCC.js").ThermostatOperatingStateCCValues;
 	"Thermostat Setpoint":
-		typeof import("../cc/ThermostatSetpointCC").ThermostatSetpointCCValues;
+		typeof import("../cc/ThermostatSetpointCC.js").ThermostatSetpointCCValues;
 	"Time Parameters":
-		typeof import("../cc/TimeParametersCC").TimeParametersCCValues;
-	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
-	Version: typeof import("../cc/VersionCC").VersionCCValues;
-	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+		typeof import("../cc/TimeParametersCC.js").TimeParametersCCValues;
+	"User Code": typeof import("../cc/UserCodeCC.js").UserCodeCCValues;
+	Version: typeof import("../cc/VersionCC.js").VersionCCValues;
+	"Wake Up": typeof import("../cc/WakeUpCC.js").WakeUpCCValues;
 	"Window Covering":
-		typeof import("../cc/WindowCoveringCC").WindowCoveringCCValues;
-	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
+		typeof import("../cc/WindowCoveringCC.js").WindowCoveringCCValues;
+	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC.js").ZWavePlusCCValues;
 }

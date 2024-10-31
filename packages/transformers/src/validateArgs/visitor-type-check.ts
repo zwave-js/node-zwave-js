@@ -1,10 +1,10 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import type { VisitorContext } from "./visitor-context.js";
-import * as VisitorIndexedAccess from "./visitor-indexed-access.js";
-import * as VisitorKeyof from "./visitor-keyof.js";
-import * as VisitorTypeName from "./visitor-type-name.js";
-import * as VisitorUtils from "./visitor-utils.js";
+import type { VisitorContext } from "./visitor-context";
+import * as VisitorIndexedAccess from "./visitor-indexed-access";
+import * as VisitorKeyof from "./visitor-keyof";
+import * as VisitorTypeName from "./visitor-type-name";
+import * as VisitorUtils from "./visitor-utils";
 
 function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const name = VisitorTypeName.visitType(type, visitorContext, {

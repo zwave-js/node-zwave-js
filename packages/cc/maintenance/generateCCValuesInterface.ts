@@ -5,8 +5,12 @@
  */
 
 import { formatWithDprint } from "@zwave-js/maintenance";
+import esMain from "es-main";
 import fs from "node:fs/promises";
-import * as path from "node:path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const valuesDefinitionRegex = /export const ([^\s]+CCValues) =/;
@@ -37,7 +41,7 @@ export async function generateCCValuesInterface(): Promise<void> {
 		const classMatch = valuesDefinitionRegex.exec(fileContent);
 		if (apiMatch && classMatch) {
 			CCsWithValues.push({
-				file: ccFile.replace(/\.ts$/, ""),
+				file: ccFile.replace(/\.ts$/, ".js"),
 				name: apiMatch[1],
 				className: classMatch[1],
 			});
@@ -77,4 +81,4 @@ export async function generateCCValuesInterface(): Promise<void> {
 	}
 }
 
-if (require.main === module) void generateCCValuesInterface();
+if (esMain(import.meta)) void generateCCValuesInterface();

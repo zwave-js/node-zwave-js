@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
-    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
+    "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node18",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",

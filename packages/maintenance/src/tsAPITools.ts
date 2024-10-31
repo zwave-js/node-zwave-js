@@ -1,6 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
-import * as path from "node:path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import ts from "typescript";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Find this project's root dir
 export const projectRoot = process.cwd();
