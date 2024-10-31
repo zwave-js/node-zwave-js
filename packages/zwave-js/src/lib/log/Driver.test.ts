@@ -10,7 +10,7 @@ import {
 	assertMessage,
 } from "@zwave-js/core/test";
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
 import colors from "ansi-colors";
 import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";

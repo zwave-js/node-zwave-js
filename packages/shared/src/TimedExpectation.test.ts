@@ -1,6 +1,6 @@
 import test from "ava";
 import sinon from "sinon";
-import { TimedExpectation } from "./TimedExpectation";
+import { TimedExpectation } from "./TimedExpectation.js";
 
 test("resolves to the given value", async (t) => {
 	const exp = new TimedExpectation<string>(100);

@@ -10,7 +10,7 @@ import {
 	pick,
 	stringify,
 } from "@zwave-js/shared";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import JSON5 from "json5";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";

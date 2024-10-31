@@ -5,7 +5,7 @@ import {
 	getErrorMessage,
 	readJSON,
 } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import execa from "execa";
 import fs from "node:fs/promises";
 import os from "node:os";

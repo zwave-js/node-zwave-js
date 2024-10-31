@@ -1,4 +1,4 @@
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import { Bytes } from "./Bytes.js";
 import { uint8ArrayToHex } from "./uint8array-extras.js";
 

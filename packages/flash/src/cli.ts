@@ -1,5 +1,5 @@
 import { ZWaveErrorCodes, isZWaveError } from "@zwave-js/core/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
 import yargs from "yargs";

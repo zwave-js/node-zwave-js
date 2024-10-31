@@ -1,13 +1,13 @@
 import test from "ava";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
 import {
 	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
 	isConsecutiveArray,
 	stripUndefined,
 	validatePayload,
-} from "./misc";
+} from "./misc.js";
 
 test("isConsecutiveArray() -> returns true for consecutive arrays", (t) => {
 	const tests = [

@@ -41,9 +41,9 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays";
-import { composeObject } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { composeObject } from "alcalzone-shared/objects/index.js";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	CCAPI,
 	type CCAPIEndpoint,

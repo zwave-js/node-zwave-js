@@ -1,7 +1,7 @@
 import test from "ava";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
-import { Duration } from "./Duration";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { Duration } from "./Duration.js";
 
 test("constructor() -> should remember the given value and unit", (t) => {
 	const tests = [

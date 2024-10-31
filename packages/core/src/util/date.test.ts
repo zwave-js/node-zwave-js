@@ -1,5 +1,5 @@
 import test from "ava";
-import { formatDate, getDSTInfo } from "./date";
+import { formatDate, getDSTInfo } from "./date.js";
 
 test("formatDate() should work correctly", (t) => {
 	t.is(formatDate(new Date(2021, 5, 15), "YYYY-MM-DD"), "2021-06-15");

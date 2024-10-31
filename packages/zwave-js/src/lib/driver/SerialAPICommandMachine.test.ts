@@ -3,7 +3,7 @@ import type { Message } from "@zwave-js/serial";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+} from "alcalzone-shared/deferred-promise/index.js";
 import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
 import { Machine, type State, assign, interpret } from "xstate";

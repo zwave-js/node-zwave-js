@@ -1,4 +1,4 @@
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { throwInvalidConfig } from "../utils_safe.js";
 import { type ConditionalItem, conditionApplies } from "./ConditionalItem.js";
 import type { DeviceID } from "./shared.js";

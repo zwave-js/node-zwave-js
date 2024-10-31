@@ -1,5 +1,5 @@
 import { num2hex } from "@zwave-js/shared/safe";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import type { ProtocolDataRate } from "../capabilities/Protocols.js";
 import { type SecurityClass } from "../security/SecurityClass.js";
 import type { CCId } from "../traits/CommandClasses.js";

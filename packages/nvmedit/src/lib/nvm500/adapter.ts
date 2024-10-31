@@ -4,7 +4,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
-import { assertNever } from "alcalzone-shared/helpers";
+import { assertNever } from "alcalzone-shared/helpers/index.js";
 import { SUC_MAX_UPDATES } from "../../consts.js";
 import { type NVM500, type NVM500Info } from "../NVM500.js";
 import {

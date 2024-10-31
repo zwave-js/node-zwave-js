@@ -1,4 +1,4 @@
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import { type EventEmitter } from "node:events";
 import { type Duplex } from "node:stream";
 

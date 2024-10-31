@@ -1,5 +1,5 @@
 import test from "ava";
-import { GraphNode, topologicalSort } from "./graph";
+import { GraphNode, topologicalSort } from "./graph.js";
 
 test("topologicalSort() -> should sort correctly (Test 1)", (t) => {
 	const nodes = [

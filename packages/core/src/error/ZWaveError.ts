@@ -1,4 +1,4 @@
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 
 /**
  * Used to identify errors from this library without relying on the specific wording of the error message

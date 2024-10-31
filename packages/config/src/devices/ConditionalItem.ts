@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { ObjectKeyMap } from "@zwave-js/shared/safe";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
 import { evaluate } from "../Logic.js";
 import { throwInvalidConfig } from "../utils_safe.js";
 import type { DeviceID } from "./shared.js";

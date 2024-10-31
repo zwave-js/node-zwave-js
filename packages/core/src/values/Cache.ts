@@ -4,8 +4,8 @@ import {
 	isUint8Array,
 	uint8ArrayToHex,
 } from "@zwave-js/shared/safe";
-import { composeObject } from "alcalzone-shared/objects";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { composeObject } from "alcalzone-shared/objects/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { Duration } from "./Duration.js";
 import type { ValueMetadata } from "./Metadata.js";
 import type { ValueID } from "./_Types.js";

@@ -15,7 +15,7 @@ import {
 	SendDataResponse,
 } from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import sinon from "sinon";
 import {
 	MockControllerCommunicationState,

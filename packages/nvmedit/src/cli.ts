@@ -1,5 +1,5 @@
 import { readJSON } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import fs from "node:fs/promises";
 import "reflect-metadata";
 import yargs from "yargs";

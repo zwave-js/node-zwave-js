@@ -29,7 +29,7 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {

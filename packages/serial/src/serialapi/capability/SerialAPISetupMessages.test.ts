@@ -1,7 +1,7 @@
 import { Message } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
-import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages";
+import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages.js";
 
 test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7.19.1 encoding)", (t) => {
 	const data = Bytes.from(

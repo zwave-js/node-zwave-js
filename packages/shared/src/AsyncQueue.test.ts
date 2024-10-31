@@ -1,6 +1,6 @@
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import test from "ava";
-import { AsyncQueue } from "./AsyncQueue";
+import { AsyncQueue } from "./AsyncQueue.js";
 
 test("can be iterated over after adding items", async (t) => {
 	const queue = new AsyncQueue<number>();

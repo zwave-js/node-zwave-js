@@ -1,5 +1,5 @@
 import test from "ava";
-import { getMeter, getMeterScale } from "./Meters";
+import { getMeter, getMeterScale } from "./Meters.js";
 
 test(
 	"getMeter() returns the meter definition if it is defined",

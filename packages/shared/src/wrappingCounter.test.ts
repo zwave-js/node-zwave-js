@@ -1,5 +1,5 @@
 import test from "ava";
-import { createWrappingCounter } from "./wrappingCounter";
+import { createWrappingCounter } from "./wrappingCounter.js";
 
 test("wrappingCounter -> should return 1 first", (t) => {
 	const c1 = createWrappingCounter(1);

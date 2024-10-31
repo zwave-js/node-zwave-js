@@ -1,6 +1,6 @@
 import { Powerlevel } from "@zwave-js/cc/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import type {
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,

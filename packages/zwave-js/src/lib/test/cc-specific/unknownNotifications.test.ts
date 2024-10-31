@@ -4,7 +4,7 @@ import {
 } from "@zwave-js/cc/NotificationCC";
 import { ValueMetadata } from "@zwave-js/core";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 

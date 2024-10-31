@@ -182,13 +182,13 @@ import {
 	pathExists,
 	pick,
 } from "@zwave-js/shared";
-import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { randomBytes } from "node:crypto";
 import type { EventEmitter } from "node:events";
 import fs from "node:fs/promises";

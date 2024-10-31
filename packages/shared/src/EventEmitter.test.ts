@@ -1,8 +1,8 @@
 import test from "ava";
 import { EventEmitter } from "node:events";
-import { TypedEventEmitter } from "./EventEmitter";
-import { AllOf, Mixin } from "./inheritance";
-import type { Constructor } from "./types";
+import { TypedEventEmitter } from "./EventEmitter.js";
+import { AllOf, Mixin } from "./inheritance.js";
+import type { Constructor } from "./types.js";
 
 interface TestEvents {
 	test1: (arg1: number) => void;

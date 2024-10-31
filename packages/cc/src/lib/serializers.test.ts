@@ -6,7 +6,7 @@ import {
 	encodeSetbackState,
 	encodeSwitchpoint,
 	setbackSpecialStateValues,
-} from "./serializers";
+} from "./serializers.js";
 
 test("encodeSetbackState() should return the defined values for the special states", (t) => {
 	for (

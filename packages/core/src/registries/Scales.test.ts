@@ -1,5 +1,5 @@
 import test from "ava";
-import { getNamedScale, getNamedScaleGroup } from "./Scales";
+import { getNamedScale, getNamedScaleGroup } from "./Scales.js";
 
 test(
 	"getNamedScaleGroup() returns the scale group if it is defined",

@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { isValidDSK } from "./shared_safe.js";
 

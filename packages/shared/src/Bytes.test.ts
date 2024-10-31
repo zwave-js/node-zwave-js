@@ -1,6 +1,6 @@
 import test from "ava";
-import { Bytes } from "./Bytes";
-import { uint8ArrayToHex } from "./uint8array-extras";
+import { Bytes } from "./Bytes.js";
+import { uint8ArrayToHex } from "./uint8array-extras.js";
 
 test("writeUIntLE works as expected", (t) => {
 	const b = new Bytes(10);

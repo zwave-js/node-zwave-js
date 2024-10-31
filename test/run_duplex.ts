@@ -1,4 +1,4 @@
-import { wait as _wait } from "alcalzone-shared/async";
+import { wait as _wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
 import "reflect-metadata";
 import { Bytes } from "@zwave-js/shared/safe";

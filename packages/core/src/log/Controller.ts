@@ -1,4 +1,4 @@
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import { CommandClasses } from "../capabilities/CommandClasses.js";
 import { InterviewStage } from "../consts/InterviewStage.js";
 import type {

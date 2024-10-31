@@ -1,5 +1,5 @@
 import test from "ava";
-import { evaluate } from "./Logic";
+import { evaluate } from "./Logic.js";
 
 const tests = [
 	{

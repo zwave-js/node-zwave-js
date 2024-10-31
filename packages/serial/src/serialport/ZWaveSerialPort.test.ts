@@ -1,12 +1,12 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import ava, { type TestFn } from "ava";
 import { PassThrough } from "node:stream";
 import sinon from "sinon";
-import { MessageHeaders } from "../message/MessageHeaders";
-import { createAndOpenMockedZWaveSerialPort } from "../mock/MockSerialPort";
-import type { MockPortBinding } from "../mock/SerialPortBindingMock";
-import type { ZWaveSerialPort } from "./ZWaveSerialPort";
+import { MessageHeaders } from "../message/MessageHeaders.js";
+import { createAndOpenMockedZWaveSerialPort } from "../mock/MockSerialPort.js";
+import type { MockPortBinding } from "../mock/SerialPortBindingMock.js";
+import type { ZWaveSerialPort } from "./ZWaveSerialPort.js";
 
 interface TestContext {
 	port: ZWaveSerialPort;

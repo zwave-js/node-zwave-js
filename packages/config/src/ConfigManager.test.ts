@@ -5,9 +5,9 @@ import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import semver from "semver";
-import { ConfigManager } from "./ConfigManager";
-import { ConfigLogger } from "./Logger";
-import { syncExternalConfigDir } from "./utils";
+import { ConfigManager } from "./ConfigManager.js";
+import { ConfigLogger } from "./Logger.js";
+import { syncExternalConfigDir } from "./utils.js";
 
 interface TestContext {
 	tempDir: string;

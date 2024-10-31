@@ -7,7 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { DeviceClass } from "../DeviceClass.js";
 import { Endpoint } from "../Endpoint.js";
 import * as nodeUtils from "../utils.js";

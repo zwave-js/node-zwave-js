@@ -30,8 +30,8 @@ import {
 	pick,
 } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { clamp } from "alcalzone-shared/math";
-import { isObject } from "alcalzone-shared/typeguards";
+import { clamp } from "alcalzone-shared/math/index.js";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,

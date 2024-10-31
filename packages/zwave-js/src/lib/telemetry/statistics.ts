@@ -1,5 +1,5 @@
 import { formatId } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import * as crypto from "node:crypto";
 import type { Driver } from "../driver/Driver.js";
 

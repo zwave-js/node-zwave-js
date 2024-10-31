@@ -1,8 +1,8 @@
 import { CommandClasses, ValueMetadata } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import test from "ava";
-import { V } from "./Values";
-import { AlarmSensorType } from "./_Types";
+import { V } from "./Values.js";
+import { AlarmSensorType } from "./_Types.js";
 
 test("defineDynamicCCValues, dynamic property and meta", (t) => {
 	const dfn = V.defineDynamicCCValues(CommandClasses.Basic, {

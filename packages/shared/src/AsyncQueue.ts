@@ -1,7 +1,7 @@
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+} from "alcalzone-shared/deferred-promise/index.js";
 
 export class AsyncQueue<T> implements AsyncIterable<T> {
 	/** Adds one or more items onto the queue */

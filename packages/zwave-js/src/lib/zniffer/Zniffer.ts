@@ -69,7 +69,7 @@ import {
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+} from "alcalzone-shared/deferred-promise/index.js";
 import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
 import { ZnifferLogger } from "../log/Zniffer.js";

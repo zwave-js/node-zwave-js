@@ -1,5 +1,5 @@
 import test from "ava";
-import { computeBergerCode } from "./utils";
+import { computeBergerCode } from "./utils.js";
 
 {
 	const cases = [

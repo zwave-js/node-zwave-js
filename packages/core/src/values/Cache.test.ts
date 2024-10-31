@@ -1,6 +1,6 @@
 import test from "ava";
-import { deserializeCacheValue, serializeCacheValue } from "./Cache";
-import { Duration } from "./Duration";
+import { deserializeCacheValue, serializeCacheValue } from "./Cache.js";
+import { Duration } from "./Duration.js";
 
 test("serializeCacheValue() -> leaves numbers untouched", (t) => {
 	const tests = [1, 2, 6, 7, -1, 0.15];

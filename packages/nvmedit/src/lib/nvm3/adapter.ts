@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import { assertNever } from "alcalzone-shared/helpers";
+import { assertNever } from "alcalzone-shared/helpers/index.js";
 import { SUC_MAX_UPDATES } from "../../consts.js";
 import { type NVM3 } from "../NVM3.js";
 import {

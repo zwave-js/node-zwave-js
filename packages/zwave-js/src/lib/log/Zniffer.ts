@@ -18,7 +18,7 @@ import {
 } from "@zwave-js/core";
 import { type ZnifferDataMessage } from "@zwave-js/serial";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	type BeamStop,
 	type LongRangeBeamStart,

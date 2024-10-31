@@ -50,11 +50,11 @@ import {
 } from "@zwave-js/serial/serialapi";
 import { type ContainsCC, containsCC } from "@zwave-js/serial/serialapi";
 import { getErrorMessage } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+} from "alcalzone-shared/deferred-promise/index.js";
 import type { Driver } from "./Driver.js";
 import type { MessageGenerator } from "./Transaction.js";
 

@@ -1,12 +1,12 @@
 import { pick } from "@zwave-js/shared/safe";
 import test from "ava";
 import sinon from "sinon";
-import { CommandClasses } from "../capabilities/CommandClasses";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
-import { ValueMetadata } from "./Metadata";
-import { ValueDB, dbKeyToValueIdFast } from "./ValueDB";
-import type { ValueID } from "./_Types";
+import { CommandClasses } from "../capabilities/CommandClasses.js";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { ValueMetadata } from "./Metadata.js";
+import { ValueDB, dbKeyToValueIdFast } from "./ValueDB.js";
+import type { ValueID } from "./_Types.js";
 
 function setup(): {
 	valueDB: ValueDB;

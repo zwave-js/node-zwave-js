@@ -1,5 +1,5 @@
 import test from "ava";
-import { ConfigManager } from "../ConfigManager";
+import { ConfigManager } from "../ConfigManager.js";
 
 test("Z-TRM3 with commandClasses.add compat should work", async (t) => {
 	// This test might take a while

@@ -30,7 +30,7 @@ import {
 	pick,
 	staticExtends,
 } from "@zwave-js/shared";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	ExplorerFrameCommand,
 	LongRangeFrameType,

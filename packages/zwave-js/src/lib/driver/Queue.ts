@@ -2,8 +2,8 @@ import { type Message } from "@zwave-js/serial";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { SortedList } from "alcalzone-shared/sorted-list/index.js";
 import { type Transaction } from "./Transaction.js";
 
 export interface TransactionQueueOptions {

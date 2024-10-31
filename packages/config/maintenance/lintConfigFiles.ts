@@ -11,9 +11,9 @@ import {
 	getErrorMessage,
 	num2hex,
 } from "@zwave-js/shared";
-import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { wait } from "alcalzone-shared/async/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import c from "ansi-colors";
 import esMain from "es-main";
 import levenshtein from "js-levenshtein";

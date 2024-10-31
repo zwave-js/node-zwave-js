@@ -29,7 +29,7 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro for https://github.com/zwave-js/node-zwave-js/issues/6305

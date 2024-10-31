@@ -4,7 +4,7 @@ import {
 	type MockPortBinding,
 	SerialPortMock,
 } from "@zwave-js/serial/mock";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";

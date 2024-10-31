@@ -18,7 +18,7 @@ import {
 	num2hex,
 	pick,
 } from "@zwave-js/shared/safe";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import semver from "semver";
 import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts.js";
 import { NVM3, type NVM3Meta } from "./lib/NVM3.js";

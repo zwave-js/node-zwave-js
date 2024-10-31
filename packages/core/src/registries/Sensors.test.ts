@@ -1,5 +1,5 @@
 import test from "ava";
-import { getSensor, getSensorScale } from "./Sensors";
+import { getSensor, getSensorScale } from "./Sensors.js";
 
 test(
 	"getSensor() returns the sensor definition if it is defined",

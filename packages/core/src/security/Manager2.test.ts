@@ -1,10 +1,10 @@
 import { isUint8Array } from "@zwave-js/shared";
 import test from "ava";
 import * as crypto from "node:crypto";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
-import { SecurityManager2 } from "./Manager2";
-import { SecurityClass } from "./SecurityClass";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { SecurityManager2 } from "./Manager2.js";
+import { SecurityClass } from "./SecurityClass.js";
 
 function dummyInit(
 	man: SecurityManager2,

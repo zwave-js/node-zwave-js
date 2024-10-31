@@ -1,6 +1,6 @@
 import test from "ava";
-import { assertZWaveError } from "../test/assertZWaveError";
-import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError.js";
 
 const err = new ZWaveError(
 	"Test message",

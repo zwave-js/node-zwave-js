@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import { clamp } from "alcalzone-shared/math";
+import { clamp } from "alcalzone-shared/math/index.js";
 
 export type TimeoutUnit = "seconds" | "minutes" | "none" | "infinite";
 

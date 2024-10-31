@@ -1,7 +1,7 @@
 import { Bytes } from "@zwave-js/shared";
 import test from "ava";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
 import {
 	UNKNOWN_STATE,
 	encodeBitMask,
@@ -15,7 +15,7 @@ import {
 	parseMaybeNumber,
 	parseNumber,
 	parsePartial,
-} from "./Primitive";
+} from "./Primitive.js";
 
 test("parseBoolean() -> should return false when the value is 0", (t) => {
 	t.false(parseBoolean(0));

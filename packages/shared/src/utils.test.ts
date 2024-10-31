@@ -4,7 +4,7 @@ import {
 	discreteBinarySearch,
 	discreteLinearSearch,
 	mergeDeep,
-} from "./utils";
+} from "./utils.js";
 
 test("discreteBinarySearch -> test case 1", async (t) => {
 	const [rangeMin, rangeMax] = [0, 9];

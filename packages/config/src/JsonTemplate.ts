@@ -1,7 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { pathExists } from "@zwave-js/shared";
 import { getErrorMessage } from "@zwave-js/shared/safe";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import JSON5 from "json5";
 import fs from "node:fs/promises";
 import * as path from "node:path";

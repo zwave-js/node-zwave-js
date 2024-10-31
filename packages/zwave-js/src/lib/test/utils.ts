@@ -1,11 +1,10 @@
 import { MockSerialPort } from "@zwave-js/serial/mock";
-import type { DeepPartial } from "@zwave-js/shared";
 import proxyquire from "proxyquire";
-import type { ZWaveOptions } from "../driver/ZWaveOptions.js";
+import type { PartialZWaveOptions } from "../driver/ZWaveOptions.js";
 
 // load the driver with stubbed out Serialport
-const { Driver } = proxyquire<typeof import("../driver/Driver")>(
-	"../driver/Driver",
+const { Driver } = proxyquire<typeof import("../driver/Driver.js")>(
+	"../driver/Driver.js",
 	{
 		"@zwave-js/serial": {
 			ZWaveSerialPort: MockSerialPort,
@@ -18,7 +17,7 @@ export const PORT_ADDRESS = "/tty/FAKE";
 /** Creates a real driver instance with a mocked serial port to enable end to end tests */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function createAndStartDriver(
-	options: DeepPartial<ZWaveOptions> = {},
+	options: PartialZWaveOptions = {},
 ) {
 	// Usually we don't want logs in these tests
 	if (!options.logConfig) {

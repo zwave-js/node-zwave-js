@@ -20,7 +20,7 @@ import {
 	securityClassIsS2,
 } from "@zwave-js/core/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
-import { distinct } from "alcalzone-shared/arrays";
+import { distinct } from "alcalzone-shared/arrays/index.js";
 import type { Driver } from "../driver/Driver.js";
 import { createMultiCCAPIWrapper } from "./MultiCCAPIWrapper.js";
 import { VirtualNode } from "./VirtualNode.js";

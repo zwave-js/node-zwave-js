@@ -19,7 +19,7 @@ import {
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { randomInt } from "node:crypto";
 import {
 	type MockControllerCapabilities,

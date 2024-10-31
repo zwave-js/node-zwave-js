@@ -1,6 +1,6 @@
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
 import test from "ava";
-import { ConditionalDeviceConfig } from "./DeviceConfig";
+import { ConditionalDeviceConfig } from "./DeviceConfig.js";
 
 test("parses a simple device config", (t) => {
 	const json = {

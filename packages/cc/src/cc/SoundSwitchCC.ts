@@ -20,7 +20,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { clamp } from "alcalzone-shared/math";
+import { clamp } from "alcalzone-shared/math/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,

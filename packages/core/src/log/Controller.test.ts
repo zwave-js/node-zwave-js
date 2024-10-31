@@ -1,13 +1,13 @@
 import ava, { type TestFn } from "ava";
-import { CommandClasses } from "../capabilities/CommandClasses";
-import { InterviewStage } from "../consts/InterviewStage";
+import { CommandClasses } from "../capabilities/CommandClasses.js";
+import { InterviewStage } from "../consts/InterviewStage.js";
 import {
 	SpyTransport,
 	assertLogInfo,
 	assertMessage,
-} from "../test/SpyTransport";
-import { ControllerLogger } from "./Controller";
-import { ZWaveLogContainer, createDefaultTransportFormat } from "./shared";
+} from "../test/SpyTransport.js";
+import { ControllerLogger } from "./Controller.js";
+import { ZWaveLogContainer, createDefaultTransportFormat } from "./shared.js";
 
 interface TestContext {
 	controllerLogger: ControllerLogger;

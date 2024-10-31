@@ -3,7 +3,7 @@ import test from "ava";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
-import { readJsonWithTemplate } from "./JsonTemplate";
+import { readJsonWithTemplate } from "./JsonTemplate.js";
 
 const mockDir = path.join(tmpdir(), `zwave-js-template-test`);
 

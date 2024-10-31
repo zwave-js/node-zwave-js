@@ -1,5 +1,5 @@
 import test from "ava";
-import { enumValuesToMetadataStates } from "./Metadata";
+import { enumValuesToMetadataStates } from "./Metadata.js";
 
 enum TestEnum {
 	"Easy" = 0x00,

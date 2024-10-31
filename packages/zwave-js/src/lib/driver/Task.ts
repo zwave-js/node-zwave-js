@@ -1,11 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes, highResTimestamp } from "@zwave-js/core";
 import { createWrappingCounter, evalOrStatic, noop } from "@zwave-js/shared";
-import { type CompareResult } from "alcalzone-shared/comparable";
+import { type CompareResult } from "alcalzone-shared/comparable/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { SortedList } from "alcalzone-shared/sorted-list/index.js";
 
 /** A high-level task that can be started and stepped through */
 export interface Task<TReturn> {

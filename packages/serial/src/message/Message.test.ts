@@ -2,8 +2,8 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared";
 import test from "ava";
-import { FunctionType, MessageType } from "./Constants";
-import { Message, messageTypes } from "./Message";
+import { FunctionType, MessageType } from "./Constants.js";
+import { Message, messageTypes } from "./Message.js";
 
 test("should deserialize and serialize correctly", (t) => {
 	// actual messages from OZW

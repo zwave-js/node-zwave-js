@@ -6,7 +6,7 @@ import {
 	createThrowingMap,
 	getEnumMemberName,
 } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";

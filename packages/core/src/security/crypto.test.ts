@@ -7,7 +7,7 @@ import {
 	decryptAES128OFB,
 	encryptAES128ECB,
 	encryptAES128OFB,
-} from "./crypto";
+} from "./crypto.js";
 
 test("encryptAES128OFB() / decryptAES128OFB() -> should be able to en- and decrypt the same data", (t) => {
 	const plaintextIn =

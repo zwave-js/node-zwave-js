@@ -1,5 +1,5 @@
 import test from "ava";
-import { getIndicatorProperty } from "./Indicators";
+import { getIndicatorProperty } from "./Indicators.js";
 
 test(
 	"getIndicatorProperty() returns the property definition if it is defined",

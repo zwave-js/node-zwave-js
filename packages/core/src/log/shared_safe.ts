@@ -1,4 +1,4 @@
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import type { TransformableInfo } from "logform";
 import type { Logger } from "winston";
 import type Transport from "winston-transport";

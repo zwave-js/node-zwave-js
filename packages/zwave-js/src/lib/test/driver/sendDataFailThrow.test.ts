@@ -2,7 +2,7 @@ import { BasicCCSet } from "@zwave-js/cc";
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import ava, { type TestFn } from "ava";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";

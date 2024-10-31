@@ -1,6 +1,6 @@
 import ava, { type TestFn } from "ava";
 import sinon from "sinon";
-import { throttle } from "./utils";
+import { throttle } from "./utils.js";
 
 interface TestContext {
 	clock: sinon.SinonFakeTimers;

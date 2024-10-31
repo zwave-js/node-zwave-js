@@ -226,14 +226,14 @@ import {
 	pick,
 	stringify,
 } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { roundTo } from "alcalzone-shared/math";
-import { padStart } from "alcalzone-shared/strings";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { roundTo } from "alcalzone-shared/math/index.js";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { EventEmitter } from "node:events";
 import path from "node:path";
 import semver from "semver";

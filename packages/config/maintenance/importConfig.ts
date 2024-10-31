@@ -18,8 +18,8 @@ import {
 	readJSON,
 	stringify,
 } from "@zwave-js/shared";
-import { composeObject } from "alcalzone-shared/objects";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { composeObject } from "alcalzone-shared/objects/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import * as JSONC from "comment-json";
 import * as JSON5 from "json5";
 import { AssertionError, ok } from "node:assert";

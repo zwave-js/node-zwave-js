@@ -1,13 +1,13 @@
 import test from "ava";
 
-import { Bytes } from "./Bytes";
+import { Bytes } from "./Bytes.js";
 import {
 	cpp2js,
 	isPrintableASCIIWithWhitespace,
 	num2hex,
 	stringToUint8ArrayUTF16BE,
 	uint8ArrayToStringUTF16BE,
-} from "./strings";
+} from "./strings.js";
 
 test("cpp2js() -> should truncate null-terminated strings", (t) => {
 	const testCases = [

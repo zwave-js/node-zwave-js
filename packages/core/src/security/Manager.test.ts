@@ -3,7 +3,7 @@ import { isUint8Array } from "@zwave-js/shared";
 import test from "ava";
 import crypto, { randomBytes } from "node:crypto";
 import sinon from "sinon";
-import { SecurityManager } from "./Manager";
+import { SecurityManager } from "./Manager.js";
 
 const networkKey = Uint8Array.from([
 	1,

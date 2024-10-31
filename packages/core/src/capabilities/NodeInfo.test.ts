@@ -1,10 +1,10 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import test from "ava";
-import { CommandClasses } from "./CommandClasses";
+import { CommandClasses } from "./CommandClasses.js";
 import {
 	parseApplicationNodeInformation,
 	parseNodeUpdatePayload,
-} from "./NodeInfo";
+} from "./NodeInfo.js";
 
 test("parseApplicationNodeInformation() should parse correctly", (t) => {
 	const payload = Bytes.from([
