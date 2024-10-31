@@ -7,7 +7,7 @@ import {
 	type ControllerInfoFile,
 	type LRNodeInfo,
 	type NodeInfo,
-} from "../nvm3/files.js";
+} from "../nvm3/files/index.js";
 import { type Route } from "./routeCache.js";
 import { type SUCUpdateEntry } from "./sucUpdateEntry.js";
 

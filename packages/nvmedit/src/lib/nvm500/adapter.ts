@@ -16,7 +16,7 @@ import {
 } from "../common/definitions.js";
 import { type Route } from "../common/routeCache.js";
 import { type SUCUpdateEntry } from "../common/sucUpdateEntry.js";
-import { type NodeInfo } from "../nvm3/files.js";
+import { type NodeInfo } from "../nvm3/files/index.js";
 import { type NVM500NodeInfo } from "./EntryParsers.js";
 import {
 	APPL_NODEPARM_MAX,

@@ -50,7 +50,7 @@ export {
 	ControllerInfoFile,
 	ControllerInfoFileID,
 	NVMFile,
-} from "./lib/nvm3/files.js";
+} from "./lib/nvm3/files/index.js";
 export type { NVM3Object } from "./lib/nvm3/object.js";
 export type { NVM3Page, NVM3PageHeader } from "./lib/nvm3/page.js";
 export { NVM500Adapter } from "./lib/nvm500/adapter.js";

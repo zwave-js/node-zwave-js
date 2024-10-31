@@ -29,7 +29,7 @@ import {
 	parseNVMDescriptor,
 	parseNVMModuleDescriptor,
 } from "./nvm500/EntryParsers.js";
-import { nvm500Impls } from "./nvm500/impls.js";
+import { nvm500Impls } from "./nvm500/impls/index.js";
 import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,

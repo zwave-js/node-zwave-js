@@ -68,7 +68,7 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "./files.js";
+} from "./files/index.js";
 
 const DEFAULT_FILE_VERSION = "7.0.0";
 

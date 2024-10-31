@@ -37,6 +37,10 @@ import {
 	ZWAVE_SHARED_NVM_SIZE,
 } from "./lib/nvm3/consts.js";
 import {
+	type ApplicationNameFile,
+	ApplicationNameFileID,
+} from "./lib/nvm3/files/ApplicationNameFile.js";
+import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
 	type ApplicationDataFile,
@@ -90,15 +94,11 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "./lib/nvm3/files.js";
-import {
-	type ApplicationNameFile,
-	ApplicationNameFileID,
-} from "./lib/nvm3/files/ApplicationNameFile.js";
+} from "./lib/nvm3/files/index.js";
 import type { NVM3Object } from "./lib/nvm3/object.js";
 import { dumpNVM, mapToObject } from "./lib/nvm3/utils.js";
 import { NVM500Adapter } from "./lib/nvm500/adapter.js";
-import { nvm500Impls } from "./lib/nvm500/impls.js";
+import { nvm500Impls } from "./lib/nvm500/impls/index.js";
 import { resolveLayout } from "./lib/nvm500/shared.js";
 import {
 	type NVM500JSON,

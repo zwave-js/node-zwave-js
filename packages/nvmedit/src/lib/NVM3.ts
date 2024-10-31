@@ -34,7 +34,7 @@ import {
 	ApplicationVersionFile800ID,
 	type NVMSection,
 	getNVMSectionByFileID,
-} from "./nvm3/files.js";
+} from "./nvm3/files/index.js";
 import {
 	type NVM3Object,
 	type NVM3ObjectHeader,
