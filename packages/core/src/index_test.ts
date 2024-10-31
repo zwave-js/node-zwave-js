@@ -1,2 +1,2 @@
-export * from "./test/SpyTransport";
-export * from "./test/assertZWaveError";
+export * from "./test/SpyTransport.js";
+export * from "./test/assertZWaveError.js";

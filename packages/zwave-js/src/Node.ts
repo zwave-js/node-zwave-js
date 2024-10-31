@@ -7,15 +7,15 @@ export {
 	ProtocolVersion,
 } from "@zwave-js/core/safe";
 export type { DataRate, FLiRS } from "@zwave-js/core/safe";
-export { DeviceClass } from "./lib/node/DeviceClass";
-export type { NodeDump } from "./lib/node/Dump";
-export { Endpoint } from "./lib/node/Endpoint";
-export { ZWaveNode } from "./lib/node/Node";
+export { DeviceClass } from "./lib/node/DeviceClass.js";
+export type { NodeDump } from "./lib/node/Dump.js";
+export { Endpoint } from "./lib/node/Endpoint.js";
+export { ZWaveNode } from "./lib/node/Node.js";
 export type {
 	NodeStatistics,
 	RouteStatistics,
-} from "./lib/node/NodeStatistics";
-export { VirtualEndpoint } from "./lib/node/VirtualEndpoint";
-export { VirtualNode } from "./lib/node/VirtualNode";
-export type { VirtualValueID } from "./lib/node/VirtualNode";
-export * from "./lib/node/_Types";
+} from "./lib/node/NodeStatistics.js";
+export { VirtualEndpoint } from "./lib/node/VirtualEndpoint.js";
+export { VirtualNode } from "./lib/node/VirtualNode.js";
+export type { VirtualValueID } from "./lib/node/VirtualNode.js";
+export * from "./lib/node/_Types.js";

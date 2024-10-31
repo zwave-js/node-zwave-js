@@ -33,10 +33,10 @@ export const HOMEID_BYTES = 4;
 /** How many repeaters can appear in a route */
 export const MAX_REPEATERS = 4;
 
-export { ControllerStatus } from "./ControllerStatus";
-export { InterviewStage } from "./InterviewStage";
-export { NodeStatus } from "./NodeStatus";
-export * from "./Transmission";
+export { ControllerStatus } from "./ControllerStatus.js";
+export { InterviewStage } from "./InterviewStage.js";
+export { NodeStatus } from "./NodeStatus.js";
+export * from "./Transmission.js";
 
 export const MAX_SUPERVISION_SESSION_ID = 0b111111;
 

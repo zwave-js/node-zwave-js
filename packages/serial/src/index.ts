@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
-export { SerialLogger } from "./log/Logger";
-export type { SerialLogContext } from "./log/Logger_safe";
-export * from "./message/Constants";
-export * from "./message/Message";
-export * from "./message/MessageHeaders";
-export * from "./message/SuccessIndicator";
-export * from "./message/ZnifferMessages";
-export * from "./parsers/BootloaderParsers";
-export * from "./parsers/SerialAPIParser";
-export * from "./serialport/ZWaveSerialPort";
-export * from "./serialport/ZWaveSerialPortBase";
-export * from "./serialport/ZWaveSerialPortImplementation";
-export * from "./serialport/ZWaveSocket";
-export * from "./serialport/ZWaveSocketOptions";
-export * from "./zniffer/ZnifferSerialPort";
-export * from "./zniffer/ZnifferSerialPortBase";
-export * from "./zniffer/ZnifferSocket";
+export { SerialLogger } from "./log/Logger.js";
+export type { SerialLogContext } from "./log/Logger_safe.js";
+export * from "./message/Constants.js";
+export * from "./message/Message.js";
+export * from "./message/MessageHeaders.js";
+export * from "./message/SuccessIndicator.js";
+export * from "./message/ZnifferMessages.js";
+export * from "./parsers/BootloaderParsers.js";
+export * from "./parsers/SerialAPIParser.js";
+export * from "./serialport/ZWaveSerialPort.js";
+export * from "./serialport/ZWaveSerialPortBase.js";
+export * from "./serialport/ZWaveSerialPortImplementation.js";
+export * from "./serialport/ZWaveSocket.js";
+export * from "./serialport/ZWaveSocketOptions.js";
+export * from "./zniffer/ZnifferSerialPort.js";
+export * from "./zniffer/ZnifferSerialPortBase.js";
+export * from "./zniffer/ZnifferSocket.js";
 
-export * from "./index_serialapi";
+export * from "./index_serialapi.js";

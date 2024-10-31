@@ -19,4 +19,4 @@ export type {
 	ZWaveNodeValueNotificationArgs,
 	ZWaveNodeValueRemovedArgs,
 	ZWaveNodeValueUpdatedArgs,
-} from "./lib/node/_Types";
+} from "./lib/node/_Types.js";

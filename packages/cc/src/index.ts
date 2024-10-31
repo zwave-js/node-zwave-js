@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import * as utils from "./lib/utils.js";
 
-export * from "./cc/index";
-export * from "./lib/API";
-export * from "./lib/CommandClass";
-export * from "./lib/CommandClassDecorators";
-export * from "./lib/EncapsulatingCommandClass";
+export * from "./cc/index.js";
+export * from "./lib/API.js";
+export * from "./lib/CommandClass.js";
+export * from "./lib/CommandClassDecorators.js";
+export * from "./lib/EncapsulatingCommandClass.js";
 export {
 	MGRPExtension,
 	MOSExtension,
@@ -15,14 +15,14 @@ export {
 	extensionType,
 	getExtensionType,
 	getS2ExtensionConstructor,
-} from "./lib/Security2/Extension";
-export * from "./lib/Security2/shared";
-export * from "./lib/SetValueResult";
-export { defaultCCValueOptions } from "./lib/Values";
+} from "./lib/Security2/Extension.js";
+export * from "./lib/Security2/shared.js";
+export * from "./lib/SetValueResult.js";
+export { defaultCCValueOptions } from "./lib/Values.js";
 export type {
 	CCValueOptions,
 	CCValuePredicate,
 	PartialCCValuePredicate,
-} from "./lib/Values";
-export * from "./lib/_Types";
+} from "./lib/Values.js";
+export * from "./lib/_Types.js";
 export { utils };

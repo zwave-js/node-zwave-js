@@ -11,16 +11,16 @@ async function main() {
 	for (const file of sourceFiles) {
 		// const filePath = path.relative(process.cwd(), file.getFilePath());
 
-		const relativeImports = file.getImportDeclarations().filter((imp) => {
-			return imp.getModuleSpecifierValue().startsWith(".")
-				&& !imp.getModuleSpecifierValue().endsWith(".js");
+		const relativeExports = file.getExportDeclarations().filter((exp) => {
+			return exp.getModuleSpecifierValue()?.startsWith(".")
+				&& !exp.getModuleSpecifierValue()?.endsWith(".js");
 		});
-		if (relativeImports.length === 0) continue;
+		if (relativeExports.length === 0) continue;
 
-		for (const imp of relativeImports) {
-			const oldPath = imp.getModuleSpecifierValue();
+		for (const exp of relativeExports) {
+			const oldPath = exp.getModuleSpecifierValue();
 			const newPath = oldPath + ".js";
-			imp.setModuleSpecifier(newPath);
+			exp.setModuleSpecifier(newPath);
 		}
 
 		await file.save();
