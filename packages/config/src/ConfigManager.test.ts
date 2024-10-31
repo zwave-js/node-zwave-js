@@ -1,10 +1,10 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
 import { pathExists } from "@zwave-js/shared";
-import ava, { type ExecutionContext, type TestFn } from "ava";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import semver from "semver";
+import { beforeAll, beforeEach, test } from "vitest";
 import { ConfigManager } from "./ConfigManager.js";
 import { ConfigLogger } from "./Logger.js";
 import { syncExternalConfigDir } from "./utils.js";
@@ -20,7 +20,7 @@ const test = ava as TestFn<TestContext>;
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ownVersion = require("../package.json").version;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	const tempDir = path.join(tmpdir(), "zwavejs_test");
 	await fs.mkdir(tempDir, { recursive: true });
 	t.context.tempDir = tempDir;
@@ -31,37 +31,35 @@ test.before(async (t) => {
 	t.context.logger = new ConfigLogger(logContainer);
 });
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	await fs.rm(t.context.tempDir, { recursive: true, force: true });
 	await fs.mkdir(t.context.tempDir, { recursive: true });
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	await fs.rm(t.context.tempDir, { recursive: true, force: true });
 });
 
-test.serial(
+test.sequential(
 	"syncExternalConfigDir() syncs the external config dir if it does not exist",
 	async (t) => {
-		t.timeout(60000);
 		const { tempDir, logger } = t.context;
 
 		const configDir = path.join(tempDir, "extconfig");
 		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		await syncExternalConfigDir(logger);
 
-		t.true(await pathExists(configDir));
-		t.is(
+		t.expect(await pathExists(configDir)).toBe(true);
+		t.expect(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
-			ownVersion,
-		);
+		).toBe(ownVersion);
 	},
+	60000,
 );
 
-test.serial(
+test.sequential(
 	"syncExternalConfigDir() syncs the external config dir alone if it is from an incompatible version",
 	async (t) => {
-		t.timeout(60000);
 		const { tempDir, logger } = t.context;
 
 		const configDir = path.join(tempDir, "extconfig");
@@ -77,19 +75,18 @@ test.serial(
 
 		await syncExternalConfigDir(logger);
 
-		t.true(await pathExists(configDir));
+		t.expect(await pathExists(configDir)).toBe(true);
 
-		t.is(
+		t.expect(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
-			ownVersion,
-		);
+		).toBe(ownVersion);
 	},
+	60000,
 );
 
-test.serial(
+test.sequential(
 	"syncExternalConfigDir() leaves the external config dir alone if it is from a newer compatible version",
 	async (t) => {
-		t.timeout(60000);
 		const { tempDir, logger } = t.context;
 
 		const configDir = path.join(tempDir, "extconfig");
@@ -105,33 +102,35 @@ test.serial(
 
 		await syncExternalConfigDir(logger);
 
-		t.true(await pathExists(configDir));
+		t.expect(await pathExists(configDir)).toBe(true);
 
-		t.is(
+		t.expect(
 			await fs.readFile(path.join(configDir, "version"), "utf8"),
-			otherVersion,
-		);
+		).toBe(otherVersion);
 	},
+	60000,
 );
 
-test.serial("loading config files from the embedded config dir", async (t) => {
-	t.timeout(60000);
-	delete process.env.ZWAVEJS_EXTERNAL_CONFIG;
+test.sequential(
+	"loading config files from the embedded config dir",
+	async (t) => {
+		delete process.env.ZWAVEJS_EXTERNAL_CONFIG;
 
-	const { logContainer } = t.context;
-	const cm = new ConfigManager({ logContainer });
-	await cm.loadAll();
+		const { logContainer } = t.context;
+		const cm = new ConfigManager({ logContainer });
+		await cm.loadAll();
 
-	// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
-	const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
-	t.truthy(device);
-	t.true(device?.isEmbedded);
-});
+		// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
+		const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
+		t.truthy(device);
+		t.expect(device?.isEmbedded).toBe(true);
+	},
+	60000,
+);
 
-test.serial(
+test.sequential(
 	"loading config files from the ZWAVEJS_EXTERNAL_CONFIG",
 	async (t) => {
-		t.timeout(60000);
 		const { tempDir, logContainer } = t.context;
 
 		const configDir = path.join(tempDir, "extconfig");
@@ -139,13 +138,14 @@ test.serial(
 
 		const cm = new ConfigManager({ logContainer });
 		await cm.loadAll();
-		t.true(await pathExists(configDir));
+		t.expect(await pathExists(configDir)).toBe(true);
 
 		// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
 		const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
 		t.truthy(device);
-		t.true(device?.isEmbedded); // ZWAVEJS_EXTERNAL_CONFIG is still considered as an embedded config
+		t.expect(device?.isEmbedded).toBe(true); // ZWAVEJS_EXTERNAL_CONFIG is still considered as an embedded config
 	},
+	60000,
 );
 
 async function testDeviceConfigPriorityDir(
@@ -223,26 +223,25 @@ async function testDeviceConfigPriorityDir(
 	t.false(device?.isEmbedded); // deviceConfigPriorityDir is considered a user-provided config
 }
 
-test.serial(
+test.sequential(
 	"loading config from the deviceConfigPriorityDir (without ZWAVEJS_EXTERNAL_CONFIG)",
 	async (t) => {
-		t.timeout(60000);
 		await testDeviceConfigPriorityDir(t, false);
 	},
+	60000,
 );
 
-test.serial(
+test.sequential(
 	"loading config from the deviceConfigPriorityDir (with ZWAVEJS_EXTERNAL_CONFIG)",
 	async (t) => {
-		t.timeout(60000);
 		await testDeviceConfigPriorityDir(t, true);
 	},
+	60000,
 );
 
-test.serial(
+test.sequential(
 	`config files with the "preferred" flag are preferred`,
 	async (t) => {
-		t.timeout(60000);
 		const { logContainer } = t.context;
 
 		const cm = new ConfigManager({ logContainer });
@@ -252,7 +251,8 @@ test.serial(
 		const preferred = await cm.lookupDevice(0x0330, 0x0300, 0xb302, "1.26");
 		// ZV9001K12-DIM-Z4 is the fallback config for the same IDs
 		const fallback = await cm.lookupDevice(0x0330, 0x0300, 0xb302, "1.0");
-		t.is(preferred?.manufacturer, "Vesternet");
-		t.is(fallback?.manufacturer, "Sunricher");
+		t.expect(preferred?.manufacturer).toBe("Vesternet");
+		t.expect(fallback?.manufacturer).toBe("Sunricher");
 	},
+	60000,
 );

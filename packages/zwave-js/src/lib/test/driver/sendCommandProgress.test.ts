@@ -42,8 +42,6 @@ integrationTest(
 			sinon.assert.calledWith(onProgress, {
 				state: TransactionState.Completed,
 			});
-
-			t.pass();
 		},
 	},
 );

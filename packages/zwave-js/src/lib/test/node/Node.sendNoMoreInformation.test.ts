@@ -1,8 +1,8 @@
 import { WakeUpCommand } from "@zwave-js/cc";
 import { WakeUpCC } from "@zwave-js/cc/WakeUpCC";
 import { CommandClasses, InterviewStage } from "@zwave-js/core";
-import test from "ava";
 import sinon from "sinon";
+import { beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { assertCC } from "../assertCC.js";
@@ -19,49 +19,49 @@ function makeNode(): ZWaveNode {
 	return node;
 }
 
-test.beforeEach(() => fakeDriver.sendMessage.resetHistory());
+beforeEach(() => fakeDriver.sendMessage.resetHistory());
 
-test.serial(
+test.sequential(
 	"should not do anything and return false if the node is asleep",
 	async (t) => {
 		const node = makeNode();
 		node.markAsAsleep();
 
-		t.false(await node.sendNoMoreInformation());
+		t.expect(await node.sendNoMoreInformation()).toBe(false);
 		sinon.assert.notCalled(fakeDriver.sendMessage);
 		node.destroy();
 	},
 );
 
-test.serial(
+test.sequential(
 	"should not do anything and return false if the node interview is not complete",
 	async (t) => {
 		const node = makeNode();
 		node.interviewStage = InterviewStage.CommandClasses;
-		t.false(await node.sendNoMoreInformation());
+		t.expect(await node.sendNoMoreInformation()).toBe(false);
 		sinon.assert.notCalled(fakeDriver.sendMessage);
 		node.destroy();
 	},
 );
 
-test.serial(
+test.sequential(
 	"should not send anything if the node should be kept awake",
 	async (t) => {
 		const node = makeNode();
 		node.markAsAwake();
 		node.keepAwake = true;
 
-		t.false(await node.sendNoMoreInformation());
+		t.expect(await node.sendNoMoreInformation()).toBe(false);
 		sinon.assert.notCalled(fakeDriver.sendMessage);
 		node.destroy();
 	},
 );
 
-test.serial("should send a WakeupCC.NoMoreInformation otherwise", async (t) => {
+test.sequential("should send a WakeupCC.NoMoreInformation otherwise", async (t) => {
 	const node = makeNode();
 	node.interviewStage = InterviewStage.Complete;
 	node.markAsAwake();
-	t.true(await node.sendNoMoreInformation());
+	t.expect(await node.sendNoMoreInformation()).toBe(true);
 	sinon.assert.called(fakeDriver.sendMessage);
 
 	assertCC(t, fakeDriver.sendMessage.getCall(0).args[0], {

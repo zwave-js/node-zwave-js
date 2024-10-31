@@ -187,7 +187,6 @@ integrationTest(
 
 			// And the command should eventually succeed
 			await basicSetPromise;
-			t.pass();
 		},
 	},
 );
@@ -390,8 +389,7 @@ integrationTest(
 // 			await firstCommand;
 // 			await followupCommand;
 
-// 			t.pass();
-// 		},
+// 		// 		},
 // 	},
 // );
 

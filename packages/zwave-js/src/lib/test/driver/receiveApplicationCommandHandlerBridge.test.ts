@@ -3,7 +3,7 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(30000);
 
 	const { driver, serialport } = await createAndStartDriver({
@@ -48,7 +48,7 @@ test.beforeEach(async (t) => {
 	t.context = { driver, serialport };
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -81,10 +81,9 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 	// │ transmit options: 0x25
 	// │ callback id:      1
 	// └─[SecurityCCNonceGet]
-	t.deepEqual(
+	t.expect(
 		serialport.lastWrite,
-		Bytes.from("0109001303029840250118", "hex"),
-	);
+	).toStrictEqual(Bytes.from("0109001303029840250118", "hex"));
 	await wait(10);
 	serialport.receiveData(ACK);
 
@@ -94,7 +93,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 	//     was sent: true
 	serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 	// » [ACK]
-	t.deepEqual(serialport.lastWrite, ACK);
+	t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 	await wait(10);
 
@@ -108,7 +107,7 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 		),
 	);
 	// » [ACK]
-	t.deepEqual(serialport.lastWrite, ACK);
+	t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 	await wait(10);
 
@@ -117,7 +116,9 @@ test("Node responses in a BridgeApplicationCommandRequest should be understood",
 		Bytes.from("011300a80001030a98803e55e4b714973b9e00c18b", "hex"),
 	);
 	// » [ACK]
-	t.deepEqual(serialport.lastWrite, ACK);
+	t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
-	t.deepEqual(await getNoncePromise, Bytes.from("3e55e4b714973b9e", "hex"));
+	t.expect(await getNoncePromise).toStrictEqual(
+		Bytes.from("3e55e4b714973b9e", "hex"),
+	);
 });

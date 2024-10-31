@@ -139,8 +139,6 @@ integrationTest(
 					errorMessage: "Expected a Nonce Report to be sent",
 				},
 			);
-
-			t.pass();
 		},
 	},
 );

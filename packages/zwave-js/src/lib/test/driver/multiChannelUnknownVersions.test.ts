@@ -27,8 +27,6 @@ integrationTest(
 						instanceof MultiChannelCCCommandEncapsulation
 					&& frame.payload.encapsulated instanceof BinarySwitchCCSet,
 			);
-
-			t.pass();
 		},
 	},
 );

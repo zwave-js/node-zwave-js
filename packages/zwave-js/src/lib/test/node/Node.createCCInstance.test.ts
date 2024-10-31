@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -19,7 +19,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	const { driver } = await createAndStartTestingDriver({
 		skipNodeInterview: true,
 		loadConfiguration: false,
@@ -34,7 +34,7 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
@@ -59,7 +59,7 @@ test("should return a linked instance of the correct CC", (t) => {
 	node.addCC(CommandClasses.Basic, { isSupported: true });
 
 	const cc = node.createCCInstance(BasicCC)!;
-	t.true(cc instanceof BasicCC);
-	t.is(cc.getNode(driver), node);
+	t.expect(cc instanceof BasicCC).toBe(true);
+	t.expect(cc.getNode(driver)).toBe(node);
 	node.destroy();
 });

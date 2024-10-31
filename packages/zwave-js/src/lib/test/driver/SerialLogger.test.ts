@@ -6,8 +6,8 @@ import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared/safe";
 import colors from "ansi-colors";
-import ava, { type TestFn } from "ava";
 import { pseudoRandomBytes } from "node:crypto";
+import { beforeAll, beforeEach, test } from "vitest";
 
 interface TestContext {
 	serialLogger: SerialLogger;
@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before((t) => {
+beforeAll((t) => {
 	// Replace all defined transports with a spy transport
 	const spyTransport = new SpyTransport();
 	spyTransport.format = createDefaultTransportFormat(true, true);
@@ -35,15 +35,15 @@ test.before((t) => {
 });
 
 // Don't spam the console when performing the other tests not related to logging
-test.after.always((t) => {
+afterAll((t) => {
 	t.context.serialLogger.container.updateConfiguration({ enabled: false });
 });
 
-test.beforeEach((t) => {
+beforeEach((t) => {
 	t.context.spyTransport.spy.resetHistory();
 });
 
-test.serial("logs single-byte messages correctly: inbound ACK", (t) => {
+test.sequential("logs single-byte messages correctly: inbound ACK", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.ACK("inbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -52,7 +52,7 @@ test.serial("logs single-byte messages correctly: inbound ACK", (t) => {
 	});
 });
 
-test.serial("logs single-byte messages correctly: outbound ACK", (t) => {
+test.sequential("logs single-byte messages correctly: outbound ACK", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.ACK("outbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -61,7 +61,7 @@ test.serial("logs single-byte messages correctly: outbound ACK", (t) => {
 	});
 });
 
-test.serial("logs single-byte messages correctly: inbound NAK", (t) => {
+test.sequential("logs single-byte messages correctly: inbound NAK", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.NAK("inbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -70,7 +70,7 @@ test.serial("logs single-byte messages correctly: inbound NAK", (t) => {
 	});
 });
 
-test.serial("logs single-byte messages correctly: outbound NAK", (t) => {
+test.sequential("logs single-byte messages correctly: outbound NAK", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.NAK("outbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -79,7 +79,7 @@ test.serial("logs single-byte messages correctly: outbound NAK", (t) => {
 	});
 });
 
-test.serial("logs single-byte messages correctly: inbound CAN", (t) => {
+test.sequential("logs single-byte messages correctly: inbound CAN", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.CAN("inbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -88,7 +88,7 @@ test.serial("logs single-byte messages correctly: inbound CAN", (t) => {
 	});
 });
 
-test.serial("logs single-byte messages correctly: outbound CAN", (t) => {
+test.sequential("logs single-byte messages correctly: outbound CAN", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.CAN("outbound");
 	const alignRight = " ".repeat(80 - 14);
@@ -98,7 +98,7 @@ test.serial("logs single-byte messages correctly: outbound CAN", (t) => {
 });
 
 for (const msg of ["ACK", "NAK", "CAN"] as const) {
-	test.serial(`colors single-byte messages like tags: ${msg}`, (t) => {
+	test.sequential(`colors single-byte messages like tags: ${msg}`, (t) => {
 		const { serialLogger, spyTransport } = t.context;
 		serialLogger[msg]("inbound");
 
@@ -112,7 +112,7 @@ for (const msg of ["ACK", "NAK", "CAN"] as const) {
 	});
 }
 
-test.serial("logs raw data correctly: short buffer, inbound", (t) => {
+test.sequential("logs raw data correctly: short buffer, inbound", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.data("inbound", Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8]));
 	const alignRight = " ".repeat(80 - 30);
@@ -121,7 +121,7 @@ test.serial("logs raw data correctly: short buffer, inbound", (t) => {
 	});
 });
 
-test.serial("logs raw data correctly: short buffer, outbound", (t) => {
+test.sequential("logs raw data correctly: short buffer, outbound", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.data("outbound", Uint8Array.from([0x55, 4, 3, 2, 1]));
 	const alignRight = " ".repeat(80 - 24);
@@ -130,7 +130,7 @@ test.serial("logs raw data correctly: short buffer, outbound", (t) => {
 	});
 });
 
-test.serial("wraps longer buffers into multiple lines", (t) => {
+test.sequential("wraps longer buffers into multiple lines", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	// We have room for 67 chars in the first line
 	const expected = pseudoRandomBytes(39);
@@ -144,7 +144,7 @@ test.serial("wraps longer buffers into multiple lines", (t) => {
 	});
 });
 
-test.serial("correctly groups very long lines", (t) => {
+test.sequential("correctly groups very long lines", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	// We have room for 67 chars in the first line, that is 32.5 bytes
 	// and 78 chars (39 bytes) in each following line
@@ -161,7 +161,7 @@ test.serial("correctly groups very long lines", (t) => {
 	});
 });
 
-test.serial("logs discarded data correctly", (t) => {
+test.sequential("logs discarded data correctly", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.discarded(Bytes.from("02020202020202", "hex"));
 	const alignRight = " ".repeat(80 - 53);
@@ -171,7 +171,7 @@ test.serial("logs discarded data correctly", (t) => {
 	});
 });
 
-test.serial("logs short messages correctly", (t) => {
+test.sequential("logs short messages correctly", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.message("Test");
 	assertMessage(t, spyTransport, {
@@ -179,7 +179,7 @@ test.serial("logs short messages correctly", (t) => {
 	});
 });
 
-test.serial("logs long messages correctly", (t) => {
+test.sequential("logs long messages correctly", (t) => {
 	const { serialLogger, spyTransport } = t.context;
 	serialLogger.message(
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",

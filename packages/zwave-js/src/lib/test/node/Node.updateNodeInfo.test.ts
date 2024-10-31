@@ -4,7 +4,7 @@ import "@zwave-js/cc";
 import { CommandClasses, InterviewStage, NodeStatus } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -23,7 +23,7 @@ const emptyNodeInfo = {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 
 	const { driver } = await createAndStartTestingDriver({
@@ -57,36 +57,36 @@ test.before(async (t) => {
 	};
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
 
-test.afterEach((t) => {
+afterEach((t) => {
 	const { driver } = t.context;
 	driver.networkCache.clear();
 });
 
-test.serial("marks a sleeping node as awake", (t) => {
+test.sequential("marks a sleeping node as awake", (t) => {
 	const { makeNode } = t.context;
 
 	const node = makeNode(true);
 	node.markAsAsleep();
 
 	node.updateNodeInfo(emptyNodeInfo as any);
-	t.is(node.status, NodeStatus.Awake);
+	t.expect(node.status).toBe(NodeStatus.Awake);
 	node.destroy();
 });
 
-test.serial("does not throw when called on a non-sleeping node", (t) => {
+test.sequential("does not throw when called on a non-sleeping node", (t) => {
 	const { makeNode } = t.context;
 
 	const node = makeNode(false);
-	t.notThrows(() => node.updateNodeInfo(emptyNodeInfo as any));
+	t.expect(() => node.updateNodeInfo(emptyNodeInfo as any)).not.toThrow();
 	node.destroy();
 });
 
-test.serial("remembers all received CCs", (t) => {
+test.sequential("remembers all received CCs", (t) => {
 	const { makeNode } = t.context;
 
 	const node = makeNode();
@@ -100,12 +100,12 @@ test.serial("remembers all received CCs", (t) => {
 	node.updateNodeInfo({
 		supportedCCs: [CommandClasses.Battery, CommandClasses.Configuration],
 	} as any);
-	t.true(node.supportsCC(CommandClasses.Battery));
-	t.true(node.supportsCC(CommandClasses.Configuration));
+	t.expect(node.supportsCC(CommandClasses.Battery)).toBe(true);
+	t.expect(node.supportsCC(CommandClasses.Configuration)).toBe(true);
 	node.destroy();
 });
 
-test.serial("ignores the data in an NIF if it was received already", (t) => {
+test.sequential("ignores the data in an NIF if it was received already", (t) => {
 	const { makeNode } = t.context;
 
 	const node = makeNode();
@@ -115,7 +115,7 @@ test.serial("ignores the data in an NIF if it was received already", (t) => {
 		supportedCCs: [CommandClasses.Battery],
 	} as any);
 
-	t.false(node.supportsCC(CommandClasses.Battery));
-	t.false(node.controlsCC(CommandClasses.Configuration));
+	t.expect(node.supportsCC(CommandClasses.Battery)).toBe(false);
+	t.expect(node.controlsCC(CommandClasses.Configuration)).toBe(false);
 	node.destroy();
 });

@@ -12,8 +12,8 @@ import {
 import { FunctionType, Message, MessageType } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
 import colors from "ansi-colors";
-import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
+import { beforeAll, beforeEach, test } from "vitest";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartTestingDriver } from "../driver/DriverMock.js";
 import { TransactionQueue } from "../driver/Queue.js";
@@ -28,7 +28,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 
 	const { driver } = await createAndStartTestingDriver({
@@ -56,7 +56,7 @@ test.before(async (t) => {
 	MockDate.set(new Date().setHours(0, 0, 0, 0));
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver, driverLogger } = t.context;
 	await driver.destroy();
 
@@ -65,7 +65,7 @@ test.after.always(async (t) => {
 	MockDate.reset();
 });
 
-test.beforeEach((t) => {
+beforeEach((t) => {
 	t.context.spyTransport.spy.resetHistory();
 });
 
@@ -102,7 +102,7 @@ function createTransaction(
 	return trns;
 }
 
-test.serial("print() logs short messages correctly", (t) => {
+test.sequential("print() logs short messages correctly", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test");
 	assertMessage(t, spyTransport, {
@@ -110,7 +110,7 @@ test.serial("print() logs short messages correctly", (t) => {
 	});
 });
 
-test.serial("print() logs long messages correctly", (t) => {
+test.sequential("print() logs long messages correctly", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print(
 		"This is a very long message that should be broken into multiple lines maybe sometimes...",
@@ -122,19 +122,19 @@ test.serial("print() logs long messages correctly", (t) => {
 	});
 });
 
-test.serial("print() logs with the given loglevel", (t) => {
+test.sequential("print() logs with the given loglevel", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test", "warn");
 	assertLogInfo(t, spyTransport, { level: "warn" });
 });
 
-test.serial("print() has a default loglevel of verbose", (t) => {
+test.sequential("print() has a default loglevel of verbose", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Test");
 	assertLogInfo(t, spyTransport, { level: "verbose" });
 });
 
-test.serial(
+test.sequential(
 	"print() prefixes the messages with the current timestamp and channel name",
 	(t) => {
 		const { driverLogger, spyTransport } = t.context;
@@ -147,7 +147,7 @@ test.serial(
 	},
 );
 
-test.serial("print() the timestamp is in a dim color", (t) => {
+test.sequential("print() the timestamp is in a dim color", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Whatever");
 	assertMessage(t, spyTransport, {
@@ -158,7 +158,7 @@ test.serial("print() the timestamp is in a dim color", (t) => {
 	});
 });
 
-test.serial("print() the channel name is in inverted gray color", (t) => {
+test.sequential("print() the channel name is in inverted gray color", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print("Whatever");
 	assertMessage(t, spyTransport, {
@@ -168,7 +168,7 @@ test.serial("print() the channel name is in inverted gray color", (t) => {
 	});
 });
 
-test.serial(
+test.sequential(
 	"transaction() (for outbound messages) contains the direction",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -178,7 +178,7 @@ test.serial(
 		});
 	},
 );
-test.serial(
+test.sequential(
 	"transaction() (for outbound messages) contains the message type as a tag",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -199,7 +199,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transaction() (for outbound messages) contains the function type as a tag",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -214,7 +214,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transaction() (for outbound messages) contains the message priority",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -229,7 +229,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transactionResponse() (for inbound messages) contains the direction",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -241,7 +241,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transactionResponse() (for inbound messages) contains the message type as a tag",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -264,7 +264,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transactionResponse() (for inbound messages) contains the function type as a tag",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -278,7 +278,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"transactionResponse() (for inbound messages) contains the role (regarding the transaction) of the received message as a tag",
 	(t) => {
 		const { driver, driverLogger, spyTransport } = t.context;
@@ -292,7 +292,7 @@ test.serial(
 	},
 );
 
-test.serial("sendQueue() prints the send queue length", (t) => {
+test.sequential("sendQueue() prints the send queue length", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
 	const queue = new TransactionQueue();
 	driverLogger.sendQueue(queue);
@@ -323,7 +323,7 @@ test.serial("sendQueue() prints the send queue length", (t) => {
 	});
 });
 
-test.serial("sendQueue() prints the function type for each message", (t) => {
+test.sequential("sendQueue() prints the function type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
 	const queue = new TransactionQueue();
 	queue.add(
@@ -344,7 +344,7 @@ test.serial("sendQueue() prints the function type for each message", (t) => {
 	});
 });
 
-test.serial("sendQueue() prints the message type for each message", (t) => {
+test.sequential("sendQueue() prints the message type for each message", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
 	const queue = new TransactionQueue();
 	queue.add(
@@ -369,7 +369,7 @@ test.serial("sendQueue() prints the message type for each message", (t) => {
 	});
 });
 
-test.serial("primary tags are printed in inverse colors", (t) => {
+test.sequential("primary tags are printed in inverse colors", (t) => {
 	const { driver, driverLogger, spyTransport } = t.context;
 	const msg = createMessage(driver, {
 		functionType: FunctionType.HardReset,
@@ -393,7 +393,7 @@ test.serial("primary tags are printed in inverse colors", (t) => {
 	});
 });
 
-test.serial("inline tags are printed in inverse colors", (t) => {
+test.sequential("inline tags are printed in inverse colors", (t) => {
 	const { driverLogger, spyTransport } = t.context;
 	driverLogger.print(`This is a message [with] [inline] tags...`);
 

@@ -1,4 +1,4 @@
-import ava, { type TestFn } from "ava";
+import { afterAll, beforeAll, beforeEach, test } from "vitest";
 import { CommandClasses } from "../capabilities/CommandClasses.js";
 import { InterviewStage } from "../consts/InterviewStage.js";
 import {
@@ -14,10 +14,10 @@ interface TestContext {
 	spyTransport: SpyTransport;
 }
 
-const test = ava as TestFn<TestContext>;
+// const test = ava as TestFn<TestContext>;
 
 // Replace all defined transports with a spy transport
-test.before((t) => {
+beforeAll((t) => {
 	t.context.spyTransport = new SpyTransport();
 	t.context.spyTransport.format = createDefaultTransportFormat(true, true);
 	t.context.controllerLogger = new ControllerLogger(
@@ -30,17 +30,17 @@ test.before((t) => {
 });
 
 // Don't spam the console when performing the other tests not related to logging
-test.after.always((t) => {
+afterAll((t) => {
 	t.context.controllerLogger?.container.updateConfiguration({
 		enabled: false,
 	});
 });
 
-test.beforeEach((t) => {
+beforeEach((t) => {
 	t.context.spyTransport.spy.resetHistory();
 });
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a short tag for the change type",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -71,12 +71,10 @@ test.serial(
 			predicate: (msg) => msg.includes("[-]"),
 			callNumber: 2,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a tag including the CC name",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -91,12 +89,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Basic]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a tag including the Node ID",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -115,12 +111,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Node 005]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a secondary tag including the CC endpoint",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -145,12 +139,10 @@ test.serial(
 			predicate: (msg) => msg.includes("[Endpoint 5]"),
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a secondary tag if the value is internal",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -178,12 +170,10 @@ test.serial(
 			predicate: (msg) => !msg.includes("[internal]"),
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints the name of the property",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -207,12 +197,10 @@ test.serial(
 				callNumber,
 			});
 		}
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints the name and key of map-like properties",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -237,12 +225,10 @@ test.serial(
 				callNumber,
 			});
 		}
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.value() -> prints a the value change according to the change type",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -276,12 +262,10 @@ test.serial(
 			predicate: (msg) => msg.includes("(was 5)"),
 			callNumber: 2,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial("ControllerLogger.value() -> stringifies objects", (t) => {
+test.sequential("ControllerLogger.value() -> stringifies objects", (t) => {
 	const { controllerLogger, spyTransport } = t.context;
 
 	const baseArgs = {
@@ -297,11 +281,9 @@ test.serial("ControllerLogger.value() -> stringifies objects", (t) => {
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.includes(`{"foo":"bar"}`),
 	});
-
-	t.pass();
 });
 
-test.serial(
+test.sequential(
 	"ControllerLogger.metadata() -> prints a tag including the CC name",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -316,12 +298,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Basic]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.metadata() -> prints a tag including the Node ID",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -339,12 +319,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Node 005]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.metadata() -> prints a secondary tag including the CC endpoint",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -368,12 +346,10 @@ test.serial(
 			predicate: (msg) => msg.includes("[Endpoint 5]"),
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.metadata() -> prints a secondary tag if the value is internal",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -397,12 +373,10 @@ test.serial(
 			predicate: (msg) => !msg.includes("[internal]"),
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.metadata() -> it prints the name of the property",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -417,12 +391,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("foo"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial("ControllerLogger.metadata() -> prints the change type", (t) => {
+test.sequential("ControllerLogger.metadata() -> prints the change type", (t) => {
 	const { controllerLogger, spyTransport } = t.context;
 
 	const baseArgs = {
@@ -435,11 +407,9 @@ test.serial("ControllerLogger.metadata() -> prints the change type", (t) => {
 	assertMessage(t, spyTransport, {
 		predicate: (msg) => msg.endsWith(": metadata updated"),
 	});
-
-	t.pass();
 });
 
-test.serial(
+test.sequential(
 	"ControllerLogger.interviewStage() -> includes a tag for the node ID",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -448,12 +418,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Node 007]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.interviewStage() -> logs the name of the interview stage",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -466,12 +434,10 @@ test.serial(
 			predicate: (msg) =>
 				msg.includes("Interview stage completed: CommandClasses"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.interviewStage() -> prints a custom message when the interview is complete",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -483,12 +449,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			message: "  [Node 005] Interview completed",
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.interviewStart() -> includes a tag for the node ID",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -497,12 +461,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			predicate: (msg) => msg.includes("[Node 007]"),
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.interviewStart() -> logs the name of the last interview stage",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -515,12 +477,10 @@ test.serial(
 			message:
 				"  [Node 005] Beginning interview - last completed stage: CommandClasses",
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.logNode() -> logs short messages correctly",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -535,12 +495,10 @@ test.serial(
 			message: `  [Node 003] Test2`,
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.logNode() -> logs long messages correctly",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -565,12 +523,10 @@ test.serial(
   es maybe sometimes...`,
 			callNumber: 1,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.logNode() -> logs with the given loglevel",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -586,7 +542,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"ControllerLogger.logNode() -> has a default loglevel of info",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -599,7 +555,7 @@ test.serial(
 	},
 );
 
-test.serial("ControllerLogger.logNode() -> logs the direction prefix", (t) => {
+test.sequential("ControllerLogger.logNode() -> logs the direction prefix", (t) => {
 	const { controllerLogger, spyTransport } = t.context;
 
 	controllerLogger.logNode(3, {
@@ -617,11 +573,9 @@ test.serial("ControllerLogger.logNode() -> logs the direction prefix", (t) => {
 		message: "» [Node 005] Test",
 		callNumber: 1,
 	});
-
-	t.pass();
 });
 
-test.serial(
+test.sequential(
 	"ControllerLogger.print() -> logs short messages correctly",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;
@@ -630,12 +584,10 @@ test.serial(
 		assertMessage(t, spyTransport, {
 			message: `  Test`,
 		});
-
-		t.pass();
 	},
 );
 
-test.serial("ControllerLogger.print() -> logs long messages correctly", (t) => {
+test.sequential("ControllerLogger.print() -> logs long messages correctly", (t) => {
 	const { controllerLogger, spyTransport } = t.context;
 
 	controllerLogger.print(
@@ -646,18 +598,16 @@ test.serial("ControllerLogger.print() -> logs long messages correctly", (t) => {
 			`  This is a very long message that should be broken into multiple lines maybe so
   metimes...`,
 	});
-
-	t.pass();
 });
 
-test.serial("ControllerLogger.print() -> logs with the given loglevel", (t) => {
+test.sequential("ControllerLogger.print() -> logs with the given loglevel", (t) => {
 	const { controllerLogger, spyTransport } = t.context;
 
 	controllerLogger.print("Test", "warn");
 	assertLogInfo(t, spyTransport, { level: "warn" });
 });
 
-test.serial(
+test.sequential(
 	"ControllerLogger.print() -> has a default loglevel of info",
 	(t) => {
 		const { controllerLogger, spyTransport } = t.context;

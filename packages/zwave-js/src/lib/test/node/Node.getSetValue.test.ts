@@ -3,8 +3,8 @@ import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { CommandClasses, type ValueID, ValueMetadata } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
+import { TaskContext, afterAll, beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -16,9 +16,9 @@ interface TestContext {
 	controller: MockController;
 }
 
-const test = ava as TestFn<TestContext>;
+// const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	const { driver } = await createAndStartTestingDriver({
 		skipNodeInterview: true,
 		loadConfiguration: false,
@@ -33,12 +33,12 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
 
-test.serial("getValue() returns the values stored in the value DB", (t) => {
+test.sequential("getValue() returns the values stored in the value DB", (t) => {
 	const { driver } = t.context;
 
 	const node = new ZWaveNode(1, driver);
@@ -50,12 +50,12 @@ test.serial("getValue() returns the values stored in the value DB", (t) => {
 
 	node.valueDB.setValue(valueId, 4);
 
-	t.is(node.getValue(valueId), 4);
+	t.expect(node.getValue(valueId)).toBe(4);
 
 	node.destroy();
 });
 
-test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
+test.sequential("setValue() issues the correct xyzCCSet command", async (t) => {
 	const { driver } = t.context;
 
 	// We test with a BasicCC
@@ -80,7 +80,7 @@ test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
 		5,
 	);
 
-	t.is(result.status, SetValueStatus.SuccessUnsupervised);
+	t.expect(result.status).toBe(SetValueStatus.SuccessUnsupervised);
 	sinon.assert.called(sendMessage);
 
 	assertCC(t, sendMessage.getCall(0).args[0], {
@@ -93,7 +93,7 @@ test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
 	node.destroy();
 });
 
-test.serial(
+test.sequential(
 	"setValue() returns false if the CC is not implemented",
 	async (t) => {
 		const { driver } = t.context;
@@ -107,7 +107,7 @@ test.serial(
 			},
 			1,
 		);
-		t.is(result.status, SetValueStatus.NotImplemented);
+		t.expect(result.status).toBe(SetValueStatus.NotImplemented);
 		t.regex(result.message!, /Command Class 12245589 is not implemented/);
 		node.destroy();
 	},
@@ -117,25 +117,25 @@ test.serial(
 	const valueDefinition = BasicCCValues.currentValue;
 	const valueId = BasicCCValues.currentValue.id;
 
-	function prepareTest(t: ExecutionContext<TestContext>): ZWaveNode {
+	function prepareTest(t: TaskContext & TestContext): ZWaveNode {
 		const { driver } = t.context;
 		const node = new ZWaveNode(1, driver);
 		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 			node.id,
 			node,
 		);
-		t.teardown(() => node.destroy());
+		t.onTestFinished(() => node.destroy());
 		return node;
 	}
 
-	test.serial(
+	test.sequential(
 		"getValueMetadata() returns the defined metadata for the given value",
 		(t) => {
 			const node = prepareTest(t);
 			// We test this with the BasicCC
 			// currentValue is readonly, 0-99
 			const currentValueMeta = node.getValueMetadata(valueId);
-			t.like(currentValueMeta, {
+			t.expect(currentValueMeta).toMatchObject({
 				readable: true,
 				writeable: false,
 				min: 0,
@@ -147,7 +147,7 @@ test.serial(
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"writing to the value DB with setValueMetadata() overwrites the statically defined metadata",
 		(t) => {
 			const node = prepareTest(t);
@@ -156,7 +156,7 @@ test.serial(
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
-			t.deepEqual(currentValueMeta, {
+			t.expect(currentValueMeta).toStrictEqual({
 				...ValueMetadata.WriteOnlyInt32,
 				secret: valueDefinition.options.secret,
 				stateful: valueDefinition.options.stateful,
@@ -164,7 +164,7 @@ test.serial(
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"writing to the value DB with setValueMetadata() preserves the secret/stateful flags",
 		(t) => {
 			const node = prepareTest(t);
@@ -176,7 +176,7 @@ test.serial(
 			});
 
 			const currentValueMeta = node.getValueMetadata(valueId);
-			t.like(currentValueMeta, {
+			t.expect(currentValueMeta).toMatchObject({
 				secret: valueDefinition.options.secret,
 				stateful: valueDefinition.options.stateful,
 			});

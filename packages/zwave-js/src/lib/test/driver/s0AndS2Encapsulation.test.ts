@@ -203,7 +203,5 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 				&& f.payload.encapsulated
 					instanceof SecurityCCCommandsSupportedGet,
 		);
-
-		t.pass();
 	},
 });

@@ -9,7 +9,7 @@ import { FunctionType } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type ExecutionContext, type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import { ZWaveController } from "../controller/Controller.js";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartDriver } from "../test/utils.js";
@@ -23,7 +23,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	const { driver, serialport } = await createAndStartDriver();
 	driver["_controller"] = new ZWaveController(driver);
 	driver["_controller"].isFunctionSupported = isFunctionSupported;
@@ -40,7 +40,7 @@ test.beforeEach(async (t) => {
 	};
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -56,7 +56,7 @@ function isFunctionSupported(fn: FunctionType): boolean {
 	return true;
 }
 
-test.serial(
+test.sequential(
 	"createAPI() throws if a non-implemented API should be created",
 	(t) => {
 		const { driver } = t.context;
@@ -68,7 +68,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"the broadcast API throws when trying to access a non-supported CC",
 	async (t) => {
 		const { driver, makePhysicalNode } = t.context;
@@ -90,7 +90,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"the broadcast API should know it is a broadcast API",
 	async (t) => {
 		const { driver, makePhysicalNode } = t.context;
@@ -98,11 +98,12 @@ test.serial(
 		makePhysicalNode(3);
 		const broadcast = driver.controller.getBroadcastNode();
 
-		t.true(broadcast.createAPI(CommandClasses.Basic)["isBroadcast"]());
+		t.expect(broadcast.createAPI(CommandClasses.Basic)["isBroadcast"]())
+			.toBe(true);
 	},
 );
 
-test.serial(
+test.sequential(
 	"the multicast API should know it is a multicast API",
 	async (t) => {
 		const { driver, makePhysicalNode } = t.context;
@@ -110,7 +111,8 @@ test.serial(
 		makePhysicalNode(3);
 		const multicast = driver.controller.getMulticastGroup([2, 3]);
 
-		t.true(multicast.createAPI(CommandClasses.Basic)["isMulticast"]());
+		t.expect(multicast.createAPI(CommandClasses.Basic)["isMulticast"]())
+			.toBe(true);
 	},
 );
 
@@ -125,7 +127,7 @@ test.serial(
 		};
 	}
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary throws when trying to access a non-implemented CC",
 		(t) => {
 			const { driver } = t.context;
@@ -164,45 +166,45 @@ test.serial(
 	// 	},
 	// );
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary does not throw when checking support of a CC",
 		(t) => {
 			const { driver } = t.context;
 			prepareTest(t);
 
 			const broadcast = driver.controller.getBroadcastNode();
-			t.false(broadcast.commandClasses["Binary Switch"].isSupported());
+			t.expect(broadcast.commandClasses["Binary Switch"].isSupported())
+				.toBe(false);
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary  does not throw when accessing the ID of a CC",
 		(t) => {
 			const { driver } = t.context;
 			prepareTest(t);
 
 			const broadcast = driver.controller.getBroadcastNode();
-			t.is(
+			t.expect(
 				broadcast.commandClasses["Binary Switch"].ccId,
-				CommandClasses["Binary Switch"],
-			);
+			).toBe(CommandClasses["Binary Switch"]);
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary  does not throw when scoping the API options",
 		(t) => {
 			const { driver } = t.context;
 			prepareTest(t);
 
 			const broadcast = driver.controller.getBroadcastNode();
-			t.notThrows(() =>
+			t.expect(() =>
 				broadcast.commandClasses["Binary Switch"].withOptions({})
-			);
+			).not.toThrow();
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary  returns all supported CCs when being enumerated",
 		(t) => {
 			const { driver } = t.context;
@@ -211,7 +213,7 @@ test.serial(
 			// No supported CCs, empty array
 			let broadcast = driver.controller.getBroadcastNode();
 			let actual = [...broadcast.commandClasses];
-			t.deepEqual(actual, []);
+			t.expect(actual).toStrictEqual([]);
 
 			// Supported and controlled CCs
 			node2.addCC(CommandClasses["Binary Switch"], { isSupported: true });
@@ -221,48 +223,45 @@ test.serial(
 			broadcast = driver.controller.getBroadcastNode();
 
 			actual = [...broadcast.commandClasses];
-			t.is(actual.length, 1);
-			t.deepEqual(
+			t.expect(actual.length).toBe(1);
+			t.expect(
 				actual.map((api) => api.constructor),
-				[
-					BinarySwitchCCAPI,
-					// VersionCCAPI cannot be used in broadcast
-					// WakeUpCCAPI is not supported (only controlled), so no API!
-				],
-			);
+			).toStrictEqual([
+				BinarySwitchCCAPI,
+				// VersionCCAPI cannot be used in broadcast
+				// WakeUpCCAPI is not supported (only controlled), so no API!
+			]);
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary  returns [object Object] when turned into a string",
 		(t) => {
 			const { driver } = t.context;
 			prepareTest(t);
 
 			const broadcast = driver.controller.getBroadcastNode();
-			t.is(
+			t.expect(
 				(broadcast.commandClasses as any)[Symbol.toStringTag],
-				"[object Object]",
-			);
+			).toBe("[object Object]");
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"the commandClasses dictionary  returns undefined for other symbol properties",
 		(t) => {
 			const { driver } = t.context;
 			prepareTest(t);
 
 			const broadcast = driver.controller.getBroadcastNode();
-			t.is(
+			t.expect(
 				(broadcast.commandClasses as any)[Symbol.unscopables],
-				undefined,
-			);
+			).toBeUndefined();
 		},
 	);
 }
 
-test.serial(
+test.sequential(
 	"broadcast uses the correct commands behind the scenes",
 	async (t) => {
 		const { driver, serialport, makePhysicalNode } = t.context;
@@ -275,14 +274,13 @@ test.serial(
 		//   │ transmit options: 0x25
 		//   │ callback id:        1
 		//   └─[BasicCCSet]
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
-			Bytes.from("010a0013ff0320016325017c", "hex"),
-		);
+		).toStrictEqual(Bytes.from("010a0013ff0320016325017c", "hex"));
 	},
 );
 
-test.serial(
+test.sequential(
 	"multicast uses the correct commands behind the scenes",
 	async (t) => {
 		const { driver, serialport, makePhysicalNode } = t.context;
@@ -295,9 +293,8 @@ test.serial(
 		//   │ transmit options: 0x25
 		//   │ callback id:        1
 		//   └─[BasicCCSet]
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
-			Bytes.from("010c001402020303200163250181", "hex"),
-		);
+		).toStrictEqual(Bytes.from("010c001402020303200163250181", "hex"));
 	},
 );

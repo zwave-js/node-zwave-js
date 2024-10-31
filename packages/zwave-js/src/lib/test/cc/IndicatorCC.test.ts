@@ -10,7 +10,7 @@ import { IndicatorCCValues } from "@zwave-js/cc/IndicatorCC";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 import { createTestNode } from "../mocks.js";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
@@ -31,7 +31,7 @@ test("the Get command (V1) should serialize correctly", (t) => {
 			IndicatorCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Get command (V2) should serialize correctly", (t) => {
@@ -45,7 +45,7 @@ test("the Get command (V2) should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command (v1) should serialize correctly", (t) => {
@@ -59,7 +59,7 @@ test("the Set command (v1) should serialize correctly", (t) => {
 			23, // value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command (v2) should serialize correctly", (t) => {
@@ -91,7 +91,7 @@ test("the Set command (v2) should serialize correctly", (t) => {
 			1, // value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -105,10 +105,10 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCCReport;
-	t.is(cc.constructor, IndicatorCCReport);
+	t.expect(cc.constructor).toBe(IndicatorCCReport);
 
-	t.is(cc.indicator0Value, 55);
-	t.is(cc.values, undefined);
+	t.expect(cc.indicator0Value).toBe(55);
+	t.expect(cc.values).toBeUndefined();
 });
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
@@ -129,12 +129,12 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCCReport;
-	t.is(cc.constructor, IndicatorCCReport);
+	t.expect(cc.constructor).toBe(IndicatorCCReport);
 	// Boolean indicators are only interpreted during persistValues
 	cc.persistValues(host);
 
-	t.is(cc.indicator0Value, undefined);
-	t.deepEqual(cc.values, [
+	t.expect(cc.indicator0Value).toBeUndefined();
+	t.expect(cc.values).toStrictEqual([
 		{
 			indicatorId: 1,
 			propertyId: 2,
@@ -156,7 +156,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCC;
-	t.is(cc.constructor, IndicatorCC);
+	t.expect(cc.constructor).toBe(IndicatorCC);
 });
 
 test("the value IDs should be translated properly", (t) => {
@@ -176,8 +176,8 @@ test("the value IDs should be translated properly", (t) => {
 		valueId.property,
 		valueId.propertyKey,
 	);
-	t.is(translatedProperty, "Button 1 indication");
-	t.is(translatedPropertyKey, "Binary");
+	t.expect(translatedProperty).toBe("Button 1 indication");
+	t.expect(translatedPropertyKey).toBe("Binary");
 });
 
 // describe.skip("interviewing the node", () => {

@@ -4,8 +4,8 @@ import { CentralSceneCCNotification } from "@zwave-js/cc/CentralSceneCC";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
+import { afterEach, beforeAll, beforeEach, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -19,7 +19,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 
 	const { driver } = await createAndStartTestingDriver({
@@ -43,13 +43,13 @@ test.before(async (t) => {
 	t.context.node2 = node2;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
 });
 
-test.beforeEach((t) => {
+beforeEach((t) => {
 	const { driver } = t.context;
 	const node2 = new ZWaveNode(2, driver);
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
@@ -59,7 +59,7 @@ test.beforeEach((t) => {
 	t.context.node2 = node2;
 });
 
-test.afterEach((t) => {
+afterEach((t) => {
 	const { node2, driver } = t.context;
 	node2.destroy();
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
@@ -85,7 +85,7 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 		.getCalls()
 		.map((call) => call.args[0])
 		.map(({ property }) => property);
-	t.false(properties.includes("interviewComplete"));
+	t.expect(properties.includes("interviewComplete")).toBe(false);
 });
 
 test(`persistValues() should not store values marked as "events" (non-stateful)`, async (t) => {
@@ -108,8 +108,9 @@ test(`persistValues() should not store values marked as "events" (non-stateful)`
 
 	sinon.assert.notCalled(spyA);
 	sinon.assert.called(spyN);
-	t.is(spyN.getCall(0).args[1].value, CentralSceneKeys.KeyPressed);
+	t.expect(spyN.getCall(0).args[1].value).toBe(CentralSceneKeys.KeyPressed);
 
 	// and not persist the value in the DB
-	t.is(node2.valueDB.getValues(CommandClasses["Central Scene"]).length, 0);
+	t.expect(node2.valueDB.getValues(CommandClasses["Central Scene"]).length)
+		.toBe(0);
 });

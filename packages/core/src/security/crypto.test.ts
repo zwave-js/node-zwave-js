@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
 import * as crypto from "node:crypto";
+import { test } from "vitest";
 import {
 	computeCMAC,
 	computeMAC,
@@ -16,7 +16,7 @@ test("encryptAES128OFB() / decryptAES128OFB() -> should be able to en- and decry
 	const iv = crypto.randomBytes(16);
 	const ciphertext = encryptAES128OFB(Bytes.from(plaintextIn), key, iv);
 	const plaintextOut = decryptAES128OFB(ciphertext, key, iv).toString();
-	t.is(plaintextOut, plaintextIn);
+	t.expect(plaintextOut).toBe(plaintextIn);
 });
 
 test("encryptAES128ECB() -> should work correctly", (t) => {
@@ -24,7 +24,7 @@ test("encryptAES128ECB() -> should work correctly", (t) => {
 	const key = Bytes.from("2b7e151628aed2a6abf7158809cf4f3c", "hex");
 	const plaintext = Bytes.from("6bc1bee22e409f96e93d7e117393172a", "hex");
 	const expected = Bytes.from("3ad77bb40d7a3660a89ecaf32466ef97", "hex");
-	t.deepEqual(encryptAES128ECB(plaintext, key), expected);
+	t.expect(encryptAES128ECB(plaintext, key)).toStrictEqual(expected);
 });
 
 test("encryptAES128OFB() -> should work correctly", (t) => {
@@ -33,7 +33,7 @@ test("encryptAES128OFB() -> should work correctly", (t) => {
 	const iv = Bytes.from("000102030405060708090a0b0c0d0e0f", "hex");
 	const plaintext = Bytes.from("6bc1bee22e409f96e93d7e117393172a", "hex");
 	const expected = Bytes.from("3b3fd92eb72dad20333449f8e83cfb4a", "hex");
-	t.deepEqual(encryptAES128OFB(plaintext, key, iv), expected);
+	t.expect(encryptAES128OFB(plaintext, key, iv)).toStrictEqual(expected);
 });
 
 test("encryptAES128OFB() -> should correctly decrypt a real packet", (t) => {
@@ -57,7 +57,7 @@ test("encryptAES128OFB() -> should correctly decrypt a real packet", (t) => {
 		"009803008685598e60725a845b7170807aef2526ef",
 		"hex",
 	);
-	t.deepEqual(plaintext, expected);
+	t.expect(plaintext).toStrictEqual(expected);
 });
 
 test("computeMAC() -> should work correctly", (t) => {
@@ -68,7 +68,7 @@ test("computeMAC() -> should work correctly", (t) => {
 	const plaintext = Bytes.from("6bc1bee22e409f96e93d7e117393172a", "hex");
 	const expected = Bytes.from("7649abac8119b246", "hex");
 
-	t.deepEqual(computeMAC(plaintext, key, iv), expected);
+	t.expect(computeMAC(plaintext, key, iv)).toStrictEqual(expected);
 });
 
 test("computeMAC() -> should work correctly (part 2)", (t) => {
@@ -80,7 +80,7 @@ test("computeMAC() -> should work correctly (part 2)", (t) => {
 	);
 	const expected = Bytes.from("2bc20a8aa9bbb371", "hex");
 
-	t.deepEqual(computeMAC(plaintext, key), expected);
+	t.expect(computeMAC(plaintext, key)).toStrictEqual(expected);
 });
 
 test("computeCMAC() -> should work correctly (part 1)", (t) => {
@@ -89,7 +89,7 @@ test("computeCMAC() -> should work correctly (part 1)", (t) => {
 	const plaintext = new Bytes();
 	const expected = Bytes.from("BB1D6929E95937287FA37D129B756746", "hex");
 
-	t.deepEqual(computeCMAC(plaintext, key), expected);
+	t.expect(computeCMAC(plaintext, key)).toStrictEqual(expected);
 });
 
 test("computeCMAC() -> should work correctly (part 2)", (t) => {
@@ -98,7 +98,7 @@ test("computeCMAC() -> should work correctly (part 2)", (t) => {
 	const plaintext = Bytes.from("6BC1BEE22E409F96E93D7E117393172A", "hex");
 	const expected = Bytes.from("070A16B46B4D4144F79BDD9DD04A287C", "hex");
 
-	t.deepEqual(computeCMAC(plaintext, key), expected);
+	t.expect(computeCMAC(plaintext, key)).toStrictEqual(expected);
 });
 
 test("computeCMAC() -> should work correctly (part 3)", (t) => {
@@ -110,7 +110,7 @@ test("computeCMAC() -> should work correctly (part 3)", (t) => {
 	);
 	const expected = Bytes.from("7D85449EA6EA19C823A7BF78837DFADE", "hex");
 
-	t.deepEqual(computeCMAC(plaintext, key), expected);
+	t.expect(computeCMAC(plaintext, key)).toStrictEqual(expected);
 });
 
 test("computeCMAC() -> should work correctly (part 4)", (t) => {
@@ -122,5 +122,5 @@ test("computeCMAC() -> should work correctly (part 4)", (t) => {
 	);
 	const expected = Bytes.from("51F0BEBF7E3B9D92FC49741779363CFE", "hex");
 
-	t.deepEqual(computeCMAC(plaintext, key), expected);
+	t.expect(computeCMAC(plaintext, key)).toStrictEqual(expected);
 });

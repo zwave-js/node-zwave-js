@@ -1,4 +1,4 @@
-import test from "ava";
+import { test } from "vitest";
 import { ConfigManager } from "../ConfigManager.js";
 
 test("Z-TRM3 with commandClasses.add compat should work", async (t) => {
@@ -13,7 +13,7 @@ test("Z-TRM3 with commandClasses.add compat should work", async (t) => {
 		"4.0",
 	);
 	t.not(config, undefined);
-	t.is(config?.compat?.addCCs?.get(49)?.endpoints.size, 3);
+	t.expect(config?.compat?.addCCs?.get(49)?.endpoints.size).toBe(3);
 });
 
 test("Associations on endpoints should work - including imports", async (t) => {
@@ -29,16 +29,16 @@ test("Associations on endpoints should work - including imports", async (t) => {
 		"0.0",
 	);
 	t.not(config, undefined);
-	t.like(config?.endpoints?.get(0)?.associations?.get(2), {
+	t.expect(config?.endpoints?.get(0)?.associations?.get(2)).toMatchObject({
 		label: "Button 1 (Basic Report)",
 		maxNodes: 5,
 	});
-	t.like(config?.endpoints?.get(1)?.associations?.get(1), {
+	t.expect(config?.endpoints?.get(1)?.associations?.get(1)).toMatchObject({
 		label: "Lifeline",
 		maxNodes: 5,
 		isLifeline: false,
 	});
-	t.like(config?.endpoints?.get(4)?.associations?.get(3), {
+	t.expect(config?.endpoints?.get(4)?.associations?.get(3)).toMatchObject({
 		label: "Button 4 (Binary Switch Set)",
 		maxNodes: 5,
 	});

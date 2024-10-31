@@ -1,8 +1,8 @@
 import { CommandClasses, type ValueID } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
+import { afterEach, beforeAll, beforeEach, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	const { driver } = await createAndStartTestingDriver({
 		skipNodeInterview: true,
 		loadConfiguration: false,
@@ -31,7 +31,7 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
@@ -40,7 +40,7 @@ const onValueAdded = sinon.spy();
 const onValueUpdated = sinon.spy();
 const onValueRemoved = sinon.spy();
 
-test.beforeEach((t) => {
+beforeEach((t) => {
 	const { driver } = t.context;
 	const node = new ZWaveNode(1, driver)
 		.on("value added", onValueAdded)
@@ -57,13 +57,13 @@ test.beforeEach((t) => {
 	onValueRemoved.resetHistory();
 });
 
-test.afterEach((t) => {
+afterEach((t) => {
 	const { node, driver } = t.context;
 	node.destroy();
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(node.id);
 });
 
-test.serial(
+test.sequential(
 	"the emitted events should contain a speaking name for the CC",
 	(t) => {
 		const { node } = t.context;
@@ -83,12 +83,12 @@ test.serial(
 
 		for (const method of [onValueAdded, onValueUpdated, onValueRemoved]) {
 			const cbArg = method.getCall(0).args[1];
-			t.is(cbArg.commandClassName, ccName);
+			t.expect(cbArg.commandClassName).toBe(ccName);
 		}
 	},
 );
 
-test.serial(
+test.sequential(
 	"the emitted events should contain a speaking name for the propertyKey",
 	(t) => {
 		const { node } = t.context;
@@ -102,11 +102,11 @@ test.serial(
 		);
 		sinon.assert.called(onValueAdded);
 		const cbArg = onValueAdded.getCall(0).args[1];
-		t.is(cbArg.propertyKeyName, "Heating");
+		t.expect(cbArg.propertyKeyName).toBe("Heating");
 	},
 );
 
-test.serial(
+test.sequential(
 	"the emitted events should not be emitted for internal values",
 	(t) => {
 		const { node } = t.context;
@@ -118,6 +118,5 @@ test.serial(
 			true,
 		);
 		sinon.assert.notCalled(onValueAdded);
-		t.pass();
 	},
 );

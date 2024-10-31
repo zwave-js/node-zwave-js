@@ -7,7 +7,7 @@ import {
 	getEnumMemberName,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { NodeStatus } from "../../node/_Types.js";
@@ -21,7 +21,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(5000);
 
 	const { driver, serialport } = await createAndStartDriver();
@@ -37,7 +37,7 @@ test.beforeEach(async (t) => {
 	t.context = { driver, serialport };
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -63,7 +63,7 @@ for (
 
 		const expectedStatus = canSleep ? NodeStatus.Awake : NodeStatus.Alive;
 
-		test.serial(
+		test.sequential(
 			`When a ping succeeds, the node should be marked awake/alive (Can sleep: ${canSleep}, initial status: ${
 				getEnumMemberName(
 					NodeStatus,
@@ -98,7 +98,7 @@ for (
 				} else if (initialStatus === NodeStatus.Dead) {
 					node4.markAsDead();
 				}
-				t.is(node4.status, initialStatus);
+				t.expect(node4.status).toBe(initialStatus);
 
 				const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -108,10 +108,9 @@ for (
 				//   │ transmit options: 0x25
 				//   │ callback id:      1
 				//   └─[NoOperationCC]
-				t.deepEqual(
+				t.expect(
 					serialport.lastWrite,
-					Bytes.from("010800130401002501c5", "hex"),
-				);
+				).toStrictEqual(Bytes.from("010800130401002501c5", "hex"));
 				await wait(10);
 				serialport.receiveData(ACK);
 
@@ -121,7 +120,7 @@ for (
 				//     was sent: true
 				serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 				// » [ACK]
-				t.deepEqual(serialport.lastWrite, ACK);
+				t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 				await wait(10);
 
@@ -134,13 +133,13 @@ for (
 						"hex",
 					),
 				);
-				t.deepEqual(serialport.lastWrite, ACK);
+				t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 				await wait(10);
 
 				await pingPromise;
 
-				t.is(node4.status, expectedStatus);
+				t.expect(node4.status).toBe(expectedStatus);
 			},
 		);
 	}

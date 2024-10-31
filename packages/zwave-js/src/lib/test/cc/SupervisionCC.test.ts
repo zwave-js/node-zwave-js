@@ -1,6 +1,6 @@
 import { BasicCCSet, SupervisionCC, SupervisionCCReport } from "@zwave-js/cc";
 import { SupervisionStatus } from "@zwave-js/core";
-import test from "ava";
+import { test } from "vitest";
 
 test("SupervisionCCGet should expect a response", (t) => {
 	const ccRequest = SupervisionCC.encapsulate(
@@ -10,7 +10,7 @@ test("SupervisionCCGet should expect a response", (t) => {
 		}),
 		1,
 	);
-	t.true(ccRequest.expectsCCResponse());
+	t.expect(ccRequest.expectsCCResponse()).toBe(true);
 });
 
 test("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = expected", (t) => {
@@ -28,7 +28,7 @@ test("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = exp
 		status: SupervisionStatus.Success,
 	});
 
-	t.true(ccRequest.isExpectedCCResponse(ccResponse));
+	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(true);
 });
 
 test("SupervisionCC/BasicCCSet => SupervisionCCReport (wrong session ID) = unexpected", (t) => {
@@ -46,5 +46,5 @@ test("SupervisionCC/BasicCCSet => SupervisionCCReport (wrong session ID) = unexp
 		status: SupervisionStatus.Success,
 	});
 
-	t.false(ccRequest.isExpectedCCResponse(ccResponse));
+	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(false);
 });

@@ -1,7 +1,7 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../Utils.js";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartTestingDriver } from "../driver/DriverMock.js";
@@ -14,7 +14,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 	const { driver } = await createAndStartTestingDriver({
 		loadConfiguration: false,
@@ -29,7 +29,7 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	await t.context.driver.destroy();
 });
 
@@ -40,7 +40,7 @@ test("should return a node if it was found", (t) => {
 		node2.id,
 		node2,
 	);
-	t.notThrows(() => driver.controller.nodes.getOrThrow(2));
+	t.expect(() => driver.controller.nodes.getOrThrow(2)).not.toThrow();
 });
 
 test("should throw if the node was not found", (t) => {

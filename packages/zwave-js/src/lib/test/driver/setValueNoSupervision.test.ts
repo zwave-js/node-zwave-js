@@ -73,7 +73,5 @@ integrationTest("setValue without supervision: expect validation GET", {
 					"Node should have sent a BinarySwitchCCReport with currentValue false",
 			},
 		);
-
-		t.pass();
 	},
 });

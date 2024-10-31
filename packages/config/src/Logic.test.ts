@@ -1,4 +1,4 @@
-import test from "ava";
+import { test } from "vitest";
 import { evaluate } from "./Logic.js";
 
 const tests = [
@@ -46,7 +46,7 @@ for (let i = 1; i <= tests.length; i++) {
 			)
 		} --> ${logic} is ${expected}`,
 		(t) => {
-			t.is(evaluate(logic, context), expected);
+			t.expect(evaluate(logic, context)).toBe(expected);
 		},
 	);
 }

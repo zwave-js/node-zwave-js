@@ -3,7 +3,7 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
@@ -19,7 +19,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(5000);
 
 	const { driver, serialport } = await createAndStartDriver();
@@ -34,7 +34,7 @@ test.beforeEach(async (t) => {
 	t.context = { driver, serialport };
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -42,7 +42,7 @@ test.afterEach.always(async (t) => {
 
 process.env.LOGLEVEL = "debug";
 
-test.serial(
+test.sequential(
 	"when a SendData request fails, the `sendMessage/sendCommand` call should be rejected",
 	async (t) => {
 		const { driver, serialport } = t.context;
@@ -81,10 +81,9 @@ test.serial(
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
-			Bytes.from("010a00130203200163250181", "hex"),
-		);
+		).toStrictEqual(Bytes.from("010a00130203200163250181", "hex"));
 		await wait(10);
 		serialport.receiveData(ACK);
 
@@ -94,7 +93,7 @@ test.serial(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(50);
 
@@ -102,13 +101,13 @@ test.serial(
 		//   callback id:     1
 		//   transmit status: NoACK
 		serialport.receiveData(Bytes.from("0107001301010002e9", "hex"));
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
-		await t.throwsAsync(promise);
+		await t.expect(() => promise).rejects.toThrowError();
 	},
 );
 
-test.serial(
+test.sequential(
 	"when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected",
 	async (t) => {
 		const { driver, serialport } = t.context;
@@ -148,8 +147,9 @@ test.serial(
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
+		).toStrictEqual(
 			Bytes.from("010f00a90102032001632500000000013f", "hex"),
 		);
 		await wait(10);
@@ -161,7 +161,7 @@ test.serial(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("010401a90152", "hex"));
 		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(50);
 
@@ -174,8 +174,8 @@ test.serial(
 				"hex",
 			),
 		);
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
-		await t.throwsAsync(promise);
+		await t.expect(() => promise).rejects.toThrowError();
 	},
 );

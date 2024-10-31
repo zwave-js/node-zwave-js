@@ -7,8 +7,8 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
 import MockDate from "mockdate";
+import { afterEach, beforeAll, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { DriverLogger } from "../../log/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
@@ -25,7 +25,7 @@ interface TestContext {
 const test = ava as TestFn<TestContext>;
 
 // Replace all defined transports with a spy transport
-test.before((t) => {
+beforeAll((t) => {
 	process.env.LOGLEVEL = "debug";
 
 	const spyTransport = new SpyTransport();
@@ -46,12 +46,12 @@ test.before((t) => {
 });
 
 // Don't spam the console when performing the other tests not related to logging
-test.after.always((t) => {
+afterAll((t) => {
 	t.context.driverLogger.container.updateConfiguration({ enabled: false });
 	MockDate.reset();
 });
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(5000);
 
 	const { spyTransport, driverLogger } = t.context;
@@ -72,7 +72,7 @@ test.beforeEach(async (t) => {
 	t.context.serialport = serialport;
 });
 
-test.afterEach(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -112,5 +112,5 @@ test("when an invalid CC is received, this is printed in the logs", async (t) =>
   └─[BinarySensorCCReport] [INVALID]`,
 	});
 	// FIXME: The log message should be BinarySensorCCReport, not BinarySensorCCReport2
-	t.deepEqual(serialport.lastWrite, ACK);
+	t.expect(serialport.lastWrite).toStrictEqual(ACK);
 });

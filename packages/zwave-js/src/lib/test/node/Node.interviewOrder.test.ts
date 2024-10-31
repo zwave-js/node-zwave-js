@@ -7,7 +7,7 @@ import {
 	nonApplicationCCs,
 	topologicalSort,
 } from "@zwave-js/core";
-import test from "ava";
+import { test } from "vitest";
 import { ZWaveNode } from "../../node/Node.js";
 import { createEmptyMockDriver } from "../mocks.js";
 
@@ -54,28 +54,26 @@ test("the CC interviews happen in the correct order", (t) => {
 	const rootInterviewOrderPart1 = topologicalSort(rootInterviewGraphPart1);
 	const rootInterviewOrderPart2 = topologicalSort(rootInterviewGraphPart2);
 
-	t.deepEqual(
+	t.expect(
 		rootInterviewOrderPart1.map((cc) => getCCName(cc)),
-		[
-			"Z-Wave Plus Info",
-			"Device Reset Locally",
-			"Firmware Update Meta Data",
-			"CRC-16 Encapsulation",
-			"Multi Channel",
-			"Association",
-			"Multi Channel Association",
-			"Association Group Information",
-		],
-	);
-	t.deepEqual(
+	).toStrictEqual([
+		"Z-Wave Plus Info",
+		"Device Reset Locally",
+		"Firmware Update Meta Data",
+		"CRC-16 Encapsulation",
+		"Multi Channel",
+		"Association",
+		"Multi Channel Association",
+		"Association Group Information",
+	]);
+	t.expect(
 		rootInterviewOrderPart2.map((cc) => getCCName(cc)),
-		[
-			"Multilevel Switch",
-			"Configuration",
-			"Multilevel Sensor",
-			"Meter",
-			"Protection",
-			"Notification",
-		],
-	);
+	).toStrictEqual([
+		"Multilevel Switch",
+		"Configuration",
+		"Multilevel Sensor",
+		"Meter",
+		"Protection",
+		"Notification",
+	]);
 });

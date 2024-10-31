@@ -1,8 +1,8 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
 import { PassThrough } from "node:stream";
 import sinon from "sinon";
+import { afterEach, beforeEach, test } from "vitest";
 import { MessageHeaders } from "../message/MessageHeaders.js";
 import { createAndOpenMockedZWaveSerialPort } from "../mock/MockSerialPort.js";
 import type { MockPortBinding } from "../mock/SerialPortBindingMock.js";
@@ -12,8 +12,6 @@ interface TestContext {
 	port: ZWaveSerialPort;
 	binding: MockPortBinding;
 }
-
-const test = ava as TestFn<TestContext>;
 
 async function waitForData(port: {
 	once: (event: "data", callback: (data: any) => void) => any;
@@ -25,11 +23,11 @@ async function waitForData(port: {
 	});
 }
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.context = await createAndOpenMockedZWaveSerialPort("/dev/zwavetest");
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const port = t.context.port;
 	port.removeAllListeners();
 	if (port.isOpen) await port.close();
@@ -37,13 +35,13 @@ test.afterEach.always(async (t) => {
 
 test("isOpen returns true after opening", async (t) => {
 	const { port } = t.context;
-	t.true(port.isOpen);
+	t.expect(port.isOpen).toBe(true);
 });
 
 test("isOpen returns false after closing", async (t) => {
 	const { port } = t.context;
 	await port.close();
-	t.false(port.isOpen);
+	t.expect(port.isOpen).toBe(false);
 });
 
 test("passes written data through unchanged", async (t) => {
@@ -54,31 +52,30 @@ test("passes written data through unchanged", async (t) => {
 	];
 	for (const buffer of buffers) {
 		await port.writeAsync(buffer);
-		t.deepEqual(binding.lastWrite, buffer);
+		t.expect(binding.lastWrite).toStrictEqual(buffer);
 	}
 });
 
 test("write rejects if the port is not open", async (t) => {
 	const { port } = t.context;
 	await port.close();
-	await t.throwsAsync(() =>
-		port.writeAsync(Bytes.from([MessageHeaders.ACK]))
-	);
+	await t.expect(() => port.writeAsync(Bytes.from([MessageHeaders.ACK])))
+		.rejects.toThrowError();
 });
 
 test("emit an event for each single-byte message that was read", async (t) => {
 	const { port, binding } = t.context;
 	binding.emitData(Bytes.from([MessageHeaders.ACK]));
 	let data = await waitForData(port);
-	t.deepEqual(data, MessageHeaders.ACK);
+	t.expect(data).toStrictEqual(MessageHeaders.ACK);
 
 	binding.emitData(Bytes.from([MessageHeaders.CAN]));
 	data = await waitForData(port);
-	t.deepEqual(data, MessageHeaders.CAN);
+	t.expect(data).toStrictEqual(MessageHeaders.CAN);
 
 	binding.emitData(Bytes.from([MessageHeaders.NAK]));
 	data = await waitForData(port);
-	t.deepEqual(data, MessageHeaders.NAK);
+	t.expect(data).toStrictEqual(MessageHeaders.NAK);
 });
 
 test("emits a series of events when multiple single-byte messages are received", async (t) => {
@@ -95,9 +92,9 @@ test("emits a series of events when multiple single-byte messages are received",
 	return new Promise((resolve) => {
 		port.on("data", (data) => {
 			count++;
-			if (count === 1) t.is(data, MessageHeaders.ACK);
-			if (count === 2) t.is(data, MessageHeaders.CAN);
-			if (count === 3) t.is(data, MessageHeaders.NAK);
+			if (count === 1) t.expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) t.expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) t.expect(data).toBe(MessageHeaders.NAK);
 
 			if (count === 3) resolve();
 		});
@@ -122,9 +119,9 @@ test("skips all invalid/unexpected data", async (t) => {
 	return new Promise((resolve) => {
 		port.on("data", (data) => {
 			count++;
-			if (count === 1) t.is(data, MessageHeaders.ACK);
-			if (count === 2) t.is(data, MessageHeaders.CAN);
-			if (count === 3) t.is(data, MessageHeaders.ACK);
+			if (count === 1) t.expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) t.expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) t.expect(data).toBe(MessageHeaders.ACK);
 
 			if (count === 3) resolve();
 		});
@@ -151,9 +148,9 @@ test("skips all invalid/unexpected data (test 2)", async (t) => {
 	return new Promise((resolve) => {
 		port.on("data", (data) => {
 			count++;
-			if (count === 1) t.is(data, MessageHeaders.ACK);
-			if (count === 2) t.is(data, MessageHeaders.CAN);
-			if (count === 3) t.is(data, MessageHeaders.NAK);
+			if (count === 1) t.expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) t.expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) t.expect(data).toBe(MessageHeaders.NAK);
 
 			if (count === 3) resolve();
 		});
@@ -173,7 +170,7 @@ test("emits a buffer when a message is received", async (t) => {
 	binding.emitData(data);
 
 	const received = await waitForData(port);
-	t.deepEqual(received, data);
+	t.expect(received).toStrictEqual(data);
 });
 
 test("may be consumed with an async iterator", async (t) => {
@@ -192,9 +189,9 @@ test("may be consumed with an async iterator", async (t) => {
 	let count = 0;
 	for await (const msg of port) {
 		count++;
-		if (count === 1) t.is(msg, MessageHeaders.ACK);
-		if (count === 2) t.is(msg, MessageHeaders.CAN);
-		if (count === 3) t.is(msg, MessageHeaders.ACK);
+		if (count === 1) t.expect(msg).toBe(MessageHeaders.ACK);
+		if (count === 2) t.expect(msg).toBe(MessageHeaders.CAN);
+		if (count === 3) t.expect(msg).toBe(MessageHeaders.ACK);
 		if (count === 3) break;
 	}
 });
@@ -207,10 +204,10 @@ test("can be piped into", async (t) => {
 	return new Promise((resolve) => {
 		const data = Bytes.from([1, 2, 3, 4, 5]);
 		passThrough.write(data, (err) => {
-			t.falsy(err);
+			t.expect(err).toBeFalsy();
 			// I see no better way of forcing the write to bubble through the streams
 			setTimeout(() => {
-				t.deepEqual(binding.lastWrite, data);
+				t.expect(binding.lastWrite).toStrictEqual(data);
 				resolve();
 			}, 1);
 		});
@@ -227,7 +224,7 @@ test("can be piped to a reader", async (t) => {
 	binding.emitData(expected);
 
 	const data = await waitForData(stream);
-	t.deepEqual(data, expected);
+	t.expect(data).toStrictEqual(expected);
 });
 
 test("can be unpiped again", async (t) => {
@@ -244,5 +241,5 @@ test("can be unpiped again", async (t) => {
 
 	await wait(1);
 
-	t.is(spy.callCount, 0);
+	t.expect(spy.callCount).toBe(0);
 });

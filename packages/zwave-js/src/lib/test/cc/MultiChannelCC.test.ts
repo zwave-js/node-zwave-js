@@ -17,7 +17,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -34,7 +34,7 @@ test("is an encapsulating CommandClass", (t) => {
 		targetValue: 50,
 	});
 	cc = MultiChannelCC.encapsulate(cc);
-	t.true(isEncapsulatingCommandClass(cc));
+	t.expect(isEncapsulatingCommandClass(cc)).toBe(true);
 });
 
 test("the EndPointGet command should serialize correctly", (t) => {
@@ -44,7 +44,7 @@ test("the EndPointGet command should serialize correctly", (t) => {
 			MultiChannelCommand.EndPointGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the CapabilityGet command should serialize correctly", (t) => {
@@ -58,7 +58,7 @@ test("the CapabilityGet command should serialize correctly", (t) => {
 			7, // EndPoint
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the EndPointFind command should serialize correctly", (t) => {
@@ -74,7 +74,7 @@ test("the EndPointFind command should serialize correctly", (t) => {
 			0x02, // specificClass
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the CommandEncapsulation command should serialize correctly", (t) => {
@@ -94,7 +94,7 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 			5, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the AggregatedMembersGet command should serialize correctly", (t) => {
@@ -108,7 +108,7 @@ test("the AggregatedMembersGet command should serialize correctly", (t) => {
 			6, // EndPoint
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", (t) => {
@@ -126,7 +126,7 @@ test("the CommandEncapsulation command should also accept V1CommandEncapsulation
 		}),
 	});
 	received.endpointIndex = sent.destination as any;
-	t.true(sent.isExpectedCCResponse(received));
+	t.expect(sent.isExpectedCCResponse(received)).toBe(true);
 });
 
 // test("the Report command (v2) should be deserialized correctly", (t) => {
@@ -155,7 +155,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as MultiChannelCC;
-	t.is(cc.constructor, MultiChannelCC);
+	t.expect(cc.constructor).toBe(MultiChannelCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {
@@ -191,7 +191,7 @@ test("MultiChannelCC/BasicCCGet should expect a response", (t) => {
 			endpointIndex: 2,
 		}),
 	);
-	t.true(ccRequest.expectsCCResponse());
+	t.expect(ccRequest.expectsCCResponse()).toBe(true);
 });
 
 test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
@@ -203,7 +203,7 @@ test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
 	);
 	// A multicast request never expects a response
 	ccRequest.destination = [1, 2, 3];
-	t.false(ccRequest.expectsCCResponse());
+	t.expect(ccRequest.expectsCCResponse()).toBe(false);
 });
 
 test("MultiChannelCC/BasicCCSet should expect NO response", (t) => {
@@ -214,7 +214,7 @@ test("MultiChannelCC/BasicCCSet should expect NO response", (t) => {
 			targetValue: 7,
 		}),
 	);
-	t.false(ccRequest.expectsCCResponse());
+	t.expect(ccRequest.expectsCCResponse()).toBe(false);
 });
 
 test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", (t) => {
@@ -232,7 +232,7 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", (t)
 	);
 	ccResponse.endpointIndex = 2;
 
-	t.true(ccRequest.isExpectedCCResponse(ccResponse));
+	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(true);
 });
 
 test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", (t) => {
@@ -250,7 +250,7 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", (t) 
 	);
 	ccResponse.endpointIndex = 2;
 
-	t.false(ccRequest.isExpectedCCResponse(ccResponse));
+	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(false);
 });
 
 test("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", (t) => {
@@ -268,5 +268,5 @@ test("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", (
 	]);
 	ccResponse.endpointIndex = 2;
 
-	t.false(ccRequest.isExpectedCCResponse(ccResponse));
+	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(false);
 });

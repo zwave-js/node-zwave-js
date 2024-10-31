@@ -1,5 +1,5 @@
 import { SecurityClass, assertZWaveError } from "@zwave-js/core";
-import test from "ava";
+import { test } from "vitest";
 import { ProvisioningEntryStatus } from "./Inclusion.js";
 import { assertProvisioningEntry } from "./utils.js";
 
@@ -116,6 +116,4 @@ test("happy path", (t) => {
 		status: ProvisioningEntryStatus.Active,
 		requestedSecurityClasses: [SecurityClass.S0_Legacy],
 	});
-
-	t.pass();
 });

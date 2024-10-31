@@ -19,7 +19,7 @@ import {
 } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -39,7 +39,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the SupportedReport command should deserialize correctly", (t) => {
@@ -54,9 +54,9 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCSupportedReport;
-	t.is(cc.constructor, ColorSwitchCCSupportedReport);
+	t.expect(cc.constructor).toBe(ColorSwitchCCSupportedReport);
 
-	t.deepEqual(cc.supportedColorComponents, [
+	t.expect(cc.supportedColorComponents).toStrictEqual([
 		ColorComponent["Warm White"],
 		ColorComponent["Cold White"],
 		ColorComponent.Red,
@@ -82,7 +82,7 @@ test("the Get command should serialize correctly", (t) => {
 			2, // Color Component
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should deserialize correctly (version 1)", (t) => {
@@ -97,12 +97,12 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
-	t.is(cc.constructor, ColorSwitchCCReport);
+	t.expect(cc.constructor).toBe(ColorSwitchCCReport);
 
-	t.is(cc.colorComponent, ColorComponent.Red);
-	t.is(cc.currentValue, 255);
-	t.is(cc.targetValue, undefined);
-	t.is(cc.duration, undefined);
+	t.expect(cc.colorComponent).toBe(ColorComponent.Red);
+	t.expect(cc.currentValue).toBe(255);
+	t.expect(cc.targetValue).toBeUndefined();
+	t.expect(cc.duration).toBeUndefined();
 });
 
 test("the Report command should deserialize correctly (version 3)", (t) => {
@@ -119,13 +119,13 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
-	t.is(cc.constructor, ColorSwitchCCReport);
+	t.expect(cc.constructor).toBe(ColorSwitchCCReport);
 
-	t.is(cc.colorComponent, ColorComponent.Red);
-	t.is(cc.currentValue, 128);
-	t.is(cc.targetValue, 255);
-	t.is(cc.duration!.value, 1);
-	t.is(cc.duration!.unit, "seconds");
+	t.expect(cc.colorComponent).toBe(ColorComponent.Red);
+	t.expect(cc.currentValue).toBe(128);
+	t.expect(cc.targetValue).toBe(255);
+	t.expect(cc.duration!.value).toBe(1);
+	t.expect(cc.duration!.unit).toBe("seconds");
 });
 
 test("the Set command should serialize correctly (without duration)", (t) => {
@@ -154,7 +154,7 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (version 2)", (t) => {
@@ -183,7 +183,7 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the StartLevelChange command should serialize correctly", (t) => {
@@ -210,7 +210,7 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {
@@ -225,7 +225,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			0b0000_0010, // color: red
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the setValue API verifies that targetColor isn't set with non-numeric keys", async (t) => {

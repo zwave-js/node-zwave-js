@@ -1,6 +1,6 @@
-import test, { type ExecutionContext } from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
+import { test } from "vitest";
 
 const readFileStub = sinon.stub();
 const pathExistsStub = sinon.stub();
@@ -36,20 +36,20 @@ type ConfigManager = import("./ConfigManager").ConfigManager;
 		return configManager;
 	}
 
-	test.serial(
+	test.sequential(
 		"lookupManufacturer (with missing file) does not throw",
 		async (t) => {
 			const configManager = await prepareTest(t);
-			t.notThrows(() => configManager.lookupManufacturer(0));
+			t.expect(() => configManager.lookupManufacturer(0)).not.toThrow();
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"lookupManufacturer (with missing file) returns undefined",
 		async (t) => {
 			const configManager = await prepareTest(t);
-			t.is(configManager.lookupManufacturer(0x0e), undefined);
-			t.is(configManager.lookupManufacturer(0xff), undefined);
+			t.expect(configManager.lookupManufacturer(0x0e)).toBeUndefined();
+			t.expect(configManager.lookupManufacturer(0xff)).toBeUndefined();
 		},
 	);
 }
@@ -69,19 +69,20 @@ type ConfigManager = import("./ConfigManager").ConfigManager;
 		return configManager;
 	}
 
-	test.serial(
+	test.sequential(
 		"lookupManufacturer (with invalid file) does not throw",
 		async (t) => {
 			const configManager = await prepareTest(t);
-			t.notThrows(() => configManager.lookupManufacturer(0x0e));
+			t.expect(() => configManager.lookupManufacturer(0x0e)).not
+				.toThrow();
 		},
 	);
 
-	test.serial(
+	test.sequential(
 		"lookupManufacturer (with invalid file) returns undefined",
 		async (t) => {
 			const configManager = await prepareTest(t);
-			t.is(configManager.lookupManufacturer(0x0e), undefined);
+			t.expect(configManager.lookupManufacturer(0x0e)).toBeUndefined();
 		},
 	);
 }
@@ -105,12 +106,12 @@ type ConfigManager = import("./ConfigManager").ConfigManager;
 		return configManager;
 	}
 
-	test.serial(
+	test.sequential(
 		"lookupManufacturer() returns the name belonging to the manufacturer ID if it is defined",
 		async (t) => {
 			const configManager = await prepareTest(t);
-			t.is(configManager.lookupManufacturer(0x0e), "Test");
-			t.is(configManager.lookupManufacturer(0xff), undefined);
+			t.expect(configManager.lookupManufacturer(0x0e)).toBe("Test");
+			t.expect(configManager.lookupManufacturer(0xff)).toBeUndefined();
 		},
 	);
 }

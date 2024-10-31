@@ -1,7 +1,7 @@
 import { NodeStatus } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
+import { beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -15,7 +15,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	const { driver } = await createAndStartTestingDriver({
 		skipNodeInterview: true,
 		loadConfiguration: false,
@@ -30,7 +30,7 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
@@ -51,7 +51,6 @@ function performTest(
 	node["onStatusChange"](options.targetStatus);
 	node.destroy();
 	sinon.assert.called(spy);
-	t.pass();
 }
 
 test(

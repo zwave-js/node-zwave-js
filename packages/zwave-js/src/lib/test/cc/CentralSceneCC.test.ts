@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -32,7 +32,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the ConfigurationSet command should serialize correctly (flags set)", (t) => {
@@ -46,7 +46,7 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 			0b1000_0000,
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the ConfigurationSet command should serialize correctly (flags not set)", (t) => {
@@ -60,7 +60,7 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 			0,
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the ConfigurationReport command should be deserialized correctly", (t) => {
@@ -74,9 +74,9 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCConfigurationReport;
-	t.is(cc.constructor, CentralSceneCCConfigurationReport);
+	t.expect(cc.constructor).toBe(CentralSceneCCConfigurationReport);
 
-	t.is(cc.slowRefresh, true);
+	t.expect(cc.slowRefresh).toBe(true);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
@@ -88,7 +88,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -107,14 +107,14 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCSupportedReport;
-	t.is(cc.constructor, CentralSceneCCSupportedReport);
+	t.expect(cc.constructor).toBe(CentralSceneCCSupportedReport);
 
-	t.is(cc.sceneCount, 2);
-	t.true(cc.supportsSlowRefresh);
-	t.is(cc.supportedKeyAttributes.size, 2);
+	t.expect(cc.sceneCount).toBe(2);
+	t.expect(cc.supportsSlowRefresh).toBe(true);
+	t.expect(cc.supportedKeyAttributes.size).toBe(2);
 	// Key attributes start counting at 0
-	t.deepEqual(cc.supportedKeyAttributes.get(1), [0, 8, 9]);
-	t.deepEqual(cc.supportedKeyAttributes.get(2), [0, 2, 4]);
+	t.expect(cc.supportedKeyAttributes.get(1)).toStrictEqual([0, 8, 9]);
+	t.expect(cc.supportedKeyAttributes.get(2)).toStrictEqual([0, 2, 4]);
 });
 
 test("the Notification command should be deserialized correctly", (t) => {
@@ -130,13 +130,13 @@ test("the Notification command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
-	t.is(cc.constructor, CentralSceneCCNotification);
+	t.expect(cc.constructor).toBe(CentralSceneCCNotification);
 
-	t.is(cc.sequenceNumber, 7);
+	t.expect(cc.sequenceNumber).toBe(7);
 	// slow refresh is only evaluated if the attribute is KeyHeldDown
-	t.falsy(cc.slowRefresh);
-	t.is(cc.keyAttribute, CentralSceneKeys.KeyPressed4x);
-	t.is(cc.sceneNumber, 8);
+	t.expect(cc.slowRefresh).toBeFalsy();
+	t.expect(cc.keyAttribute).toBe(CentralSceneKeys.KeyPressed4x);
+	t.expect(cc.sceneNumber).toBe(8);
 });
 
 test("the Notification command should be deserialized correctly (KeyHeldDown)", (t) => {
@@ -152,12 +152,12 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
-	t.is(cc.constructor, CentralSceneCCNotification);
+	t.expect(cc.constructor).toBe(CentralSceneCCNotification);
 
-	t.is(cc.sequenceNumber, 7);
-	t.true(cc.slowRefresh);
-	t.is(cc.keyAttribute, CentralSceneKeys.KeyHeldDown);
-	t.is(cc.sceneNumber, 8);
+	t.expect(cc.sequenceNumber).toBe(7);
+	t.expect(cc.slowRefresh).toBe(true);
+	t.expect(cc.keyAttribute).toBe(CentralSceneKeys.KeyHeldDown);
+	t.expect(cc.sceneNumber).toBe(8);
 });
 
 test("deserializing an unsupported command should return an unspecified version of CentralSceneCC", (t) => {
@@ -168,7 +168,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCC;
-	t.is(cc.constructor, CentralSceneCC);
+	t.expect(cc.constructor).toBe(CentralSceneCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

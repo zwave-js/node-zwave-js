@@ -21,7 +21,7 @@ integrationTest(
 				"not-a-number",
 			);
 
-			await t.throwsAsync(promise);
+			await t.expect(() => promise).rejects.toThrowError();
 			t.is(spy.callCount, 0);
 		},
 	},

@@ -1,6 +1,6 @@
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import { CommandClasses } from "@zwave-js/core";
-import ava, { type TestFn } from "ava";
+import { beforeAll, test } from "vitest";
 import type { Driver } from "../driver/Driver.js";
 import { ZWaveNode } from "../node/Node.js";
 import { createEmptyMockDriver } from "../test/mocks.js";
@@ -12,7 +12,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(60000);
 
 	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
@@ -48,10 +48,9 @@ test("should respect the endpoint definition format when AGI is supported", asyn
 	);
 	fakeDriver.getDeviceConfig = () => deviceConfig;
 
-	t.is(
+	t.expect(
 		ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)?.label,
-		"Button 1 (Multilevel Set)",
-	);
+	).toBe("Button 1 (Multilevel Set)");
 });
 
 test("should respect the endpoint definition format when AGI is not supported", async (t) => {
@@ -76,8 +75,7 @@ test("should respect the endpoint definition format when AGI is not supported", 
 	);
 	fakeDriver.getDeviceConfig = () => deviceConfig;
 
-	t.is(
+	t.expect(
 		ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)?.label,
-		"Button 1 (Multilevel Set)",
-	);
+	).toBe("Button 1 (Multilevel Set)");
 });

@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			PowerlevelCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set NormalPower command should serialize correctly", (t) => {
@@ -42,7 +42,7 @@ test("the Set NormalPower command should serialize correctly", (t) => {
 			0, // timeout (ignored)
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set NormalPower command with timeout should serialize correctly", (t) => {
@@ -58,7 +58,7 @@ test("the Set NormalPower command with timeout should serialize correctly", (t) 
 			0x00, // timeout ignored
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set Custom power command should serialize correctly", (t) => {
@@ -74,7 +74,7 @@ test("the Set Custom power command should serialize correctly", (t) => {
 			50, // timeout
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should be deserialized correctly (NormalPower)", (t) => {
@@ -89,10 +89,10 @@ test("the Report command should be deserialized correctly (NormalPower)", (t) =>
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
-	t.is(cc.constructor, PowerlevelCCReport);
+	t.expect(cc.constructor).toBe(PowerlevelCCReport);
 
-	t.is(cc.powerlevel, Powerlevel["Normal Power"]);
-	t.is(cc.timeout, undefined); // timeout does not apply to NormalPower
+	t.expect(cc.powerlevel).toBe(Powerlevel["Normal Power"]);
+	t.expect(cc.timeout).toBeUndefined(); // timeout does not apply to NormalPower
 });
 
 test("the Report command should be deserialized correctly (custom power)", (t) => {
@@ -107,10 +107,10 @@ test("the Report command should be deserialized correctly (custom power)", (t) =
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
-	t.is(cc.constructor, PowerlevelCCReport);
+	t.expect(cc.constructor).toBe(PowerlevelCCReport);
 
-	t.is(cc.powerlevel, Powerlevel["-3 dBm"]);
-	t.is(cc.timeout, 50); // timeout does not apply to NormalPower
+	t.expect(cc.powerlevel).toBe(Powerlevel["-3 dBm"]);
+	t.expect(cc.timeout).toBe(50); // timeout does not apply to NormalPower
 });
 
 test("deserializing an unsupported command should return an unspecified version of PowerlevelCC", (t) => {
@@ -121,5 +121,5 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as PowerlevelCC;
-	t.is(cc.constructor, PowerlevelCC);
+	t.expect(cc.constructor).toBe(PowerlevelCC);
 });

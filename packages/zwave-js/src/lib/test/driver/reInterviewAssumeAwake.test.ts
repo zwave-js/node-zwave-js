@@ -62,7 +62,5 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 		});
 		const wait10s = wait(10000, true);
 		await Promise.race([interviewCompleted, wait10s]);
-
-		t.pass();
 	},
 });

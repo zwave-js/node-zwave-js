@@ -2,7 +2,7 @@ import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { Bytes } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
@@ -13,7 +13,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(30000);
 	const { driver } = await createAndStartTestingDriver({
 		loadConfiguration: false,
@@ -27,13 +27,13 @@ test.beforeEach(async (t) => {
 	t.context.driver = driver;
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
 });
 
-test.serial(
+test.sequential(
 	"should not crash if a message is received that cannot be deserialized",
 	async (t) => {
 		const { driver, controller } = t.context;
@@ -48,11 +48,10 @@ test.serial(
 			req.serialize(driver["getEncodingContext"]()),
 		);
 		await controller.expectHostACK(1000);
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"should correctly handle multiple messages in the receive buffer",
 	async (t) => {
 		const { controller } = t.context;
@@ -66,6 +65,5 @@ test.serial(
 		// Ensure the driver ACKed two messages
 		await controller.expectHostACK(1000);
 		await controller.expectHostACK(1000);
-		t.pass();
 	},
 );

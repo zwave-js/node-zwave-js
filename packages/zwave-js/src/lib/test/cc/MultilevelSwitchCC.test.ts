@@ -12,7 +12,7 @@ import {
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -30,7 +30,7 @@ test("the Get command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (no duration)", (t) => {
@@ -51,7 +51,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the Set command (V2) should serialize correctly", (t) => {
@@ -73,7 +73,7 @@ test("the Set command (V2) should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the Report command (V1) should be deserialized correctly", (t) => {
@@ -87,11 +87,11 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCCReport;
-	t.is(cc.constructor, MultilevelSwitchCCReport);
+	t.expect(cc.constructor).toBe(MultilevelSwitchCCReport);
 
-	t.is(cc.currentValue, 55);
-	t.is(cc.targetValue, undefined);
-	t.is(cc.duration, undefined);
+	t.expect(cc.currentValue).toBe(55);
+	t.expect(cc.targetValue).toBeUndefined();
+	t.expect(cc.duration).toBeUndefined();
 });
 
 test("the Report command (v4) should be deserialized correctly", (t) => {
@@ -107,12 +107,12 @@ test("the Report command (v4) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCCReport;
-	t.is(cc.constructor, MultilevelSwitchCCReport);
+	t.expect(cc.constructor).toBe(MultilevelSwitchCCReport);
 
-	t.is(cc.currentValue, 55);
-	t.is(cc.targetValue, 66);
-	t.is(cc.duration!.unit, "seconds");
-	t.is(cc.duration!.value, 1);
+	t.expect(cc.currentValue).toBe(55);
+	t.expect(cc.targetValue).toBe(66);
+	t.expect(cc.duration!.unit).toBe("seconds");
+	t.expect(cc.duration!.value).toBe(1);
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {
@@ -124,7 +124,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.StopLevelChange, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the StartLevelChange command (V2) should serialize correctly (down, ignore start level, with duration)", (t) => {
@@ -149,7 +149,7 @@ test("the StartLevelChange command (V2) should serialize correctly (down, ignore
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
@@ -161,7 +161,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("deserializing an unsupported command should return an unspecified version of MultilevelSwitchCC", (t) => {
@@ -172,7 +172,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCC;
-	t.is(cc.constructor, MultilevelSwitchCC);
+	t.expect(cc.constructor).toBe(MultilevelSwitchCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

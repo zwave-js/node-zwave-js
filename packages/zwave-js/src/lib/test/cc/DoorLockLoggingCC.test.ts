@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -29,7 +29,7 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the RecordsCountReport command should be deserialized correctly", (t) => {
@@ -43,9 +43,9 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordsSupportedReport;
-	t.is(cc.constructor, DoorLockLoggingCCRecordsSupportedReport);
+	t.expect(cc.constructor).toBe(DoorLockLoggingCCRecordsSupportedReport);
 
-	t.is(cc.recordsCount, 20);
+	t.expect(cc.recordsCount).toBe(20);
 });
 
 test("the RecordGet command should serialize correctly", (t) => {
@@ -59,7 +59,7 @@ test("the RecordGet command should serialize correctly", (t) => {
 			1, // Record Number
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the RecordReport command should be deserialized correctly", (t) => {
@@ -85,17 +85,16 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordReport;
-	t.is(cc.constructor, DoorLockLoggingCCRecordReport);
+	t.expect(cc.constructor).toBe(DoorLockLoggingCCRecordReport);
 
-	t.is(cc.recordNumber, 7);
+	t.expect(cc.recordNumber).toBe(7);
 
-	t.is(cc.record!.eventType, 1);
-	t.is(cc.record!.label, "Locked via Access Code");
-	t.is(
+	t.expect(cc.record!.eventType).toBe(1);
+	t.expect(cc.record!.label).toBe("Locked via Access Code");
+	t.expect(
 		cc.record!.timestamp,
-		new Date(1989, 12 - 1, 27, 10, 40, 30).toISOString(),
-	);
-	t.is(cc.record!.userId, 1);
+	).toBe(new Date(1989, 12 - 1, 27, 10, 40, 30).toISOString());
+	t.expect(cc.record!.userId).toBe(1);
 });
 
 // describe.skip(`interview()`, () => {

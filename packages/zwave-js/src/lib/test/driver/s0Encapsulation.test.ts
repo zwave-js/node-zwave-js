@@ -188,7 +188,5 @@ integrationTest("Communication via Security S0 works", {
 		const result = await node.commandClasses.Basic.get();
 
 		t.is(result?.currentValue, 2);
-
-		t.pass();
 	},
 });

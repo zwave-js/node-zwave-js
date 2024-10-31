@@ -3,7 +3,7 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import ava, { type TestFn } from "ava";
+import { afterEach, beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.beforeEach(async (t) => {
+beforeEach(async (t) => {
 	t.timeout(5000);
 
 	const { driver, serialport } = await createAndStartDriver();
@@ -32,7 +32,7 @@ test.beforeEach(async (t) => {
 	t.context = { driver, serialport };
 });
 
-test.afterEach.always(async (t) => {
+afterEach(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
@@ -40,7 +40,7 @@ test.afterEach.always(async (t) => {
 
 process.env.LOGLEVEL = "debug";
 
-test.serial(
+test.sequential(
 	"unsolicited commands which need special handling are passed to Node.handleCommand",
 	async (t) => {
 		const { driver, serialport } = t.context;
@@ -61,20 +61,20 @@ test.serial(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		t.expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+		t.expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );
 
-test.serial(
+test.sequential(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller response",
 	async (t) => {
 		const { driver, serialport } = t.context;
@@ -95,7 +95,7 @@ test.serial(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		t.expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -106,10 +106,9 @@ test.serial(
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
-			Bytes.from("010800130201002501c3", "hex"),
-		);
+		).toStrictEqual(Bytes.from("010800130201002501c3", "hex"));
 		await wait(10);
 		serialport.receiveData(ACK);
 
@@ -121,13 +120,13 @@ test.serial(
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+		t.expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );
 
-test.serial(
+test.sequential(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller callback",
 	async (t) => {
 		const { driver, serialport } = t.context;
@@ -148,7 +147,7 @@ test.serial(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		t.expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -159,10 +158,9 @@ test.serial(
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		t.deepEqual(
+		t.expect(
 			serialport.lastWrite,
-			Bytes.from("010800130201002501c3", "hex"),
-		);
+		).toStrictEqual(Bytes.from("010800130201002501c3", "hex"));
 		await wait(10);
 		serialport.receiveData(ACK);
 
@@ -172,7 +170,7 @@ test.serial(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(10);
 
@@ -182,8 +180,8 @@ test.serial(
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
+		t.expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+		t.expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );

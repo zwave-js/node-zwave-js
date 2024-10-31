@@ -334,8 +334,6 @@ integrationTest(
 			// The ping and the followup command should eventually succeed
 			await firstCommand;
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );
@@ -487,8 +485,6 @@ integrationTest(
 
 			// The followup command should eventually succeed
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );
@@ -715,8 +711,6 @@ integrationTestMulti(
 
 			await immediateCommand;
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );

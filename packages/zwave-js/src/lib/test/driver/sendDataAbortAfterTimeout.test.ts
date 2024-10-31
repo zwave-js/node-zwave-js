@@ -337,8 +337,7 @@ integrationTest(
 // 			await firstCommand;
 // 			await followupCommand;
 
-// 			t.pass();
-// 		},
+// 		// 		},
 // 	},
 // );
 

@@ -1,7 +1,7 @@
 import { NoOperationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -17,14 +17,14 @@ test("the CC should serialize correctly", (t) => {
 	const expected = buildCCBuffer(
 		Uint8Array.from([]), // No command!
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the CC should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([]), // No command!
 	);
-	t.notThrows(() =>
+	t.expect(() =>
 		new NoOperationCC({ nodeId: 2, data: ccData, context: {} as any })
-	);
+	).not.toThrow();
 });

@@ -51,8 +51,6 @@ integrationTest(
 						"The driver should have sent an S0-encapsulated command",
 				},
 			);
-
-			t.pass();
 		},
 	},
 );

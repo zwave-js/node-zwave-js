@@ -206,8 +206,6 @@ integrationTest(
 					&& f.payload instanceof Security2CCMessageEncapsulation
 					&& f.payload.encapsulated instanceof BasicCCSet,
 			);
-
-			t.pass();
 		},
 	},
 );

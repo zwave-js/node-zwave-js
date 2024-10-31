@@ -1,12 +1,12 @@
-import test from "ava";
 import execa from "execa";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { beforeAll, test } from "vitest";
 
 const fixturesDir = path.join(__dirname, "../test/fixtures");
 const files: string[] = [];
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(180000);
 	await execa("yarn", ["run", "pretest"], { cwd: __dirname });
 	const jsFiles = (await fs.readdir(fixturesDir)).filter(
@@ -23,5 +23,4 @@ test("run fixtures", async (t) => {
 			throw new Error(`${file} failed to run: ${e.stack}`);
 		}
 	}
-	t.pass();
 });

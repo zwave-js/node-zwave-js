@@ -48,7 +48,6 @@ integrationTest(
 			await promise;
 
 			await wait(500);
-			t.pass();
 		},
 	},
 );

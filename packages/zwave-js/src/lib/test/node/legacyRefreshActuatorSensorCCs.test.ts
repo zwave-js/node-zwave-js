@@ -84,8 +84,6 @@ integrationTest(
 					f.type === MockZWaveFrameType.Request
 					&& f.payload instanceof MultilevelSwitchCCGet,
 			);
-
-			t.pass();
 		},
 	},
 );

@@ -2,7 +2,7 @@ import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
-import test from "ava";
+import { test } from "vitest";
 import {
 	type TaskBuilder,
 	TaskInterruptBehavior,
@@ -15,7 +15,6 @@ test("The scheduler can be started and stopped", async (t) => {
 	const scheduler = new TaskScheduler();
 	scheduler.start();
 	await scheduler.stop();
-	t.pass();
 });
 
 test("An empty task runs to completion", async (t) => {
@@ -26,7 +25,6 @@ test("An empty task runs to completion", async (t) => {
 		task: async function*() {},
 	});
 	await task;
-	t.pass();
 });
 
 test("The task promise resolves to the return value of the task function", async (t) => {
@@ -38,7 +36,7 @@ test("The task promise resolves to the return value of the task function", async
 			return 1;
 		},
 	});
-	t.is(await task, 1);
+	t.expect(await task).toBe(1);
 });
 
 test("A task with multiple interrupt points runs to completion", async (t) => {
@@ -52,7 +50,6 @@ test("A task with multiple interrupt points runs to completion", async (t) => {
 		},
 	});
 	await task;
-	t.pass();
 });
 
 test("A task with multiple interrupt points has the correct result", async (t) => {
@@ -66,7 +63,7 @@ test("A task with multiple interrupt points has the correct result", async (t) =
 			return 2;
 		},
 	});
-	t.is(await task, 2);
+	t.expect(await task).toBe(2);
 });
 
 test("Multiple tasks run to completion", async (t) => {
@@ -89,7 +86,7 @@ test("Multiple tasks run to completion", async (t) => {
 		},
 	});
 	const result = await Promise.all([task1, task2]);
-	t.deepEqual(result, [1, 2]);
+	t.expect(result).toStrictEqual([1, 2]);
 });
 
 test("Higher priority tasks run before lower priority ones if the scheduler is started afterwards", async (t) => {
@@ -115,7 +112,7 @@ test("Higher priority tasks run before lower priority ones if the scheduler is s
 	scheduler.start();
 
 	await Promise.all([task1, task2]);
-	t.deepEqual(order, [2, 1]);
+	t.expect(order).toStrictEqual([2, 1]);
 });
 
 test("Higher priority tasks run before lower priority ones when added at the same time", async (t) => {
@@ -142,7 +139,7 @@ test("Higher priority tasks run before lower priority ones when added at the sam
 	});
 
 	await Promise.all([task1, task2]);
-	t.deepEqual(order, [2, 1]);
+	t.expect(order).toStrictEqual([2, 1]);
 });
 
 test("Higher priority tasks run before lower priority ones when added at the same time, part 2", async (t) => {
@@ -177,7 +174,7 @@ test("Higher priority tasks run before lower priority ones when added at the sam
 	});
 
 	await Promise.all([task1, task2, task3]);
-	t.deepEqual(order, [2, 1, 3]);
+	t.expect(order).toStrictEqual([2, 1, 3]);
 });
 
 test("Higher priority tasks interrupt lower priority ones", async (t) => {
@@ -213,7 +210,7 @@ test("Higher priority tasks interrupt lower priority ones", async (t) => {
 
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "2a", "2b", "2c", "1b", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b", "2c", "1b", "1c"]);
 });
 
 test("Higher priority tasks interrupt lower priority ones, part 2", async (t) => {
@@ -262,7 +259,17 @@ test("Higher priority tasks interrupt lower priority ones, part 2", async (t) =>
 
 	await Promise.all([task1, task2, task3]);
 
-	t.deepEqual(order, ["1a", "2a", "2b", "2c", "3a", "3b", "3c", "1b", "1c"]);
+	t.expect(order).toStrictEqual([
+		"1a",
+		"2a",
+		"2b",
+		"2c",
+		"3a",
+		"3b",
+		"3c",
+		"1b",
+		"1c",
+	]);
 });
 
 test("Higher priority tasks do not interrupt non-interruptible lower priority ones", async (t) => {
@@ -299,7 +306,7 @@ test("Higher priority tasks do not interrupt non-interruptible lower priority on
 
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "1b", "1c", "2a", "2b", "2c"]);
+	t.expect(order).toStrictEqual(["1a", "1b", "1c", "2a", "2b", "2c"]);
 });
 
 test("Interrupting a task with the Restart interrupt behavior restarts it completely", async (t) => {
@@ -336,7 +343,7 @@ test("Interrupting a task with the Restart interrupt behavior restarts it comple
 
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "2a", "2b", "2c", "1a", "1b", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b", "2c", "1a", "1b", "1c"]);
 });
 
 test("Completed Restart tasks are not restarted after completion", async (t) => {
@@ -371,7 +378,7 @@ test("Completed Restart tasks are not restarted after completion", async (t) => 
 
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "1b", "1c", "2a", "2b", "2c"]);
+	t.expect(order).toStrictEqual(["1a", "1b", "1c", "2a", "2b", "2c"]);
 });
 
 test("Yielding a promise-returning function causes the scheduler to wait for that until resuming the task", async (t) => {
@@ -393,13 +400,13 @@ test("Yielding a promise-returning function causes the scheduler to wait for tha
 
 	// Wait long enough that the task is definitely waiting for the promise
 	await wait(50);
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	// Run to completion
 	yieldedPromise.resolve();
 	await task1;
 
-	t.deepEqual(order, ["1a", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "1b"]);
 });
 
 test("While a task is waiting, higher-priority tasks are still executed", async (t) => {
@@ -437,13 +444,13 @@ test("While a task is waiting, higher-priority tasks are still executed", async 
 	// Task 1 should not have completed yet
 	// Wait long enough that it would have if the scheduler didn't work correctly
 	await wait(50);
-	t.deepEqual(order, ["1a", "2a", "2b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b"]);
 
 	// Run task 1 to completion
 	yieldedPromise.resolve();
 	await task1;
 
-	t.deepEqual(order, ["1a", "2a", "2b", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b", "1b"]);
 });
 
 test("Waiting tasks are deprioritized over tasks with the same priority", async (t) => {
@@ -481,13 +488,13 @@ test("Waiting tasks are deprioritized over tasks with the same priority", async 
 	// Task 1 should not have completed yet
 	// Wait long enough that it would have if the scheduler didn't work correctly
 	await wait(50);
-	t.deepEqual(order, ["1a", "2a", "2b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b"]);
 
 	// Run task 1 to completion
 	yieldedPromise.resolve();
 	await task1;
 
-	t.deepEqual(order, ["1a", "2a", "2b", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b", "1b"]);
 });
 
 test("Waiting tasks are deprioritized over tasks with a higher priority", async (t) => {
@@ -525,13 +532,13 @@ test("Waiting tasks are deprioritized over tasks with a higher priority", async 
 	// Task 1 should not have completed yet
 	// Wait long enough that it would have if the scheduler didn't work correctly
 	await wait(50);
-	t.deepEqual(order, ["1a", "2a", "2b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b"]);
 
 	// Run task 1 to completion
 	yieldedPromise.resolve();
 	await task1;
 
-	t.deepEqual(order, ["1a", "2a", "2b", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2b", "1b"]);
 });
 
 test("Waiting tasks are NOT deprioritized over tasks with a lower priority", async (t) => {
@@ -565,13 +572,13 @@ test("Waiting tasks are NOT deprioritized over tasks with a lower priority", asy
 
 	// Task 2 should not have started yet
 	await wait(50);
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	// Run to completion
 	yieldedPromise.resolve();
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "1b", "2a", "2b"]);
+	t.expect(order).toStrictEqual(["1a", "1b", "2a", "2b"]);
 });
 
 test("Two tasks of the same priority can wait at the same time", async (t) => {
@@ -600,7 +607,7 @@ test("Two tasks of the same priority can wait at the same time", async (t) => {
 
 	await Promise.all([task1, task2]);
 
-	t.deepEqual(order, ["1a", "2a", "1b", "2b"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "1b", "2b"]);
 });
 
 test("Stopping the scheduler mid-task works", async (t) => {
@@ -634,14 +641,14 @@ test("Stopping the scheduler mid-task works", async (t) => {
 
 	// Task 2 should not have started yet
 	await wait(1);
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.stop();
 
 	// "Run" to completion, but nothing should happen
 	yieldedPromise.resolve();
 	await wait(50);
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 });
 
 test("Stopping the scheduler works after multiple tasks have run to completion", async (t) => {
@@ -664,7 +671,7 @@ test("Stopping the scheduler works after multiple tasks have run to completion",
 		},
 	});
 	const result = await Promise.all([task1, task2]);
-	t.deepEqual(result, [1, 2]);
+	t.expect(result).toStrictEqual([1, 2]);
 
 	await scheduler.stop();
 });
@@ -694,7 +701,7 @@ test("Tasks can yield-queue higher-priority tasks", async (t) => {
 
 	await outer;
 
-	t.deepEqual(order, ["inner", "outer"]);
+	t.expect(order).toStrictEqual(["inner", "outer"]);
 });
 
 test("Tasks can yield-queue same-priority tasks", async (t) => {
@@ -722,10 +729,10 @@ test("Tasks can yield-queue same-priority tasks", async (t) => {
 
 	await outer;
 
-	t.deepEqual(order, ["inner", "outer"]);
+	t.expect(order).toStrictEqual(["inner", "outer"]);
 });
 
-test.failing("Tasks cannot yield-queue lower-priority tasks", async (t) => {
+test.fails("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 	const scheduler = new TaskScheduler();
 	scheduler.start();
 
@@ -792,13 +799,13 @@ test("Yielding tasks multiple levels deep works", async (t) => {
 
 	// Wait long enough that the task is definitely waiting for the promise
 	await wait(10);
-	t.deepEqual(order, ["outer1", "inner1", "innerinner1"]);
+	t.expect(order).toStrictEqual(["outer1", "inner1", "innerinner1"]);
 
 	// Run to completion
 	yieldedPromise.resolve();
 	await outer;
 
-	t.deepEqual(order, [
+	t.expect(order).toStrictEqual([
 		"outer1",
 		"inner1",
 		"innerinner1",
@@ -831,7 +838,7 @@ test("Tasks receive the result of yielded tasks", async (t) => {
 		},
 	});
 
-	t.is(await outer, "foo");
+	t.expect(await outer).toBe("foo");
 });
 
 test("Tasks receive the result of yielded tasks, part 2", async (t) => {
@@ -870,7 +877,7 @@ test("Tasks receive the result of yielded tasks, part 2", async (t) => {
 		},
 	});
 
-	t.is(await outer, "foobar");
+	t.expect(await outer).toBe("foobar");
 });
 
 test("Tasks receive the result of yielded tasks, part 3", async (t) => {
@@ -898,8 +905,8 @@ test("Tasks receive the result of yielded tasks, part 3", async (t) => {
 	});
 
 	const result = await outer;
-	t.true(result instanceof Error);
-	t.is(result.message, "foo");
+	t.expect(result instanceof Error).toBe(true);
+	t.expect(result.message).toBe("foo");
 });
 
 test("Tasks can queue lower-priority tasks without waiting for them", async (t) => {
@@ -929,7 +936,7 @@ test("Tasks can queue lower-priority tasks without waiting for them", async (t) 
 	await outer;
 	await inner!;
 
-	t.deepEqual(order, ["outer", "inner"]);
+	t.expect(order).toStrictEqual(["outer", "inner"]);
 });
 
 test("Failing tasks reject the corresponding Promise", async (t) => {
@@ -952,8 +959,8 @@ test("Failing tasks reject the corresponding Promise", async (t) => {
 		},
 	});
 
-	await t.throwsAsync(task1, { message: "Task 1 failed" });
-	t.is(await task2, 2);
+	await t.expect(() => task1).rejects.toThrowError("Task 1 failed");
+	t.expect(await task2).toBe(2);
 });
 
 test("Tasks can be removed if they haven't been started yet", async (t) => {
@@ -989,7 +996,7 @@ test("Tasks can be removed if they haven't been started yet", async (t) => {
 
 	// Task 2 should not have started yet
 	await wait(1);
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.removeTasks((t) => t.name === "task2");
 
@@ -1000,7 +1007,7 @@ test("Tasks can be removed if they haven't been started yet", async (t) => {
 	// Run to completion
 	longRunningThing.resolve();
 	await task1;
-	t.deepEqual(order, ["1a", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "1b"]);
 });
 
 test("Tasks can be removed while paused", async (t) => {
@@ -1024,7 +1031,7 @@ test("Tasks can be removed while paused", async (t) => {
 
 	await wait(1);
 	// The task should have run to the first yield
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.removeTasks((t) => true);
 
@@ -1032,7 +1039,7 @@ test("Tasks can be removed while paused", async (t) => {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
-	t.deepEqual(order, ["1a", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "1c"]);
 });
 
 test("Tasks can be removed while paused, part 2", async (t) => {
@@ -1071,7 +1078,7 @@ test("Tasks can be removed while paused, part 2", async (t) => {
 
 	await wait(1);
 	// The tasks should have run to the first yield
-	t.deepEqual(order, ["1a", "2a"]);
+	t.expect(order).toStrictEqual(["1a", "2a"]);
 
 	await scheduler.removeTasks((t) => true);
 
@@ -1083,7 +1090,7 @@ test("Tasks can be removed while paused, part 2", async (t) => {
 	});
 
 	// Current task "1" gets cleaned up last
-	t.deepEqual(order, ["1a", "2a", "2c", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "2c", "1c"]);
 });
 
 test("Tasks can be removed while running", async (t) => {
@@ -1122,7 +1129,7 @@ test("Tasks can be removed while running", async (t) => {
 	await wait(1);
 	// Task 1 should have run to the first yield,
 	// Task 2 should not have started yet
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.removeTasks((t) => true);
 
@@ -1134,7 +1141,7 @@ test("Tasks can be removed while running", async (t) => {
 	});
 
 	// Only task 1 should have been cleaned up, since task 2 was not started
-	t.deepEqual(order, ["1a", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "1c"]);
 });
 
 test("Tasks can be removed while running and paused", async (t) => {
@@ -1172,7 +1179,7 @@ test("Tasks can be removed while running and paused", async (t) => {
 
 	await wait(1);
 	// Both tasks should have run to the first yield.
-	t.deepEqual(order, ["1a", "2a"]);
+	t.expect(order).toStrictEqual(["1a", "2a"]);
 
 	await scheduler.removeTasks((t) => true);
 
@@ -1185,7 +1192,7 @@ test("Tasks can be removed while running and paused", async (t) => {
 
 	// Both tasks should be cleaned up, 1c before 2c,
 	// since task 2 was the current task and should be cleaned up last
-	t.deepEqual(order, ["1a", "2a", "1c", "2c"]);
+	t.expect(order).toStrictEqual(["1a", "2a", "1c", "2c"]);
 });
 
 test("The task rejection uses the given error, if any", async (t) => {
@@ -1209,7 +1216,7 @@ test("The task rejection uses the given error, if any", async (t) => {
 
 	await wait(1);
 	// The task should have run to the first yield
-	t.deepEqual(order, ["1a"]);
+	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.removeTasks(
 		(t) => true,
@@ -1220,7 +1227,7 @@ test("The task rejection uses the given error, if any", async (t) => {
 		errorCode: ZWaveErrorCodes.Driver_Reset,
 	});
 
-	t.deepEqual(order, ["1a", "1c"]);
+	t.expect(order).toStrictEqual(["1a", "1c"]);
 });
 
 test("Canceling nested tasks works", async (t) => {
@@ -1250,12 +1257,12 @@ test("Canceling nested tasks works", async (t) => {
 
 	// Wait long enough that the task is definitely waiting for the promise
 	await wait(50);
-	t.deepEqual(order, ["1a", "2a"]);
+	t.expect(order).toStrictEqual(["1a", "2a"]);
 
 	// Cancel all tasks
 	await scheduler.removeTasks(() => true);
 
-	t.deepEqual(order, ["1a", "2a"]);
+	t.expect(order).toStrictEqual(["1a", "2a"]);
 });
 
 test("Canceling nested tasks works, part 2", async (t) => {
@@ -1290,7 +1297,7 @@ test("Canceling nested tasks works, part 2", async (t) => {
 	// FIXME: Restore parent tasks when removing nested tasks
 	await scheduler.removeTasks((t) => t.name === "inner");
 
-	t.is(await outer, "canceled");
+	t.expect(await outer).toBe("canceled");
 });
 
 test("Splitting tasks into multiple generator functions works", async (t) => {
@@ -1318,7 +1325,7 @@ test("Splitting tasks into multiple generator functions works", async (t) => {
 
 	await task1;
 
-	t.deepEqual(order, ["1a", "1b", "1c", "1d"]);
+	t.expect(order).toStrictEqual(["1a", "1b", "1c", "1d"]);
 });
 
 test("Split tasks can be canceled", async (t) => {
@@ -1351,5 +1358,5 @@ test("Split tasks can be canceled", async (t) => {
 	// Cancel all tasks
 	await scheduler.removeTasks(() => true);
 
-	t.deepEqual(order, ["1a", "1b"]);
+	t.expect(order).toStrictEqual(["1a", "1b"]);
 });

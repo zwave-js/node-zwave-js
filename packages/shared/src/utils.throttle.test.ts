@@ -1,5 +1,5 @@
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
+import { beforeAll, test } from "vitest";
 import { throttle } from "./utils.js";
 
 interface TestContext {
@@ -12,7 +12,7 @@ const test = ava as TestFn<TestContext>;
 const originalDateNow = Date.now;
 let now: number;
 
-test.before((t) => {
+beforeAll((t) => {
 	now = Date.now();
 	Date.now = sinon.fake(() => {
 		return now;
@@ -24,7 +24,7 @@ test.before((t) => {
 	};
 });
 
-test.after.always((t) => {
+afterAll((t) => {
 	t.context.clock.restore();
 	Date.now = originalDateNow;
 });
@@ -34,7 +34,6 @@ test("calls the function immediately when called once", (t) => {
 	const throttled = throttle(spy, 100);
 	throttled();
 	sinon.assert.calledOnce(spy);
-	t.pass();
 });
 
 test("passes the given parameters along", (t) => {
@@ -42,7 +41,6 @@ test("passes the given parameters along", (t) => {
 	const throttled = throttle(spy, 100);
 	throttled(5, 6, "7");
 	sinon.assert.calledWith(spy, 5, 6, "7");
-	t.pass();
 });
 
 test("calls the function once when called twice quickly", (t) => {
@@ -52,7 +50,6 @@ test("calls the function once when called twice quickly", (t) => {
 	throttled(2);
 	sinon.assert.calledOnce(spy);
 	sinon.assert.calledWith(spy, 1);
-	t.pass();
 });
 
 test("only adds a delayed function call when trailing=true", (t) => {
@@ -76,7 +73,6 @@ test("only adds a delayed function call when trailing=true", (t) => {
 	t.context.advanceTime(100);
 	sinon.assert.calledTwice(spy);
 	sinon.assert.calledWith(spy, 2);
-	t.pass();
 });
 
 test("when called during the wait time for the trailing call, the most recent arguments are used", (t) => {
@@ -95,5 +91,4 @@ test("when called during the wait time for the trailing call, the most recent ar
 	sinon.assert.calledTwice(spy);
 	sinon.assert.neverCalledWith(spy, 2);
 	sinon.assert.calledWith(spy, 4);
-	t.pass();
 });

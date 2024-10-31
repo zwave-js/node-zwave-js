@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -13,7 +13,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 
 	const { driver } = await createAndStartTestingDriver({
@@ -30,7 +30,7 @@ test.before(async (t) => {
 	t.context.driver = driver;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 });
@@ -38,7 +38,7 @@ test.after.always(async (t) => {
 test("getCCVersion() should return 0 if a command class is not supported", (t) => {
 	const { driver } = t.context;
 	const node = new ZWaveNode(2, driver);
-	t.is(node.getCCVersion(CommandClasses["Anti-Theft"]), 0);
+	t.expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(0);
 	node.destroy();
 });
 
@@ -49,7 +49,7 @@ test("getCCVersion() should return the supported version otherwise", (t) => {
 		isSupported: true,
 		version: 5,
 	});
-	t.is(node.getCCVersion(CommandClasses["Anti-Theft"]), 5);
+	t.expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(5);
 	node.destroy();
 });
 
@@ -60,9 +60,9 @@ test("removeCC() should mark a CC as not supported", (t) => {
 		isSupported: true,
 		version: 7,
 	});
-	t.is(node.getCCVersion(CommandClasses["Anti-Theft"]), 7);
+	t.expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(7);
 
 	node.removeCC(CommandClasses["Anti-Theft"]);
-	t.is(node.getCCVersion(CommandClasses["Anti-Theft"]), 0);
+	t.expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(0);
 	node.destroy();
 });

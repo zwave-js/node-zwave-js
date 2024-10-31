@@ -1,4 +1,4 @@
-import test from "ava";
+import { test } from "vitest";
 import { assertZWaveError } from "../test/assertZWaveError.js";
 import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError.js";
 
@@ -12,7 +12,7 @@ function thisThrows() {
 }
 
 test("ZWaveError should be of type Error", (t) => {
-	t.true(err instanceof Error);
+	t.expect(err instanceof Error).toBe(true);
 });
 
 test("ZWaveError should contain an error code", (t) => {
@@ -20,5 +20,4 @@ test("ZWaveError should contain an error code", (t) => {
 		messageMatches: "Test message",
 		errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
 	});
-	t.pass();
 });

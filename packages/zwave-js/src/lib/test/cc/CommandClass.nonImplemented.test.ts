@@ -15,8 +15,6 @@ integrationTest(
 				ccCommand: 0x02,
 			});
 			await driver.sendCommand(cc);
-
-			t.pass();
 		},
 	},
 );

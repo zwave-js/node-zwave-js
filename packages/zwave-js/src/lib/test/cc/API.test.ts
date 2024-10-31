@@ -2,7 +2,7 @@ import { API, CCAPI } from "@zwave-js/cc";
 import { NOT_KNOWN } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
+import { beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -19,7 +19,7 @@ const test = ava as TestFn<TestContext>;
 @API(0xff as any)
 export class DummyCCAPI extends CCAPI {}
 
-test.before(async (t) => {
+beforeAll(async (t) => {
 	t.timeout(30000);
 
 	const { driver } = await createAndStartTestingDriver({
@@ -43,14 +43,14 @@ test.before(async (t) => {
 	t.context.node2 = node2;
 });
 
-test.after.always(async (t) => {
+afterAll(async (t) => {
 	const { driver } = t.context;
 	await driver.destroy();
 	driver.removeAllListeners();
 });
 
-test.serial(`supportsCommand() returns NOT_KNOWN by default`, (t) => {
+test.sequential(`supportsCommand() returns NOT_KNOWN by default`, (t) => {
 	const { node2, driver } = t.context;
 	const API = new DummyCCAPI(driver, node2);
-	t.is(API.supportsCommand(null as any), NOT_KNOWN);
+	t.expect(API.supportsCommand(null as any)).toBe(NOT_KNOWN);
 });

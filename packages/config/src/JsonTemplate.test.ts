@@ -1,8 +1,8 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
-import test from "ava";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
+import { afterEach, beforeAll, test } from "vitest";
 import { readJsonWithTemplate } from "./JsonTemplate.js";
 
 const mockDir = path.join(tmpdir(), `zwave-js-template-test`);
@@ -21,14 +21,12 @@ mockFs.restore = async (): Promise<void> => {
 	await fs.rm(mockDir, { recursive: true, force: true });
 };
 
-test.before(() => mockFs.restore());
-test.afterEach.always(() => mockFs.restore());
+beforeAll(() => mockFs.restore());
+afterEach(() => mockFs.restore());
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should read simple JSON files normally",
 	async (t) => {
-		t.timeout(20000);
-
 		const file = {
 			foo: "bar",
 			baz: 1,
@@ -40,15 +38,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, file);
+		t.expect(content).toStrictEqual(file);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should follow top-level whole-file $imports",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json",
 		};
@@ -63,15 +60,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, template);
+		t.expect(content).toStrictEqual(template);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should overwrite keys that are present before the $import",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			template: false,
 			$import: "template.json",
@@ -87,15 +83,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, template);
+		t.expect(content).toStrictEqual(template);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should preserve keys that are present after the $import",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json",
 			template: false,
@@ -113,15 +108,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should throw if the $import specifier is not a string",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: 1,
 		};
@@ -139,12 +133,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should throw if the $import specifier is not valid",
 	async (t) => {
-		t.timeout(20000);
 		const tests = [
 			"no-extension",
 			"wrong.extension",
@@ -171,13 +165,12 @@ test.serial(
 			);
 		}
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should throw if the $import target is not an object",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json#somewhere",
 		};
@@ -197,42 +190,45 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial("readJsonWithTemplate() should follow deep $imports", async (t) => {
-	t.timeout(20000);
-
-	const test = {
-		toplevel: true,
-		nested: {
-			$import: "template.json",
-		},
-		template: false,
-	};
-	const template = {
-		template: true,
-	};
-	const expected = {
-		toplevel: true,
-		nested: {
+test.sequential(
+	"readJsonWithTemplate() should follow deep $imports",
+	async (t) => {
+		const test = {
+			toplevel: true,
+			nested: {
+				$import: "template.json",
+			},
+			template: false,
+		};
+		const template = {
 			template: true,
-		},
-		template: false,
-	};
-	await mockFs({
-		"/test.json": JSON.stringify(test),
-		"/template.json": JSON.stringify(template),
-	});
+		};
+		const expected = {
+			toplevel: true,
+			nested: {
+				template: true,
+			},
+			template: false,
+		};
+		await mockFs({
+			"/test.json": JSON.stringify(test),
+			"/template.json": JSON.stringify(template),
+		});
 
-	const content = await readJsonWithTemplate(path.join(mockDir, "test.json"));
-	t.deepEqual(content, expected);
-});
+		const content = await readJsonWithTemplate(
+			path.join(mockDir, "test.json"),
+		);
+		t.expect(content).toStrictEqual(expected);
+	},
+	20000,
+);
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should follow deep $imports in arrays",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			toplevel: true,
 			nested: [
@@ -272,15 +268,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() file-based circular references should throw an error (direct, top-level)",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json",
 		};
@@ -300,13 +295,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() file-based circular references should throw an error (three-way)",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template1.json",
 		};
@@ -330,13 +324,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() file-based circular references should throw an error (three-way, nested)",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			nested: {
 				$import: "template1.json",
@@ -373,13 +366,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should be able to resolve relative paths",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "../baz/template.json",
 		};
@@ -394,15 +386,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "foo/bar/test.json"),
 		);
-		t.deepEqual(content, template);
+		t.expect(content).toStrictEqual(template);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should be able to resolve the root directory with ~/",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "~/template.json",
 		};
@@ -418,15 +409,14 @@ test.serial(
 			path.join(mockDir, "foo/bar/test.json"),
 			path.join(mockDir, "foo"),
 		);
-		t.deepEqual(content, template);
+		t.expect(content).toStrictEqual(template);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should throw when using a path that starts with ~/ when no root dir is configured",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "~/foo/template.json",
 		};
@@ -442,13 +432,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should be able to resolve in-file selectors",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json#sub",
 		};
@@ -467,15 +456,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should be able to resolve deep in-file selectors",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template.json#we/all/live/in/1/yellow/submarine",
 		};
@@ -501,15 +489,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() selector based circular references should throw an error (three-way)",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "template1.json#foo",
 		};
@@ -543,13 +530,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() unspecified self-references throw an error",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			$import: "#",
 		};
@@ -563,12 +549,12 @@ test.serial(
 			{},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() circular self-references throw an error",
 	async (t) => {
-		t.timeout(20000);
 		const test = {
 			key1: {
 				$import: "#key2",
@@ -589,12 +575,12 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() crazy stuff does work (part 1)",
 	async (t) => {
-		t.timeout(20000);
 		const test = {
 			$import: "template1.json",
 		};
@@ -632,14 +618,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() crazy stuff does work (part 2)",
 	async (t) => {
-		t.timeout(20000);
 		const test = {
 			$import: "template1.json",
 		};
@@ -677,15 +663,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() referencing partial parameters works",
 	async (t) => {
-		t.timeout(20000);
-
 		const test = {
 			paramInformation: {
 				1: {
@@ -716,15 +701,14 @@ test.serial(
 		const content = await readJsonWithTemplate(
 			path.join(mockDir, "test.json"),
 		);
-		t.deepEqual(content, expected);
+		t.expect(content).toStrictEqual(expected);
 	},
+	20000,
 );
 
-test.serial(
+test.sequential(
 	"readJsonWithTemplate() should throw when the referenced file is outside the rootDir",
 	async (t) => {
-		t.timeout(20000);
-
 		const rootDir = "root/test";
 		const test = {
 			$import: "../outside.json",
@@ -746,4 +730,5 @@ test.serial(
 			},
 		);
 	},
+	20000,
 );

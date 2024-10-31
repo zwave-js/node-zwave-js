@@ -2,9 +2,9 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, mergeDeep } from "@zwave-js/shared";
-import test from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
+import { test, vi } from "vitest";
 import { PORT_ADDRESS, createAndStartDriver } from "../test/utils.js";
 import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions.js";
 
@@ -18,7 +18,7 @@ const { Driver } = proxyquire<typeof import("./Driver")>("./Driver", {
 	},
 });
 
-test.serial("starting the driver should open a new serialport", async (t) => {
+test.sequential("starting the driver should open a new serialport", async (t) => {
 	const driver = new Driver(PORT_ADDRESS, {
 		testingHooks: {
 			skipBootloaderCheck: true,
@@ -33,11 +33,11 @@ test.serial("starting the driver should open a new serialport", async (t) => {
 	await driver.start();
 
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-	t.is(portInstance.openStub.callCount, 1);
+	t.expect(portInstance.openStub.callCount).toBe(1);
 	await driver.destroy();
 });
 
-test.serial("starting the driver should only work once", async (t) => {
+test.sequential("starting the driver should only work once", async (t) => {
 	const driver = new Driver(PORT_ADDRESS, {
 		testingHooks: {
 			skipBootloaderCheck: true,
@@ -53,11 +53,11 @@ test.serial("starting the driver should only work once", async (t) => {
 	await driver.start();
 
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-	t.is(portInstance.openStub.callCount, 1);
+	t.expect(portInstance.openStub.callCount).toBe(1);
 	await driver.destroy();
 });
 
-test.serial(
+test.sequential(
 	"the driver start promise should only be fulfilled after the port was opened",
 	async (t) => {
 		const driver = new Driver(PORT_ADDRESS, {
@@ -74,14 +74,14 @@ test.serial(
 		// start the driver
 		const fulfilledSpy = sinon.spy();
 		const startPromise = driver.start().then(fulfilledSpy);
-		t.true(fulfilledSpy.notCalled);
+		t.expect(fulfilledSpy.notCalled).toBe(true);
 		// Opening the mock port succeeds by default
 		await startPromise;
 		await driver.destroy();
 	},
 );
 
-test.serial(
+test.sequential(
 	"the driver start promise should be rejected if the port opening fails",
 	async (t) => {
 		const driver = new Driver(PORT_ADDRESS, {
@@ -105,12 +105,12 @@ test.serial(
 			Promise.reject(new Error("NOPE"))
 		);
 
-		await t.throwsAsync(startPromise, { message: /NOPE/ });
+		await t.expect(() => startPromise).rejects.toThrowError("NOPE");
 		await driver.destroy();
 	},
 );
 
-test.serial(
+test.sequential(
 	"after a failed driver start, starting again should not be possible",
 	async (t) => {
 		const driver = new Driver(PORT_ADDRESS, {
@@ -131,7 +131,7 @@ test.serial(
 		// fail opening of the serialport
 		const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 		portInstance.openStub.rejects(new Error("NOPE"));
-		await t.throwsAsync(startPromise, { message: /NOPE/ });
+		await t.expect(() => startPromise).rejects.toThrowError("NOPE");
 
 		// try to start again
 		await assertZWaveError(t, () => driver.start(), {
@@ -142,7 +142,7 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	`starting the driver should throw if no "error" handler is attached`,
 	async (t) => {
 		const driver = new Driver(PORT_ADDRESS, {
@@ -156,21 +156,21 @@ test.serial(
 	},
 );
 
-test.serial(
+test.sequential(
 	"the driver passes errors from the serialport through",
 	async (t) => {
 		const { driver, serialport } = await createAndStartDriver();
 		const errorSpy = sinon.spy();
 		driver.on("error", errorSpy);
 		serialport.emit("error", new Error("foo"));
-		t.is(errorSpy.callCount, 1);
-		t.true(errorSpy.firstCall.args[0].message.includes("foo"));
+		t.expect(errorSpy.callCount).toBe(1);
+		t.expect(errorSpy.firstCall.args[0].message.includes("foo")).toBe(true);
 	},
 );
 
-test.serial("the constructor should throw on duplicate security keys", (t) => {
-	let driver: import("./Driver").Driver;
-	t.teardown(async () => {
+test.sequential("the constructor should throw on duplicate security keys", (t) => {
+	let driver: import("./Driver.js").Driver;
+	t.onTestFinished(async () => {
 		if (driver) {
 			await driver.destroy();
 			driver.removeAllListeners();
@@ -222,7 +222,7 @@ test("merging multiple sets of options should work", (t) => {
 
 	const driver = new Driver("/dev/test", preset1, preset2);
 
-	t.like(driver.options, {
+	t.expect(driver.options).toMatchObject({
 		attempts: {
 			sendDataJammed: 2,
 			sendData: 3,
@@ -275,7 +275,7 @@ test("The exported driver presets work", (t) => {
 	let expected = mergeDeep({}, driverPresets.SAFE_MODE, true);
 	expected = mergeDeep(expected, driverPresets.AWAKE_LONGER, true);
 
-	t.like(driver.options, expected);
+	t.expect(driver.options).toMatchObject(expected);
 });
 
 // describe.skip("sending messages", () => {

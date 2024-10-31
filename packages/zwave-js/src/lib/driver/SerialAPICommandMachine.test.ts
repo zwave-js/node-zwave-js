@@ -4,8 +4,8 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise/index.js";
-import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
+import { beforeAll, test } from "vitest";
 import { Machine, type State, assign, interpret } from "xstate";
 import {
 	dummyCallbackNOK,
@@ -116,11 +116,11 @@ const machineParams: SerialAPICommandMachineParams = {
 	},
 };
 
-test.before((t) => {
+beforeAll((t) => {
 	t.context.clock = sinon.useFakeTimers();
 });
 
-test.after.always((t) => {
+afterAll((t) => {
 	t.context.clock.restore();
 });
 
@@ -405,7 +405,7 @@ testPlans.forEach((plan) => {
 		// ) {
 		// 	return;
 		// }
-		test.serial(`${planDescription} ${path.description}`, async (t) => {
+		test.sequential(`${planDescription} ${path.description}`, async (t) => {
 			// eslint-disable-next-line prefer-const
 			let context: TestContext;
 			const sendData = sinon.stub().callsFake(() => {
@@ -435,7 +435,6 @@ testPlans.forEach((plan) => {
 			const match = createMachineRegex.exec(path.description);
 			if (!match?.groups?.json) {
 				await path.test(undefined as any);
-				t.pass();
 				return;
 			}
 
@@ -501,7 +500,6 @@ testPlans.forEach((plan) => {
 			}
 
 			await path.test(context);
-			t.pass();
 		});
 	});
 });
@@ -512,5 +510,4 @@ testPlans.forEach((plan) => {
 // 			return !!stateNode.meta;
 // 		},
 // 	});
-// 	t.pass();
-// });
+// // });

@@ -1,4 +1,4 @@
-import test from "ava";
+import { test } from "vitest";
 import {
 	cloneDeep,
 	discreteBinarySearch,
@@ -9,124 +9,116 @@ import {
 test("discreteBinarySearch -> test case 1", async (t) => {
 	const [rangeMin, rangeMax] = [0, 9];
 	const values = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		4,
-	);
+	).toBe(4);
 });
 
 test("discreteBinarySearch -> test case 2", async (t) => {
 	const [rangeMin, rangeMax] = [0, 9];
 	const values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		9,
-	);
+	).toBe(9);
 });
 
 test("discreteBinarySearch -> test case 3", async (t) => {
 	const [rangeMin, rangeMax] = [0, 6];
 	const values = [0, 1, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		0,
-	);
+	).toBe(0);
 });
 
 test("discreteBinarySearch -> test case 4", async (t) => {
 	const [rangeMin, rangeMax] = [0, 6];
 	const values = [1, 1, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("discreteBinarySearch -> test case 5", async (t) => {
 	const [rangeMin, rangeMax] = [0, 0];
 	const values = [0];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		0,
-	);
+	).toBe(0);
 });
 
 test("discreteBinarySearch -> test case 6", async (t) => {
 	const [rangeMin, rangeMax] = [1, -1];
 	const values: number[] = [];
-	t.is(
+	t.expect(
 		await discreteBinarySearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("discreteLinearSearch -> test case 1", async (t) => {
 	const [rangeMin, rangeMax] = [0, 9];
 	const values = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		4,
-	);
+	).toBe(4);
 });
 
 test("discreteLinearSearch -> test case 2", async (t) => {
 	const [rangeMin, rangeMax] = [0, 9];
 	const values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		9,
-	);
+	).toBe(9);
 });
 
 test("discreteLinearSearch -> test case 3", async (t) => {
 	const [rangeMin, rangeMax] = [0, 6];
 	const values = [0, 1, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		0,
-	);
+	).toBe(0);
 });
 
 test("discreteLinearSearch -> test case 4", async (t) => {
 	const [rangeMin, rangeMax] = [0, 6];
 	const values = [1, 1, 1, 1, 1, 1, 1];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("discreteLinearSearch -> test case 5", async (t) => {
 	const [rangeMin, rangeMax] = [0, 0];
 	const values = [0];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		0,
-	);
+	).toBe(0);
 });
 
 test("discreteLinearSearch -> test case 6", async (t) => {
 	const [rangeMin, rangeMax] = [1, -1];
 	const values: number[] = [];
-	t.is(
+	t.expect(
 		await discreteLinearSearch(rangeMin, rangeMax, (i) => values[i] === 0),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("cloneDeep -> works with primitives", (t) => {
-	t.is(cloneDeep(1), 1);
-	t.is(cloneDeep("foo"), "foo");
-	t.is(cloneDeep(true), true);
+	t.expect(cloneDeep(1)).toBe(1);
+	t.expect(cloneDeep("foo")).toBe("foo");
+	t.expect(cloneDeep(true)).toBe(true);
 });
 
 test("cloneDeep -> works with arrays", (t) => {
-	t.deepEqual(cloneDeep([1, 2, 3]), [1, 2, 3]);
+	t.expect(cloneDeep([1, 2, 3])).toStrictEqual([1, 2, 3]);
 	t.not(cloneDeep([1, 2, 3]), [1, 2, 3]);
 });
 
 test("cloneDeep -> works with objects", (t) => {
-	t.deepEqual(cloneDeep({ a: 1, b: 2, c: 3 }), { a: 1, b: 2, c: 3 });
+	t.expect(cloneDeep({ a: 1, b: 2, c: 3 })).toStrictEqual({
+		a: 1,
+		b: 2,
+		c: 3,
+	});
 	t.not(cloneDeep({ a: 1, b: 2, c: 3 }), { a: 1, b: 2, c: 3 });
 });
 
@@ -134,7 +126,7 @@ test("cloneDeep -> works with nested objects", (t) => {
 	const source = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
 	const target = cloneDeep(source);
 
-	t.deepEqual(target, source);
+	t.expect(target).toStrictEqual(source);
 	t.not(target, source);
 	t.not(target.b, source.b);
 	t.not(target.e, source.e);
@@ -144,7 +136,7 @@ test("cloneDeep -> works with nested arrays", (t) => {
 	const source = [1, [2, 3], 4];
 	const target = cloneDeep(source);
 
-	t.deepEqual(target, source);
+	t.expect(target).toStrictEqual(source);
 	t.not(target, source);
 	t.not(target[1], source[1]);
 });
@@ -153,7 +145,7 @@ test("cloneDeep -> works with objects nested in arrays", (t) => {
 	const source = [{ a: 1 }, { b: 2 }, { c: 3 }];
 	const target = cloneDeep(source);
 
-	t.deepEqual(target, source);
+	t.expect(target).toStrictEqual(source);
 	t.not(target, source);
 	t.not(target[0], source[0]);
 	t.not(target[1], source[1]);
@@ -164,7 +156,7 @@ test("cloneDeep -> works with arrays nested in objects", (t) => {
 	const source = { a: [1, 2, 3] };
 	const target = cloneDeep(source);
 
-	t.deepEqual(target, source);
+	t.expect(target).toStrictEqual(source);
 	t.not(target, source);
 	t.not(target.a, source.a);
 });
@@ -180,21 +172,21 @@ test("cloneDeep -> creates new object instances", (t) => {
 test("mergeDeep -> can delete keys when undefined is passed", (t) => {
 	const target = { a: 1, b: 2, c: 3 };
 	const result = mergeDeep(target, { a: undefined }, true);
-	t.deepEqual(result, { b: 2, c: 3 });
+	t.expect(result).toStrictEqual({ b: 2, c: 3 });
 });
 
 test("mergeDeep -> sanity check with overwrite: true", (t) => {
 	const target = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
 	const source = { b: { c: undefined }, e: "foo" };
 	const result = mergeDeep(target, source, true);
-	t.deepEqual(result, { a: 1, b: { d: 4 }, e: "foo" });
+	t.expect(result).toStrictEqual({ a: 1, b: { d: 4 }, e: "foo" });
 });
 
 test("mergeDeep -> sanity check with overwrite: false", (t) => {
 	const target = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
 	const source = { b: { c: undefined }, e: "foo", f: "bar" };
 	const result = mergeDeep(target, source, false);
-	t.deepEqual(result, {
+	t.expect(result).toStrictEqual({
 		a: 1,
 		b: { c: 3, d: 4 },
 		e: [5, 6, 7],

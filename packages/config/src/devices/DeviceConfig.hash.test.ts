@@ -1,8 +1,8 @@
 import { CommandClasses } from "@zwave-js/core";
 import { isUint8Array } from "@zwave-js/shared";
-import test from "ava";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { test } from "vitest";
 import { ConfigManager } from "../ConfigManager.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -23,7 +23,7 @@ test("hash() works", async (t) => {
 	t.not(config, undefined);
 
 	const hash = config.getHash();
-	t.true(isUint8Array(hash));
+	t.expect(isUint8Array(hash)).toBe(true);
 });
 
 test("hash() changes when changing a parameter info", async (t) => {

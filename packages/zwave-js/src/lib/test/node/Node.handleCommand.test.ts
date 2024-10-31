@@ -3,8 +3,8 @@ import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
 import { type EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import { type CommandClassInfo, CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
-import test from "ava";
 import sinon from "sinon";
+import { beforeEach, test } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import {
@@ -26,9 +26,9 @@ function makeNode(
 	return node;
 }
 
-test.beforeEach(() => fakeDriver.sendMessage.resetHistory());
+beforeEach(() => fakeDriver.sendMessage.resetHistory());
 
-test.serial(
+test.sequential(
 	"should map commands from the root endpoint to endpoint 1 if configured",
 	async (t) => {
 		const node = makeNode([
@@ -71,19 +71,19 @@ test.serial(
 		});
 		await node.handleCommand(command);
 
-		t.true(
+		t.expect(
 			node.getValue({
 				commandClass: CommandClasses["Binary Switch"],
 				endpoint: 1,
 				property: "currentValue",
 			}),
-		);
+		).toBe(true);
 
 		node.destroy();
 	},
 );
 
-test.serial(
+test.sequential(
 	"a notification event is sent when receiving an EntryControlNotification",
 	async (t) => {
 		const node = makeNode([
@@ -133,7 +133,6 @@ test.serial(
 				eventData: "1234",
 			},
 		);
-		t.pass();
 
 		node.destroy();
 	},

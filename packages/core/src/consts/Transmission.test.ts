@@ -1,4 +1,4 @@
-import test from "ava";
+import { test } from "vitest";
 import { MessagePriority, isMessagePriority } from "./Transmission.js";
 
 test("isMessagePriority() should detect numbers in the enum range as a message priority", (t) => {
@@ -8,13 +8,13 @@ test("isMessagePriority() should detect numbers in the enum range as a message p
 	const minKey = Math.min(...numericKeys);
 	const maxKey = Math.max(...numericKeys);
 	for (let num = minKey - 2; num <= maxKey + 2; num++) {
-		t.is(isMessagePriority(num), num >= minKey && num <= maxKey);
+		t.expect(isMessagePriority(num)).toBe(num >= minKey && num <= maxKey);
 	}
 });
 
 test("isMessagePriority() should not detect anything else as a message priority", (t) => {
 	const notAPriority: any[] = [null, undefined, "", [], {}, true, false];
 	for (const stuff of notAPriority) {
-		t.false(isMessagePriority(stuff));
+		t.expect(isMessagePriority(stuff)).toBe(false);
 	}
 });

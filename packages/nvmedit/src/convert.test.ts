@@ -1,10 +1,10 @@
 import { readJSON } from "@zwave-js/shared";
 import { cloneDeep } from "@zwave-js/shared/safe";
-import test, { type ExecutionContext } from "ava";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { test } from "vitest";
 import {
 	type NVMJSON,
 	json500To700,
@@ -61,7 +61,7 @@ function bufferEquals(
 			// @ts-expect-error
 			if (!("meta" in jsonInput)) delete jsonOutput.meta;
 
-			t.deepEqual(jsonOutput, jsonInput);
+			t.expect(jsonOutput).toStrictEqual(jsonInput);
 		});
 	}
 }
@@ -191,7 +191,7 @@ function bufferEquals(
 						.applicationData.slice(0, 1024);
 				}
 			}
-			t.deepEqual(output, expected);
+			t.expect(output).toStrictEqual(expected);
 		});
 	}
 }

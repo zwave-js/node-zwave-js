@@ -1,7 +1,7 @@
 import c from "ansi-colors";
-import type { Assertions } from "ava";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
+import { TestContext } from "vitest";
 import Transport from "winston-transport";
 import type { ZWaveLogInfo } from "../log/shared_safe.js";
 
@@ -36,7 +36,7 @@ export class SpyTransport extends Transport {
 
 /** Tests a printed log message */
 export function assertMessage(
-	t: Assertions,
+	t: TestContext,
 	transport: SpyTransport,
 	options: Partial<{
 		message: string;
@@ -51,7 +51,7 @@ export function assertMessage(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	t.true(transport.spy.callCount > callNumber);
+	t.expect(transport.spy.callCount > callNumber).toBe(true);
 	const callArg = transport.spy.getCall(callNumber).args[0];
 	let actualMessage: string = callArg[MESSAGE];
 	// By default ignore the color codes
@@ -75,15 +75,15 @@ export function assertMessage(
 		if (ignoreColor) {
 			options.message = c.stripColor(options.message);
 		}
-		t.is(actualMessage, options.message);
+		t.expect(actualMessage).toBe(options.message);
 	}
 	if (typeof options.predicate === "function") {
-		t.true(options.predicate(actualMessage));
+		t.expect(options.predicate(actualMessage)).toBe(true);
 	}
 }
 
 export function assertLogInfo(
-	t: Assertions,
+	t: TestContext,
 	transport: SpyTransport,
 	options: Partial<{
 		level: string;
@@ -92,13 +92,13 @@ export function assertLogInfo(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	t.true(transport.spy.callCount > callNumber);
+	t.expect(transport.spy.callCount > callNumber).toBe(true);
 	const callArg = transport.spy.getCall(callNumber).args[0];
 
 	if (typeof options.level === "string") {
-		t.is(callArg.level, options.level);
+		t.expect(callArg.level).toBe(options.level);
 	}
 	if (typeof options.predicate === "function") {
-		t.true(options.predicate(callArg));
+		t.expect(options.predicate(callArg)).toBe(true);
 	}
 }

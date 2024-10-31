@@ -1,6 +1,6 @@
 import { CommandClasses, ValueMetadata } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import test from "ava";
+import { test } from "vitest";
 import { V } from "./Values.js";
 import { AlarmSensorType } from "./_Types.js";
 
@@ -35,66 +35,66 @@ test("defineDynamicCCValues, dynamic property and meta", (t) => {
 	});
 
 	const actual1a = dfn.prop1("bar");
-	t.deepEqual(actual1a.id, {
+	t.expect(actual1a.id).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		property: "bar",
 		propertyKey: "bar",
 	});
-	t.like(actual1a.meta, {
+	t.expect(actual1a.meta).toMatchObject({
 		readable: false,
 	});
 	const actual1b = dfn.prop1("readable");
-	t.deepEqual(actual1b.id, {
+	t.expect(actual1b.id).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		property: "readable",
 		propertyKey: "readable",
 	});
-	t.like(actual1b.meta, {
+	t.expect(actual1b.meta).toMatchObject({
 		readable: true,
 	});
-	t.like(dfn.prop1.options, {
+	t.expect(dfn.prop1.options).toMatchObject({
 		internal: true,
 		secret: false,
 	});
 
 	const actual2a = dfn.prop2("bar");
-	t.deepEqual(actual2a.id, {
+	t.expect(actual2a.id).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		property: "bar2",
 		propertyKey: "bar2",
 	});
-	t.like(actual2a.meta, {
+	t.expect(actual2a.meta).toMatchObject({
 		writeable: true,
 	});
 	const actual2b = dfn.prop2("not-writeable");
-	t.deepEqual(actual2b.id, {
+	t.expect(actual2b.id).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		property: "not-writeable2",
 		propertyKey: "not-writeable2",
 	});
-	t.like(actual2b.meta, {
+	t.expect(actual2b.meta).toMatchObject({
 		writeable: false,
 	});
-	t.like(dfn.prop2.options, {
+	t.expect(dfn.prop2.options).toMatchObject({
 		internal: false,
 		secret: true,
 	});
 
-	t.true(
+	t.expect(
 		dfn.prop1.is({
 			commandClass: CommandClasses.Basic,
 			property: "the same",
 			propertyKey: "the same",
 		}),
-	);
+	).toBe(true);
 
-	t.false(
+	t.expect(
 		dfn.prop1.is({
 			commandClass: CommandClasses.Basic,
 			property: "the same",
 			propertyKey: "not the same",
 		}),
-	);
+	).toBe(false);
 });
 
 // This is a copy of the Basic CC value definitions, for resiliency
@@ -109,7 +109,7 @@ const BasicCCValues = Object.freeze({
 
 test("Basic CC, current value, no endpoint", (t) => {
 	const actual = BasicCCValues.currentValue.id;
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		property: "currentValue",
 	});
@@ -117,7 +117,7 @@ test("Basic CC, current value, no endpoint", (t) => {
 
 test("Basic CC, current value, endpoint 2", (t) => {
 	const actual = BasicCCValues.currentValue.endpoint(2);
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		endpoint: 2,
 		property: "currentValue",
@@ -126,7 +126,7 @@ test("Basic CC, current value, endpoint 2", (t) => {
 
 test("Basic CC, compat event, endpoint 2", (t) => {
 	const actual = BasicCCValues.compatEvent.endpoint(2);
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses.Basic,
 		endpoint: 2,
 		property: "event",
@@ -166,7 +166,7 @@ const AlarmSensorCCValues = Object.freeze({
 
 test("(fake) Alarm Sensor CC, state (type 1), no endpoint", (t) => {
 	const actual = AlarmSensorCCValues.state(1).id;
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses["Alarm Sensor"],
 		property: "state",
 		propertyKey: 1,
@@ -175,7 +175,7 @@ test("(fake) Alarm Sensor CC, state (type 1), no endpoint", (t) => {
 
 test("(fake) Alarm Sensor CC, state (type 1), endpoint 5", (t) => {
 	const actual = AlarmSensorCCValues.state(1).endpoint(5);
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses["Alarm Sensor"],
 		endpoint: 5,
 		property: "state",
@@ -185,7 +185,7 @@ test("(fake) Alarm Sensor CC, state (type 1), endpoint 5", (t) => {
 
 test("(fake) Alarm Sensor CC, type (4), endpoint 5", (t) => {
 	const actual = AlarmSensorCCValues.type(4).endpoint(5);
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		commandClass: CommandClasses["Alarm Sensor"],
 		endpoint: 5,
 		property: 4,
@@ -194,7 +194,7 @@ test("(fake) Alarm Sensor CC, type (4), endpoint 5", (t) => {
 
 test("(fake) Alarm Sensor CC, dynamic metadata", (t) => {
 	const actual = AlarmSensorCCValues.state(1).meta;
-	t.deepEqual(actual, {
+	t.expect(actual).toStrictEqual({
 		type: "boolean",
 		readable: true,
 		writeable: false,

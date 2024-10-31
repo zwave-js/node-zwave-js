@@ -320,7 +320,6 @@ integrationTest(
 						"Expected communication with endpoint 2 to be secure",
 				},
 			);
-			t.pass();
 		},
 	},
 );

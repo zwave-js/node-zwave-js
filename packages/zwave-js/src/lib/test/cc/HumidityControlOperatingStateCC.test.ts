@@ -7,7 +7,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlOperatingStateCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -41,9 +41,9 @@ test("the Report command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as HumidityControlOperatingStateCCReport;
-	t.is(cc.constructor, HumidityControlOperatingStateCCReport);
+	t.expect(cc.constructor).toBe(HumidityControlOperatingStateCCReport);
 
-	t.is(cc.state, HumidityControlOperatingState.Humidifying);
+	t.expect(cc.state).toBe(HumidityControlOperatingState.Humidifying);
 });
 
 // test("the CC values should have the correct metadata", (t) => {
