@@ -1,6 +1,6 @@
 import { type Interpreter, interpret } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
-import { TaskContext, TestContext, test } from "vitest";
+import { type TaskContext, type TestContext, test } from "vitest";
 import {
 	type NodeReadyContext,
 	type NodeReadyEvent,
