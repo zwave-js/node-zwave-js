@@ -227,6 +227,35 @@ jobs:
       if: github.event_name != 'pull_request'
       run: yarn run test:ts $TURBO_FLAGS
 
+  # ===================
+  # Test if the transformers are working
+  test-transformers:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [18, 20]
+        os: [ubuntu-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
+      with:
+        node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    # Transformer tests need their dependencies to be compiled
+    - name: Compile test dependencies
+      run: |
+        yarn workspace @zwave-js/shared run build
+        yarn workspace @zwave-js/core run build
+
+    # For pull requests, only run tests for changed files
+    - name: Test transformers
+      run: yarn workspace @zwave-js/transformers run test:ts
+
   # # ===================
   # # This job checks if a PR changes the public API surface
   # api-surface:

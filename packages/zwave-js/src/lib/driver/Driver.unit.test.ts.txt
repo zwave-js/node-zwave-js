@@ -2,23 +2,14 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, mergeDeep } from "@zwave-js/shared";
-import proxyquire from "proxyquire";
 import sinon from "sinon";
 import { test } from "vitest";
-import { PORT_ADDRESS, createAndStartDriver } from "../test/utils.js";
 import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions.js";
 
-// @messageTypes(MessageType.Request, 0xff)
-// class TestMessage extends Message {}
-
-// load the driver with stubbed out Serialport
-const { Driver } = proxyquire<typeof import("./Driver")>("./Driver", {
-	"@zwave-js/serial": {
-		ZWaveSerialPort: MockSerialPort,
-	},
-});
+// FIXME: Check if we need these tests. If so, migrate to createAndStartDriverWithMockPort()
 
 test.sequential("starting the driver should open a new serialport", async (t) => {
+	
 	const driver = new Driver(PORT_ADDRESS, {
 		testingHooks: {
 			skipBootloaderCheck: true,

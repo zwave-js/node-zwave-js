@@ -1,3 +1,4 @@
+import { BasicCommand } from "@zwave-js/cc";
 import type { BinarySensorCCAPI } from "@zwave-js/cc/BinarySensorCC";
 import { BinarySwitchCCAPI } from "@zwave-js/cc/BinarySwitchCC";
 import {
@@ -5,60 +6,112 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { FunctionType } from "@zwave-js/serial";
-import type { MockSerialPort } from "@zwave-js/serial/mock";
-import { Bytes, type ThrowingMap } from "@zwave-js/shared";
+import {
+	FunctionType,
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "@zwave-js/serial";
+import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { type ThrowingMap, noop } from "@zwave-js/shared";
+import {
+	MockController,
+	type MockControllerBehavior,
+	MockNode,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
-import { afterEach, beforeEach, test as baseTest } from "vitest";
-import { ZWaveController } from "../controller/Controller.js";
+import { test as baseTest } from "vitest";
+import {
+	createDefaultMockControllerBehaviors,
+	createDefaultMockNodeBehaviors,
+} from "../../Utils.js";
 import type { Driver } from "../driver/Driver.js";
-import { createAndStartDriver } from "../test/utils.js";
+import { createAndStartTestingDriver } from "../driver/DriverMock.js";
 import { ZWaveNode } from "./Node.js";
 
 interface LocalTestContext {
 	context: {
 		driver: Driver;
-		serialport: MockSerialPort;
+		controller: MockController;
+		serialport: MockPortBinding;
 		makePhysicalNode(nodeId: number): ZWaveNode;
 	};
 }
 
 const test = baseTest.extend<LocalTestContext>({
-	context: {} as LocalTestContext["context"],
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
+
+			const { driver, mockPort } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				skipNodeInterview: true,
+				beforeStartup(mockPort) {
+					context.controller = new MockController({
+						serial: mockPort,
+						capabilities: {
+							supportedFunctionTypes:
+								getDefaultSupportedFunctionTypes().filter(
+									(ft) =>
+										ft !== FunctionType.SendDataBridge
+										&& ft
+											!== FunctionType
+												.SendDataMulticastBridge,
+								),
+						},
+					});
+					context.controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+
+					const ignoreBroadcast: MockControllerBehavior = {
+						onHostMessage(controller, msg) {
+							if (
+								msg instanceof SendDataRequest
+								&& msg.getNodeId() === 255
+							) {
+								return true;
+							}
+						},
+					};
+					context.controller.defineBehavior(ignoreBroadcast);
+				},
+			});
+			context.driver = driver;
+			context.serialport = mockPort;
+
+			context.makePhysicalNode = (nodeId: number) => {
+				// Make the driver know about the node
+				const node = new ZWaveNode(nodeId, driver);
+				(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+					nodeId,
+					node,
+				);
+
+				// Make the mock controller know about the node
+				const mockNode = new MockNode({
+					id: nodeId,
+					controller: context.controller,
+				});
+				context.controller.addNode(mockNode);
+
+				// Apply default behaviors that are required for interacting with the driver correctly
+				mockNode.defineBehavior(...createDefaultMockNodeBehaviors());
+
+				return node;
+			};
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
+		},
+		{ auto: true },
+	],
 });
-
-beforeEach<LocalTestContext>(async ({ context, expect }) => {
-	const { driver, serialport } = await createAndStartDriver();
-	driver["_controller"] = new ZWaveController(driver);
-	driver["_controller"].isFunctionSupported = isFunctionSupported;
-
-	context.driver = driver;
-	context.serialport = serialport;
-	context.makePhysicalNode = (nodeId: number) => {
-		const node = new ZWaveNode(nodeId, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			nodeId,
-			node,
-		);
-		return node;
-	};
-});
-
-afterEach<LocalTestContext>(async ({ context, expect }) => {
-	const { driver } = context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-// Test mock for isFunctionSupported to control which commands are getting used
-function isFunctionSupported(fn: FunctionType): boolean {
-	switch (fn) {
-		case FunctionType.SendDataBridge:
-		case FunctionType.SendDataMulticastBridge:
-			return false;
-	}
-	return true;
-}
 
 test.sequential(
 	"createAPI() throws if a non-implemented API should be created",
@@ -141,6 +194,7 @@ test.sequential(
 
 			assertZWaveError(
 				expect,
+				// @ts-expect-error
 				() => broadcast.commandClasses.FOOBAR,
 				{
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
@@ -155,7 +209,7 @@ test.sequential(
 	// 	"the commandClasses dictionary throws when trying to use a command of an unsupported CC",
 	// 	({ context, expect }) => {
 	// 		const { driver } = context;
-	// 		prepareTest(t);
+	// 		prepareTest(context);
 
 	// 		const broadcast = driver.controller.getBroadcastNode();
 	// 		assertZWaveError(
@@ -183,7 +237,7 @@ test.sequential(
 	);
 
 	test.sequential(
-		"the commandClasses dictionary  does not throw when accessing the ID of a CC",
+		"the commandClasses dictionary does not throw when accessing the ID of a CC",
 		({ context, expect }) => {
 			const { driver } = context;
 			prepareTest(context);
@@ -196,7 +250,7 @@ test.sequential(
 	);
 
 	test.sequential(
-		"the commandClasses dictionary  does not throw when scoping the API options",
+		"the commandClasses dictionary does not throw when scoping the API options",
 		({ context, expect }) => {
 			const { driver } = context;
 			prepareTest(context);
@@ -212,7 +266,7 @@ test.sequential(
 		"the commandClasses dictionary  returns all supported CCs when being enumerated",
 		({ context, expect }) => {
 			const { driver } = context;
-			const { node2, node3 } = prepareTest(t);
+			const { node2, node3 } = prepareTest(context);
 
 			// No supported CCs, empty array
 			let broadcast = driver.controller.getBroadcastNode();
@@ -246,6 +300,7 @@ test.sequential(
 
 			const broadcast = driver.controller.getBroadcastNode();
 			expect(
+				// @ts-expect-error
 				broadcast.commandClasses[Symbol.toStringTag],
 			).toBe("[object Object]");
 		},
@@ -259,6 +314,7 @@ test.sequential(
 
 			const broadcast = driver.controller.getBroadcastNode();
 			expect(
+				// @ts-expect-error
 				broadcast.commandClasses[Symbol.unscopables],
 			).toBeUndefined();
 		},
@@ -268,37 +324,45 @@ test.sequential(
 test.sequential(
 	"broadcast uses the correct commands behind the scenes",
 	async ({ context, expect }) => {
-		const { driver, serialport, makePhysicalNode } = context;
+		const { driver, serialport, controller, makePhysicalNode } = context;
 		makePhysicalNode(2);
 		makePhysicalNode(3);
 		const broadcast = driver.controller.getBroadcastNode();
-		broadcast.commandClasses.Basic.set(99);
+		broadcast.commandClasses.Basic.set(99).catch(noop);
 		await wait(1);
 		// » [Node 255] [REQ] [SendData]
 		//   │ transmit options: 0x25
 		//   │ callback id:        1
 		//   └─[BasicCCSet]
-		expect(
-			serialport.lastWrite,
-		).toStrictEqual(Bytes.from("010a0013ff0320016325017c", "hex"));
+		controller.assertReceivedHostMessage((msg) =>
+			msg instanceof SendDataRequest
+			&& msg.getNodeId() === 255
+			&& msg.serializedCC?.[0] === CommandClasses.Basic
+			&& msg.serializedCC?.[1] === BasicCommand.Set
+		);
 	},
 );
 
 test.sequential(
 	"multicast uses the correct commands behind the scenes",
 	async ({ context, expect }) => {
-		const { driver, serialport, makePhysicalNode } = context;
+		const { driver, serialport, controller, makePhysicalNode } = context;
 		makePhysicalNode(2);
 		makePhysicalNode(3);
 		const multicast = driver.controller.getMulticastGroup([2, 3]);
-		multicast.commandClasses.Basic.set(99);
+		multicast.commandClasses.Basic.set(99).catch(noop);
 		await wait(1);
 		// » [Node 2, 3] [REQ] [SendData]
 		//   │ transmit options: 0x25
 		//   │ callback id:        1
 		//   └─[BasicCCSet]
-		expect(
-			serialport.lastWrite,
-		).toStrictEqual(Bytes.from("010c001402020303200163250181", "hex"));
+		controller.assertReceivedHostMessage((msg) =>
+			msg instanceof SendDataMulticastRequest
+			&& msg.nodeIds.length === 2
+			&& msg.nodeIds.includes(2)
+			&& msg.nodeIds.includes(3)
+			&& msg.serializedCC?.[0] === CommandClasses.Basic
+			&& msg.serializedCC?.[1] === BasicCommand.Set
+		);
 	},
 );

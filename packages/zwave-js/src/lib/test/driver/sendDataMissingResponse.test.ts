@@ -106,7 +106,8 @@ integrationTest(
 			node.markAsAlive();
 			shouldTimeOut = true;
 
-			const basicSetPromise = node.commandClasses.Basic.set(99);
+			const basicSetPromise = node.commandClasses.Basic.set(99)
+				.catch((e) => e);
 
 			await wait(2000);
 
@@ -115,7 +116,7 @@ integrationTest(
 			);
 			mockController.clearReceivedHostMessages();
 
-			await assertZWaveError(t.expect, () => basicSetPromise, {
+			await assertZWaveError(t.expect, await basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 				context: "response",
 			});
