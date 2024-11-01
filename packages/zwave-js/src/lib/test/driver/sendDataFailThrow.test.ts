@@ -3,7 +3,7 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import { afterEach, beforeEach, test } from "vitest";
+import { test as baseTest } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
@@ -12,40 +12,44 @@ import {
 	isFunctionSupported_NoBridge,
 } from "./fixtures.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		serialport: MockSerialPort;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
 
-beforeEach(async (t) => {
-	t.timeout(5000);
+			const { driver, serialport } = await createAndStartDriver();
 
-	const { driver, serialport } = await createAndStartDriver();
+			driver["_controller"] = {
+				ownNodeId: 1,
+				nodes: new Map(),
+				incrementStatistics: () => {},
+				removeAllListeners: () => {},
+			} as any;
 
-	driver["_controller"] = {
-		ownNodeId: 1,
-		nodes: new Map(),
-		incrementStatistics: () => {},
-		removeAllListeners: () => {},
-	} as any;
+			// Run tests
+			await use({ driver, serialport });
 
-	t.context = { driver, serialport };
-});
-
-afterEach(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
+		},
+		{ auto: true },
+	],
 });
 
 process.env.LOGLEVEL = "debug";
 
 test.sequential(
 	"when a SendData request fails, the `sendMessage/sendCommand` call should be rejected",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	async ({ context, expect }) => {
+		const { driver, serialport } = context;
 
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported =
@@ -81,7 +85,7 @@ test.sequential(
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		t.expect(
+		expect(
 			serialport.lastWrite,
 		).toStrictEqual(Bytes.from("010a00130203200163250181", "hex"));
 		await wait(10);
@@ -93,7 +97,7 @@ test.sequential(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(50);
 
@@ -101,16 +105,16 @@ test.sequential(
 		//   callback id:     1
 		//   transmit status: NoACK
 		serialport.receiveData(Bytes.from("0107001301010002e9", "hex"));
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 
-		await t.expect(() => promise).rejects.toThrowError();
+		await expect(() => promise).rejects.toThrowError();
 	},
 );
 
 test.sequential(
 	"when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	async ({ context, expect }) => {
+		const { driver, serialport } = context;
 
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
@@ -147,7 +151,7 @@ test.sequential(
 		//   │ callback id:      1
 		//   └─[BasicCCSet]
 		//     └─ targetValue: 99
-		t.expect(
+		expect(
 			serialport.lastWrite,
 		).toStrictEqual(
 			Bytes.from("010f00a90102032001632500000000013f", "hex"),
@@ -161,7 +165,7 @@ test.sequential(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("010401a90152", "hex"));
 		// » [ACK]
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(50);
 
@@ -174,8 +178,8 @@ test.sequential(
 				"hex",
 			),
 		);
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 
-		await t.expect(() => promise).rejects.toThrowError();
+		await expect(() => promise).rejects.toThrowError();
 	},
 );

@@ -108,6 +108,13 @@ async function main() {
 						callExpr,
 						"not.toThrow",
 					);
+				} else if (methodName === "throwsAsync") {
+					replaceAssertion_staticAssertion(
+						ident,
+						propAccess,
+						callExpr,
+						"rejects.toThrow",
+					);
 				} else if (methodName === "teardown") {
 					propAccess.replaceWithText(
 						`${ident.getText()}.onTestFinished`,

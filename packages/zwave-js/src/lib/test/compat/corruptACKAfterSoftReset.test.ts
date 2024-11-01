@@ -15,7 +15,7 @@ integrationTest(
 			mockController.clearReceivedHostMessages();
 
 			mockController.corruptACK = true;
-			await t.notThrowsAsync(driver.softReset());
+			await driver.softReset();
 			mockController.corruptACK = false;
 		},
 	},

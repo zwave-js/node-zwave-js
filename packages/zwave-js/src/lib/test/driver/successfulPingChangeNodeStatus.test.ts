@@ -7,23 +7,25 @@ import {
 	getEnumMemberName,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import { afterEach, beforeEach, test } from "vitest";
+import { afterEach, beforeEach, test as baseTest } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { NodeStatus } from "../../node/_Types.js";
 import { createAndStartDriver } from "../utils.js";
 import { isFunctionSupported_NoBridge } from "./fixtures.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		serialport: MockSerialPort;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: {} as LocalTestContext["context"],
+});
 
-beforeEach(async (t) => {
-	t.timeout(5000);
-
+beforeEach<LocalTestContext>(async ({ context }) => {
 	const { driver, serialport } = await createAndStartDriver();
 
 	driver["_controller"] = {
@@ -33,12 +35,12 @@ beforeEach(async (t) => {
 		incrementStatistics: () => {},
 		removeAllListeners: () => {},
 	} as any;
-
-	t.context = { driver, serialport };
+	context.driver = driver;
+	context.serialport = serialport;
 });
 
-afterEach(async (t) => {
-	const { driver } = t.context;
+afterEach<LocalTestContext>(async ({ context }) => {
+	const { driver } = context;
 	await driver.destroy();
 	driver.removeAllListeners();
 });
@@ -70,8 +72,8 @@ for (
 					initialStatus,
 				)
 			})`,
-			async (t) => {
-				const { driver, serialport } = t.context;
+			async ({ context, expect }) => {
+				const { driver, serialport } = context;
 
 				// https://github.com/zwave-js/node-zwave-js/issues/1364#issuecomment-760006591
 
@@ -98,7 +100,7 @@ for (
 				} else if (initialStatus === NodeStatus.Dead) {
 					node4.markAsDead();
 				}
-				t.expect(node4.status).toBe(initialStatus);
+				expect(node4.status).toBe(initialStatus);
 
 				const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -108,7 +110,7 @@ for (
 				//   │ transmit options: 0x25
 				//   │ callback id:      1
 				//   └─[NoOperationCC]
-				t.expect(
+				expect(
 					serialport.lastWrite,
 				).toStrictEqual(Bytes.from("010800130401002501c5", "hex"));
 				await wait(10);
@@ -120,7 +122,7 @@ for (
 				//     was sent: true
 				serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 				// » [ACK]
-				t.expect(serialport.lastWrite).toStrictEqual(ACK);
+				expect(serialport.lastWrite).toStrictEqual(ACK);
 
 				await wait(10);
 
@@ -133,13 +135,13 @@ for (
 						"hex",
 					),
 				);
-				t.expect(serialport.lastWrite).toStrictEqual(ACK);
+				expect(serialport.lastWrite).toStrictEqual(ACK);
 
 				await wait(10);
 
 				await pingPromise;
 
-				t.expect(node4.status).toBe(expectedStatus);
+				expect(node4.status).toBe(expectedStatus);
 			},
 		);
 	}

@@ -1,31 +1,39 @@
-import { afterEach, beforeEach, test } from "vitest";
+import { test as baseTest } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
-interface TestContext {
-	driver: Driver;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-beforeEach(async (t) => {
-	t.timeout(30000);
-	const { driver } = await createAndStartTestingDriver({
-		loadConfiguration: false,
-		skipControllerIdentification: true,
-		skipNodeInterview: true,
-	});
-	t.context.driver = driver;
+			const { driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				skipControllerIdentification: true,
+				skipNodeInterview: true,
+			});
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
+		},
+		{ auto: true },
+	],
 });
 
-afterEach(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-test("the automatically created callback ID should be incremented and wrap from 0xff back to 1", (t) => {
-	const { driver } = t.context;
+test("the automatically created callback ID should be incremented and wrap from 0xff back to 1", ({ context, expect }) => {
+	const { driver } = context;
 	let lastCallbackId: number | undefined;
 	for (let i = 0; i <= 300; i++) {
 		if (i === 300) {
@@ -35,10 +43,10 @@ test("the automatically created callback ID should be incremented and wrap from 
 		}
 		const nextCallbackId = driver.getNextCallbackId();
 		if (lastCallbackId === 0xff) {
-			t.expect(nextCallbackId).toBe(1);
+			expect(nextCallbackId).toBe(1);
 			break;
 		} else if (lastCallbackId != null) {
-			t.expect(nextCallbackId).toBe(lastCallbackId + 1);
+			expect(nextCallbackId).toBe(lastCallbackId + 1);
 		}
 		lastCallbackId = nextCallbackId;
 	}

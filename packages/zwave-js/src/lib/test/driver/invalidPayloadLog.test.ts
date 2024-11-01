@@ -8,53 +8,62 @@ import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
 import MockDate from "mockdate";
-import { afterEach, beforeAll, beforeEach, test } from "vitest";
+import { afterEach, beforeEach, test as baseTest } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { DriverLogger } from "../../log/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
 import { isFunctionSupported_NoBridge } from "./fixtures.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
-	driverLogger: DriverLogger;
-	spyTransport: SpyTransport;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		serialport: MockSerialPort;
+		driverLogger: DriverLogger;
+		spyTransport: SpyTransport;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
-
 // Replace all defined transports with a spy transport
-beforeAll((t) => {
-	process.env.LOGLEVEL = "debug";
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-	const spyTransport = new SpyTransport();
-	spyTransport.format = createDefaultTransportFormat(true, true);
-	const driverLogger = new DriverLogger(
-		undefined as any,
-		new ZWaveLogContainer({
-			transports: [spyTransport],
-		}),
-	);
-	// Uncomment this to debug the log outputs manually
-	// wasSilenced = unsilence(driverLogger);
+			process.env.LOGLEVEL = "debug";
 
-	MockDate.set(new Date().setHours(0, 0, 0, 0));
+			const spyTransport = new SpyTransport();
+			spyTransport.format = createDefaultTransportFormat(true, true);
+			const driverLogger = new DriverLogger(
+				undefined as any,
+				new ZWaveLogContainer({
+					transports: [spyTransport],
+				}),
+			);
+			// Uncomment this to debug the log outputs manually
+			// wasSilenced = unsilence(driverLogger);
 
-	t.context.driverLogger = driverLogger;
-	t.context.spyTransport = spyTransport;
+			MockDate.set(new Date().setHours(0, 0, 0, 0));
+
+			context.driverLogger = driverLogger;
+			context.spyTransport = spyTransport;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			// Don't spam the console when performing the other tests not related to logging
+
+			driverLogger.container.updateConfiguration({ enabled: false });
+			MockDate.reset();
+		},
+		{ auto: true },
+	],
 });
 
-// Don't spam the console when performing the other tests not related to logging
-afterAll((t) => {
-	t.context.driverLogger.container.updateConfiguration({ enabled: false });
-	MockDate.reset();
-});
-
-beforeEach(async (t) => {
-	t.timeout(5000);
-
-	const { spyTransport, driverLogger } = t.context;
+beforeEach<LocalTestContext>(async ({ context }) => {
+	const { spyTransport, driverLogger } = context;
 	spyTransport.spy.resetHistory();
 
 	const { driver, serialport } = await createAndStartDriver();
@@ -68,18 +77,18 @@ beforeEach(async (t) => {
 	driver["_driverLog"] = driverLogger;
 	(driverLogger as any).driver = driver;
 
-	t.context.driver = driver;
-	t.context.serialport = serialport;
+	context.driver = driver;
+	context.serialport = serialport;
 });
 
-afterEach(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
+afterEach<LocalTestContext>(async ({ context }) => {
+	const { driver } = context;
 	driver.removeAllListeners();
+	await driver.destroy();
 });
 
-test("when an invalid CC is received, this is printed in the logs", async (t) => {
-	const { driver, serialport, spyTransport } = t.context;
+test("when an invalid CC is received, this is printed in the logs", async ({ context, expect }) => {
+	const { driver, serialport, spyTransport } = context;
 
 	// Use the normal SendData commands
 	driver["_controller"]!.isFunctionSupported = isFunctionSupported_NoBridge;
@@ -106,11 +115,11 @@ test("when an invalid CC is received, this is printed in the logs", async (t) =>
 	//        value: true
 	serialport.receiveData(Bytes.from("010800040021043003e5", "hex"));
 	await wait(10);
-	assertMessage(t, spyTransport, {
+	assertMessage(expect, spyTransport, {
 		callNumber: 1,
 		message: `« [Node 033] [REQ] [ApplicationCommand]
   └─[BinarySensorCCReport] [INVALID]`,
 	});
 	// FIXME: The log message should be BinarySensorCCReport, not BinarySensorCCReport2
-	t.expect(serialport.lastWrite).toStrictEqual(ACK);
+	expect(serialport.lastWrite).toStrictEqual(ACK);
 });

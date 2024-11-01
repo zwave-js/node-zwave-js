@@ -4,42 +4,52 @@ import { CommandClasses, type ValueID, ValueMetadata } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import sinon from "sinon";
-import { type TaskContext, afterAll, beforeAll, test } from "vitest";
+import { type TaskContext, test as baseTest } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { assertCC } from "../assertCC.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-// const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-beforeAll(async (t) => {
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			t.context.controller = controller;
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-afterAll(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-});
-
-test.sequential("getValue() returns the values stored in the value DB", (t) => {
-	const { driver } = t.context;
+test.sequential("getValue() returns the values stored in the value DB", ({ context, expect }) => {
+	const { driver } = context;
 
 	const node = new ZWaveNode(1, driver);
 	const valueId: ValueID = {
@@ -50,13 +60,13 @@ test.sequential("getValue() returns the values stored in the value DB", (t) => {
 
 	node.valueDB.setValue(valueId, 4);
 
-	t.expect(node.getValue(valueId)).toBe(4);
+	expect(node.getValue(valueId)).toBe(4);
 
 	node.destroy();
 });
 
-test.sequential("setValue() issues the correct xyzCCSet command", async (t) => {
-	const { driver } = t.context;
+test.sequential("setValue() issues the correct xyzCCSet command", async ({ context, expect }) => {
+	const { driver } = context;
 
 	// We test with a BasicCC
 	const node = new ZWaveNode(1, driver);
@@ -80,10 +90,10 @@ test.sequential("setValue() issues the correct xyzCCSet command", async (t) => {
 		5,
 	);
 
-	t.expect(result.status).toBe(SetValueStatus.SuccessUnsupervised);
+	expect(result.status).toBe(SetValueStatus.SuccessUnsupervised);
 	sinon.assert.called(sendMessage);
 
-	assertCC(t.expect, sendMessage.getCall(0).args[0], {
+	assertCC(expect, sendMessage.getCall(0).args[0], {
 		cc: BasicCC,
 		nodeId: node.id,
 		ccValues: {
@@ -95,8 +105,8 @@ test.sequential("setValue() issues the correct xyzCCSet command", async (t) => {
 
 test.sequential(
 	"setValue() returns false if the CC is not implemented",
-	async (t) => {
-		const { driver } = t.context;
+	async ({ context, expect }) => {
+		const { driver } = context;
 
 		const node = new ZWaveNode(1, driver);
 		const result = await node.setValue(
@@ -107,8 +117,10 @@ test.sequential(
 			},
 			1,
 		);
-		t.expect(result.status).toBe(SetValueStatus.NotImplemented);
-		t.regex(result.message!, /Command Class 12245589 is not implemented/);
+		expect(result.status).toBe(SetValueStatus.NotImplemented);
+		expect(result.message).toMatch(
+			/Command Class 12245589 is not implemented/,
+		);
 		node.destroy();
 	},
 );
@@ -117,25 +129,28 @@ test.sequential(
 	const valueDefinition = BasicCCValues.currentValue;
 	const valueId = BasicCCValues.currentValue.id;
 
-	function prepareTest(t: TaskContext & TestContext): ZWaveNode {
-		const { driver } = t.context;
+	function prepareTest({
+		onTestFinished,
+		context,
+	}: Pick<TaskContext, "onTestFinished"> & LocalTestContext): ZWaveNode {
+		const { driver } = context;
 		const node = new ZWaveNode(1, driver);
 		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 			node.id,
 			node,
 		);
-		t.onTestFinished(() => node.destroy());
+		onTestFinished(() => node.destroy());
 		return node;
 	}
 
 	test.sequential(
 		"getValueMetadata() returns the defined metadata for the given value",
-		(t) => {
-			const node = prepareTest(t);
+		({ context, expect, onTestFinished }) => {
+			const node = prepareTest({ onTestFinished, context });
 			// We test this with the BasicCC
 			// currentValue is readonly, 0-99
 			const currentValueMeta = node.getValueMetadata(valueId);
-			t.expect(currentValueMeta).toMatchObject({
+			expect(currentValueMeta).toMatchObject({
 				readable: true,
 				writeable: false,
 				min: 0,
@@ -149,14 +164,14 @@ test.sequential(
 
 	test.sequential(
 		"writing to the value DB with setValueMetadata() overwrites the statically defined metadata",
-		(t) => {
-			const node = prepareTest(t);
+		({ context, expect, onTestFinished }) => {
+			const node = prepareTest({ onTestFinished, context });
 			// Create dynamic metadata
 			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
-			t.expect(currentValueMeta).toStrictEqual({
+			expect(currentValueMeta).toStrictEqual({
 				...ValueMetadata.WriteOnlyInt32,
 				secret: valueDefinition.options.secret,
 				stateful: valueDefinition.options.stateful,
@@ -166,8 +181,8 @@ test.sequential(
 
 	test.sequential(
 		"writing to the value DB with setValueMetadata() preserves the secret/stateful flags",
-		(t) => {
-			const node = prepareTest(t);
+		({ context, expect, onTestFinished }) => {
+			const node = prepareTest({ onTestFinished, context });
 			// Create dynamic metadata
 			node.valueDB.setMetadata(valueId, {
 				...ValueMetadata.WriteOnlyInt32,
@@ -176,7 +191,7 @@ test.sequential(
 			});
 
 			const currentValueMeta = node.getValueMetadata(valueId);
-			t.expect(currentValueMeta).toMatchObject({
+			expect(currentValueMeta).toMatchObject({
 				secret: valueDefinition.options.secret,
 				stateful: valueDefinition.options.stateful,
 			});

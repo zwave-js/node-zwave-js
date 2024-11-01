@@ -7,55 +7,63 @@ import {
 	assertZWaveError,
 } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import { afterEach, beforeAll, test } from "vitest";
+import { afterEach, test as baseTest } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../Utils.js";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartTestingDriver } from "../driver/DriverMock.js";
 import { Endpoint } from "./Endpoint.js";
 import { ZWaveNode } from "./Node.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-beforeAll(async (t) => {
-	t.timeout(30000);
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
 
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			t.context.controller = controller;
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-afterAll(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-});
-
-afterEach((t) => {
-	const { driver } = t.context;
+afterEach<LocalTestContext>(({ context, expect }) => {
+	const { driver } = context;
 	driver.networkCache.clear();
 	driver.valueDB?.clear();
 });
 
 test.sequential(
 	"createAPI() throws if a non-implemented API should be created",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
 
-		assertZWaveError(t.expect, () => endpoint.createAPI(0xbada55), {
+		assertZWaveError(expect, () => endpoint.createAPI(0xbada55), {
 			errorCode: ZWaveErrorCodes.CC_NoAPI,
 			messageMatches: "no associated API",
 		});
@@ -64,8 +72,8 @@ test.sequential(
 
 test.sequential(
 	"The API returned from createAPI() throws when trying to access a non-supported CC",
-	async (t) => {
-		const { driver } = t.context;
+	async ({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
 		// We must not use Basic CC here, because that is assumed to be always supported
 		const api = endpoint.createAPI(CommandClasses["Binary Sensor"]);
@@ -73,14 +81,14 @@ test.sequential(
 		// this does not throw
 		api.isSupported();
 		// this does
-		await assertZWaveError(t.expect, () => api.get(), {
+		await assertZWaveError(expect, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 			messageMatches: /Node 1 \(endpoint 1\) does not support/,
 		});
 
 		// It only includes the endpoint number for non-root endpoints
 		(endpoint as any).index = 0;
-		await assertZWaveError(t.expect, () => api.get(), {
+		await assertZWaveError(expect, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 			messageMatches: "Node 1 does not support",
 		});
@@ -89,11 +97,11 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary throws when trying to access a non-implemented CC",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
 		assertZWaveError(
-			t.expect,
+			expect,
 			() => (endpoint.commandClasses as any).FOOBAR,
 			{
 				errorCode: ZWaveErrorCodes.CC_NotImplemented,
@@ -105,11 +113,11 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary throws when trying to use a command of an unsupported CC",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
 		assertZWaveError(
-			t.expect,
+			expect,
 			() => endpoint.commandClasses.Battery.get(),
 			{
 				errorCode: ZWaveErrorCodes.CC_NotSupported,
@@ -121,19 +129,19 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary does not throw when checking support of a CC",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
-		t.expect(endpoint.commandClasses.Battery.isSupported()).toBe(false);
+		expect(endpoint.commandClasses.Battery.isSupported()).toBe(false);
 	},
 );
 
 test.sequential(
 	"The commandClasses dictionary does not throw when accessing the ID of a CC",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
-		t.expect(endpoint.commandClasses.Battery.ccId).toBe(
+		expect(endpoint.commandClasses.Battery.ccId).toBe(
 			CommandClasses.Battery,
 		);
 	},
@@ -141,22 +149,22 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary does not throw when scoping the API options",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
-		t.expect(() => endpoint.commandClasses.Battery.withOptions({})).not
+		expect(() => endpoint.commandClasses.Battery.withOptions({})).not
 			.toThrow();
 	},
 );
 
 test.sequential(
 	"The commandClasses dictionary returns all supported CCs when being enumerated",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		// No supported CCs, empty array
 		let node = new ZWaveNode(2, driver, undefined, []);
 		let actual = [...node.commandClasses];
-		t.expect(actual).toStrictEqual([]);
+		expect(actual).toStrictEqual([]);
 
 		// Supported and controlled CCs
 		node = new ZWaveNode(
@@ -167,8 +175,8 @@ test.sequential(
 			[CommandClasses["Wake Up"]],
 		);
 		actual = [...node.commandClasses];
-		t.expect(actual.length).toBe(2);
-		t.expect(
+		expect(actual.length).toBe(2);
+		expect(
 			actual.map((api) => api.constructor),
 		).toStrictEqual([
 			BatteryCCAPI,
@@ -181,10 +189,10 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary returns [object Object] when turned into a string",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const node = new ZWaveNode(2, driver, undefined, []);
-		t.expect(
+		expect(
 			(node.commandClasses as any)[Symbol.toStringTag],
 		).toBe("[object Object]");
 		node.destroy();
@@ -193,10 +201,10 @@ test.sequential(
 
 test.sequential(
 	"The commandClasses dictionary returns undefined for other symbol properties",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const node = new ZWaveNode(2, driver, undefined, []);
-		t.expect((node.commandClasses as any)[Symbol.unscopables])
+		expect((node.commandClasses as any)[Symbol.unscopables])
 			.toBeUndefined();
 		node.destroy();
 	},
@@ -204,12 +212,12 @@ test.sequential(
 
 test.sequential(
 	"createCCInstance() returns undefined if the node supports the CC but it is not yet implemented",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const endpoint = new Endpoint(1, driver, 1);
 		const cc = 0xbada55;
 		endpoint.addCC(cc, { isSupported: true });
 		const instance = endpoint.createCCInstance(cc);
-		t.expect(instance).toBeUndefined();
+		expect(instance).toBeUndefined();
 	},
 );

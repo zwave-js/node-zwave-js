@@ -6,44 +6,54 @@ import {
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import { beforeAll, test } from "vitest";
+import { test as baseTest } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 import { ZWaveNode } from "../../node/Node.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-beforeAll(async (t) => {
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			t.context.controller = controller;
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-afterAll(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-});
-
-test("should throw if the CC is not supported", (t) => {
-	const { driver } = t.context;
+test("should throw if the CC is not supported", ({ context, expect }) => {
+	const { driver } = context;
 	const node = new ZWaveNode(2, driver);
 	assertZWaveError(
-		t.expect,
+		expect,
 		() => node.createCCInstance(CommandClasses.Basic),
 		{
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
@@ -53,8 +63,8 @@ test("should throw if the CC is not supported", (t) => {
 	node.destroy();
 });
 
-test("should return a linked instance of the correct CC", (t) => {
-	const { driver } = t.context;
+test("should return a linked instance of the correct CC", ({ context, expect }) => {
+	const { driver } = context;
 	const node = new ZWaveNode(2, driver);
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 		node.id,
@@ -63,7 +73,7 @@ test("should return a linked instance of the correct CC", (t) => {
 	node.addCC(CommandClasses.Basic, { isSupported: true });
 
 	const cc = node.createCCInstance(BasicCC)!;
-	t.expect(cc instanceof BasicCC).toBe(true);
-	t.expect(cc.getNode(driver)).toBe(node);
+	expect(cc instanceof BasicCC).toBe(true);
+	expect(cc.getNode(driver)).toBe(node);
 	node.destroy();
 });

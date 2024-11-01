@@ -3,47 +3,52 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async/index.js";
-import { afterEach, beforeEach, test } from "vitest";
+import { test as baseTest } from "vitest";
 import type { Driver } from "../../driver/Driver.js";
 import { ZWaveNode } from "../../node/Node.js";
 import { createAndStartDriver } from "../utils.js";
 import { isFunctionSupported_NoBridge } from "./fixtures.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		serialport: MockSerialPort;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-beforeEach(async (t) => {
-	t.timeout(5000);
+			const { driver, serialport } = await createAndStartDriver();
 
-	const { driver, serialport } = await createAndStartDriver();
+			driver["_controller"] = {
+				ownNodeId: 1,
+				isFunctionSupported: isFunctionSupported_NoBridge,
+				nodes: createThrowingMap(),
+				incrementStatistics: () => {},
+				removeAllListeners: () => {},
+			} as any;
 
-	driver["_controller"] = {
-		ownNodeId: 1,
-		isFunctionSupported: isFunctionSupported_NoBridge,
-		nodes: createThrowingMap(),
-		incrementStatistics: () => {},
-		removeAllListeners: () => {},
-	} as any;
+			// Run tests
+			await use({ driver, serialport });
 
-	t.context = { driver, serialport };
-});
-
-afterEach(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
+		},
+		{ auto: true },
+	],
 });
 
 process.env.LOGLEVEL = "debug";
 
 test.sequential(
 	"unsolicited commands which need special handling are passed to Node.handleCommand",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	async ({ context, expect }) => {
+		const { driver, serialport } = context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -61,23 +66,23 @@ test.sequential(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.expect(node2.getValue(valueId)).toBeUndefined();
+		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.expect(node2.getValue(valueId)).toStrictEqual(5);
+		expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );
 
 test.sequential(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller response",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	async ({ context, expect }) => {
+		const { driver, serialport } = context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -95,7 +100,7 @@ test.sequential(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.expect(node2.getValue(valueId)).toBeUndefined();
+		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -106,7 +111,7 @@ test.sequential(
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		t.expect(
+		expect(
 			serialport.lastWrite,
 		).toStrictEqual(Bytes.from("010800130201002501c3", "hex"));
 		await wait(10);
@@ -120,16 +125,16 @@ test.sequential(
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.expect(node2.getValue(valueId)).toStrictEqual(5);
+		expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );
 
 test.sequential(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller callback",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	async ({ context, expect }) => {
+		const { driver, serialport } = context;
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
@@ -147,7 +152,7 @@ test.sequential(
 		node2.markAsAlive();
 
 		const valueId = BasicCCValues.currentValue.id;
-		t.expect(node2.getValue(valueId)).toBeUndefined();
+		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Uint8Array.from([MessageHeaders.ACK]);
 
@@ -158,7 +163,7 @@ test.sequential(
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
 		//   └─[NoOperationCC]
-		t.expect(
+		expect(
 			serialport.lastWrite,
 		).toStrictEqual(Bytes.from("010800130201002501c3", "hex"));
 		await wait(10);
@@ -170,7 +175,7 @@ test.sequential(
 		//     was sent: true
 		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
 		// » [ACK]
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 
 		await wait(10);
 
@@ -180,8 +185,8 @@ test.sequential(
 		// « [Node 002] [REQ] [ApplicationCommand]
 		//   └─[BasicCCSet]
 		//       target value: 5
-		t.expect(serialport.lastWrite).toStrictEqual(ACK);
+		expect(serialport.lastWrite).toStrictEqual(ACK);
 		await wait(10);
-		t.expect(node2.getValue(valueId)).toStrictEqual(5);
+		expect(node2.getValue(valueId)).toStrictEqual(5);
 	},
 );

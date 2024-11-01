@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { getCCConstructor } from "@zwave-js/cc";
 import {
 	CommandClasses,
@@ -12,7 +11,6 @@ import { ZWaveNode } from "../../node/Node.js";
 import { createEmptyMockDriver } from "../mocks.js";
 
 test("the CC interviews happen in the correct order", (t) => {
-	require("@zwave-js/cc");
 	t.expect(getCCConstructor(49)).toBeDefined();
 
 	const fakeDriver = createEmptyMockDriver();
