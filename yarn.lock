@@ -527,10 +527,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/json@npm:^0.19.3":
-  version: 0.19.3
-  resolution: "@dprint/json@npm:0.19.3"
-  checksum: 10/1e5f622f65f06ca1044e799593b168da34d6f242b69dee9016ab2b427fcc603c293bdaef5335c377bd79ede77d86a9b594ed1032586c0287fc2c35cf2c8d0c9f
+"@dprint/json@npm:^0.19.4":
+  version: 0.19.4
+  resolution: "@dprint/json@npm:0.19.4"
+  checksum: 10/048ea00fa8bfe0871a0cfb8970ee996372b87fce8622ec35b2c2f2ab2631844d2e7eadd40185851e6a9956a6ccab486768db522c05651979ed1d0a198aebc05f
   languageName: node
   linkType: hard
 
@@ -2195,7 +2195,7 @@ __metadata:
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
     "@dprint/formatter": "npm:^0.4.1"
-    "@dprint/json": "npm:^0.19.3"
+    "@dprint/json": "npm:^0.19.4"
     "@dprint/markdown": "npm:^0.17.8"
     "@dprint/typescript": "npm:^0.93.0"
     "@types/globrex": "npm:^0.1.4"
@@ -2258,7 +2258,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.5.0"
     "@commitlint/config-conventional": "npm:^19.5.0"
     "@dprint/formatter": "npm:^0.4.1"
-    "@dprint/json": "npm:^0.19.3"
+    "@dprint/json": "npm:^0.19.4"
     "@dprint/markdown": "npm:^0.17.8"
     "@dprint/typescript": "npm:^0.93.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
