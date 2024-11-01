@@ -15,7 +15,7 @@ spyTransport.format = createDefaultTransportFormat(true, true);
 integrationTest(
 	"when an invalid CC is received, this is printed in the logs",
 	{
-		debug: true,
+		// debug: true,
 
 		// No support for Bridge API:
 		controllerCapabilities: {
