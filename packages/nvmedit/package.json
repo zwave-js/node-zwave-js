@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.9",
-    "@types/node": "^18.19.55",
+    "@types/node": "^18.19.63",
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.33",
     "ava": "^6.1.3",
