@@ -88,7 +88,7 @@
 
 		"test:ts": {
 			// "dependsOn": ["//#build:turbo"],
-			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
+			"inputs": ["src/**/*.ts", "vitest.config.mjs"]
 			// TODO: consider snapshot files
 		}
 	},

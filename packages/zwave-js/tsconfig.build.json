@@ -45,5 +45,5 @@
 		}
 	],
 	"include": ["src/**/*.ts"],
-	"exclude": ["src/lib/test", "src/**/*.test.ts", "src/**/*.test.ava.ts"]
+	"exclude": ["src/lib/test", "src/**/*.test.ts"]
 }
