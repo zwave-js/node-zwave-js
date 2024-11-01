@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@dprint/formatter": "^0.4.1",
-    "@dprint/json": "^0.19.3",
+    "@dprint/json": "^0.19.4",
     "@dprint/markdown": "^0.17.8",
     "@dprint/typescript": "^0.93.0",
     "@types/globrex": "^0.1.4",
