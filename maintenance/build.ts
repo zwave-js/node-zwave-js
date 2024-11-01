@@ -5,8 +5,9 @@ const buildArgs = process.argv
 	.slice(3)
 	.filter((a) => a !== "-w" && a !== "--watch");
 
-// TODO: Parse package.json dependency graph to figure out if codegen and/or
+// FIXME: Parse package.json dependency graph to figure out if codegen and/or
 // partial builds are necessary, instead of hardcoding it here.
+// FIXME: dependency graph is needed to create CJS builds for affected packages
 
 // Only cc, config and projects that depend on them need codegen and partial builds
 const needsNoCodegen = [
@@ -130,6 +131,15 @@ async function main() {
 			execOptions,
 		);
 	}
+
+	// Perform ESM to CJS transformation
+	console.log();
+	console.log(`Transpiling to CommonJS...`);
+	await execa(
+		"yarn",
+		["workspaces", "foreach", "--all", "run", "postbuild"],
+		execOptions,
+	);
 }
 
 main()

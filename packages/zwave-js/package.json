@@ -59,7 +59,8 @@
   },
   "files": [
     "bin/",
-    "build/**/*.{js,d.ts,map}"
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
   ],
   "bin": {
     "mock-server": "bin/mock-server.js"

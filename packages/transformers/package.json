@@ -7,7 +7,8 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build/**/*.{js,d.ts,map}"
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
   ],
   "author": {
     "name": "AlCalzone",

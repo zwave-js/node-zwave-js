@@ -93,7 +93,27 @@ jobs:
         npm init -y
         npm i .tarballs/zwave-js.tgz
 
-        echo "Testing entry points..."
+        echo "Testing ESM entry points..."
+        # Now all entrypoints should work
+        node -e 'await import("zwave-js")'
+        node -e 'await import("@zwave-js/cc")'
+        node -e 'await import("@zwave-js/config")'
+        node -e 'await import("@zwave-js/core")'
+        node -e 'await import("@zwave-js/host")'
+        node -e 'await import("@zwave-js/nvmedit")'
+        node -e 'await import("@zwave-js/serial")'
+        node -e 'await import("@zwave-js/shared")'
+        node -e 'await import("@zwave-js/testing")'
+        node -e 'await import("zwave-js/safe")'
+        node -e 'await import("@zwave-js/cc/safe")'
+        node -e 'await import("@zwave-js/config/safe")'
+        node -e 'await import("@zwave-js/core/safe")'
+        node -e 'await import("@zwave-js/host/safe")'
+        node -e 'await import("@zwave-js/nvmedit/safe")'
+        node -e 'await import("@zwave-js/serial/safe")'
+        node -e 'await import("@zwave-js/shared/safe")'
+
+        echo "Testing CJS entry points..."
         # Now all entrypoints should work
         node -e 'require("zwave-js")'
         node -e 'require("@zwave-js/cc")'

@@ -10,7 +10,8 @@
   "main": "build/cli.js",
   "files": [
     "bin/",
-    "build/**/*.{js,d.ts,map}"
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
   ],
   "bin": "bin/flash.mjs",
   "author": {
