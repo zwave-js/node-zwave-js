@@ -1,5 +1,10 @@
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
@@ -19,6 +24,16 @@ import { integrationTest } from "../integrationTestSuite.js";
 let shouldTimeOut: boolean;
 let lastCallbackId: number;
 
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
+
 integrationTest(
 	"Abort transmission if the Send Data callback hasn't been received after the sendDataAbort timeout elapses",
 	{
@@ -28,6 +43,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {

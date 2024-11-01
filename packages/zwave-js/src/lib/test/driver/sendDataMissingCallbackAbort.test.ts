@@ -1,5 +1,10 @@
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
 import {
 	MockControllerCommunicationState,
@@ -35,6 +40,16 @@ import { integrationTest as integrationTestMulti } from "../integrationTestSuite
 
 let shouldTimeOut: boolean;
 
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
+
 integrationTest(
 	"Abort transmission and soft-reset stick if SendData is missing the callback",
 	{
@@ -44,6 +59,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -149,6 +166,8 @@ integrationTest(
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
 
+		controllerCapabilities: controllerCapabilitiesNoBridge,
+
 		additionalDriverOptions: {
 			testingHooks: {
 				skipNodeInterview: true,
@@ -243,6 +262,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -391,6 +412,7 @@ integrationTest(
 		// ),
 
 		controllerCapabilities: {
+			...controllerCapabilitiesNoBridge,
 			// Soft-reset cannot be disabled on 700+ series
 			libraryVersion: "Z-Wave 6.84.0",
 		},
@@ -502,6 +524,7 @@ integrationTest(
 		// ),
 
 		controllerCapabilities: {
+			...controllerCapabilitiesNoBridge,
 			// Soft-reset cannot be disabled on 700+ series
 			libraryVersion: "Z-Wave 6.84.0",
 		},
@@ -598,6 +621,8 @@ integrationTestMulti(
 			__dirname,
 			"fixtures/sendDataMissingCallbackImmediateToSleepingNode",
 		),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		nodeCapabilities: [
 			{
@@ -730,6 +755,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {

@@ -1,10 +1,27 @@
 import { BinarySwitchCCSet, BinarySwitchCCValues } from "@zwave-js/cc";
 import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
-import { MockZWaveFrameType, ccCaps } from "@zwave-js/testing";
+import { FunctionType } from "@zwave-js/serial";
+import {
+	type MockControllerCapabilities,
+	MockZWaveFrameType,
+	ccCaps,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
 import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 // Regression test for #5844
+
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
 
 integrationTest("multicast setValue: do optimistic value update after ACK", {
 	// debug: true,
@@ -12,6 +29,8 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 	// 	__dirname,
 	// 	"__fixtures/supervision_binary_switch",
 	// ),
+
+	controllerCapabilities: controllerCapabilitiesNoBridge,
 
 	nodeCapabilities: [
 		{

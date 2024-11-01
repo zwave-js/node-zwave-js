@@ -1,5 +1,10 @@
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
 import {
 	MockControllerCommunicationState,
@@ -23,10 +28,22 @@ import { integrationTest } from "../integrationTestSuite.js";
 let shouldTimeOut: boolean;
 let lastCallbackId: number;
 
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
+
 integrationTest(
 	"Abort transmission and wait for callback if SendData is missing the response",
 	{
 		// debug: true,
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -121,6 +138,8 @@ integrationTest(
 	"Recover controller if callback times out after timed out SendData response",
 	{
 		// debug: true,
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {

@@ -27,7 +27,8 @@ export function prepareDriver(
 ): Promise<CreateAndStartDriverWithMockPortResult> {
 	// Skipping the bootloader check speeds up tests a lot
 	additionalOptions.testingHooks ??= {};
-	additionalOptions.testingHooks.skipBootloaderCheck = true;
+	additionalOptions.testingHooks.skipBootloaderCheck = !additionalOptions
+		.allowBootloaderOnly;
 
 	const logConfig = additionalOptions.logConfig ?? {};
 	if (logToFile) {

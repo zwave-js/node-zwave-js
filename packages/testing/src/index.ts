@@ -2,11 +2,14 @@
 export * from "./CCSpecificCapabilities.js";
 export * from "./MockController.js";
 export {
+	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
 	getDefaultSupportedFunctionTypes,
 } from "./MockControllerCapabilities.js";
 export * from "./MockNode.js";
 export {
+	type MockEndpointCapabilities,
+	type MockNodeCapabilities,
 	ccCaps,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,

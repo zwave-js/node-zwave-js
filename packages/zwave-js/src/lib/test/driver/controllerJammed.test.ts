@@ -14,7 +14,12 @@ import {
 	SendDataRequestTransmitReport,
 	SendDataResponse,
 } from "@zwave-js/serial/serialapi";
-import { type MockControllerBehavior } from "@zwave-js/testing";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
 import sinon from "sinon";
 import {
@@ -26,12 +31,24 @@ import { integrationTest as integrationTestMulti } from "../integrationTestSuite
 
 let shouldFail = false;
 
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
+
 integrationTest("update the controller status and wait if TX status is Fail", {
 	// debug: true,
 	// provisioningDirectory: path.join(
 	// 	__dirname,
 	// 	"__fixtures/supervision_binary_switch",
 	// ),
+
+	controllerCapabilities: controllerCapabilitiesNoBridge,
 
 	additionalDriverOptions: {
 		testingHooks: {
@@ -149,6 +166,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -282,6 +301,7 @@ integrationTestMulti(
 		},
 
 		controllerCapabilities: {
+			...controllerCapabilitiesNoBridge,
 			// 500 series controller, where the soft-reset workaround does not make sense
 			libraryVersion: "Z-Wave 6.84",
 			zwaveChipType: getZWaveChipType(0x05, 0x00),

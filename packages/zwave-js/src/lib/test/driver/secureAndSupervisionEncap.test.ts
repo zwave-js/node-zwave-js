@@ -1,6 +1,6 @@
 import { SecurityCCNonceGet } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { SendDataRequest } from "@zwave-js/serial/serialapi";
+import { isSendDataSinglecast } from "@zwave-js/serial/serialapi";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 
@@ -44,7 +44,7 @@ integrationTest(
 			// We take the driver asking for a nonce for a sign that it correctly identified the CC as needing S0
 			mockController.assertReceivedHostMessage(
 				(msg) =>
-					msg instanceof SendDataRequest
+					isSendDataSinglecast(msg)
 					&& msg.command instanceof SecurityCCNonceGet,
 				{
 					errorMessage:

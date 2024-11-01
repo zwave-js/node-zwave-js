@@ -443,6 +443,44 @@ export class SendDataMulticastBridgeRequest<
 		}
 	}
 
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastBridgeRequest {
+		const { nodeId: sourceNodeId, bytesRead } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+		);
+		let offset = bytesRead;
+
+		const destinationNodeIdCount = raw.payload[offset++];
+		const nodeIds: number[] = [];
+		for (let i = 0; i < destinationNodeIdCount; i++) {
+			const { nodeId, bytesRead } = parseNodeID(
+				raw.payload,
+				ctx.nodeIdType,
+				offset,
+			);
+			nodeIds.push(nodeId);
+			offset += bytesRead;
+		}
+
+		const ccLength = raw.payload[offset++];
+		const serializedCC = raw.payload.slice(offset, offset + ccLength);
+		offset += ccLength;
+
+		const transmitOptions = raw.payload[offset++];
+		const callbackId = raw.payload[offset++];
+
+		return new this({
+			sourceNodeId,
+			nodeIds: nodeIds as MulticastDestination,
+			serializedCC,
+			transmitOptions,
+			callbackId,
+		});
+	}
+
 	/** Which Node ID this command originates from */
 	public sourceNodeId: number;
 
