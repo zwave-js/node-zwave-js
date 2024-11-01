@@ -732,7 +732,7 @@ test("Tasks can yield-queue same-priority tasks", async (t) => {
 	t.expect(order).toStrictEqual(["inner", "outer"]);
 });
 
-test.fails("Tasks cannot yield-queue lower-priority tasks", async (t) => {
+test("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 	const scheduler = new TaskScheduler();
 	scheduler.start();
 
@@ -755,7 +755,7 @@ test.fails("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 		},
 	});
 
-	await outer;
+	t.expect(() => outer).rejects.toThrowError("lower priority");
 });
 
 test("Yielding tasks multiple levels deep works", async (t) => {

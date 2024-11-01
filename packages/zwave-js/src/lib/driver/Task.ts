@@ -363,6 +363,11 @@ export class TaskScheduler {
 							promise: waitForPromise,
 						};
 					} else if (isTaskBuilder(waitFor)) {
+						if (waitFor.priority > builder.priority) {
+							throw new Error(
+								"Tasks cannot yield to tasks with lower priority than their own",
+							);
+						}
 						// Create a sub-task with a reference to this task
 						state = TaskState.AwaitingTask;
 						const subTask = self.createTask(waitFor, this);
