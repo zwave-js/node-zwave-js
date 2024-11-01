@@ -38,6 +38,8 @@ export function getDefaultSupportedFunctionTypes(): FunctionType[] {
 		FunctionType.GetControllerCapabilities,
 		FunctionType.SendData,
 		FunctionType.SendDataMulticast,
+		FunctionType.SendDataBridge,
+		FunctionType.SendDataMulticastBridge,
 		FunctionType.GetControllerVersion,
 		FunctionType.GetControllerId,
 		FunctionType.GetNodeProtocolInfo,

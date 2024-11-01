@@ -226,7 +226,7 @@ export class MockNode {
 	/** Can be used by behaviors to store controller related state */
 	public readonly state = new Map<string, unknown>();
 
-	/** Controls whether the controller automatically ACKs node frames before handling them */
+	/** Controls whether the node automatically ACKs CCs from the controller before handling them */
 	public autoAckControllerFrames: boolean = true;
 
 	private expectedControllerFrames: TimedExpectation<

@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./CCSpecificCapabilities.js";
 export * from "./MockController.js";
-export { getDefaultSupportedFunctionTypes } from "./MockControllerCapabilities.js";
+export {
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "./MockControllerCapabilities.js";
 export * from "./MockNode.js";
 export {
 	ccCaps,

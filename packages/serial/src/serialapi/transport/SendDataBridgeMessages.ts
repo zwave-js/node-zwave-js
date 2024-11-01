@@ -12,6 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { CCEncodingContext } from "@zwave-js/host";
 import type {
@@ -37,7 +38,11 @@ import { ApplicationCommandRequest } from "../application/ApplicationCommandRequ
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest.js";
 import { type MessageWithCC, containsCC } from "../utils.js";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages.js";
-import { parseTXReport, txReportToMessageRecord } from "./SendDataShared.js";
+import {
+	encodeTXReport,
+	parseTXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared.js";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
@@ -105,6 +110,39 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		if (options.maxSendAttempts != undefined) {
 			this.maxSendAttempts = options.maxSendAttempts;
 		}
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataBridgeRequestBase {
+		let offset = 0;
+		let parseResult = parseNodeID(raw.payload, ctx.nodeIdType);
+		const sourceNodeId = parseResult.nodeId;
+		offset += parseResult.bytesRead;
+
+		parseResult = parseNodeID(raw.payload, ctx.nodeIdType, offset);
+		const destinationNodeId = parseResult.nodeId;
+		offset += parseResult.bytesRead;
+
+		const ccLength = raw.payload[offset++];
+		const serializedCC = raw.payload.slice(offset, offset + ccLength);
+		offset += ccLength;
+
+		const transmitOptions = raw.payload[offset++];
+
+		// The route field is unused
+		offset += 4;
+
+		const callbackId = raw.payload[offset++];
+
+		return new this({
+			sourceNodeId,
+			nodeId: destinationNodeId,
+			serializedCC,
+			transmitOptions,
+			callbackId,
+		});
 	}
 
 	/** Which Node ID this command originates from */
@@ -252,6 +290,19 @@ export class SendDataBridgeRequestTransmitReport
 
 	public isOK(): boolean {
 		return this.transmitStatus === TransmitStatus.OK;
+	}
+
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.assertCallbackId();
+		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
+		if (this.txReport) {
+			this.payload = Bytes.concat([
+				this.payload,
+				encodeTXReport(this.txReport),
+			]);
+		}
+
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

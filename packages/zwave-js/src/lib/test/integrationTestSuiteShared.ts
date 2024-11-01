@@ -25,6 +25,10 @@ export function prepareDriver(
 	logToFile: boolean = false,
 	additionalOptions: PartialZWaveOptions = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
+	// Skipping the bootloader check speeds up tests a lot
+	additionalOptions.testingHooks ??= {};
+	additionalOptions.testingHooks.skipBootloaderCheck = true;
+
 	return createAndStartDriverWithMockPort({
 		...additionalOptions,
 		portAddress: "/tty/FAKE",

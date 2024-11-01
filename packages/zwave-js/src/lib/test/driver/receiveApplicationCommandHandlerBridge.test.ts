@@ -1,7 +1,14 @@
 import { SecurityCCNonceReport } from "@zwave-js/cc";
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
-import { BridgeApplicationCommandRequest } from "@zwave-js/serial";
+import {
+	BridgeApplicationCommandRequest,
+	FunctionType,
+} from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared/safe";
+import {
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
@@ -11,6 +18,16 @@ integrationTest(
 		// BridgeApplicationCommandRequest
 
 		// debug: true,
+
+		// The controller does not support the bridge API
+		controllerCapabilities: {
+			...getDefaultMockControllerCapabilities(),
+			supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+				(ft) =>
+					ft !== FunctionType.SendDataBridge
+					&& ft !== FunctionType.SendDataMulticastBridge,
+			),
+		},
 
 		nodeCapabilities: {
 			commandClasses: [CommandClasses.Security],

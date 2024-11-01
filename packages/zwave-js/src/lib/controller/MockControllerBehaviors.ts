@@ -13,7 +13,16 @@ import {
 	ZWaveErrorCodes,
 	isZWaveError,
 } from "@zwave-js/core";
-import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
+import {
+	ApplicationCommandRequest,
+	SendDataBridgeRequest,
+	SendDataBridgeRequestTransmitReport,
+	SendDataBridgeResponse,
+	type SendDataMessage,
+	SendDataMulticastBridgeRequest,
+	SendDataMulticastBridgeRequestTransmitReport,
+	SendDataMulticastBridgeResponse,
+} from "@zwave-js/serial/serialapi";
 import {
 	type ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -99,7 +108,7 @@ import { determineNIF } from "./NodeInformationFrame.js";
 function createLazySendDataPayload(
 	controller: MockController,
 	node: MockNode,
-	msg: SendDataRequest | SendDataMulticastRequest,
+	msg: SendDataMessage,
 ): () => CommandClass {
 	return () => {
 		try {
@@ -474,6 +483,197 @@ const handleSendDataMulticast: MockControllerBehavior = {
 	},
 };
 
+const handleSendDataBridge: MockControllerBehavior = {
+	async onHostMessage(controller, msg) {
+		if (msg instanceof SendDataBridgeRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.CommunicationState,
+			) as MockControllerCommunicationState | undefined;
+			if (
+				state != undefined
+				&& state !== MockControllerCommunicationState.Idle
+			) {
+				throw new Error(
+					"Received SendDataBridgeRequest while not idle",
+				);
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Sending,
+			);
+
+			// Notify the host that the message was sent
+			const res = new SendDataBridgeResponse({
+				wasSent: true,
+			});
+			await controller.sendMessageToHost(res);
+
+			// We deferred parsing of the CC because it requires the node's host to do so.
+			// Now we can do that. Also set the CC node ID to the controller's own node ID,
+			// so CC knows it came from the controller's node ID.
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			// Create a lazy frame, so it can be deserialized on the node after a short delay to simulate radio transmission
+			const lazyPayload = createLazySendDataPayload(
+				controller,
+				node,
+				msg,
+			);
+			const lazyFrame = createMockZWaveRequestFrame(lazyPayload, {
+				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+			});
+			const ackPromise = controller.sendToNode(node, lazyFrame);
+
+			if (msg.callbackId !== 0) {
+				// Put the controller into waiting state
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.WaitingForNode,
+				);
+
+				// Wait for the ACK and notify the host
+				let ack = false;
+				try {
+					const ackResult = await ackPromise;
+					ack = !!ackResult?.ack;
+				} catch (e) {
+					// We want to know when we're using a command in tests that cannot be decoded yet
+					if (
+						isZWaveError(e)
+						&& e.code
+							=== ZWaveErrorCodes.Deserialization_NotImplemented
+					) {
+						console.error(e.message);
+						throw e;
+					}
+
+					// Treat all other errors as no response
+				}
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
+
+				const cb = new SendDataBridgeRequestTransmitReport({
+					callbackId: msg.callbackId,
+					transmitStatus: ack
+						? TransmitStatus.OK
+						: TransmitStatus.NoAck,
+				});
+
+				await controller.sendMessageToHost(cb);
+			} else {
+				// No callback was requested, we're done
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
+			}
+			return true;
+		}
+	},
+};
+
+const handleSendDataMulticastBridge: MockControllerBehavior = {
+	async onHostMessage(controller, msg) {
+		if (msg instanceof SendDataMulticastBridgeRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.CommunicationState,
+			) as MockControllerCommunicationState | undefined;
+			if (
+				state != undefined
+				&& state !== MockControllerCommunicationState.Idle
+			) {
+				throw new Error(
+					"Received SendDataMulticastBridgeRequest while not idle",
+				);
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Sending,
+			);
+
+			// Notify the host that the message was sent
+			const res = new SendDataMulticastBridgeResponse({
+				wasSent: true,
+			});
+			await controller.sendMessageToHost(res);
+
+			// We deferred parsing of the CC because it requires the node's host to do so.
+			// Now we can do that. Also set the CC node ID to the controller's own node ID,
+			// so CC knows it came from the controller's node ID.
+			const nodeIds = msg.nodeIds;
+
+			const ackPromises = nodeIds.map((nodeId) => {
+				const node = controller.nodes.get(nodeId)!;
+				// Create a lazy frame, so it can be deserialized on the node after a short delay to simulate radio transmission
+				const lazyPayload = createLazySendDataPayload(
+					controller,
+					node,
+					msg,
+				);
+				const lazyFrame = createMockZWaveRequestFrame(lazyPayload, {
+					ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+				});
+				const ackPromise = controller.sendToNode(node, lazyFrame);
+				return ackPromise;
+			});
+
+			if (msg.callbackId !== 0) {
+				// Put the controller into waiting state
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.WaitingForNode,
+				);
+
+				// Wait for the ACKs and notify the host
+				let ack = false;
+				try {
+					const ackResults = await Promise.all(ackPromises);
+					ack = ackResults.every((result) => !!result?.ack);
+				} catch (e) {
+					// We want to know when we're using a command in tests that cannot be decoded yet
+					if (
+						isZWaveError(e)
+						&& e.code
+							=== ZWaveErrorCodes.Deserialization_NotImplemented
+					) {
+						console.error(e.message);
+						throw e;
+					}
+
+					// Treat all other errors as no response
+				}
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
+
+				const cb = new SendDataMulticastBridgeRequestTransmitReport({
+					callbackId: msg.callbackId,
+					transmitStatus: ack
+						? TransmitStatus.OK
+						: TransmitStatus.NoAck,
+				});
+
+				await controller.sendMessageToHost(cb);
+			} else {
+				// No callback was requested, we're done
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
+			}
+			return true;
+		}
+	},
+};
+
 const handleRequestNodeInfo: MockControllerBehavior = {
 	async onHostMessage(controller, msg) {
 		if (msg instanceof RequestNodeInfoRequest) {
@@ -803,6 +1003,8 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		respondToGetNodeProtocolInfo,
 		handleSendData,
 		handleSendDataMulticast,
+		handleSendDataBridge,
+		handleSendDataMulticastBridge,
 		handleRequestNodeInfo,
 		handleAssignSUCReturnRoute,
 		handleAddNode,
