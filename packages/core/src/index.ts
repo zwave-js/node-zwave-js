@@ -22,6 +22,7 @@ export * from "./security/DSK";
 export * from "./security/Manager";
 export * from "./security/Manager2";
 export * from "./security/QR";
+export * from "./security/QR_safe";
 export * from "./security/SecurityClass";
 export * from "./security/crypto";
 export * from "./security/ctr_drbg";

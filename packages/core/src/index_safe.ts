@@ -19,6 +19,7 @@ export * from "./registries/Notifications";
 export * from "./registries/Scales";
 export * from "./registries/Sensors";
 export * from "./security/DSK";
+export * from "./security/QR_safe";
 export * from "./security/SecurityClass";
 export * from "./security/shared_safe";
 export * from "./traits/CommandClasses";
