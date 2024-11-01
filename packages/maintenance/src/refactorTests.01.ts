@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import {
-	CallExpression,
-	Identifier,
+	type CallExpression,
+	type Identifier,
 	Project,
-	PropertyAccessExpression,
+	type PropertyAccessExpression,
 	SyntaxKind,
 } from "ts-morph";
 
