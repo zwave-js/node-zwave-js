@@ -1,7 +1,7 @@
 import c from "ansi-colors";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
-import { ExpectStatic, TestContext } from "vitest";
+import { type ExpectStatic } from "vitest";
 import Transport from "winston-transport";
 import type { ZWaveLogInfo } from "../log/shared_safe.js";
 

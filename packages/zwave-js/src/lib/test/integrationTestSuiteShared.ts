@@ -29,23 +29,22 @@ export function prepareDriver(
 	additionalOptions.testingHooks ??= {};
 	additionalOptions.testingHooks.skipBootloaderCheck = true;
 
+	const logConfig = additionalOptions.logConfig ?? {};
+	if (logToFile) {
+		logConfig.enabled = true;
+		logConfig.logToFile = true;
+		logConfig.filename = path.join(
+			cacheDir,
+			"logs",
+			"zwavejs_%DATE%.log",
+		);
+		logConfig.level ??= "debug";
+	}
+
 	return createAndStartDriverWithMockPort({
 		...additionalOptions,
 		portAddress: "/tty/FAKE",
-		...(logToFile
-			? {
-				logConfig: {
-					filename: path.join(
-						cacheDir,
-						"logs",
-						"zwavejs_%DATE%.log",
-					),
-					logToFile: true,
-					enabled: true,
-					level: additionalOptions.logConfig?.level ?? "debug",
-				},
-			}
-			: {}),
+		logConfig,
 		securityKeys: {
 			S0_Legacy: Bytes.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 			S2_Unauthenticated: Bytes.from(
