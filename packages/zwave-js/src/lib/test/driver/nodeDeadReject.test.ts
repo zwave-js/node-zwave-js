@@ -18,7 +18,7 @@ integrationTest(
 			node2.markAsAlive();
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			const command1 = new BasicCCSet({
 				nodeId: 2,
@@ -58,15 +58,15 @@ integrationTest(
 			);
 
 			// The command should be rejected
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, () => basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
 			});
-			t.is(node2.status, NodeStatus.Dead);
+			t.expect(node2.status).toBe(NodeStatus.Dead);
 
 			driver.driverLog.sendQueue(driver["queue"]);
 
 			// The second command should be rejected immediately because the node is dead
-			await assertZWaveError(t, () => basicGetPromise, {
+			await assertZWaveError(t.expect, () => basicGetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_MessageDropped,
 			});
 		},
@@ -86,7 +86,7 @@ integrationTest(
 			node2.markAsAlive();
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			const command1 = new BasicCCSet({
 				nodeId: 2,
@@ -126,15 +126,15 @@ integrationTest(
 			);
 
 			// The command should be rejected
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, () => basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
 			});
-			t.is(node2.status, NodeStatus.Dead);
+			t.expect(node2.status).toBe(NodeStatus.Dead);
 
 			driver.driverLog.sendQueue(driver["queue"]);
 
 			// The second command should be rejected immediately because the node is dead
-			await assertZWaveError(t, () => basicGetPromise, {
+			await assertZWaveError(t.expect, () => basicGetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_MessageDropped,
 			});
 		},
@@ -154,7 +154,7 @@ integrationTest(
 			node2.markAsAlive();
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			const basicSetPromise = node2.commandClasses.Basic.set(99);
 			basicSetPromise.then(() => {
@@ -182,13 +182,13 @@ integrationTest(
 			);
 
 			// The command should be rejected
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, () => basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
 			});
-			t.is(node2.status, NodeStatus.Dead);
+			t.expect(node2.status).toBe(NodeStatus.Dead);
 
 			// The second command should be rejected immediately because the node is dead
-			await assertZWaveError(t, () => basicGetPromise, {
+			await assertZWaveError(t.expect, () => basicGetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_MessageDropped,
 			});
 		},
@@ -208,7 +208,7 @@ integrationTest(
 			node2.markAsAlive();
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			const basicSetPromise = node2.commandClasses.Basic.set(99);
 			basicSetPromise.then(() => {
@@ -230,10 +230,10 @@ integrationTest(
 			);
 
 			// The command should be rejected
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, () => basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
 			});
-			t.is(node2.status, NodeStatus.Dead);
+			t.expect(node2.status).toBe(NodeStatus.Dead);
 
 			const basicGetPromise = node2.commandClasses.Basic.get();
 			basicGetPromise.then(() => {
@@ -254,11 +254,11 @@ integrationTest(
 			);
 
 			// The second command should be rejected separately
-			await assertZWaveError(t, () => basicGetPromise, {
+			await assertZWaveError(t.expect, () => basicGetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
 			});
 			// The node is still dead
-			t.is(node2.status, NodeStatus.Dead);
+			t.expect(node2.status).toBe(NodeStatus.Dead);
 		},
 	},
 );

@@ -30,7 +30,7 @@ const cases = [
 
 for (const { code, reason } of cases) {
 	test(`QR code parsing -> throws when the QR code ${reason}`, (t) => {
-		assertZWaveError(t, () => parseQRCodeString(code), {
+		assertZWaveError(t.expect, () => parseQRCodeString(code), {
 			errorCode: ZWaveErrorCodes.Security2CC_InvalidQRCode,
 		});
 	});

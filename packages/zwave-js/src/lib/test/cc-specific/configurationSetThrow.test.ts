@@ -22,7 +22,7 @@ integrationTest(
 			);
 
 			await t.expect(() => promise).rejects.toThrowError();
-			t.is(spy.callCount, 0);
+			t.expect(spy.callCount).toBe(0);
 		},
 	},
 );

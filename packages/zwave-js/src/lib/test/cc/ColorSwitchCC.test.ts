@@ -237,7 +237,7 @@ test("the setValue API verifies that targetColor isn't set with non-numeric keys
 		false,
 	);
 	await assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			API.setValue!(
 				{ property: "targetColor" },

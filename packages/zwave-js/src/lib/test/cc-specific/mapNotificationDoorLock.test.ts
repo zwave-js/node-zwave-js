@@ -31,7 +31,7 @@ integrationTest(
 			// wait a bit for the value to be updated
 			await wait(100);
 
-			t.is(node.getValue(valueId), DoorLockMode.Secured);
+			t.expect(node.getValue(valueId)).toBe(DoorLockMode.Secured);
 
 			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
@@ -46,7 +46,7 @@ integrationTest(
 			// wait a bit for the value to be updated
 			await wait(100);
 
-			t.is(node.getValue(valueId), DoorLockMode.Unsecured);
+			t.expect(node.getValue(valueId)).toBe(DoorLockMode.Unsecured);
 		},
 	},
 );

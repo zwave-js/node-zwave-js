@@ -43,16 +43,18 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 	testBody: async (t, driver, nodes, mockController, mockNodes) => {
 		const [node2, node3] = nodes;
 
-		t.is(node2.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
-		t.is(node3.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
-		t.is(
+		t.expect(node2.getValue(BinarySwitchCCValues.targetValue.id)).toBe(
+			NOT_KNOWN,
+		);
+		t.expect(node3.getValue(BinarySwitchCCValues.targetValue.id)).toBe(
+			NOT_KNOWN,
+		);
+		t.expect(
 			node2.getValue(BinarySwitchCCValues.currentValue.id),
-			UNKNOWN_STATE,
-		);
-		t.is(
+		).toBe(UNKNOWN_STATE);
+		t.expect(
 			node3.getValue(BinarySwitchCCValues.currentValue.id),
-			UNKNOWN_STATE,
-		);
+		).toBe(UNKNOWN_STATE);
 
 		const mcGroup = driver.controller.getMulticastGroup([2, 3]);
 
@@ -72,7 +74,11 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 
 		await wait(100);
 
-		t.is(node2.getValue(BinarySwitchCCValues.currentValue.id), true);
-		t.is(node3.getValue(BinarySwitchCCValues.currentValue.id), true);
+		t.expect(node2.getValue(BinarySwitchCCValues.currentValue.id)).toBe(
+			true,
+		);
+		t.expect(node3.getValue(BinarySwitchCCValues.currentValue.id)).toBe(
+			true,
+		);
 	},
 });

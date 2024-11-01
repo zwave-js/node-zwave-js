@@ -55,7 +55,7 @@ test.sequential(
 		const { driver } = t.context;
 		const endpoint = new Endpoint(1, driver, 1);
 
-		assertZWaveError(t, () => endpoint.createAPI(0xbada55), {
+		assertZWaveError(t.expect, () => endpoint.createAPI(0xbada55), {
 			errorCode: ZWaveErrorCodes.CC_NoAPI,
 			messageMatches: "no associated API",
 		});
@@ -73,14 +73,14 @@ test.sequential(
 		// this does not throw
 		api.isSupported();
 		// this does
-		await assertZWaveError(t, () => api.get(), {
+		await assertZWaveError(t.expect, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 			messageMatches: /Node 1 \(endpoint 1\) does not support/,
 		});
 
 		// It only includes the endpoint number for non-root endpoints
 		(endpoint as any).index = 0;
-		await assertZWaveError(t, () => api.get(), {
+		await assertZWaveError(t.expect, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 			messageMatches: "Node 1 does not support",
 		});
@@ -92,10 +92,14 @@ test.sequential(
 	(t) => {
 		const { driver } = t.context;
 		const endpoint = new Endpoint(1, driver, 1);
-		assertZWaveError(t, () => (endpoint.commandClasses as any).FOOBAR, {
-			errorCode: ZWaveErrorCodes.CC_NotImplemented,
-			messageMatches: "FOOBAR is not implemented",
-		});
+		assertZWaveError(
+			t.expect,
+			() => (endpoint.commandClasses as any).FOOBAR,
+			{
+				errorCode: ZWaveErrorCodes.CC_NotImplemented,
+				messageMatches: "FOOBAR is not implemented",
+			},
+		);
 	},
 );
 
@@ -104,10 +108,14 @@ test.sequential(
 	(t) => {
 		const { driver } = t.context;
 		const endpoint = new Endpoint(1, driver, 1);
-		assertZWaveError(t, () => endpoint.commandClasses.Battery.get(), {
-			errorCode: ZWaveErrorCodes.CC_NotSupported,
-			messageMatches: "does not support the Command Class Battery",
-		});
+		assertZWaveError(
+			t.expect,
+			() => endpoint.commandClasses.Battery.get(),
+			{
+				errorCode: ZWaveErrorCodes.CC_NotSupported,
+				messageMatches: "does not support the Command Class Battery",
+			},
+		);
 	},
 );
 

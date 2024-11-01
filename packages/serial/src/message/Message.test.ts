@@ -90,7 +90,7 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 	];
 	for (const [message, msg, code] of brokenMessages) {
 		assertZWaveError(
-			t,
+			t.expect,
 			() => Message.parse(message, {} as any),
 			{
 				messageMatches: msg,
@@ -163,7 +163,7 @@ test("Parsing a buffer with an unknown function type returns an unspecified `Mes
 
 test(`the constructor should throw when no message type is specified`, (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() => new Message({ functionType: 0xff as any }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -174,7 +174,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 	@messageTypes(undefined as any, 0xff as any)
 	class FakeMessageWithoutMessageType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutMessageType(), {
+	assertZWaveError(t.expect, () => new FakeMessageWithoutMessageType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
@@ -182,7 +182,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 
 test(`the constructor should throw when no function type is specified`, (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() => new Message({ type: MessageType.Request }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -193,7 +193,7 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	@messageTypes(MessageType.Request, undefined as any)
 	class FakeMessageWithoutFunctionType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(), {
+	assertZWaveError(t.expect, () => new FakeMessageWithoutFunctionType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /function type/i,
 	});

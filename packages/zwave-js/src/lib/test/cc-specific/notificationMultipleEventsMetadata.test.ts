@@ -33,7 +33,7 @@ integrationTest(
 					).id,
 				) as ValueMetadataNumeric
 			).states;
-			t.deepEqual(states, {
+			t.expect(states).toStrictEqual({
 				[0x00]: "idle",
 				[0x03]: "Smoke alarm test",
 				[0x06]: "Alarm silenced",

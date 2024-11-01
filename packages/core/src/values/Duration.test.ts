@@ -97,7 +97,7 @@ test("serializeSet() -> should correctly parse default durations", (t) => {
 
 test("serializeSet() -> should throw for unknown durations", (t) => {
 	const duration = Duration.unknown();
-	assertZWaveError(t, () => duration.serializeSet(), {
+	assertZWaveError(t.expect, () => duration.serializeSet(), {
 		errorCode: ZWaveErrorCodes.CC_Invalid,
 	});
 });

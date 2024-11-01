@@ -41,7 +41,7 @@ BL >\0`,
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.true(driver.isInBootloader());
+			t.expect(driver.isInBootloader()).toBe(true);
 		},
 	},
 );

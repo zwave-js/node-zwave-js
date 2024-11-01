@@ -12,7 +12,7 @@ test("Z-TRM3 with commandClasses.add compat should work", async (t) => {
 		0x0203,
 		"4.0",
 	);
-	t.not(config, undefined);
+	t.expect(config).toBeDefined();
 	t.expect(config?.compat?.addCCs?.get(49)?.endpoints.size).toBe(3);
 });
 
@@ -28,7 +28,7 @@ test("Associations on endpoints should work - including imports", async (t) => {
 		0x0121,
 		"0.0",
 	);
-	t.not(config, undefined);
+	t.expect(config).toBeDefined();
 	t.expect(config?.endpoints?.get(0)?.associations?.get(2)).toMatchObject({
 		label: "Button 1 (Basic Report)",
 		maxNodes: 5,

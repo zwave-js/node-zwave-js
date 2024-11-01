@@ -54,18 +54,16 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.is(
+			t.expect(
 				node
 					.getEndpoint(1)
 					?.getCCVersion(CommandClasses["Binary Switch"]),
-				2,
-			);
-			t.is(
+			).toBe(2);
+			t.expect(
 				node
 					.getEndpoint(2)
 					?.getCCVersion(CommandClasses["Binary Switch"]),
-				2,
-			);
+			).toBe(2);
 		},
 	},
 );

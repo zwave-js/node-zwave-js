@@ -260,7 +260,7 @@ integrationTest(
 					);
 				});
 
-			t.is((await basicGet)?.currentValue, 2);
+			t.expect((await basicGet)?.currentValue).toBe(2);
 		},
 	},
 );

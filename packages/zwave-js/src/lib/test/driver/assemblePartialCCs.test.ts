@@ -338,5 +338,6 @@ test.sequential("passes other errors during merging through", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.throws(() => driver["assemblePartialCCs"](msg), { message: /invalid/ });
+	t.expect(() => driver["assemblePartialCCs"](msg))
+		.toThrow("invalid");
 });

@@ -32,7 +32,7 @@ function dummyInit(
 
 test("nextNonce() -> should throw if the PRNG for the given receiver node has not been initialized", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.nextNonce(2), {
+	assertZWaveError(t.expect, () => man.nextNonce(2), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "initialized",
 	});
@@ -59,14 +59,14 @@ test("nextNonce() -> two nonces should be different", (t) => {
 
 	const nonce1 = man.nextNonce(2);
 	const nonce2 = man.nextNonce(2);
-	t.notDeepEqual(nonce1, nonce2);
+	t.expect(nonce1).not.toStrictEqual(nonce2);
 });
 
 test("initializeSPAN() -> should throw if either entropy input does not have length 16", (t) => {
 	const man = new SecurityManager2();
 	const nodeId = 2;
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			man.initializeSPAN(
 				nodeId,
@@ -81,7 +81,7 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 	);
 
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			man.initializeSPAN(
 				nodeId,
@@ -100,7 +100,7 @@ test("initializeSPAN() -> should throw if the node has not been assigned a secur
 	const man = new SecurityManager2();
 	const nodeId = 2;
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			man.initializeSPAN(
 				nodeId,
@@ -119,7 +119,7 @@ test("initializeSPAN() -> should throw if the keys for the node's security class
 	const man = new SecurityManager2();
 	const nodeId = 2;
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			man.initializeSPAN(
 				nodeId,
@@ -154,7 +154,7 @@ test("initializeSPAN() -> should not throw otherwise", (t) => {
 test("setKeys() -> throws if the network key does not have length 16", (t) => {
 	const man = new SecurityManager2();
 	assertZWaveError(
-		t,
+		t.expect,
 		() => man.setKey(SecurityClass.S2_Authenticated, new Uint8Array(15)),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -165,10 +165,14 @@ test("setKeys() -> throws if the network key does not have length 16", (t) => {
 
 test("setKeys() -> throws if the security class is not valid", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.setKey(-1 as any, new Uint8Array(16)), {
-		errorCode: ZWaveErrorCodes.Argument_Invalid,
-		messageMatches: "security class",
-	});
+	assertZWaveError(
+		t.expect,
+		() => man.setKey(-1 as any, new Uint8Array(16)),
+		{
+			errorCode: ZWaveErrorCodes.Argument_Invalid,
+			messageMatches: "security class",
+		},
+	);
 });
 
 test("createMulticastGroup() -> should return a different group ID for a different node set", (t) => {
@@ -183,7 +187,7 @@ test("createMulticastGroup() -> should return a different group ID for a differe
 		SecurityClass.S2_Authenticated,
 	);
 
-	t.not(group1, group2);
+	t.expect(group1).not.toBe(group2);
 });
 
 test("createMulticastGroup() -> should return a different group ID for a different node set for LR nodes", (t) => {
@@ -198,7 +202,7 @@ test("createMulticastGroup() -> should return a different group ID for a differe
 		SecurityClass.S2_Authenticated,
 	);
 
-	t.not(group1, group2);
+	t.expect(group1).not.toBe(group2);
 });
 
 //
@@ -235,7 +239,7 @@ test("createMulticastGroup() -> should return the same group ID for a previously
 
 test("getMulticastKeyAndIV() -> should throw if the MPAN state for the given multicast group has not been initialized", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.getMulticastKeyAndIV(1), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
@@ -243,7 +247,7 @@ test("getMulticastKeyAndIV() -> should throw if the MPAN state for the given mul
 
 test("getMulticastKeyAndIV() -> should throw if the multicast group has not been created", (t) => {
 	const man = new SecurityManager2();
-	assertZWaveError(t, () => man.getMulticastKeyAndIV(1), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
@@ -255,7 +259,7 @@ test("getMulticastKeyAndIV() -> should throw if the keys for the group's securit
 		[2, 3, 4],
 		SecurityClass.S2_Authenticated,
 	);
-	assertZWaveError(t, () => man.getMulticastKeyAndIV(groupId), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(groupId), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "network key",
 	});
@@ -285,7 +289,8 @@ test("getMulticastKeyAndIV() -> two nonces for the same group should be differen
 
 	const nonce1 = man.getMulticastKeyAndIV(groupId).iv;
 	const nonce2 = man.getMulticastKeyAndIV(groupId).iv;
-	t.notDeepEqual(nonce1, nonce2);
+
+	t.expect(nonce1).not.toStrictEqual(nonce2);
 });
 
 test("getMulticastKeyAndIV() -> two nonces for different groups should be different", (t) => {
@@ -302,5 +307,6 @@ test("getMulticastKeyAndIV() -> two nonces for different groups should be differ
 
 	const nonce1 = man.getMulticastKeyAndIV(group1).iv;
 	const nonce2 = man.getMulticastKeyAndIV(group2).iv;
-	t.notDeepEqual(nonce1, nonce2);
+
+	t.expect(nonce1).not.toStrictEqual(nonce2);
 });

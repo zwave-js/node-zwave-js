@@ -13,7 +13,9 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, _mockNode) => {
 			const valueAddedPromise = new Promise<void>((resolve) => {
 				node.on("value added", (_node, args) => {
-					t.is(args.propertyKeyName, "Electric_kWh_Consumed");
+					t.expect(args.propertyKeyName).toBe(
+						"Electric_kWh_Consumed",
+					);
 					resolve();
 				});
 			});

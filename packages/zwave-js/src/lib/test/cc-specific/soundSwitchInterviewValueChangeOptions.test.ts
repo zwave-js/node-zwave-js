@@ -28,7 +28,7 @@ integrationTest(
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const toneIdValue = SoundSwitchCCValues.toneId;
 			const meta = node.getValueMetadata(toneIdValue.id);
-			t.deepEqual(meta.valueChangeOptions, ["volume"]);
+			t.expect(meta.valueChangeOptions).toStrictEqual(["volume"]);
 		},
 	},
 );

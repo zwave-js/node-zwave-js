@@ -57,12 +57,12 @@ integrationTest(
 			const anyValue = node.getValue(
 				BinarySensorCCValues.state(BinarySensorType.Any).id,
 			);
-			t.is(anyValue, undefined);
+			t.expect(anyValue).toBeUndefined();
 
 			const motionValue = node.getValue(
 				BinarySensorCCValues.state(BinarySensorType.Motion).id,
 			);
-			t.is(motionValue, true);
+			t.expect(motionValue).toBe(true);
 		},
 	},
 );

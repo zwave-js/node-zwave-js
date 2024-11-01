@@ -10,7 +10,7 @@ test(
 		});
 
 		// @ts-expect-error
-		t.throws(() => getNamedScaleGroup("foobar"));
+		t.expect(() => getNamedScaleGroup("foobar")).toThrow();
 	},
 );
 
@@ -25,6 +25,6 @@ test(
 		});
 
 		// @ts-expect-error
-		t.throws(() => getNamedScale("foobar", 999));
+		t.expect(() => getNamedScale("foobar", 999)).toThrow();
 	},
 );

@@ -36,7 +36,7 @@ integrationTest(
 			);
 
 			const result = await awaited;
-			t.like(result, {
+			t.expect(result).toMatchObject({
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02,
 				payload: Bytes.from([0x00, 0x01]),

@@ -37,8 +37,8 @@ integrationTest(
 			const param1 = node.deviceConfig?.paramInformation?.get({
 				parameter: 1,
 			});
-			t.is(param1?.label, "Param 1");
-			t.is(param1!.options?.length, 2);
+			t.expect(param1?.label).toBe("Param 1");
+			t.expect(param1!.options?.length).toBe(2);
 		},
 	},
 );

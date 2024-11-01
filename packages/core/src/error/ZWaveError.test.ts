@@ -16,7 +16,7 @@ test("ZWaveError should be of type Error", (t) => {
 });
 
 test("ZWaveError should contain an error code", (t) => {
-	assertZWaveError(t, thisThrows, {
+	assertZWaveError(t.expect, thisThrows, {
 		messageMatches: "Test message",
 		errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
 	});

@@ -217,10 +217,10 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 });
 
 test("encodeFloatWithScale() -> should throw when the value cannot be represented in 4 bytes", (t) => {
-	assertZWaveError(t, () => encodeFloatWithScale(0xffffffff, 0), {
+	assertZWaveError(t.expect, () => encodeFloatWithScale(0xffffffff, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
-	assertZWaveError(t, () => encodeFloatWithScale(Number.NaN, 0), {
+	assertZWaveError(t.expect, () => encodeFloatWithScale(Number.NaN, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
 });

@@ -64,14 +64,14 @@ integrationTest(
 			let currentValue = node.getValue(
 				MultilevelSwitchCCValues.currentValue.id,
 			);
-			t.not(currentValue, 77);
+			t.expect(currentValue).not.toBe(77);
 
 			await promise;
 
 			currentValue = node.getValue(
 				MultilevelSwitchCCValues.currentValue.id,
 			);
-			t.is(currentValue, 77);
+			t.expect(currentValue).toBe(77);
 
 			// await node.commandClasses["Multilevel Switch"].startLevelChange({
 			// 	direction: "up",

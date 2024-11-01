@@ -1000,7 +1000,7 @@ test("Tasks can be removed if they haven't been started yet", async (t) => {
 
 	await scheduler.removeTasks((t) => t.name === "task2");
 
-	await assertZWaveError(t, () => task2, {
+	await assertZWaveError(t.expect, () => task2, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
@@ -1035,7 +1035,7 @@ test("Tasks can be removed while paused", async (t) => {
 
 	await scheduler.removeTasks((t) => true);
 
-	await assertZWaveError(t, () => task1, {
+	await assertZWaveError(t.expect, () => task1, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
@@ -1082,10 +1082,10 @@ test("Tasks can be removed while paused, part 2", async (t) => {
 
 	await scheduler.removeTasks((t) => true);
 
-	await assertZWaveError(t, () => task1, {
+	await assertZWaveError(t.expect, () => task1, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
-	await assertZWaveError(t, () => task2, {
+	await assertZWaveError(t.expect, () => task2, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
@@ -1133,10 +1133,10 @@ test("Tasks can be removed while running", async (t) => {
 
 	await scheduler.removeTasks((t) => true);
 
-	await assertZWaveError(t, () => task1, {
+	await assertZWaveError(t.expect, () => task1, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
-	await assertZWaveError(t, () => task2, {
+	await assertZWaveError(t.expect, () => task2, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
@@ -1183,10 +1183,10 @@ test("Tasks can be removed while running and paused", async (t) => {
 
 	await scheduler.removeTasks((t) => true);
 
-	await assertZWaveError(t, () => task1, {
+	await assertZWaveError(t.expect, () => task1, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
-	await assertZWaveError(t, () => task2, {
+	await assertZWaveError(t.expect, () => task2, {
 		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
 	});
 
@@ -1223,7 +1223,7 @@ test("The task rejection uses the given error, if any", async (t) => {
 		new ZWaveError("Test error", ZWaveErrorCodes.Driver_Reset),
 	);
 
-	await assertZWaveError(t, () => task1, {
+	await assertZWaveError(t.expect, () => task1, {
 		errorCode: ZWaveErrorCodes.Driver_Reset,
 	});
 

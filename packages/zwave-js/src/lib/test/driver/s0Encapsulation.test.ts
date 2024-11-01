@@ -187,6 +187,6 @@ integrationTest("Communication via Security S0 works", {
 	testBody: async (t, driver, node, mockController, mockNode) => {
 		const result = await node.commandClasses.Basic.get();
 
-		t.is(result?.currentValue, 2);
+		t.expect(result?.currentValue).toBe(2);
 	},
 });

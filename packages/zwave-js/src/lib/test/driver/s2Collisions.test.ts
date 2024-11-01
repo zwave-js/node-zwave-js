@@ -187,10 +187,10 @@ integrationTest(
 			const currentValue = node.getValue(
 				BinarySwitchCCValues.currentValue.id,
 			);
-			t.is(currentValue, true);
+			t.expect(currentValue).toBe(true);
 
 			// Ensure the Binary Switch Set causing a collision eventually gets resolved
-			t.like(p2result, {
+			t.expect(p2result).toMatchObject({
 				status: SupervisionStatus.Success,
 			});
 		},
@@ -327,7 +327,7 @@ integrationTest(
 
 			// If the collision was handled gracefully, we should now have the value reported by the node
 			const currentValue = node.getValue(BasicCCValues.currentValue.id);
-			t.is(currentValue, 99);
+			t.expect(currentValue).toBe(99);
 		},
 	},
 );
@@ -507,8 +507,10 @@ integrationTest(
 			const [turnOffResult, reportResult, confirmationResult] =
 				await Promise.all([turnOff, report, reportConfirmation]);
 
-			t.deepEqual(turnOffResult, { status: SupervisionStatus.Success });
-			t.not(confirmationResult, undefined);
+			t.expect(turnOffResult).toStrictEqual({
+				status: SupervisionStatus.Success,
+			});
+			t.expect(confirmationResult).toBeDefined();
 
 			// // Now create a collision by having both parties send at the same time
 			// const nodeToHost = Security2CC.encapsulate(

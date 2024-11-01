@@ -24,9 +24,11 @@ integrationTest(`An insecurely-included node has security class None`, {
 	},
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
-		t.is(node.hasSecurityClass(SecurityClass.S0_Legacy), false);
-		t.is(node.hasSecurityClass(SecurityClass.S2_AccessControl), false);
-		t.is(node.getHighestSecurityClass(), SecurityClass.None);
+		t.expect(node.hasSecurityClass(SecurityClass.S0_Legacy)).toBe(false);
+		t.expect(node.hasSecurityClass(SecurityClass.S2_AccessControl)).toBe(
+			false,
+		);
+		t.expect(node.getHighestSecurityClass()).toBe(SecurityClass.None);
 	},
 });
 
@@ -49,9 +51,12 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.is(node.hasSecurityClass(SecurityClass.S0_Legacy), false);
-			t.is(node.hasSecurityClass(SecurityClass.S2_AccessControl), false);
-			t.is(node.getHighestSecurityClass(), SecurityClass.None);
+			t.expect(node.hasSecurityClass(SecurityClass.S0_Legacy)).toBe(
+				false,
+			);
+			t.expect(node.hasSecurityClass(SecurityClass.S2_AccessControl))
+				.toBe(false);
+			t.expect(node.getHighestSecurityClass()).toBe(SecurityClass.None);
 		},
 	},
 );
@@ -114,14 +119,17 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.is(node.hasSecurityClass(SecurityClass.S0_Legacy), false);
-			t.is(
-				node.hasSecurityClass(SecurityClass.S2_Unauthenticated),
+			t.expect(node.hasSecurityClass(SecurityClass.S0_Legacy)).toBe(
 				false,
 			);
-			t.is(node.hasSecurityClass(SecurityClass.S2_Authenticated), false);
-			t.is(node.hasSecurityClass(SecurityClass.S2_AccessControl), false);
-			t.is(node.getHighestSecurityClass(), SecurityClass.None);
+			t.expect(
+				node.hasSecurityClass(SecurityClass.S2_Unauthenticated),
+			).toBe(false);
+			t.expect(node.hasSecurityClass(SecurityClass.S2_Authenticated))
+				.toBe(false);
+			t.expect(node.hasSecurityClass(SecurityClass.S2_AccessControl))
+				.toBe(false);
+			t.expect(node.getHighestSecurityClass()).toBe(SecurityClass.None);
 		},
 	},
 );

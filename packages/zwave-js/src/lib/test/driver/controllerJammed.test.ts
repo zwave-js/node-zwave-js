@@ -121,8 +121,8 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 		await wait(500);
 
 		// The controller should now be jammed, but the node's status must not change
-		t.is(driver.controller.status, ControllerStatus.Jammed);
-		t.is(node.status, NodeStatus.Alive);
+		t.expect(driver.controller.status).toBe(ControllerStatus.Jammed);
+		t.expect(node.status).toBe(NodeStatus.Alive);
 
 		setTimeout(() => {
 			shouldFail = false;
@@ -130,11 +130,11 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 
 		await promise;
 
-		t.is(driver.controller.status, ControllerStatus.Ready);
-		t.is(node.status, NodeStatus.Alive);
+		t.expect(driver.controller.status).toBe(ControllerStatus.Ready);
+		t.expect(node.status).toBe(NodeStatus.Alive);
 
 		sinon.assert.notCalled(nodeDead);
-		t.deepEqual(statusChanges, [
+		t.expect(statusChanges).toStrictEqual([
 			ControllerStatus.Jammed,
 			ControllerStatus.Ready,
 		]);
@@ -244,8 +244,8 @@ integrationTest(
 			await wait(500);
 
 			// The controller should now be jammed, but the node's status must not change
-			t.is(driver.controller.status, ControllerStatus.Jammed);
-			t.is(node.status, NodeStatus.Alive);
+			t.expect(driver.controller.status).toBe(ControllerStatus.Jammed);
+			t.expect(node.status).toBe(NodeStatus.Alive);
 
 			// After soft-resetting (done automatically), the controller should be sending normally again
 			await promise;
@@ -254,11 +254,11 @@ integrationTest(
 				msg.functionType === FunctionType.SoftReset
 			);
 
-			t.is(driver.controller.status, ControllerStatus.Ready);
-			t.is(node.status, NodeStatus.Alive);
+			t.expect(driver.controller.status).toBe(ControllerStatus.Ready);
+			t.expect(node.status).toBe(NodeStatus.Alive);
 
 			sinon.assert.notCalled(nodeDead);
-			t.deepEqual(statusChanges, [
+			t.expect(statusChanges).toStrictEqual([
 				ControllerStatus.Jammed,
 				ControllerStatus.Ready,
 			]);
@@ -378,7 +378,7 @@ integrationTestMulti(
 
 			// Commands to node 2 will fail forever
 			await assertZWaveError(
-				t,
+				t.expect,
 				() => node2.commandClasses.Basic.set(99),
 				{
 					errorCode: ZWaveErrorCodes.Controller_MessageDropped,
@@ -386,7 +386,7 @@ integrationTestMulti(
 			);
 
 			// But commands to node 3 should still continue afterwards
-			t.true(await node3.ping());
+			t.expect(await node3.ping()).toBe(true);
 		},
 	},
 );

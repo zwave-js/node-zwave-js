@@ -4,7 +4,7 @@ import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { test } from "vitest";
+import { type ExpectStatic, test } from "vitest";
 import {
 	type NVMJSON,
 	json500To700,
@@ -20,11 +20,11 @@ import type { NVM500JSON } from "./nvm500/NVMParser.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function bufferEquals(
-	t: ExecutionContext,
+	expect: ExpectStatic,
 	actual: Uint8Array,
 	expected: Uint8Array,
 ) {
-	t.deepEqual(actual.buffer, expected.buffer);
+	expect(actual.buffer).toStrictEqual(expected.buffer);
 }
 
 {
@@ -37,7 +37,7 @@ function bufferEquals(
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fsp.readFile(path.join(fixturesDir, file));
 			const json = await nvmToJSON(data);
-			t.snapshot(json);
+			t.expect(json).toMatchSnapshot();
 		});
 	}
 }
@@ -83,7 +83,7 @@ function bufferEquals(
 			const json = await nvmToJSON(nvmIn);
 			const nvmOut = await jsonToNVM(json, version);
 
-			bufferEquals(t, nvmOut, nvmIn);
+			bufferEquals(t.expect, nvmOut, nvmIn);
 		});
 	}
 }
@@ -98,7 +98,7 @@ function bufferEquals(
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fsp.readFile(path.join(fixturesDir, file));
 			const json = await nvm500ToJSON(data);
-			t.snapshot(json);
+			t.expect(json).toMatchSnapshot();
 		});
 	}
 }
@@ -139,7 +139,7 @@ function bufferEquals(
 				json.controller.protocolVersion,
 			);
 
-			bufferEquals(t, nvmOut, nvmIn);
+			bufferEquals(t.expect, nvmOut, nvmIn);
 		});
 	}
 }
@@ -156,7 +156,7 @@ function bufferEquals(
 				path.join(fixturesDir, file),
 			);
 			const json700 = json500To700(json500, true);
-			t.snapshot(json700);
+			t.expect(json700).toMatchSnapshot();
 		});
 	}
 }
@@ -209,5 +209,5 @@ test("700 to 700 migration shortcut", async (t) => {
 	);
 	const converted = await migrateNVM(nvmSource, nvmTarget);
 
-	bufferEquals(t, converted, nvmSource);
+	bufferEquals(t.expect, converted, nvmSource);
 });

@@ -222,12 +222,12 @@ integrationTest(
 			let result = await driver.controller.assignSUCReturnRoutes(
 				node.id,
 			);
-			t.false(result);
+			t.expect(result).toBe(false);
 
 			result = await driver.controller.deleteSUCReturnRoutes(
 				node.id,
 			);
-			t.false(result);
+			t.expect(result).toBe(false);
 		},
 	},
 );

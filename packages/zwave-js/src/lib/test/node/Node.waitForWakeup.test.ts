@@ -82,7 +82,7 @@ test("throws when called on a non-sleeping node", async (t) => {
 	const { makeNode } = t.context;
 	const node = makeNode(false);
 
-	await assertZWaveError(t, () => node.waitForWakeup(), {
+	await assertZWaveError(t.expect, () => node.waitForWakeup(), {
 		errorCode: ZWaveErrorCodes.CC_NotSupported,
 	});
 

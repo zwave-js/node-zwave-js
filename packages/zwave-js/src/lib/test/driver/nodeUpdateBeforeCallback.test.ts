@@ -49,7 +49,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToBasicGetWithDelayedAck);
 
 			const result = await node.commandClasses.Basic.get();
-			t.is(result?.currentValue, 55);
+			t.expect(result?.currentValue).toBe(55);
 		},
 	},
 );

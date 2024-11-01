@@ -64,7 +64,7 @@ test.sequential("should send a WakeupCC.NoMoreInformation otherwise", async (t) 
 	t.expect(await node.sendNoMoreInformation()).toBe(true);
 	sinon.assert.called(fakeDriver.sendMessage);
 
-	assertCC(t, fakeDriver.sendMessage.getCall(0).args[0], {
+	assertCC(t.expect, fakeDriver.sendMessage.getCall(0).args[0], {
 		cc: WakeUpCC,
 		nodeId: node.id,
 		ccValues: {

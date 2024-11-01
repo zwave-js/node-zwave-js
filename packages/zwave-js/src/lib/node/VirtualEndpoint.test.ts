@@ -61,7 +61,7 @@ test.sequential(
 	(t) => {
 		const { driver } = t.context;
 		const broadcast = driver.controller.getBroadcastNode();
-		assertZWaveError(t, () => broadcast.createAPI(0xbada55 as any), {
+		assertZWaveError(t.expect, () => broadcast.createAPI(0xbada55 as any), {
 			errorCode: ZWaveErrorCodes.CC_NoAPI,
 			messageMatches: "no associated API",
 		});
@@ -84,7 +84,7 @@ test.sequential(
 		// this does not throw
 		api.isSupported();
 		// this does
-		await assertZWaveError(t, () => api.get(), {
+		await assertZWaveError(t.expect, () => api.get(), {
 			errorCode: ZWaveErrorCodes.CC_NotSupported,
 		});
 	},
@@ -136,7 +136,7 @@ test.sequential(
 			const broadcast = driver.controller.getBroadcastNode();
 
 			assertZWaveError(
-				t,
+				t.expect,
 				() => (broadcast.commandClasses as any).FOOBAR,
 				{
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,

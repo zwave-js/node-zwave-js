@@ -171,7 +171,7 @@ integrationTest(
 			const currentValue = node.getValue(
 				MultilevelSwitchCCValues.currentValue.id,
 			);
-			t.is(currentValue, 88);
+			t.expect(currentValue).toBe(88);
 		},
 	},
 );

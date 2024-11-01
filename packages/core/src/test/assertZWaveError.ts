@@ -1,4 +1,4 @@
-import { TestContext } from "vitest";
+import { type ExpectStatic } from "vitest";
 import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 export interface AssertZWaveErrorOptions {
@@ -13,15 +13,15 @@ export interface AssertZWaveErrorOptions {
  * @param options Additional assertions
  */
 export function assertZWaveError<T>(
-	t: TestContext,
+	expect: ExpectStatic,
 	valueOrFactory: T,
 	options: AssertZWaveErrorOptions = {},
 ): T extends () => PromiseLike<any> ? Promise<void> : void {
 	const { messageMatches, errorCode, context } = options;
 
 	function _assertZWaveError(e: any): asserts e is ZWaveError {
-		t.expect(e.constructor.name).toBe("ZWaveError");
-		t.expect(e.code).toBeTypeOf("number");
+		expect(e.constructor.name).toBe("ZWaveError");
+		expect(e.code).toBeTypeOf("number");
 	}
 
 	function handleError(e: any): void {
@@ -30,10 +30,10 @@ export function assertZWaveError<T>(
 			const regex = messageMatches instanceof RegExp
 				? messageMatches
 				: new RegExp(messageMatches);
-			t.expect(e.message).toMatch(regex);
+			expect(e.message).toMatch(regex);
 		}
-		if (errorCode != undefined) t.expect(e.code).toBe(errorCode);
-		if (context != undefined) t.expect(e.context).toBe(context);
+		if (errorCode != undefined) expect(e.code).toBe(errorCode);
+		if (context != undefined) expect(e.context).toBe(context);
 	}
 	function fail(): never {
 		// We should not be here

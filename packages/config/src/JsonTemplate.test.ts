@@ -126,7 +126,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_Invalid,
@@ -156,7 +156,7 @@ test.sequential(
 			});
 
 			await assertZWaveError(
-				t,
+				t.expect,
 				() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 				{
 					errorCode: ZWaveErrorCodes.Config_Invalid,
@@ -183,7 +183,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_Invalid,
@@ -288,7 +288,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
@@ -317,7 +317,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
@@ -359,7 +359,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
@@ -424,7 +424,7 @@ test.sequential(
 			"/foo/bar/test.json": JSON.stringify(test),
 		});
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "foo/bar/test.json")),
 			{
 				messageMatches: "import specifier cannot start with ~/",
@@ -523,7 +523,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
@@ -544,7 +544,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{},
 		);
@@ -568,7 +568,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
@@ -718,7 +718,7 @@ test.sequential(
 		});
 
 		await assertZWaveError(
-			t,
+			t.expect,
 			() =>
 				readJsonWithTemplate(
 					path.join(mockDir, rootDir, "test.json"),

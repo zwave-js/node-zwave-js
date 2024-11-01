@@ -52,7 +52,7 @@ integrationTest(
 			const defined = node.getDefinedValueIDs();
 			const targetValue = BinarySwitchCCValues.targetValue;
 			const existing = defined.find((v) => targetValue.is(v));
-			t.not(existing, undefined, "targetValue should be defined");
+			t.expect(existing, "targetValue should be defined").toBeDefined();
 		},
 	},
 );
@@ -88,7 +88,7 @@ integrationTest(
 			const defined = node.getDefinedValueIDs();
 			const targetValue = BinarySwitchCCValues.targetValue;
 			const existing = defined.find((v) => targetValue.is(v));
-			t.not(existing, undefined, "targetValue should be defined");
+			t.expect(existing, "targetValue should be defined").toBeDefined();
 		},
 	},
 );

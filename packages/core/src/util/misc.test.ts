@@ -78,17 +78,21 @@ test("validatePayload() -> passes when all arguments are truthy", (t) => {
 
 test("validatePayload() -> throws a ZWaveError with PacketFormat_InvalidPayload otherwise", (t) => {
 	for (const args of [[false], [true, 0, true]]) {
-		assertZWaveError(t, () => validatePayload(...args), {
+		assertZWaveError(t.expect, () => validatePayload(...args), {
 			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 		});
 	}
 });
 
 test("validatePayload() -> The error message should contain the rejection reason", (t) => {
-	assertZWaveError(t, () => validatePayload.withReason("NOPE")(false), {
-		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-		context: "NOPE",
-	});
+	assertZWaveError(
+		t.expect,
+		() => validatePayload.withReason("NOPE")(false),
+		{
+			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			context: "NOPE",
+		},
+	);
 });
 
 test("getMinimumShiftForBitMask() -> returns 0 if the mask is 0", (t) => {

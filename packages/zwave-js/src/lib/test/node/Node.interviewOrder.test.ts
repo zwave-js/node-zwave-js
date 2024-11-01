@@ -13,7 +13,7 @@ import { createEmptyMockDriver } from "../mocks.js";
 
 test("the CC interviews happen in the correct order", (t) => {
 	require("@zwave-js/cc");
-	t.not(getCCConstructor(49), undefined);
+	t.expect(getCCConstructor(49)).toBeDefined();
 
 	const fakeDriver = createEmptyMockDriver();
 

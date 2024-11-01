@@ -7,11 +7,11 @@ import {
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async/index.js";
-import test, { type ExecutionContext } from "ava";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { type TestContext, test } from "vitest";
 import type { Driver } from "../driver/Driver.js";
 import type { PartialZWaveOptions } from "../driver/ZWaveOptions.js";
 import type { ZWaveNode } from "../node/Node.js";
@@ -32,7 +32,7 @@ interface IntegrationTestOptions {
 		mockNode: MockNode,
 	) => Promise<void>;
 	testBody: (
-		t: ExecutionContext,
+		t: TestContext,
 		driver: Driver,
 		node: ZWaveNode,
 		mockController: MockController,
@@ -157,13 +157,12 @@ function suite(
 
 	// Integration tests need to run in serial, or they might block the serial port on CI
 	const fn = modifier === "only"
-		? test.serial.only
+		? test.sequential.only
 		: modifier === "skip"
-		? test.serial.skip
-		: test.serial;
+		? test.sequential.skip
+		: test.sequential;
 	fn(name, async (t) => {
-		t.timeout(30000);
-		t.teardown(async () => {
+		t.onTestFinished(async () => {
 			// Give everything a chance to settle before destroying the driver.
 			await wait(100);
 
@@ -176,7 +175,7 @@ function suite(
 
 		await prepareTest();
 		await testBody(t, driver, node, mockController, mockNode);
-	});
+	}, 30000);
 }
 
 /** Performs an integration test with a real driver using a mock controller and one mock node */

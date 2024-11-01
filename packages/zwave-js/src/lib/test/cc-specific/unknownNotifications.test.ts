@@ -31,21 +31,20 @@ integrationTest(
 			// wait a bit for the value to be updated
 			await wait(100);
 
-			t.like(
+			t.expect(
 				node.getValueMetadata(
 					NotificationCCValues.unknownNotificationVariable(
 						0x06,
 						"Access Control",
 					).id,
 				),
-				{
-					...ValueMetadata.ReadOnlyUInt8,
-					label: "Access Control: Unknown value",
-					ccSpecific: {
-						notificationType: 0x06,
-					},
+			).toMatchObject({
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Access Control: Unknown value",
+				ccSpecific: {
+					notificationType: 0x06,
 				},
-			);
+			});
 		},
 	},
 );

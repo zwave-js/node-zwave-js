@@ -45,8 +45,10 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 		);
 
 		// Z-Wave+ v2 specifications, section 3.1
-		t.is(response.zwavePlusVersion, 2);
+		t.expect(response.zwavePlusVersion).toBe(2);
 		// Z-Wave+ v2 specifications, section 4.1
-		t.is(response.roleType, ZWavePlusRoleType.CentralStaticController);
+		t.expect(response.roleType).toBe(
+			ZWavePlusRoleType.CentralStaticController,
+		);
 	},
 });

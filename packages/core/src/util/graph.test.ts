@@ -43,5 +43,5 @@ test("topologicalSort() -> should throw when there are circular dependencies", (
 	nodes[3].edges.add(nodes[2]);
 	nodes[2].edges.add(nodes[0]);
 
-	t.throws(() => topologicalSort(nodes));
+	t.expect(() => topologicalSort(nodes)).toThrow();
 });

@@ -277,7 +277,7 @@ test("the Report command should validate that a known meter type is given", (t) 
 	t.expect(report.constructor).toBe(MeterCCReport);
 
 	// Meter type 31 (does not exist)
-	assertZWaveError(t, () => report.persistValues(host), {
+	assertZWaveError(t.expect, () => report.persistValues(host), {
 		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 	});
 });
@@ -303,7 +303,7 @@ test("the Report command should validate that a known meter scale is given", (t)
 	t.expect(report.constructor).toBe(MeterCCReport);
 
 	// Meter type 4, Scale 8 (does not exist)
-	assertZWaveError(t, () => report.persistValues(host), {
+	assertZWaveError(t.expect, () => report.persistValues(host), {
 		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 	});
 });

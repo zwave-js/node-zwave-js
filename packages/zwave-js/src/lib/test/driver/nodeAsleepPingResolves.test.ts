@@ -17,12 +17,12 @@ integrationTest(
 		testBody: async (t, driver, node2, mockController, mockNode) => {
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Asleep);
+			t.expect(node2.status).toBe(NodeStatus.Asleep);
 			const pingResult = await Promise.race([
 				node2.ping(),
 				wait(2000).then(() => "timeout"),
 			]);
-			t.is(pingResult, false);
+			t.expect(pingResult).toBe(false);
 		},
 	},
 );

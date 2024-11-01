@@ -53,7 +53,7 @@ integrationTest(
 			const notificationMode = node.getValue(
 				NotificationCCValues.notificationMode.id,
 			);
-			t.is(notificationMode, "push");
+			t.expect(notificationMode).toBe("push");
 		},
 	},
 );

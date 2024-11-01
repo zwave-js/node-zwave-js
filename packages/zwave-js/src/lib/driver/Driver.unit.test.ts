@@ -4,7 +4,7 @@ import { MockSerialPort } from "@zwave-js/serial/mock";
 import { Bytes, mergeDeep } from "@zwave-js/shared";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { test, vi } from "vitest";
+import { test } from "vitest";
 import { PORT_ADDRESS, createAndStartDriver } from "../test/utils.js";
 import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions.js";
 
@@ -134,7 +134,7 @@ test.sequential(
 		await t.expect(() => startPromise).rejects.toThrowError("NOPE");
 
 		// try to start again
-		await assertZWaveError(t, () => driver.start(), {
+		await assertZWaveError(t.expect, () => driver.start(), {
 			errorCode: ZWaveErrorCodes.Driver_Destroyed,
 		});
 
@@ -150,7 +150,7 @@ test.sequential(
 			logConfig: { enabled: false },
 		});
 		// start the driver
-		await assertZWaveError(t, () => driver.start(), {
+		await assertZWaveError(t.expect, () => driver.start(), {
 			errorCode: ZWaveErrorCodes.Driver_NoErrorHandler,
 		});
 	},
@@ -178,7 +178,7 @@ test.sequential("the constructor should throw on duplicate security keys", (t) =
 	});
 
 	assertZWaveError(
-		t,
+		t.expect,
 		() => {
 			driver = new Driver("/dev/test", {
 				securityKeys: {
@@ -259,10 +259,14 @@ test("The result of merging multiple sets of options is still checked", (t) => {
 		},
 	};
 
-	assertZWaveError(t, () => new Driver("/dev/test", preset1, preset2), {
-		errorCode: ZWaveErrorCodes.Driver_InvalidOptions,
-		messageMatches: /Abort/,
-	});
+	assertZWaveError(
+		t.expect,
+		() => new Driver("/dev/test", preset1, preset2),
+		{
+			errorCode: ZWaveErrorCodes.Driver_InvalidOptions,
+			messageMatches: /Abort/,
+		},
+	);
 });
 
 test("The exported driver presets work", (t) => {
@@ -292,7 +296,7 @@ test("The exported driver presets work", (t) => {
 // 		driver.on("error", () => {});
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t.expect, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -315,7 +319,7 @@ test("The exported driver presets work", (t) => {
 // 		driver.start();
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t.expect, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -343,7 +347,7 @@ test("The exported driver presets work", (t) => {
 // 		await expect(startPromise).rejects.toThrow("NOPE");
 
 // 		const msg = new TestMessage(driver);
-// 		await assertZWaveError(t, () => driver.sendMessage(msg), {
+// 		await assertZWaveError(t.expect, () => driver.sendMessage(msg), {
 // 			errorCode: ZWaveErrorCodes.Driver_NotReady,
 // 		});
 
@@ -400,7 +404,7 @@ test("The exported driver presets work", (t) => {
 // 		// receive something that's not a message header
 // 		await serialport.receiveData(Buffer.from([0xff]));
 // 		t.is(errorSpy.callCount, 1);
-// 		assertZWaveError(t, errorSpy.mock.calls[0][0] as unknown, {
+// 		assertZWaveError(t.expect, errorSpy.mock.calls[0][0] as unknown, {
 // 			errorCode: ZWaveErrorCodes.Driver_InvalidDataReceived,
 // 		});
 
@@ -442,7 +446,7 @@ test("The exported driver presets work", (t) => {
 // 		// This is necessary or the test will finish too early and fail
 // 		await promise;
 // 		t.is(errorSpy.callCount, 1);
-// 		assertZWaveError(t, errorSpy.mock.calls[0][0] as unknown, {
+// 		assertZWaveError(t.expect, errorSpy.mock.calls[0][0] as unknown, {
 // 			errorCode: ZWaveErrorCodes.Driver_Reset,
 // 		});
 // 	});

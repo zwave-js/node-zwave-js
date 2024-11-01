@@ -77,7 +77,7 @@ integrationTest(
 			const currentValue = node.getValue(
 				BinarySwitchCCValues.currentValue.id,
 			);
-			t.true(currentValue);
+			t.expect(currentValue).toBe(true);
 
 			// And make sure the value event handlers are called
 			sinon.assert.calledWith(

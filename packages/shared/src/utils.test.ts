@@ -110,7 +110,7 @@ test("cloneDeep -> works with primitives", (t) => {
 
 test("cloneDeep -> works with arrays", (t) => {
 	t.expect(cloneDeep([1, 2, 3])).toStrictEqual([1, 2, 3]);
-	t.not(cloneDeep([1, 2, 3]), [1, 2, 3]);
+	t.expect(cloneDeep([1, 2, 3])).not.toBe([1, 2, 3]);
 });
 
 test("cloneDeep -> works with objects", (t) => {
@@ -119,7 +119,7 @@ test("cloneDeep -> works with objects", (t) => {
 		b: 2,
 		c: 3,
 	});
-	t.not(cloneDeep({ a: 1, b: 2, c: 3 }), { a: 1, b: 2, c: 3 });
+	t.expect(cloneDeep({ a: 1, b: 2, c: 3 })).not.toBe({ a: 1, b: 2, c: 3 });
 });
 
 test("cloneDeep -> works with nested objects", (t) => {
@@ -127,9 +127,9 @@ test("cloneDeep -> works with nested objects", (t) => {
 	const target = cloneDeep(source);
 
 	t.expect(target).toStrictEqual(source);
-	t.not(target, source);
-	t.not(target.b, source.b);
-	t.not(target.e, source.e);
+	t.expect(target).not.toBe(source);
+	t.expect(target.b).not.toBe(source.b);
+	t.expect(target.e).not.toBe(source.e);
 });
 
 test("cloneDeep -> works with nested arrays", (t) => {
@@ -137,8 +137,8 @@ test("cloneDeep -> works with nested arrays", (t) => {
 	const target = cloneDeep(source);
 
 	t.expect(target).toStrictEqual(source);
-	t.not(target, source);
-	t.not(target[1], source[1]);
+	t.expect(target).not.toBe(source);
+	t.expect(target[1]).not.toBe(source[1]);
 });
 
 test("cloneDeep -> works with objects nested in arrays", (t) => {
@@ -146,10 +146,10 @@ test("cloneDeep -> works with objects nested in arrays", (t) => {
 	const target = cloneDeep(source);
 
 	t.expect(target).toStrictEqual(source);
-	t.not(target, source);
-	t.not(target[0], source[0]);
-	t.not(target[1], source[1]);
-	t.not(target[2], source[2]);
+	t.expect(target).not.toBe(source);
+	t.expect(target[0]).not.toBe(source[0]);
+	t.expect(target[1]).not.toBe(source[1]);
+	t.expect(target[2]).not.toBe(source[2]);
 });
 
 test("cloneDeep -> works with arrays nested in objects", (t) => {
@@ -157,8 +157,8 @@ test("cloneDeep -> works with arrays nested in objects", (t) => {
 	const target = cloneDeep(source);
 
 	t.expect(target).toStrictEqual(source);
-	t.not(target, source);
-	t.not(target.a, source.a);
+	t.expect(target).not.toBe(source);
+	t.expect(target.a).not.toBe(source.a);
 });
 
 test("cloneDeep -> creates new object instances", (t) => {
@@ -166,7 +166,7 @@ test("cloneDeep -> creates new object instances", (t) => {
 	const target = cloneDeep(source);
 
 	target.a.b.c = 0;
-	t.not(source.a.b.c, 0);
+	t.expect(source.a.b.c).not.toBe(0);
 });
 
 test("mergeDeep -> can delete keys when undefined is passed", (t) => {

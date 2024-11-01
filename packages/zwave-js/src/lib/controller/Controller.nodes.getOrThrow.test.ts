@@ -45,7 +45,7 @@ test("should return a node if it was found", (t) => {
 
 test("should throw if the node was not found", (t) => {
 	const { driver } = t.context;
-	assertZWaveError(t, () => driver.controller.nodes.getOrThrow(3), {
+	assertZWaveError(t.expect, () => driver.controller.nodes.getOrThrow(3), {
 		errorCode: ZWaveErrorCodes.Controller_NodeNotFound,
 	});
 });

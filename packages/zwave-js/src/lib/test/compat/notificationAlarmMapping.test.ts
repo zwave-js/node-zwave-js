@@ -51,22 +51,22 @@ integrationTest(
 			sinon.assert.calledOnce(nodeNotification);
 			const event = nodeNotification.getCall(0).args[2];
 
-			t.is(event.type, 0x06);
-			t.is(event.event, 0x05);
-			t.deepEqual(event.parameters, {
+			t.expect(event.type).toBe(0x06);
+			t.expect(event.event).toBe(0x05);
+			t.expect(event.parameters).toStrictEqual({
 				userId: 2,
 			});
 
 			// And they should be known to be supported
 			const supportedNotificationTypes: number[] | undefined = node
 				.getValue(NotificationCCValues.supportedNotificationTypes.id);
-			t.true(supportedNotificationTypes?.includes(0x06));
+			t.expect(supportedNotificationTypes?.includes(0x06)).toBe(true);
 
 			const supportedAccessControlEvents: number[] | undefined = node
 				.getValue(
 					NotificationCCValues.supportedNotificationEvents(0x06).id,
 				);
-			t.true(supportedAccessControlEvents?.includes(0x05));
+			t.expect(supportedAccessControlEvents?.includes(0x05)).toBe(true);
 		},
 	},
 );

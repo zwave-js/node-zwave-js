@@ -35,27 +35,27 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			const valueIDs = node.getDefinedValueIDs();
-			t.true(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Did not find Basic CC currentValue although it should be exposed",
-			);
-			t.false(
+			).toBe(true);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Found Basic CC targetValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.duration.is(v)),
 				"Found Basic CC duration although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.restorePrevious.is(v)),
 				"Found Basic CC restorePrevious although it shouldn't be exposed",
-			);
+			).toBe(false);
 
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.compatEvent.is(v)),
 				"Found Basic CC compatEvent although it shouldn't be exposed",
-			);
+			).toBe(false);
 		},
 	},
 );
@@ -92,27 +92,27 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			const valueIDs = node.getDefinedValueIDs();
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Found Basic CC currentValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Found Basic CC targetValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.duration.is(v)),
 				"Found Basic CC duration although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.restorePrevious.is(v)),
 				"Found Basic CC restorePrevious although it shouldn't be exposed",
-			);
+			).toBe(false);
 
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.compatEvent.is(v)),
 				"Found Basic CC compatEvent although it shouldn't be exposed",
-			);
+			).toBe(false);
 		},
 	},
 );

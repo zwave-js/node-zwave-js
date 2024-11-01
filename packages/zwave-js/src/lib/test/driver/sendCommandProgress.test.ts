@@ -94,7 +94,7 @@ integrationTest(
 
 			await wait(200);
 
-			t.deepEqual(states, [
+			t.expect(states).toStrictEqual([
 				TransactionState.Queued,
 				TransactionState.Active,
 				TransactionState.Queued,
@@ -108,7 +108,7 @@ integrationTest(
 
 			await wait(200);
 
-			t.deepEqual(states, [
+			t.expect(states).toStrictEqual([
 				TransactionState.Queued,
 				TransactionState.Active,
 				TransactionState.Queued,

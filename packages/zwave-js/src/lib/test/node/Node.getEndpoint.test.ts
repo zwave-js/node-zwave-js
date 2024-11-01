@@ -67,7 +67,7 @@ afterEach((t) => {
 
 test.sequential("throws when a negative endpoint index is requested", (t) => {
 	const { node } = t.context;
-	assertZWaveError(t, () => node.getEndpoint(-1), {
+	assertZWaveError(t.expect, () => node.getEndpoint(-1), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: "must be positive",
 	});
@@ -124,7 +124,7 @@ test.sequential("caches the created endpoint instances", (t) => {
 	);
 	const first = node.getEndpoint(5);
 	const second = node.getEndpoint(5);
-	t.not(first, undefined);
+	t.expect(first).toBeDefined();
 	t.expect(first).toBe(second);
 });
 

@@ -81,23 +81,23 @@ integrationTest(
 			const targetValueId = MultilevelSwitchCCValues.targetValue.id;
 			const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
-			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			await node.setValue(targetValueId, 55);
 
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			// Unchanged after 0.5s
 			await wait(500);
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			// Updated after 2.5s
 			await wait(2000);
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), 55);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(55);
 		},
 	},
 );

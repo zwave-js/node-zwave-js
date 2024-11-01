@@ -4,7 +4,7 @@ import { CommandClasses, type ValueID, ValueMetadata } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import sinon from "sinon";
-import { TaskContext, afterAll, beforeAll, test } from "vitest";
+import { type TaskContext, afterAll, beforeAll, test } from "vitest";
 import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
@@ -83,7 +83,7 @@ test.sequential("setValue() issues the correct xyzCCSet command", async (t) => {
 	t.expect(result.status).toBe(SetValueStatus.SuccessUnsupervised);
 	sinon.assert.called(sendMessage);
 
-	assertCC(t, sendMessage.getCall(0).args[0], {
+	assertCC(t.expect, sendMessage.getCall(0).args[0], {
 		cc: BasicCC,
 		nodeId: node.id,
 		ccValues: {

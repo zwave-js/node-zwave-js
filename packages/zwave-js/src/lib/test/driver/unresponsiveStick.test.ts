@@ -50,7 +50,7 @@ integrationTest(
 				{ supportCheck: false },
 			);
 
-			t.is(ids.ownNodeId, mockController.ownNodeId);
+			t.expect(ids.ownNodeId).toBe(mockController.ownNodeId);
 		},
 	},
 );
@@ -94,7 +94,7 @@ integrationTest(
 			await wait(1000);
 
 			await assertZWaveError(
-				t,
+				t.expect,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
 						new GetControllerIdRequest(),
@@ -108,7 +108,7 @@ integrationTest(
 
 			// The serial port should have been closed and reopened
 			await wait(100);
-			t.true(serialPortCloseSpy.called);
+			t.expect(serialPortCloseSpy.called).toBe(true);
 
 			// FIXME: When closing the serial port, we lose the connection between the mock port instance and the controller
 			// Fix it at some point, then enable the below test.
@@ -161,7 +161,7 @@ integrationTest(
 
 			// The command fails
 			await assertZWaveError(
-				t,
+				t.expect,
 				() =>
 					driver.sendMessage<GetControllerIdResponse>(
 						new GetControllerIdRequest(),
@@ -176,11 +176,11 @@ integrationTest(
 			await wait(500);
 
 			// And the controller does not get soft-reset
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage((msg) =>
 					msg.functionType === FunctionType.SoftReset
 				)
-			);
+			).toThrow();
 		},
 	},
 );

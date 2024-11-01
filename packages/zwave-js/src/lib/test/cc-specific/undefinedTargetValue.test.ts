@@ -31,7 +31,7 @@ integrationTest(
 			await wait(100);
 
 			// The value in the DB should not be changed because we have no new info
-			t.is(node.getValue(targetValueValueID), false);
+			t.expect(node.getValue(targetValueValueID)).toBe(false);
 		},
 	},
 );

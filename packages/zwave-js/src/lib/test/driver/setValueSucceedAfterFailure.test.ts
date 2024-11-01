@@ -76,7 +76,7 @@ integrationTest(
 				},
 			};
 
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			const basicSetPromise0 = node2.setValue(
 				BasicCCValues.targetValue.endpoint(0),
@@ -118,7 +118,7 @@ integrationTest(
 			mockNode.autoAckControllerFrames = true;
 
 			await basicSetPromise2;
-			t.is(node2.status, NodeStatus.Alive);
+			t.expect(node2.status).toBe(NodeStatus.Alive);
 
 			await wait(10000);
 		},

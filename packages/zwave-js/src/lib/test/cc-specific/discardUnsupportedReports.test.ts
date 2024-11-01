@@ -95,10 +95,10 @@ integrationTest(
 			const temperature0 = node.getValue(
 				sensorValue.id,
 			);
-			t.is(temperature0, undefined);
+			t.expect(temperature0).toBeUndefined();
 
 			const temperature1 = node.getValue(sensorValue.endpoint(1));
-			t.is(temperature1, 25.12);
+			t.expect(temperature1).toBe(25.12);
 
 			const meterValue = MeterCCValues.value(
 				0x01,
@@ -106,10 +106,10 @@ integrationTest(
 				0x00,
 			);
 			const meter0 = node.getValue(meterValue.id);
-			t.is(meter0, 2.34);
+			t.expect(meter0).toBe(2.34);
 
 			const meter1 = node.getValue(meterValue.endpoint(1));
-			t.is(meter1, undefined);
+			t.expect(meter1).toBeUndefined();
 		},
 	},
 );

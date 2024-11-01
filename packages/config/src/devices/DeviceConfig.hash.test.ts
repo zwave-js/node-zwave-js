@@ -7,90 +7,98 @@ import { ConfigManager } from "../ConfigManager.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-test("hash() works", async (t) => {
+test(
+	"hash() works",
+	async (t) => {
+		const configManager = new ConfigManager({
+			deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
+		});
+		const config = (await configManager.lookupDevice(
+			0xffff,
+			0xcafe,
+			0xbeef,
+			"1.0",
+		))!;
+		t.expect(config).toBeDefined();
+
+		const hash = config.getHash();
+		t.expect(isUint8Array(hash)).toBe(true);
+	},
 	// This test might take a while
-	t.timeout(60000);
+	60000,
+);
 
-	const configManager = new ConfigManager({
-		deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
-	});
-	const config = (await configManager.lookupDevice(
-		0xffff,
-		0xcafe,
-		0xbeef,
-		"1.0",
-	))!;
-	t.not(config, undefined);
+test(
+	"hash() changes when changing a parameter info",
+	async (t) => {
+		const configManager = new ConfigManager({
+			deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
+		});
+		const config = (await configManager.lookupDevice(
+			0xffff,
+			0xcafe,
+			0xbeef,
+			"1.0",
+		))!;
+		t.expect(config).toBeDefined();
 
-	const hash = config.getHash();
-	t.expect(isUint8Array(hash)).toBe(true);
-});
+		const hash1 = config.getHash();
 
-test("hash() changes when changing a parameter info", async (t) => {
+		// @ts-expect-error
+		config.paramInformation!.get({ parameter: 2 })!.unit = "lightyears";
+		const hash2 = config.getHash();
+
+		t.expect(hash1).not.toStrictEqual(hash2);
+	},
 	// This test might take a while
-	t.timeout(60000);
+	60000,
+);
 
-	const configManager = new ConfigManager({
-		deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
-	});
-	const config = (await configManager.lookupDevice(
-		0xffff,
-		0xcafe,
-		0xbeef,
-		"1.0",
-	))!;
-	t.not(config, undefined);
+test(
+	"hash() changes when removing a CC",
+	async (t) => {
+		const configManager = new ConfigManager({
+			deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
+		});
+		const config = (await configManager.lookupDevice(
+			0xffff,
+			0xcafe,
+			0xbeef,
+			"1.0",
+		))!;
+		t.expect(config).toBeDefined();
 
-	const hash1 = config.getHash();
+		const hash1 = config.getHash();
 
-	// @ts-expect-error
-	config.paramInformation!.get({ parameter: 2 })!.unit = "lightyears";
-	const hash2 = config.getHash();
+		const removeCCs = new Map();
+		removeCCs.set(CommandClasses["All Switch"], "*");
+		// @ts-expect-error
+		config.compat!.removeCCs = removeCCs;
 
-	t.notDeepEqual(hash1, hash2);
-});
+		const hash2 = config.getHash();
 
-test("hash() changes when removing a CC", async (t) => {
+		t.expect(hash1).not.toStrictEqual(hash2);
+	},
 	// This test might take a while
-	t.timeout(60000);
+	60000,
+);
 
-	const configManager = new ConfigManager({
-		deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
-	});
-	const config = (await configManager.lookupDevice(
-		0xffff,
-		0xcafe,
-		0xbeef,
-		"1.0",
-	))!;
-	t.not(config, undefined);
+test(
+	"hash() does not crash for devices with a proprietary field",
+	async (t) => {
+		const configManager = new ConfigManager({
+			deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
+		});
+		const config = (await configManager.lookupDevice(
+			0xffff,
+			0xdead,
+			0xbeef,
+			"1.0",
+		))!;
+		t.expect(config).toBeDefined();
 
-	const hash1 = config.getHash();
-
-	const removeCCs = new Map();
-	removeCCs.set(CommandClasses["All Switch"], "*");
-	// @ts-expect-error
-	config.compat!.removeCCs = removeCCs;
-
-	const hash2 = config.getHash();
-
-	t.notDeepEqual(hash1, hash2);
-});
-
-test("hash() does not crash for devices with a proprietary field", async (t) => {
+		config.getHash();
+	},
 	// This test might take a while
-	t.timeout(60000);
-
-	const configManager = new ConfigManager({
-		deviceConfigPriorityDir: path.join(__dirname, "__fixtures/hash"),
-	});
-	const config = (await configManager.lookupDevice(
-		0xffff,
-		0xdead,
-		0xbeef,
-		"1.0",
-	))!;
-	t.not(config, undefined);
-
-	config.getHash();
-});
+	60000,
+);

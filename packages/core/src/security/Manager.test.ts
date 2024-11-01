@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-globals -- crypto methods return Buffers */
 import { isUint8Array } from "@zwave-js/shared";
-import crypto, { randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import sinon from "sinon";
-import { test } from "vitest";
+import { test, vi } from "vitest";
 import { SecurityManager } from "./Manager.js";
 
 const networkKey = Uint8Array.from([
@@ -26,6 +26,13 @@ const networkKey = Uint8Array.from([
 const ownNodeId = 1;
 const options = { networkKey, ownNodeId, nonceTimeout: 500 };
 
+vi.mock("node:crypto", async () => {
+	const originalCrypto = await vi.importActual("node:crypto");
+	return {
+		...originalCrypto,
+	};
+});
+
 test("constructor() -> should set the network key, auth key and encryption key", (t) => {
 	const man = new SecurityManager(options);
 	t.expect(man.networkKey).toStrictEqual(networkKey);
@@ -36,15 +43,14 @@ test("constructor() -> should set the network key, auth key and encryption key",
 });
 
 test("constructor() -> should throw if the network key doesn't have length 16", (t) => {
-	t.throws(
+	t.expect(
 		() =>
 			new SecurityManager({
 				networkKey: new Uint8Array(),
 				ownNodeId: 1,
 				nonceTimeout: 500,
 			}),
-		{ message: /16 bytes/ },
-	);
+	).toThrowError("16 bytes");
 });
 
 test("generateNonce() should return a random Buffer of the given length", (t) => {
@@ -63,23 +69,24 @@ test("generateNonce() should return a random Buffer of the given length", (t) =>
 	t.expect(nonce3.length).toBe(8);
 });
 
-test("generateNonce() -> should ensure that no collisions happen", (t) => {
+test("generateNonce() -> should ensure that no collisions happen", async (t) => {
 	const buf1a = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
 	const buf1b = Buffer.from([1, 2, 3, 4, 5, 6, 7, 9]); // has the same nonce id
 	const buf2 = Buffer.from([2, 2, 3, 4, 5, 6, 7, 8]);
 
-	const fakeRandomBytes = sinon
-		.stub()
-		.onFirstCall()
-		.returns(buf1a)
-		.onSecondCall()
-		.returns(buf1b)
-		.onThirdCall()
-		.returns(buf2);
-	sinon.replace(crypto, "randomBytes", fakeRandomBytes);
+	const originalCrypto = await vi.importActual("node:crypto");
+	const mockCrypto = await import("node:crypto");
+	mockCrypto.randomBytes = vi.fn()
+		.mockImplementationOnce(() => buf1a)
+		.mockImplementationOnce(() => buf1b)
+		.mockImplementationOnce(() => buf2);
+	t.onTestFinished(() => {
+		// @ts-expect-error
+		mockCrypto.randomBytes = originalCrypto.randomBytes;
+	});
 
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	const SM: typeof SecurityManager = require("./Manager").SecurityManager;
+	const SM: typeof SecurityManager =
+		(await import("./Manager.js")).SecurityManager;
 
 	const man = new SM(options);
 	const nonce1 = man.generateNonce(2, 8);
@@ -272,7 +279,7 @@ test("deleteAllNoncesForReceiver -> should only delete the nonces for the given 
 	t.expect(man.hasNonce(nonceId1)).toBe(false);
 	t.expect(man.getNonce(nonceId2)).toBeUndefined();
 	t.expect(man.hasNonce(nonceId2)).toBe(false);
-	t.not(man.getNonce(nonceId3), undefined);
+	t.expect(man.getNonce(nonceId3)).toBeDefined();
 	t.expect(man.hasNonce(nonceId3)).toBe(true);
 });
 

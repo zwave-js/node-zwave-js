@@ -48,18 +48,18 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			// Despite the compat flag, Basic CC should not be considered supported
-			t.false(node.supportsCC(CommandClasses.Basic));
+			t.expect(node.supportsCC(CommandClasses.Basic)).toBe(false);
 
 			// But currentValue should be exposed - otherwise it makes no sense to not map it
 			const valueIDs = node.getDefinedValueIDs();
-			t.true(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Did not find Basic CC currentValue although it should be exposed",
-			);
-			t.false(
+			).toBe(true);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Found Basic CC targetValue although it shouldn't be exposed",
-			);
+			).toBe(false);
 		},
 	},
 );

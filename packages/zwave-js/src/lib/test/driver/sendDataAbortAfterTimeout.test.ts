@@ -117,16 +117,16 @@ integrationTest(
 
 			// await wait(3000);
 			// The ping should eventually fail
-			t.false(await pingPromise);
+			t.expect(await pingPromise).toBe(false);
 
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SendDataAbort,
 			);
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage(
 					(msg) => msg.functionType === FunctionType.SoftReset,
 				)
-			);
+			).toThrow();
 
 			// mockController.clearReceivedHostMessages();
 
@@ -374,7 +374,7 @@ integrationTest(
 // 			// Circumvent the options validation so the test doesn't take forever
 // 			driver.options.timeouts.sendDataCallback = 1500;
 
-// 			await assertZWaveError(t, () => node.requestNodeInfo(), {
+// 			await assertZWaveError(t.expect, () => node.requestNodeInfo(), {
 // 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 // 				context: "callback",
 // 			});

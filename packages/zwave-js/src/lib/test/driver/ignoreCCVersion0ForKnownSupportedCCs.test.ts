@@ -172,7 +172,7 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.true(node.supportsCC(CommandClasses["Security 2"]));
+			t.expect(node.supportsCC(CommandClasses["Security 2"])).toBe(true);
 		},
 	},
 );
@@ -360,7 +360,7 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.true(node.supportsCC(CommandClasses["Security"]));
+			t.expect(node.supportsCC(CommandClasses["Security"])).toBe(true);
 		},
 	},
 );

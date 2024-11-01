@@ -70,7 +70,7 @@ test("encodeSwitchpoint() should correctly encode the minute part", (t) => {
 
 test("encodeSwitchpoint() should throw when the switchpoint state is undefined", (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() => encodeSwitchpoint({ hour: 1, minute: 5, state: undefined }),
 		{
 			errorCode: ZWaveErrorCodes.CC_Invalid,

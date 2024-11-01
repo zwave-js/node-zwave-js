@@ -12,7 +12,7 @@ integrationTest(
 
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const valueIDs = node.getDefinedValueIDs();
-			t.true(valueIDs.some((v) => v.property === "sceneId"));
+			t.expect(valueIDs.some((v) => v.property === "sceneId")).toBe(true);
 		},
 	},
 );

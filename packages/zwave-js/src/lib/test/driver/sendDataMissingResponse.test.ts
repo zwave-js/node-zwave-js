@@ -98,21 +98,21 @@ integrationTest(
 			);
 			mockController.clearReceivedHostMessages();
 
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, () => basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 				context: "response",
 			});
 
 			// The stick should NOT have been soft-reset
 			await wait(1000);
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage(
 					(msg) => msg.functionType === FunctionType.SoftReset,
 				)
-			);
+			).toThrow();
 
 			// And the node should be marked dead
-			t.is(node.status, NodeStatus.Dead);
+			t.expect(node.status).toBe(NodeStatus.Dead);
 		},
 	},
 );
@@ -426,7 +426,7 @@ integrationTest(
 // 			// Circumvent the options validation so the test doesn't take forever
 // 			driver.options.timeouts.sendDataCallback = 1500;
 
-// 			await assertZWaveError(t, () => node.requestNodeInfo(), {
+// 			await assertZWaveError(t.expect, () => node.requestNodeInfo(), {
 // 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 // 				context: "callback",
 // 			});

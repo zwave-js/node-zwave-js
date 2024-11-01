@@ -60,7 +60,7 @@ integrationTest(
 			await wait(500);
 
 			const setpoint = node.getValue(setpointValueId);
-			t.is(setpoint, 20);
+			t.expect(setpoint).toBe(20);
 
 			// And make sure the value event handlers are called
 			sinon.assert.calledWith(

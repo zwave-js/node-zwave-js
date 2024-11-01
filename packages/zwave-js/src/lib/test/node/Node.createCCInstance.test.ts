@@ -42,10 +42,14 @@ afterAll(async (t) => {
 test("should throw if the CC is not supported", (t) => {
 	const { driver } = t.context;
 	const node = new ZWaveNode(2, driver);
-	assertZWaveError(t, () => node.createCCInstance(CommandClasses.Basic), {
-		errorCode: ZWaveErrorCodes.CC_NotSupported,
-		messageMatches: "unsupported",
-	});
+	assertZWaveError(
+		t.expect,
+		() => node.createCCInstance(CommandClasses.Basic),
+		{
+			errorCode: ZWaveErrorCodes.CC_NotSupported,
+			messageMatches: "unsupported",
+		},
+	);
 	node.destroy();
 });
 
