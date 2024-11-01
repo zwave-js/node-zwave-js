@@ -226,7 +226,7 @@ jobs:
     # For all other events, especially on master and releases, run the full test suite
     # Run the full test suite on master, release branches and tags
     - name: Run component tests (full)
-      if: github.event_name != 'pull_request'
+      # if: github.event_name != 'pull_request'
       run: yarn run test:ts --shard ${{ matrix.shard }}
 
   # ===================
