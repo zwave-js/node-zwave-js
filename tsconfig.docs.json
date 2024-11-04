@@ -4,5 +4,9 @@
 	"compilerOptions": {
 		"customConditions": ["@@dev"]
 	},
-	"include": ["packages/**/src/**/*.ts"]
+	"include": [
+		"packages/**/src/**/*.ts",
+		"packages/**/src/**/*.cts",
+		"packages/**/src/**/*.mts"
+	]
 }

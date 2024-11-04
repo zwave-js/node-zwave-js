@@ -3,7 +3,6 @@
 	"compileOnSave": true,
 	"compilerOptions": {
 		"module": "commonjs",
-		"moduleResolution": "node",
 		// "noImplicitAny": true,
 		"rootDir": "../",
 		"newLine": "lf"
