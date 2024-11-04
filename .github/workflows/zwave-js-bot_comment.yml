@@ -72,7 +72,7 @@ jobs:
         github-token: ${{ secrets.BOT_TOKEN }}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.packPr({github, context});
 
 
@@ -102,7 +102,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.cjs`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
@@ -112,7 +112,7 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.cjs`);
           const result = await bot.getFixLintInfo({github, context});
           console.dir(result);
           return result || {pending: true};
@@ -177,7 +177,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.cjs`);
           return bot.fixLintFeedback({github, context});
 
 
@@ -206,7 +206,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
@@ -275,7 +275,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.rebaseFeedback({github, context});
 
   # No longer needed
@@ -303,7 +303,7 @@ jobs:
   #       github-token: ${{secrets.BOT_TOKEN}}
   #       result-encoding: string
   #       script: |
-  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
   #         return (
   #           (await bot.checkAuthorized({github, context})) &&
   #           (await bot.renameCommitCheck({github, context}))
@@ -316,7 +316,7 @@ jobs:
   #     id: get-pr
   #     with:
   #       script: |
-  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
   #         return bot.renameCommitGetPRInfo({github, context});
 
   #   - name: Save our CI scripts
@@ -366,7 +366,7 @@ jobs:
   #     with:
   #       github-token: ${{secrets.BOT_TOKEN}}
   #       script: |
-  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
   #         return bot.renameCommitFeedback({github, context});
 
   # #########################################################################
@@ -393,7 +393,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
@@ -465,7 +465,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.importConfigCreatePR({github, context});
 
 
@@ -497,7 +497,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
@@ -540,7 +540,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.addCompatFlag({github, context});
 
     - name: Commit changes
@@ -584,7 +584,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.addCompatFlagCreatePR({github, context});
 
 
@@ -613,7 +613,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
@@ -656,7 +656,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.addFingerprint({github, context});
 
     - name: Commit changes
@@ -702,5 +702,5 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
           return bot.addFingerprintCreatePR({github, context});
