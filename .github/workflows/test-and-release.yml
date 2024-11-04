@@ -232,10 +232,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    # When doing releases, some tests need the generated code to be up to date
-    - name: Perform code generation
-      run: yarn turbo run codegen
-
     # # For pull requests, only run tests for changed files
     # - name: Run component tests (changes)
     #   if: github.event_name == 'pull_request'
