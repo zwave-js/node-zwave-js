@@ -43,7 +43,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -381,6 +381,9 @@ export interface BinarySwitchCCReportOptions {
 }
 
 @CCCommand(BinarySwitchCommand.Report)
+@ccValueProperty("currentValue", BinarySwitchCCValues.currentValue)
+@ccValueProperty("targetValue", BinarySwitchCCValues.targetValue)
+@ccValueProperty("duration", BinarySwitchCCValues.duration)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
 		options: WithAddress<BinarySwitchCCReportOptions>,
@@ -417,13 +420,10 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		});
 	}
 
-	@ccValue(BinarySwitchCCValues.currentValue)
 	public readonly currentValue: MaybeUnknown<boolean> | undefined;
 
-	@ccValue(BinarySwitchCCValues.targetValue)
 	public readonly targetValue: MaybeUnknown<boolean> | undefined;
 
-	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

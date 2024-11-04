@@ -1,23 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import "reflect-metadata";
 
 type Constructor<T> = new (...args: any[]) => T;
 
 export interface ReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TArgs extends any[],
 	TValue,
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 > {
 	/** The decorator which is used to decorate classes */
 	decorator: <TTarget extends TBase>(
 		...args: TArgs
 	) => TypedClassDecorator<TTarget>;
 	/** Looks up the value which was assigned to the target class by the decorator, using a class instance */
-	lookupValue: (target: TBase) => TValue | undefined;
+	lookupValue: (target: InstanceType<TBase>) => TValue | undefined;
 	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
-	lookupValueStatic: (constr: Function) => TValue | undefined;
+	lookupValueStatic: (constr: TBase) => TValue | undefined;
 	/** Looks up the class constructor for a given value. This can only be used if the value does not need to be transformed using `constructorLookupKey`. */
 	lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
 	/** Looks up the class constructor for a given lookup key. This MUST be used if the value needs to be transformed using `constructorLookupKey`. */
@@ -25,10 +26,12 @@ export interface ReflectionDecorator<
 }
 
 export interface CreateReflectionDecoratorOptions<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TArgs extends any[],
 	TValue,
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 > {
 	/** The name of this decorator */
 	name: string;
@@ -45,10 +48,12 @@ export interface CreateReflectionDecoratorOptions<
 
 /** Creates a reflection decorator and corresponding methods for reverse lookup of values and constructors */
 export function createReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TArgs extends any[],
 	TValue,
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 >({
 	name,
 	valueFromArgs,
@@ -66,9 +71,12 @@ export function createReflectionDecorator<
 	const lookupTarget = Object.create(null);
 
 	const grp: ReflectionDecorator<TBase, TArgs, TValue, TConstructor> = {
-		decorator: (...args): TypedClassDecorator<TBase> => {
+		decorator: (...args) => {
 			const value = valueFromArgs(...args);
-			let body = (target: TConstructor) => {
+			function body<T extends TConstructor>(
+				target: T,
+				_context: ClassDecoratorContext<T>,
+			) {
 				Reflect.defineMetadata(key, value, target);
 
 				if (constructorLookupKey === false) return;
@@ -80,10 +88,10 @@ export function createReflectionDecorator<
 					Reflect.getMetadata(mapKey, lookupTarget) || new Map();
 				map.set(reverseLookupKey, target);
 				Reflect.defineMetadata(mapKey, map, lookupTarget);
-			};
+			}
 
 			// Rename the decorator body so it is easier to identify in stack traces
-			body = Object.defineProperty(body, "name", {
+			Object.defineProperty(body, "name", {
 				value: "decoratorBody_" + name,
 			});
 
@@ -144,9 +152,11 @@ export function createReflectionDecorator<
 }
 
 export interface SimpleReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TArgs extends [any],
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 > {
 	/** The decorator which is used to decorate the super class */
 	decorator: <TTarget extends TBase>(
@@ -154,10 +164,10 @@ export interface SimpleReflectionDecorator<
 	) => TypedClassDecorator<TTarget>;
 
 	/** Looks up the value which was assigned to the target class by the decorator, using a class instance */
-	lookupValue: (target: TBase) => TArgs[0] | undefined;
+	lookupValue: (target: InstanceType<TBase>) => TArgs[0] | undefined;
 
 	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
-	lookupValueStatic: (constr: Function) => TArgs[0] | undefined;
+	lookupValueStatic: (constr: TBase) => TArgs[0] | undefined;
 
 	/** Looks up the super class constructor for a given value. */
 	lookupConstructor: (...args: TArgs) => TConstructor | undefined;
@@ -172,9 +182,11 @@ export interface CreateSimpleReflectionDecoratorOptions {
  * Like {@link createReflectionDecorator}, but for single-value decorators. This has the advantage that the returned functions can be reused easier with named args.
  */
 export function createSimpleReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TArgs extends [any],
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 >({
 	name,
 }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<
@@ -203,16 +215,16 @@ export function createSimpleReflectionDecorator<
 }
 
 export interface ValuelessReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 > {
 	/** The decorator which is used to decorate the super class */
 	decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
 
 	/** Checks if the target class was decorated by this decorator, using a class instance */
-	isDecorated: (target: TBase) => boolean;
+	isDecorated: (target: InstanceType<TBase>) => boolean;
 
 	/** Checks if the target class was decorated by this decorator, using the class itself */
-	isDecoratedStatic: (constr: Function) => boolean;
+	isDecoratedStatic: (constr: TBase) => boolean;
 }
 
 export interface CreateValuelessReflectionDecoratorOptions {
@@ -224,7 +236,7 @@ export interface CreateValuelessReflectionDecoratorOptions {
  * Like {@link createReflectionDecorator}, but for valueless decorators.
  */
 export function createValuelessReflectionDecorator<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 >({
 	name,
 }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<
@@ -237,8 +249,9 @@ export function createValuelessReflectionDecorator<
 
 	const ret: ValuelessReflectionDecorator<TBase> = {
 		decorator: decorator.decorator,
-		isDecorated: (target: TBase) => !!decorator.lookupValue(target),
-		isDecoratedStatic: (constr: Function) =>
+		isDecorated: (target: InstanceType<TBase>) =>
+			!!decorator.lookupValue(target),
+		isDecoratedStatic: (constr: TBase) =>
 			!!decorator.lookupValueStatic(constr),
 	};
 
@@ -246,10 +259,12 @@ export function createValuelessReflectionDecorator<
 }
 
 export interface ReflectionDecoratorPair<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TSuperArgs extends [any],
 	TSubArgs extends [any],
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 > {
 	/** The decorator which is used to decorate the super class */
 	superDecorator: <TTarget extends TBase>(
@@ -262,14 +277,16 @@ export interface ReflectionDecoratorPair<
 	) => TypedClassDecorator<TTarget>;
 
 	/** Looks up the value which was assigned to the target super class by the decorator, using a class instance */
-	lookupSuperValue: (target: TBase) => TSuperArgs[0] | undefined;
+	lookupSuperValue: (
+		target: InstanceType<TBase>,
+	) => TSuperArgs[0] | undefined;
 	/** Looks up the value which was assigned to the target sub class by the decorator, using a class instance */
-	lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
+	lookupSubValue: (target: InstanceType<TBase>) => TSubArgs[0] | undefined;
 
 	/** Looks up the value which was assigned to the target super class by the decorator, using the class itself */
-	lookupSuperValueStatic: (constr: Function) => TSuperArgs[0] | undefined;
+	lookupSuperValueStatic: (constr: TBase) => TSuperArgs[0] | undefined;
 	/** Looks up the value which was assigned to the target sub class by the decorator, using the class itself */
-	lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
+	lookupSubValueStatic: (constr: TBase) => TSubArgs[0] | undefined;
 
 	/** Looks up the super class constructor for a given value. */
 	lookupSuperConstructor: (...args: TSuperArgs) => TConstructor | undefined;
@@ -291,10 +308,12 @@ export interface CreateReflectionDecoratorPairOptions {
  * This pair is meant to decorate a super class and several of its subclasses
  */
 export function createReflectionDecoratorPair<
-	TBase extends object,
+	TBase extends abstract new (...args: any) => any,
 	TSuperArgs extends [any],
 	TSubArgs extends [any],
-	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+	TConstructor extends Constructor<InstanceType<TBase>> = Constructor<
+		InstanceType<TBase>
+	>,
 >({
 	superName,
 	subName,
@@ -327,7 +346,9 @@ export function createReflectionDecoratorPair<
 		name: subName,
 		valueFromArgs: (arg) => arg,
 		constructorLookupKey: (target, subArg) => {
-			const superArg = superDecorator.lookupValueStatic(target);
+			const superArg = superDecorator.lookupValueStatic(
+				target as unknown as TBase,
+			);
 			return getLookupKey(superArg, subArg);
 		},
 	});
@@ -354,82 +375,3 @@ export function createReflectionDecoratorPair<
 
 	return ret;
 }
-
-// export interface PropertyReflectionDecorator<
-// // 	TTarget extends object,
-// 	TArgs extends any[],
-// 	TValue,
-// > {
-// 	/** The decorator which is used to decorate properties */
-// 	decorator: (...args: TArgs) => TypedPropertyDecorator<TTarget>;
-// 	/** Looks up all decorated properties and the decorator arguments for a class instance */
-// 	lookupValues: (target: TTarget) => ReadonlyMap<string | number, TValue>;
-// }
-
-// export interface CreatePropertyReflectionDecoratorOptions<
-// 	TArgs extends any[],
-// 	TValue,
-// > {
-// 	/** The name of this decorator */
-// 	name: string;
-// 	/** Determines the value to be stored for the given arguments */
-// 	valueFromArgs: (...args: TArgs) => TValue;
-// }
-
-// /** Creates a reflection decorator for a class property and the corresponding method for reverse lookup of defined values */
-// export function createPropertyReflectionDecorator<
-// // 	TTarget extends object,
-// 	TArgs extends any[],
-// 	TValue,
-// >({
-// 	name,
-// 	valueFromArgs,
-// }: CreatePropertyReflectionDecoratorOptions<
-// 	TArgs,
-// 	TValue
-// >): PropertyReflectionDecorator<TTarget, TArgs, TValue> {
-// 	const key = Symbol.for(`METADATA_${name}`);
-
-// 	const prp: PropertyReflectionDecorator<TTarget, TArgs, TValue> = {
-// 		decorator: (...args) => {
-// 			const value = valueFromArgs(...args);
-// 			let body = (
-// 				target: TTarget,
-// 				property: string | number | symbol,
-// 			) => {
-// 				// get the class constructor
-// 				const constr = target.constructor;
-
-// 				// retrieve the current metadata
-// 				const metadata: Map<string | number, TValue> =
-// 					Reflect.getMetadata(key, constr) ?? new Map();
-
-// 				// Add the variable
-// 				metadata.set(property as string | number, value);
-
-// 				// And store it back
-// 				Reflect.defineMetadata(key, metadata, constr);
-// 			};
-
-// 			// Rename the decorator body so it is easier to identify in stack traces
-// 			body = Object.defineProperty(body, "name", {
-// 				value: "decoratorBody_" + name,
-// 			});
-
-// 			return body;
-// 		},
-
-// 		lookupValues: (target) => {
-// 			return Reflect.getMetadata(key, target.constructor);
-// 		},
-// 	};
-
-// 	// Rename the decorator functions so they are easier to identify in stack traces
-// 	for (const property of ["decorator", "lookupValues"] as const) {
-// 		prp[property] = Object.defineProperty(prp[property], "name", {
-// 			value: `${property}_${name}`,
-// 		}) as any;
-// 	}
-
-// 	return prp;
-// }

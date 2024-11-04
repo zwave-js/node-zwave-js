@@ -54,7 +54,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -685,6 +685,10 @@ export interface ColorSwitchCCSupportedReportOptions {
 }
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
+@ccValueProperty(
+	"supportedColorComponents",
+	ColorSwitchCCValues.supportedColorComponents,
+)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
 		options: WithAddress<ColorSwitchCCSupportedReportOptions>,
@@ -711,7 +715,6 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		});
 	}
 
-	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -748,6 +751,17 @@ export interface ColorSwitchCCReportOptions {
 }
 
 @CCCommand(ColorSwitchCommand.Report)
+@ccValueProperty(
+	"currentValue",
+	ColorSwitchCCValues.currentColorChannel,
+	(self) => [self.colorComponent],
+)
+@ccValueProperty(
+	"targetValue",
+	ColorSwitchCCValues.targetColorChannel,
+	(self) => [self.colorComponent],
+)
+@ccValueProperty("duration", ColorSwitchCCValues.duration)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
 		options: WithAddress<ColorSwitchCCReportOptions>,
@@ -844,19 +858,11 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	}
 
 	public readonly colorComponent: ColorComponent;
-	@ccValue(
-		ColorSwitchCCValues.currentColorChannel,
-		(self: ColorSwitchCCReport) => [self.colorComponent] as const,
-	)
+
 	public readonly currentValue: number;
 
-	@ccValue(
-		ColorSwitchCCValues.targetColorChannel,
-		(self: ColorSwitchCCReport) => [self.colorComponent] as const,
-	)
 	public readonly targetValue: number | undefined;
 
-	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

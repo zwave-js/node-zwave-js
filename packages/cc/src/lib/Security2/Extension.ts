@@ -14,7 +14,7 @@ enum S2ExtensionType {
 }
 
 const extensionTypeDecorator = createSimpleReflectionDecorator<
-	Security2Extension,
+	typeof Security2Extension,
 	[type: S2ExtensionType],
 	Security2ExtensionConstructor<Security2Extension>
 >({

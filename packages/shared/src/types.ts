@@ -9,12 +9,12 @@ export type JSONObject = Record<string, any>;
 
 export type Constructor<T = object> = new (...args: any[]) => T;
 
-export type TypedClassDecorator<TTarget extends object> = <
-	T extends TTarget,
-	TConstructor extends new (...args: any[]) => T,
->(
-	apiClass: TConstructor,
-) => TConstructor | void;
+export type TypedClassDecorator<
+	Class extends abstract new (...args: any) => any,
+> = (
+	target: Class,
+	context: ClassDecoratorContext<Class>,
+) => Class | void;
 
 export type TypedPropertyDecorator<TTarget extends object> = <
 	T extends TTarget,

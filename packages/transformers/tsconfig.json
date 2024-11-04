@@ -3,7 +3,6 @@
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"newLine": "lf",
-		"experimentalDecorators": true,
 		"paths": {
 			"@zwave-js/transformers": ["./src"]
 		}

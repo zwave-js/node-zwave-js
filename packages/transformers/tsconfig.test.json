@@ -8,8 +8,7 @@
 		"declarationMap": false,
 		"sourceMap": false,
 		"plugins": [{ "transform": "./build" }],
-		"incremental": false,
-		"experimentalDecorators": true
+		"incremental": false
 	},
 	"include": ["test/fixtures/**/*.ts"]
 }

@@ -27,7 +27,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -236,6 +236,7 @@ export interface DoorLockLoggingCCRecordsSupportedReportOptions {
 }
 
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
+@ccValueProperty("recordsCount", DoorLockLoggingCCValues.recordsCount)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
 		options: WithAddress<DoorLockLoggingCCRecordsSupportedReportOptions>,
@@ -259,7 +260,6 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		});
 	}
 
-	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

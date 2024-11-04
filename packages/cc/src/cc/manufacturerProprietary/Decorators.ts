@@ -15,7 +15,7 @@ import type { FibaroCC } from "./FibaroCC.js";
 // === Define the manufacturer ID for a given Manufacturer Proprietary CC subclass
 
 const manufacturerIdDecorator = createSimpleReflectionDecorator<
-	ManufacturerProprietaryCC,
+	typeof ManufacturerProprietaryCC,
 	[manufacturerId: number],
 	ManufacturerProprietaryCCConstructor
 >({
@@ -60,7 +60,7 @@ export const getManufacturerProprietaryCCConstructor =
 	manufacturerIdDecorator.lookupConstructor;
 
 const manufacturerProprietaryAPIDecorator = createSimpleReflectionDecorator<
-	CCAPI,
+	typeof CCAPI,
 	[manufacturerId: number],
 	APIConstructor<ManufacturerProprietaryCCAPI>
 >({
@@ -86,7 +86,7 @@ export const getManufacturerProprietaryAPI =
 // Decorators for easy lookup
 
 const FibaroCCAndCommandDecorator = createReflectionDecoratorPair<
-	FibaroCC,
+	typeof FibaroCC,
 	[fibaroCCId: number],
 	[fibaroCCCommand: number],
 	ManufacturerProprietaryCCConstructor<typeof FibaroCC>

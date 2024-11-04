@@ -6,16 +6,13 @@ import {
 	createReflectionDecoratorPair,
 	createValuelessReflectionDecorator,
 } from "@zwave-js/core";
-import type {
-	TypedClassDecorator,
-	TypedPropertyDecorator,
-} from "@zwave-js/shared";
+import type { TypedClassDecorator } from "@zwave-js/shared";
 import type { APIConstructor, CCAPI } from "./API.js";
-import type {
-	CCConstructor,
-	CCResponsePredicate,
-	CommandClass,
-	DynamicCCResponse,
+import {
+	type CCConstructor,
+	type CCResponsePredicate,
+	type CommandClass,
+	type DynamicCCResponse,
 } from "./CommandClass.js";
 import type {
 	DynamicCCValue,
@@ -24,7 +21,7 @@ import type {
 } from "./Values.js";
 
 const CCAndCommandDecorator = createReflectionDecoratorPair<
-	CommandClass,
+	typeof CommandClass,
 	[ccId: CommandClasses],
 	[ccCommand: number],
 	CCConstructor<CommandClass>
@@ -80,7 +77,7 @@ export function getCommandClassStatic<T extends CCConstructor<CommandClass>>(
 }
 
 const apiDecorator = createReflectionDecorator<
-	CCAPI,
+	typeof CCAPI,
 	[cc: CommandClasses],
 	CommandClasses,
 	APIConstructor
@@ -111,8 +108,10 @@ export function getCommandClass(cc: CommandClass | CCAPI): CommandClasses {
 	// get the class constructor
 	const constr = cc.constructor;
 	// retrieve the current metadata
-	const ret = CCAndCommandDecorator.lookupSuperValueStatic(constr)
-		?? apiDecorator.lookupValueStatic(constr);
+	const ret = CCAndCommandDecorator.lookupSuperValueStatic(
+		constr as typeof CommandClass,
+	)
+		?? apiDecorator.lookupValueStatic(constr as typeof CCAPI);
 
 	if (ret == undefined) {
 		throw new ZWaveError(
@@ -124,7 +123,7 @@ export function getCommandClass(cc: CommandClass | CCAPI): CommandClasses {
 }
 
 const implementedVersionDecorator = createReflectionDecorator<
-	CommandClass,
+	typeof CommandClass,
 	[version: number],
 	number
 >({
@@ -169,7 +168,7 @@ export function getImplementedVersionStatic<
 }
 
 const expectedCCResponseDecorator = createReflectionDecorator<
-	CommandClass,
+	typeof CommandClass,
 	[
 		cc:
 			| CCConstructor<CommandClass>
@@ -194,12 +193,13 @@ const expectedCCResponseDecorator = createReflectionDecorator<
  * Defines the expected response associated with a Z-Wave message
  */
 export function expectedCCResponse<
+	TTarget extends typeof CommandClass,
 	TSent extends CommandClass,
 	TReceived extends CommandClass,
 >(
 	cc: CCConstructor<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
-): TypedClassDecorator<CommandClass> {
+): TypedClassDecorator<TTarget> {
 	return expectedCCResponseDecorator.decorator(cc as any, predicate as any);
 }
 
@@ -224,7 +224,7 @@ export function getCCResponsePredicate<T extends CommandClass>(
 }
 
 const ccValuesDecorator = createReflectionDecorator<
-	CommandClass,
+	typeof CommandClass,
 	[valueDefinition: Record<string, StaticCCValue | DynamicCCValue>],
 	Record<string, StaticCCValue | DynamicCCValue | undefined>
 >({
@@ -260,60 +260,131 @@ export function getCCValues<T extends CommandClass>(
 
 const ccValue_METADATA = Symbol.for(`METADATA_ccValue`);
 
+// /**
+//  * @publicAPI
+//  * Defines which CC value a Z-Wave command class property belongs to
+//  */
+// export function ccValue<TTarget extends CommandClass>(
+// 	value: StaticCCValue,
+// ): TypedPropertyDecorator<TTarget>;
+
+// export function ccValue<TTarget extends CommandClass, TArgs extends any[]>(
+// 	value: DynamicCCValue<TArgs>,
+// 	getArgs: (self: TTarget) => Readonly<TArgs>,
+// ): TypedPropertyDecorator<TTarget>;
+
+// // Ideally this should use the PropertyReflectionDecorator, but we cannot reuse the
+// // target type in the getArgs function then.
+// export function ccValue<TTarget extends CommandClass, TArgs extends any[]>(
+// 	...args:
+// 		| [value: StaticCCValue]
+// 		| [value: DynamicCCValue<TArgs>, getArgs: (self: TTarget) => TArgs]
+// ): TypedPropertyDecorator<TTarget> {
+// 	// Normalize the arguments to the expected format
+// 	debugger;
+// 	let valueOrFactory: StaticCCValue | StaticCCValueFactory<TTarget>;
+// 	if (args.length === 1) {
+// 		valueOrFactory = args[0];
+// 	} else {
+// 		const [value, getArgs] = args;
+// 		valueOrFactory = (self: TTarget) => {
+// 			const args = getArgs(self);
+// 			const base = value(...args);
+// 			return {
+// 				...base,
+// 				is: value.is,
+// 				options: value.options,
+// 			};
+// 		};
+// 	}
+
+// 	return function decoratorBody_ccValue(
+// 		target: TTarget,
+// 		property: string | number | symbol,
+// 	): void {
+// 		// get the class constructor
+// 		const constr = target.constructor;
+
+// 		// retrieve the current metadata
+// 		const metadata: Map<
+// 			string | number,
+// 			StaticCCValue | StaticCCValueFactory<TTarget>
+// 		> = Reflect.getMetadata(ccValue_METADATA, constr) ?? new Map();
+
+// 		// Add the variable
+// 		metadata.set(property as string | number, valueOrFactory);
+
+// 		// And store it back
+// 		Reflect.defineMetadata(ccValue_METADATA, metadata, constr);
+// 	};
+// }
+
+export function ccValueProperty<
+	Class extends abstract new (...args: any) => any,
+>(
+	property: keyof InstanceType<Class>,
+	value: StaticCCValue,
+): TypedClassDecorator<Class>;
+
+export function ccValueProperty<
+	Class extends abstract new (...args: any) => any,
+	const TArgs extends any[],
+>(
+	property: keyof InstanceType<Class>,
+	value: DynamicCCValue<TArgs>,
+	getArgs: (self: InstanceType<Class>) => TArgs,
+): TypedClassDecorator<Class>;
+
 /**
  * @publicAPI
- * Defines which CC value a Z-Wave command class property belongs to
+ * Defines which CC values the properties of a Z-Wave Command Class correspond to
  */
-export function ccValue<TTarget extends CommandClass>(
-	value: StaticCCValue,
-): TypedPropertyDecorator<TTarget>;
-
-export function ccValue<TTarget extends CommandClass, TArgs extends any[]>(
-	value: DynamicCCValue<TArgs>,
-	getArgs: (self: TTarget) => Readonly<TArgs>,
-): TypedPropertyDecorator<TTarget>;
-
-// Ideally this should use the PropertyReflectionDecorator, but we cannot reuse the
-// target type in the getArgs function then.
-export function ccValue<TTarget extends CommandClass, TArgs extends any[]>(
+export function ccValueProperty<
+	Class extends abstract new (...args: any) => any,
+	const TArgs extends any[],
+>(
+	property: keyof InstanceType<Class>,
 	...args:
 		| [value: StaticCCValue]
-		| [value: DynamicCCValue<TArgs>, getArgs: (self: TTarget) => TArgs]
-): TypedPropertyDecorator<TTarget> {
-	// Normalize the arguments to the expected format
-	let valueOrFactory: StaticCCValue | StaticCCValueFactory<TTarget>;
-	if (args.length === 1) {
-		valueOrFactory = args[0];
-	} else {
-		const [value, getArgs] = args;
-		valueOrFactory = (self: TTarget) => {
-			const args = getArgs(self);
-			const base = value(...args);
-			return {
-				...base,
-				is: value.is,
-				options: value.options,
-			};
-		};
-	}
-
-	return function decoratorBody_ccValue(
-		target: TTarget,
-		property: string | number | symbol,
-	): void {
+		| [
+			value: DynamicCCValue<TArgs>,
+			getArgs: (self: InstanceType<Class>) => TArgs,
+		]
+): TypedClassDecorator<Class> {
+	return function ccValues2_body(target: Class): void {
 		// get the class constructor
 		const constr = target.constructor;
 
 		// retrieve the current metadata
 		const metadata: Map<
 			string | number,
-			StaticCCValue | StaticCCValueFactory<TTarget>
+			StaticCCValue | StaticCCValueFactory<InstanceType<Class>>
 		> = Reflect.getMetadata(ccValue_METADATA, constr) ?? new Map();
+
+		// Add the variable to the metadata
+
+		let valueOrFactory:
+			| StaticCCValue
+			| StaticCCValueFactory<InstanceType<Class>>;
+		if (args.length === 1) {
+			valueOrFactory = args[0];
+		} else {
+			const [value, getArgs] = args;
+			valueOrFactory = (self: InstanceType<Class>) => {
+				const args = getArgs(self);
+				const base = value(...args);
+				return {
+					...base,
+					is: value.is,
+					options: value.options,
+				};
+			};
+		}
 
 		// Add the variable
 		metadata.set(property as string | number, valueOrFactory);
 
-		// And store it back
+		// And store the metadata back
 		Reflect.defineMetadata(ccValue_METADATA, metadata, constr);
 	};
 }
@@ -351,7 +422,9 @@ export function getCCValueProperties<TTarget extends CommandClass>(
 //  */
 // export const getCCValueDefinitions = ccValueDecorator.lookupValues;
 
-const supervisionDecorator = createValuelessReflectionDecorator<CommandClass>({
+const supervisionDecorator = createValuelessReflectionDecorator<
+	typeof CommandClass
+>({
 	name: "useSupervision",
 });
 

@@ -25,7 +25,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -167,6 +167,7 @@ export interface HumidityControlOperatingStateCCReportOptions {
 }
 
 @CCCommand(HumidityControlOperatingStateCommand.Report)
+@ccValueProperty("state", HumidityControlOperatingStateCCValues.state)
 export class HumidityControlOperatingStateCCReport
 	extends HumidityControlOperatingStateCC
 {
@@ -192,7 +193,6 @@ export class HumidityControlOperatingStateCCReport
 		});
 	}
 
-	@ccValue(HumidityControlOperatingStateCCValues.state)
 	public readonly state: HumidityControlOperatingState;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -31,7 +31,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -254,6 +254,8 @@ export interface LanguageCCReportOptions {
 }
 
 @CCCommand(LanguageCommand.Report)
+@ccValueProperty("language", LanguageCCValues.language)
+@ccValueProperty("country", LanguageCCValues.country)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
 		options: WithAddress<LanguageCCReportOptions>,
@@ -278,10 +280,8 @@ export class LanguageCCReport extends LanguageCC {
 		});
 	}
 
-	@ccValue(LanguageCCValues.language)
 	public readonly language: string;
 
-	@ccValue(LanguageCCValues.country)
 	public readonly country: MaybeNotKnown<string>;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

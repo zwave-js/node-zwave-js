@@ -31,7 +31,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -598,6 +598,7 @@ export interface AssociationGroupInfoCCInfoReportOptions {
 }
 
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
+@ccValueProperty("hasDynamicInfo", AssociationGroupInfoCCValues.hasDynamicInfo)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
 		options: WithAddress<AssociationGroupInfoCCInfoReportOptions>,
@@ -641,7 +642,6 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly isListMode: boolean;
 
-	@ccValue(AssociationGroupInfoCCValues.hasDynamicInfo)
 	public readonly hasDynamicInfo: boolean;
 
 	public readonly groups: readonly AssociationGroupInfo[];
@@ -789,6 +789,11 @@ export interface AssociationGroupInfoCCCommandListReportOptions {
 }
 
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
+@ccValueProperty(
+	"commands",
+	AssociationGroupInfoCCValues.commands,
+	(self) => [self.groupId],
+)
 export class AssociationGroupInfoCCCommandListReport
 	extends AssociationGroupInfoCC
 {
@@ -830,11 +835,6 @@ export class AssociationGroupInfoCCCommandListReport
 
 	public readonly groupId: number;
 
-	@ccValue(
-		AssociationGroupInfoCCValues.commands,
-		(self: AssociationGroupInfoCCCommandListReport) =>
-			[self.groupId] as const,
-	)
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

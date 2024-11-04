@@ -37,7 +37,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -415,6 +415,8 @@ export interface WakeUpCCIntervalReportOptions {
 }
 
 @CCCommand(WakeUpCommand.IntervalReport)
+@ccValueProperty("wakeUpInterval", WakeUpCCValues.wakeUpInterval)
+@ccValueProperty("controllerNodeId", WakeUpCCValues.controllerNodeId)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
 		options: WithAddress<WakeUpCCIntervalReportOptions>,
@@ -441,10 +443,8 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		});
 	}
 
-	@ccValue(WakeUpCCValues.wakeUpInterval)
 	public readonly wakeUpInterval: number;
 
-	@ccValue(WakeUpCCValues.controllerNodeId)
 	public readonly controllerNodeId: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -478,6 +478,10 @@ export interface WakeUpCCIntervalCapabilitiesReportOptions {
 }
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
+@ccValueProperty(
+	"wakeUpOnDemandSupported",
+	WakeUpCCValues.wakeUpOnDemandSupported,
+)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public constructor(
 		options: WithAddress<WakeUpCCIntervalCapabilitiesReportOptions>,
@@ -547,7 +551,6 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public readonly defaultWakeUpInterval: number;
 	public readonly wakeUpIntervalSteps: number;
 
-	@ccValue(WakeUpCCValues.wakeUpOnDemandSupported)
 	public readonly wakeUpOnDemandSupported: boolean;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

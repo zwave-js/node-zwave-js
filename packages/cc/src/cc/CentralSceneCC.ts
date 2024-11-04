@@ -42,7 +42,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -392,6 +392,15 @@ export interface CentralSceneCCSupportedReportOptions {
 }
 
 @CCCommand(CentralSceneCommand.SupportedReport)
+@ccValueProperty("sceneCount", CentralSceneCCValues.sceneCount)
+@ccValueProperty(
+	"supportsSlowRefresh",
+	CentralSceneCCValues.supportsSlowRefresh,
+)
+@ccValueProperty(
+	"supportedKeyAttributes",
+	CentralSceneCCValues.supportedKeyAttributes,
+)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
 		options: WithAddress<CentralSceneCCSupportedReportOptions>,
@@ -473,11 +482,10 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return true;
 	}
 
-	@ccValue(CentralSceneCCValues.sceneCount)
 	public readonly sceneCount: number;
 
 	// TODO: Only offer `slowRefresh` if this is true
-	@ccValue(CentralSceneCCValues.supportsSlowRefresh)
+
 	public readonly supportsSlowRefresh: MaybeNotKnown<boolean>;
 
 	private _supportedKeyAttributes = new Map<
@@ -485,7 +493,6 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		readonly CentralSceneKeys[]
 	>();
 
-	@ccValue(CentralSceneCCValues.supportedKeyAttributes)
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
 		readonly CentralSceneKeys[]
@@ -522,6 +529,7 @@ export interface CentralSceneCCConfigurationReportOptions {
 }
 
 @CCCommand(CentralSceneCommand.ConfigurationReport)
+@ccValueProperty("slowRefresh", CentralSceneCCValues.slowRefresh)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
 		options: WithAddress<CentralSceneCCConfigurationReportOptions>,
@@ -545,7 +553,6 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		});
 	}
 
-	@ccValue(CentralSceneCCValues.slowRefresh)
 	public readonly slowRefresh: boolean;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

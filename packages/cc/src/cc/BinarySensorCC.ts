@@ -36,7 +36,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -484,6 +484,10 @@ export interface BinarySensorCCSupportedReportOptions {
 }
 
 @CCCommand(BinarySensorCommand.SupportedReport)
+@ccValueProperty(
+	"supportedSensorTypes",
+	BinarySensorCCValues.supportedSensorTypes,
+)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
 		options: WithAddress<BinarySensorCCSupportedReportOptions>,
@@ -514,7 +518,6 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		});
 	}
 
-	@ccValue(BinarySensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: BinarySensorType[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {

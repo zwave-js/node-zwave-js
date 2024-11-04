@@ -46,7 +46,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -1357,6 +1357,10 @@ export interface IrrigationCCSystemInfoReportOptions {
 }
 
 @CCCommand(IrrigationCommand.SystemInfoReport)
+@ccValueProperty("numValves", IrrigationCCValues.numValves)
+@ccValueProperty("numValveTables", IrrigationCCValues.numValveTables)
+@ccValueProperty("supportsMasterValve", IrrigationCCValues.supportsMasterValve)
+@ccValueProperty("maxValveTableSize", IrrigationCCValues.maxValveTableSize)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	public constructor(
 		options: WithAddress<IrrigationCCSystemInfoReportOptions>,
@@ -1389,16 +1393,12 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 		});
 	}
 
-	@ccValue(IrrigationCCValues.numValves)
 	public readonly numValves: number;
 
-	@ccValue(IrrigationCCValues.numValveTables)
 	public readonly numValveTables: number;
 
-	@ccValue(IrrigationCCValues.supportsMasterValve)
 	public readonly supportsMasterValve: boolean;
 
-	@ccValue(IrrigationCCValues.maxValveTableSize)
 	public readonly maxValveTableSize: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -1438,6 +1438,30 @@ export interface IrrigationCCSystemStatusReportOptions {
 }
 
 @CCCommand(IrrigationCommand.SystemStatusReport)
+@ccValueProperty("systemVoltage", IrrigationCCValues.systemVoltage)
+@ccValueProperty("flowSensorActive", IrrigationCCValues.flowSensorActive)
+@ccValueProperty(
+	"pressureSensorActive",
+	IrrigationCCValues.pressureSensorActive,
+)
+@ccValueProperty("rainSensorActive", IrrigationCCValues.rainSensorActive)
+@ccValueProperty(
+	"moistureSensorActive",
+	IrrigationCCValues.moistureSensorActive,
+)
+@ccValueProperty("flow", IrrigationCCValues.flow)
+@ccValueProperty("pressure", IrrigationCCValues.pressure)
+@ccValueProperty("shutoffDuration", IrrigationCCValues.shutoffDuration)
+@ccValueProperty("errorNotProgrammed", IrrigationCCValues.errorNotProgrammed)
+@ccValueProperty(
+	"errorEmergencyShutdown",
+	IrrigationCCValues.errorEmergencyShutdown,
+)
+@ccValueProperty("errorHighPressure", IrrigationCCValues.errorHighPressure)
+@ccValueProperty("errorLowPressure", IrrigationCCValues.errorLowPressure)
+@ccValueProperty("errorValve", IrrigationCCValues.errorValve)
+@ccValueProperty("masterValveOpen", IrrigationCCValues.masterValveOpen)
+@ccValueProperty("firstOpenZoneId", IrrigationCCValues.firstOpenZoneId)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	public constructor(
 		options: WithAddress<IrrigationCCSystemStatusReportOptions>,
@@ -1526,49 +1550,34 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		});
 	}
 
-	@ccValue(IrrigationCCValues.systemVoltage)
 	public systemVoltage: number;
 
-	@ccValue(IrrigationCCValues.flowSensorActive)
 	public flowSensorActive: boolean;
 
-	@ccValue(IrrigationCCValues.pressureSensorActive)
 	public pressureSensorActive: boolean;
 
-	@ccValue(IrrigationCCValues.rainSensorActive)
 	public rainSensorActive: boolean;
 
-	@ccValue(IrrigationCCValues.moistureSensorActive)
 	public moistureSensorActive: boolean;
 
-	@ccValue(IrrigationCCValues.flow)
 	public flow?: number;
 
-	@ccValue(IrrigationCCValues.pressure)
 	public pressure?: number;
 
-	@ccValue(IrrigationCCValues.shutoffDuration)
 	public shutoffDuration: number;
 
-	@ccValue(IrrigationCCValues.errorNotProgrammed)
 	public errorNotProgrammed: boolean;
 
-	@ccValue(IrrigationCCValues.errorEmergencyShutdown)
 	public errorEmergencyShutdown: boolean;
 
-	@ccValue(IrrigationCCValues.errorHighPressure)
 	public errorHighPressure: boolean;
 
-	@ccValue(IrrigationCCValues.errorLowPressure)
 	public errorLowPressure: boolean;
 
-	@ccValue(IrrigationCCValues.errorValve)
 	public errorValve: boolean;
 
-	@ccValue(IrrigationCCValues.masterValveOpen)
 	public masterValveOpen: boolean;
 
-	@ccValue(IrrigationCCValues.firstOpenZoneId)
 	public firstOpenZoneId?: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -1721,6 +1730,20 @@ export interface IrrigationCCSystemConfigReportOptions {
 }
 
 @CCCommand(IrrigationCommand.SystemConfigReport)
+@ccValueProperty("masterValveDelay", IrrigationCCValues.masterValveDelay)
+@ccValueProperty(
+	"highPressureThreshold",
+	IrrigationCCValues.highPressureThreshold,
+)
+@ccValueProperty(
+	"lowPressureThreshold",
+	IrrigationCCValues.lowPressureThreshold,
+)
+@ccValueProperty("rainSensorPolarity", IrrigationCCValues.rainSensorPolarity)
+@ccValueProperty(
+	"moistureSensorPolarity",
+	IrrigationCCValues.moistureSensorPolarity,
+)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	public constructor(
 		options: WithAddress<IrrigationCCSystemConfigReportOptions>,
@@ -1782,19 +1805,14 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		});
 	}
 
-	@ccValue(IrrigationCCValues.masterValveDelay)
 	public readonly masterValveDelay: number;
 
-	@ccValue(IrrigationCCValues.highPressureThreshold)
 	public readonly highPressureThreshold: number;
 
-	@ccValue(IrrigationCCValues.lowPressureThreshold)
 	public readonly lowPressureThreshold: number;
 
-	@ccValue(IrrigationCCValues.rainSensorPolarity)
 	public readonly rainSensorPolarity?: IrrigationSensorPolarity;
 
-	@ccValue(IrrigationCCValues.moistureSensorPolarity)
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -33,7 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -630,6 +630,16 @@ export interface AssociationCCReportOptions {
 }
 
 @CCCommand(AssociationCommand.Report)
+@ccValueProperty(
+	"maxNodes",
+	AssociationCCValues.maxNodes,
+	(self) => [self.groupId],
+)
+@ccValueProperty(
+	"nodeIds",
+	AssociationCCValues.nodeIds,
+	(self) => [self.groupId],
+)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
 		options: WithAddress<AssociationCCReportOptions>,
@@ -660,16 +670,8 @@ export class AssociationCCReport extends AssociationCC {
 
 	public groupId: number;
 
-	@ccValue(
-		AssociationCCValues.maxNodes,
-		(self: AssociationCCReport) => [self.groupId] as const,
-	)
 	public maxNodes: number;
 
-	@ccValue(
-		AssociationCCValues.nodeIds,
-		(self: AssociationCCReport) => [self.groupId] as const,
-	)
 	public nodeIds: number[];
 
 	public reportsToFollow: number;
@@ -768,6 +770,7 @@ export interface AssociationCCSupportedGroupingsReportOptions {
 }
 
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
+@ccValueProperty("groupCount", AssociationCCValues.groupCount)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
 		options: WithAddress<AssociationCCSupportedGroupingsReportOptions>,
@@ -790,7 +793,6 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		});
 	}
 
-	@ccValue(AssociationCCValues.groupCount)
 	public groupCount: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

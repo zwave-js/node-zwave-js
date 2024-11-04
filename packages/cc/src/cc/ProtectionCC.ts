@@ -44,7 +44,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -571,6 +571,8 @@ export interface ProtectionCCReportOptions {
 }
 
 @CCCommand(ProtectionCommand.Report)
+@ccValueProperty("local", ProtectionCCValues.localProtectionState)
+@ccValueProperty("rf", ProtectionCCValues.rfProtectionState)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
 		options: WithAddress<ProtectionCCReportOptions>,
@@ -597,10 +599,8 @@ export class ProtectionCCReport extends ProtectionCC {
 		});
 	}
 
-	@ccValue(ProtectionCCValues.localProtectionState)
 	public readonly local: LocalProtectionState;
 
-	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -630,6 +630,16 @@ export interface ProtectionCCSupportedReportOptions {
 }
 
 @CCCommand(ProtectionCommand.SupportedReport)
+@ccValueProperty(
+	"supportsExclusiveControl",
+	ProtectionCCValues.supportsExclusiveControl,
+)
+@ccValueProperty("supportsTimeout", ProtectionCCValues.supportsTimeout)
+@ccValueProperty(
+	"supportedLocalStates",
+	ProtectionCCValues.supportedLocalStates,
+)
+@ccValueProperty("supportedRFStates", ProtectionCCValues.supportedRFStates)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
 		options: WithAddress<ProtectionCCSupportedReportOptions>,
@@ -693,16 +703,12 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		return true;
 	}
 
-	@ccValue(ProtectionCCValues.supportsExclusiveControl)
 	public readonly supportsExclusiveControl: boolean;
 
-	@ccValue(ProtectionCCValues.supportsTimeout)
 	public readonly supportsTimeout: boolean;
 
-	@ccValue(ProtectionCCValues.supportedLocalStates)
 	public readonly supportedLocalStates: LocalProtectionState[];
 
-	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -736,6 +742,10 @@ export interface ProtectionCCExclusiveControlReportOptions {
 }
 
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
+@ccValueProperty(
+	"exclusiveControlNodeId",
+	ProtectionCCValues.exclusiveControlNodeId,
+)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
 		options: WithAddress<ProtectionCCExclusiveControlReportOptions>,
@@ -759,7 +769,6 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		});
 	}
 
-	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -830,6 +839,7 @@ export interface ProtectionCCTimeoutReportOptions {
 }
 
 @CCCommand(ProtectionCommand.TimeoutReport)
+@ccValueProperty("timeout", ProtectionCCValues.timeout)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
 		options: WithAddress<ProtectionCCTimeoutReportOptions>,
@@ -853,7 +863,6 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		});
 	}
 
-	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

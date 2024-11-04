@@ -42,7 +42,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -408,6 +408,8 @@ export type ThermostatModeCCReportOptions =
 	};
 
 @CCCommand(ThermostatModeCommand.Report)
+@ccValueProperty("mode", ThermostatModeCCValues.thermostatMode)
+@ccValueProperty("manufacturerData", ThermostatModeCCValues.manufacturerData)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
 		options: WithAddress<ThermostatModeCCReportOptions>,
@@ -482,10 +484,8 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		return true;
 	}
 
-	@ccValue(ThermostatModeCCValues.thermostatMode)
 	public readonly mode: ThermostatMode;
 
-	@ccValue(ThermostatModeCCValues.manufacturerData)
 	public readonly manufacturerData: Uint8Array | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -529,6 +529,7 @@ export interface ThermostatModeCCSupportedReportOptions {
 }
 
 @CCCommand(ThermostatModeCommand.SupportedReport)
+@ccValueProperty("supportedModes", ThermostatModeCCValues.supportedModes)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
 		options: WithAddress<ThermostatModeCCSupportedReportOptions>,
@@ -568,7 +569,6 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		return true;
 	}
 
-	@ccValue(ThermostatModeCCValues.supportedModes)
 	public readonly supportedModes: ThermostatMode[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {

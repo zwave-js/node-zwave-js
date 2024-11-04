@@ -24,7 +24,7 @@ import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -296,6 +296,11 @@ export interface ClimateControlScheduleCCReportOptions {
 }
 
 @CCCommand(ClimateControlScheduleCommand.Report)
+@ccValueProperty(
+	"schedule",
+	ClimateControlScheduleCCValues.schedule,
+	(self) => [self.weekday],
+)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
 		options: WithAddress<ClimateControlScheduleCCReportOptions>,
@@ -333,10 +338,6 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 
 	public readonly weekday: Weekday;
 
-	@ccValue(
-		ClimateControlScheduleCCValues.schedule,
-		(self: ClimateControlScheduleCCReport) => [self.weekday] as const,
-	)
 	public readonly schedule: readonly Switchpoint[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -461,6 +462,8 @@ export interface ClimateControlScheduleCCOverrideReportOptions {
 }
 
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
+@ccValueProperty("overrideType", ClimateControlScheduleCCValues.overrideType)
+@ccValueProperty("overrideState", ClimateControlScheduleCCValues.overrideState)
 export class ClimateControlScheduleCCOverrideReport
 	extends ClimateControlScheduleCC
 {
@@ -490,10 +493,8 @@ export class ClimateControlScheduleCCOverrideReport
 		});
 	}
 
-	@ccValue(ClimateControlScheduleCCValues.overrideType)
 	public readonly overrideType: ScheduleOverrideType;
 
-	@ccValue(ClimateControlScheduleCCValues.overrideState)
 	public readonly overrideState: SetbackState;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

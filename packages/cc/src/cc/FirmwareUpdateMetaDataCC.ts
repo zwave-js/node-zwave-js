@@ -33,7 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -325,6 +325,30 @@ export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
+@ccValueProperty(
+	"firmwareUpgradable",
+	FirmwareUpdateMetaDataCCValues.firmwareUpgradable,
+)
+@ccValueProperty(
+	"additionalFirmwareIDs",
+	FirmwareUpdateMetaDataCCValues.additionalFirmwareIDs,
+)
+@ccValueProperty(
+	"continuesToFunction",
+	FirmwareUpdateMetaDataCCValues.continuesToFunction,
+)
+@ccValueProperty(
+	"supportsActivation",
+	FirmwareUpdateMetaDataCCValues.supportsActivation,
+)
+@ccValueProperty(
+	"supportsResuming",
+	FirmwareUpdateMetaDataCCValues.supportsResuming,
+)
+@ccValueProperty(
+	"supportsNonSecureTransfer",
+	FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer,
+)
 export class FirmwareUpdateMetaDataCCMetaDataReport
 	extends FirmwareUpdateMetaDataCC
 	implements FirmwareUpdateMetaData
@@ -422,19 +446,19 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly manufacturerId: number;
 	public readonly firmwareId: number;
 	public readonly checksum: number;
-	@ccValue(FirmwareUpdateMetaDataCCValues.firmwareUpgradable)
+
 	public readonly firmwareUpgradable: boolean;
 	public readonly maxFragmentSize?: number;
-	@ccValue(FirmwareUpdateMetaDataCCValues.additionalFirmwareIDs)
+
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
-	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
+
 	public readonly continuesToFunction: MaybeNotKnown<boolean>;
-	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
+
 	public readonly supportsActivation: MaybeNotKnown<boolean>;
-	@ccValue(FirmwareUpdateMetaDataCCValues.supportsResuming)
+
 	public readonly supportsResuming?: MaybeNotKnown<boolean>;
-	@ccValue(FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer)
+
 	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

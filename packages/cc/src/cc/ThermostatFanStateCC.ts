@@ -26,7 +26,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -159,6 +159,7 @@ export interface ThermostatFanStateCCReportOptions {
 }
 
 @CCCommand(ThermostatFanStateCommand.Report)
+@ccValueProperty("state", ThermostatFanStateCCValues.fanState)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
 		options: WithAddress<ThermostatFanStateCCReportOptions>,
@@ -182,7 +183,6 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 		});
 	}
 
-	@ccValue(ThermostatFanStateCCValues.fanState)
 	public readonly state: ThermostatFanState;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

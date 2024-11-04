@@ -41,7 +41,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -686,6 +686,10 @@ export interface WindowCoveringCCSupportedReportOptions {
 }
 
 @CCCommand(WindowCoveringCommand.SupportedReport)
+@ccValueProperty(
+	"supportedParameters",
+	WindowCoveringCCValues.supportedParameters,
+)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	public constructor(
 		options: WithAddress<WindowCoveringCCSupportedReportOptions>,
@@ -714,7 +718,6 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 		});
 	}
 
-	@ccValue(WindowCoveringCCValues.supportedParameters)
 	public readonly supportedParameters: readonly WindowCoveringParameter[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -766,6 +769,21 @@ export interface WindowCoveringCCReportOptions {
 }
 
 @CCCommand(WindowCoveringCommand.Report)
+@ccValueProperty(
+	"currentValue",
+	WindowCoveringCCValues.currentValue,
+	(self) => [self.parameter],
+)
+@ccValueProperty(
+	"targetValue",
+	WindowCoveringCCValues.targetValue,
+	(self) => [self.parameter],
+)
+@ccValueProperty(
+	"duration",
+	WindowCoveringCCValues.duration,
+	(self) => [self.parameter],
+)
 export class WindowCoveringCCReport extends WindowCoveringCC {
 	public constructor(
 		options: WithAddress<WindowCoveringCCReportOptions>,
@@ -801,20 +819,10 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 
 	public readonly parameter: WindowCoveringParameter;
 
-	@ccValue(
-		WindowCoveringCCValues.currentValue,
-		(self: WindowCoveringCCReport) => [self.parameter] as const,
-	)
 	public readonly currentValue: number;
-	@ccValue(
-		WindowCoveringCCValues.targetValue,
-		(self: WindowCoveringCCReport) => [self.parameter] as const,
-	)
+
 	public readonly targetValue: number;
-	@ccValue(
-		WindowCoveringCCValues.duration,
-		(self: WindowCoveringCCReport) => [self.parameter] as const,
-	)
+
 	public readonly duration: Duration;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

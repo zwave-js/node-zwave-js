@@ -58,8 +58,13 @@ export interface ValidateArgsOptions {
 }
 
 /** Generates code at build time which validates all arguments of this method */
-export function validateArgs(options?: ValidateArgsOptions): PropertyDecorator {
-	return (target: unknown, property: string | number | symbol) => {
+export function validateArgs<T extends (...args: any[]) => any>(
+	options?: ValidateArgsOptions,
+) {
+	return function validateArgsBody(
+		target: T,
+		context: ClassMethodDecoratorContext,
+	): T | void {
 		// this is a no-op that gets replaced during the build process using the transformer below
 		if (process.env.NODE_ENV === "test") return;
 		if (process.execArgv.includes("--conditions=@@dev")) return;

@@ -25,7 +25,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -234,6 +234,9 @@ export interface ManufacturerSpecificCCReportOptions {
 }
 
 @CCCommand(ManufacturerSpecificCommand.Report)
+@ccValueProperty("manufacturerId", ManufacturerSpecificCCValues.manufacturerId)
+@ccValueProperty("productType", ManufacturerSpecificCCValues.productType)
+@ccValueProperty("productId", ManufacturerSpecificCCValues.productId)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
 		options: WithAddress<ManufacturerSpecificCCReportOptions>,
@@ -262,13 +265,10 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		});
 	}
 
-	@ccValue(ManufacturerSpecificCCValues.manufacturerId)
 	public readonly manufacturerId: number;
 
-	@ccValue(ManufacturerSpecificCCValues.productType)
 	public readonly productType: number;
 
-	@ccValue(ManufacturerSpecificCCValues.productId)
 	public readonly productId: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -302,6 +302,11 @@ export interface ManufacturerSpecificCCDeviceSpecificReportOptions {
 }
 
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
+@ccValueProperty(
+	"deviceId",
+	ManufacturerSpecificCCValues.deviceId,
+	(self) => [self.type],
+)
 export class ManufacturerSpecificCCDeviceSpecificReport
 	extends ManufacturerSpecificCC
 {
@@ -338,11 +343,6 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 
 	public readonly type: DeviceIdType;
 
-	@ccValue(
-		ManufacturerSpecificCCValues.deviceId,
-		(self: ManufacturerSpecificCCDeviceSpecificReport) =>
-			[self.type] as const,
-	)
 	public readonly deviceId: string;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -45,7 +45,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -741,6 +741,10 @@ export interface HumidityControlSetpointCCSupportedReportOptions {
 }
 
 @CCCommand(HumidityControlSetpointCommand.SupportedReport)
+@ccValueProperty(
+	"supportedSetpointTypes",
+	HumidityControlSetpointCCValues.supportedSetpointTypes,
+)
 export class HumidityControlSetpointCCSupportedReport
 	extends HumidityControlSetpointCC
 {
@@ -770,7 +774,6 @@ export class HumidityControlSetpointCCSupportedReport
 		});
 	}
 
-	@ccValue(HumidityControlSetpointCCValues.supportedSetpointTypes)
 	public readonly supportedSetpointTypes:
 		readonly HumidityControlSetpointType[];
 

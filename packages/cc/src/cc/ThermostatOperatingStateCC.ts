@@ -25,7 +25,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -164,6 +164,7 @@ export interface ThermostatOperatingStateCCReportOptions {
 }
 
 @CCCommand(ThermostatOperatingStateCommand.Report)
+@ccValueProperty("state", ThermostatOperatingStateCCValues.operatingState)
 export class ThermostatOperatingStateCCReport
 	extends ThermostatOperatingStateCC
 {
@@ -189,7 +190,6 @@ export class ThermostatOperatingStateCCReport
 		});
 	}
 
-	@ccValue(ThermostatOperatingStateCCValues.operatingState)
 	public readonly state: ThermostatOperatingState;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

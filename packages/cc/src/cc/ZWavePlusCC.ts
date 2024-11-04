@@ -23,7 +23,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -177,6 +177,11 @@ export interface ZWavePlusCCReportOptions {
 }
 
 @CCCommand(ZWavePlusCommand.Report)
+@ccValueProperty("zwavePlusVersion", ZWavePlusCCValues.zwavePlusVersion)
+@ccValueProperty("nodeType", ZWavePlusCCValues.nodeType)
+@ccValueProperty("roleType", ZWavePlusCCValues.roleType)
+@ccValueProperty("installerIcon", ZWavePlusCCValues.installerIcon)
+@ccValueProperty("userIcon", ZWavePlusCCValues.userIcon)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
 		options: WithAddress<ZWavePlusCCReportOptions>,
@@ -207,19 +212,14 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		});
 	}
 
-	@ccValue(ZWavePlusCCValues.zwavePlusVersion)
 	public zwavePlusVersion: number;
 
-	@ccValue(ZWavePlusCCValues.nodeType)
 	public nodeType: ZWavePlusNodeType;
 
-	@ccValue(ZWavePlusCCValues.roleType)
 	public roleType: ZWavePlusRoleType;
 
-	@ccValue(ZWavePlusCCValues.installerIcon)
 	public installerIcon: number;
 
-	@ccValue(ZWavePlusCCValues.userIcon)
 	public userIcon: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

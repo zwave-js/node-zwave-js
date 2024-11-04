@@ -71,7 +71,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -1228,6 +1228,10 @@ export interface MeterCCSupportedReportOptions {
 }
 
 @CCCommand(MeterCommand.SupportedReport)
+@ccValueProperty("type", MeterCCValues.type)
+@ccValueProperty("supportsReset", MeterCCValues.supportsReset)
+@ccValueProperty("supportedScales", MeterCCValues.supportedScales)
+@ccValueProperty("supportedRateTypes", MeterCCValues.supportedRateTypes)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
 		options: WithAddress<MeterCCSupportedReportOptions>,
@@ -1286,16 +1290,12 @@ export class MeterCCSupportedReport extends MeterCC {
 		});
 	}
 
-	@ccValue(MeterCCValues.type)
 	public readonly type: number;
 
-	@ccValue(MeterCCValues.supportsReset)
 	public readonly supportsReset: boolean;
 
-	@ccValue(MeterCCValues.supportedScales)
 	public readonly supportedScales: readonly number[];
 
-	@ccValue(MeterCCValues.supportedRateTypes)
 	public readonly supportedRateTypes: readonly RateType[];
 
 	public persistValues(ctx: PersistValuesContext): boolean {
