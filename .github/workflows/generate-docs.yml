@@ -58,5 +58,5 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/generateTypedDocs.js`);
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/generateTypedDocs.cjs`);
           return main({github, context});

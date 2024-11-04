@@ -2,7 +2,7 @@
 
 /// <reference path="types.d.ts" />
 
-const { reviewers } = require("./users");
+const { reviewers } = require("./users.cjs");
 
 /**
  * @param {{github: Github, context: Context}} param
@@ -19,7 +19,7 @@ async function main(param) {
 		await github.rest.issues.createComment({
 			...options,
 			issue_number: context.payload.issue.number,
-			body: `❌ Sorry, adding the compat flag(s) yielded no changes.`,
+			body: `❌ Sorry, adding the fingerprint yielded no changes.`,
 		});
 		return;
 	}
@@ -29,10 +29,7 @@ async function main(param) {
 		head: process.env.branchname,
 		base: "master",
 		title: process.env.commitmessage,
-		body: `fixes: #${context.payload.issue.number}
-
-**TODO:**
-- [ ]	Change PR title to be more specific`,
+		body: `fixes: #${context.payload.issue.number}`,
 		maintainer_can_modify: true,
 	});
 	const prNumber = pr.data.number;

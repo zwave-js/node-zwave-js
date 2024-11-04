@@ -2,8 +2,8 @@
 
 /// <reference path="types.d.ts" />
 
-const { reviewers } = require("./users");
-const { urls } = require("./utils");
+const { reviewers } = require("./users.cjs");
+const { urls } = require("./utils.cjs");
 
 /**
  * @param {{github: Github, context: Context}} param

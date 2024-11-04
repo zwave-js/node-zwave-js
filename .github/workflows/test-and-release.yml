@@ -356,7 +356,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateCCImplementationOverview.js`);
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateCCImplementationOverview.cjs`);
           return main({github, context});
 
   # ===================
@@ -391,7 +391,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateToLogEntryOverview.js`);
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateToLogEntryOverview.cjs`);
           return main({github, context});
 
   # ===================

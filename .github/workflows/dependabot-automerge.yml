@@ -36,7 +36,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }} # This doesn't need special permissions
           result-encoding: string
           script: |
-            const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+            const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
             return bot.shouldAutomerge({github, context});
 
       - name: Approve PR

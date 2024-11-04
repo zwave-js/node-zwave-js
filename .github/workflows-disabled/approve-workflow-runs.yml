@@ -33,7 +33,7 @@ jobs:
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           script: |
-            const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+            const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.cjs`);
             const workflows = [
               ".github/workflows/generate-docs.yml",
               ".github/workflows/test-and-release.yml",
