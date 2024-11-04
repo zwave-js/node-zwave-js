@@ -4,7 +4,7 @@ import {
 } from "@zwave-js/cc";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When CC versions are unknown, commands are sent using the highest implemented CC version",
@@ -27,8 +27,6 @@ integrationTest(
 						instanceof MultiChannelCCCommandEncapsulation
 					&& frame.payload.encapsulated instanceof BinarySwitchCCSet,
 			);
-
-			t.pass();
 		},
 	},
 );

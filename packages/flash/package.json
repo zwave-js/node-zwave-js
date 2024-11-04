@@ -6,13 +6,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "main": "build/cli.js",
-  "type": "commonjs",
   "files": [
     "bin/",
-    "build/**/*.{js,d.ts,map}"
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
   ],
-  "bin": "bin/flash.js",
+  "bin": "bin/flash.mjs",
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"

@@ -1,8 +1,8 @@
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import type { TransformableInfo } from "logform";
 import type { Logger } from "winston";
 import type Transport from "winston-transport";
-import type { ValueID } from "../values/_Types";
+import type { ValueID } from "../values/_Types.js";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
 export const timestampPaddingShort = " ".repeat(

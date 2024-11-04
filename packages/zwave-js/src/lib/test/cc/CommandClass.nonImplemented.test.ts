@@ -1,6 +1,6 @@
 import { CommandClass } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"the CC constructor does not throw when creating a raw instance of a non-implemented CC",
@@ -15,8 +15,6 @@ integrationTest(
 				ccCommand: 0x02,
 			});
 			await driver.sendCommand(cc);
-
-			t.pass();
 		},
 	},
 );

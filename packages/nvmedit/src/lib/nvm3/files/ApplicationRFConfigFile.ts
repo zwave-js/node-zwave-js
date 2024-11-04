@@ -10,7 +10,7 @@ import {
 	getEnumMemberName,
 } from "@zwave-js/shared/safe";
 import semver from "semver";
-import type { NVM3Object } from "../object";
+import type { NVM3Object } from "../object.js";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -18,7 +18,7 @@ import {
 	gotDeserializationOptions,
 	nvmFileID,
 	nvmSection,
-} from "./NVMFile";
+} from "./NVMFile.js";
 
 export type ApplicationRFConfigFileOptions =
 	& NVMFileCreationOptions

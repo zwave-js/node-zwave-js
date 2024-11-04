@@ -1,10 +1,15 @@
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
+} from "../../controller/MockControllerState.js";
 
 import {
 	NodeStatus,
@@ -18,15 +23,27 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "@zwave-js/serial/serialapi";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 let shouldTimeOut: boolean;
 let lastCallbackId: number;
+
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
 
 integrationTest(
 	"Abort transmission and wait for callback if SendData is missing the response",
 	{
 		// debug: true,
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -89,7 +106,8 @@ integrationTest(
 			node.markAsAlive();
 			shouldTimeOut = true;
 
-			const basicSetPromise = node.commandClasses.Basic.set(99);
+			const basicSetPromise = node.commandClasses.Basic.set(99)
+				.catch((e) => e);
 
 			await wait(2000);
 
@@ -98,21 +116,21 @@ integrationTest(
 			);
 			mockController.clearReceivedHostMessages();
 
-			await assertZWaveError(t, () => basicSetPromise, {
+			await assertZWaveError(t.expect, await basicSetPromise, {
 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 				context: "response",
 			});
 
 			// The stick should NOT have been soft-reset
 			await wait(1000);
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage(
 					(msg) => msg.functionType === FunctionType.SoftReset,
 				)
-			);
+			).toThrow();
 
 			// And the node should be marked dead
-			t.is(node.status, NodeStatus.Dead);
+			t.expect(node.status).toBe(NodeStatus.Dead);
 		},
 	},
 );
@@ -121,6 +139,8 @@ integrationTest(
 	"Recover controller if callback times out after timed out SendData response",
 	{
 		// debug: true,
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -187,7 +207,6 @@ integrationTest(
 
 			// And the command should eventually succeed
 			await basicSetPromise;
-			t.pass();
 		},
 	},
 );
@@ -390,8 +409,7 @@ integrationTest(
 // 			await firstCommand;
 // 			await followupCommand;
 
-// 			t.pass();
-// 		},
+// 		// 		},
 // 	},
 // );
 
@@ -428,7 +446,7 @@ integrationTest(
 // 			// Circumvent the options validation so the test doesn't take forever
 // 			driver.options.timeouts.sendDataCallback = 1500;
 
-// 			await assertZWaveError(t, () => node.requestNodeInfo(), {
+// 			await assertZWaveError(t.expect, () => node.requestNodeInfo(), {
 // 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 // 				context: "callback",
 // 			});

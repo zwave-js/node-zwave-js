@@ -1,5 +1,5 @@
 import { type NodeId } from "@zwave-js/core/safe";
-import { Endpoint } from "../Endpoint";
+import { Endpoint } from "../Endpoint.js";
 
 export abstract class ZWaveNodeBase extends Endpoint implements NodeId {
 	/**

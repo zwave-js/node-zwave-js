@@ -5,7 +5,7 @@ import {
 } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior, ccCaps } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Notification CC: Push nodes without AGI support are detected as push, not pull",
@@ -53,7 +53,7 @@ integrationTest(
 			const notificationMode = node.getValue(
 				NotificationCCValues.notificationMode.id,
 			);
-			t.is(notificationMode, "push");
+			t.expect(notificationMode).toBe("push");
 		},
 	},
 );

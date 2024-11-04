@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import fs, { type FileHandle } from "node:fs/promises";
-import { NVMAccess, type NVMIO } from "../common/definitions";
+import { NVMAccess, type NVMIO } from "../common/definitions.js";
 
 /** An implementation of NVMIO for the filesystem */
 export class NVMFileIO implements NVMIO {

@@ -20,14 +20,14 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -36,14 +36,14 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
-} from "../lib/_Types";
-import { AssociationCC } from "./AssociationCC";
-import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+} from "../lib/_Types.js";
+import { AssociationCC } from "./AssociationCC.js";
+import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC.js";
 
 export const AssociationGroupInfoCCValues = Object.freeze({
 	// Defines values that do not depend on anything else

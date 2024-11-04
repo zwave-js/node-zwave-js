@@ -12,24 +12,24 @@ import {
 	stripUndefined,
 } from "@zwave-js/core/safe";
 import { Bytes } from "@zwave-js/shared/safe";
-import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages";
-import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages";
-import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
-import { AssignSUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignSUCReturnRouteMessages";
-import { DeleteReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteReturnRouteMessages";
-import { DeleteSUCReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteSUCReturnRouteMessages";
+import { AssignPriorityReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPriorityReturnRouteMessages.js";
+import { AssignPrioritySUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignPrioritySUCReturnRouteMessages.js";
+import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages.js";
+import { AssignSUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignSUCReturnRouteMessages.js";
+import { DeleteReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteReturnRouteMessages.js";
+import { DeleteSUCReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteSUCReturnRouteMessages.js";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
 	SendDataMulticastBridgeRequestTransmitReport,
-} from "./SendDataBridgeMessages";
+} from "./SendDataBridgeMessages.js";
 import {
 	SendDataMulticastRequest,
 	SendDataMulticastRequestTransmitReport,
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-} from "./SendDataMessages";
+} from "./SendDataMessages.js";
 
 export type SendDataMessage =
 	| SendDataRequest

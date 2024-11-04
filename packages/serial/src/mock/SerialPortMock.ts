@@ -9,7 +9,7 @@ import {
 import {
 	MockBinding,
 	type MockBindingInterface,
-} from "./SerialPortBindingMock";
+} from "./SerialPortBindingMock.js";
 
 export type SerialPortMockOpenOptions = Omit<
 	OpenOptions<MockBindingInterface>,

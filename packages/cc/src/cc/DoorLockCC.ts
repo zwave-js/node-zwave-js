@@ -24,7 +24,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -34,14 +34,14 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -51,14 +51,14 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	type DoorHandleStatus,
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 export const DoorLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Door Lock"], {

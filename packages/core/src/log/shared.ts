@@ -6,7 +6,7 @@ import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
-import { colorizer } from "./Colorizer";
+import { colorizer } from "./Colorizer.js";
 import {
 	CONTROL_CHAR_WIDTH,
 	LOG_WIDTH,
@@ -22,7 +22,7 @@ import {
 	timestampFormatShort,
 	timestampPadding,
 	timestampPaddingShort,
-} from "./shared_safe";
+} from "./shared_safe.js";
 
 const { combine, timestamp, label } = winston.format;
 

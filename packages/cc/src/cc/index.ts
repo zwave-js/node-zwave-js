@@ -5,7 +5,7 @@ export type {
 	AlarmSensorCCGetOptions,
 	AlarmSensorCCReportOptions,
 	AlarmSensorCCSupportedReportOptions,
-} from "./AlarmSensorCC";
+} from "./AlarmSensorCC.js";
 export {
 	AlarmSensorCC,
 	AlarmSensorCCGet,
@@ -13,7 +13,7 @@ export {
 	AlarmSensorCCSupportedGet,
 	AlarmSensorCCSupportedReport,
 	AlarmSensorCCValues,
-} from "./AlarmSensorCC";
+} from "./AlarmSensorCC.js";
 export type {
 	AssociationCCGetOptions,
 	AssociationCCRemoveOptions,
@@ -21,7 +21,7 @@ export type {
 	AssociationCCSetOptions,
 	AssociationCCSpecificGroupReportOptions,
 	AssociationCCSupportedGroupingsReportOptions,
-} from "./AssociationCC";
+} from "./AssociationCC.js";
 export {
 	AssociationCC,
 	AssociationCCGet,
@@ -33,7 +33,7 @@ export {
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCSupportedGroupingsReport,
 	AssociationCCValues,
-} from "./AssociationCC";
+} from "./AssociationCC.js";
 export type {
 	AssociationGroupInfoCCCommandListGetOptions,
 	AssociationGroupInfoCCCommandListReportOptions,
@@ -41,7 +41,7 @@ export type {
 	AssociationGroupInfoCCInfoReportOptions,
 	AssociationGroupInfoCCNameGetOptions,
 	AssociationGroupInfoCCNameReportOptions,
-} from "./AssociationGroupInfoCC";
+} from "./AssociationGroupInfoCC.js";
 export {
 	AssociationGroupInfoCC,
 	AssociationGroupInfoCCCommandListGet,
@@ -51,7 +51,7 @@ export {
 	AssociationGroupInfoCCNameGet,
 	AssociationGroupInfoCCNameReport,
 	AssociationGroupInfoCCValues,
-} from "./AssociationGroupInfoCC";
+} from "./AssociationGroupInfoCC.js";
 export type {
 	BarrierOperatorCCEventSignalingGetOptions,
 	BarrierOperatorCCEventSignalingReportOptions,
@@ -59,7 +59,7 @@ export type {
 	BarrierOperatorCCReportOptions,
 	BarrierOperatorCCSetOptions,
 	BarrierOperatorCCSignalingCapabilitiesReportOptions,
-} from "./BarrierOperatorCC";
+} from "./BarrierOperatorCC.js";
 export {
 	BarrierOperatorCC,
 	BarrierOperatorCCEventSignalingGet,
@@ -71,19 +71,19 @@ export {
 	BarrierOperatorCCSignalingCapabilitiesGet,
 	BarrierOperatorCCSignalingCapabilitiesReport,
 	BarrierOperatorCCValues,
-} from "./BarrierOperatorCC";
-export type { BasicCCReportOptions, BasicCCSetOptions } from "./BasicCC";
+} from "./BarrierOperatorCC.js";
+export type { BasicCCReportOptions, BasicCCSetOptions } from "./BasicCC.js";
 export {
 	BasicCC,
 	BasicCCGet,
 	BasicCCReport,
 	BasicCCSet,
 	BasicCCValues,
-} from "./BasicCC";
+} from "./BasicCC.js";
 export type {
 	BatteryCCHealthReportOptions,
 	BatteryCCReportOptions,
-} from "./BatteryCC";
+} from "./BatteryCC.js";
 export {
 	BatteryCC,
 	BatteryCCGet,
@@ -91,12 +91,12 @@ export {
 	BatteryCCHealthReport,
 	BatteryCCReport,
 	BatteryCCValues,
-} from "./BatteryCC";
+} from "./BatteryCC.js";
 export type {
 	BinarySensorCCGetOptions,
 	BinarySensorCCReportOptions,
 	BinarySensorCCSupportedReportOptions,
-} from "./BinarySensorCC";
+} from "./BinarySensorCC.js";
 export {
 	BinarySensorCC,
 	BinarySensorCCGet,
@@ -104,26 +104,26 @@ export {
 	BinarySensorCCSupportedGet,
 	BinarySensorCCSupportedReport,
 	BinarySensorCCValues,
-} from "./BinarySensorCC";
+} from "./BinarySensorCC.js";
 export type {
 	BinarySwitchCCReportOptions,
 	BinarySwitchCCSetOptions,
-} from "./BinarySwitchCC";
+} from "./BinarySwitchCC.js";
 export {
 	BinarySwitchCC,
 	BinarySwitchCCGet,
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
 	BinarySwitchCCValues,
-} from "./BinarySwitchCC";
-export type { CRC16CCCommandEncapsulationOptions } from "./CRC16CC";
-export { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
+} from "./BinarySwitchCC.js";
+export type { CRC16CCCommandEncapsulationOptions } from "./CRC16CC.js";
+export { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC.js";
 export type {
 	CentralSceneCCConfigurationReportOptions,
 	CentralSceneCCConfigurationSetOptions,
 	CentralSceneCCNotificationOptions,
 	CentralSceneCCSupportedReportOptions,
-} from "./CentralSceneCC";
+} from "./CentralSceneCC.js";
 export {
 	CentralSceneCC,
 	CentralSceneCCConfigurationGet,
@@ -133,7 +133,7 @@ export {
 	CentralSceneCCSupportedGet,
 	CentralSceneCCSupportedReport,
 	CentralSceneCCValues,
-} from "./CentralSceneCC";
+} from "./CentralSceneCC.js";
 export type {
 	ClimateControlScheduleCCChangedReportOptions,
 	ClimateControlScheduleCCGetOptions,
@@ -141,7 +141,7 @@ export type {
 	ClimateControlScheduleCCOverrideSetOptions,
 	ClimateControlScheduleCCReportOptions,
 	ClimateControlScheduleCCSetOptions,
-} from "./ClimateControlScheduleCC";
+} from "./ClimateControlScheduleCC.js";
 export {
 	ClimateControlScheduleCC,
 	ClimateControlScheduleCCChangedGet,
@@ -153,9 +153,9 @@ export {
 	ClimateControlScheduleCCReport,
 	ClimateControlScheduleCCSet,
 	ClimateControlScheduleCCValues,
-} from "./ClimateControlScheduleCC";
-export type { ClockCCReportOptions, ClockCCSetOptions } from "./ClockCC";
-export { ClockCC, ClockCCGet, ClockCCReport, ClockCCSet } from "./ClockCC";
+} from "./ClimateControlScheduleCC.js";
+export type { ClockCCReportOptions, ClockCCSetOptions } from "./ClockCC.js";
+export { ClockCC, ClockCCGet, ClockCCReport, ClockCCSet } from "./ClockCC.js";
 export type {
 	ColorSwitchCCGetOptions,
 	ColorSwitchCCReportOptions,
@@ -163,7 +163,7 @@ export type {
 	ColorSwitchCCStartLevelChangeOptions,
 	ColorSwitchCCStopLevelChangeOptions,
 	ColorSwitchCCSupportedReportOptions,
-} from "./ColorSwitchCC";
+} from "./ColorSwitchCC.js";
 export {
 	ColorSwitchCC,
 	ColorSwitchCCGet,
@@ -174,7 +174,7 @@ export {
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 	ColorSwitchCCValues,
-} from "./ColorSwitchCC";
+} from "./ColorSwitchCC.js";
 export type {
 	ConfigurationCCAPISetOptions,
 	ConfigurationCCBulkGetOptions,
@@ -186,7 +186,7 @@ export type {
 	ConfigurationCCPropertiesReportOptions,
 	ConfigurationCCReportOptions,
 	ConfigurationCCSetOptions,
-} from "./ConfigurationCC";
+} from "./ConfigurationCC.js";
 export {
 	ConfigurationCC,
 	ConfigurationCCBulkGet,
@@ -203,18 +203,18 @@ export {
 	ConfigurationCCReport,
 	ConfigurationCCSet,
 	ConfigurationCCValues,
-} from "./ConfigurationCC";
+} from "./ConfigurationCC.js";
 export {
 	DeviceResetLocallyCC,
 	DeviceResetLocallyCCNotification,
-} from "./DeviceResetLocallyCC";
+} from "./DeviceResetLocallyCC.js";
 export type {
 	DoorLockCCCapabilitiesReportOptions,
 	DoorLockCCConfigurationReportOptions,
 	DoorLockCCConfigurationSetOptions,
 	DoorLockCCOperationReportOptions,
 	DoorLockCCOperationSetOptions,
-} from "./DoorLockCC";
+} from "./DoorLockCC.js";
 export {
 	DoorLockCC,
 	DoorLockCCCapabilitiesGet,
@@ -226,12 +226,12 @@ export {
 	DoorLockCCOperationReport,
 	DoorLockCCOperationSet,
 	DoorLockCCValues,
-} from "./DoorLockCC";
+} from "./DoorLockCC.js";
 export type {
 	DoorLockLoggingCCRecordGetOptions,
 	DoorLockLoggingCCRecordReportOptions,
 	DoorLockLoggingCCRecordsSupportedReportOptions,
-} from "./DoorLockLoggingCC";
+} from "./DoorLockLoggingCC.js";
 export {
 	DoorLockLoggingCC,
 	DoorLockLoggingCCRecordGet,
@@ -239,24 +239,24 @@ export {
 	DoorLockLoggingCCRecordsSupportedGet,
 	DoorLockLoggingCCRecordsSupportedReport,
 	DoorLockLoggingCCValues,
-} from "./DoorLockLoggingCC";
+} from "./DoorLockLoggingCC.js";
 export type {
 	EnergyProductionCCGetOptions,
 	EnergyProductionCCReportOptions,
-} from "./EnergyProductionCC";
+} from "./EnergyProductionCC.js";
 export {
 	EnergyProductionCC,
 	EnergyProductionCCGet,
 	EnergyProductionCCReport,
 	EnergyProductionCCValues,
-} from "./EnergyProductionCC";
+} from "./EnergyProductionCC.js";
 export type {
 	EntryControlCCConfigurationReportOptions,
 	EntryControlCCConfigurationSetOptions,
 	EntryControlCCEventSupportedReportOptions,
 	EntryControlCCKeySupportedReportOptions,
 	EntryControlCCNotificationOptions,
-} from "./EntryControlCC";
+} from "./EntryControlCC.js";
 export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
@@ -268,7 +268,7 @@ export {
 	EntryControlCCKeySupportedReport,
 	EntryControlCCNotification,
 	EntryControlCCValues,
-} from "./EntryControlCC";
+} from "./EntryControlCC.js";
 export type {
 	FirmwareUpdateMetaDataCCActivationReportOptions,
 	FirmwareUpdateMetaDataCCActivationSetOptions,
@@ -280,7 +280,7 @@ export type {
 	FirmwareUpdateMetaDataCCRequestGetOptions,
 	FirmwareUpdateMetaDataCCRequestReportOptions,
 	FirmwareUpdateMetaDataCCStatusReportOptions,
-} from "./FirmwareUpdateMetaDataCC";
+} from "./FirmwareUpdateMetaDataCC.js";
 export {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCActivationReport,
@@ -295,13 +295,13 @@ export {
 	FirmwareUpdateMetaDataCCRequestReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	FirmwareUpdateMetaDataCCValues,
-} from "./FirmwareUpdateMetaDataCC";
-export { HailCC } from "./HailCC";
+} from "./FirmwareUpdateMetaDataCC.js";
+export { HailCC } from "./HailCC.js";
 export type {
 	HumidityControlModeCCReportOptions,
 	HumidityControlModeCCSetOptions,
 	HumidityControlModeCCSupportedReportOptions,
-} from "./HumidityControlModeCC";
+} from "./HumidityControlModeCC.js";
 export {
 	HumidityControlModeCC,
 	HumidityControlModeCCGet,
@@ -310,14 +310,14 @@ export {
 	HumidityControlModeCCSupportedGet,
 	HumidityControlModeCCSupportedReport,
 	HumidityControlModeCCValues,
-} from "./HumidityControlModeCC";
-export type { HumidityControlOperatingStateCCReportOptions } from "./HumidityControlOperatingStateCC";
+} from "./HumidityControlModeCC.js";
+export type { HumidityControlOperatingStateCCReportOptions } from "./HumidityControlOperatingStateCC.js";
 export {
 	HumidityControlOperatingStateCC,
 	HumidityControlOperatingStateCCGet,
 	HumidityControlOperatingStateCCReport,
 	HumidityControlOperatingStateCCValues,
-} from "./HumidityControlOperatingStateCC";
+} from "./HumidityControlOperatingStateCC.js";
 export type {
 	HumidityControlSetpointCCCapabilitiesGetOptions,
 	HumidityControlSetpointCCCapabilitiesReportOptions,
@@ -327,7 +327,7 @@ export type {
 	HumidityControlSetpointCCScaleSupportedReportOptions,
 	HumidityControlSetpointCCSetOptions,
 	HumidityControlSetpointCCSupportedReportOptions,
-} from "./HumidityControlSetpointCC";
+} from "./HumidityControlSetpointCC.js";
 export {
 	HumidityControlSetpointCC,
 	HumidityControlSetpointCCCapabilitiesGet,
@@ -340,16 +340,16 @@ export {
 	HumidityControlSetpointCCSupportedGet,
 	HumidityControlSetpointCCSupportedReport,
 	HumidityControlSetpointCCValues,
-} from "./HumidityControlSetpointCC";
+} from "./HumidityControlSetpointCC.js";
 export type {
 	InclusionControllerCCCompleteOptions,
 	InclusionControllerCCInitiateOptions,
-} from "./InclusionControllerCC";
+} from "./InclusionControllerCC.js";
 export {
 	InclusionControllerCC,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
-} from "./InclusionControllerCC";
+} from "./InclusionControllerCC.js";
 export type {
 	IndicatorCCDescriptionGetOptions,
 	IndicatorCCDescriptionReportOptions,
@@ -359,7 +359,7 @@ export type {
 	IndicatorCCSupportedGetOptions,
 	IndicatorCCSupportedReportOptions,
 	IndicatorObject,
-} from "./IndicatorCC";
+} from "./IndicatorCC.js";
 export {
 	IndicatorCC,
 	IndicatorCCDescriptionGet,
@@ -370,7 +370,7 @@ export {
 	IndicatorCCSupportedGet,
 	IndicatorCCSupportedReport,
 	IndicatorCCValues,
-} from "./IndicatorCC";
+} from "./IndicatorCC.js";
 export type {
 	IrrigationCCSystemConfigReportOptions,
 	IrrigationCCSystemConfigSetOptions,
@@ -387,7 +387,7 @@ export type {
 	IrrigationCCValveTableReportOptions,
 	IrrigationCCValveTableRunOptions,
 	IrrigationCCValveTableSetOptions,
-} from "./IrrigationCC";
+} from "./IrrigationCC.js";
 export {
 	IrrigationCC,
 	IrrigationCCSystemConfigGet,
@@ -409,33 +409,33 @@ export {
 	IrrigationCCValveTableReport,
 	IrrigationCCValveTableRun,
 	IrrigationCCValveTableSet,
-} from "./IrrigationCC";
+} from "./IrrigationCC.js";
 export type {
 	LanguageCCReportOptions,
 	LanguageCCSetOptions,
-} from "./LanguageCC";
+} from "./LanguageCC.js";
 export {
 	LanguageCC,
 	LanguageCCGet,
 	LanguageCCReport,
 	LanguageCCSet,
 	LanguageCCValues,
-} from "./LanguageCC";
-export type { LockCCReportOptions, LockCCSetOptions } from "./LockCC";
+} from "./LanguageCC.js";
+export type { LockCCReportOptions, LockCCSetOptions } from "./LockCC.js";
 export {
 	LockCC,
 	LockCCGet,
 	LockCCReport,
 	LockCCSet,
 	LockCCValues,
-} from "./LockCC";
-export type { ManufacturerProprietaryCCOptions } from "./ManufacturerProprietaryCC";
-export { ManufacturerProprietaryCC } from "./ManufacturerProprietaryCC";
+} from "./LockCC.js";
+export type { ManufacturerProprietaryCCOptions } from "./ManufacturerProprietaryCC.js";
+export { ManufacturerProprietaryCC } from "./ManufacturerProprietaryCC.js";
 export type {
 	ManufacturerSpecificCCDeviceSpecificGetOptions,
 	ManufacturerSpecificCCDeviceSpecificReportOptions,
 	ManufacturerSpecificCCReportOptions,
-} from "./ManufacturerSpecificCC";
+} from "./ManufacturerSpecificCC.js";
 export {
 	ManufacturerSpecificCC,
 	ManufacturerSpecificCCDeviceSpecificGet,
@@ -443,13 +443,13 @@ export {
 	ManufacturerSpecificCCGet,
 	ManufacturerSpecificCCReport,
 	ManufacturerSpecificCCValues,
-} from "./ManufacturerSpecificCC";
+} from "./ManufacturerSpecificCC.js";
 export type {
 	MeterCCGetOptions,
 	MeterCCReportOptions,
 	MeterCCResetOptions,
 	MeterCCSupportedReportOptions,
-} from "./MeterCC";
+} from "./MeterCC.js";
 export {
 	MeterCC,
 	MeterCCGet,
@@ -458,14 +458,14 @@ export {
 	MeterCCSupportedGet,
 	MeterCCSupportedReport,
 	MeterCCValues,
-} from "./MeterCC";
+} from "./MeterCC.js";
 export type {
 	MultiChannelAssociationCCGetOptions,
 	MultiChannelAssociationCCRemoveOptions,
 	MultiChannelAssociationCCReportOptions,
 	MultiChannelAssociationCCSetOptions,
 	MultiChannelAssociationCCSupportedGroupingsReportOptions,
-} from "./MultiChannelAssociationCC";
+} from "./MultiChannelAssociationCC.js";
 export {
 	MultiChannelAssociationCC,
 	MultiChannelAssociationCCGet,
@@ -475,7 +475,7 @@ export {
 	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiChannelAssociationCCSupportedGroupingsReport,
 	MultiChannelAssociationCCValues,
-} from "./MultiChannelAssociationCC";
+} from "./MultiChannelAssociationCC.js";
 export type {
 	MultiChannelCCAggregatedMembersGetOptions,
 	MultiChannelCCAggregatedMembersReportOptions,
@@ -488,7 +488,7 @@ export type {
 	MultiChannelCCV1CommandEncapsulationOptions,
 	MultiChannelCCV1GetOptions,
 	MultiChannelCCV1ReportOptions,
-} from "./MultiChannelCC";
+} from "./MultiChannelCC.js";
 export {
 	MultiChannelCC,
 	MultiChannelCCAggregatedMembersGet,
@@ -504,19 +504,19 @@ export {
 	MultiChannelCCV1Get,
 	MultiChannelCCV1Report,
 	MultiChannelCCValues,
-} from "./MultiChannelCC";
-export type { MultiCommandCCCommandEncapsulationOptions } from "./MultiCommandCC";
+} from "./MultiChannelCC.js";
+export type { MultiCommandCCCommandEncapsulationOptions } from "./MultiCommandCC.js";
 export {
 	MultiCommandCC,
 	MultiCommandCCCommandEncapsulation,
-} from "./MultiCommandCC";
+} from "./MultiCommandCC.js";
 export type {
 	MultilevelSensorCCGetOptions,
 	MultilevelSensorCCGetSupportedScaleOptions,
 	MultilevelSensorCCReportOptions,
 	MultilevelSensorCCSupportedScaleReportOptions,
 	MultilevelSensorCCSupportedSensorReportOptions,
-} from "./MultilevelSensorCC";
+} from "./MultilevelSensorCC.js";
 export {
 	MultilevelSensorCC,
 	MultilevelSensorCCGet,
@@ -526,13 +526,13 @@ export {
 	MultilevelSensorCCSupportedScaleReport,
 	MultilevelSensorCCSupportedSensorReport,
 	MultilevelSensorCCValues,
-} from "./MultilevelSensorCC";
+} from "./MultilevelSensorCC.js";
 export type {
 	MultilevelSwitchCCReportOptions,
 	MultilevelSwitchCCSetOptions,
 	MultilevelSwitchCCStartLevelChangeOptions,
 	MultilevelSwitchCCSupportedReportOptions,
-} from "./MultilevelSwitchCC";
+} from "./MultilevelSwitchCC.js";
 export {
 	MultilevelSwitchCC,
 	MultilevelSwitchCCGet,
@@ -543,14 +543,14 @@ export {
 	MultilevelSwitchCCSupportedGet,
 	MultilevelSwitchCCSupportedReport,
 	MultilevelSwitchCCValues,
-} from "./MultilevelSwitchCC";
-export { NoOperationCC } from "./NoOperationCC";
+} from "./MultilevelSwitchCC.js";
+export { NoOperationCC } from "./NoOperationCC.js";
 export type {
 	NodeNamingAndLocationCCLocationReportOptions,
 	NodeNamingAndLocationCCLocationSetOptions,
 	NodeNamingAndLocationCCNameReportOptions,
 	NodeNamingAndLocationCCNameSetOptions,
-} from "./NodeNamingCC";
+} from "./NodeNamingCC.js";
 export {
 	NodeNamingAndLocationCC,
 	NodeNamingAndLocationCCLocationGet,
@@ -560,7 +560,7 @@ export {
 	NodeNamingAndLocationCCNameReport,
 	NodeNamingAndLocationCCNameSet,
 	NodeNamingAndLocationCCValues,
-} from "./NodeNamingCC";
+} from "./NodeNamingCC.js";
 export type {
 	NotificationCCEventSupportedGetOptions,
 	NotificationCCEventSupportedReportOptions,
@@ -568,7 +568,7 @@ export type {
 	NotificationCCReportOptions,
 	NotificationCCSetOptions,
 	NotificationCCSupportedReportOptions,
-} from "./NotificationCC";
+} from "./NotificationCC.js";
 export {
 	NotificationCC,
 	NotificationCCEventSupportedGet,
@@ -579,13 +579,13 @@ export {
 	NotificationCCSupportedGet,
 	NotificationCCSupportedReport,
 	NotificationCCValues,
-} from "./NotificationCC";
+} from "./NotificationCC.js";
 export type {
 	PowerlevelCCReportOptions,
 	PowerlevelCCSetOptions,
 	PowerlevelCCTestNodeReportOptions,
 	PowerlevelCCTestNodeSetOptions,
-} from "./PowerlevelCC";
+} from "./PowerlevelCC.js";
 export {
 	PowerlevelCC,
 	PowerlevelCCGet,
@@ -594,7 +594,7 @@ export {
 	PowerlevelCCTestNodeGet,
 	PowerlevelCCTestNodeReport,
 	PowerlevelCCTestNodeSet,
-} from "./PowerlevelCC";
+} from "./PowerlevelCC.js";
 export type {
 	ProtectionCCExclusiveControlReportOptions,
 	ProtectionCCExclusiveControlSetOptions,
@@ -603,7 +603,7 @@ export type {
 	ProtectionCCSupportedReportOptions,
 	ProtectionCCTimeoutReportOptions,
 	ProtectionCCTimeoutSetOptions,
-} from "./ProtectionCC";
+} from "./ProtectionCC.js";
 export {
 	ProtectionCC,
 	ProtectionCCExclusiveControlGet,
@@ -618,37 +618,37 @@ export {
 	ProtectionCCTimeoutReport,
 	ProtectionCCTimeoutSet,
 	ProtectionCCValues,
-} from "./ProtectionCC";
-export type { SceneActivationCCSetOptions } from "./SceneActivationCC";
+} from "./ProtectionCC.js";
+export type { SceneActivationCCSetOptions } from "./SceneActivationCC.js";
 export {
 	SceneActivationCC,
 	SceneActivationCCSet,
 	SceneActivationCCValues,
-} from "./SceneActivationCC";
+} from "./SceneActivationCC.js";
 export type {
 	SceneActuatorConfigurationCCGetOptions,
 	SceneActuatorConfigurationCCReportOptions,
 	SceneActuatorConfigurationCCSetOptions,
-} from "./SceneActuatorConfigurationCC";
+} from "./SceneActuatorConfigurationCC.js";
 export {
 	SceneActuatorConfigurationCC,
 	SceneActuatorConfigurationCCGet,
 	SceneActuatorConfigurationCCReport,
 	SceneActuatorConfigurationCCSet,
 	SceneActuatorConfigurationCCValues,
-} from "./SceneActuatorConfigurationCC";
+} from "./SceneActuatorConfigurationCC.js";
 export type {
 	SceneControllerConfigurationCCGetOptions,
 	SceneControllerConfigurationCCReportOptions,
 	SceneControllerConfigurationCCSetOptions,
-} from "./SceneControllerConfigurationCC";
+} from "./SceneControllerConfigurationCC.js";
 export {
 	SceneControllerConfigurationCC,
 	SceneControllerConfigurationCCGet,
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
 	SceneControllerConfigurationCCValues,
-} from "./SceneControllerConfigurationCC";
+} from "./SceneControllerConfigurationCC.js";
 export type {
 	ScheduleEntryLockCCDailyRepeatingScheduleGetOptions,
 	ScheduleEntryLockCCDailyRepeatingScheduleReportOptions,
@@ -664,7 +664,7 @@ export type {
 	ScheduleEntryLockCCYearDayScheduleGetOptions,
 	ScheduleEntryLockCCYearDayScheduleReportOptions,
 	ScheduleEntryLockCCYearDayScheduleSetOptions,
-} from "./ScheduleEntryLockCC";
+} from "./ScheduleEntryLockCC.js";
 export {
 	ScheduleEntryLockCC,
 	ScheduleEntryLockCCDailyRepeatingScheduleGet,
@@ -684,7 +684,7 @@ export {
 	ScheduleEntryLockCCYearDayScheduleGet,
 	ScheduleEntryLockCCYearDayScheduleReport,
 	ScheduleEntryLockCCYearDayScheduleSet,
-} from "./ScheduleEntryLockCC";
+} from "./ScheduleEntryLockCC.js";
 export type {
 	DecryptionResult,
 	MulticastContext,
@@ -699,7 +699,7 @@ export type {
 	Security2CCNonceReportOptions,
 	Security2CCPublicKeyReportOptions,
 	Security2CCTransferEndOptions,
-} from "./Security2CC";
+} from "./Security2CC.js";
 export {
 	Security2CC,
 	Security2CCCommandsSupportedGet,
@@ -716,12 +716,12 @@ export {
 	Security2CCNonceReport,
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
-} from "./Security2CC";
+} from "./Security2CC.js";
 export type {
 	SecurityCCCommandEncapsulationOptions,
 	SecurityCCCommandsSupportedReportOptions,
 	SecurityCCNetworkKeySetOptions,
-} from "./SecurityCC";
+} from "./SecurityCC.js";
 export {
 	SecurityCC,
 	SecurityCCCommandEncapsulation,
@@ -735,7 +735,7 @@ export {
 	SecurityCCSchemeGet,
 	SecurityCCSchemeInherit,
 	SecurityCCSchemeReport,
-} from "./SecurityCC";
+} from "./SecurityCC.js";
 export type {
 	SoundSwitchCCConfigurationReportOptions,
 	SoundSwitchCCConfigurationSetOptions,
@@ -744,7 +744,7 @@ export type {
 	SoundSwitchCCTonePlayReportOptions,
 	SoundSwitchCCTonePlaySetOptions,
 	SoundSwitchCCTonesNumberReportOptions,
-} from "./SoundSwitchCC";
+} from "./SoundSwitchCC.js";
 export {
 	SoundSwitchCC,
 	SoundSwitchCCConfigurationGet,
@@ -758,22 +758,22 @@ export {
 	SoundSwitchCCTonesNumberGet,
 	SoundSwitchCCTonesNumberReport,
 	SoundSwitchCCValues,
-} from "./SoundSwitchCC";
+} from "./SoundSwitchCC.js";
 export type {
 	SupervisionCCGetOptions,
 	SupervisionCCReportOptions,
-} from "./SupervisionCC";
+} from "./SupervisionCC.js";
 export {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
 	SupervisionCCValues,
-} from "./SupervisionCC";
+} from "./SupervisionCC.js";
 export type {
 	ThermostatFanModeCCReportOptions,
 	ThermostatFanModeCCSetOptions,
 	ThermostatFanModeCCSupportedReportOptions,
-} from "./ThermostatFanModeCC";
+} from "./ThermostatFanModeCC.js";
 export {
 	ThermostatFanModeCC,
 	ThermostatFanModeCCGet,
@@ -782,19 +782,19 @@ export {
 	ThermostatFanModeCCSupportedGet,
 	ThermostatFanModeCCSupportedReport,
 	ThermostatFanModeCCValues,
-} from "./ThermostatFanModeCC";
-export type { ThermostatFanStateCCReportOptions } from "./ThermostatFanStateCC";
+} from "./ThermostatFanModeCC.js";
+export type { ThermostatFanStateCCReportOptions } from "./ThermostatFanStateCC.js";
 export {
 	ThermostatFanStateCC,
 	ThermostatFanStateCCGet,
 	ThermostatFanStateCCReport,
 	ThermostatFanStateCCValues,
-} from "./ThermostatFanStateCC";
+} from "./ThermostatFanStateCC.js";
 export type {
 	ThermostatModeCCReportOptions,
 	ThermostatModeCCSetOptions,
 	ThermostatModeCCSupportedReportOptions,
-} from "./ThermostatModeCC";
+} from "./ThermostatModeCC.js";
 export {
 	ThermostatModeCC,
 	ThermostatModeCCGet,
@@ -803,24 +803,24 @@ export {
 	ThermostatModeCCSupportedGet,
 	ThermostatModeCCSupportedReport,
 	ThermostatModeCCValues,
-} from "./ThermostatModeCC";
-export type { ThermostatOperatingStateCCReportOptions } from "./ThermostatOperatingStateCC";
+} from "./ThermostatModeCC.js";
+export type { ThermostatOperatingStateCCReportOptions } from "./ThermostatOperatingStateCC.js";
 export {
 	ThermostatOperatingStateCC,
 	ThermostatOperatingStateCCGet,
 	ThermostatOperatingStateCCReport,
 	ThermostatOperatingStateCCValues,
-} from "./ThermostatOperatingStateCC";
+} from "./ThermostatOperatingStateCC.js";
 export type {
 	ThermostatSetbackCCReportOptions,
 	ThermostatSetbackCCSetOptions,
-} from "./ThermostatSetbackCC";
+} from "./ThermostatSetbackCC.js";
 export {
 	ThermostatSetbackCC,
 	ThermostatSetbackCCGet,
 	ThermostatSetbackCCReport,
 	ThermostatSetbackCCSet,
-} from "./ThermostatSetbackCC";
+} from "./ThermostatSetbackCC.js";
 export type {
 	ThermostatSetpointCCCapabilitiesGetOptions,
 	ThermostatSetpointCCCapabilitiesReportOptions,
@@ -828,7 +828,7 @@ export type {
 	ThermostatSetpointCCReportOptions,
 	ThermostatSetpointCCSetOptions,
 	ThermostatSetpointCCSupportedReportOptions,
-} from "./ThermostatSetpointCC";
+} from "./ThermostatSetpointCC.js";
 export {
 	ThermostatSetpointCC,
 	ThermostatSetpointCCCapabilitiesGet,
@@ -839,13 +839,13 @@ export {
 	ThermostatSetpointCCSupportedGet,
 	ThermostatSetpointCCSupportedReport,
 	ThermostatSetpointCCValues,
-} from "./ThermostatSetpointCC";
+} from "./ThermostatSetpointCC.js";
 export type {
 	TimeCCDateReportOptions,
 	TimeCCTimeOffsetReportOptions,
 	TimeCCTimeOffsetSetOptions,
 	TimeCCTimeReportOptions,
-} from "./TimeCC";
+} from "./TimeCC.js";
 export {
 	TimeCC,
 	TimeCCDateGet,
@@ -855,25 +855,25 @@ export {
 	TimeCCTimeOffsetReport,
 	TimeCCTimeOffsetSet,
 	TimeCCTimeReport,
-} from "./TimeCC";
+} from "./TimeCC.js";
 export type {
 	TimeParametersCCReportOptions,
 	TimeParametersCCSetOptions,
-} from "./TimeParametersCC";
+} from "./TimeParametersCC.js";
 export {
 	TimeParametersCC,
 	TimeParametersCCGet,
 	TimeParametersCCReport,
 	TimeParametersCCSet,
 	TimeParametersCCValues,
-} from "./TimeParametersCC";
+} from "./TimeParametersCC.js";
 export type {
 	TransportServiceCCFirstSegmentOptions,
 	TransportServiceCCSegmentCompleteOptions,
 	TransportServiceCCSegmentRequestOptions,
 	TransportServiceCCSegmentWaitOptions,
 	TransportServiceCCSubsequentSegmentOptions,
-} from "./TransportServiceCC";
+} from "./TransportServiceCC.js";
 export {
 	TransportServiceCC,
 	TransportServiceCCFirstSegment,
@@ -883,7 +883,7 @@ export {
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
 	isTransportServiceEncapsulation,
-} from "./TransportServiceCC";
+} from "./TransportServiceCC.js";
 export type {
 	UserCodeCCAdminCodeReportOptions,
 	UserCodeCCAdminCodeSetOptions,
@@ -898,7 +898,7 @@ export type {
 	UserCodeCCSetOptions,
 	UserCodeCCUserCodeChecksumReportOptions,
 	UserCodeCCUsersNumberReportOptions,
-} from "./UserCodeCC";
+} from "./UserCodeCC.js";
 export {
 	UserCodeCC,
 	UserCodeCCAdminCodeGet,
@@ -920,14 +920,14 @@ export {
 	UserCodeCCUsersNumberGet,
 	UserCodeCCUsersNumberReport,
 	UserCodeCCValues,
-} from "./UserCodeCC";
+} from "./UserCodeCC.js";
 export type {
 	VersionCCCapabilitiesReportOptions,
 	VersionCCCommandClassGetOptions,
 	VersionCCCommandClassReportOptions,
 	VersionCCReportOptions,
 	VersionCCZWaveSoftwareReportOptions,
-} from "./VersionCC";
+} from "./VersionCC.js";
 export {
 	VersionCC,
 	VersionCCCapabilitiesGet,
@@ -939,12 +939,12 @@ export {
 	VersionCCValues,
 	VersionCCZWaveSoftwareGet,
 	VersionCCZWaveSoftwareReport,
-} from "./VersionCC";
+} from "./VersionCC.js";
 export type {
 	WakeUpCCIntervalCapabilitiesReportOptions,
 	WakeUpCCIntervalReportOptions,
 	WakeUpCCIntervalSetOptions,
-} from "./WakeUpCC";
+} from "./WakeUpCC.js";
 export {
 	WakeUpCC,
 	WakeUpCCIntervalCapabilitiesGet,
@@ -955,7 +955,7 @@ export {
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
-} from "./WakeUpCC";
+} from "./WakeUpCC.js";
 export type {
 	WindowCoveringCCGetOptions,
 	WindowCoveringCCReportOptions,
@@ -963,7 +963,7 @@ export type {
 	WindowCoveringCCStartLevelChangeOptions,
 	WindowCoveringCCStopLevelChangeOptions,
 	WindowCoveringCCSupportedReportOptions,
-} from "./WindowCoveringCC";
+} from "./WindowCoveringCC.js";
 export {
 	WindowCoveringCC,
 	WindowCoveringCCGet,
@@ -974,15 +974,15 @@ export {
 	WindowCoveringCCSupportedGet,
 	WindowCoveringCCSupportedReport,
 	WindowCoveringCCValues,
-} from "./WindowCoveringCC";
-export { ZWaveLongRangeCC } from "./ZWaveLongRangeCC";
-export type { ZWavePlusCCReportOptions } from "./ZWavePlusCC";
+} from "./WindowCoveringCC.js";
+export { ZWaveLongRangeCC } from "./ZWaveLongRangeCC.js";
+export type { ZWavePlusCCReportOptions } from "./ZWavePlusCC.js";
 export {
 	ZWavePlusCC,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,
 	ZWavePlusCCValues,
-} from "./ZWavePlusCC";
+} from "./ZWavePlusCC.js";
 export type {
 	ZWaveProtocolCCAcceptLostOptions,
 	ZWaveProtocolCCAssignIDsOptions,
@@ -1011,7 +1011,7 @@ export type {
 	ZWaveProtocolCCTransferNodeInformationOptions,
 	ZWaveProtocolCCTransferPresentationOptions,
 	ZWaveProtocolCCTransferRangeInformationOptions,
-} from "./ZWaveProtocolCC";
+} from "./ZWaveProtocolCC.js";
 export {
 	ZWaveProtocolCC,
 	ZWaveProtocolCCAcceptLost,
@@ -1049,7 +1049,7 @@ export {
 	ZWaveProtocolCCTransferNodeInformation,
 	ZWaveProtocolCCTransferPresentation,
 	ZWaveProtocolCCTransferRangeInformation,
-} from "./ZWaveProtocolCC";
+} from "./ZWaveProtocolCC.js";
 export {
 	fibaroCC,
 	fibaroCCCommand,
@@ -1063,15 +1063,15 @@ export {
 	getManufacturerProprietaryCCConstructor,
 	manufacturerId,
 	manufacturerProprietaryAPI,
-} from "./manufacturerProprietary/Decorators";
+} from "./manufacturerProprietary/Decorators.js";
 export type {
 	FibaroVenetianBlindCCReportOptions,
 	FibaroVenetianBlindCCSetOptions,
-} from "./manufacturerProprietary/FibaroCC";
+} from "./manufacturerProprietary/FibaroCC.js";
 export {
 	FibaroCC,
 	FibaroVenetianBlindCC,
 	FibaroVenetianBlindCCGet,
 	FibaroVenetianBlindCCReport,
 	FibaroVenetianBlindCCSet,
-} from "./manufacturerProprietary/FibaroCC";
+} from "./manufacturerProprietary/FibaroCC.js";

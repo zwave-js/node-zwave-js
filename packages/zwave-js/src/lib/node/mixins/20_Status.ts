@@ -1,19 +1,19 @@
 import { type CommandClasses, InterviewStage } from "@zwave-js/core";
-import { type Driver } from "../../driver/Driver";
-import { cacheKeys } from "../../driver/NetworkCache";
-import { type Extended, interpretEx } from "../../driver/StateMachineShared";
-import { type DeviceClass } from "../DeviceClass";
+import { type Driver } from "../../driver/Driver.js";
+import { cacheKeys } from "../../driver/NetworkCache.js";
+import { type Extended, interpretEx } from "../../driver/StateMachineShared.js";
+import { type DeviceClass } from "../DeviceClass.js";
 import {
 	type NodeReadyInterpreter,
 	createNodeReadyMachine,
-} from "../NodeReadyMachine";
+} from "../NodeReadyMachine.js";
 import {
 	type NodeStatusInterpreter,
 	createNodeStatusMachine,
 	nodeStatusMachineStateToNodeStatus,
-} from "../NodeStatusMachine";
-import { NodeStatus } from "../_Types";
-import { NodeEventsMixin } from "./10_Events";
+} from "../NodeStatusMachine.js";
+import { NodeStatus } from "../_Types.js";
+import { NodeEventsMixin } from "./10_Events.js";
 
 export interface NodeWithStatus {
 	/**

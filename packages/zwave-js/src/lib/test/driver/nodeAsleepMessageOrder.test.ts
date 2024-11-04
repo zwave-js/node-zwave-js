@@ -11,9 +11,9 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuiteMulti";
+import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 // Repro from #1107
 // Node 10's awake timer elapses before its ping is rejected,
@@ -86,7 +86,7 @@ integrationTest(
 			mockNode10.ackControllerRequestFrame();
 
 			// Ping for 10 should be failed now
-			t.false(await pingPromise10);
+			t.expect(await pingPromise10).toBe(false);
 
 			// Now the ping for 17 should go out
 			await wait(500);
@@ -100,10 +100,11 @@ integrationTest(
 			);
 
 			// Ping 17 does not get resolved by the other callback
-			t.is(await Promise.race([pingPromise17, wait(50)]), undefined);
+			t.expect(await Promise.race([pingPromise17, wait(50)]))
+				.toBeUndefined();
 
 			// And it should fail since we don't ack:
-			t.false(await pingPromise17);
+			t.expect(await pingPromise17).toBe(false);
 		},
 	},
 );
@@ -195,7 +196,7 @@ integrationTest(
 				&& f.payload instanceof BasicCCGet
 			);
 			// and return a number
-			t.is(typeof result?.currentValue, "number");
+			t.expect(typeof result?.currentValue).toBe("number");
 
 			// Query the node's BASIC state again. This should be handled relatively quickly
 			mockNode10.clearReceivedControllerFrames();
@@ -217,7 +218,7 @@ integrationTest(
 				&& f.payload instanceof BasicCCGet
 			);
 			// and return a number
-			t.is(typeof result?.currentValue, "number");
+			t.expect(typeof result?.currentValue).toBe("number");
 		},
 	},
 );
@@ -286,7 +287,7 @@ integrationTest(
 				wait(500).then(() => "timeout"),
 				commandToNode17.then(() => "ok"),
 			]);
-			t.is(result, "ok");
+			t.expect(result).toBe("ok");
 
 			// The first command should not have been sent
 			mockNode10.assertReceivedControllerFrame(
@@ -315,7 +316,7 @@ integrationTest(
 				wait(500).then(() => "timeout"),
 				commandToNode10.then(() => "ok"),
 			]);
-			t.is(result, "ok");
+			t.expect(result).toBe("ok");
 		},
 	},
 );

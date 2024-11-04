@@ -1,7 +1,7 @@
 import { SecurityClass, assertZWaveError } from "@zwave-js/core";
-import test from "ava";
-import { ProvisioningEntryStatus } from "./Inclusion";
-import { assertProvisioningEntry } from "./utils";
+import { test } from "vitest";
+import { ProvisioningEntryStatus } from "./Inclusion.js";
+import { assertProvisioningEntry } from "./utils.js";
 
 // A valid DSK
 const dsk = "11111-22222-12345-54321-65535-00001-11111-22222";
@@ -12,30 +12,30 @@ const securityClasses = [
 ];
 
 test("should throw if the argument is not an object", (t) => {
-	assertZWaveError(t, () => assertProvisioningEntry(undefined), {
+	assertZWaveError(t.expect, () => assertProvisioningEntry(undefined), {
 		messageMatches: "not an object",
 	});
 
-	assertZWaveError(t, () => assertProvisioningEntry(1), {
+	assertZWaveError(t.expect, () => assertProvisioningEntry(1), {
 		messageMatches: "not an object",
 	});
 });
 
 test("should throw if the argument does not have a valid dsk", (t) => {
-	assertZWaveError(t, () => assertProvisioningEntry({}), {
+	assertZWaveError(t.expect, () => assertProvisioningEntry({}), {
 		messageMatches: "dsk must be a string",
 	});
-	assertZWaveError(t, () => assertProvisioningEntry({ dsk: 1 }), {
+	assertZWaveError(t.expect, () => assertProvisioningEntry({ dsk: 1 }), {
 		messageMatches: "dsk must be a string",
 	});
-	assertZWaveError(t, () => assertProvisioningEntry({ dsk: "abc" }), {
+	assertZWaveError(t.expect, () => assertProvisioningEntry({ dsk: "abc" }), {
 		messageMatches: "dsk does not have the correct format",
 	});
 });
 
 test("should throw if the status is invalid", (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -44,7 +44,7 @@ test("should throw if the status is invalid", (t) => {
 		{ messageMatches: "not a ProvisioningEntryStatus" },
 	);
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -56,7 +56,7 @@ test("should throw if the status is invalid", (t) => {
 
 test("should throw if the securityClasses are invalid", (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -66,7 +66,7 @@ test("should throw if the securityClasses are invalid", (t) => {
 		{ messageMatches: "securityClasses must be an array" },
 	);
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -79,7 +79,7 @@ test("should throw if the securityClasses are invalid", (t) => {
 
 test("should throw if the requestedSecurityClasses are invalid", (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -90,7 +90,7 @@ test("should throw if the requestedSecurityClasses are invalid", (t) => {
 		{ messageMatches: "requestedSecurityClasses must be an array" },
 	);
 	assertZWaveError(
-		t,
+		t.expect,
 		() =>
 			assertProvisioningEntry({
 				dsk,
@@ -116,6 +116,4 @@ test("happy path", (t) => {
 		status: ProvisioningEntryStatus.Active,
 		requestedSecurityClasses: [SecurityClass.S0_Legacy],
 	});
-
-	t.pass();
 });

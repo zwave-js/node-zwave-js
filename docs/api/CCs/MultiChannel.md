@@ -39,10 +39,7 @@ async getAggregatedMembers(
 
 ```ts
 async sendEncapsulated(
-	options: Omit<
-		MultiChannelCCCommandEncapsulationOptions,
-		keyof CCCommandOptions
-	>,
+	options: MultiChannelCCCommandEncapsulationOptions,
 ): Promise<void>;
 ```
 

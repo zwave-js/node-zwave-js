@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Mixin } from "@zwave-js/shared";
-import test from "ava";
 import EventEmitter from "node:events";
-import { StatisticsHost } from "./Statistics";
+import { test } from "vitest";
+import { StatisticsHost } from "./Statistics.js";
 
 interface TestStatistics {
 	one: number;
@@ -25,7 +25,7 @@ class Test extends EventEmitter {}
 
 test("the statistics property is available and has the correct defaults", (t) => {
 	const test = new Test();
-	t.deepEqual(test.statistics, {
+	t.expect(test.statistics).toStrictEqual({
 		one: 1,
 		two: 2,
 	});

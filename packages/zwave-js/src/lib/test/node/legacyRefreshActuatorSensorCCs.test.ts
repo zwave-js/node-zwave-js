@@ -6,8 +6,8 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import { ApplicationUpdateRequestNodeInfoReceived } from "@zwave-js/serial/serialapi";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When a NIF is received for a node that does not send unsolicited reports, refresh actuator and sensor CCs",
@@ -84,8 +84,6 @@ integrationTest(
 					f.type === MockZWaveFrameType.Request
 					&& f.payload instanceof MultilevelSwitchCCGet,
 			);
-
-			t.pass();
 		},
 	},
 );

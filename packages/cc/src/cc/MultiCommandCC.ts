@@ -13,15 +13,15 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { CCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
 	commandClass,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { MultiCommandCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { MultiCommandCommand } from "../lib/_Types.js";
 
 // TODO: Handle this command when received
 

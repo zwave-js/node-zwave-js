@@ -1,4 +1,4 @@
-import { bold, gray, green, red } from "ansi-colors";
+import c from "ansi-colors";
 import chokidar from "chokidar";
 import cp from "node:child_process";
 import crypto from "node:crypto";
@@ -101,7 +101,7 @@ async function exec(): Promise<void> {
 	if (child) child.kill("SIGTERM");
 
 	console.log();
-	console.log(`👀 ${bold(task)}: starting...`);
+	console.log(`👀 ${c.bold(task)}: starting...`);
 	console.log();
 
 	child = cp.spawn("yarn", [task, ...taskArgs], {
@@ -111,15 +111,15 @@ async function exec(): Promise<void> {
 	});
 	child.on("exit", (code) => {
 		if (code === 0) {
-			console.log(green(`👀 ${bold(task)}: completed successfully!`));
+			console.log(c.green(`👀 ${c.bold(task)}: completed successfully!`));
 			prevHash = totalHash;
 		} else {
-			console.log(red(`👀 ${bold(task)}: failed with code ${code}`));
+			console.log(c.red(`👀 ${c.bold(task)}: failed with code ${code}`));
 		}
 		child = undefined;
 
 		console.log(
-			gray(`   Waiting for file changes... Press Ctrl+C to exit.`),
+			c.gray(`   Waiting for file changes... Press Ctrl+C to exit.`),
 		);
 	});
 }

@@ -1,7 +1,7 @@
 import { BasicCCValues } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Basic CC values should only include the compatEvent value if Basic CC is not supported, but the compat flag is set",
@@ -39,30 +39,30 @@ integrationTest(
 			// Make sure the custom config is loaded
 			const mapBasicSet = node.deviceConfig?.compat
 				?.mapBasicSet;
-			t.is(mapBasicSet, "event");
+			t.expect(mapBasicSet).toBe("event");
 
 			const valueIDs = node.getDefinedValueIDs();
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Found Basic CC currentValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Found Basic CC targetValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.duration.is(v)),
 				"Found Basic CC duration although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.restorePrevious.is(v)),
 				"Found Basic CC restorePrevious although it shouldn't be exposed",
-			);
+			).toBe(false);
 
-			t.true(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.compatEvent.is(v)),
 				"Did not find Basic CC compatEvent although it should be exposed",
-			);
+			).toBe(true);
 		},
 	},
 );
@@ -99,30 +99,30 @@ integrationTest(
 			// Make sure the custom config is loaded
 			const mapBasicSet = node.deviceConfig?.compat
 				?.mapBasicSet;
-			t.is(mapBasicSet, "event");
+			t.expect(mapBasicSet).toBe("event");
 
 			const valueIDs = node.getDefinedValueIDs();
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Found Basic CC currentValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Found Basic CC targetValue although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.duration.is(v)),
 				"Found Basic CC duration although it shouldn't be exposed",
-			);
-			t.false(
+			).toBe(false);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.restorePrevious.is(v)),
 				"Found Basic CC restorePrevious although it shouldn't be exposed",
-			);
+			).toBe(false);
 
-			t.true(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.compatEvent.is(v)),
 				"Did not find Basic CC compatEvent although it should be exposed",
-			);
+			).toBe(true);
 		},
 	},
 );
@@ -142,27 +142,27 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			const valueIDs = node.getDefinedValueIDs();
-			t.true(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.currentValue.is(v)),
 				"Did not find Basic CC currentValue although it should be exposed",
-			);
-			t.true(
+			).toBe(true);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.targetValue.is(v)),
 				"Did not find Basic CC targetValue although it should be exposed",
-			);
-			t.true(
+			).toBe(true);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.duration.is(v)),
 				"Did not find Basic CC duration although it should be exposed",
-			);
-			t.true(
+			).toBe(true);
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.restorePrevious.is(v)),
 				"Did not find Basic CC restorePrevious although it should be exposed",
-			);
+			).toBe(true);
 
-			t.false(
+			t.expect(
 				valueIDs.some((v) => BasicCCValues.compatEvent.is(v)),
 				"Found Basic CC compatEvent although it shouldn't be exposed",
-			);
+			).toBe(false);
 		},
 	},
 );

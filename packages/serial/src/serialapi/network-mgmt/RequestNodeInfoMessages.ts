@@ -22,7 +22,7 @@ import { Bytes } from "@zwave-js/shared";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../application/ApplicationUpdateRequest";
+} from "../application/ApplicationUpdateRequest.js";
 
 export interface RequestNodeInfoResponseOptions {
 	wasSent: boolean;

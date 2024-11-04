@@ -20,13 +20,13 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings";
-import { CCAPI } from "../lib/API";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -34,9 +34,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { TimeCommand } from "../lib/_Types";
-import { encodeTimezone, parseTimezone } from "../lib/serializers";
+} from "../lib/CommandClassDecorators.js";
+import { TimeCommand } from "../lib/_Types.js";
+import { encodeTimezone, parseTimezone } from "../lib/serializers.js";
 
 // @noSetValueAPI
 // Only the timezone information can be set and that accepts a non-primitive value

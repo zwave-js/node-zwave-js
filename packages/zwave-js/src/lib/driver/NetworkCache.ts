@@ -13,14 +13,14 @@ import {
 } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
 import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import path from "node:path";
 import {
 	ProvisioningEntryStatus,
 	type SmartStartProvisioningEntry,
-} from "../controller/Inclusion";
-import { DeviceClass } from "../node/DeviceClass";
-import { InterviewStage } from "../node/_Types";
+} from "../controller/Inclusion.js";
+import { DeviceClass } from "../node/DeviceClass.js";
+import { InterviewStage } from "../node/_Types.js";
 
 /**
  * Defines the keys that are used to store certain properties in the network cache.

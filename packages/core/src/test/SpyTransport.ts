@@ -1,18 +1,18 @@
-import { ansiRegex, stripColor } from "ansi-colors";
-import type { Assertions } from "ava";
+import c from "ansi-colors";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
+import { type ExpectStatic } from "vitest";
 import Transport from "winston-transport";
-import type { ZWaveLogInfo } from "../log/shared_safe";
+import type { ZWaveLogInfo } from "../log/shared_safe.js";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
-	`^(${ansiRegex.source})?${timestampRegex.source}(${ansiRegex.source})? `,
+	`^(${c.ansiRegex.source})?${timestampRegex.source}(${c.ansiRegex.source})? `,
 	"gm",
 );
 const channelRegex = /(SERIAL|CNTRLR|DRIVER|RFLCTN)/g;
 const channelPrefixRegex = new RegExp(
-	`(${ansiRegex.source})?${channelRegex.source}(${ansiRegex.source})? `,
+	`(${c.ansiRegex.source})?${channelRegex.source}(${c.ansiRegex.source})? `,
 	"gm",
 );
 
@@ -36,7 +36,7 @@ export class SpyTransport extends Transport {
 
 /** Tests a printed log message */
 export function assertMessage(
-	t: Assertions,
+	expect: ExpectStatic,
 	transport: SpyTransport,
 	options: Partial<{
 		message: string;
@@ -51,13 +51,13 @@ export function assertMessage(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	t.true(transport.spy.callCount > callNumber);
+	expect(transport.spy.callCount > callNumber).toBe(true);
 	const callArg = transport.spy.getCall(callNumber).args[0];
 	let actualMessage: string = callArg[MESSAGE];
 	// By default ignore the color codes
 	const ignoreColor = options.ignoreColor !== false;
 	if (ignoreColor) {
-		actualMessage = stripColor(actualMessage);
+		actualMessage = c.stripColor(actualMessage);
 	}
 	// By default, strip away the timestamp and placeholder
 	if (options.ignoreTimestamp !== false) {
@@ -73,17 +73,17 @@ export function assertMessage(
 	}
 	if (typeof options.message === "string") {
 		if (ignoreColor) {
-			options.message = stripColor(options.message);
+			options.message = c.stripColor(options.message);
 		}
-		t.is(actualMessage, options.message);
+		expect(actualMessage).toBe(options.message);
 	}
 	if (typeof options.predicate === "function") {
-		t.true(options.predicate(actualMessage));
+		expect(options.predicate(actualMessage)).toBe(true);
 	}
 }
 
 export function assertLogInfo(
-	t: Assertions,
+	expect: ExpectStatic,
 	transport: SpyTransport,
 	options: Partial<{
 		level: string;
@@ -92,13 +92,13 @@ export function assertLogInfo(
 	}>,
 ): void {
 	const callNumber = options.callNumber || 0;
-	t.true(transport.spy.callCount > callNumber);
+	expect(transport.spy.callCount > callNumber).toBe(true);
 	const callArg = transport.spy.getCall(callNumber).args[0];
 
 	if (typeof options.level === "string") {
-		t.is(callArg.level, options.level);
+		expect(callArg.level).toBe(options.level);
 	}
 	if (typeof options.predicate === "function") {
-		t.true(options.predicate(callArg));
+		expect(options.predicate(callArg)).toBe(true);
 	}
 }

@@ -1,7 +1,7 @@
 import { NodeStatus } from "@zwave-js/core";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro from #6062
 
@@ -17,12 +17,12 @@ integrationTest(
 		testBody: async (t, driver, node2, mockController, mockNode) => {
 			mockNode.autoAckControllerFrames = false;
 
-			t.is(node2.status, NodeStatus.Asleep);
+			t.expect(node2.status).toBe(NodeStatus.Asleep);
 			const pingResult = await Promise.race([
 				node2.ping(),
 				wait(2000).then(() => "timeout"),
 			]);
-			t.is(pingResult, false);
+			t.expect(pingResult).toBe(false);
 		},
 	},
 );

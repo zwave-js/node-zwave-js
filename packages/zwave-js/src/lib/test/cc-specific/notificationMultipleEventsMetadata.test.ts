@@ -1,6 +1,6 @@
 import { NotificationCCValues } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses, type ValueMetadataNumeric } from "@zwave-js/core";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Notification types with multiple supported events preserve states for all of them",
@@ -33,7 +33,7 @@ integrationTest(
 					).id,
 				) as ValueMetadataNumeric
 			).states;
-			t.deepEqual(states, {
+			t.expect(states).toStrictEqual({
 				[0x00]: "idle",
 				[0x03]: "Smoke alarm test",
 				[0x06]: "Alarm silenced",

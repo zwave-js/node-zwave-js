@@ -15,7 +15,7 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest("Communication via Security S0 works", {
 	// debug: true,
@@ -187,8 +187,6 @@ integrationTest("Communication via Security S0 works", {
 	testBody: async (t, driver, node, mockController, mockNode) => {
 		const result = await node.commandClasses.Basic.get();
 
-		t.is(result?.currentValue, 2);
-
-		t.pass();
+		t.expect(result?.currentValue).toBe(2);
 	},
 });

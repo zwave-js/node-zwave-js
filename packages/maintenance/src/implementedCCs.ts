@@ -6,7 +6,11 @@ import { num2hex } from "@zwave-js/shared";
 import c from "ansi-colors";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
@@ -19,7 +23,7 @@ const noInterviewRegex = /^\/\/ @noInterview/m; // This comment marks a CC that 
 const pollValueApiRegex = /^\tprotected \[POLL_VALUE\]/m;
 const noPollValueApiRegex = /^\/\/ @noPollValueAPI/m; // This comment marks a CC that needs no pollValue API
 
-const argv = yargs.parseSync();
+const argv = yargs(hideBin(process.argv)).parseSync();
 const onlyIncomplete = !!argv.onlyIncomplete;
 
 function getSafeLength(str: string): number {

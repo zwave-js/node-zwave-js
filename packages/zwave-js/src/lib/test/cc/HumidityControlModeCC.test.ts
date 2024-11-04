@@ -12,7 +12,7 @@ import { HumidityControlModeCCValues } from "@zwave-js/cc/HumidityControlModeCC"
 import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 const host = createTestingHost();
 const nodeId = 2;
@@ -35,7 +35,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -49,7 +49,7 @@ test("the Set command should serialize correctly", (t) => {
 			0x03, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -63,9 +63,9 @@ test("the Report command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
-	t.is(cc.constructor, HumidityControlModeCCReport);
+	t.expect(cc.constructor).toBe(HumidityControlModeCCReport);
 
-	t.is(cc.mode, HumidityControlMode.Auto);
+	t.expect(cc.mode).toBe(HumidityControlMode.Auto);
 });
 
 test("the Report command should set the correct value", (t) => {
@@ -85,7 +85,7 @@ test("the Report command should set the correct value", (t) => {
 		commandClass: CommandClasses["Humidity Control Mode"],
 		property: "mode",
 	});
-	t.deepEqual(currentValue, HumidityControlMode.Auto);
+	t.expect(currentValue).toStrictEqual(HumidityControlMode.Auto);
 });
 
 test("the Report command should set the correct metadata", (t) => {
@@ -105,7 +105,7 @@ test("the Report command should set the correct metadata", (t) => {
 		.getValueDB(nodeId)
 		.getMetadata(HumidityControlModeCCValues.mode.id);
 
-	t.like(currentValueMeta, {
+	t.expect(currentValueMeta).toMatchObject({
 		states: enumValuesToMetadataStates(HumidityControlMode),
 		label: "Humidity control mode",
 	});
@@ -120,7 +120,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -134,9 +134,9 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCSupportedReport;
-	t.is(cc.constructor, HumidityControlModeCCSupportedReport);
+	t.expect(cc.constructor).toBe(HumidityControlModeCCSupportedReport);
 
-	t.deepEqual(cc.supportedModes, [
+	t.expect(cc.supportedModes).toStrictEqual([
 		HumidityControlMode.Off,
 		HumidityControlMode.Auto,
 	]);
@@ -159,7 +159,7 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 		.getValueDB(nodeId)
 		.getMetadata(HumidityControlModeCCValues.mode.id);
 
-	t.like(currentValueMeta, {
+	t.expect(currentValueMeta).toMatchObject({
 		states: {
 			0: "Off",
 			3: "Auto",

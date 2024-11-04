@@ -2,16 +2,16 @@ import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Bytes, Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "node:events";
 import { PassThrough, type Readable, type Writable } from "node:stream";
-import { SerialLogger } from "../log/Logger";
-import { MessageHeaders } from "../message/MessageHeaders";
+import { SerialLogger } from "../log/Logger.js";
+import { MessageHeaders } from "../message/MessageHeaders.js";
 import {
 	type BootloaderChunk,
 	BootloaderParser,
 	BootloaderScreenParser,
 	bootloaderMenuPreamble,
-} from "../parsers/BootloaderParsers";
-import { SerialAPIParser } from "../parsers/SerialAPIParser";
-import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation";
+} from "../parsers/BootloaderParsers.js";
+import { SerialAPIParser } from "../parsers/SerialAPIParser.js";
+import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation.js";
 
 export type ZWaveSerialChunk =
 	| MessageHeaders.ACK

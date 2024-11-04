@@ -9,7 +9,7 @@ import {
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			BinarySwitchCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (no duration)", (t) => {
@@ -48,7 +48,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -71,7 +71,7 @@ test("the Set command should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.deepEqual(cc.serialize(ctx), expected);
+	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -85,11 +85,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCCReport;
-	t.is(cc.constructor, BinarySwitchCCReport);
+	t.expect(cc.constructor).toBe(BinarySwitchCCReport);
 
-	t.is(cc.currentValue, true);
-	t.is(cc.targetValue, undefined);
-	t.is(cc.duration, undefined);
+	t.expect(cc.currentValue).toBe(true);
+	t.expect(cc.targetValue).toBeUndefined();
+	t.expect(cc.duration).toBeUndefined();
 });
 
 test("the Report command (v2) should be deserialized correctly", (t) => {
@@ -105,12 +105,12 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCCReport;
-	t.is(cc.constructor, BinarySwitchCCReport);
+	t.expect(cc.constructor).toBe(BinarySwitchCCReport);
 
-	t.is(cc.currentValue, true);
-	t.is(cc.targetValue, false);
-	t.is(cc.duration!.unit, "seconds");
-	t.is(cc.duration!.value, 1);
+	t.expect(cc.currentValue).toBe(true);
+	t.expect(cc.targetValue).toBe(false);
+	t.expect(cc.duration!.unit).toBe("seconds");
+	t.expect(cc.duration!.value).toBe(1);
 });
 
 test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
@@ -121,7 +121,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCC;
-	t.is(cc.constructor, BinarySwitchCC);
+	t.expect(cc.constructor).toBe(BinarySwitchCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

@@ -12,6 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { CCEncodingContext } from "@zwave-js/host";
 import type {
@@ -32,12 +33,16 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { clamp } from "alcalzone-shared/math";
-import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
-import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
-import { type MessageWithCC, containsCC } from "../utils";
-import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
-import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
+import { clamp } from "alcalzone-shared/math/index.js";
+import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest.js";
+import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest.js";
+import { type MessageWithCC, containsCC } from "../utils.js";
+import { MAX_SEND_ATTEMPTS } from "./SendDataMessages.js";
+import {
+	encodeTXReport,
+	parseTXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared.js";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
@@ -105,6 +110,39 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		if (options.maxSendAttempts != undefined) {
 			this.maxSendAttempts = options.maxSendAttempts;
 		}
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataBridgeRequestBase {
+		let offset = 0;
+		let parseResult = parseNodeID(raw.payload, ctx.nodeIdType);
+		const sourceNodeId = parseResult.nodeId;
+		offset += parseResult.bytesRead;
+
+		parseResult = parseNodeID(raw.payload, ctx.nodeIdType, offset);
+		const destinationNodeId = parseResult.nodeId;
+		offset += parseResult.bytesRead;
+
+		const ccLength = raw.payload[offset++];
+		const serializedCC = raw.payload.slice(offset, offset + ccLength);
+		offset += ccLength;
+
+		const transmitOptions = raw.payload[offset++];
+
+		// The route field is unused
+		offset += 4;
+
+		const callbackId = raw.payload[offset++];
+
+		return new this({
+			sourceNodeId,
+			nodeId: destinationNodeId,
+			serializedCC,
+			transmitOptions,
+			callbackId,
+		});
 	}
 
 	/** Which Node ID this command originates from */
@@ -254,6 +292,19 @@ export class SendDataBridgeRequestTransmitReport
 		return this.transmitStatus === TransmitStatus.OK;
 	}
 
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		this.assertCallbackId();
+		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
+		if (this.txReport) {
+			this.payload = Bytes.concat([
+				this.payload,
+				encodeTXReport(this.txReport),
+			]);
+		}
+
+		return super.serialize(ctx);
+	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -390,6 +441,44 @@ export class SendDataMulticastBridgeRequest<
 		if (options.maxSendAttempts != undefined) {
 			this.maxSendAttempts = options.maxSendAttempts;
 		}
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastBridgeRequest {
+		const { nodeId: sourceNodeId, bytesRead } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+		);
+		let offset = bytesRead;
+
+		const destinationNodeIdCount = raw.payload[offset++];
+		const nodeIds: number[] = [];
+		for (let i = 0; i < destinationNodeIdCount; i++) {
+			const { nodeId, bytesRead } = parseNodeID(
+				raw.payload,
+				ctx.nodeIdType,
+				offset,
+			);
+			nodeIds.push(nodeId);
+			offset += bytesRead;
+		}
+
+		const ccLength = raw.payload[offset++];
+		const serializedCC = raw.payload.slice(offset, offset + ccLength);
+		offset += ccLength;
+
+		const transmitOptions = raw.payload[offset++];
+		const callbackId = raw.payload[offset++];
+
+		return new this({
+			sourceNodeId,
+			nodeIds: nodeIds as MulticastDestination,
+			serializedCC,
+			transmitOptions,
+			callbackId,
+		});
 	}
 
 	/** Which Node ID this command originates from */

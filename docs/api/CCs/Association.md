@@ -31,7 +31,7 @@ Returns information about an association group.
 
 ```ts
 async sendReport(
-	options: AssociationCCReportSpecificOptions,
+	options: AssociationCCReportOptions,
 ): Promise<void>;
 ```
 

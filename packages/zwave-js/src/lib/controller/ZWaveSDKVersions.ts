@@ -1,4 +1,4 @@
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 
 // Based on INS13954-13, chapter 7
 const versions = Object.freeze([

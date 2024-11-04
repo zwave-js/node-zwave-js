@@ -22,14 +22,14 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -39,10 +39,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { type AssociationAddress, AssociationCommand } from "../lib/_Types";
-import * as ccUtils from "../lib/utils";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { type AssociationAddress, AssociationCommand } from "../lib/_Types.js";
+import * as ccUtils from "../lib/utils.js";
 
 export const AssociationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Association, {

@@ -1,7 +1,7 @@
 import { Bytes } from "@zwave-js/shared";
-import test from "ava";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
+import { test } from "vitest";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
 import {
 	UNKNOWN_STATE,
 	encodeBitMask,
@@ -15,66 +15,66 @@ import {
 	parseMaybeNumber,
 	parseNumber,
 	parsePartial,
-} from "./Primitive";
+} from "./Primitive.js";
 
 test("parseBoolean() -> should return false when the value is 0", (t) => {
-	t.false(parseBoolean(0));
+	t.expect(parseBoolean(0)).toBe(false);
 });
 
 test("parseBoolean() -> should return true when the value is 0xff", (t) => {
-	t.true(parseBoolean(0xff));
+	t.expect(parseBoolean(0xff)).toBe(true);
 });
 
 test("parseBoolean() -> should return undefined otherwise", (t) => {
-	t.is(parseBoolean(0x80), undefined);
+	t.expect(parseBoolean(0x80)).toBeUndefined();
 });
 
 test("parseMaybeBoolean() -> should return false when the value is 0", (t) => {
-	t.false(parseMaybeBoolean(0));
+	t.expect(parseMaybeBoolean(0)).toBe(false);
 });
 
 test("parseMaybeBoolean() -> should return true when the value is 0xff", (t) => {
-	t.true(parseMaybeBoolean(0xff));
+	t.expect(parseMaybeBoolean(0xff)).toBe(true);
 });
 
 test("parseMaybeBoolean() -> should return unknown when the value is 0xfe", (t) => {
-	t.is(parseMaybeBoolean(0xfe), UNKNOWN_STATE);
+	t.expect(parseMaybeBoolean(0xfe)).toBe(UNKNOWN_STATE);
 });
 
 test("parseMaybeBoolean() -> should return undefined otherwise", (t) => {
-	t.is(parseMaybeBoolean(0x80), undefined);
+	t.expect(parseMaybeBoolean(0x80)).toBeUndefined();
 });
 
 test("parseNumber() -> should return the value when it is in the range 0..99", (t) => {
 	for (let i = 0; i <= 99; i++) {
-		t.is(parseNumber(i), i);
+		t.expect(parseNumber(i)).toBe(i);
 	}
 });
 
 test("parseNumber() -> should return 99 when the value is 0xff", (t) => {
-	t.is(parseNumber(0xff), 99);
+	t.expect(parseNumber(0xff)).toBe(99);
 });
 
 test("parseNumber() -> should return undefined otherwise", (t) => {
-	t.is(parseNumber(0x80), undefined);
+	t.expect(parseNumber(0x80)).toBeUndefined();
 });
 
 test("parseMaybeNumber() -> should return the value when it is in the range 0..99", (t) => {
 	for (let i = 0; i <= 99; i++) {
-		t.is(parseMaybeNumber(i), i);
+		t.expect(parseMaybeNumber(i)).toBe(i);
 	}
 });
 
 test("parseMaybeNumber() -> should return 99 when the value is 0xff", (t) => {
-	t.is(parseMaybeNumber(0xff), 99);
+	t.expect(parseMaybeNumber(0xff)).toBe(99);
 });
 
 test("parseMaybeNumber() -> should return unknown when the value is 0xfe", (t) => {
-	t.is(parseMaybeNumber(0xfe), UNKNOWN_STATE);
+	t.expect(parseMaybeNumber(0xfe)).toBe(UNKNOWN_STATE);
 });
 
 test("parseMaybeNumber() -> should return undefined otherwise", (t) => {
-	t.is(parseMaybeNumber(0x80), undefined);
+	t.expect(parseMaybeNumber(0x80)).toBeUndefined();
 });
 
 test("parseFloatWithScale() -> should correctly extract the scale", (t) => {
@@ -85,7 +85,7 @@ test("parseFloatWithScale() -> should correctly extract the scale", (t) => {
 		{ payload: Uint8Array.from([0b00011001, 0]), expected: 0b11 },
 	];
 	for (const { payload, expected } of tests) {
-		t.is(parseFloatWithScale(payload).scale, expected);
+		t.expect(parseFloatWithScale(payload).scale).toBe(expected);
 	}
 });
 
@@ -105,7 +105,7 @@ test("parseFloatWithScale() -> should correctly extract the value", (t) => {
 	for (const { payload, expected, numDigits } of tests) {
 		const diff = Math.abs(expected - parseFloatWithScale(payload).value);
 		const allowed = 10 ** -numDigits / 2;
-		t.true(diff < allowed);
+		t.expect(diff < allowed).toBe(true);
 	}
 });
 
@@ -133,7 +133,9 @@ test("encodeFloatWithScale() -> should correctly encode the scale", (t) => {
 		},
 	];
 	for (const { scale, value, expected } of tests) {
-		t.true(encodeFloatWithScale(value, scale).equals(expected));
+		t.expect(encodeFloatWithScale(value, scale).equals(expected)).toBe(
+			true,
+		);
 	}
 });
 
@@ -147,7 +149,7 @@ test("encodeFloatWithScale() -> should correctly determine the minimum necessary
 		{ value: 32768, expected: 4 },
 	];
 	for (const { value, expected } of tests) {
-		t.is(encodeFloatWithScale(value, 0).length, expected + 1);
+		t.expect(encodeFloatWithScale(value, 0).length).toBe(expected + 1);
 	}
 });
 
@@ -165,7 +167,7 @@ test("encodeFloatWithScale() -> should correctly detect the necessary precision 
 		},
 	];
 	for (const { scale, value, expected } of tests) {
-		t.deepEqual(encodeFloatWithScale(value, scale), expected);
+		t.expect(encodeFloatWithScale(value, scale)).toStrictEqual(expected);
 	}
 });
 
@@ -192,7 +194,9 @@ test("encodeFloatWithScale() -> should use the specified override options", (t) 
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {
-		t.deepEqual(encodeFloatWithScale(value, scale, override), expected);
+		t.expect(encodeFloatWithScale(value, scale, override)).toStrictEqual(
+			expected,
+		);
 	}
 });
 
@@ -206,15 +210,17 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 		},
 	];
 	for (const { scale, value, override, expected } of tests) {
-		t.deepEqual(encodeFloatWithScale(value, scale, override), expected);
+		t.expect(encodeFloatWithScale(value, scale, override)).toStrictEqual(
+			expected,
+		);
 	}
 });
 
 test("encodeFloatWithScale() -> should throw when the value cannot be represented in 4 bytes", (t) => {
-	assertZWaveError(t, () => encodeFloatWithScale(0xffffffff, 0), {
+	assertZWaveError(t.expect, () => encodeFloatWithScale(0xffffffff, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
-	assertZWaveError(t, () => encodeFloatWithScale(Number.NaN, 0), {
+	assertZWaveError(t.expect, () => encodeFloatWithScale(Number.NaN, 0), {
 		errorCode: ZWaveErrorCodes.Arithmetic,
 	});
 });
@@ -224,7 +230,7 @@ test("parseBitMask() -> should correctly convert a bit mask into a numeric array
 		{ mask: Uint8Array.from([0b11, 0b110]), expected: [1, 2, 10, 11] },
 	];
 	for (const { mask, expected } of tests) {
-		t.deepEqual(parseBitMask(mask), expected);
+		t.expect(parseBitMask(mask)).toStrictEqual(expected);
 	}
 });
 
@@ -252,7 +258,7 @@ test("parseBitMask() -> should take the 2nd parameter into account when calculat
 		},
 	];
 	for (const { mask, startValue, expected } of tests) {
-		t.deepEqual(parseBitMask(mask, startValue), expected);
+		t.expect(parseBitMask(mask, startValue)).toStrictEqual(expected);
 	}
 });
 
@@ -270,7 +276,7 @@ test("encodeBitMask() -> should correctly convert a numeric array into a bit mas
 		},
 	];
 	for (const { values, max, expected } of tests) {
-		t.deepEqual(encodeBitMask(values, max), expected);
+		t.expect(encodeBitMask(values, max)).toStrictEqual(expected);
 	}
 });
 
@@ -280,7 +286,7 @@ test("encodeBitMask() -> should respect the maxValue argument for determining th
 		{ values: [1, 2, 10, 11], max: 3, expectedLength: 1 },
 	];
 	for (const { values, max, expectedLength } of tests) {
-		t.is(encodeBitMask(values, max).length, expectedLength);
+		t.expect(encodeBitMask(values, max).length).toBe(expectedLength);
 	}
 });
 
@@ -300,34 +306,36 @@ test("encodeBitMask() -> should respect the startValue too", (t) => {
 		},
 	];
 	for (const { values, max, startValue, expected } of tests) {
-		t.deepEqual(encodeBitMask(values, max, startValue), expected);
+		t.expect(encodeBitMask(values, max, startValue)).toStrictEqual(
+			expected,
+		);
 	}
 });
 
 test("getMinIntegerSize(signed) -> should return 1 for numbers from -128 to 127", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, true), 1);
+		t.expect(getMinIntegerSize(val, true)).toBe(1);
 	}
 	[-128, -1, 0, 1, 127].forEach(test);
 });
 
 test("getMinIntegerSize(signed) -> should return 2 for numbers from -32768 to 32767", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, true), 2);
+		t.expect(getMinIntegerSize(val, true)).toBe(2);
 	}
 	[-32768, -129, 128, 32767].forEach(test);
 });
 
 test("getMinIntegerSize(signed) -> should return 4 for numbers from -2147483648 to 2147483647", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, true), 4);
+		t.expect(getMinIntegerSize(val, true)).toBe(4);
 	}
 	[-2147483648, -32769, 32768, 2147483647].forEach(test);
 });
 
 test("getMinIntegerSize(signed) -> should return undefined for larger and smaller numbers", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, true), undefined);
+		t.expect(getMinIntegerSize(val, true)).toBeUndefined();
 	}
 	[
 		Number.MIN_SAFE_INTEGER,
@@ -339,28 +347,28 @@ test("getMinIntegerSize(signed) -> should return undefined for larger and smalle
 
 test("getMinIntegerSize(unsigned) -> should return 1 for numbers from 0 to 255", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, false), 1);
+		t.expect(getMinIntegerSize(val, false)).toBe(1);
 	}
 	[0, 1, 254, 255].forEach(test);
 });
 
 test("getMinIntegerSize(unsigned) -> should return 2 for numbers from 256 to 65535", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, false), 2);
+		t.expect(getMinIntegerSize(val, false)).toBe(2);
 	}
 	[256, 257, 65534, 65535].forEach(test);
 });
 
 test("getMinIntegerSize(unsigned) -> should return 4 for numbers from 65536 to 4294967295", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, false), 4);
+		t.expect(getMinIntegerSize(val, false)).toBe(4);
 	}
 	[65536, 65537, 4294967294, 4294967295].forEach(test);
 });
 
 test("getMinIntegerSize(unsigned) -> should return undefined for larger and smaller numbers", (t) => {
 	function test(val: number) {
-		t.is(getMinIntegerSize(val, false), undefined);
+		t.expect(getMinIntegerSize(val, false)).toBeUndefined();
 	}
 	[Number.MIN_SAFE_INTEGER, -1, 4294967296, Number.MAX_SAFE_INTEGER].forEach(
 		test,
@@ -381,7 +389,7 @@ test("parsePartial() -> should work correctly for unsigned partials", (t) => {
 		},
 	];
 	for (const { value, bitMask, expected } of tests) {
-		t.is(parsePartial(value, bitMask, false), expected);
+		t.expect(parsePartial(value, bitMask, false)).toBe(expected);
 	}
 });
 
@@ -409,7 +417,7 @@ test("parsePartial() -> should work correctly for signed partials", (t) => {
 		},
 	];
 	for (const { value, bitMask, expected } of tests) {
-		t.is(parsePartial(value, bitMask, true), expected);
+		t.expect(parsePartial(value, bitMask, true)).toBe(expected);
 	}
 });
 
@@ -436,6 +444,8 @@ test("encodePartial() -> should work correctly for signed and unsigned partials"
 		},
 	];
 	for (const { fullValue, partialValue, bitMask, expected } of tests) {
-		t.is(encodePartial(fullValue, partialValue, bitMask), expected);
+		t.expect(encodePartial(fullValue, partialValue, bitMask)).toBe(
+			expected,
+		);
 	}
 });

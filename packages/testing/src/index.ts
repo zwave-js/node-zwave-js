@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
-export * from "./CCSpecificCapabilities";
-export * from "./MockController";
-export { getDefaultSupportedFunctionTypes } from "./MockControllerCapabilities";
-export * from "./MockNode";
+export * from "./CCSpecificCapabilities.js";
+export * from "./MockController.js";
 export {
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "./MockControllerCapabilities.js";
+export * from "./MockNode.js";
+export {
+	type MockEndpointCapabilities,
+	type MockNodeCapabilities,
 	ccCaps,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
-} from "./MockNodeCapabilities";
-export type { PartialCCCapabilities } from "./MockNodeCapabilities";
-export * from "./MockZWaveFrame";
+} from "./MockNodeCapabilities.js";
+export type { PartialCCCapabilities } from "./MockNodeCapabilities.js";
+export * from "./MockZWaveFrame.js";

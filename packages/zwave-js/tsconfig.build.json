@@ -3,7 +3,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build",
+		"outDir": "build/esm",
 		"typeRoots": [
 			"src/lib/@types",
 			"node_modules/@types",
@@ -45,5 +45,5 @@
 		}
 	],
 	"include": ["src/**/*.ts"],
-	"exclude": ["src/lib/test", "src/**/*.test.ts", "src/**/*.test.ava.ts"]
+	"exclude": ["src/lib/test", "src/**/*.test.ts"]
 }

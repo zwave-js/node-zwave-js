@@ -1,10 +1,10 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { createHash } from "node:crypto";
-import { Protocols } from "../capabilities/Protocols";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { parseBitMask } from "../values/Primitive";
-import { dskToString } from "./DSK";
-import { SecurityClass } from "./SecurityClass";
+import { Protocols } from "../capabilities/Protocols.js";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { parseBitMask } from "../values/Primitive.js";
+import { dskToString } from "./DSK.js";
+import { SecurityClass } from "./SecurityClass.js";
 
 function readNumber(qr: string, offset: number, length: number): number {
 	return parseInt(qr.slice(offset, offset + length), 10);

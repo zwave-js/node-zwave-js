@@ -189,7 +189,7 @@ type CorruptedFrame = {
 
 	protocolDataRate: ZnifferProtocolDataRate;
 
-	payload: Buffer;
+	payload: Uint8Array;
 };
 ```
 
@@ -235,7 +235,7 @@ type ZWaveFrame =
 				type: ZWaveFrameType.Singlecast;
 				destinationNodeId: number;
 				ackRequested: boolean;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			}
 			// Only present in routed frames:
 			& AllOrNone<
@@ -274,13 +274,13 @@ type ZWaveFrame =
 			type: ZWaveFrameType.Broadcast;
 			destinationNodeId: typeof NODE_ID_BROADCAST;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Multicast frame, not routed
 			type: ZWaveFrameType.Multicast;
 			destinationNodeIds: number[];
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Ack frame, not routed
@@ -291,7 +291,7 @@ type ZWaveFrame =
 			// Different kind of explorer frames
 			& ({
 				type: ZWaveFrameType.ExplorerNormal;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			} | {
 				type: ZWaveFrameType.ExplorerSearchResult;
 				searchingNodeId: number;
@@ -301,7 +301,7 @@ type ZWaveFrame =
 			} | {
 				type: ZWaveFrameType.ExplorerInclusionRequest;
 				networkHomeId: number;
-				payload: Buffer | CommandClass;
+				payload: Uint8Array | CommandClass;
 			})
 			// Common fields for all explorer frames
 			& {
@@ -344,7 +344,7 @@ type LongRangeFrame =
 			// Singlecast frame
 			type: LongRangeFrameType.Singlecast;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Broadcast frame. This is technically a singlecast frame,
@@ -352,13 +352,13 @@ type LongRangeFrame =
 			type: LongRangeFrameType.Broadcast;
 			destinationNodeId: typeof NODE_ID_BROADCAST_LR;
 			ackRequested: boolean;
-			payload: Buffer | CommandClass;
+			payload: Uint8Array | CommandClass;
 		}
 		| {
 			// Acknowledgement frame
 			type: LongRangeFrameType.Ack;
 			incomingRSSI: RSSI;
-			payload: Buffer;
+			payload: Uint8Array;
 		}
 	);
 ```

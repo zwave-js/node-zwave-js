@@ -6,8 +6,8 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior, ccCaps } from "@zwave-js/testing";
-import { defaultCapabilities } from "../../node/mockCCBehaviors/UserCode";
-import { integrationTest } from "../integrationTestSuite";
+import { defaultCapabilities } from "../../node/mockCCBehaviors/UserCode.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When a node sends a Binary Sensor Report with type 0xFF (Any), use the first supported sensor instead",
@@ -57,12 +57,12 @@ integrationTest(
 			const anyValue = node.getValue(
 				BinarySensorCCValues.state(BinarySensorType.Any).id,
 			);
-			t.is(anyValue, undefined);
+			t.expect(anyValue).toBeUndefined();
 
 			const motionValue = node.getValue(
 				BinarySensorCCValues.state(BinarySensorType.Motion).id,
 			);
-			t.is(motionValue, true);
+			t.expect(motionValue).toBe(true);
 		},
 	},
 );

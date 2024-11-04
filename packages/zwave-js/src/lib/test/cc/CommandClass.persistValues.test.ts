@@ -4,71 +4,78 @@ import { CentralSceneCCNotification } from "@zwave-js/cc/CentralSceneCC";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
+import { afterEach, beforeEach, test as baseTest } from "vitest";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
+import { ZWaveNode } from "../../node/Node.js";
 
-interface TestContext {
-	driver: Driver;
-	node2: ZWaveNode;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		node2: ZWaveNode;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-test.before(async (t) => {
-	t.timeout(30000);
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
 
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
+			const node2 = new ZWaveNode(2, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node2.id,
+				node2,
 			);
-			t.context.controller = controller;
+			context.node2 = node2;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
+});
 
+beforeEach<LocalTestContext>(({ context, expect }) => {
+	const { driver } = context;
 	const node2 = new ZWaveNode(2, driver);
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 		node2.id,
 		node2,
 	);
-	t.context.node2 = node2;
+	context.node2 = node2;
 });
 
-test.after.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-test.beforeEach((t) => {
-	const { driver } = t.context;
-	const node2 = new ZWaveNode(2, driver);
-	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-		node2.id,
-		node2,
-	);
-	t.context.node2 = node2;
-});
-
-test.afterEach((t) => {
-	const { node2, driver } = t.context;
+afterEach<LocalTestContext>(({ context, expect }) => {
+	const { node2, driver } = context;
 	node2.destroy();
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
 		node2.id,
 	);
 });
 
-test(`persistValues() should not update "interviewComplete" in the value DB`, (t) => {
-	const { node2, driver } = t.context;
+test(`persistValues() should not update "interviewComplete" in the value DB`, ({ context, expect }) => {
+	const { node2, driver } = context;
 
 	// Repro for #383
 	const cc = new BasicCCSet({
@@ -85,11 +92,11 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 		.getCalls()
 		.map((call) => call.args[0])
 		.map(({ property }) => property);
-	t.false(properties.includes("interviewComplete"));
+	expect(properties.includes("interviewComplete")).toBe(false);
 });
 
-test(`persistValues() should not store values marked as "events" (non-stateful)`, async (t) => {
-	const { node2, driver } = t.context;
+test(`persistValues() should not store values marked as "events" (non-stateful)`, async ({ context, expect }) => {
+	const { node2, driver } = context;
 
 	const cc = new CentralSceneCCNotification({
 		nodeId: node2.id,
@@ -108,8 +115,9 @@ test(`persistValues() should not store values marked as "events" (non-stateful)`
 
 	sinon.assert.notCalled(spyA);
 	sinon.assert.called(spyN);
-	t.is(spyN.getCall(0).args[1].value, CentralSceneKeys.KeyPressed);
+	expect(spyN.getCall(0).args[1].value).toBe(CentralSceneKeys.KeyPressed);
 
 	// and not persist the value in the DB
-	t.is(node2.valueDB.getValues(CommandClasses["Central Scene"]).length, 0);
+	expect(node2.valueDB.getValues(CommandClasses["Central Scene"]).length)
+		.toBe(0);
 });

@@ -1,14 +1,14 @@
-import { isObject } from "alcalzone-shared/typeguards";
-import { CommandClasses } from "../capabilities/CommandClasses";
-import { InterviewStage } from "../consts/InterviewStage";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
+import { CommandClasses } from "../capabilities/CommandClasses.js";
+import { InterviewStage } from "../consts/InterviewStage.js";
 import type {
 	ValueAddedArgs,
 	ValueID,
 	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
-} from "../values/_Types";
-import { type ZWaveLogContainer, ZWaveLoggerBase, tagify } from "./shared";
+} from "../values/_Types.js";
+import { type ZWaveLogContainer, ZWaveLoggerBase, tagify } from "./shared.js";
 import {
 	type DataDirection,
 	type LogContext,
@@ -16,7 +16,7 @@ import {
 	type ValueLogContext,
 	getDirectionPrefix,
 	getNodeTag,
-} from "./shared_safe";
+} from "./shared_safe.js";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";

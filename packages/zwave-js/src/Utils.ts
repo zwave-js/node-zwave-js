@@ -22,13 +22,13 @@ export {
 	getEnumMemberName,
 	num2hex,
 } from "@zwave-js/shared/safe";
-export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors";
-export { driverPresets } from "./lib/driver/ZWaveOptions";
+export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors.js";
+export { driverPresets } from "./lib/driver/ZWaveOptions.js";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,
 	formatRouteHealthCheckRound,
 	formatRouteHealthCheckSummary,
 	healthCheckRatingToWord,
-} from "./lib/node/HealthCheck";
-export { createDefaultBehaviors as createDefaultMockNodeBehaviors } from "./lib/node/MockNodeBehaviors";
+} from "./lib/node/HealthCheck.js";
+export { createDefaultBehaviors as createDefaultMockNodeBehaviors } from "./lib/node/MockNodeBehaviors.js";

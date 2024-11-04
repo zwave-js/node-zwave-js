@@ -17,10 +17,10 @@ export {
 	isCommandRequest,
 	isMessageWithCC,
 } from "@zwave-js/serial/serialapi";
-export { Driver, libName, libVersion } from "./lib/driver/Driver";
+export { Driver, libName, libVersion } from "./lib/driver/Driver.js";
 export type {
 	EditableZWaveOptions,
 	PartialZWaveOptions,
 	ZWaveOptions,
-} from "./lib/driver/ZWaveOptions";
-export type { DriverLogContext } from "./lib/log/Driver";
+} from "./lib/driver/ZWaveOptions.js";
+export type { DriverLogContext } from "./lib/log/Driver.js";

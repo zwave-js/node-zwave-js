@@ -30,12 +30,12 @@ import {
 	pick,
 	staticExtends,
 } from "@zwave-js/shared";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	ExplorerFrameCommand,
 	LongRangeFrameType,
 	ZWaveFrameType,
-} from "./_Types";
+} from "./_Types.js";
 
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {

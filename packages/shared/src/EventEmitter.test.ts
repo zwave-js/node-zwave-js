@@ -1,8 +1,8 @@
-import test from "ava";
 import { EventEmitter } from "node:events";
-import { TypedEventEmitter } from "./EventEmitter";
-import { AllOf, Mixin } from "./inheritance";
-import type { Constructor } from "./types";
+import { test } from "vitest";
+import { TypedEventEmitter } from "./EventEmitter.js";
+import { AllOf, Mixin } from "./inheritance.js";
+import type { Constructor } from "./types.js";
 
 interface TestEvents {
 	test1: (arg1: number) => void;
@@ -30,10 +30,10 @@ interface TestEvents {
 	test("Type-Safe EventEmitter as Mixin works", (t) => {
 		return new Promise<void>((resolve) => {
 			const testClass = new Test();
-			t.is(testClass.baseProp, "base");
-			t.is(testClass.baseProp2, "base");
+			t.expect(testClass.baseProp).toBe("base");
+			t.expect(testClass.baseProp2).toBe("base");
 			testClass.on("test1", (arg1) => {
-				t.is(arg1, 1);
+				t.expect(arg1).toBe(1);
 				resolve();
 			});
 			testClass.emit1();
@@ -52,7 +52,7 @@ interface TestEvents {
 		return new Promise<void>((resolve) => {
 			const testClass = new Test();
 			testClass.on("test1", (arg1) => {
-				t.is(arg1, 1);
+				t.expect(arg1).toBe(1);
 				resolve();
 			});
 			testClass.emit1();
@@ -79,11 +79,11 @@ interface TestEvents {
 
 	test("Type-Safe EventEmitter (with multi-inheritance) works", async (t) => {
 		const testClass = new Test();
-		t.is(testClass.baseProp, "base");
-		t.is(testClass.baseProp2, "base");
+		t.expect(testClass.baseProp).toBe("base");
+		t.expect(testClass.baseProp2).toBe("base");
 		return new Promise<void>((resolve) => {
 			testClass.on("test1", (arg1) => {
-				t.is(arg1, 1);
+				t.expect(arg1).toBe(1);
 				resolve();
 			});
 			testClass.emit1();

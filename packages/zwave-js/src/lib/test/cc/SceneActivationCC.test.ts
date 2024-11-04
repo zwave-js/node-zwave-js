@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -29,7 +29,7 @@ test("the Set command (without Duration) should serialize correctly", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command (with Duration) should serialize correctly", (t) => {
@@ -45,7 +45,7 @@ test("the Set command (with Duration) should serialize correctly", (t) => {
 			0x80, // 1 minute
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should be deserialized correctly", (t) => {
@@ -60,10 +60,10 @@ test("the Set command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as SceneActivationCCSet;
-	t.is(cc.constructor, SceneActivationCCSet);
+	t.expect(cc.constructor).toBe(SceneActivationCCSet);
 
-	t.is(cc.sceneId, 15);
-	t.deepEqual(cc.dimmingDuration, new Duration(0, "seconds"));
+	t.expect(cc.sceneId).toBe(15);
+	t.expect(cc.dimmingDuration).toStrictEqual(new Duration(0, "seconds"));
 });
 
 test("deserializing an unsupported command should return an unspecified version of SceneActivationCC", (t) => {
@@ -74,7 +74,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as SceneActivationCC;
-	t.is(cc.constructor, SceneActivationCC);
+	t.expect(cc.constructor).toBe(SceneActivationCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

@@ -1,189 +1,156 @@
-import { BasicCCValues } from "@zwave-js/cc/BasicCC";
-import { MessageHeaders } from "@zwave-js/serial";
-import type { MockSerialPort } from "@zwave-js/serial/mock";
-import { Bytes, type ThrowingMap, createThrowingMap } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
-import ava, { type TestFn } from "ava";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
-import { isFunctionSupported_NoBridge } from "./fixtures";
+import { BasicCCSet, BasicCCValues } from "@zwave-js/cc/BasicCC";
+import { FunctionType, SendDataResponse } from "@zwave-js/serial";
+import {
+	type MockControllerBehavior,
+	createMockZWaveRequestFrame,
+} from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
-}
-
-const test = ava as TestFn<TestContext>;
-
-test.beforeEach(async (t) => {
-	t.timeout(5000);
-
-	const { driver, serialport } = await createAndStartDriver();
-
-	driver["_controller"] = {
-		ownNodeId: 1,
-		isFunctionSupported: isFunctionSupported_NoBridge,
-		nodes: createThrowingMap(),
-		incrementStatistics: () => {},
-		removeAllListeners: () => {},
-	} as any;
-
-	t.context = { driver, serialport };
-});
-
-test.afterEach.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-process.env.LOGLEVEL = "debug";
-
-test.serial(
+integrationTest(
 	"unsolicited commands which need special handling are passed to Node.handleCommand",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	{
 		// Repro from #4467
 
-		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			2,
-			node2,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+		// debug: true,
 
-		node2["isListening"] = true;
-		node2["isFrequentListening"] = false;
-		node2.markAsAlive();
+		additionalDriverOptions: {
+			testingHooks: {
+				skipBootloaderCheck: true,
+				skipNodeInterview: true,
+			},
+		},
 
-		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		async testBody(t, driver, node, mockController, mockNode) {
+			const value = BasicCCValues.currentValue;
+			t.expect(node.getValue(value.id)).toBeUndefined();
 
-		const ACK = Uint8Array.from([MessageHeaders.ACK]);
-		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
-		// « [Node 002] [REQ] [ApplicationCommand]
-		//   └─[BasicCCSet]
-		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
-		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+			const cc = new BasicCCSet({
+				nodeId: node.id,
+				targetValue: 5,
+			});
+			mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+
+			await new Promise<void>((resolve) => {
+				node.on("value added", (node, args) => {
+					if (value.is(args) && args.newValue === 5) resolve();
+				});
+			});
+		},
 	},
 );
 
-test.serial(
+integrationTest(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller response",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	{
 		// Repro from #4467
 
-		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			2,
-			node2,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+		// debug: true,
 
-		node2["isListening"] = true;
-		node2["isFrequentListening"] = false;
-		node2.markAsAlive();
+		additionalDriverOptions: {
+			testingHooks: {
+				skipBootloaderCheck: true,
+				skipNodeInterview: true,
+			},
+		},
 
-		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		async customSetup(driver, mockController, mockNode) {
+			const noSendDataResponse: MockControllerBehavior = {
+				onHostMessage(controller, msg) {
+					if (msg.functionType === FunctionType.SendData) {
+						// Ignore
+						return true;
+					}
+				},
+			};
+			mockController.defineBehavior(noSendDataResponse);
+		},
 
-		const ACK = Uint8Array.from([MessageHeaders.ACK]);
+		async testBody(t, driver, node, mockController, mockNode) {
+			const value = BasicCCValues.currentValue;
+			t.expect(node.getValue(value.id)).toBeUndefined();
 
-		// Step 1: Send a ping and receive the response
-		node2.ping();
-		await wait(1);
-		// » [Node 002] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      1
-		//   └─[NoOperationCC]
-		t.deepEqual(
-			serialport.lastWrite,
-			Bytes.from("010800130201002501c3", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
+			node.ping();
 
-		await wait(10);
+			const cc = new BasicCCSet({
+				nodeId: node.id,
+				targetValue: 5,
+			});
+			mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
 
-		// We're now waiting for a response. The next command must not get lost
-
-		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
-		// « [Node 002] [REQ] [ApplicationCommand]
-		//   └─[BasicCCSet]
-		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
-		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+			await new Promise<void>((resolve) => {
+				node.on("value added", (node, args) => {
+					if (value.is(args) && args.newValue === 5) resolve();
+				});
+			});
+		},
 	},
 );
 
-test.serial(
+integrationTest(
 	"unsolicited commands are passed to Node.handleCommand while waiting for a controller callback",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	{
 		// Repro from #4467
 
-		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			2,
-			node2,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+		// debug: true,
 
-		node2["isListening"] = true;
-		node2["isFrequentListening"] = false;
-		node2.markAsAlive();
+		additionalDriverOptions: {
+			testingHooks: {
+				skipBootloaderCheck: true,
+				skipNodeInterview: true,
+			},
+		},
 
-		const valueId = BasicCCValues.currentValue.id;
-		t.is(node2.getValue(valueId), undefined);
+		async customSetup(driver, mockController, mockNode) {
+			const noSendDataResponse: MockControllerBehavior = {
+				async onHostMessage(controller, msg) {
+					if (msg.functionType === FunctionType.SendData) {
+						// Notify the host that the message was sent
 
-		const ACK = Uint8Array.from([MessageHeaders.ACK]);
+						const res = new SendDataResponse({
+							wasSent: true,
+						});
+						await controller.sendMessageToHost(res);
 
-		// Step 1: Send a ping and receive the response
-		node2.ping();
-		await wait(1);
-		// » [Node 002] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      1
-		//   └─[NoOperationCC]
-		t.deepEqual(
-			serialport.lastWrite,
-			Bytes.from("010800130201002501c3", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
+						// But do not send a callback
+						return true;
+					}
+				},
+			};
+			mockController.defineBehavior(noSendDataResponse);
+		},
 
-		await wait(10);
+		async testBody(t, driver, node, mockController, mockNode) {
+			const value = BasicCCValues.currentValue;
+			t.expect(node.getValue(value.id)).toBeUndefined();
 
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
-		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
+			node.ping();
 
-		await wait(10);
+			await wait(50);
 
-		// We're now waiting for a callback. The next command must not get lost
+			const cc = new BasicCCSet({
+				nodeId: node.id,
+				targetValue: 5,
+			});
+			mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
 
-		serialport.receiveData(Bytes.from("01090004000203200105d7", "hex"));
-		// « [Node 002] [REQ] [ApplicationCommand]
-		//   └─[BasicCCSet]
-		//       target value: 5
-		t.deepEqual(serialport.lastWrite, ACK);
-		await wait(10);
-		t.deepEqual(node2.getValue(valueId), 5);
+			await new Promise<void>((resolve) => {
+				node.on("value added", (node, args) => {
+					if (value.is(args) && args.newValue === 5) resolve();
+				});
+			});
+		},
 	},
 );

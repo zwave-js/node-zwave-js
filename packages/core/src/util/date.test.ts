@@ -1,15 +1,17 @@
-import test from "ava";
-import { formatDate, getDSTInfo } from "./date";
+import { test } from "vitest";
+import { formatDate, getDSTInfo } from "./date.js";
 
 test("formatDate() should work correctly", (t) => {
-	t.is(formatDate(new Date(2021, 5, 15), "YYYY-MM-DD"), "2021-06-15");
+	t.expect(formatDate(new Date(2021, 5, 15), "YYYY-MM-DD")).toBe(
+		"2021-06-15",
+	);
 });
 
 if (Intl.DateTimeFormat().resolvedOptions().timeZone === "Europe/Berlin") {
 	test("getDSTInfo() should work correctly", (t) => {
 		let dstInfo = getDSTInfo(new Date("2021-05-15T01:00:00.000Z"));
 
-		t.deepEqual(dstInfo, {
+		t.expect(dstInfo).toStrictEqual({
 			dstOffset: 120,
 			endDate: new Date("2021-10-31T01:00:00.000Z"),
 			standardOffset: 60,
@@ -17,7 +19,7 @@ if (Intl.DateTimeFormat().resolvedOptions().timeZone === "Europe/Berlin") {
 		});
 
 		dstInfo = getDSTInfo(new Date("2020-11-12T01:00:00.000Z"));
-		t.deepEqual(dstInfo, {
+		t.expect(dstInfo).toStrictEqual({
 			dstOffset: 120,
 			endDate: new Date("2020-10-25T01:00:00.000Z"),
 			standardOffset: 60,

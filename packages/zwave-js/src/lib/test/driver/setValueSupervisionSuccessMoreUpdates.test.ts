@@ -6,9 +6,9 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import sinon from "sinon";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	`Regression test for #4957: Treat Supervision Report with Success but "more updates follow" as final`,
@@ -60,7 +60,7 @@ integrationTest(
 			await wait(500);
 
 			const setpoint = node.getValue(setpointValueId);
-			t.is(setpoint, 20);
+			t.expect(setpoint).toBe(20);
 
 			// And make sure the value event handlers are called
 			sinon.assert.calledWith(

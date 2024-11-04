@@ -9,10 +9,10 @@ export type {
 	NVMJSONNode,
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
-} from "./convert";
-export type { NVM3EraseOptions, NVM3Meta } from "./lib/NVM3";
-export type { NVM500EraseOptions, NVM500Info } from "./lib/NVM500";
-export { NVMAccess } from "./lib/common/definitions";
+} from "./convert.js";
+export type { NVM3EraseOptions, NVM3Meta } from "./lib/NVM3.js";
+export type { NVM500EraseOptions, NVM500Info } from "./lib/NVM500.js";
+export { NVMAccess } from "./lib/common/definitions.js";
 export type {
 	ControllerNVMProperty,
 	ControllerNVMPropertyToDataType,
@@ -25,15 +25,15 @@ export type {
 	NVMPropertyToDataType,
 	NodeNVMProperty,
 	NodeNVMPropertyToDataType,
-} from "./lib/common/definitions";
+} from "./lib/common/definitions.js";
 export {
 	FragmentType,
 	ObjectType,
 	PageStatus,
 	PageWriteSize,
-} from "./lib/nvm3/consts";
-export type { NVM3Object } from "./lib/nvm3/object";
-export type { NVM3Page, NVM3PageHeader } from "./lib/nvm3/page";
+} from "./lib/nvm3/consts.js";
+export type { NVM3Object } from "./lib/nvm3/object.js";
+export type { NVM3Page, NVM3PageHeader } from "./lib/nvm3/page.js";
 export type {
 	NVM500JSON,
 	NVM500JSONController,
@@ -42,4 +42,4 @@ export type {
 	NVM500JSONNodeWithInfo,
 	NVM500JSONVirtualNode,
 	NVM500Meta,
-} from "./nvm500/NVMParser";
+} from "./nvm500/NVMParser.js";

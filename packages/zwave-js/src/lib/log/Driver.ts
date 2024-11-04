@@ -17,10 +17,10 @@ import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
 import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
-import { type TransactionQueue } from "../driver/Queue";
-import type { Transaction } from "../driver/Transaction";
-import { NodeStatus } from "../node/_Types";
+import type { Driver } from "../driver/Driver.js";
+import { type TransactionQueue } from "../driver/Queue.js";
+import type { Transaction } from "../driver/Transaction.js";
+import { NodeStatus } from "../node/_Types.js";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";

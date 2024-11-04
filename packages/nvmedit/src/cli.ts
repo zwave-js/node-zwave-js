@@ -1,8 +1,9 @@
 import { readJSON } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import fs from "node:fs/promises";
 import "reflect-metadata";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import {
 	json500To700,
 	json700To500,
@@ -11,16 +12,17 @@ import {
 	migrateNVM,
 	nvm500ToJSON,
 	nvmToJSON,
-} from "./convert";
-import "./index";
+} from "./convert.js";
 
-void yargs
+const yargsInstance = yargs(hideBin(process.argv));
+
+void yargsInstance
 	.env("NVMEDIT")
 	.strict()
 	.usage("Z-Wave JS NVM converter utility\n\nUsage: $0 [options]")
 	.alias("h", "help")
 	.alias("v", "version")
-	.wrap(Math.min(100, yargs.terminalWidth()))
+	.wrap(Math.min(100, yargsInstance.terminalWidth()))
 	.options({
 		verbose: {
 			alias: "vv",

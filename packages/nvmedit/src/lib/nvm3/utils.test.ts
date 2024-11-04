@@ -1,5 +1,5 @@
-import test from "ava";
-import { computeBergerCode } from "./utils";
+import { test } from "vitest";
+import { computeBergerCode } from "./utils.js";
 
 {
 	const cases = [
@@ -27,7 +27,7 @@ import { computeBergerCode } from "./utils";
 
 	for (const { input, numBits, result } of cases) {
 		test(`computeBergerCode() -> returns ${result} for input ${input} with ${numBits} bits`, (t) => {
-			t.is(computeBergerCode(input, numBits), result);
+			t.expect(computeBergerCode(input, numBits)).toBe(result);
 		});
 	}
 }

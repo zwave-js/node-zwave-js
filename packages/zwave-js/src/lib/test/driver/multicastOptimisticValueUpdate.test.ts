@@ -1,10 +1,27 @@
 import { BinarySwitchCCSet, BinarySwitchCCValues } from "@zwave-js/cc";
 import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
-import { MockZWaveFrameType, ccCaps } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuiteMulti";
+import { FunctionType } from "@zwave-js/serial";
+import {
+	type MockControllerCapabilities,
+	MockZWaveFrameType,
+	ccCaps,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 // Regression test for #5844
+
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
 
 integrationTest("multicast setValue: do optimistic value update after ACK", {
 	// debug: true,
@@ -12,6 +29,8 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 	// 	__dirname,
 	// 	"__fixtures/supervision_binary_switch",
 	// ),
+
+	controllerCapabilities: controllerCapabilitiesNoBridge,
 
 	nodeCapabilities: [
 		{
@@ -43,16 +62,18 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 	testBody: async (t, driver, nodes, mockController, mockNodes) => {
 		const [node2, node3] = nodes;
 
-		t.is(node2.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
-		t.is(node3.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
-		t.is(
+		t.expect(node2.getValue(BinarySwitchCCValues.targetValue.id)).toBe(
+			NOT_KNOWN,
+		);
+		t.expect(node3.getValue(BinarySwitchCCValues.targetValue.id)).toBe(
+			NOT_KNOWN,
+		);
+		t.expect(
 			node2.getValue(BinarySwitchCCValues.currentValue.id),
-			UNKNOWN_STATE,
-		);
-		t.is(
+		).toBe(UNKNOWN_STATE);
+		t.expect(
 			node3.getValue(BinarySwitchCCValues.currentValue.id),
-			UNKNOWN_STATE,
-		);
+		).toBe(UNKNOWN_STATE);
 
 		const mcGroup = driver.controller.getMulticastGroup([2, 3]);
 
@@ -72,7 +93,11 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 
 		await wait(100);
 
-		t.is(node2.getValue(BinarySwitchCCValues.currentValue.id), true);
-		t.is(node3.getValue(BinarySwitchCCValues.currentValue.id), true);
+		t.expect(node2.getValue(BinarySwitchCCValues.currentValue.id)).toBe(
+			true,
+		);
+		t.expect(node3.getValue(BinarySwitchCCValues.currentValue.id)).toBe(
+			true,
+		);
 	},
 });

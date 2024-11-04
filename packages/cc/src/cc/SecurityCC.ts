@@ -29,25 +29,25 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { randomBytes } from "node:crypto";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { SecurityCommand } from "../lib/_Types";
-import { CRC16CC } from "./CRC16CC";
-import { Security2CC } from "./Security2CC";
-import { TransportServiceCC } from "./TransportServiceCC";
+} from "../lib/CommandClassDecorators.js";
+import { SecurityCommand } from "../lib/_Types.js";
+import { CRC16CC } from "./CRC16CC.js";
+import { Security2CC } from "./Security2CC.js";
+import { TransportServiceCC } from "./TransportServiceCC.js";
 
 // @noSetValueAPI This is an encapsulation CC
 

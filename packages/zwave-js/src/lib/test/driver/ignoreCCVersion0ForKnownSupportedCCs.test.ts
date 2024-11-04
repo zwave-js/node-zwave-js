@@ -29,8 +29,8 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // Repro for https://github.com/zwave-js/node-zwave-js/issues/6305
 
@@ -172,7 +172,7 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.true(node.supportsCC(CommandClasses["Security 2"]));
+			t.expect(node.supportsCC(CommandClasses["Security 2"])).toBe(true);
 		},
 	},
 );
@@ -360,7 +360,7 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.true(node.supportsCC(CommandClasses["Security"]));
+			t.expect(node.supportsCC(CommandClasses["Security"])).toBe(true);
 		},
 	},
 );

@@ -318,23 +318,25 @@ Retrieves the firmware update capabilities of a node to decide which options (e.
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateCapabilities = {
-	/** Indicates whether the node's firmware can be upgraded */
-	readonly firmwareUpgradable: false;
-} | {
-	/** Indicates whether the node's firmware can be upgraded */
-	readonly firmwareUpgradable: true;
-	/** An array of firmware targets that can be upgraded */
-	readonly firmwareTargets: readonly number[];
-	/** Indicates whether the node continues to function normally during an upgrade */
-	readonly continuesToFunction: MaybeNotKnown<boolean>;
-	/** Indicates whether the node supports delayed activation of the new firmware */
-	readonly supportsActivation: MaybeNotKnown<boolean>;
-	/** Indicates whether the node supports resuming aborted firmware transfers */
-	readonly supportsResuming: MaybeNotKnown<boolean>;
-	/** Indicates whether the node supports non-secure firmware transfers */
-	readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
-};
+type FirmwareUpdateCapabilities =
+	| {
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: false;
+	}
+	| {
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: true;
+		/** An array of firmware targets that can be upgraded */
+		readonly firmwareTargets: readonly number[];
+		/** Indicates whether the node continues to function normally during an upgrade */
+		readonly continuesToFunction: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports delayed activation of the new firmware */
+		readonly supportsActivation: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports resuming aborted firmware transfers */
+		readonly supportsResuming: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports non-secure firmware transfers */
+		readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
+	};
 ```
 
 ### `updateFirmware`
@@ -356,7 +358,7 @@ This method an array of firmware updates, each of which contains the following p
 
 ```ts
 interface Firmware {
-	data: Buffer;
+	data: Uint8Array;
 	firmwareTarget?: number;
 }
 ```
@@ -856,25 +858,28 @@ This property tracks the current status of the node interview. It contains a val
 ```ts
 enum InterviewStage {
 	/** The interview process hasn't started for this node */
-	None = 0,
+	None,
 	/** The node's protocol information has been queried from the controller */
-	ProtocolInfo = 1,
+	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
-	NodeInfo = 2,
+	NodeInfo,
+
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
-	CommandClasses = 3,
+	CommandClasses,
+
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
-	OverwriteConfig = 4,
+	OverwriteConfig,
+
 	/** The interview process has finished */
-	Complete = 5,
+	Complete,
 }
 ```
 
@@ -949,8 +954,8 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 
 ```ts
 enum ZWavePlusNodeType {
-	Node = 0, // ZWave+ Node
-	IPGateway = 2,
+	Node = 0x00, // ZWave+ Node
+	IPGateway = 0x02, // ZWave+ for IP Gateway
 }
 ```
 
@@ -1401,7 +1406,7 @@ interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	dataType: EntryControlDataTypes;
 	/** A human-readable label for the data type */
 	dataTypeLabel: string;
-	eventData?: Buffer | string;
+	eventData?: Uint8Array | string;
 }
 ```
 
@@ -1502,9 +1507,9 @@ with
 
 ```ts
 enum PowerlevelTestStatus {
-	Failed = 0,
-	Success = 1,
-	"In Progress" = 2,
+	Failed = 0x00,
+	Success = 0x01,
+	"In Progress" = 0x02,
 }
 ```
 

@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -27,7 +27,7 @@ test("the TimeGet command should serialize correctly", (t) => {
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the TimeReport command should be deserialized correctly", (t) => {
@@ -43,11 +43,11 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCCTimeReport;
-	t.is(cc.constructor, TimeCCTimeReport);
+	t.expect(cc.constructor).toBe(TimeCCTimeReport);
 
-	t.is(cc.hour, 14);
-	t.is(cc.minute, 23);
-	t.is(cc.second, 59);
+	t.expect(cc.hour).toBe(14);
+	t.expect(cc.minute).toBe(23);
+	t.expect(cc.second).toBe(59);
 });
 
 test("the DateGet command should serialize correctly", (t) => {
@@ -57,7 +57,7 @@ test("the DateGet command should serialize correctly", (t) => {
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the DateReport command should be deserialized correctly", (t) => {
@@ -74,11 +74,11 @@ test("the DateReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCCDateReport;
-	t.is(cc.constructor, TimeCCDateReport);
+	t.expect(cc.constructor).toBe(TimeCCDateReport);
 
-	t.is(cc.year, 1989);
-	t.is(cc.month, 10);
-	t.is(cc.day, 17);
+	t.expect(cc.year).toBe(1989);
+	t.expect(cc.month).toBe(10);
+	t.expect(cc.day).toBe(17);
 });
 
 test("deserializing an unsupported command should return an unspecified version of TimeCC", (t) => {
@@ -89,7 +89,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCC;
-	t.is(cc.constructor, TimeCC);
+	t.expect(cc.constructor).toBe(TimeCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

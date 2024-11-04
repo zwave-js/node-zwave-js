@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { getErrorMessage } from ".";
+import { getErrorMessage } from "./errors.js";
 
 export async function enumFilesRecursive(
 	rootDir: string,

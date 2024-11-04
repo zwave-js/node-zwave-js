@@ -21,13 +21,13 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -37,9 +37,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { LanguageCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { LanguageCommand } from "../lib/_Types.js";
 
 export const LanguageCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Language, {

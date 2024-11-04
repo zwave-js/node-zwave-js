@@ -1,9 +1,9 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { sum } from "@zwave-js/shared/safe";
-import { NodeIDType } from "../consts";
-import { type BasicDeviceClass } from "../index_safe";
-import { validatePayload } from "../util/misc";
-import { CommandClasses } from "./CommandClasses";
+import { NodeIDType } from "../consts/index.js";
+import { type BasicDeviceClass } from "../index_safe.js";
+import { validatePayload } from "../util/misc.js";
+import { CommandClasses } from "./CommandClasses.js";
 
 export interface ApplicationNodeInformation {
 	genericDeviceClass: number;

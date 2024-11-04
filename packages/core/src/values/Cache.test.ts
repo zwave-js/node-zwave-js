@@ -1,36 +1,36 @@
-import test from "ava";
-import { deserializeCacheValue, serializeCacheValue } from "./Cache";
-import { Duration } from "./Duration";
+import { test } from "vitest";
+import { deserializeCacheValue, serializeCacheValue } from "./Cache.js";
+import { Duration } from "./Duration.js";
 
 test("serializeCacheValue() -> leaves numbers untouched", (t) => {
 	const tests = [1, 2, 6, 7, -1, 0.15];
 	for (const val of tests) {
-		t.is(serializeCacheValue(val), val);
+		t.expect(serializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("serializeCacheValue() -> leaves strings untouched", (t) => {
 	const tests = ["1", "2", "6", "7", "-1", "0.15"];
 	for (const val of tests) {
-		t.is(serializeCacheValue(val), val);
+		t.expect(serializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("serializeCacheValue() -> leaves booleans untouched", (t) => {
-	t.true(serializeCacheValue(true));
+	t.expect(serializeCacheValue(true)).toBe(true);
 });
 
 test("serializeCacheValue() -> leaves arrays untouched", (t) => {
 	const tests = [[], [1, 2, "3"], [false]];
 	for (const val of tests) {
-		t.is(serializeCacheValue(val), val);
+		t.expect(serializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("serializeCacheValue() -> leaves objects untouched", (t) => {
 	const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
 	for (const val of tests) {
-		t.deepEqual(serializeCacheValue(val), val);
+		t.expect(serializeCacheValue(val)).toStrictEqual(val);
 	}
 });
 
@@ -40,7 +40,7 @@ test("serializeCacheValue() -> converts Maps into objects", (t) => {
 		[0, 1],
 	]);
 	const expected = { foo: "bar", 0: 1, $$type$$: "map" };
-	t.deepEqual(serializeCacheValue(input), expected);
+	t.expect(serializeCacheValue(input)).toStrictEqual(expected);
 });
 
 test("serializeCacheValue() -> converts Durations into objects", (t) => {
@@ -50,37 +50,37 @@ test("serializeCacheValue() -> converts Durations into objects", (t) => {
 		value: 2,
 		$$type$$: "duration",
 	};
-	t.deepEqual(serializeCacheValue(input), expected);
+	t.expect(serializeCacheValue(input)).toStrictEqual(expected);
 });
 test("deserializeCacheValue() -> leaves numbers untouched", (t) => {
 	const tests = [1, 2, 6, 7, -1, 0.15];
 	for (const val of tests) {
-		t.is(deserializeCacheValue(val), val);
+		t.expect(deserializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("deserializeCacheValue() -> leaves strings untouched", (t) => {
 	const tests = ["1", "2", "6", "7", "-1", "0.15"];
 	for (const val of tests) {
-		t.is(deserializeCacheValue(val), val);
+		t.expect(deserializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("deserializeCacheValue() -> leaves booleans untouched", (t) => {
-	t.true(deserializeCacheValue(true));
+	t.expect(deserializeCacheValue(true)).toBe(true);
 });
 
 test("deserializeCacheValue() -> leaves arrays untouched", (t) => {
 	const tests = [[], [1, 2, "3"], [false]];
 	for (const val of tests) {
-		t.is(deserializeCacheValue(val), val);
+		t.expect(deserializeCacheValue(val)).toBe(val);
 	}
 });
 
 test("deserializeCacheValue() -> leaves objects untouched", (t) => {
 	const tests = [{}, { foo: "bar", baz: "inga" }, { 0: 1 }];
 	for (const val of tests) {
-		t.deepEqual(deserializeCacheValue(val), val);
+		t.expect(deserializeCacheValue(val)).toStrictEqual(val);
 	}
 });
 
@@ -90,7 +90,7 @@ test("deserializeCacheValue() -> Restores Maps", (t) => {
 		[0, 1],
 		["foo", "bar"],
 	]);
-	t.deepEqual(deserializeCacheValue(input), expected);
+	t.expect(deserializeCacheValue(input)).toStrictEqual(expected);
 });
 
 test("deserializeCacheValue() -> restores Durations", (t) => {
@@ -99,5 +99,5 @@ test("deserializeCacheValue() -> restores Durations", (t) => {
 		unit: "default",
 		$$type$$: "duration",
 	};
-	t.deepEqual(deserializeCacheValue(input), expected);
+	t.expect(deserializeCacheValue(input)).toStrictEqual(expected);
 });

@@ -1,6 +1,6 @@
-import { isArray } from "alcalzone-shared/typeguards";
-import test from "ava";
-import { ConditionalDeviceConfig } from "./DeviceConfig";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { test } from "vitest";
+import { ConditionalDeviceConfig } from "./DeviceConfig.js";
 
 test("parses a simple device config", (t) => {
 	const json = {
@@ -22,10 +22,10 @@ test("parses a simple device config", (t) => {
 
 	const condConfig = new ConditionalDeviceConfig("test.json", true, json);
 	// Ensure that the config is parsed correctly
-	t.is(condConfig.manufacturer, "Silicon Labs");
-	t.is(condConfig.label, "ZST10-700");
-	t.is(condConfig.description, "700 Series-based Controller");
-	t.deepEqual(condConfig.firmwareVersion, {
+	t.expect(condConfig.manufacturer).toBe("Silicon Labs");
+	t.expect(condConfig.label).toBe("ZST10-700");
+	t.expect(condConfig.description).toBe("700 Series-based Controller");
+	t.expect(condConfig.firmwareVersion).toStrictEqual({
 		min: "0.0",
 		max: "255.255",
 	});
@@ -63,10 +63,10 @@ test("parses a device config with conditional manufacturer, label and descriptio
 
 	const condConfig = new ConditionalDeviceConfig("test.json", true, json);
 	// Ensure that the config is parsed correctly
-	t.is(condConfig.manufacturer.length, 2);
-	t.is(condConfig.label.length, 2);
-	t.is(condConfig.description.length, 2);
-	t.like(condConfig.firmwareVersion, {
+	t.expect(condConfig.manufacturer.length).toBe(2);
+	t.expect(condConfig.label.length).toBe(2);
+	t.expect(condConfig.description.length).toBe(2);
+	t.expect(condConfig.firmwareVersion).toMatchObject({
 		min: "0.0",
 		max: "255.255",
 	});
@@ -82,17 +82,17 @@ test("parses a device config with conditional manufacturer, label and descriptio
 		...deviceId,
 		firmwareVersion: "0.5",
 	});
-	t.is(evaluated1.manufacturer, "Silicon Labs");
-	t.is(evaluated1.label, "ZST10-700");
-	t.is(evaluated1.description, "700 Series-based Controller");
+	t.expect(evaluated1.manufacturer).toBe("Silicon Labs");
+	t.expect(evaluated1.label).toBe("ZST10-700");
+	t.expect(evaluated1.description).toBe("700 Series-based Controller");
 
 	const evaluated2 = condConfig.evaluate({
 		...deviceId,
 		firmwareVersion: "1.0",
 	});
-	t.is(evaluated2.manufacturer, "Z-Wave JS");
-	t.is(evaluated2.label, "ZST10-700 rev. 2");
-	t.is(evaluated2.description, "815 Series-based Controller");
+	t.expect(evaluated2.manufacturer).toBe("Z-Wave JS");
+	t.expect(evaluated2.label).toBe("ZST10-700 rev. 2");
+	t.expect(evaluated2.description).toBe("815 Series-based Controller");
 });
 
 test("parses a device config with conditional metadata", (t) => {
@@ -145,8 +145,8 @@ test("parses a device config with conditional metadata", (t) => {
 		...deviceId,
 		firmwareVersion: "0.5",
 	});
-	t.is(evaluated1.metadata?.reset, "Press any key to continue...");
-	t.deepEqual(evaluated1.metadata?.comments, [
+	t.expect(evaluated1.metadata?.reset).toBe("Press any key to continue...");
+	t.expect(evaluated1.metadata?.comments).toStrictEqual([
 		{
 			level: "warning",
 			text: "Join the dark side!",
@@ -157,8 +157,8 @@ test("parses a device config with conditional metadata", (t) => {
 		...deviceId,
 		firmwareVersion: "1.0",
 	});
-	t.is(evaluated2.metadata?.reset, undefined);
-	t.deepEqual(evaluated2.metadata?.comments, [
+	t.expect(evaluated2.metadata?.reset).toBeUndefined();
+	t.expect(evaluated2.metadata?.comments).toStrictEqual([
 		{
 			level: "info",
 			text: "Good, good...",
@@ -202,7 +202,7 @@ test("parses a device config with conditional compat flags", (t) => {
 		...deviceId,
 		firmwareVersion: "0.5",
 	});
-	t.deepEqual(evaluated1.compat, {
+	t.expect(evaluated1.compat).toStrictEqual({
 		mapBasicSet: "auto",
 	});
 
@@ -210,7 +210,7 @@ test("parses a device config with conditional compat flags", (t) => {
 		...deviceId,
 		firmwareVersion: "1.0",
 	});
-	t.is(evaluated2.compat, undefined);
+	t.expect(evaluated2.compat).toBeUndefined();
 });
 
 test("parses a device config with conditional config parameter options", (t) => {
@@ -267,35 +267,37 @@ test("parses a device config with conditional config parameter options", (t) => 
 		...deviceId,
 		firmwareVersion: "0.5",
 	});
-	t.deepEqual(evaluated1.paramInformation?.get({ parameter: 1 })?.options, [
-		{
-			label: "Yes",
-			value: 1,
-		},
-		{
-			label: "No",
-			value: 2,
-		},
-		{
-			label: "Maybe",
-			value: 3,
-		},
-	]);
+	t.expect(evaluated1.paramInformation?.get({ parameter: 1 })?.options)
+		.toStrictEqual([
+			{
+				label: "Yes",
+				value: 1,
+			},
+			{
+				label: "No",
+				value: 2,
+			},
+			{
+				label: "Maybe",
+				value: 3,
+			},
+		]);
 
 	const evaluated2 = condConfig.evaluate({
 		...deviceId,
 		firmwareVersion: "1.0",
 	});
-	t.deepEqual(evaluated2.paramInformation?.get({ parameter: 1 })?.options, [
-		{
-			label: "Yes",
-			value: 1,
-		},
-		{
-			label: "No",
-			value: 2,
-		},
-	]);
+	t.expect(evaluated2.paramInformation?.get({ parameter: 1 })?.options)
+		.toStrictEqual([
+			{
+				label: "Yes",
+				value: 1,
+			},
+			{
+				label: "No",
+				value: 2,
+			},
+		]);
 });
 
 test("supports x.y.z firmware versions", (t) => {
@@ -337,39 +339,35 @@ test("supports x.y.z firmware versions", (t) => {
 		...deviceId,
 		firmwareVersion: "7.17",
 	});
-	t.is(
+	t.expect(
 		isArray(evaluatedXY_warning.metadata?.comments)
 			&& evaluatedXY_warning.metadata?.comments.length,
-		1,
-	);
+	).toBe(1);
 
 	const evaluatedXY_ok = condConfig.evaluate({
 		...deviceId,
 		firmwareVersion: "7.18",
 	});
-	t.is(
+	t.expect(
 		isArray(evaluatedXY_ok.metadata?.comments)
 			&& evaluatedXY_ok.metadata?.comments.length,
-		0,
-	);
+	).toBe(0);
 
 	const evaluatedXYZ_warning = condConfig.evaluate({
 		...deviceId,
 		firmwareVersion: "7.17.1",
 	});
-	t.is(
+	t.expect(
 		isArray(evaluatedXYZ_warning.metadata?.comments)
 			&& evaluatedXYZ_warning.metadata?.comments.length,
-		1,
-	);
+	).toBe(1);
 
 	const evaluatedXYZ_ok = condConfig.evaluate({
 		...deviceId,
 		firmwareVersion: "7.17.2",
 	});
-	t.is(
+	t.expect(
 		isArray(evaluatedXYZ_ok.metadata?.comments)
 			&& evaluatedXYZ_ok.metadata?.comments.length,
-		0,
-	);
+	).toBe(0);
 });

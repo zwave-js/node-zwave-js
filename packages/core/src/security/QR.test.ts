@@ -1,6 +1,8 @@
-import test from "ava";
-import { SecurityClass, ZWaveErrorCodes, assertZWaveError } from "..";
-import { QRCodeVersion, parseQRCodeString } from "./QR";
+import { test } from "vitest";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { QRCodeVersion, parseQRCodeString } from "./QR.js";
+import { SecurityClass } from "./SecurityClass.js";
 
 function createDummyQR(firstDigits: string): string {
 	return firstDigits + "0".repeat(52 - firstDigits.length);
@@ -28,10 +30,9 @@ const cases = [
 
 for (const { code, reason } of cases) {
 	test(`QR code parsing -> throws when the QR code ${reason}`, (t) => {
-		assertZWaveError(t, () => parseQRCodeString(code), {
+		assertZWaveError(t.expect, () => parseQRCodeString(code), {
 			errorCode: ZWaveErrorCodes.Security2CC_InvalidQRCode,
 		});
-		t.pass();
 	});
 }
 
@@ -39,7 +40,7 @@ test("QR code parsing -> Example case: Acme Light Dimmer", (t) => {
 	const result = parseQRCodeString(
 		"900132782003515253545541424344453132333435212223242500100435301537022065520001000000300578",
 	);
-	t.deepEqual(result, {
+	t.expect(result).toStrictEqual({
 		version: QRCodeVersion.SmartStart,
 		securityClasses: [
 			SecurityClass.S2_Unauthenticated,
@@ -64,7 +65,7 @@ test("QR code parsing -> Example case: Oscorp Door Lock w. UUID", (t) => {
 	const result = parseQRCodeString(
 		"9001346230075152535455414243444531323334352122232425001016387007680220655210100000017002880642002122232425414243444511121314153132333435",
 	);
-	t.deepEqual(result, {
+	t.expect(result).toStrictEqual({
 		version: QRCodeVersion.SmartStart,
 		securityClasses: [
 			SecurityClass.S2_Unauthenticated,
@@ -92,7 +93,7 @@ test("QR code parsing -> Example case: Acme Light Dimmer w/o SmartStart", (t) =>
 	const result = parseQRCodeString(
 		"900032782003515253545541424344453132333435212223242500100435301537022065520001000000300578",
 	);
-	t.deepEqual(result, {
+	t.expect(result).toStrictEqual({
 		version: QRCodeVersion.S2,
 		securityClasses: [
 			SecurityClass.S2_Unauthenticated,
@@ -117,7 +118,7 @@ test("QR code parsing -> ignore surrounding whitespace", (t) => {
 	const result = parseQRCodeString(
 		"	900032782003515253545541424344453132333435212223242500100435301537022065520001000000300578  ",
 	);
-	t.deepEqual(result, {
+	t.expect(result).toStrictEqual({
 		version: QRCodeVersion.S2,
 		securityClasses: [
 			SecurityClass.S2_Unauthenticated,

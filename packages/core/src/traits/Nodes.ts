@@ -1,7 +1,7 @@
-import { type FLiRS } from "../capabilities/NodeInfo";
-import { type NodeStatus } from "../consts/NodeStatus";
-import { type MaybeNotKnown } from "../values/Primitive";
-import { type EndpointId, type VirtualEndpointId } from "./Endpoints";
+import { type FLiRS } from "../capabilities/NodeInfo.js";
+import { type NodeStatus } from "../consts/NodeStatus.js";
+import { type MaybeNotKnown } from "../values/Primitive.js";
+import { type EndpointId, type VirtualEndpointId } from "./Endpoints.js";
 
 /** Identifies a node */
 export interface NodeId extends EndpointId {

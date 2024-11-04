@@ -1,181 +1,70 @@
-import { BasicCCSet } from "@zwave-js/cc";
-import { MessageHeaders } from "@zwave-js/serial";
-import type { MockSerialPort } from "@zwave-js/serial/mock";
-import { Bytes, type ThrowingMap } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
-import ava, { type TestFn } from "ava";
-import type { Driver } from "../../driver/Driver";
-import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
+import { FunctionType } from "@zwave-js/serial";
 import {
-	isFunctionSupported_All,
-	isFunctionSupported_NoBridge,
-} from "./fixtures";
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
+import { integrationTest } from "../integrationTestSuite.js";
 
-interface TestContext {
-	driver: Driver;
-	serialport: MockSerialPort;
-}
-
-const test = ava as TestFn<TestContext>;
-
-test.beforeEach(async (t) => {
-	t.timeout(5000);
-
-	const { driver, serialport } = await createAndStartDriver();
-
-	driver["_controller"] = {
-		ownNodeId: 1,
-		nodes: new Map(),
-		incrementStatistics: () => {},
-		removeAllListeners: () => {},
-	} as any;
-
-	t.context = { driver, serialport };
-});
-
-test.afterEach.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-process.env.LOGLEVEL = "debug";
-
-test.serial(
+integrationTest(
 	"when a SendData request fails, the `sendMessage/sendCommand` call should be rejected",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	{
+		// debug: true,
 
-		// Use the normal SendData commands
-		driver["_controller"]!.isFunctionSupported =
-			isFunctionSupported_NoBridge;
+		controllerCapabilities: {
+			...getDefaultMockControllerCapabilities(),
+			supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+				(ft) =>
+					ft !== FunctionType.SendDataBridge
+					&& ft !== FunctionType.SendDataMulticastBridge,
+			),
+		},
 
-		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			2,
-			node2,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
 
-		node2["isListening"] = true;
-		node2["isFrequentListening"] = false;
-		node2.markAsAlive();
+		async testBody(t, driver, node, mockController, mockNode) {
+			mockNode.autoAckControllerFrames = false;
 
-		const ACK = Uint8Array.from([MessageHeaders.ACK]);
+			const basicSetPromise = node.commandClasses.Basic.withOptions({
+				maxSendAttempts: 1,
+			}).set(99);
 
-		const command = new BasicCCSet({
-			nodeId: 2,
-			targetValue: 99,
-		});
-		const promise = driver.sendCommand(command, {
-			maxSendAttempts: 1,
-		});
-		await wait(1);
-
-		// » [Node 002] [REQ] [SendData]
-		//   │ transmit options: 0x25
-		//   │ callback id:      1
-		//   └─[BasicCCSet]
-		//     └─ targetValue: 99
-		t.deepEqual(
-			serialport.lastWrite,
-			Bytes.from("010a00130203200163250181", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
-
-		await wait(50);
-
-		// « [RES] [SendData]
-		//     was sent: true
-		serialport.receiveData(Bytes.from("0104011301e8", "hex"));
-		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
-
-		await wait(50);
-
-		// « [REQ] [SendData]
-		//   callback id:     1
-		//   transmit status: NoACK
-		serialport.receiveData(Bytes.from("0107001301010002e9", "hex"));
-		t.deepEqual(serialport.lastWrite, ACK);
-
-		await t.throwsAsync(promise);
+			await t.expect(basicSetPromise).rejects.toThrowError();
+		},
 	},
 );
 
-test.serial(
+integrationTest(
 	"when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected",
-	async (t) => {
-		const { driver, serialport } = t.context;
+	{
+		// debug: true,
 
-		// Use the normal SendData commands
-		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
-
-		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-			2,
-			node2,
-		);
-		// Add event handlers for the nodes
-		for (const node of driver.controller.nodes.values()) {
-			driver["addNodeEventHandlers"](node);
-		}
-
-		node2["isListening"] = true;
-		node2["isFrequentListening"] = false;
-		node2.markAsAlive();
-
-		const ACK = Uint8Array.from([MessageHeaders.ACK]);
-
-		const command = new BasicCCSet({
-			nodeId: 2,
-			targetValue: 99,
-		});
-		const promise = driver.sendCommand(command, {
-			maxSendAttempts: 1,
-		});
-		await wait(1);
-
-		// » [Node 002] [REQ] [SendDataBridge]
-		//   │ source node id:   1
-		//   │ transmit options: 0x25
-		//   │ route:            0, 0, 0, 0
-		//   │ callback id:      1
-		//   └─[BasicCCSet]
-		//     └─ targetValue: 99
-		t.deepEqual(
-			serialport.lastWrite,
-			Bytes.from("010f00a90102032001632500000000013f", "hex"),
-		);
-		await wait(10);
-		serialport.receiveData(ACK);
-
-		await wait(50);
-
-		// « [RES] [SendDataBridge]
-		//     was sent: true
-		serialport.receiveData(Bytes.from("010401a90152", "hex"));
-		// » [ACK]
-		t.deepEqual(serialport.lastWrite, ACK);
-
-		await wait(50);
-
-		// « [REQ] [SendDataBridge]
-		//   callback id:     1
-		//   transmit status: NoACK
-		serialport.receiveData(
-			Bytes.from(
-				"011800a90101019e007f7f7f7f7f0101070000000002070000ac",
-				"hex",
+		controllerCapabilities: {
+			...getDefaultMockControllerCapabilities(),
+			supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+				(ft) =>
+					ft !== FunctionType.SendData
+					&& ft !== FunctionType.SendDataMulticast,
 			),
-		);
-		t.deepEqual(serialport.lastWrite, ACK);
+		},
 
-		await t.throwsAsync(promise);
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
+		async testBody(t, driver, node, mockController, mockNode) {
+			mockNode.autoAckControllerFrames = false;
+
+			const basicSetPromise = node.commandClasses.Basic.withOptions({
+				maxSendAttempts: 1,
+			}).set(99);
+
+			await t.expect(basicSetPromise).rejects.toThrowError();
+		},
 	},
 );

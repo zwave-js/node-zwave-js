@@ -1,4 +1,4 @@
-import { composeObject, entries } from "alcalzone-shared/objects";
+import { composeObject, entries } from "alcalzone-shared/objects/index.js";
 
 export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 	public constructor(

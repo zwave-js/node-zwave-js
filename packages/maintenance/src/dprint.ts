@@ -1,4 +1,4 @@
-import { repoRoot } from "./tsAPITools";
+import { repoRoot } from "./tsAPITools.js";
 
 import { formatWithDprint as format } from "@zwave-js/fmt";
 

@@ -1,8 +1,8 @@
 import { SecurityCCNonceGet } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { SendDataRequest } from "@zwave-js/serial/serialapi";
+import { isSendDataSinglecast } from "@zwave-js/serial/serialapi";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"secure encapsulation should be used when encapsulated command requires it",
@@ -44,15 +44,13 @@ integrationTest(
 			// We take the driver asking for a nonce for a sign that it correctly identified the CC as needing S0
 			mockController.assertReceivedHostMessage(
 				(msg) =>
-					msg instanceof SendDataRequest
+					isSendDataSinglecast(msg)
 					&& msg.command instanceof SecurityCCNonceGet,
 				{
 					errorMessage:
 						"The driver should have sent an S0-encapsulated command",
 				},
 			);
-
-			t.pass();
 		},
 	},
 );

@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import { type NVMAccess, type NVMIO } from "../common/definitions";
+import { type NVMAccess, type NVMIO } from "../common/definitions.js";
 
 interface BufferedChunk {
 	offset: number;

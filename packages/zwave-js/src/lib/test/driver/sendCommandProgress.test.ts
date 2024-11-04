@@ -3,9 +3,9 @@ import { CommandClasses, TransactionState } from "@zwave-js/core";
 import sinon from "sinon";
 
 import { getEnumMemberName } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"The progress listener passed to sendCommand gets called with status updates",
@@ -42,8 +42,6 @@ integrationTest(
 			sinon.assert.calledWith(onProgress, {
 				state: TransactionState.Completed,
 			});
-
-			t.pass();
 		},
 	},
 );
@@ -96,7 +94,7 @@ integrationTest(
 
 			await wait(200);
 
-			t.deepEqual(states, [
+			t.expect(states).toStrictEqual([
 				TransactionState.Queued,
 				TransactionState.Active,
 				TransactionState.Queued,
@@ -110,7 +108,7 @@ integrationTest(
 
 			await wait(200);
 
-			t.deepEqual(states, [
+			t.expect(states).toStrictEqual([
 				TransactionState.Queued,
 				TransactionState.Active,
 				TransactionState.Queued,

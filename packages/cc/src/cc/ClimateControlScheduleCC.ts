@@ -18,9 +18,9 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings";
-import { CCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import { CCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -30,21 +30,21 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
 import {
 	ClimateControlScheduleCommand,
 	ScheduleOverrideType,
 	type SetbackState,
 	type Switchpoint,
 	Weekday,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 import {
 	decodeSetbackState,
 	decodeSwitchpoint,
 	encodeSetbackState,
 	encodeSwitchpoint,
-} from "../lib/serializers";
+} from "../lib/serializers.js";
 
 export const ClimateControlScheduleCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Climate Control Schedule"], {

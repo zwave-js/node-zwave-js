@@ -1,5 +1,5 @@
-import { type SecurityManager } from "../security/Manager";
-import { type SecurityManager2 } from "../security/Manager2";
+import { type SecurityManager } from "../security/Manager.js";
+import { type SecurityManager2 } from "../security/Manager2.js";
 
 /** Allows accessing the security manager instances */
 export interface SecurityManagers {

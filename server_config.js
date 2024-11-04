@@ -5,7 +5,7 @@ const { CommandClasses, ConfigValueFormat, SupervisionStatus } = require(
 const { ccCaps, MockZWaveFrameType, createMockZWaveRequestFrame } = require(
 	"@zwave-js/testing",
 );
-const { wait } = require("alcalzone-shared/async");
+const { wait } = require("alcalzone-shared/async/index.js");
 const { SupervisionCCGet, SupervisionCCReport, ConfigurationCCSet } = require(
 	"zwave-js",
 );

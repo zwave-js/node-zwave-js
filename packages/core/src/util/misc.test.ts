@@ -1,13 +1,13 @@
-import test from "ava";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
+import { test } from "vitest";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
 import {
 	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
 	isConsecutiveArray,
 	stripUndefined,
 	validatePayload,
-} from "./misc";
+} from "./misc.js";
 
 test("isConsecutiveArray() -> returns true for consecutive arrays", (t) => {
 	const tests = [
@@ -17,12 +17,12 @@ test("isConsecutiveArray() -> returns true for consecutive arrays", (t) => {
 		[-2, -1, 0],
 	];
 	for (const test of tests) {
-		t.true(isConsecutiveArray(test));
+		t.expect(isConsecutiveArray(test)).toBe(true);
 	}
 });
 
 test("isConsecutiveArray() -> returns true for empty arrays", (t) => {
-	t.true(isConsecutiveArray([]));
+	t.expect(isConsecutiveArray([])).toBe(true);
 });
 
 test("isConsecutiveArray() -> returns false otherwise", (t) => {
@@ -31,7 +31,7 @@ test("isConsecutiveArray() -> returns false otherwise", (t) => {
 		[1, 2, 3, 2],
 	];
 	for (const test of tests) {
-		t.false(isConsecutiveArray(test));
+		t.expect(isConsecutiveArray(test)).toBe(false);
 	}
 });
 
@@ -41,7 +41,7 @@ test("stripUndefined() -> keeps objects with no undefined properties as-is", (t)
 		bar: 1,
 		baz: true,
 	};
-	t.deepEqual(stripUndefined(obj), obj);
+	t.expect(stripUndefined(obj)).toStrictEqual(obj);
 });
 
 test("stripUndefined() -> removes undefined properties from objects", (t) => {
@@ -54,7 +54,7 @@ test("stripUndefined() -> removes undefined properties from objects", (t) => {
 		foo: "bar",
 		baz: true,
 	};
-	t.deepEqual(stripUndefined(obj), expected);
+	t.expect(stripUndefined(obj)).toStrictEqual(expected);
 });
 
 test("stripUndefined() -> does not touch nested properties", (t) => {
@@ -63,40 +63,40 @@ test("stripUndefined() -> does not touch nested properties", (t) => {
 		bar: { sub: undefined },
 		baz: true,
 	};
-	t.deepEqual(stripUndefined(obj), obj);
+	t.expect(stripUndefined(obj)).toStrictEqual(obj);
 });
 
 test("validatePayload() -> passes when no arguments were given", (t) => {
 	validatePayload();
-	t.pass();
 });
 
 test("validatePayload() -> passes when all arguments are truthy", (t) => {
 	validatePayload(1);
 	validatePayload(true, "true");
 	validatePayload({});
-	t.pass();
 });
 
 test("validatePayload() -> throws a ZWaveError with PacketFormat_InvalidPayload otherwise", (t) => {
 	for (const args of [[false], [true, 0, true]]) {
-		assertZWaveError(t, () => validatePayload(...args), {
+		assertZWaveError(t.expect, () => validatePayload(...args), {
 			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 		});
 	}
-	t.pass();
 });
 
 test("validatePayload() -> The error message should contain the rejection reason", (t) => {
-	assertZWaveError(t, () => validatePayload.withReason("NOPE")(false), {
-		errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-		context: "NOPE",
-	});
-	t.pass();
+	assertZWaveError(
+		t.expect,
+		() => validatePayload.withReason("NOPE")(false),
+		{
+			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			context: "NOPE",
+		},
+	);
 });
 
 test("getMinimumShiftForBitMask() -> returns 0 if the mask is 0", (t) => {
-	t.is(getMinimumShiftForBitMask(0), 0);
+	t.expect(getMinimumShiftForBitMask(0)).toBe(0);
 });
 
 test("getMinimumShiftForBitMask() -> returns the correct bit shift for sensible bit masks", (t) => {
@@ -111,13 +111,13 @@ test("getMinimumShiftForBitMask() -> returns the correct bit shift for sensible 
 		{ input: 0b1011, expected: 0 },
 	];
 	for (const { input, expected } of tests) {
-		t.is(getMinimumShiftForBitMask(input), expected);
+		t.expect(getMinimumShiftForBitMask(input)).toBe(expected);
 	}
 });
 
 test("getLegalRangeForBitMask() -> returns [0,0] if the mask is 0", (t) => {
-	t.deepEqual(getLegalRangeForBitMask(0, true), [0, 0]);
-	t.deepEqual(getLegalRangeForBitMask(0, false), [0, 0]);
+	t.expect(getLegalRangeForBitMask(0, true)).toStrictEqual([0, 0]);
+	t.expect(getLegalRangeForBitMask(0, false)).toStrictEqual([0, 0]);
 });
 
 test("getLegalRangeForBitMask returns the correct ranges otherwise", (t) => {
@@ -133,7 +133,9 @@ test("getLegalRangeForBitMask returns the correct ranges otherwise", (t) => {
 		{ mask: 0b1011, expSigned: [-8, 7], expUnsigned: [0, 15] },
 	];
 	for (const { mask, expSigned, expUnsigned } of tests) {
-		t.deepEqual(getLegalRangeForBitMask(mask, true), expUnsigned);
-		t.deepEqual(getLegalRangeForBitMask(mask, false), expSigned);
+		t.expect(getLegalRangeForBitMask(mask, true)).toStrictEqual(
+			expUnsigned,
+		);
+		t.expect(getLegalRangeForBitMask(mask, false)).toStrictEqual(expSigned);
 	}
 });

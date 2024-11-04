@@ -1,5 +1,5 @@
 import EventEmitter from "node:events";
-import { applyMixin } from "./inheritance";
+import { applyMixin } from "./inheritance.js";
 
 export type EventHandler =
 	// Add more overloads as necessary

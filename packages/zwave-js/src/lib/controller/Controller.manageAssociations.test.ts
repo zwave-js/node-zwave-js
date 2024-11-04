@@ -6,8 +6,8 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
 import { createTestingHost } from "@zwave-js/host";
-import test from "ava";
-import { type CreateTestNodeOptions, createTestNode } from "../test/mocks";
+import { test } from "vitest";
+import { type CreateTestNodeOptions, createTestNode } from "../test/mocks.js";
 
 test("associations between insecure nodes are allowed", (t) => {
 	// This test simulates two Zooz ZEN76 switches, included insecurely
@@ -63,10 +63,9 @@ test("associations between insecure nodes are allowed", (t) => {
 		commands,
 	);
 
-	t.is(
+	t.expect(
 		ccUtils.checkAssociation(host, node2, groupId, {
 			nodeId: 3,
 		}),
-		AssociationCheckResult.OK,
-	);
+	).toBe(AssociationCheckResult.OK);
 });

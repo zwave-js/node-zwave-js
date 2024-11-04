@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"$imports from user-defined config files fall back to the internal DB",
@@ -37,8 +37,8 @@ integrationTest(
 			const param1 = node.deviceConfig?.paramInformation?.get({
 				parameter: 1,
 			});
-			t.is(param1?.label, "Param 1");
-			t.is(param1!.options?.length, 2);
+			t.expect(param1?.label).toBe("Param 1");
+			t.expect(param1!.options?.length).toBe(2);
 		},
 	},
 );

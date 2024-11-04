@@ -18,8 +18,8 @@ import {
 	ccCaps,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 	// debug: true,
@@ -62,8 +62,8 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 		const currentValueId = BasicCCValues.currentValue.id;
 
 		// At the start, values should be 0 as per the interview
-		t.is(node.getValue(targetValueId), 0);
-		t.is(node.getValue(currentValueId), 0);
+		t.expect(node.getValue(targetValueId)).toBe(0);
+		t.expect(node.getValue(currentValueId)).toBe(0);
 
 		// Send an update with UNKNOWN state
 		const cc = new BasicCCReport({
@@ -81,8 +81,8 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 		// wait a bit for the change to propagate
 		await wait(100);
 
-		t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-		t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+		t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+		t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 	},
 });
 
@@ -109,8 +109,8 @@ integrationTest(
 			const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
 			// At the start, values are not known yet
-			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			// Send an initial state
 			let cc = new MultilevelSwitchCCReport({
@@ -127,8 +127,8 @@ integrationTest(
 			// wait a bit for the change to propagate
 			await wait(100);
 
-			t.is(node.getValue(targetValueId), 0);
-			t.is(node.getValue(currentValueId), 0);
+			t.expect(node.getValue(targetValueId)).toBe(0);
+			t.expect(node.getValue(currentValueId)).toBe(0);
 
 			// Send an update with UNKNOWN state
 			cc = new MultilevelSwitchCCReport({
@@ -145,8 +145,8 @@ integrationTest(
 			// wait a bit for the change to propagate
 			await wait(100);
 
-			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 		},
 	},
 );
@@ -181,8 +181,8 @@ integrationTest(
 			const currentValueId = BinarySwitchCCValues.currentValue.id;
 
 			// At the start, values are not known yet, because the interview was skipped
-			t.is(node.getValue(targetValueId), NOT_KNOWN);
-			t.is(node.getValue(currentValueId), NOT_KNOWN);
+			t.expect(node.getValue(targetValueId)).toBe(NOT_KNOWN);
+			t.expect(node.getValue(currentValueId)).toBe(NOT_KNOWN);
 
 			// Send an initial state
 			let cc = new BinarySwitchCCReport({
@@ -200,8 +200,8 @@ integrationTest(
 			// wait a bit for the change to propagate
 			await wait(100);
 
-			t.is(node.getValue(targetValueId), false);
-			t.is(node.getValue(currentValueId), false);
+			t.expect(node.getValue(targetValueId)).toBe(false);
+			t.expect(node.getValue(currentValueId)).toBe(false);
 
 			// Send an update with UNKNOWN state
 			cc = new BinarySwitchCCReport({
@@ -219,8 +219,8 @@ integrationTest(
 			// wait a bit for the change to propagate
 			await wait(100);
 
-			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 		},
 	},
 );

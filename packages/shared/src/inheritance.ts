@@ -1,4 +1,4 @@
-import type { Constructor, UnionToIntersection } from "./types";
+import type { Constructor, UnionToIntersection } from "./types.js";
 
 /** Decorator to support multi-inheritance using mixins */
 export function Mixin(baseCtors: Constructor[]) {

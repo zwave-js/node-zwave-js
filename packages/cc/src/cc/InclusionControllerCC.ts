@@ -11,19 +11,19 @@ import type {
 	GetValueDB,
 } from "@zwave-js/host";
 import { Bytes, getEnumMemberName } from "@zwave-js/shared";
-import { CCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { CCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
 	commandClass,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	InclusionControllerCommand,
 	InclusionControllerStatus,
 	InclusionControllerStep,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 // This CC should not be used directly from user code
 /* eslint-disable @zwave-js/ccapi-validate-args */

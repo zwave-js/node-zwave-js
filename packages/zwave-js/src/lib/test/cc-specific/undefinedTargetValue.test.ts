@@ -4,9 +4,9 @@ import {
 } from "@zwave-js/cc/BinarySwitchCC";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
 
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue",
@@ -31,7 +31,7 @@ integrationTest(
 			await wait(100);
 
 			// The value in the DB should not be changed because we have no new info
-			t.is(node.getValue(targetValueValueID), false);
+			t.expect(node.getValue(targetValueValueID)).toBe(false);
 		},
 	},
 );

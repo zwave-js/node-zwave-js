@@ -226,37 +226,37 @@ import {
 	pick,
 	stringify,
 } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { roundTo } from "alcalzone-shared/math";
-import { padStart } from "alcalzone-shared/strings";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { roundTo } from "alcalzone-shared/math/index.js";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
 import { EventEmitter } from "node:events";
 import path from "node:path";
 import semver from "semver";
-import { RemoveNodeReason } from "../controller/Inclusion";
-import { determineNIF } from "../controller/NodeInformationFrame";
-import { type Driver, libVersion } from "../driver/Driver";
-import { cacheKeys } from "../driver/NetworkCache";
-import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
-import type { Transaction } from "../driver/Transaction";
-import { DeviceClass } from "./DeviceClass";
-import { type NodeDump, type ValueDump } from "./Dump";
-import { type Endpoint } from "./Endpoint";
+import { RemoveNodeReason } from "../controller/Inclusion.js";
+import { determineNIF } from "../controller/NodeInformationFrame.js";
+import { type Driver, libVersion } from "../driver/Driver.js";
+import { cacheKeys } from "../driver/NetworkCache.js";
+import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics.js";
+import type { Transaction } from "../driver/Transaction.js";
+import { DeviceClass } from "./DeviceClass.js";
+import { type NodeDump, type ValueDump } from "./Dump.js";
+import { type Endpoint } from "./Endpoint.js";
 import {
 	formatLifelineHealthCheckSummary,
 	formatRouteHealthCheckSummary,
 	healthCheckTestFrameCount,
-} from "./HealthCheck";
+} from "./HealthCheck.js";
 import {
 	type NodeStatistics,
 	NodeStatisticsHost,
 	type RouteStatistics,
 	routeStatisticsEquals,
-} from "./NodeStatistics";
+} from "./NodeStatistics.js";
 import {
 	type DateAndTime,
 	type LifelineHealthCheckResult,
@@ -268,10 +268,10 @@ import {
 	type RouteHealthCheckResult,
 	type RouteHealthCheckSummary,
 	type ZWaveNodeEventCallbacks,
-} from "./_Types";
-import { InterviewStage, NodeStatus } from "./_Types";
-import { ZWaveNodeMixins } from "./mixins";
-import * as nodeUtils from "./utils";
+} from "./_Types.js";
+import { InterviewStage, NodeStatus } from "./_Types.js";
+import { ZWaveNodeMixins } from "./mixins/index.js";
+import * as nodeUtils from "./utils.js";
 
 const MAX_ASSOCIATIONS = 1;
 

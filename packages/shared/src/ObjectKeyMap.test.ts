@@ -1,5 +1,5 @@
-import test from "ava";
-import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "./ObjectKeyMap";
+import { test } from "vitest";
+import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "./ObjectKeyMap.js";
 
 const fixtures = {
 	entries: [
@@ -32,66 +32,62 @@ const fixtures = {
 
 test("get(): should treat different property keys as distinct values", (t) => {
 	const map = fixtures.createMapWithEntries();
-	t.is(
+	t.expect(
 		map.get({
 			property: "prop",
 			propertyKey: "foo",
 		}),
-		1,
-	);
-	t.is(
+	).toBe(1);
+	t.expect(
 		map.get({
 			property: "prop",
 			propertyKey: "bar",
 		}),
-		2,
-	);
+	).toBe(2);
 });
 
 test("get(): should return undefined after a call to clear()", (t) => {
 	const map = fixtures.createMapWithEntries();
 	map.clear();
-	t.is(
+	t.expect(
 		map.get({
 			property: "prop",
 			propertyKey: "foo",
 		}),
-		undefined,
-	);
-	t.is(
+	).toBeUndefined();
+	t.expect(
 		map.get({
 			property: "prop",
 			propertyKey: "bar",
 		}),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("has(): should treat different property keys as distinct values", (t) => {
 	const map = fixtures.createMapWithEntries();
-	t.true(
+	t.expect(
 		map.has({
 			property: "prop",
 			propertyKey: "foo",
 		}),
-	);
-	t.false(
+	).toBe(true);
+	t.expect(
 		map.has({
 			property: "prop",
 			propertyKey: "baz",
 		}),
-	);
+	).toBe(false);
 });
 
 test("has(): should return false after a call to clear()", (t) => {
 	const map = fixtures.createMapWithEntries();
 	map.clear();
-	t.false(
+	t.expect(
 		map.has({
 			property: "prop",
 			propertyKey: "foo",
 		}),
-	);
+	).toBe(false);
 });
 
 test("set(): should overwrite previous values", (t) => {
@@ -114,29 +110,26 @@ test("set(): should overwrite previous values", (t) => {
 		6,
 	);
 
-	t.is(
+	t.expect(
 		map.get({
 			property: "prop",
 			propertyKey: "foo",
 		}),
-		6,
-	);
+	).toBe(6);
 });
 
 test("values(): works like on the original Map class", (t) => {
 	const map = fixtures.createMapWithEntries();
-	t.deepEqual(
+	t.expect(
 		[...map.values()],
-		fixtures.entries.map(([, v]) => v),
-	);
+	).toStrictEqual(fixtures.entries.map(([, v]) => v));
 });
 
 test("keys(): works like on the original Map class", (t) => {
 	const map = fixtures.createMapWithEntries();
-	t.deepEqual(
+	t.expect(
 		[...map.keys()],
-		fixtures.entries.map(([k]) => k),
-	);
+	).toStrictEqual(fixtures.entries.map(([k]) => k));
 });
 
 test("required key properties should automatically be filled in", (t) => {
@@ -146,22 +139,21 @@ test("required key properties should automatically be filled in", (t) => {
 	>(undefined, { propertyKey: "5" });
 	map.set({ property: "foo" }, 1);
 	map.set({ property: "foo", propertyKey: "1" }, 2);
-	t.deepEqual(
+	t.expect(
 		[...map.keys()],
-		[
-			{ property: "foo", propertyKey: "5" },
-			{ property: "foo", propertyKey: "1" },
-		],
-	);
+	).toStrictEqual([
+		{ property: "foo", propertyKey: "5" },
+		{ property: "foo", propertyKey: "1" },
+	]);
 });
 
 test("should be iterable", (t) => {
 	const map: ReadonlyObjectKeyMap<{ key: string }, number> = new ObjectKeyMap(
 		[[{ key: "test" }, 1]],
 	);
-	t.deepEqual([...map], [[{ key: "test" }, 1]]);
+	t.expect([...map]).toStrictEqual([[{ key: "test" }, 1]]);
 
 	const readonlyMap: ReadonlyObjectKeyMap<{ key: string }, number> =
 		new ObjectKeyMap([[{ key: "test" }, 1]]);
-	t.deepEqual([...readonlyMap], [[{ key: "test" }, 1]]);
+	t.expect([...readonlyMap]).toStrictEqual([[{ key: "test" }, 1]]);
 });

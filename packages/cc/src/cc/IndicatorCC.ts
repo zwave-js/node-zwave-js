@@ -24,8 +24,8 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { clamp, roundTo } from "alcalzone-shared/math";
-import { isArray } from "alcalzone-shared/typeguards";
+import { clamp, roundTo } from "alcalzone-shared/math/index.js";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -34,14 +34,14 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -50,9 +50,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { IndicatorCommand, type IndicatorTimeout } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { IndicatorCommand, type IndicatorTimeout } from "../lib/_Types.js";
 
 function isManufacturerDefinedIndicator(indicatorId: number): boolean {
 	return indicatorId >= 0x80 && indicatorId <= 0x9f;

@@ -1,5 +1,5 @@
 import { num2hex } from "@zwave-js/shared/safe";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 export interface ScaleDefinition {
 	readonly label: string;

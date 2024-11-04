@@ -1,47 +1,57 @@
 import { CommandClasses, type ValueID } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { ZWaveNode } from "../../node/Node";
+import { afterEach, beforeEach, test as baseTest } from "vitest";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
+import { ZWaveNode } from "../../node/Node.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
-	node: ZWaveNode;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+		node: ZWaveNode;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-test.before(async (t) => {
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			t.context.controller = controller;
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
-});
-
-test.after.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
+		{ auto: true },
+	],
 });
 
 const onValueAdded = sinon.spy();
 const onValueUpdated = sinon.spy();
 const onValueRemoved = sinon.spy();
 
-test.beforeEach((t) => {
-	const { driver } = t.context;
+beforeEach<LocalTestContext>(({ context, expect }) => {
+	const { driver } = context;
 	const node = new ZWaveNode(1, driver)
 		.on("value added", onValueAdded)
 		.on("value updated", onValueUpdated)
@@ -50,23 +60,23 @@ test.beforeEach((t) => {
 		node.id,
 		node,
 	);
-	t.context.node = node;
+	context.node = node;
 
 	onValueAdded.resetHistory();
 	onValueUpdated.resetHistory();
 	onValueRemoved.resetHistory();
 });
 
-test.afterEach((t) => {
-	const { node, driver } = t.context;
+afterEach<LocalTestContext>(({ context, expect }) => {
+	const { node, driver } = context;
 	node.destroy();
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(node.id);
 });
 
-test.serial(
+test.sequential(
 	"the emitted events should contain a speaking name for the CC",
-	(t) => {
-		const { node } = t.context;
+	({ context, expect }) => {
+		const { node } = context;
 
 		const cc = CommandClasses["Wake Up"];
 		const ccName = CommandClasses[cc];
@@ -83,15 +93,15 @@ test.serial(
 
 		for (const method of [onValueAdded, onValueUpdated, onValueRemoved]) {
 			const cbArg = method.getCall(0).args[1];
-			t.is(cbArg.commandClassName, ccName);
+			expect(cbArg.commandClassName).toBe(ccName);
 		}
 	},
 );
 
-test.serial(
+test.sequential(
 	"the emitted events should contain a speaking name for the propertyKey",
-	(t) => {
-		const { node } = t.context;
+	({ context, expect }) => {
+		const { node } = context;
 		node.valueDB.setValue(
 			{
 				commandClass: CommandClasses["Thermostat Setpoint"],
@@ -102,14 +112,14 @@ test.serial(
 		);
 		sinon.assert.called(onValueAdded);
 		const cbArg = onValueAdded.getCall(0).args[1];
-		t.is(cbArg.propertyKeyName, "Heating");
+		expect(cbArg.propertyKeyName).toBe("Heating");
 	},
 );
 
-test.serial(
+test.sequential(
 	"the emitted events should not be emitted for internal values",
-	(t) => {
-		const { node } = t.context;
+	({ context, expect }) => {
+		const { node } = context;
 		node.valueDB.setValue(
 			{
 				commandClass: CommandClasses.Battery,
@@ -118,6 +128,5 @@ test.serial(
 			true,
 		);
 		sinon.assert.notCalled(onValueAdded);
-		t.pass();
 	},
 );

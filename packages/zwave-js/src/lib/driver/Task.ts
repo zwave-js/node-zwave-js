@@ -1,11 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes, highResTimestamp } from "@zwave-js/core";
 import { createWrappingCounter, evalOrStatic, noop } from "@zwave-js/shared";
-import { type CompareResult } from "alcalzone-shared/comparable";
+import { type CompareResult } from "alcalzone-shared/comparable/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { SortedList } from "alcalzone-shared/sorted-list/index.js";
 
 /** A high-level task that can be started and stepped through */
 export interface Task<TReturn> {
@@ -363,6 +363,11 @@ export class TaskScheduler {
 							promise: waitForPromise,
 						};
 					} else if (isTaskBuilder(waitFor)) {
+						if (waitFor.priority > builder.priority) {
+							throw new Error(
+								"Tasks cannot yield to tasks with lower priority than their own",
+							);
+						}
 						// Create a sub-task with a reference to this task
 						state = TaskState.AwaitingTask;
 						const subTask = self.createTask(waitFor, this);

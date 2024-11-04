@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import type { NVMIO } from "./definitions";
+import type { NVMIO } from "./definitions.js";
 
 export async function nvmReadUInt32LE(
 	io: NVMIO,

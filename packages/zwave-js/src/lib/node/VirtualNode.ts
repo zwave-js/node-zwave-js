@@ -26,10 +26,10 @@ import {
 	supervisedCommandSucceeded,
 	valueIdToString,
 } from "@zwave-js/core";
-import { distinct } from "alcalzone-shared/arrays";
-import type { Driver } from "../driver/Driver";
-import type { ZWaveNode } from "./Node";
-import { VirtualEndpoint } from "./VirtualEndpoint";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import type { Driver } from "../driver/Driver.js";
+import type { ZWaveNode } from "./Node.js";
+import { VirtualEndpoint } from "./VirtualEndpoint.js";
 
 export interface VirtualValueID extends TranslatedValueID {
 	/** The metadata that belongs to this virtual value ID */

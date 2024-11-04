@@ -19,14 +19,14 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings";
-import { CCAPI } from "../lib/API";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -34,8 +34,8 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { ClockCommand, Weekday } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { ClockCommand, Weekday } from "../lib/_Types.js";
 
 // @noSetValueAPI - This CC has no simple value to set
 

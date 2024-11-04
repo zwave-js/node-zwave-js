@@ -14,11 +14,11 @@ export {
 	getEnumMemberName,
 	num2hex,
 } from "@zwave-js/shared/safe";
-export { driverPresets } from "./lib/driver/ZWaveOptions";
+export { driverPresets } from "./lib/driver/ZWaveOptions.js";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,
 	formatRouteHealthCheckRound,
 	formatRouteHealthCheckSummary,
 	healthCheckRatingToWord,
-} from "./lib/node/HealthCheck";
+} from "./lib/node/HealthCheck.js";

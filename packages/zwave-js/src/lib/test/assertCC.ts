@@ -1,12 +1,12 @@
 import type { CCConstructor, CommandClass } from "@zwave-js/cc";
 import { SendDataBridgeRequest } from "@zwave-js/serial/serialapi";
 import { SendDataRequest } from "@zwave-js/serial/serialapi";
-import type { ExecutionContext } from "ava";
+import { type ExpectStatic } from "vitest";
 
 export function assertCC<
 	TConst extends CCConstructor<CommandClass> = CCConstructor<CommandClass>,
 >(
-	t: ExecutionContext,
+	expect: ExpectStatic,
 	callArg: any,
 	options: {
 		nodeId?: number;
@@ -16,17 +16,17 @@ export function assertCC<
 ): void {
 	const request: SendDataRequest | SendDataBridgeRequest = callArg;
 	try {
-		t.true(request instanceof SendDataRequest);
+		expect(request).toBeInstanceOf(SendDataRequest);
 	} catch {
-		t.true(request instanceof SendDataBridgeRequest);
+		expect(request).toBeInstanceOf(SendDataBridgeRequest);
 	}
-	if (options.nodeId) t.is(request.getNodeId(), options.nodeId);
+	if (options.nodeId) expect(request.getNodeId()).toBe(options.nodeId);
 
 	const command = request.command;
-	t.true(command instanceof options.cc);
+	expect(command).toBeInstanceOf(options.cc);
 	if (options.ccValues) {
 		for (const [prop, val] of Object.entries(options.ccValues)) {
-			t.is((command as any)[prop], val);
+			expect((command as any)[prop]).toBe(val);
 		}
 	}
 }

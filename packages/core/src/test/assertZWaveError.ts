@@ -1,5 +1,5 @@
-import type { ExecutionContext } from "ava";
-import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { type ExpectStatic } from "vitest";
+import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 export interface AssertZWaveErrorOptions {
 	messageMatches?: string | RegExp;
@@ -13,15 +13,15 @@ export interface AssertZWaveErrorOptions {
  * @param options Additional assertions
  */
 export function assertZWaveError<T>(
-	t: ExecutionContext,
+	expect: ExpectStatic,
 	valueOrFactory: T,
 	options: AssertZWaveErrorOptions = {},
 ): T extends () => PromiseLike<any> ? Promise<void> : void {
 	const { messageMatches, errorCode, context } = options;
 
 	function _assertZWaveError(e: any): asserts e is ZWaveError {
-		t.is(e.constructor.name, "ZWaveError");
-		t.is(typeof e.code, "number");
+		expect(e.constructor.name).toBe("ZWaveError");
+		expect(e.code).toBeTypeOf("number");
 	}
 
 	function handleError(e: any): void {
@@ -30,10 +30,10 @@ export function assertZWaveError<T>(
 			const regex = messageMatches instanceof RegExp
 				? messageMatches
 				: new RegExp(messageMatches);
-			t.regex(e.message, regex);
+			expect(e.message).toMatch(regex);
 		}
-		if (errorCode != undefined) t.is(e.code, errorCode);
-		if (context != undefined) t.is(e.context, context);
+		if (errorCode != undefined) expect(e.code).toBe(errorCode);
+		if (context != undefined) expect(e.context).toBe(context);
 	}
 	function fail(): never {
 		// We should not be here

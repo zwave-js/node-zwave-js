@@ -26,17 +26,21 @@ import {
 } from "@zwave-js/core";
 import { containsCC } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName, throttle } from "@zwave-js/shared";
-import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import { roundTo } from "alcalzone-shared/math";
+} from "alcalzone-shared/deferred-promise/index.js";
+import { roundTo } from "alcalzone-shared/math/index.js";
 import { randomBytes } from "node:crypto";
-import { type Task, type TaskBuilder, TaskPriority } from "../../driver/Task";
-import { type Transaction } from "../../driver/Transaction";
-import { SchedulePollMixin } from "./60_ScheduledPoll";
+import {
+	type Task,
+	type TaskBuilder,
+	TaskPriority,
+} from "../../driver/Task.js";
+import { type Transaction } from "../../driver/Transaction.js";
+import { SchedulePollMixin } from "./60_ScheduledPoll.js";
 
 interface AbortFirmwareUpdateContext {
 	abort: boolean;

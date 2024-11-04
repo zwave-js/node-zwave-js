@@ -7,61 +7,69 @@ import { AssociationCommand } from "@zwave-js/cc/safe";
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { MockController, MockNode } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { test as baseTest } from "vitest";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-test.beforeEach(async (t) => {
-	t.timeout(30000);
-	const { driver } = await createAndStartTestingDriver({
-		loadConfiguration: false,
-		skipNodeInterview: true,
-		securityKeys: {
-			S0_Legacy: new Uint8Array(16).fill(0xff),
-		},
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			const node2 = new MockNode({
-				id: 2,
-				controller,
+			const { driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				skipNodeInterview: true,
+				securityKeys: {
+					S0_Legacy: new Uint8Array(16).fill(0xff),
+				},
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					const node2 = new MockNode({
+						id: 2,
+						controller,
+					});
+					(controller.nodes as Map<any, any>).set(node2.id, node2);
+					context.controller = controller;
+				},
 			});
-			(controller.nodes as Map<any, any>).set(node2.id, node2);
-			t.context.controller = controller;
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-test.afterEach.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-test.serial("returns true when a non-partial CC is received", (t) => {
-	const { driver } = t.context;
+test.sequential("returns true when a non-partial CC is received", ({ context, expect }) => {
+	const { driver } = context;
 	const cc = new BasicCCSet({ nodeId: 2, targetValue: 50 });
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.true(driver["assemblePartialCCs"](msg));
+	expect(driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.serial(
+test.sequential(
 	"returns true when a partial CC is received that expects no more reports",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -78,14 +86,14 @@ test.serial(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		t.true(driver["assemblePartialCCs"](msg));
+		expect(driver["assemblePartialCCs"](msg)).toBe(true);
 	},
 );
 
-test.serial(
+test.sequential(
 	"returns false when a partial CC is received that expects more reports",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -102,14 +110,14 @@ test.serial(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		t.false(driver["assemblePartialCCs"](msg));
+		expect(driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.serial(
+test.sequential(
 	"returns true when the final partial CC is received and merges its data",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc1 = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -139,22 +147,21 @@ test.serial(
 		const msg1 = new ApplicationCommandRequest({
 			command: cc1,
 		});
-		t.false(driver["assemblePartialCCs"](msg1));
+		expect(driver["assemblePartialCCs"](msg1)).toBe(false);
 
 		const msg2 = new ApplicationCommandRequest({
 			command: cc2,
 		});
-		t.true(driver["assemblePartialCCs"](msg2));
+		expect(driver["assemblePartialCCs"](msg2)).toBe(true);
 
-		t.deepEqual(
+		expect(
 			(msg2.command as AssociationCCReport).nodeIds,
-			[1, 2, 3, 4, 5, 6],
-		);
+		).toStrictEqual([1, 2, 3, 4, 5, 6]);
 	},
 );
 
-test.serial("does not crash when receiving a Multi Command CC", (t) => {
-	const { driver } = t.context;
+test.sequential("does not crash when receiving a Multi Command CC", ({ context, expect }) => {
+	const { driver } = context;
 	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
 	const cc2 = new BasicCCSet({ nodeId: 2, targetValue: 50 });
 	const cc = new MultiCommandCCCommandEncapsulation({
@@ -164,11 +171,11 @@ test.serial("does not crash when receiving a Multi Command CC", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.true(driver["assemblePartialCCs"](msg));
+	expect(driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.serial("supports nested partial/non-partial CCs", (t) => {
-	const { driver } = t.context;
+test.sequential("supports nested partial/non-partial CCs", ({ context, expect }) => {
+	const { driver } = context;
 	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
@@ -179,11 +186,11 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.true(driver["assemblePartialCCs"](msg));
+	expect(driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.serial("supports nested partial/partial CCs (part 1)", (t) => {
-	const { driver } = t.context;
+test.sequential("supports nested partial/partial CCs (part 1)", ({ context, expect }) => {
+	const { driver } = context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
 		encapsulated: {} as any,
@@ -202,11 +209,11 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.false(driver["assemblePartialCCs"](msg));
+	expect(driver["assemblePartialCCs"](msg)).toBe(false);
 });
 
-test.serial("supports nested partial/partial CCs (part 2)", (t) => {
-	const { driver } = t.context;
+test.sequential("supports nested partial/partial CCs (part 2)", ({ context, expect }) => {
+	const { driver } = context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
 		encapsulated: {} as any,
@@ -225,13 +232,13 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.true(driver["assemblePartialCCs"](msg));
+	expect(driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.serial(
+test.sequential(
 	"returns false when a partial CC throws Deserialization_NotImplemented during merging",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -254,14 +261,14 @@ test.serial(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		t.false(driver["assemblePartialCCs"](msg));
+		expect(driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.serial(
+test.sequential(
 	"returns false when a partial CC throws CC_NotImplemented during merging",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -284,14 +291,14 @@ test.serial(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		t.false(driver["assemblePartialCCs"](msg));
+		expect(driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.serial(
+test.sequential(
 	"returns false when a partial CC throws PacketFormat_InvalidPayload during merging",
-	(t) => {
-		const { driver } = t.context;
+	({ context, expect }) => {
+		const { driver } = context;
 		const cc = CommandClass.parse(
 			Uint8Array.from([
 				CommandClasses.Association,
@@ -314,12 +321,12 @@ test.serial(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		t.false(driver["assemblePartialCCs"](msg));
+		expect(driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.serial("passes other errors during merging through", (t) => {
-	const { driver } = t.context;
+test.sequential("passes other errors during merging through", ({ context, expect }) => {
+	const { driver } = context;
 	const cc = CommandClass.parse(
 		Uint8Array.from([
 			CommandClasses.Association,
@@ -339,5 +346,6 @@ test.serial("passes other errors during merging through", (t) => {
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	t.throws(() => driver["assemblePartialCCs"](msg), { message: /invalid/ });
+	expect(() => driver["assemblePartialCCs"](msg))
+		.toThrow("invalid");
 });

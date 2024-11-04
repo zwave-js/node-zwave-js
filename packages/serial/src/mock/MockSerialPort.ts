@@ -5,13 +5,13 @@ import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "node:events";
 import { PassThrough } from "node:stream";
 import sinon from "sinon";
-import { ZWaveSerialPort } from "../serialport/ZWaveSerialPort";
-import type { ZWaveSerialPortEventCallbacks } from "../serialport/ZWaveSerialPortBase";
+import { ZWaveSerialPort } from "../serialport/ZWaveSerialPort.js";
+import type { ZWaveSerialPortEventCallbacks } from "../serialport/ZWaveSerialPortBase.js";
 import {
 	MockBinding as SerialPortMockBinding,
 	type MockPortBinding as SerialPortMockPortBinding,
-} from "./SerialPortBindingMock";
-import { SerialPortMock } from "./SerialPortMock";
+} from "./SerialPortBindingMock.js";
+import { SerialPortMock } from "./SerialPortMock.js";
 
 const instances = new Map<string, MockSerialPort>();
 

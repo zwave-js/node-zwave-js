@@ -13,7 +13,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -35,7 +35,7 @@ test("the NameGet command should serialize correctly", (t) => {
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the NameReport command should be deserialized correctly", (t) => {
@@ -57,10 +57,10 @@ test("the NameReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCNameReport;
-	t.is(cc.constructor, AssociationGroupInfoCCNameReport);
+	t.expect(cc.constructor).toBe(AssociationGroupInfoCCNameReport);
 
-	t.is(cc.groupId, 7);
-	t.is(cc.name, "foobar");
+	t.expect(cc.groupId).toBe(7);
+	t.expect(cc.name).toBe("foobar");
 });
 
 test("the InfoGet command should serialize correctly (no flag set)", (t) => {
@@ -77,7 +77,7 @@ test("the InfoGet command should serialize correctly (no flag set)", (t) => {
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the InfoGet command should serialize correctly (refresh cache flag set)", (t) => {
@@ -94,7 +94,7 @@ test("the InfoGet command should serialize correctly (refresh cache flag set)", 
 			7, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the InfoGet command should serialize correctly (list mode flag set)", (t) => {
@@ -111,7 +111,7 @@ test("the InfoGet command should serialize correctly (list mode flag set)", (t) 
 			0, // group id is ignored
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Info Report command should be deserialized correctly", (t) => {
@@ -144,16 +144,17 @@ test("the Info Report command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCInfoReport;
-	t.is(cc.constructor, AssociationGroupInfoCCInfoReport);
+	t.expect(cc.constructor).toBe(AssociationGroupInfoCCInfoReport);
 
-	t.is(cc.groups.length, 2);
-	t.is(cc.groups[0].groupId, 1);
-	t.is(
+	t.expect(cc.groups.length).toBe(2);
+	t.expect(cc.groups[0].groupId).toBe(1);
+	t.expect(
 		cc.groups[0].profile,
-		AssociationGroupInfoProfile["General: Lifeline"],
+	).toBe(AssociationGroupInfoProfile["General: Lifeline"]);
+	t.expect(cc.groups[1].groupId).toBe(2);
+	t.expect(cc.groups[1].profile).toBe(
+		AssociationGroupInfoProfile["Control: Key 01"],
 	);
-	t.is(cc.groups[1].groupId, 2);
-	t.is(cc.groups[1].profile, AssociationGroupInfoProfile["Control: Key 01"]);
 });
 
 test("the CommandListGet command should serialize correctly", (t) => {
@@ -169,7 +170,7 @@ test("the CommandListGet command should serialize correctly", (t) => {
 			6, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the CommandListReport command should be deserialized correctly", (t) => {
@@ -190,15 +191,16 @@ test("the CommandListReport command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCCommandListReport;
-	t.is(cc.constructor, AssociationGroupInfoCCCommandListReport);
+	t.expect(cc.constructor).toBe(AssociationGroupInfoCCCommandListReport);
 
-	t.is(cc.groupId, 7);
-	t.is(cc.commands.size, 2);
-	t.deepEqual(
+	t.expect(cc.groupId).toBe(7);
+	t.expect(cc.commands.size).toBe(2);
+	t.expect(
 		[...cc.commands.keys()],
-		[CommandClasses.Basic, CommandClasses["Security Mark"]],
-	);
-	t.deepEqual([...cc.commands.values()], [[BasicCommand.Set], [0x05]]);
+	).toStrictEqual([CommandClasses.Basic, CommandClasses["Security Mark"]]);
+	t.expect([...cc.commands.values()]).toStrictEqual([[BasicCommand.Set], [
+		0x05,
+	]]);
 });
 
 test("deserializing an unsupported command should return an unspecified version of AssociationGroupInfoCC", (t) => {
@@ -209,7 +211,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCC;
-	t.is(cc.constructor, AssociationGroupInfoCC);
+	t.expect(cc.constructor).toBe(AssociationGroupInfoCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

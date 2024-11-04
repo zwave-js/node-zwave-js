@@ -1,11 +1,11 @@
 import { type JSONObject, pick } from "@zwave-js/shared/safe";
-import { throwInvalidConfig } from "../utils_safe";
+import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type ConditionalItem,
 	conditionApplies,
 	validateCondition,
-} from "./ConditionalItem";
-import type { DeviceID } from "./shared";
+} from "./ConditionalItem.js";
+import type { DeviceID } from "./shared.js";
 
 export class ConditionalAssociationConfig
 	implements ConditionalItem<AssociationConfig>

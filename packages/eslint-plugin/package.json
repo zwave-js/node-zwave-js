@@ -8,7 +8,8 @@
   "main": "build/index.js",
   "module": "build/index.js",
   "files": [
-    "build/**/*.js"
+    "build/**/*.js",
+    "build/**/package.json"
   ],
   "author": {
     "name": "AlCalzone",
@@ -37,6 +38,7 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.2.3",
     "@types/eslint": "^9.6.1",
     "@typescript-eslint/utils": "^8.8.1",
     "@zwave-js/core": "workspace:*",

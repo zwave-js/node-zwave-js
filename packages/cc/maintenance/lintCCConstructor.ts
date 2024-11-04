@@ -242,7 +242,7 @@
 // 	}
 // }
 
-// if (require.main === module)
+// if (esMain(import.meta))
 // 	lintCCConstructors()
 // 		.then(() => process.exit(0))
 // 		.catch(() => process.exit(1));

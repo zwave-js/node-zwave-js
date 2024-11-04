@@ -8,25 +8,25 @@ import {
 import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
+import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
+} from "../lib/CommandClassDecorators.js";
+import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC.js";
 import {
 	getManufacturerId,
 	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
-} from "./manufacturerProprietary/Decorators";
+} from "./manufacturerProprietary/Decorators.js";
 
 export type ManufacturerProprietaryCCConstructor<
 	T extends typeof ManufacturerProprietaryCC =

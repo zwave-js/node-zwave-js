@@ -5,7 +5,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { NodeStatusMixin } from "./20_Status";
+import { NodeStatusMixin } from "./20_Status.js";
 
 /**
  * Interface for NodeWakeupMixin

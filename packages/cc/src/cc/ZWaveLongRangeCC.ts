@@ -1,9 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
-import { CommandClass } from "../lib/CommandClass";
+import { CommandClass } from "../lib/CommandClass.js";
 import {
 	commandClass,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 
 @commandClass(CommandClasses["Z-Wave Long Range"])
 @implementedVersion(1)

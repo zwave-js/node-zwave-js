@@ -30,13 +30,13 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -46,9 +46,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { TimeParametersCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { TimeParametersCommand } from "../lib/_Types.js";
 
 export const TimeParametersCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Time Parameters"], {

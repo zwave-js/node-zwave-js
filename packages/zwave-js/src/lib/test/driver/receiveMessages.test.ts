@@ -2,41 +2,51 @@ import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { Bytes } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { test as baseTest } from "vitest";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-test.beforeEach(async (t) => {
-	t.timeout(30000);
-	const { driver } = await createAndStartTestingDriver({
-		loadConfiguration: false,
-		// We don't need a real interview for this
-		skipControllerIdentification: true,
-		skipNodeInterview: true,
-		beforeStartup(mockPort) {
-			t.context.controller = new MockController({ serial: mockPort });
+			const { driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				// We don't need a real interview for this
+				skipControllerIdentification: true,
+				skipNodeInterview: true,
+				beforeStartup(mockPort) {
+					context.controller = new MockController({
+						serial: mockPort,
+					});
+				},
+			});
+			context.driver = driver;
+
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-test.afterEach.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-	driver.removeAllListeners();
-});
-
-test.serial(
+test.sequential(
 	"should not crash if a message is received that cannot be deserialized",
-	async (t) => {
-		const { driver, controller } = t.context;
+	async ({ context, expect }) => {
+		const { driver, controller } = context;
 		const req = new ApplicationCommandRequest({
 			command: new WakeUpCCIntervalSet({
 				nodeId: 1,
@@ -48,14 +58,13 @@ test.serial(
 			req.serialize(driver["getEncodingContext"]()),
 		);
 		await controller.expectHostACK(1000);
-		t.pass();
 	},
 );
 
-test.serial(
+test.sequential(
 	"should correctly handle multiple messages in the receive buffer",
-	async (t) => {
-		const { controller } = t.context;
+	async ({ context, expect }) => {
+		const { controller } = context;
 		// This buffer contains a SendData transmit report and a ManufacturerSpecific report
 		const data = Bytes.from(
 			"010700130f000002e6010e000400020872050086000200828e",
@@ -66,6 +75,5 @@ test.serial(
 		// Ensure the driver ACKed two messages
 		await controller.expectHostACK(1000);
 		await controller.expectHostACK(1000);
-		t.pass();
 	},
 );

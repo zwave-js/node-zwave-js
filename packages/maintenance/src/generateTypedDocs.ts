@@ -4,11 +4,13 @@
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
-import { red, yellow } from "ansi-colors";
+import c from "ansi-colors";
+import esMain from "es-main";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
-import Piscina from "piscina";
+import { Piscina } from "piscina";
 import {
 	type CommentRange,
 	type ExportedDeclarations,
@@ -27,12 +29,23 @@ import {
 	type TypeLiteralNode,
 	type ts,
 } from "ts-morph";
-import { formatWithDprint } from "./dprint";
+import { formatWithDprint } from "./dprint.js";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
 	tsConfigFilePathForDocs as tsConfigFilePath,
-} from "./tsAPITools";
+} from "./tsAPITools.js";
+
+// Support directly loading this file in a worker
+import { register } from "tsx/esm/api";
+register();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const exportDeclarationCache = new Map<
+	string,
+	ReadonlyMap<string, ExportedDeclarations[]>
+>();
 
 export function findSourceNode(
 	program: Project,
@@ -40,8 +53,13 @@ export function findSourceNode(
 	identifier: string,
 ): ExportedDeclarations | undefined {
 	// Scan all source files
-	const file = program.getSourceFile(exportingFile);
-	return file?.getExportedDeclarations().get(identifier)?.[0];
+	if (!exportDeclarationCache.has(exportingFile)) {
+		const decls = program.getSourceFile(exportingFile)
+			?.getExportedDeclarations();
+		if (decls) exportDeclarationCache.set(exportingFile, decls);
+	}
+	return exportDeclarationCache.get(exportingFile)
+		?.get(identifier)?.[0];
 }
 
 export function stripComments(
@@ -235,7 +253,7 @@ function stripQuotes(str: string): string {
 function expectLiteralString(strType: string, context: string): void {
 	if (strType === "string") {
 		console.warn(
-			yellow(
+			c.yellow(
 				`WARNING: Received type "string" where a string literal was expected.
 		Make sure to define this string or the entire object using "as const".
 		Context: ${context}`,
@@ -247,7 +265,7 @@ function expectLiteralString(strType: string, context: string): void {
 function expectLiteralNumber(numType: string, context: string): void {
 	if (numType === "number") {
 		console.warn(
-			yellow(
+			c.yellow(
 				`WARNING: Received type "number" where a number literal was expected.
 Make sure to define this number or the entire object using "as const".
 Context: ${context}`,
@@ -278,7 +296,7 @@ export async function processDocFile(
 		);
 		if (!sourceNode) {
 			console.error(
-				red(
+				c.red(
 					`${docFile}: Cannot find symbol ${range.symbol} in module ${range.module}!`,
 				),
 			);
@@ -658,7 +676,7 @@ async function generateCCDocs(
 	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
 	if (indexAutoGenStart === -1) {
 		console.error(
-			red(`Marker for auto-generation in CCs/index.md missing!`),
+			c.red(`Marker for auto-generation in CCs/index.md missing!`),
 		);
 		return false;
 	}
@@ -702,7 +720,7 @@ async function generateCCDocs(
 	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
 	if (sidebarAutoGenStart === -1) {
 		console.error(
-			red(`Marker for CC auto-generation in _sidebar.md missing!`),
+			c.red(`Marker for CC auto-generation in _sidebar.md missing!`),
 		);
 		return false;
 	}
@@ -723,7 +741,7 @@ async function generateCCDocs(
 
 async function main(): Promise<void> {
 	const piscina = new Piscina({
-		filename: path.join(__dirname, "generateTypedDocsWorker.js"),
+		filename: path.join(__dirname, "generateTypedDocs.ts"),
 		maxThreads: 4,
 	});
 
@@ -764,7 +782,10 @@ export async function processCC(
 	const program = getProgram();
 	const sourceFile = program.getSourceFileOrThrow(filename);
 	const dtsFile = program.addSourceFileAtPath(
-		filename.replace("/src/", "/build/").replace(/(?<!\.d)\.ts$/, ".d.ts"),
+		filename.replace("/src/", "/build/esm/").replace(
+			/(?<!\.d)\.ts$/,
+			".d.ts",
+		),
 	);
 	try {
 		return await processCCDocFile(sourceFile, dtsFile);
@@ -775,7 +796,7 @@ export async function processCC(
 
 // If this is NOT run as a worker thread, execute the main function
 if (isMainThread) {
-	if (require.main === module) {
+	if (esMain(import.meta)) {
 		void main();
 	}
 }

@@ -1,5 +1,5 @@
-import test from "ava";
-import { enumValuesToMetadataStates } from "./Metadata";
+import { test } from "vitest";
+import { enumValuesToMetadataStates } from "./Metadata.js";
 
 enum TestEnum {
 	"Easy" = 0x00,
@@ -16,7 +16,7 @@ test("enumValuesToMetadataStates() -> should translate the whole enum by default
 		8: "2 lets have some numbers",
 		9: "8 and one more",
 	};
-	t.deepEqual(actual, expected);
+	t.expect(actual).toStrictEqual(expected);
 });
 
 test("enumValuesToMetadataStates() -> should correctly translate a subset if requested", (t) => {
@@ -25,5 +25,5 @@ test("enumValuesToMetadataStates() -> should correctly translate a subset if req
 		0: "Easy",
 		9: "8 and one more",
 	};
-	t.deepEqual(actual, expected);
+	t.expect(actual).toStrictEqual(expected);
 });

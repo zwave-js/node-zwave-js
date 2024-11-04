@@ -1,6 +1,6 @@
-import { wait } from "alcalzone-shared/async";
-import test from "ava";
-import { AsyncQueue } from "./AsyncQueue";
+import { wait } from "alcalzone-shared/async/index.js";
+import { test } from "vitest";
+import { AsyncQueue } from "./AsyncQueue.js";
 
 test("can be iterated over after adding items", async (t) => {
 	const queue = new AsyncQueue<number>();
@@ -16,7 +16,7 @@ test("can be iterated over after adding items", async (t) => {
 		resolve(seen);
 	});
 
-	t.deepEqual(await actual, [1, 2, 3]);
+	t.expect(await actual).toStrictEqual([1, 2, 3]);
 });
 
 test("can be iterated over when adding items later", async (t) => {
@@ -33,7 +33,7 @@ test("can be iterated over when adding items later", async (t) => {
 	queue.add(1, 2, 3);
 	queue.end();
 
-	t.deepEqual(await actual, [1, 2, 3]);
+	t.expect(await actual).toStrictEqual([1, 2, 3]);
 });
 
 test("can be iterated over when adding items asynchronously", async (t) => {
@@ -52,7 +52,7 @@ test("can be iterated over when adding items asynchronously", async (t) => {
 	queue.add(4, 5);
 	queue.end();
 
-	t.deepEqual(await actual, [1, 2, 3, 4, 5]);
+	t.expect(await actual).toStrictEqual([1, 2, 3, 4, 5]);
 });
 
 test("aborting clears all pending items", async (t) => {
@@ -73,7 +73,7 @@ test("aborting clears all pending items", async (t) => {
 	await wait(50);
 	queue.abort();
 
-	t.deepEqual(await actual, [1, 2, 3]);
+	t.expect(await actual).toStrictEqual([1, 2, 3]);
 });
 
 test("items can be removed before they are consumed", async (t) => {
@@ -92,10 +92,10 @@ test("items can be removed before they are consumed", async (t) => {
 
 	queue.add(1, 2, 3, 4, 5);
 	await wait(50);
-	t.is(queue.remove(2), false);
-	t.is(queue.remove(3), true);
-	t.is(queue.remove(4), true);
+	t.expect(queue.remove(2)).toBe(false);
+	t.expect(queue.remove(3)).toBe(true);
+	t.expect(queue.remove(4)).toBe(true);
 	queue.end();
 
-	t.deepEqual(await actual, [1, 2, 5]);
+	t.expect(await actual).toStrictEqual([1, 2, 5]);
 });

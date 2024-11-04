@@ -7,11 +7,9 @@ import { CommandClasses } from "@zwave-js/core";
 import { type Rule as ESLintRule } from "eslint";
 import { type AST as JSONC_AST, type RuleListener } from "jsonc-eslint-parser";
 import path from "node:path";
-
-import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export type ReportFixGenerator = (
 	fixer: ESLintRule.RuleFixer,

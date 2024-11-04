@@ -13,8 +13,8 @@ import {
 	type MockNodeBehavior,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"GET requests don't time out early if the response is split using the 'more to follow' flag",
@@ -72,7 +72,7 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			const name = await node.commandClasses.Configuration.getName(1);
-			t.is(name, "Test parameter");
+			t.expect(name).toBe("Test parameter");
 		},
 	},
 );
@@ -152,7 +152,7 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			const name = await node.commandClasses.Configuration.getName(1);
-			t.is(name, longName);
+			t.expect(name).toBe(longName);
 		},
 	},
 );
@@ -189,6 +189,6 @@ integrationTest("GET requests DO time out if there's no matching response", {
 
 	async testBody(t, driver, node, mockController, mockNode) {
 		const name = await node.commandClasses.Configuration.getName(1);
-		t.is(name, undefined);
+		t.expect(name).toBeUndefined();
 	},
 });

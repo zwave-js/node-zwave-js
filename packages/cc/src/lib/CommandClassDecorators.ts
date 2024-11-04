@@ -10,18 +10,18 @@ import type {
 	TypedClassDecorator,
 	TypedPropertyDecorator,
 } from "@zwave-js/shared";
-import type { APIConstructor, CCAPI } from "./API";
+import type { APIConstructor, CCAPI } from "./API.js";
 import type {
 	CCConstructor,
 	CCResponsePredicate,
 	CommandClass,
 	DynamicCCResponse,
-} from "./CommandClass";
+} from "./CommandClass.js";
 import type {
 	DynamicCCValue,
 	StaticCCValue,
 	StaticCCValueFactory,
-} from "./Values";
+} from "./Values.js";
 
 const CCAndCommandDecorator = createReflectionDecoratorPair<
 	CommandClass,

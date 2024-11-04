@@ -14,8 +14,8 @@ import {
 	NVM3_OBJ_TYPE_MASK,
 	NVM3_WORD_SIZE,
 	ObjectType,
-} from "./consts";
-import { computeBergerCode, computeBergerCodeMulti } from "./utils";
+} from "./consts.js";
+import { computeBergerCode, computeBergerCodeMulti } from "./utils.js";
 
 export interface NVM3ObjectHeader {
 	offset: number;

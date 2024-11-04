@@ -1,7 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
-import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
+import { type NVM, NVMAccess, type NVMIO } from "./common/definitions.js";
+import {
+	nvmReadBuffer,
+	nvmReadUInt32LE,
+	nvmWriteBuffer,
+} from "./common/utils.js";
 import {
 	FLASH_MAX_PAGE_SIZE_700,
 	FLASH_MAX_PAGE_SIZE_800,
@@ -25,12 +29,12 @@ import {
 	PageStatus,
 	PageWriteSize,
 	ZWAVE_APPLICATION_NVM_SIZE,
-} from "./nvm3/consts";
+} from "./nvm3/consts.js";
 import {
 	ApplicationVersionFile800ID,
 	type NVMSection,
 	getNVMSectionByFileID,
-} from "./nvm3/files";
+} from "./nvm3/files/index.js";
 import {
 	type NVM3Object,
 	type NVM3ObjectHeader,
@@ -39,13 +43,13 @@ import {
 	getObjectHeader,
 	getRequiredSpace,
 	serializeObject,
-} from "./nvm3/object";
+} from "./nvm3/object.js";
 import {
 	type NVM3PageHeader,
 	pageSizeFromBits,
 	serializePageHeader,
-} from "./nvm3/page";
-import { validateBergerCode, validateBergerCodeMulti } from "./nvm3/utils";
+} from "./nvm3/page.js";
+import { validateBergerCode, validateBergerCodeMulti } from "./nvm3/utils.js";
 
 // TODO: Possible optimizations:
 // Investigate if there is a better way to determine whether the NVM

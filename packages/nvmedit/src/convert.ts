@@ -18,24 +18,28 @@ import {
 	num2hex,
 	pick,
 } from "@zwave-js/shared/safe";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import semver from "semver";
-import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
-import { NVM3, type NVM3Meta } from "./lib/NVM3";
-import { NVM500 } from "./lib/NVM500";
+import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts.js";
+import { NVM3, type NVM3Meta } from "./lib/NVM3.js";
+import { NVM500 } from "./lib/NVM500.js";
 import {
 	type Route,
 	type RouteCache,
 	getEmptyRoute,
-} from "./lib/common/routeCache";
-import { type SUCUpdateEntry } from "./lib/common/sucUpdateEntry";
-import { NVMMemoryIO } from "./lib/io/NVMMemoryIO";
-import { NVM3Adapter } from "./lib/nvm3/adapter";
+} from "./lib/common/routeCache.js";
+import { type SUCUpdateEntry } from "./lib/common/sucUpdateEntry.js";
+import { NVMMemoryIO } from "./lib/io/NVMMemoryIO.js";
+import { NVM3Adapter } from "./lib/nvm3/adapter.js";
 import {
 	ZWAVE_APPLICATION_NVM_SIZE,
 	ZWAVE_PROTOCOL_NVM_SIZE,
 	ZWAVE_SHARED_NVM_SIZE,
-} from "./lib/nvm3/consts";
+} from "./lib/nvm3/consts.js";
+import {
+	type ApplicationNameFile,
+	ApplicationNameFileID,
+} from "./lib/nvm3/files/ApplicationNameFile.js";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -90,22 +94,18 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "./lib/nvm3/files";
-import {
-	type ApplicationNameFile,
-	ApplicationNameFileID,
-} from "./lib/nvm3/files/ApplicationNameFile";
-import type { NVM3Object } from "./lib/nvm3/object";
-import { dumpNVM, mapToObject } from "./lib/nvm3/utils";
-import { NVM500Adapter } from "./lib/nvm500/adapter";
-import { nvm500Impls } from "./lib/nvm500/impls";
-import { resolveLayout } from "./lib/nvm500/shared";
+} from "./lib/nvm3/files/index.js";
+import type { NVM3Object } from "./lib/nvm3/object.js";
+import { dumpNVM, mapToObject } from "./lib/nvm3/utils.js";
+import { NVM500Adapter } from "./lib/nvm500/adapter.js";
+import { nvm500Impls } from "./lib/nvm500/impls/index.js";
+import { resolveLayout } from "./lib/nvm500/shared.js";
 import {
 	type NVM500JSON,
 	type NVM500JSONController,
 	type NVM500JSONNode,
 	type NVM500Meta,
-} from "./nvm500/NVMParser";
+} from "./nvm500/NVMParser.js";
 
 export interface NVMJSON {
 	format: number; // protocol file format

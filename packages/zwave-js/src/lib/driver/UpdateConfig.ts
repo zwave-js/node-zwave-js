@@ -5,13 +5,16 @@ import {
 	getErrorMessage,
 	readJSON,
 } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import execa from "execa";
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
 import os from "node:os";
 import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
+
+const require = createRequire(import.meta.url);
 
 /**
  * Checks whether there is a compatible update for the currently installed config package.

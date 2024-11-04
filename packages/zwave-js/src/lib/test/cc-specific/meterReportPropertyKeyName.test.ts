@@ -2,7 +2,7 @@
 
 import { Bytes } from "@zwave-js/shared";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When receiving a MeterCC::Report, the value event should contain the meter name in propertyKeyName",
@@ -13,7 +13,9 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, _mockNode) => {
 			const valueAddedPromise = new Promise<void>((resolve) => {
 				node.on("value added", (_node, args) => {
-					t.is(args.propertyKeyName, "Electric_kWh_Consumed");
+					t.expect(args.propertyKeyName).toBe(
+						"Electric_kWh_Consumed",
+					);
 					resolve();
 				});
 			});

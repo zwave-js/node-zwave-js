@@ -1,10 +1,13 @@
 import { copyFilesRecursive, formatId, padVersion } from "@zwave-js/shared";
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import * as semver from "semver";
-import type { ConfigLogger } from "./Logger";
-import { PACKAGE_VERSION } from "./_version";
-import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig";
+import type { ConfigLogger } from "./Logger.js";
+import { PACKAGE_VERSION } from "./_version.js";
+import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig.js";
+
+const require = createRequire(import.meta.url);
 
 /** The absolute path of the embedded configuration directory */
 export const configDir = path.resolve(

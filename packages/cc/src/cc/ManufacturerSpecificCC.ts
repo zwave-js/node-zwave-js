@@ -16,12 +16,12 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
+import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -30,9 +30,9 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { DeviceIdType, ManufacturerSpecificCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { DeviceIdType, ManufacturerSpecificCommand } from "../lib/_Types.js";
 
 export const ManufacturerSpecificCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Manufacturer Specific"], {

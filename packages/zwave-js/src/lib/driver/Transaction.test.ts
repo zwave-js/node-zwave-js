@@ -4,15 +4,15 @@ import { type Message, getDefaultPriority } from "@zwave-js/serial";
 import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
 import { RemoveFailedNodeRequest } from "@zwave-js/serial/serialapi";
 import { SendDataRequest } from "@zwave-js/serial/serialapi";
-import test from "ava";
-import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/_Types";
-import type { Driver } from "./Driver";
+import { test } from "vitest";
+import type { ZWaveNode } from "../node/Node.js";
+import { NodeStatus } from "../node/_Types.js";
+import type { Driver } from "./Driver.js";
 import {
 	type MessageGenerator,
 	Transaction,
 	type TransactionOptions,
-} from "./Transaction";
+} from "./Transaction.js";
 
 function createDummyMessageGenerator(msg: Message): MessageGenerator {
 	return {
@@ -72,8 +72,8 @@ test("should compare priority, then the timestamp", (t) => {
 		priority: MessagePriority.Controller,
 	});
 	// equal priority, earlier timestamp wins
-	t.is(t1.compareTo(t2), -1);
-	t.is(t2.compareTo(t1), 1);
+	t.expect(t1.compareTo(t2)).toBe(-1);
+	t.expect(t2.compareTo(t1)).toBe(1);
 
 	const t3 = createDummyTransaction(driverMock, {
 		priority: MessagePriority.Poll,
@@ -82,8 +82,8 @@ test("should compare priority, then the timestamp", (t) => {
 		priority: MessagePriority.Controller,
 	});
 	// lower priority loses
-	t.is(t3.compareTo(t4), 1);
-	t.is(t4.compareTo(t3), -1);
+	t.expect(t3.compareTo(t4)).toBe(1);
+	t.expect(t4.compareTo(t3)).toBe(-1);
 
 	// this should not happen but we still need to test it
 	const t5 = createDummyTransaction(driverMock, {
@@ -93,8 +93,8 @@ test("should compare priority, then the timestamp", (t) => {
 		priority: MessagePriority.Controller,
 	});
 	t6.creationTimestamp = t5.creationTimestamp;
-	t.is(t5.compareTo(t6), 0);
-	t.is(t6.compareTo(t5), 0);
+	t.expect(t5.compareTo(t6)).toBe(0);
+	t.expect(t6.compareTo(t5)).toBe(0);
 });
 
 test("NodeQuery comparisons should prioritize listening nodes", (t) => {
@@ -193,44 +193,44 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 	const tNoneLowPrio = createTransactionForNode(1, MessagePriority.Poll);
 
 	// t2/3/4 prioritized because it's listening and t1 is not
-	t.is(tNone.compareTo(tList), 1);
-	t.is(tNone.compareTo(tList), 1);
-	t.is(tNone.compareTo(tFreq), 1);
+	t.expect(tNone.compareTo(tList)).toBe(1);
+	t.expect(tNone.compareTo(tList)).toBe(1);
+	t.expect(tNone.compareTo(tFreq)).toBe(1);
 	// sanity checks
-	t.is(tList.compareTo(tNone), -1);
-	t.is(tFreq.compareTo(tNone), -1);
-	t.is(tListFreq.compareTo(tNone), -1);
+	t.expect(tList.compareTo(tNone)).toBe(-1);
+	t.expect(tFreq.compareTo(tNone)).toBe(-1);
+	t.expect(tListFreq.compareTo(tNone)).toBe(-1);
 	// equal priority because both are (frequent or not) listening
-	t.is(tList.compareTo(tFreq), 0);
-	t.is(tList.compareTo(tListFreq), 0);
+	t.expect(tList.compareTo(tFreq)).toBe(0);
+	t.expect(tList.compareTo(tListFreq)).toBe(0);
 	// sanity checks
-	t.is(tFreq.compareTo(tListFreq), 0);
-	t.is(tFreq.compareTo(tList), 0);
-	t.is(tListFreq.compareTo(tList), 0);
+	t.expect(tFreq.compareTo(tListFreq)).toBe(0);
+	t.expect(tFreq.compareTo(tList)).toBe(0);
+	t.expect(tListFreq.compareTo(tList)).toBe(0);
 
 	// NodeQuery (non listening) should be lower than other priorities (listening)
-	t.is(tNone.compareTo(tListLowPrio), 1);
-	t.is(tNone.compareTo(tListNormalPrio), 1);
+	t.expect(tNone.compareTo(tListLowPrio)).toBe(1);
+	t.expect(tNone.compareTo(tListNormalPrio)).toBe(1);
 	// sanity checks
-	t.is(tListLowPrio.compareTo(tNone), -1);
-	t.is(tListNormalPrio.compareTo(tNone), -1);
+	t.expect(tListLowPrio.compareTo(tNone)).toBe(-1);
+	t.expect(tListNormalPrio.compareTo(tNone)).toBe(-1);
 
 	// The default order should apply when both nodes are not listening
-	t.is(tNone.compareTo(tNoneNormalPrio), 1);
-	t.is(tNone.compareTo(tNoneLowPrio), -1);
+	t.expect(tNone.compareTo(tNoneNormalPrio)).toBe(1);
+	t.expect(tNone.compareTo(tNoneLowPrio)).toBe(-1);
 	// sanity checks
-	t.is(tNoneNormalPrio.compareTo(tNone), -1);
-	t.is(tNoneLowPrio.compareTo(tNone), 1);
+	t.expect(tNoneNormalPrio.compareTo(tNone)).toBe(-1);
+	t.expect(tNoneLowPrio.compareTo(tNone)).toBe(1);
 
 	// fallbacks for undefined nodes
-	t.is(tNoId.compareTo(tNone), 0);
-	t.is(tNoId.compareTo(tList), 0);
-	t.is(tFreq.compareTo(tNoId), 0);
-	t.is(tListFreq.compareTo(tNoId), 0);
-	t.is(tNoNode.compareTo(tNone), 0);
-	t.is(tNoNode.compareTo(tList), 0);
-	t.is(tFreq.compareTo(tNoNode), 0);
-	t.is(tListFreq.compareTo(tNoNode), 0);
+	t.expect(tNoId.compareTo(tNone)).toBe(0);
+	t.expect(tNoId.compareTo(tList)).toBe(0);
+	t.expect(tFreq.compareTo(tNoId)).toBe(0);
+	t.expect(tListFreq.compareTo(tNoId)).toBe(0);
+	t.expect(tNoNode.compareTo(tNone)).toBe(0);
+	t.expect(tNoNode.compareTo(tList)).toBe(0);
+	t.expect(tFreq.compareTo(tNoNode)).toBe(0);
+	t.expect(tListFreq.compareTo(tNoNode)).toBe(0);
 });
 
 test("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", (t) => {
@@ -301,31 +301,31 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 	const tAsleepLow = createTransaction(2, MessagePriority.Poll);
 
 	// For alive nodes, the conventional order should apply
-	t.is(tAwakeHigh.compareTo(tAwakeWU), -1);
-	t.is(tAwakeHigh.compareTo(tAwakeLow), -1);
-	t.is(tAwakeWU.compareTo(tAwakeLow), -1);
+	t.expect(tAwakeHigh.compareTo(tAwakeWU)).toBe(-1);
+	t.expect(tAwakeHigh.compareTo(tAwakeLow)).toBe(-1);
+	t.expect(tAwakeWU.compareTo(tAwakeLow)).toBe(-1);
 	// Test the opposite direction aswell
-	t.is(tAwakeWU.compareTo(tAwakeHigh), 1);
-	t.is(tAwakeLow.compareTo(tAwakeHigh), 1);
-	t.is(tAwakeLow.compareTo(tAwakeWU), 1);
+	t.expect(tAwakeWU.compareTo(tAwakeHigh)).toBe(1);
+	t.expect(tAwakeLow.compareTo(tAwakeHigh)).toBe(1);
+	t.expect(tAwakeLow.compareTo(tAwakeWU)).toBe(1);
 
 	// For asleep nodes, the conventional order should apply too
-	t.is(tAsleepHigh.compareTo(tAsleepWU), -1);
-	t.is(tAsleepHigh.compareTo(tAsleepLow), -1);
-	t.is(tAsleepWU.compareTo(tAsleepLow), -1);
+	t.expect(tAsleepHigh.compareTo(tAsleepWU)).toBe(-1);
+	t.expect(tAsleepHigh.compareTo(tAsleepLow)).toBe(-1);
+	t.expect(tAsleepWU.compareTo(tAsleepLow)).toBe(-1);
 	// Test the opposite direction aswell
-	t.is(tAsleepWU.compareTo(tAsleepHigh), 1);
-	t.is(tAsleepLow.compareTo(tAsleepHigh), 1);
-	t.is(tAsleepLow.compareTo(tAsleepWU), 1);
+	t.expect(tAsleepWU.compareTo(tAsleepHigh)).toBe(1);
+	t.expect(tAsleepLow.compareTo(tAsleepHigh)).toBe(1);
+	t.expect(tAsleepLow.compareTo(tAsleepWU)).toBe(1);
 
 	// The wake-up priority of sleeping nodes is lower than everything else of awake nodes
-	t.is(tAsleepWU.compareTo(tAwakeHigh), 1);
-	t.is(tAsleepWU.compareTo(tAwakeWU), 1);
-	t.is(tAsleepWU.compareTo(tAwakeLow), 1);
+	t.expect(tAsleepWU.compareTo(tAwakeHigh)).toBe(1);
+	t.expect(tAsleepWU.compareTo(tAwakeWU)).toBe(1);
+	t.expect(tAsleepWU.compareTo(tAwakeLow)).toBe(1);
 	// Test the opposite direction aswell
-	t.is(tAwakeHigh.compareTo(tAsleepWU), -1);
-	t.is(tAwakeWU.compareTo(tAsleepWU), -1);
-	t.is(tAwakeLow.compareTo(tAsleepWU), -1);
+	t.expect(tAwakeHigh.compareTo(tAsleepWU)).toBe(-1);
+	t.expect(tAwakeWU.compareTo(tAsleepWU)).toBe(-1);
+	t.expect(tAwakeLow.compareTo(tAsleepWU)).toBe(-1);
 });
 
 // Repro for #550
@@ -396,7 +396,7 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 	const tController = createTransaction(msgForController);
 
 	// The controller transaction should have a higher priority
-	t.is(tController.compareTo(tSleepingNode), -1);
+	t.expect(tController.compareTo(tSleepingNode)).toBe(-1);
 });
 
 test("should capture a stack trace where it was created", (t) => {
@@ -417,6 +417,6 @@ test("should capture a stack trace where it was created", (t) => {
 	const test = createDummyTransaction(driverMock, {
 		message: "FOOBAR" as any,
 	});
-	t.true(test.stack.includes(__filename));
-	t.false(test.stack.includes("FOOBAR"));
+	t.expect(test.stack.includes(__filename)).toBe(true);
+	t.expect(test.stack.includes("FOOBAR")).toBe(false);
 });

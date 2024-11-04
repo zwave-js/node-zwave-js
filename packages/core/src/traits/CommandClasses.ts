@@ -1,12 +1,12 @@
 import type {
 	CommandClassInfo,
 	CommandClasses,
-} from "../capabilities/CommandClasses";
+} from "../capabilities/CommandClasses.js";
 import type {
 	MulticastDestination,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
-} from "../consts";
+} from "../consts/index.js";
 
 /** Identifies which node and/or endpoint a CC is addressed to */
 export interface CCAddress {

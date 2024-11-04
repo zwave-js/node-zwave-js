@@ -1,10 +1,15 @@
 import { FunctionType } from "@zwave-js/serial";
-import { type MockControllerBehavior } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import {
+	type MockControllerBehavior,
+	type MockControllerCapabilities,
+	getDefaultMockControllerCapabilities,
+	getDefaultSupportedFunctionTypes,
+} from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async/index.js";
 import {
 	MockControllerCommunicationState,
 	MockControllerStateKeys,
-} from "../../controller/MockControllerState";
+} from "../../controller/MockControllerState.js";
 
 import {
 	CommandClasses,
@@ -29,11 +34,21 @@ import {
 } from "@zwave-js/serial/serialapi";
 import path from "node:path";
 import Sinon from "sinon";
-import { determineNIF } from "../../controller/NodeInformationFrame";
-import { integrationTest } from "../integrationTestSuite";
-import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti";
+import { determineNIF } from "../../controller/NodeInformationFrame.js";
+import { integrationTest } from "../integrationTestSuite.js";
+import { integrationTest as integrationTestMulti } from "../integrationTestSuiteMulti.js";
 
 let shouldTimeOut: boolean;
+
+const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
+	// No support for Bridge API:
+	...getDefaultMockControllerCapabilities(),
+	supportedFunctionTypes: getDefaultSupportedFunctionTypes().filter(
+		(ft) =>
+			ft !== FunctionType.SendDataBridge
+			&& ft !== FunctionType.SendDataMulticastBridge,
+	),
+};
 
 integrationTest(
 	"Abort transmission and soft-reset stick if SendData is missing the callback",
@@ -44,6 +59,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -132,7 +149,7 @@ integrationTest(
 			);
 
 			// And the ping should eventually succeed
-			t.true(await pingPromise);
+			t.expect(await pingPromise).toBe(true);
 		},
 	},
 );
@@ -148,6 +165,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -223,13 +242,13 @@ integrationTest(
 			);
 
 			// The ping should eventually fail and the node be marked dead
-			t.false(await pingPromise);
+			t.expect(await pingPromise).toBe(false);
 
-			t.is(node.status, NodeStatus.Dead);
+			t.expect(node.status).toBe(NodeStatus.Dead);
 
 			// The error event should not have been emitted
 			await wait(300);
-			t.is(errorSpy.callCount, 0);
+			t.expect(errorSpy.callCount).toBe(0);
 		},
 	},
 );
@@ -243,6 +262,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -334,8 +355,6 @@ integrationTest(
 			// The ping and the followup command should eventually succeed
 			await firstCommand;
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );
@@ -374,7 +393,7 @@ integrationTest(
 			driver.options.timeouts.sendDataAbort = 1000;
 			driver.options.timeouts.sendDataCallback = 1500;
 
-			await assertZWaveError(t, () => node.requestNodeInfo(), {
+			await assertZWaveError(t.expect, () => node.requestNodeInfo(), {
 				errorCode: ZWaveErrorCodes.Controller_Timeout,
 				context: "callback",
 			});
@@ -393,6 +412,7 @@ integrationTest(
 		// ),
 
 		controllerCapabilities: {
+			...controllerCapabilitiesNoBridge,
 			// Soft-reset cannot be disabled on 700+ series
 			libraryVersion: "Z-Wave 6.84.0",
 		},
@@ -475,20 +495,20 @@ integrationTest(
 				(msg) => msg.functionType === FunctionType.SendDataAbort,
 			);
 			// but the stick should NOT have been soft-reset
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage(
 					(msg) => msg.functionType === FunctionType.SoftReset,
 				)
-			);
+			).toThrow();
 			mockController.clearReceivedHostMessages();
 
 			// The first command should be failed
-			t.is(await firstCommand, ZWaveErrorCodes.Controller_Timeout);
+			t.expect(await firstCommand).toBe(
+				ZWaveErrorCodes.Controller_Timeout,
+			);
 
 			// The followup command should eventually succeed
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );
@@ -504,6 +524,7 @@ integrationTest(
 		// ),
 
 		controllerCapabilities: {
+			...controllerCapabilitiesNoBridge,
 			// Soft-reset cannot be disabled on 700+ series
 			libraryVersion: "Z-Wave 6.84.0",
 		},
@@ -574,15 +595,19 @@ integrationTest(
 
 			shouldTimeOut = true;
 
-			await assertZWaveError(t, () => node.commandClasses.Basic.set(99), {
-				errorCode: ZWaveErrorCodes.Controller_Timeout,
-				context: "callback",
-			});
+			await assertZWaveError(
+				t.expect,
+				() => node.commandClasses.Basic.set(99),
+				{
+					errorCode: ZWaveErrorCodes.Controller_Timeout,
+					context: "callback",
+				},
+			);
 
 			const aborts = mockController.receivedHostMessages.filter((m) =>
 				m.functionType === FunctionType.SendDataAbort
 			);
-			t.is(aborts.length, 1);
+			t.expect(aborts.length).toBe(1);
 		},
 	},
 );
@@ -596,6 +621,8 @@ integrationTestMulti(
 			__dirname,
 			"fixtures/sendDataMissingCallbackImmediateToSleepingNode",
 		),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		nodeCapabilities: [
 			{
@@ -715,8 +742,6 @@ integrationTestMulti(
 
 			await immediateCommand;
 			await followupCommand;
-
-			t.pass();
 		},
 	},
 );
@@ -730,6 +755,8 @@ integrationTest(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
 		// ),
+
+		controllerCapabilities: controllerCapabilitiesNoBridge,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -815,14 +842,14 @@ integrationTest(
 			});
 
 			// And the ping should eventually succeed
-			t.true(await pingPromise);
+			t.expect(await pingPromise).toBe(true);
 
 			// But the transmission should not have been aborted
-			t.throws(() =>
+			t.expect(() =>
 				mockController.assertReceivedHostMessage(
 					(msg) => msg.functionType === FunctionType.SendDataAbort,
 				)
-			);
+			).toThrow();
 		},
 	},
 );

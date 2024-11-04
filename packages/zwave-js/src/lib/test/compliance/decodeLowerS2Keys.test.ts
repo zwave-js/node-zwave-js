@@ -15,10 +15,10 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"S2 encapsulated commands using a lower security class can be decoded",
@@ -206,8 +206,6 @@ integrationTest(
 					&& f.payload instanceof Security2CCMessageEncapsulation
 					&& f.payload.encapsulated instanceof BasicCCSet,
 			);
-
-			t.pass();
 		},
 	},
 );

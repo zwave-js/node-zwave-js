@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared";
-import type { NVM3Object } from "../object";
+import type { NVM3Object } from "../object.js";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -7,7 +7,7 @@ import {
 	gotDeserializationOptions,
 	nvmFileID,
 	nvmSection,
-} from "./NVMFile";
+} from "./NVMFile.js";
 
 export interface VersionFileOptions extends NVMFileCreationOptions {
 	format: number;

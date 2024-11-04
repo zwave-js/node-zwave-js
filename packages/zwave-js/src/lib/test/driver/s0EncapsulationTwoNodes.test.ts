@@ -15,8 +15,8 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuiteMulti";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 integrationTest(
 	"Security S0 Nonce Get is answered while waiting for a reply from another node",
@@ -260,9 +260,7 @@ integrationTest(
 					);
 				});
 
-			t.is((await basicGet)?.currentValue, 2);
-
-			t.pass();
+			t.expect((await basicGet)?.currentValue).toBe(2);
 		},
 	},
 );

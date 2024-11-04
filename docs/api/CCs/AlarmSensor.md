@@ -19,7 +19,7 @@ Retrieves the current value from this sensor.
 ### `getSupportedSensorTypes`
 
 ```ts
-async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>;
+async getSupportedSensorTypes(): Promise<AlarmSensorType[] | undefined>;
 ```
 
 ## Alarm Sensor CC values

@@ -17,28 +17,28 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
 
-import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
-import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor";
-import { BinarySwitchCCBehaviors } from "./mockCCBehaviors/BinarySwitch";
-import { ColorSwitchCCBehaviors } from "./mockCCBehaviors/ColorSwitch";
-import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
-import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
-import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
-import { MeterCCBehaviors } from "./mockCCBehaviors/Meter";
+import { BasicCCBehaviors } from "./mockCCBehaviors/Basic.js";
+import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor.js";
+import { BinarySwitchCCBehaviors } from "./mockCCBehaviors/BinarySwitch.js";
+import { ColorSwitchCCBehaviors } from "./mockCCBehaviors/ColorSwitch.js";
+import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration.js";
+import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction.js";
+import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific.js";
+import { MeterCCBehaviors } from "./mockCCBehaviors/Meter.js";
 import {
 	MultiChannelCCBehaviors,
 	MultiChannelCCHooks,
-} from "./mockCCBehaviors/MultiChannel";
-import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
-import { MultilevelSwitchCCBehaviors } from "./mockCCBehaviors/MultilevelSwitch";
-import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
-import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
-import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
-import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
-import { ThermostatSetbackCCBehaviors } from "./mockCCBehaviors/ThermostatSetback";
-import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
-import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
-import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
+} from "./mockCCBehaviors/MultiChannel.js";
+import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor.js";
+import { MultilevelSwitchCCBehaviors } from "./mockCCBehaviors/MultilevelSwitch.js";
+import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification.js";
+import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock.js";
+import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch.js";
+import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode.js";
+import { ThermostatSetbackCCBehaviors } from "./mockCCBehaviors/ThermostatSetback.js";
+import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint.js";
+import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode.js";
+import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering.js";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {

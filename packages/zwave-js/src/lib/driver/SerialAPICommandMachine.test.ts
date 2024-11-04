@@ -3,9 +3,9 @@ import type { Message } from "@zwave-js/serial";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
-import ava, { type ExecutionContext, type TestFn } from "ava";
+} from "alcalzone-shared/deferred-promise/index.js";
 import sinon from "sinon";
+import { type ExpectStatic, afterAll, beforeAll, test, vi } from "vitest";
 import { Machine, type State, assign, interpret } from "xstate";
 import {
 	dummyCallbackNOK,
@@ -18,20 +18,14 @@ import {
 	dummyMessageWithResponseWithCallback,
 	dummyResponseNOK,
 	dummyResponseOK,
-} from "../test/messages";
+} from "../test/messages.js";
 import {
 	type SerialAPICommandDoneData,
 	type SerialAPICommandInterpreter,
 	type SerialAPICommandMachineParams,
 	type SerialAPICommandServiceImplementations,
 	createSerialAPICommandMachine,
-} from "./SerialAPICommandMachine";
-
-interface AvaTestContext {
-	clock: sinon.SinonFakeTimers;
-}
-
-const test = ava as TestFn<AvaTestContext>;
+} from "./SerialAPICommandMachine.js";
 
 interface TestMachineStateSchema {
 	states: {
@@ -93,7 +87,7 @@ interface MockImplementations {
 }
 
 interface TestContext {
-	avaExecutionContext: ExecutionContext<AvaTestContext>;
+	expect: ExpectStatic;
 	interpreter: SerialAPICommandInterpreter;
 	implementations: MockImplementations;
 	sendDataPromise?: DeferredPromise<any> | undefined;
@@ -116,12 +110,12 @@ const machineParams: SerialAPICommandMachineParams = {
 	},
 };
 
-test.before((t) => {
-	t.context.clock = sinon.useFakeTimers();
+beforeAll((t) => {
+	vi.useFakeTimers();
 });
 
-test.after.always((t) => {
-	t.context.clock.restore();
+afterAll((t) => {
+	vi.useRealTimers();
 });
 
 const testMachine = Machine<
@@ -164,7 +158,7 @@ const testMachine = Machine<
 				meta: {
 					test: async (
 						{
-							avaExecutionContext: t,
+							expect,
 							interpreter,
 							implementations: { sendData },
 						}: TestContext,
@@ -173,15 +167,17 @@ const testMachine = Machine<
 						// Skip the wait time if there should be any
 						const att = state.context.attempt;
 						if (att > 1) {
-							t.is(interpreter.getSnapshot().value, "retryWait");
-							t.context.clock.tick(100 + (att - 1) * 1000);
+							expect(interpreter.getSnapshot().value).toBe(
+								"retryWait",
+							);
+							vi.advanceTimersByTime(100 + (att - 1) * 1000);
 						}
 
 						// Assert that sendData was called
-						t.is(interpreter.getSnapshot().value, "sending");
+						expect(interpreter.getSnapshot().value).toBe("sending");
 						// but not more than 3 times
-						t.true(att <= 3);
-						t.is(sendData.callCount, att);
+						expect(att).toBeLessThanOrEqual(3);
+						expect(sendData.callCount).toBe(att);
 					},
 				},
 			},
@@ -261,26 +257,26 @@ const testMachine = Machine<
 			unsolicited: {
 				meta: {
 					test: ({
-						avaExecutionContext: t,
+						expect,
 						respondedUnsolicited,
 					}: TestContext) => {
-						t.true(respondedUnsolicited);
+						expect(respondedUnsolicited).toBe(true);
 					},
 				},
 			},
 			success: {
 				meta: {
 					test: ({
-						avaExecutionContext: t,
+						expect,
 						interpreter,
 						expectedResult,
 						machineResult,
 					}: TestContext) => {
 						// Ensure that the interpreter is in "success" state
-						t.is(interpreter.getSnapshot().value, "success");
+						expect(interpreter.getSnapshot().value).toBe("success");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
-						t.like(machineResult, {
+						expect(machineResult).toMatchObject({
 							type: "success",
 							result: expectedResult,
 						});
@@ -290,22 +286,22 @@ const testMachine = Machine<
 			failure: {
 				meta: {
 					test: ({
-						avaExecutionContext: t,
+						expect,
 						interpreter,
 						expectedFailureReason,
 						machineResult,
 						implementations: { sendData },
 					}: TestContext) => {
 						// Ensure that the interpreter is in "failure" state
-						t.is(interpreter.getSnapshot().value, "failure");
+						expect(interpreter.getSnapshot().value).toBe("failure");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
-						t.like(machineResult, {
+						expect(machineResult).toMatchObject({
 							type: "failure",
 							reason: expectedFailureReason,
 						});
 						// and that at most three attempts were made
-						t.true(sendData.callCount <= 3);
+						expect(sendData.callCount).toBeLessThanOrEqual(3);
 					},
 				},
 			},
@@ -375,14 +371,14 @@ const testModel = createModel<TestContext, TestMachineContext>(
 			message: dummyMessageUnrelated,
 		});
 	},
-	ACK_TIMEOUT: ({ avaExecutionContext: t }) => {
-		t.context.clock.tick(machineParams.timeouts.ack);
+	ACK_TIMEOUT: ({ expect }) => {
+		vi.advanceTimersByTime(machineParams.timeouts.ack);
 	},
-	RESPONSE_TIMEOUT: ({ avaExecutionContext: t }) => {
-		t.context.clock.tick(machineParams.timeouts.response);
+	RESPONSE_TIMEOUT: ({ expect }) => {
+		vi.advanceTimersByTime(machineParams.timeouts.response);
 	},
-	CALLBACK_TIMEOUT: ({ avaExecutionContext: t }) => {
-		t.context.clock.tick(machineParams.timeouts.sendDataCallback);
+	CALLBACK_TIMEOUT: ({ expect }) => {
+		vi.advanceTimersByTime(machineParams.timeouts.sendDataCallback);
 	},
 });
 
@@ -405,7 +401,7 @@ testPlans.forEach((plan) => {
 		// ) {
 		// 	return;
 		// }
-		test.serial(`${planDescription} ${path.description}`, async (t) => {
+		test.sequential(`${planDescription} ${path.description}`, async (t) => {
 			// eslint-disable-next-line prefer-const
 			let context: TestContext;
 			const sendData = sinon.stub().callsFake(() => {
@@ -435,7 +431,6 @@ testPlans.forEach((plan) => {
 			const match = createMachineRegex.exec(path.description);
 			if (!match?.groups?.json) {
 				await path.test(undefined as any);
-				t.pass();
 				return;
 			}
 
@@ -451,7 +446,7 @@ testPlans.forEach((plan) => {
 			);
 
 			context = {
-				avaExecutionContext: t,
+				expect: t.expect,
 				interpreter: interpret(machine),
 				implementations: implementations as any,
 			};
@@ -501,7 +496,6 @@ testPlans.forEach((plan) => {
 			}
 
 			await path.test(context);
-			t.pass();
 		});
 	});
 });
@@ -512,5 +506,4 @@ testPlans.forEach((plan) => {
 // 			return !!stateNode.meta;
 // 		},
 // 	});
-// 	t.pass();
-// });
+// // });

@@ -2,9 +2,9 @@ import { DoorLockMode } from "@zwave-js/cc";
 import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"When receiving a NotificationCC::Report with a lock operation, the current value for Door Lock CC should be updated accordingly",
@@ -31,7 +31,7 @@ integrationTest(
 			// wait a bit for the value to be updated
 			await wait(100);
 
-			t.is(node.getValue(valueId), DoorLockMode.Secured);
+			t.expect(node.getValue(valueId)).toBe(DoorLockMode.Secured);
 
 			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
@@ -46,7 +46,7 @@ integrationTest(
 			// wait a bit for the value to be updated
 			await wait(100);
 
-			t.is(node.getValue(valueId), DoorLockMode.Unsecured);
+			t.expect(node.getValue(valueId)).toBe(DoorLockMode.Unsecured);
 		},
 	},
 );

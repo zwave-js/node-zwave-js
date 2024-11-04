@@ -8,24 +8,29 @@ import {
 	NODE_ID_BROADCAST_LR,
 	type RSSI,
 	RssiError,
+	ZWaveError,
+	ZWaveErrorCodes,
+	encodeNodeID,
 	isLongRangeNodeId,
 	parseNodeBitMask,
 	parseNodeID,
 } from "@zwave-js/core";
+import { type CCEncodingContext } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	type MessageEncodingContext,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
-import { tryParseRSSI } from "../transport/SendDataShared";
-import { type MessageWithCC } from "../utils";
-import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
+import { Bytes, getEnumMemberName } from "@zwave-js/shared";
+import { tryParseRSSI } from "../transport/SendDataShared.js";
+import { type MessageWithCC } from "../utils.js";
+import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest.js";
 
 export type BridgeApplicationCommandRequestOptions =
 	& (
@@ -163,7 +168,19 @@ export class BridgeApplicationCommandRequest extends Message
 
 	public readonly ownNodeId: number;
 
-	public readonly serializedCC: Uint8Array | undefined;
+	public serializedCC: Uint8Array | undefined;
+	public serializeCC(ctx: CCEncodingContext): Uint8Array {
+		if (!this.serializedCC) {
+			if (!this.command) {
+				throw new ZWaveError(
+					`Cannot serialize a ${this.constructor.name} without a command`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.serializedCC = this.command.serialize(ctx);
+		}
+		return this.serializedCC;
+	}
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: CommandClass | undefined;
@@ -174,6 +191,60 @@ export class BridgeApplicationCommandRequest extends Message
 			return this.command.nodeId;
 		}
 		return this._nodeId ?? super.getNodeId();
+	}
+
+	public serialize(ctx: MessageEncodingContext): Bytes {
+		let rxStatus = 0;
+		if (this.routedBusy) {
+			rxStatus |= ApplicationCommandStatusFlags.RoutedBusy;
+		}
+		switch (this.frameType) {
+			case "multicast":
+				rxStatus |= ApplicationCommandStatusFlags.TypeMulti;
+				break;
+			case "broadcast":
+				rxStatus |= ApplicationCommandStatusFlags.TypeBroad;
+				break;
+			default:
+				rxStatus |= ApplicationCommandStatusFlags.TypeSingle;
+		}
+		if (this.isExploreFrame) {
+			rxStatus |= ApplicationCommandStatusFlags.Explore;
+		}
+		if (this.isForeignFrame) {
+			rxStatus |= ApplicationCommandStatusFlags.ForeignFrame;
+		}
+		if (this.fromForeignHomeId) {
+			rxStatus |= ApplicationCommandStatusFlags.ForeignHomeId;
+		}
+		const destinationNodeId = encodeNodeID(
+			typeof this.targetNodeId === "number" ? this.targetNodeId : 0,
+			ctx.nodeIdType,
+		);
+		const sourceNodeId = encodeNodeID(
+			this.getNodeId() ?? 0,
+			ctx.nodeIdType,
+		);
+		const serializedCC = this.serializeCC(ctx);
+		const multicastNodeMask = typeof this.targetNodeId === "number"
+			? Uint8Array.from([0])
+			: Uint8Array.from([this.targetNodeId.length, ...this.targetNodeId]);
+
+		this.payload = Bytes.concat([
+			[rxStatus],
+			destinationNodeId,
+			sourceNodeId,
+			[serializedCC.length],
+			serializedCC,
+			multicastNodeMask,
+			[RssiError.NotAvailable],
+		]);
+
+		if (this.rssi != undefined) {
+			this.payload.writeInt8(this.rssi, this.payload.length - 1);
+		}
+
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

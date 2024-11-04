@@ -1,12 +1,12 @@
 import { pick } from "@zwave-js/shared/safe";
-import test from "ava";
 import sinon from "sinon";
-import { CommandClasses } from "../capabilities/CommandClasses";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { assertZWaveError } from "../test/assertZWaveError";
-import { ValueMetadata } from "./Metadata";
-import { ValueDB, dbKeyToValueIdFast } from "./ValueDB";
-import type { ValueID } from "./_Types";
+import { test } from "vitest";
+import { CommandClasses } from "../capabilities/CommandClasses.js";
+import { ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { assertZWaveError } from "../test/assertZWaveError.js";
+import { ValueMetadata } from "./Metadata.js";
+import { ValueDB, dbKeyToValueIdFast } from "./ValueDB.js";
+import type { ValueID } from "./_Types.js";
 
 function setup(): {
 	valueDB: ValueDB;
@@ -51,17 +51,17 @@ test("setValue() -> first add", (t) => {
 	const cbArg = onValueAdded.getCall(0).args[0];
 
 	// The callback arg should contain the CC
-	t.is(typeof cbArg, "object");
-	t.is(cbArg.commandClass, CommandClasses["Alarm Sensor"]);
+	t.expect(typeof cbArg).toBe("object");
+	t.expect(cbArg.commandClass).toBe(CommandClasses["Alarm Sensor"]);
 
 	// The callback arg should contain the endpoint
-	t.is(cbArg.endpoint, 4);
+	t.expect(cbArg.endpoint).toBe(4);
 
 	// The callback arg should contain the property name
-	t.is(cbArg.property, "foo");
+	t.expect(cbArg.property).toBe("foo");
 
 	// The callback arg should contain the new value
-	t.is(cbArg.newValue, "bar");
+	t.expect(cbArg.newValue).toBe("bar");
 });
 
 test("setValue() -> consecutive adds", (t) => {
@@ -80,20 +80,20 @@ test("setValue() -> consecutive adds", (t) => {
 	const cbArg = onValueUpdated.getCall(0).args[0];
 
 	// The callback arg should contain the CC
-	t.is(typeof cbArg, "object");
-	t.is(cbArg.commandClass, CommandClasses["Wake Up"]);
+	t.expect(typeof cbArg).toBe("object");
+	t.expect(cbArg.commandClass).toBe(CommandClasses["Wake Up"]);
 
 	// The callback arg should contain the endpoint
-	t.is(cbArg.endpoint, 0);
+	t.expect(cbArg.endpoint).toBe(0);
 
 	// The callback arg should contain the property name
-	t.is(cbArg.property, "prop");
+	t.expect(cbArg.property).toBe("prop");
 
 	// The callback arg should contain the previous value
-	t.is(cbArg.prevValue, "foo");
+	t.expect(cbArg.prevValue).toBe("foo");
 
 	// The callback arg should contain the new value
-	t.is(cbArg.newValue, "bar");
+	t.expect(cbArg.newValue).toBe("bar");
 });
 
 test("setValue()/removeValue() -> with the noEvent parameter set to true", (t) => {
@@ -130,8 +130,6 @@ test("setValue()/removeValue() -> with the noEvent parameter set to true", (t) =
 	sinon.assert.notCalled(onValueAdded);
 	sinon.assert.notCalled(onValueUpdated);
 	sinon.assert.notCalled(onValueRemoved);
-
-	t.pass();
 });
 
 test("getValue()/setValue() -> should distinguish values by property key", (t) => {
@@ -158,50 +156,46 @@ test("getValue()/setValue() -> should distinguish values by property key", (t) =
 	);
 
 	// treat different property keys as distinct values", () => {
-	t.is(
+	t.expect(
 		valueDB.getValue({
 			commandClass: cc,
 			endpoint: 0,
 			property: "prop",
 			propertyKey: "foo",
 		}),
-		1,
-	);
-	t.is(
+	).toBe(1);
+	t.expect(
 		valueDB.getValue({
 			commandClass: cc,
 			endpoint: 0,
 			property: "prop",
 			propertyKey: "bar",
 		}),
-		2,
-	);
+	).toBe(2);
 
 	// the value added callback should have been called for each added value", () => {
 	sinon.assert.calledTwice(onValueAdded);
-	t.is(onValueAdded.getCall(0).args[0].propertyKey, "foo");
-	t.is(onValueAdded.getCall(1).args[0].propertyKey, "bar");
+	t.expect(onValueAdded.getCall(0).args[0].propertyKey).toBe("foo");
+	t.expect(onValueAdded.getCall(1).args[0].propertyKey).toBe("bar");
 
 	// after clearing the value DB, the values should all be removed", () => {
 	valueDB.clear();
-	t.is(
+	t.expect(
 		valueDB.getValue({
 			commandClass: cc,
 			endpoint: 0,
 			property: "prop",
 			propertyKey: "foo",
 		}),
-		undefined,
-	);
-	t.is(
+	).toBeUndefined();
+	t.expect(
 		valueDB.getValue({
 			commandClass: cc,
 			endpoint: 0,
 			property: "prop",
 			propertyKey: "bar",
 		}),
-		undefined,
-	);
+	).toBeUndefined();
 });
 
 test("removeValue()", (t) => {
@@ -226,17 +220,17 @@ test("removeValue()", (t) => {
 	const cbArg = onValueRemoved.getCall(0).args[0];
 
 	// The callback arg should contain the CC
-	t.is(typeof cbArg, "object");
-	t.is(cbArg.commandClass, CommandClasses["Alarm Sensor"]);
+	t.expect(typeof cbArg).toBe("object");
+	t.expect(cbArg.commandClass).toBe(CommandClasses["Alarm Sensor"]);
 
 	// The callback arg should contain the endpoint
-	t.is(cbArg.endpoint, 1);
+	t.expect(cbArg.endpoint).toBe(1);
 
 	// The callback arg should contain the property name
-	t.is(cbArg.property, "bar");
+	t.expect(cbArg.property).toBe("bar");
 
 	// The callback arg should contain the previous value
-	t.is(cbArg.prevValue, "foo");
+	t.expect(cbArg.prevValue).toBe("foo");
 
 	// If the value was not in the DB, the value removed event should not be emitted
 	onValueRemoved.resetHistory();
@@ -253,7 +247,7 @@ test("removeValue()", (t) => {
 		endpoint: 9,
 		property: "test",
 	});
-	t.false(retValNotFound);
+	t.expect(retValNotFound).toBe(false);
 
 	valueDB.setValue(
 		{
@@ -268,7 +262,7 @@ test("removeValue()", (t) => {
 		endpoint: 0,
 		property: "test",
 	});
-	t.true(retValFound);
+	t.expect(retValFound).toBe(true);
 
 	// After removing a value, getValue should return undefined
 	const actual = valueDB.getValue({
@@ -276,7 +270,7 @@ test("removeValue()", (t) => {
 		endpoint: 1,
 		property: "bar",
 	});
-	t.is(actual, undefined);
+	t.expect(actual).toBeUndefined();
 });
 
 test("clear()", (t) => {
@@ -302,18 +296,18 @@ test("clear()", (t) => {
 	const cbArgs = onValueRemoved.getCalls().map((c) => c.args[0]);
 
 	// The callback should contain the removed values
-	t.is(typeof cbArgs[0], "object");
-	t.is(cbArgs[0].prevValue, "foo");
-	t.is(typeof cbArgs[1], "object");
-	t.is(cbArgs[1].prevValue, "bar");
+	t.expect(typeof cbArgs[0]).toBe("object");
+	t.expect(cbArgs[0].prevValue).toBe("foo");
+	t.expect(typeof cbArgs[1]).toBe("object");
+	t.expect(cbArgs[1].prevValue).toBe("bar");
 
 	// After clearing, getValue should return undefined
 	let actual: unknown;
 	actual = valueDB.getValue(valueId1);
-	t.is(actual, undefined);
+	t.expect(actual).toBeUndefined();
 
 	actual = valueDB.setValue(valueId2, "bar");
-	t.is(actual, undefined);
+	t.expect(actual).toBeUndefined();
 });
 
 test("getValue() should return the value stored for the same combination of CC, endpoint and property", (t) => {
@@ -349,7 +343,7 @@ test("getValue() should return the value stored for the same combination of CC, 
 		valueDB.setValue(valueId, value);
 	}
 	for (const { value, ...valueId } of tests) {
-		t.is(valueDB.getValue(valueId), value);
+		t.expect(valueDB.getValue(valueId)).toBe(value);
 	}
 });
 
@@ -390,8 +384,8 @@ test("getValues() should return all values stored for the given CC", (t) => {
 	}
 
 	const actual = valueDB.getValues(requestedCC);
-	t.is(actual.length, expected.length);
-	t.deepEqual(actual, expected);
+	t.expect(actual.length).toBe(expected.length);
+	t.expect(actual).toStrictEqual(expected);
 });
 
 test("getValues() should ignore values from another node", (t) => {
@@ -439,8 +433,8 @@ test("getValues() should ignore values from another node", (t) => {
 	valueDB["_index"] = valueDB["buildIndex"]();
 
 	const actual = valueDB.getValues(requestedCC);
-	t.is(actual.length, expected.length);
-	t.deepEqual(actual, expected);
+	t.expect(actual.length).toBe(expected.length);
+	t.expect(actual).toStrictEqual(expected);
 });
 
 test("hasValue() -> should return false if no value is stored for the same combination of CC, endpoint and property", (t) => {
@@ -473,9 +467,9 @@ test("hasValue() -> should return false if no value is stored for the same combi
 	];
 
 	for (const { value, ...valueId } of tests) {
-		t.false(valueDB.hasValue(valueId));
+		t.expect(valueDB.hasValue(valueId)).toBe(false);
 		valueDB.setValue(valueId, value);
-		t.true(valueDB.hasValue(valueId));
+		t.expect(valueDB.hasValue(valueId)).toBe(true);
 	}
 });
 
@@ -511,10 +505,9 @@ test("findValues() -> should return all values whose id matches the given predic
 	for (const { value, ...valueId } of values) {
 		valueDB.setValue(valueId, value);
 	}
-	t.deepEqual(
+	t.expect(
 		valueDB.findValues((id) => id.endpoint === 2),
-		values.filter((v) => v.endpoint === 2),
-	);
+	).toStrictEqual(values.filter((v) => v.endpoint === 2));
 });
 
 test("findValues() -> should ignore values from another node", (t) => {
@@ -558,10 +551,9 @@ test("findValues() -> should ignore values from another node", (t) => {
 
 	// The node has nodeID 2
 	const { nodeId, ...expected } = values[1];
-	t.deepEqual(
+	t.expect(
 		valueDB.findValues((id) => id.endpoint === 2),
-		[expected],
-	);
+	).toStrictEqual([expected]);
 });
 
 test("Metadata is assigned to a specific combination of endpoint, property name (and property key)", (t) => {
@@ -572,10 +564,11 @@ test("Metadata is assigned to a specific combination of endpoint, property name 
 		property: "3",
 	};
 	valueDB.setMetadata(valueId, ValueMetadata.Any);
-	t.true(valueDB.hasMetadata(valueId));
-	t.false(valueDB.hasMetadata({ ...valueId, propertyKey: 4 }));
-	t.is(valueDB.getMetadata(valueId), ValueMetadata.Any);
-	t.is(valueDB.getMetadata({ ...valueId, propertyKey: 4 }), undefined);
+	t.expect(valueDB.hasMetadata(valueId)).toBe(true);
+	t.expect(valueDB.hasMetadata({ ...valueId, propertyKey: 4 })).toBe(false);
+	t.expect(valueDB.getMetadata(valueId)).toBe(ValueMetadata.Any);
+	t.expect(valueDB.getMetadata({ ...valueId, propertyKey: 4 }))
+		.toBeUndefined();
 });
 
 test("Metadata is cleared together with the values", (t) => {
@@ -587,12 +580,12 @@ test("Metadata is cleared together with the values", (t) => {
 	};
 	valueDB.setMetadata(valueId, ValueMetadata.Any);
 	valueDB.clear();
-	t.false(valueDB.hasMetadata(valueId));
+	t.expect(valueDB.hasMetadata(valueId)).toBe(false);
 });
 
 test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 	const { valueDB } = setup();
-	t.is(valueDB.getAllMetadata(1).length, 0);
+	t.expect(valueDB.getAllMetadata(1).length).toBe(0);
 
 	valueDB.setMetadata(
 		{
@@ -602,7 +595,7 @@ test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 		},
 		ValueMetadata.Any,
 	);
-	t.is(valueDB.getAllMetadata(1).length, 1);
+	t.expect(valueDB.getAllMetadata(1).length).toBe(1);
 
 	valueDB.setMetadata(
 		{
@@ -612,8 +605,8 @@ test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 		},
 		ValueMetadata.Any,
 	);
-	t.is(valueDB.getAllMetadata(1).length, 1);
-	t.is(valueDB.getAllMetadata(55).length, 1);
+	t.expect(valueDB.getAllMetadata(1).length).toBe(1);
+	t.expect(valueDB.getAllMetadata(55).length).toBe(1);
 
 	valueDB.setMetadata(
 		{
@@ -623,8 +616,8 @@ test("getAllMetadata() -> returns all metadata for a given CC", (t) => {
 		},
 		ValueMetadata.Any,
 	);
-	t.is(valueDB.getAllMetadata(1).length, 1);
-	t.is(valueDB.getAllMetadata(55).length, 2);
+	t.expect(valueDB.getAllMetadata(1).length).toBe(1);
+	t.expect(valueDB.getAllMetadata(55).length).toBe(2);
 });
 
 test("getAllMetadata() -> should ignore values from another node", (t) => {
@@ -675,8 +668,8 @@ test("getAllMetadata() -> should ignore values from another node", (t) => {
 	valueDB["_index"] = valueDB["buildIndex"]();
 
 	const actual = valueDB.getAllMetadata(requestedCC);
-	t.is(actual.length, expected.length);
-	t.deepEqual(actual, expected);
+	t.expect(actual.length).toBe(expected.length);
+	t.expect(actual).toStrictEqual(expected);
 });
 
 test("updating dynamic metadata", (t) => {
@@ -696,17 +689,17 @@ test("updating dynamic metadata", (t) => {
 	const cbArg = onMetadataUpdated.getCall(0).args[0];
 
 	// The callback arg should contain the CC
-	t.is(typeof cbArg, "object");
-	t.is(cbArg.commandClass, 1);
+	t.expect(typeof cbArg).toBe("object");
+	t.expect(cbArg.commandClass).toBe(1);
 
 	// The callback arg should contain the endpoint
-	t.is(cbArg.endpoint, 2);
+	t.expect(cbArg.endpoint).toBe(2);
 
 	// The callback arg should contain the property
-	t.is(cbArg.property, "3");
+	t.expect(cbArg.property).toBe("3");
 
 	// The callback arg should contain the new metadata
-	t.is(cbArg.metadata, ValueMetadata.Any);
+	t.expect(cbArg.metadata).toBe(ValueMetadata.Any);
 });
 
 test("findMetadata() -> should return all metadata whose id matches the given predicate", (t) => {
@@ -750,10 +743,9 @@ test("findMetadata() -> should return all metadata whose id matches the given pr
 			metadata: meta,
 		}));
 
-	t.deepEqual(
+	t.expect(
 		valueDB.findMetadata((id) => id.endpoint === 2),
-		expected,
-	);
+	).toStrictEqual(expected);
 });
 
 test("findMetadata() -> should ignore metadata from another node", (t) => {
@@ -802,10 +794,9 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		...pick(expectedMeta, ["commandClass", "endpoint", "property"]),
 		metadata: expectedMeta.meta,
 	};
-	t.deepEqual(
+	t.expect(
 		valueDB.findMetadata((id) => id.endpoint === 2),
-		[expected],
-	);
+	).toStrictEqual([expected]);
 });
 
 {
@@ -823,7 +814,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.getValue(valueId as any), {
+			assertZWaveError(t.expect, () => valueDB.getValue(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -833,9 +824,13 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.setValue(valueId as any, 0), {
-				errorCode: ZWaveErrorCodes.Argument_Invalid,
-			});
+			assertZWaveError(
+				t.expect,
+				() => valueDB.setValue(valueId as any, 0),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				},
+			);
 		}
 	});
 
@@ -843,7 +838,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.hasValue(valueId as any), {
+			assertZWaveError(t.expect, () => valueDB.hasValue(valueId as any), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 			});
 		}
@@ -853,9 +848,13 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.removeValue(valueId as any), {
-				errorCode: ZWaveErrorCodes.Argument_Invalid,
-			});
+			assertZWaveError(
+				t.expect,
+				() => valueDB.removeValue(valueId as any),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				},
+			);
 		}
 	});
 
@@ -863,9 +862,13 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.getMetadata(valueId as any), {
-				errorCode: ZWaveErrorCodes.Argument_Invalid,
-			});
+			assertZWaveError(
+				t.expect,
+				() => valueDB.getMetadata(valueId as any),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				},
+			);
 		}
 	});
 
@@ -874,7 +877,7 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 
 		for (const valueId of invalidValueIDs) {
 			assertZWaveError(
-				t,
+				t.expect,
 				() => valueDB.setMetadata(valueId as any, {} as any),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -887,9 +890,13 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 		const { valueDB } = setup();
 
 		for (const valueId of invalidValueIDs) {
-			assertZWaveError(t, () => valueDB.hasMetadata(valueId as any), {
-				errorCode: ZWaveErrorCodes.Argument_Invalid,
-			});
+			assertZWaveError(
+				t.expect,
+				() => valueDB.hasMetadata(valueId as any),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				},
+			);
 		}
 	});
 }
@@ -909,20 +916,20 @@ test("findMetadata() -> should ignore metadata from another node", (t) => {
 	test(`invalid value IDs should be ignored by the setXYZ methods when the "noThrow" parameter is true -> setValue()`, (t) => {
 		const { valueDB } = setup();
 		for (const valueId of invalidValueIDs) {
-			t.notThrows(() =>
+			t.expect(() =>
 				valueDB.setValue(valueId as any, 0, { noThrow: true })
-			);
+			).not.toThrow();
 		}
 	});
 
 	test(`invalid value IDs should be ignored by the setXYZ methods when the "noThrow" parameter is true -> setMetadata()`, (t) => {
 		const { valueDB } = setup();
 		for (const valueId of invalidValueIDs) {
-			t.notThrows(() =>
+			t.expect(() =>
 				valueDB.setMetadata(valueId as any, {} as any, {
 					noThrow: true,
 				})
-			);
+			).not.toThrow();
 		}
 	});
 }
@@ -961,7 +968,7 @@ test("dbKeyToValueIdFast() -> should work correctly", (t) => {
 	];
 
 	for (const test of tests) {
-		t.deepEqual(dbKeyToValueIdFast(JSON.stringify(test)), test);
+		t.expect(dbKeyToValueIdFast(JSON.stringify(test))).toStrictEqual(test);
 	}
 });
 
@@ -982,6 +989,6 @@ test("keys that are invalid JSON should not cause a crash", (t) => {
 		]) as any,
 	);
 
-	t.deepEqual(valueDB.getAllMetadata(44), []);
-	t.is(valueDB["_index"].size, 0);
+	t.expect(valueDB.getAllMetadata(44)).toStrictEqual([]);
+	t.expect(valueDB["_index"].size).toBe(0);
 });

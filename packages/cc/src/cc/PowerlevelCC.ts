@@ -18,8 +18,8 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "../lib/API";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { PhysicalCCAPI } from "../lib/API.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -27,12 +27,12 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	Powerlevel,
 	PowerlevelCommand,
 	PowerlevelTestStatus,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends PhysicalCCAPI {

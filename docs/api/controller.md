@@ -402,10 +402,10 @@ interface RouteStatistics {
 
 ```ts
 enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
@@ -770,19 +770,19 @@ This tells you whether an association is allowed, and if not, why:
 
 ```ts
 enum AssociationCheckResult {
-	OK = 1,
+	OK = 0x01,
 	/** The association is forbidden, because the destination is a ZWLR node. ZWLR does not support direct communication between end devices. */
-	Forbidden_DestinationIsLongRange = 2,
+	Forbidden_DestinationIsLongRange,
 	/** The association is forbidden, because the source is a ZWLR node. ZWLR does not support direct communication between end devices. */
-	Forbidden_SourceIsLongRange = 3,
+	Forbidden_SourceIsLongRange,
 	/** The association is forbidden, because a node cannot be associated with itself. */
-	Forbidden_SelfAssociation = 4,
+	Forbidden_SelfAssociation,
 	/** The association is forbidden, because the source node's CC versions require the source and destination node to have the same (highest) security class. */
-	Forbidden_SecurityClassMismatch = 5,
+	Forbidden_SecurityClassMismatch,
 	/** The association is forbidden, because the source node's CC versions require the source node to have the key for the destination node's highest security class. */
-	Forbidden_DestinationSecurityClassNotGranted = 6,
+	Forbidden_DestinationSecurityClassNotGranted,
 	/** The association is forbidden, because none of the CCs the source node sends are supported by the destination. */
-	Forbidden_NoSupportedCCs = 7,
+	Forbidden_NoSupportedCCs,
 }
 ```
 
@@ -1383,18 +1383,18 @@ Returns the type of the Z-Wave library that is supported by the controller hardw
 
 ```ts
 enum ZWaveLibraryTypes {
-	"Unknown" = 0,
-	"Static Controller" = 1,
-	"Controller" = 2,
-	"Enhanced Slave" = 3,
-	"Slave" = 4,
-	"Installer" = 5,
-	"Routing Slave" = 6,
-	"Bridge Controller" = 7,
-	"Device under Test" = 8,
-	"N/A" = 9,
-	"AV Remote" = 10,
-	"AV Device" = 11,
+	"Unknown",
+	"Static Controller",
+	"Controller",
+	"Enhanced Slave",
+	"Slave",
+	"Installer",
+	"Routing Slave",
+	"Bridge Controller",
+	"Device under Test",
+	"N/A",
+	"AV Remote",
+	"AV Device",
 }
 ```
 
@@ -1460,11 +1460,11 @@ This property tracks the status of the controller. Valid values are:
 ```ts
 enum ControllerStatus {
 	/** The controller is ready to accept commands and transmit */
-	Ready = 0,
+	Ready,
 	/** The controller is unresponsive */
-	Unresponsive = 1,
+	Unresponsive,
 	/** The controller is unable to transmit */
-	Jammed = 2,
+	Jammed,
 }
 ```
 

@@ -32,11 +32,11 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
-import type { Driver } from "../driver/Driver";
-import { cacheKeys } from "../driver/NetworkCache";
-import type { DeviceClass } from "./DeviceClass";
-import type { EndpointDump } from "./Dump";
-import type { ZWaveNode } from "./Node";
+import type { Driver } from "../driver/Driver.js";
+import { cacheKeys } from "../driver/NetworkCache.js";
+import type { DeviceClass } from "./DeviceClass.js";
+import type { EndpointDump } from "./Dump.js";
+import type { ZWaveNode } from "./Node.js";
 
 /**
  * Represents a physical endpoint of a Z-Wave node. This can either be the root

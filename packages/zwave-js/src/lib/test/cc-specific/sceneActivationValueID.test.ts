@@ -1,5 +1,5 @@
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"a node that controls the Scene Activation CC should include the scene ID in getDefinedValueIDs()",
@@ -12,7 +12,7 @@ integrationTest(
 
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const valueIDs = node.getDefinedValueIDs();
-			t.true(valueIDs.some((v) => v.property === "sceneId"));
+			t.expect(valueIDs.some((v) => v.property === "sceneId")).toBe(true);
 		},
 	},
 );

@@ -20,7 +20,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { clamp } from "alcalzone-shared/math";
+import { clamp } from "alcalzone-shared/math/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -29,13 +29,13 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	type CCResponsePredicate,
 	CommandClass,
 	type InterviewContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -45,9 +45,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { SoundSwitchCommand, type ToneId } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { SoundSwitchCommand, type ToneId } from "../lib/_Types.js";
 
 export const SoundSwitchCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Sound Switch"], {

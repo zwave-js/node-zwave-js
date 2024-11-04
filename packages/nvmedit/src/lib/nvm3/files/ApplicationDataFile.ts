@@ -6,7 +6,7 @@ import {
 	gotDeserializationOptions,
 	nvmFileID,
 	nvmSection,
-} from "./NVMFile";
+} from "./NVMFile.js";
 
 export interface ApplicationDataFileOptions extends NVMFileCreationOptions {
 	applicationData: Bytes;

@@ -1,10 +1,10 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
-import { CommandClasses } from "./CommandClasses";
+import { test } from "vitest";
+import { CommandClasses } from "./CommandClasses.js";
 import {
 	parseApplicationNodeInformation,
 	parseNodeUpdatePayload,
-} from "./NodeInfo";
+} from "./NodeInfo.js";
 
 test("parseApplicationNodeInformation() should parse correctly", (t) => {
 	const payload = Bytes.from([
@@ -19,9 +19,9 @@ test("parseApplicationNodeInformation() should parse correctly", (t) => {
 	]);
 	const eif = parseApplicationNodeInformation(payload);
 
-	t.is(eif.genericDeviceClass, 0x01);
-	t.is(eif.specificDeviceClass, 0x02);
-	t.deepEqual(eif.supportedCCs, [
+	t.expect(eif.genericDeviceClass).toBe(0x01);
+	t.expect(eif.specificDeviceClass).toBe(0x02);
+	t.expect(eif.supportedCCs).toStrictEqual([
 		CommandClasses["Multi Channel"],
 		CommandClasses["Multilevel Toggle Switch"],
 	]);
@@ -40,12 +40,12 @@ test("parseNodeUpdatePayload() should parse correctly", (t) => {
 	]);
 	const nup = parseNodeUpdatePayload(payload);
 
-	t.is(nup.nodeId, 5);
-	t.is(nup.basicDeviceClass, 3);
-	t.is(nup.genericDeviceClass, 1);
-	t.is(nup.specificDeviceClass, 2);
+	t.expect(nup.nodeId).toBe(5);
+	t.expect(nup.basicDeviceClass).toBe(3);
+	t.expect(nup.genericDeviceClass).toBe(1);
+	t.expect(nup.specificDeviceClass).toBe(2);
 
-	t.deepEqual(nup.supportedCCs, [
+	t.expect(nup.supportedCCs).toStrictEqual([
 		CommandClasses["Multi Channel"],
 		CommandClasses["Multilevel Toggle Switch"],
 	]);
@@ -70,7 +70,7 @@ test("parseNodeUpdatePayload() parses extended CCs correctly", (t) => {
 	]);
 
 	const nup = parseNodeUpdatePayload(payload);
-	t.deepEqual(nup.supportedCCs, [
+	t.expect(nup.supportedCCs).toStrictEqual([
 		CommandClasses["Security Mark"],
 		CommandClasses["Sensor Configuration"],
 		CommandClasses.Supervision,

@@ -1,7 +1,7 @@
 import { Bytes, num2hex } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
-import type { SerialLogger } from "../log/Logger";
-import { MessageHeaders } from "../message/MessageHeaders";
+import type { SerialLogger } from "../log/Logger.js";
+import { MessageHeaders } from "../message/MessageHeaders.js";
 
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message

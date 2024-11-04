@@ -1,9 +1,12 @@
-const path = require("path");
+import { spawnSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Dprint parallelizes formatting and is generally fast enough to run on the whole repo
 // despite lint-staged telling us which files have changed.
 const repoRoot = path.join(__dirname, "..");
-require("child_process").spawnSync("yarn", ["fmt"], {
+spawnSync("yarn", ["fmt"], {
 	cwd: repoRoot,
 });
 

@@ -47,14 +47,14 @@ import {
 	getErrorMessage,
 	num2hex,
 } from "@zwave-js/shared";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
 import {
 	getAPI,
 	getCCValues,
 	getCommandClass,
 	getImplementedVersion,
-} from "./CommandClassDecorators";
-import { type CCValue, type StaticCCValue } from "./Values";
+} from "./CommandClassDecorators.js";
+import { type CCValue, type StaticCCValue } from "./Values.js";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -955,89 +955,92 @@ export interface CCAPIs {
 	[Symbol.iterator](): Iterator<CCAPI>;
 
 	// AUTO GENERATION BELOW
-	"Alarm Sensor": import("../cc/AlarmSensorCC").AlarmSensorCCAPI;
-	Association: import("../cc/AssociationCC").AssociationCCAPI;
+	"Alarm Sensor": import("../cc/AlarmSensorCC.js").AlarmSensorCCAPI;
+	Association: import("../cc/AssociationCC.js").AssociationCCAPI;
 	"Association Group Information":
-		import("../cc/AssociationGroupInfoCC").AssociationGroupInfoCCAPI;
-	"Barrier Operator": import("../cc/BarrierOperatorCC").BarrierOperatorCCAPI;
-	Basic: import("../cc/BasicCC").BasicCCAPI;
-	Battery: import("../cc/BatteryCC").BatteryCCAPI;
-	"Binary Sensor": import("../cc/BinarySensorCC").BinarySensorCCAPI;
-	"Binary Switch": import("../cc/BinarySwitchCC").BinarySwitchCCAPI;
-	"CRC-16 Encapsulation": import("../cc/CRC16CC").CRC16CCAPI;
-	"Central Scene": import("../cc/CentralSceneCC").CentralSceneCCAPI;
+		import("../cc/AssociationGroupInfoCC.js").AssociationGroupInfoCCAPI;
+	"Barrier Operator":
+		import("../cc/BarrierOperatorCC.js").BarrierOperatorCCAPI;
+	Basic: import("../cc/BasicCC.js").BasicCCAPI;
+	Battery: import("../cc/BatteryCC.js").BatteryCCAPI;
+	"Binary Sensor": import("../cc/BinarySensorCC.js").BinarySensorCCAPI;
+	"Binary Switch": import("../cc/BinarySwitchCC.js").BinarySwitchCCAPI;
+	"CRC-16 Encapsulation": import("../cc/CRC16CC.js").CRC16CCAPI;
+	"Central Scene": import("../cc/CentralSceneCC.js").CentralSceneCCAPI;
 	"Climate Control Schedule":
-		import("../cc/ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
-	Clock: import("../cc/ClockCC").ClockCCAPI;
-	"Color Switch": import("../cc/ColorSwitchCC").ColorSwitchCCAPI;
-	Configuration: import("../cc/ConfigurationCC").ConfigurationCCAPI;
+		import("../cc/ClimateControlScheduleCC.js").ClimateControlScheduleCCAPI;
+	Clock: import("../cc/ClockCC.js").ClockCCAPI;
+	"Color Switch": import("../cc/ColorSwitchCC.js").ColorSwitchCCAPI;
+	Configuration: import("../cc/ConfigurationCC.js").ConfigurationCCAPI;
 	"Device Reset Locally":
-		import("../cc/DeviceResetLocallyCC").DeviceResetLocallyCCAPI;
-	"Door Lock": import("../cc/DoorLockCC").DoorLockCCAPI;
-	"Door Lock Logging": import("../cc/DoorLockLoggingCC").DoorLockLoggingCCAPI;
+		import("../cc/DeviceResetLocallyCC.js").DeviceResetLocallyCCAPI;
+	"Door Lock": import("../cc/DoorLockCC.js").DoorLockCCAPI;
+	"Door Lock Logging":
+		import("../cc/DoorLockLoggingCC.js").DoorLockLoggingCCAPI;
 	"Energy Production":
-		import("../cc/EnergyProductionCC").EnergyProductionCCAPI;
-	"Entry Control": import("../cc/EntryControlCC").EntryControlCCAPI;
+		import("../cc/EnergyProductionCC.js").EnergyProductionCCAPI;
+	"Entry Control": import("../cc/EntryControlCC.js").EntryControlCCAPI;
 	"Firmware Update Meta Data":
-		import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
+		import("../cc/FirmwareUpdateMetaDataCC.js").FirmwareUpdateMetaDataCCAPI;
 	"Humidity Control Mode":
-		import("../cc/HumidityControlModeCC").HumidityControlModeCCAPI;
+		import("../cc/HumidityControlModeCC.js").HumidityControlModeCCAPI;
 	"Humidity Control Operating State":
-		import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
+		import("../cc/HumidityControlOperatingStateCC.js").HumidityControlOperatingStateCCAPI;
 	"Humidity Control Setpoint":
-		import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
+		import("../cc/HumidityControlSetpointCC.js").HumidityControlSetpointCCAPI;
 	"Inclusion Controller":
-		import("../cc/InclusionControllerCC").InclusionControllerCCAPI;
-	Indicator: import("../cc/IndicatorCC").IndicatorCCAPI;
-	Irrigation: import("../cc/IrrigationCC").IrrigationCCAPI;
-	Language: import("../cc/LanguageCC").LanguageCCAPI;
-	Lock: import("../cc/LockCC").LockCCAPI;
+		import("../cc/InclusionControllerCC.js").InclusionControllerCCAPI;
+	Indicator: import("../cc/IndicatorCC.js").IndicatorCCAPI;
+	Irrigation: import("../cc/IrrigationCC.js").IrrigationCCAPI;
+	Language: import("../cc/LanguageCC.js").LanguageCCAPI;
+	Lock: import("../cc/LockCC.js").LockCCAPI;
 	"Manufacturer Proprietary":
-		import("../cc/ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
+		import("../cc/ManufacturerProprietaryCC.js").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific":
-		import("../cc/ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
-	Meter: import("../cc/MeterCC").MeterCCAPI;
+		import("../cc/ManufacturerSpecificCC.js").ManufacturerSpecificCCAPI;
+	Meter: import("../cc/MeterCC.js").MeterCCAPI;
 	"Multi Channel Association":
-		import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCAPI;
-	"Multi Channel": import("../cc/MultiChannelCC").MultiChannelCCAPI;
-	"Multi Command": import("../cc/MultiCommandCC").MultiCommandCCAPI;
+		import("../cc/MultiChannelAssociationCC.js").MultiChannelAssociationCCAPI;
+	"Multi Channel": import("../cc/MultiChannelCC.js").MultiChannelCCAPI;
+	"Multi Command": import("../cc/MultiCommandCC.js").MultiCommandCCAPI;
 	"Multilevel Sensor":
-		import("../cc/MultilevelSensorCC").MultilevelSensorCCAPI;
+		import("../cc/MultilevelSensorCC.js").MultilevelSensorCCAPI;
 	"Multilevel Switch":
-		import("../cc/MultilevelSwitchCC").MultilevelSwitchCCAPI;
-	"No Operation": import("../cc/NoOperationCC").NoOperationCCAPI;
+		import("../cc/MultilevelSwitchCC.js").MultilevelSwitchCCAPI;
+	"No Operation": import("../cc/NoOperationCC.js").NoOperationCCAPI;
 	"Node Naming and Location":
-		import("../cc/NodeNamingCC").NodeNamingAndLocationCCAPI;
-	Notification: import("../cc/NotificationCC").NotificationCCAPI;
-	Powerlevel: import("../cc/PowerlevelCC").PowerlevelCCAPI;
-	Protection: import("../cc/ProtectionCC").ProtectionCCAPI;
-	"Scene Activation": import("../cc/SceneActivationCC").SceneActivationCCAPI;
+		import("../cc/NodeNamingCC.js").NodeNamingAndLocationCCAPI;
+	Notification: import("../cc/NotificationCC.js").NotificationCCAPI;
+	Powerlevel: import("../cc/PowerlevelCC.js").PowerlevelCCAPI;
+	Protection: import("../cc/ProtectionCC.js").ProtectionCCAPI;
+	"Scene Activation":
+		import("../cc/SceneActivationCC.js").SceneActivationCCAPI;
 	"Scene Actuator Configuration":
-		import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
+		import("../cc/SceneActuatorConfigurationCC.js").SceneActuatorConfigurationCCAPI;
 	"Scene Controller Configuration":
-		import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
+		import("../cc/SceneControllerConfigurationCC.js").SceneControllerConfigurationCCAPI;
 	"Schedule Entry Lock":
-		import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCAPI;
-	"Security 2": import("../cc/Security2CC").Security2CCAPI;
-	Security: import("../cc/SecurityCC").SecurityCCAPI;
-	"Sound Switch": import("../cc/SoundSwitchCC").SoundSwitchCCAPI;
-	Supervision: import("../cc/SupervisionCC").SupervisionCCAPI;
+		import("../cc/ScheduleEntryLockCC.js").ScheduleEntryLockCCAPI;
+	"Security 2": import("../cc/Security2CC.js").Security2CCAPI;
+	Security: import("../cc/SecurityCC.js").SecurityCCAPI;
+	"Sound Switch": import("../cc/SoundSwitchCC.js").SoundSwitchCCAPI;
+	Supervision: import("../cc/SupervisionCC.js").SupervisionCCAPI;
 	"Thermostat Fan Mode":
-		import("../cc/ThermostatFanModeCC").ThermostatFanModeCCAPI;
+		import("../cc/ThermostatFanModeCC.js").ThermostatFanModeCCAPI;
 	"Thermostat Fan State":
-		import("../cc/ThermostatFanStateCC").ThermostatFanStateCCAPI;
-	"Thermostat Mode": import("../cc/ThermostatModeCC").ThermostatModeCCAPI;
+		import("../cc/ThermostatFanStateCC.js").ThermostatFanStateCCAPI;
+	"Thermostat Mode": import("../cc/ThermostatModeCC.js").ThermostatModeCCAPI;
 	"Thermostat Operating State":
-		import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCAPI;
+		import("../cc/ThermostatOperatingStateCC.js").ThermostatOperatingStateCCAPI;
 	"Thermostat Setback":
-		import("../cc/ThermostatSetbackCC").ThermostatSetbackCCAPI;
+		import("../cc/ThermostatSetbackCC.js").ThermostatSetbackCCAPI;
 	"Thermostat Setpoint":
-		import("../cc/ThermostatSetpointCC").ThermostatSetpointCCAPI;
-	Time: import("../cc/TimeCC").TimeCCAPI;
-	"Time Parameters": import("../cc/TimeParametersCC").TimeParametersCCAPI;
-	"User Code": import("../cc/UserCodeCC").UserCodeCCAPI;
-	Version: import("../cc/VersionCC").VersionCCAPI;
-	"Wake Up": import("../cc/WakeUpCC").WakeUpCCAPI;
-	"Window Covering": import("../cc/WindowCoveringCC").WindowCoveringCCAPI;
-	"Z-Wave Plus Info": import("../cc/ZWavePlusCC").ZWavePlusCCAPI;
+		import("../cc/ThermostatSetpointCC.js").ThermostatSetpointCCAPI;
+	Time: import("../cc/TimeCC.js").TimeCCAPI;
+	"Time Parameters": import("../cc/TimeParametersCC.js").TimeParametersCCAPI;
+	"User Code": import("../cc/UserCodeCC.js").UserCodeCCAPI;
+	Version: import("../cc/VersionCC.js").VersionCCAPI;
+	"Wake Up": import("../cc/WakeUpCC.js").WakeUpCCAPI;
+	"Window Covering": import("../cc/WindowCoveringCC.js").WindowCoveringCCAPI;
+	"Z-Wave Plus Info": import("../cc/ZWavePlusCC.js").ZWavePlusCCAPI;
 }

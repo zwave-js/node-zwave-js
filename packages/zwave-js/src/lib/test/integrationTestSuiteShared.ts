@@ -7,38 +7,45 @@ import {
 	type MockNodeOptions,
 } from "@zwave-js/testing";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "../../Utils";
+} from "../../Utils.js";
 import {
 	type CreateAndStartDriverWithMockPortResult,
 	createAndStartDriverWithMockPort,
-} from "../driver/DriverMock";
-import { type PartialZWaveOptions } from "../driver/ZWaveOptions";
+} from "../driver/DriverMock.js";
+import { type PartialZWaveOptions } from "../driver/ZWaveOptions.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),
 	logToFile: boolean = false,
 	additionalOptions: PartialZWaveOptions = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
+	// Skipping the bootloader check speeds up tests a lot
+	additionalOptions.testingHooks ??= {};
+	additionalOptions.testingHooks.skipBootloaderCheck = !additionalOptions
+		.allowBootloaderOnly;
+
+	const logConfig = additionalOptions.logConfig ?? {};
+	if (logToFile) {
+		logConfig.enabled = true;
+		logConfig.logToFile = true;
+		logConfig.filename = path.join(
+			cacheDir,
+			"logs",
+			"zwavejs_%DATE%.log",
+		);
+		logConfig.level ??= "debug";
+	}
+
 	return createAndStartDriverWithMockPort({
 		...additionalOptions,
 		portAddress: "/tty/FAKE",
-		...(logToFile
-			? {
-				logConfig: {
-					filename: path.join(
-						cacheDir,
-						"logs",
-						"zwavejs_%DATE%.log",
-					),
-					logToFile: true,
-					enabled: true,
-					level: additionalOptions.logConfig?.level ?? "debug",
-				},
-			}
-			: {}),
+		logConfig,
 		securityKeys: {
 			S0_Legacy: Bytes.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 			S2_Unauthenticated: Bytes.from(

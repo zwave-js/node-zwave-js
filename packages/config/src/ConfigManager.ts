@@ -6,13 +6,13 @@ import {
 } from "@zwave-js/core";
 import { getErrorMessage, pathExists } from "@zwave-js/shared";
 import path from "node:path";
-import { ConfigLogger } from "./Logger";
+import { ConfigLogger } from "./Logger.js";
 import {
 	type ManufacturersMap,
 	loadManufacturersInternal,
 	saveManufacturersInternal,
-} from "./Manufacturers";
-import { PACKAGE_VERSION } from "./_version";
+} from "./Manufacturers.js";
+import { PACKAGE_VERSION } from "./_version.js";
 import {
 	ConditionalDeviceConfig,
 	type DeviceConfig,
@@ -22,13 +22,13 @@ import {
 	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
-} from "./devices/DeviceConfig";
+} from "./devices/DeviceConfig.js";
 import {
 	configDir,
 	externalConfigDir,
 	getDeviceEntryPredicate,
 	syncExternalConfigDir,
-} from "./utils";
+} from "./utils.js";
 
 export interface ConfigManagerOptions {
 	logContainer?: ZWaveLogContainer;

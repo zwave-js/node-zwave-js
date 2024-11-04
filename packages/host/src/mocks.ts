@@ -21,7 +21,7 @@ import type {
 	GetValueDB,
 	HostIDs,
 	LogNode,
-} from "./ZWaveHost";
+} from "./ZWaveHost.js";
 
 export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {}
 

@@ -3,18 +3,19 @@
 import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
 import { deflateSync } from "node:zlib";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { MAX_NODES_LR, encodeBitMask } from "../index_safe";
-import { highResTimestamp } from "../util/date";
-import { type S2SecurityClass, SecurityClass } from "./SecurityClass";
-import { increment } from "./bufferUtils";
+import { MAX_NODES_LR } from "../consts/index.js";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { highResTimestamp } from "../util/date.js";
+import { encodeBitMask } from "../values/Primitive.js";
+import { type S2SecurityClass, SecurityClass } from "./SecurityClass.js";
+import { increment } from "./bufferUtils.js";
 import {
 	computeNoncePRK,
 	deriveMEI,
 	deriveNetworkKeys,
 	encryptAES128ECB,
-} from "./crypto";
-import { CtrDRBG } from "./ctr_drbg";
+} from "./crypto.js";
+import { CtrDRBG } from "./ctr_drbg.js";
 
 interface NetworkKeys {
 	pnk: Uint8Array;

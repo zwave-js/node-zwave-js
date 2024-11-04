@@ -41,9 +41,9 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays";
-import { composeObject } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { composeObject } from "alcalzone-shared/objects/index.js";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	CCAPI,
 	type CCAPIEndpoint,
@@ -54,7 +54,7 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
@@ -62,7 +62,7 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -71,9 +71,9 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { type ConfigValue, ConfigurationCommand } from "../lib/_Types";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { type ConfigValue, ConfigurationCommand } from "../lib/_Types.js";
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();

@@ -16,9 +16,9 @@ import {
 	type MockNodeBehavior,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Security S2: Completely discard commands that should have been encrypted, but are not",
@@ -141,7 +141,7 @@ integrationTest(
 			await wait(100);
 
 			let currentValue = node.getValue(BasicCCValues.currentValue.id);
-			t.is(currentValue, 99);
+			t.expect(currentValue).toBe(99);
 
 			// Then send an unencypted one that should be discarded
 			nodeToHost = new BasicCCReport({
@@ -159,7 +159,7 @@ integrationTest(
 			await wait(100);
 
 			currentValue = node.getValue(BasicCCValues.currentValue.id);
-			t.is(currentValue, 99); // unchanged
+			t.expect(currentValue).toBe(99); // unchanged
 		},
 	},
 );

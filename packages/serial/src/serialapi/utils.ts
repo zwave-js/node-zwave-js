@@ -1,9 +1,12 @@
 import { CommandClass } from "@zwave-js/cc";
 import { type Message } from "@zwave-js/serial";
 import { isUint8Array } from "@zwave-js/shared";
-import { ApplicationCommandRequest } from "./application/ApplicationCommandRequest";
-import { BridgeApplicationCommandRequest } from "./application/BridgeApplicationCommandRequest";
-import { type SendDataMessage, isSendData } from "./transport/SendDataShared";
+import { ApplicationCommandRequest } from "./application/ApplicationCommandRequest.js";
+import { BridgeApplicationCommandRequest } from "./application/BridgeApplicationCommandRequest.js";
+import {
+	type SendDataMessage,
+	isSendData,
+} from "./transport/SendDataShared.js";
 
 export type CommandRequest =
 	| ApplicationCommandRequest

@@ -7,7 +7,8 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build/**/*.{js,d.ts,map}"
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
   ],
   "author": {
     "name": "AlCalzone",
@@ -35,15 +36,15 @@
     "pretest": "del-cli \"test/fixtures/*.js\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
-    "test:ts": "ava",
-    "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
+    "test:ts": "vitest",
+    "test:dirty": "tsx ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "ava": "^6.1.3",
     "cpy-cli": "^5.0.0",
     "del-cli": "^6.0.0",
     "execa": "^5.1.1",
     "tsutils": "^3.21.0",
-    "typescript": "5.6.2"
+    "typescript": "5.6.2",
+    "vitest": "^2.1.4"
   }
 }

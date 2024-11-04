@@ -5,16 +5,16 @@ import {
 	type ReadonlyObjectKeyMap,
 	pick,
 } from "@zwave-js/shared/safe";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { throwInvalidConfig } from "../utils_safe";
+import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 	validateCondition,
-} from "./ConditionalItem";
-import type { ConditionalDeviceConfig } from "./DeviceConfig";
-import type { DeviceID } from "./shared";
+} from "./ConditionalItem.js";
+import type { ConditionalDeviceConfig } from "./DeviceConfig.js";
+import type { DeviceID } from "./shared.js";
 
 export class ConditionalParamInformation
 	implements ConditionalItem<ParamInformation>

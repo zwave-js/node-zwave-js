@@ -1,17 +1,17 @@
 export { BeamingInfo, MPDUHeaderType } from "@zwave-js/core/safe";
-export type { MPDU } from "./lib/zniffer/MPDU";
+export type { MPDU } from "./lib/zniffer/MPDU.js";
 export type {
 	BeamFrame,
 	CorruptedFrame,
 	Frame,
 	LongRangeFrame,
 	ZWaveFrame,
-} from "./lib/zniffer/MPDU";
-export { LongRangeMPDU, ZWaveMPDU, parseMPDU } from "./lib/zniffer/MPDU";
-export type { ZnifferOptions } from "./lib/zniffer/Zniffer";
-export { Zniffer } from "./lib/zniffer/Zniffer";
+} from "./lib/zniffer/MPDU.js";
+export { LongRangeMPDU, ZWaveMPDU, parseMPDU } from "./lib/zniffer/MPDU.js";
+export type { ZnifferOptions } from "./lib/zniffer/Zniffer.js";
+export { Zniffer } from "./lib/zniffer/Zniffer.js";
 export {
 	ExplorerFrameCommand,
 	LongRangeFrameType,
 	ZWaveFrameType,
-} from "./lib/zniffer/_Types";
+} from "./lib/zniffer/_Types.js";

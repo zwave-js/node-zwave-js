@@ -22,7 +22,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Security S2: Communicate with endpoints of secure nodes securely, even if the endpoint does not list S2 as supported",
@@ -320,7 +320,6 @@ integrationTest(
 						"Expected communication with endpoint 2 to be secure",
 				},
 			);
-			t.pass();
 		},
 	},
 );

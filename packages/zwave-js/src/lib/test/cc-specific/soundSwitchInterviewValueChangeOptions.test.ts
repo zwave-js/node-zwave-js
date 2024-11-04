@@ -1,7 +1,7 @@
 import { SoundSwitchCCValues } from "@zwave-js/cc/SoundSwitchCC";
 import { CommandClasses } from "@zwave-js/core";
 import { ccCaps } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"The toneId value should have value change options after SoundSwitchCC interview",
@@ -28,7 +28,7 @@ integrationTest(
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const toneIdValue = SoundSwitchCCValues.toneId;
 			const meta = node.getValueMetadata(toneIdValue.id);
-			t.deepEqual(meta.valueChangeOptions, ["volume"]);
+			t.expect(meta.valueChangeOptions).toStrictEqual(["volume"]);
 		},
 	},
 );

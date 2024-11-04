@@ -3,80 +3,88 @@ import "@zwave-js/cc";
 
 import { CommandClasses, ValueDB } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import ava, { type TestFn } from "ava";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import type { Driver } from "../../driver/Driver";
-import { createAndStartTestingDriver } from "../../driver/DriverMock";
-import { DeviceClass } from "../../node/DeviceClass";
-import { ZWaveNode } from "../../node/Node";
+import { afterEach, test as baseTest } from "vitest";
+import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import type { Driver } from "../../driver/Driver.js";
+import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
+import { DeviceClass } from "../../node/DeviceClass.js";
+import { ZWaveNode } from "../../node/Node.js";
 
-interface TestContext {
-	driver: Driver;
-	controller: MockController;
+interface LocalTestContext {
+	context: {
+		driver: Driver;
+		controller: MockController;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
+			const context = {} as LocalTestContext["context"];
 
-test.before(async (t) => {
-	t.timeout(30000);
+			const { driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					const controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+					context.controller = controller;
+				},
+			});
+			context.driver = driver;
 
-	const { driver } = await createAndStartTestingDriver({
-		skipNodeInterview: true,
-		loadConfiguration: false,
-		beforeStartup(mockPort) {
-			const controller = new MockController({ serial: mockPort });
-			controller.defineBehavior(
-				...createDefaultMockControllerBehaviors(),
-			);
-			t.context.controller = controller;
+			// Run tests
+			await use(context);
+
+			// Teardown
+			driver.removeAllListeners();
+			await driver.destroy();
 		},
-	});
-	t.context.driver = driver;
+		{ auto: true },
+	],
 });
 
-test.after.always(async (t) => {
-	const { driver } = t.context;
-	await driver.destroy();
-});
-
-test.afterEach((t) => {
-	const { driver } = t.context;
+afterEach<LocalTestContext>(({ context, expect }) => {
+	const { driver } = context;
 	driver.networkCache.clear();
 });
 
-test.serial("stores the given Node ID", (t) => {
-	const { driver } = t.context;
+test.sequential("stores the given Node ID", ({ context, expect }) => {
+	const { driver } = context;
 
 	const node1 = new ZWaveNode(1, driver);
-	t.is(node1.id, 1);
+	expect(node1.id).toBe(1);
 	const node3 = new ZWaveNode(3, driver);
-	t.is(node3.id, 3);
+	expect(node3.id).toBe(3);
 
 	node1.destroy();
 	node3.destroy();
 });
 
-test.serial("stores the given device class", (t) => {
-	const { driver } = t.context;
+test.sequential("stores the given device class", ({ context, expect }) => {
+	const { driver } = context;
 
 	function makeNode(cls: DeviceClass): ZWaveNode {
 		return new ZWaveNode(1, driver, cls);
 	}
 
 	const nodeUndef = makeNode(undefined as any);
-	t.is(nodeUndef.deviceClass, undefined);
+	expect(nodeUndef.deviceClass).toBeUndefined();
 
 	const devCls = new DeviceClass(0x02, 0x01, 0x03);
 	const nodeWithClass = makeNode(devCls);
-	t.is(nodeWithClass.deviceClass, devCls);
-	t.is(nodeWithClass.deviceClass?.specific.key, 0x03);
+	expect(nodeWithClass.deviceClass).toBe(devCls);
+	expect(nodeWithClass.deviceClass?.specific.key).toBe(0x03);
 
 	nodeUndef.destroy();
 	nodeWithClass.destroy();
 });
 
-test.serial("remembers all given command classes", (t) => {
-	const { driver } = t.context;
+test.sequential("remembers all given command classes", ({ context, expect }) => {
+	const { driver } = context;
 
 	function makeNode(
 		supportedCCs: CommandClasses[] = [],
@@ -98,20 +106,20 @@ test.serial("remembers all given command classes", (t) => {
 		const node = makeNode(supported, controlled);
 
 		for (const supp of supported) {
-			t.true(node.supportsCC(supp));
+			expect(node.supportsCC(supp)).toBe(true);
 		}
 		for (const ctrl of controlled) {
-			t.true(node.controlsCC(ctrl));
+			expect(node.controlsCC(ctrl)).toBe(true);
 		}
 
 		node.destroy();
 	}
 });
 
-test.serial("initializes the node's value DB", (t) => {
-	const { driver } = t.context;
+test.sequential("initializes the node's value DB", ({ context, expect }) => {
+	const { driver } = context;
 
 	const node = new ZWaveNode(1, driver);
-	t.true(node.valueDB instanceof ValueDB);
+	expect(node.valueDB instanceof ValueDB).toBe(true);
 	node.destroy();
 });

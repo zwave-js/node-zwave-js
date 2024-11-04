@@ -23,19 +23,19 @@ import {
 } from "@zwave-js/core";
 import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
-import { type CCRaw, CommandClass } from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	CCCommand,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	type NetworkTransferStatus,
 	WakeUpTime,
 	ZWaveProtocolCommand,
 	parseWakeUpTime,
-} from "../lib/_Types";
+} from "../lib/_Types.js";
 
 enum DataRateBitmask {
 	"9k6" = 0b001,

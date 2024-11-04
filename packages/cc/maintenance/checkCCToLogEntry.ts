@@ -3,7 +3,8 @@
  */
 
 import { loadTSConfig, projectRoot } from "@zwave-js/maintenance";
-import * as path from "path";
+import esMain from "es-main";
+import * as path from "node:path";
 import ts from "typescript";
 
 export function checkCCToLogEntry(): void {
@@ -22,7 +23,7 @@ export function checkCCToLogEntry(): void {
 	for (const sourceFile of program.getSourceFiles()) {
 		const relativePath = path
 			.relative(projectRoot, sourceFile.fileName)
-			.replace(/\\/g, "/");
+			.replaceAll("\\", "/");
 
 		// Only look at files in this package
 		if (relativePath.startsWith("..")) continue;
@@ -100,7 +101,7 @@ export function checkCCToLogEntry(): void {
 	}
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
 	checkCCToLogEntry();
 	process.exit(0);
 }

@@ -2,7 +2,7 @@ import { CommandClass } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Command classes that are not implemented are passed to awaiters before being dropped",
@@ -36,7 +36,7 @@ integrationTest(
 			);
 
 			const result = await awaited;
-			t.like(result, {
+			t.expect(result).toMatchObject({
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02,
 				payload: Bytes.from([0x00, 0x01]),

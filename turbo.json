@@ -48,7 +48,7 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}",
+				"**/*.{ts,cts,mts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../eslint.config.mjs",
 				"../../tsconfig.all.json"
@@ -59,12 +59,12 @@
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
-				"**/*.{ts,json}",
+				"**/*.{ts,cts,mts,json}",
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../eslint.config.mjs",
 				"../../tsconfig.all.json"
 			],
-			"outputs": ["**/*.{ts,json}"]
+			"outputs": ["**/*.{ts,cts,mts,json}"]
 		},
 
 		"lint:zwave": {
@@ -73,7 +73,7 @@
 		},
 		"@zwave-js/config#lint:zwave": {
 			"inputs": [
-				"**/*.ts",
+				"**/*.{ts,cts,mts}",
 				"config/**/*.json",
 				"config/eslint.config.mjs"
 			]
@@ -81,14 +81,14 @@
 
 		"extract-api": {
 			"dependsOn": ["//#build:turbo"],
-			"inputs": ["src/**/*.ts", "build/**"],
+			"inputs": ["src/**/*.{ts,cts,mts}", "build/**"],
 			"cache": false
 			// "outputs": [".tmp/api.md", "api.md"]
 		},
 
 		"test:ts": {
 			// "dependsOn": ["//#build:turbo"],
-			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
+			"inputs": ["src/**/*.{ts,cts,mts}", "vitest.config.mjs"]
 			// TODO: consider snapshot files
 		}
 	},

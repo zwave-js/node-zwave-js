@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { NVMAccess, type NVMIO } from "../common/definitions";
+import { NVMAccess, type NVMIO } from "../common/definitions.js";
 
 /** An im-memory implementation of NVMIO */
 export class NVMMemoryIO implements NVMIO {

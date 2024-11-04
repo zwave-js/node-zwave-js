@@ -26,15 +26,15 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays";
-import { CCAPI } from "../lib/API";
+import { distinct } from "alcalzone-shared/arrays/index.js";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	getEffectiveCCVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -43,13 +43,13 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
-} from "../lib/EncapsulatingCommandClass";
-import { V } from "../lib/Values";
-import { MultiChannelCommand } from "../lib/_Types";
+} from "../lib/EncapsulatingCommandClass.js";
+import { V } from "../lib/Values.js";
+import { MultiChannelCommand } from "../lib/_Types.js";
 
 // TODO: Handle removal reports of dynamic endpoints
 

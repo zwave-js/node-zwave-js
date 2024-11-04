@@ -69,10 +69,10 @@ import {
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+} from "alcalzone-shared/deferred-promise/index.js";
 import fs from "node:fs/promises";
-import { type ZWaveOptions } from "../driver/ZWaveOptions";
-import { ZnifferLogger } from "../log/Zniffer";
+import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
+import { ZnifferLogger } from "../log/Zniffer.js";
 import {
 	type CorruptedFrame,
 	type Frame,
@@ -81,7 +81,7 @@ import {
 	parseBeamFrame,
 	parseMPDU,
 	znifferDataMessageToCorruptedFrame,
-} from "./MPDU";
+} from "./MPDU.js";
 
 const logo: string = `
 ███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗

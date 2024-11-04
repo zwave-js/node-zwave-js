@@ -20,9 +20,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 	// debug: true,
@@ -203,7 +203,5 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 				&& f.payload.encapsulated
 					instanceof SecurityCCCommandsSupportedGet,
 		);
-
-		t.pass();
 	},
 });

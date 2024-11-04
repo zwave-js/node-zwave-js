@@ -1,8 +1,8 @@
 import { Bytes } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
-import type { SerialLogger } from "../log/Logger";
-import { ZnifferFrameType } from "../message/Constants";
-import { ZnifferMessageHeaders } from "../message/MessageHeaders";
+import type { SerialLogger } from "../log/Logger.js";
+import { ZnifferFrameType } from "../message/Constants.js";
+import { ZnifferMessageHeaders } from "../message/MessageHeaders.js";
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
 function getMessageLength(data: Uint8Array): number | undefined {

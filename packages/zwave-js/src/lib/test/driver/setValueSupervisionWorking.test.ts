@@ -14,8 +14,8 @@ import {
 	ccCaps,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
-import { integrationTest } from "../integrationTestSuite";
+import { wait } from "alcalzone-shared/async/index.js";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	`Regression test for #5825: Update values when "Success" is received after an initial "Working" result`,
@@ -81,23 +81,23 @@ integrationTest(
 			const targetValueId = MultilevelSwitchCCValues.targetValue.id;
 			const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
-			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(UNKNOWN_STATE);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			await node.setValue(targetValueId, 55);
 
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			// Unchanged after 0.5s
 			await wait(500);
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(UNKNOWN_STATE);
 
 			// Updated after 2.5s
 			await wait(2000);
-			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), 55);
+			t.expect(node.getValue(targetValueId)).toBe(55);
+			t.expect(node.getValue(currentValueId)).toBe(55);
 		},
 	},
 );

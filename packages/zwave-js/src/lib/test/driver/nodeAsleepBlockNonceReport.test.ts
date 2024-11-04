@@ -10,9 +10,9 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"when a NonceReport does not get delivered, it does not block further nonce requests",
@@ -139,8 +139,6 @@ integrationTest(
 					errorMessage: "Expected a Nonce Report to be sent",
 				},
 			);
-
-			t.pass();
 		},
 	},
 );

@@ -1,32 +1,13 @@
-import ava, { type TestFn } from "ava";
 import sinon from "sinon";
-import { throttle } from "./utils";
+import { afterAll, beforeAll, test, vi } from "vitest";
+import { throttle } from "./utils.js";
 
-interface TestContext {
-	clock: sinon.SinonFakeTimers;
-	advanceTime(ms: number): void;
-}
-
-const test = ava as TestFn<TestContext>;
-
-const originalDateNow = Date.now;
-let now: number;
-
-test.before((t) => {
-	now = Date.now();
-	Date.now = sinon.fake(() => {
-		return now;
-	});
-	t.context.clock = sinon.useFakeTimers(now);
-	t.context.advanceTime = (ms) => {
-		now += ms;
-		t.context.clock.tick(ms);
-	};
+beforeAll((t) => {
+	vi.useFakeTimers();
 });
 
-test.after.always((t) => {
-	t.context.clock.restore();
-	Date.now = originalDateNow;
+afterAll((t) => {
+	vi.useRealTimers();
 });
 
 test("calls the function immediately when called once", (t) => {
@@ -34,7 +15,6 @@ test("calls the function immediately when called once", (t) => {
 	const throttled = throttle(spy, 100);
 	throttled();
 	sinon.assert.calledOnce(spy);
-	t.pass();
 });
 
 test("passes the given parameters along", (t) => {
@@ -42,7 +22,6 @@ test("passes the given parameters along", (t) => {
 	const throttled = throttle(spy, 100);
 	throttled(5, 6, "7");
 	sinon.assert.calledWith(spy, 5, 6, "7");
-	t.pass();
 });
 
 test("calls the function once when called twice quickly", (t) => {
@@ -52,7 +31,6 @@ test("calls the function once when called twice quickly", (t) => {
 	throttled(2);
 	sinon.assert.calledOnce(spy);
 	sinon.assert.calledWith(spy, 1);
-	t.pass();
 });
 
 test("only adds a delayed function call when trailing=true", (t) => {
@@ -63,7 +41,7 @@ test("only adds a delayed function call when trailing=true", (t) => {
 	throttled(1);
 	throttled(2);
 	sinon.assert.calledOnce(spy);
-	t.context.advanceTime(100);
+	vi.advanceTimersByTime(100);
 	sinon.assert.calledOnce(spy);
 
 	spy.resetHistory();
@@ -73,10 +51,9 @@ test("only adds a delayed function call when trailing=true", (t) => {
 	throttled(2);
 	sinon.assert.calledOnce(spy);
 	sinon.assert.calledWith(spy, 1);
-	t.context.advanceTime(100);
+	vi.advanceTimersByTime(100);
 	sinon.assert.calledTwice(spy);
 	sinon.assert.calledWith(spy, 2);
-	t.pass();
 });
 
 test("when called during the wait time for the trailing call, the most recent arguments are used", (t) => {
@@ -87,13 +64,12 @@ test("when called during the wait time for the trailing call, the most recent ar
 	throttled(2);
 	sinon.assert.calledOnce(spy);
 	sinon.assert.calledWith(spy, 1);
-	t.context.advanceTime(50);
+	vi.advanceTimersByTime(50);
 	throttled(3);
-	t.context.advanceTime(25);
+	vi.advanceTimersByTime(25);
 	throttled(4);
-	t.context.advanceTime(25);
+	vi.advanceTimersByTime(25);
 	sinon.assert.calledTwice(spy);
 	sinon.assert.neverCalledWith(spy, 2);
 	sinon.assert.calledWith(spy, 4);
-	t.pass();
 });

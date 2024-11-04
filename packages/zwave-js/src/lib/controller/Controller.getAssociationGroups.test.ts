@@ -1,29 +1,37 @@
 import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import { CommandClasses } from "@zwave-js/core";
-import ava, { type TestFn } from "ava";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
-import { ZWaveController } from "./Controller";
+import { test as baseTest } from "vitest";
+import type { Driver } from "../driver/Driver.js";
+import { ZWaveNode } from "../node/Node.js";
+import { createEmptyMockDriver } from "../test/mocks.js";
+import { ZWaveController } from "./Controller.js";
 
-interface TestContext {
-	fakeDriver: Driver;
+interface LocalTestContext {
+	context: {
+		fakeDriver: Driver;
+	};
 }
 
-const test = ava as TestFn<TestContext>;
+const test = baseTest.extend<LocalTestContext>({
+	context: [
+		async ({}, use) => {
+			// Setup
 
-test.before(async (t) => {
-	t.timeout(60000);
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			fakeDriver.registerRequestHandler = () => {};
+			await fakeDriver.configManager.loadAll();
 
-	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-	fakeDriver.registerRequestHandler = () => {};
-	await fakeDriver.configManager.loadAll();
+			// Run tests
+			await use({ fakeDriver });
 
-	t.context.fakeDriver = fakeDriver;
+			// Teardown
+		},
+		{ auto: true },
+	],
 });
 
-test("should respect the endpoint definition format when AGI is supported", async (t) => {
-	const { fakeDriver } = t.context;
+test("should respect the endpoint definition format when AGI is supported", async ({ context, expect }) => {
+	const { fakeDriver } = context;
 
 	const ctrl = new ZWaveController(fakeDriver);
 	ctrl["_nodes"].set(1, new ZWaveNode(1, fakeDriver));
@@ -48,14 +56,13 @@ test("should respect the endpoint definition format when AGI is supported", asyn
 	);
 	fakeDriver.getDeviceConfig = () => deviceConfig;
 
-	t.is(
+	expect(
 		ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)?.label,
-		"Button 1 (Multilevel Set)",
-	);
+	).toBe("Button 1 (Multilevel Set)");
 });
 
-test("should respect the endpoint definition format when AGI is not supported", async (t) => {
-	const { fakeDriver } = t.context;
+test("should respect the endpoint definition format when AGI is not supported", async ({ context, expect }) => {
+	const { fakeDriver } = context;
 
 	const ctrl = new ZWaveController(fakeDriver);
 	ctrl["_nodes"].set(1, new ZWaveNode(1, fakeDriver));
@@ -76,8 +83,7 @@ test("should respect the endpoint definition format when AGI is not supported", 
 	);
 	fakeDriver.getDeviceConfig = () => deviceConfig;
 
-	t.is(
+	expect(
 		ctrl.getAssociationGroups({ nodeId: 1, endpoint: 0 }).get(4)?.label,
-		"Button 1 (Multilevel Set)",
-	);
+	).toBe("Button 1 (Multilevel Set)");
 });

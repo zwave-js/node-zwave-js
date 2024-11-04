@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	`targetValue properties are exposed for CCs where the version could not be queried`,
@@ -52,7 +52,7 @@ integrationTest(
 			const defined = node.getDefinedValueIDs();
 			const targetValue = BinarySwitchCCValues.targetValue;
 			const existing = defined.find((v) => targetValue.is(v));
-			t.not(existing, undefined, "targetValue should be defined");
+			t.expect(existing, "targetValue should be defined").toBeDefined();
 		},
 	},
 );
@@ -88,7 +88,7 @@ integrationTest(
 			const defined = node.getDefinedValueIDs();
 			const targetValue = BinarySwitchCCValues.targetValue;
 			const existing = defined.find((v) => targetValue.is(v));
-			t.not(existing, undefined, "targetValue should be defined");
+			t.expect(existing, "targetValue should be defined").toBeDefined();
 		},
 	},
 );

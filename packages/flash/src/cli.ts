@@ -1,8 +1,9 @@
 import { ZWaveErrorCodes, isZWaveError } from "@zwave-js/core/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import fs from "node:fs/promises";
 import path from "node:path";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import {
 	ControllerFirmwareUpdateStatus,
 	Driver,
@@ -11,7 +12,7 @@ import {
 	guessFirmwareFileFormat,
 } from "zwave-js";
 
-const argv = yargs.parseSync();
+const argv = yargs(hideBin(process.argv)).parseSync();
 const [port, filename] = argv._.map(String);
 
 if (!port || !filename) {

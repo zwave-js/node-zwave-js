@@ -24,7 +24,7 @@ async set(
 
 ```ts
 async sendReport(
-	options: IndicatorCCReportSpecificOptions,
+	options: IndicatorCCReportOptions,
 ): Promise<void>;
 ```
 

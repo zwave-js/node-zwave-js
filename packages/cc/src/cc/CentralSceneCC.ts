@@ -23,7 +23,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -32,13 +32,13 @@ import {
 	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -48,10 +48,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
-import * as ccUtils from "../lib/utils";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types.js";
+import * as ccUtils from "../lib/utils.js";
 
 export const CentralSceneCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Central Scene"], {

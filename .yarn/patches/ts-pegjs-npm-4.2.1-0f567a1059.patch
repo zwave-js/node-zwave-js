@@ -1,0 +1,13 @@
+diff --git a/dist/tspegjs.mjs b/dist/tspegjs.mjs
+index 80c07aa0716f74f7c23c2e51d2b0fb8613941071..ac02b7d22be46a708821755efe4d5d2b9442259d 100644
+--- a/dist/tspegjs.mjs
++++ b/dist/tspegjs.mjs
+@@ -20,7 +20,7 @@ var __privateMethod = (obj, member, method) => {
+ var _renameGrammarRules, renameGrammarRules_fn, _initNameMap, initNameMap_fn, _initSourceHeader, initSourceHeader_fn;
+ import { ts, Project, ScriptTarget } from "ts-morph";
+ import * as peggy from "peggy";
+-import * as prettierPluginTypescript from "prettier/parser-typescript";
++import prettierPluginTypescript from "prettier/parser-typescript";
+ import prettier from "prettier/standalone";
+ function wrapNodeInAsConstDeclaration(node) {
+   node.transform(

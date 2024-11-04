@@ -29,7 +29,7 @@ import {
 	type MockNodeBehavior,
 	type ScheduleEntryLockCCCapabilities,
 } from "@zwave-js/testing";
-import { defaultCapabilities as defaultUserCodeCapabilities } from "./UserCode";
+import { defaultCapabilities as defaultUserCodeCapabilities } from "./UserCode.js";
 
 const defaultCapabilities: ScheduleEntryLockCCCapabilities = {
 	numWeekDaySlots: 1,

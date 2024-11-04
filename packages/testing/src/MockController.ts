@@ -19,13 +19,13 @@ import {
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import { randomInt } from "node:crypto";
 import {
 	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
-} from "./MockControllerCapabilities";
-import type { MockNode } from "./MockNode";
+} from "./MockControllerCapabilities.js";
+import type { MockNode } from "./MockNode.js";
 import {
 	type LazyMockZWaveFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
@@ -35,7 +35,7 @@ import {
 	type MockZWaveRequestFrame,
 	createMockZWaveAckFrame,
 	unlazyMockZWaveFrame,
-} from "./MockZWaveFrame";
+} from "./MockZWaveFrame.js";
 
 export interface MockControllerOptions {
 	serial: MockPortBinding;

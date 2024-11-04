@@ -3,9 +3,9 @@ import {
 	type MockNodeBehavior,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Correctly capture node updates that arrive before the SendData callback",
@@ -49,7 +49,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToBasicGetWithDelayedAck);
 
 			const result = await node.commandClasses.Basic.get();
-			t.is(result?.currentValue, 55);
+			t.expect(result?.currentValue).toBe(55);
 		},
 	},
 );

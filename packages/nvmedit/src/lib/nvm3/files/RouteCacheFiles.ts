@@ -7,8 +7,8 @@ import {
 	emptyRouteCache,
 	encodeRoute,
 	parseRoute,
-} from "../../common/routeCache";
-import type { NVM3Object } from "../object";
+} from "../../common/routeCache.js";
+import type { NVM3Object } from "../object.js";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -16,7 +16,7 @@ import {
 	gotDeserializationOptions,
 	nvmFileID,
 	nvmSection,
-} from "./NVMFile";
+} from "./NVMFile.js";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;
 

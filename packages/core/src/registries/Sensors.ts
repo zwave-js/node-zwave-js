@@ -4,7 +4,7 @@ import {
 	type ScaleDefinition,
 	type ScaleGroup,
 	getNamedScaleGroup,
-} from "./Scales";
+} from "./Scales.js";
 
 export interface SensorDefinition {
 	readonly label: string;

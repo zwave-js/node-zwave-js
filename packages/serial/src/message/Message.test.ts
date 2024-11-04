@@ -1,9 +1,9 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared";
-import test from "ava";
-import { FunctionType, MessageType } from "./Constants";
-import { Message, messageTypes } from "./Message";
+import { test } from "vitest";
+import { FunctionType, MessageType } from "./Constants.js";
+import { Message, messageTypes } from "./Message.js";
 
 test("should deserialize and serialize correctly", (t) => {
 	// actual messages from OZW
@@ -40,7 +40,7 @@ test("should deserialize and serialize correctly", (t) => {
 	];
 	for (const original of okayMessages) {
 		const parsed = Message.parse(original, {} as any);
-		t.deepEqual(parsed.serialize({} as any), original);
+		t.expect(parsed.serialize({} as any)).toStrictEqual(original);
 	}
 });
 
@@ -51,7 +51,7 @@ test("should serialize correctly when the payload is null", (t) => {
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.deepEqual(message.serialize({} as any), expected);
+	t.expect(message.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("should throw the correct error when parsing a faulty message", (t) => {
@@ -90,7 +90,7 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 	];
 	for (const [message, msg, code] of brokenMessages) {
 		assertZWaveError(
-			t,
+			t.expect,
 			() => Message.parse(message, {} as any),
 			{
 				messageMatches: msg,
@@ -148,23 +148,22 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		payload: "aabbcc",
 	};
 
-	t.deepEqual(msg1.toJSON(), json1);
-	t.deepEqual(msg2.toJSON(), json2);
-	t.deepEqual(msg3.toJSON(), json3);
-	t.deepEqual(msg4.toJSON(), json4);
+	t.expect(msg1.toJSON()).toStrictEqual(json1);
+	t.expect(msg2.toJSON()).toStrictEqual(json2);
+	t.expect(msg3.toJSON()).toStrictEqual(json3);
+	t.expect(msg4.toJSON()).toStrictEqual(json4);
 });
 
 test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
 	const unknown = Bytes.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.is(
+	t.expect(
 		Message.parse(unknown, {} as any).constructor,
-		Message,
-	);
+	).toBe(Message);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() => new Message({ functionType: 0xff as any }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -175,7 +174,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 	@messageTypes(undefined as any, 0xff as any)
 	class FakeMessageWithoutMessageType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutMessageType(), {
+	assertZWaveError(t.expect, () => new FakeMessageWithoutMessageType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
@@ -183,7 +182,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 
 test(`the constructor should throw when no function type is specified`, (t) => {
 	assertZWaveError(
-		t,
+		t.expect,
 		() => new Message({ type: MessageType.Request }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
@@ -194,7 +193,7 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	@messageTypes(MessageType.Request, undefined as any)
 	class FakeMessageWithoutFunctionType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(), {
+	assertZWaveError(t.expect, () => new FakeMessageWithoutFunctionType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /function type/i,
 	});
@@ -206,7 +205,7 @@ test("tryGetNode() returns undefined when the controller is not initialized yet"
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.is(msg.tryGetNode(host), undefined);
+	t.expect(msg.tryGetNode(host)).toBeUndefined();
 });
 
 test("tryGetNode() returns undefined when the message is no node query", (t) => {
@@ -215,7 +214,7 @@ test("tryGetNode() returns undefined when the message is no node query", (t) => 
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.is(msg.tryGetNode(host), undefined);
+	t.expect(msg.tryGetNode(host)).toBeUndefined();
 });
 
 test("tryGetNode() returns the associated node otherwise", (t) => {
@@ -229,9 +228,9 @@ test("tryGetNode() returns the associated node otherwise", (t) => {
 
 	// This node exists
 	(msg as any).nodeId = 1;
-	t.is(msg.tryGetNode(host), host.getNode(1));
+	t.expect(msg.tryGetNode(host)).toBe(host.getNode(1));
 
 	// This one does
 	(msg as any).nodeId = 2;
-	t.is(msg.tryGetNode(host), undefined);
+	t.expect(msg.tryGetNode(host)).toBeUndefined();
 });

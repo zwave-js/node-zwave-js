@@ -4,8 +4,8 @@ import {
 	parseNodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { Bytes } from "@zwave-js/shared/safe";
-import { padStart } from "alcalzone-shared/strings";
-import type { NVMModuleType } from "./shared";
+import { padStart } from "alcalzone-shared/strings/index.js";
+import type { NVMModuleType } from "./shared.js";
 
 export interface NVMDescriptor {
 	manufacturerID: number;

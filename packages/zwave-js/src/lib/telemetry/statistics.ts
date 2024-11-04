@@ -1,7 +1,7 @@
 import { formatId } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards/index.js";
 import * as crypto from "node:crypto";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver.js";
 
 const apiToken = "ef58278d935ccb26307800279458484d";
 const statisticsUrl = `https://stats.zwave-js.io/statistics`;

@@ -22,7 +22,7 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared/safe";
-import { type MessageWithCC } from "../utils";
+import { type MessageWithCC } from "../utils.js";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application

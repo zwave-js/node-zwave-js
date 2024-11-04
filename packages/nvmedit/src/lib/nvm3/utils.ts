@@ -1,9 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
-import { type NVM3 } from "../NVM3";
-import { FragmentType, ObjectType, PageStatus } from "./consts";
-import { NVMFile } from "./files/NVMFile";
-import type { NVM3Object } from "./object";
+import { type NVM3 } from "../NVM3.js";
+import { FragmentType, ObjectType, PageStatus } from "./consts.js";
+import { NVMFile } from "./files/NVMFile.js";
+import type { NVM3Object } from "./object.js";
 
 /** Counts the number of unset bits in the given word */
 export function computeBergerCode(word: number, numBits: number = 32): number {

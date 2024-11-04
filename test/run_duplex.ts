@@ -1,7 +1,11 @@
-import { wait as _wait } from "alcalzone-shared/async";
+import { wait as _wait } from "alcalzone-shared/async/index.js";
 import path from "node:path";
 import "reflect-metadata";
+import { Bytes } from "@zwave-js/shared/safe";
+import { fileURLToPath } from "node:url";
 import { Driver, RFRegion } from "zwave-js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const wait = _wait;
 
@@ -33,26 +37,26 @@ const driver_primary = new Driver(port_primary, {
 		skipNodeInterview: true,
 	},
 	securityKeys: {
-		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
-		S2_Unauthenticated: Buffer.from(
+		S0_Legacy: Bytes.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+		S2_Unauthenticated: Bytes.from(
 			"5369389EFA18EE2A4894C7FB48347FEA",
 			"hex",
 		),
-		S2_Authenticated: Buffer.from(
+		S2_Authenticated: Bytes.from(
 			"656EF5C0F020F3C14238C04A1748B7E1",
 			"hex",
 		),
-		S2_AccessControl: Buffer.from(
+		S2_AccessControl: Bytes.from(
 			"31132050077310B6F7032F91C79C2EB8",
 			"hex",
 		),
 	},
 	securityKeysLongRange: {
-		S2_Authenticated: Buffer.from(
+		S2_Authenticated: Bytes.from(
 			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			"hex",
 		),
-		S2_AccessControl: Buffer.from(
+		S2_AccessControl: Bytes.from(
 			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 			"hex",
 		),
@@ -117,26 +121,26 @@ const driver_secondary = new Driver(port_secondary, {
 	// 	skipNodeInterview: true,
 	// },
 	securityKeys: {
-		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
-		S2_Unauthenticated: Buffer.from(
+		S0_Legacy: Bytes.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+		S2_Unauthenticated: Bytes.from(
 			"5369389EFA18EE2A4894C7FB48347FEA",
 			"hex",
 		),
-		S2_Authenticated: Buffer.from(
+		S2_Authenticated: Bytes.from(
 			"656EF5C0F020F3C14238C04A1748B7E1",
 			"hex",
 		),
-		S2_AccessControl: Buffer.from(
+		S2_AccessControl: Bytes.from(
 			"31132050077310B6F7032F91C79C2EB8",
 			"hex",
 		),
 	},
 	securityKeysLongRange: {
-		S2_Authenticated: Buffer.from(
+		S2_Authenticated: Bytes.from(
 			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 			"hex",
 		),
-		S2_AccessControl: Buffer.from(
+		S2_AccessControl: Bytes.from(
 			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 			"hex",
 		),

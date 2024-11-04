@@ -16,7 +16,7 @@ import {
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import path from "node:path";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
 	"Responses to encapsulated requests use the same encapsulation (CRC-16)",
@@ -52,11 +52,13 @@ integrationTest(
 				(msg) => msg.type === MockZWaveFrameType.Request,
 			);
 
-			t.true(response instanceof CRC16CCCommandEncapsulation);
-			t.true(
+			t.expect(response instanceof CRC16CCCommandEncapsulation).toBe(
+				true,
+			);
+			t.expect(
 				(response as CRC16CCCommandEncapsulation)
 					.encapsulated instanceof ZWavePlusCCReport,
-			);
+			).toBe(true);
 		},
 	},
 );
@@ -104,11 +106,12 @@ integrationTest(
 					msg.type === MockZWaveFrameType.Request,
 			);
 
-			t.true(response instanceof MultiChannelCCCommandEncapsulation);
+			t.expect(response instanceof MultiChannelCCCommandEncapsulation)
+				.toBe(true);
 			const mcc = response as MultiChannelCCCommandEncapsulation;
-			t.is(mcc.destination, 2);
+			t.expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
-			t.true(inner instanceof ZWavePlusCCReport);
+			t.expect(inner instanceof ZWavePlusCCReport).toBe(true);
 		},
 	},
 );
@@ -157,7 +160,7 @@ integrationTest(
 					msg.type === MockZWaveFrameType.Request,
 			);
 
-			t.true(response instanceof SupervisionCCReport);
+			t.expect(response instanceof SupervisionCCReport).toBe(true);
 		},
 	},
 );
@@ -213,11 +216,12 @@ integrationTest(
 					msg.type === MockZWaveFrameType.Request,
 			);
 
-			t.true(response instanceof MultiChannelCCCommandEncapsulation);
+			t.expect(response instanceof MultiChannelCCCommandEncapsulation)
+				.toBe(true);
 			const mcc = response as MultiChannelCCCommandEncapsulation;
-			t.is(mcc.destination, 2);
+			t.expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
-			t.true(inner instanceof SupervisionCCReport);
+			t.expect(inner instanceof SupervisionCCReport).toBe(true);
 		},
 	},
 );

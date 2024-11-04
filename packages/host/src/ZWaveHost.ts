@@ -13,7 +13,7 @@ import type {
 	ValueDB,
 	ValueID,
 } from "@zwave-js/core";
-import type { ZWaveHostOptions } from "./ZWaveHostOptions";
+import type { ZWaveHostOptions } from "./ZWaveHostOptions.js";
 
 /** Allows querying the home ID and node ID of the host */
 export interface HostIDs {

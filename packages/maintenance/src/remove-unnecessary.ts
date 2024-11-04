@@ -2,9 +2,13 @@
 
 import { enumFilesRecursive } from "@zwave-js/shared";
 import * as JSONC from "comment-json";
+import esMain from "es-main";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatWithDprint } from "./dprint";
+import { fileURLToPath } from "node:url";
+import { formatWithDprint } from "./dprint.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function main() {
 	const devicesDir = path.join(__dirname, "../../config/config/devices");
@@ -47,6 +51,6 @@ async function main() {
 	}
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
 	void main();
 }

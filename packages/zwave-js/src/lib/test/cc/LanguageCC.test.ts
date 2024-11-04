@@ -8,7 +8,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", (t) => {
 			LanguageCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (w/o country code)", (t) => {
@@ -43,7 +43,7 @@ test("the Set command should serialize correctly (w/o country code)", (t) => {
 			0x75,
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (w/ country code)", (t) => {
@@ -64,7 +64,7 @@ test("the Set command should serialize correctly (w/ country code)", (t) => {
 			0x45,
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should be deserialized correctly (w/o country code)", (t) => {
@@ -81,10 +81,10 @@ test("the Report command should be deserialized correctly (w/o country code)", (
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCCReport;
-	t.is(cc.constructor, LanguageCCReport);
+	t.expect(cc.constructor).toBe(LanguageCCReport);
 
-	t.is(cc.language, "deu");
-	t.is(cc.country, undefined);
+	t.expect(cc.language).toBe("deu");
+	t.expect(cc.country).toBeUndefined();
 });
 
 test("the Report command should be deserialized correctly (w/ country code)", (t) => {
@@ -104,10 +104,10 @@ test("the Report command should be deserialized correctly (w/ country code)", (t
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCCReport;
-	t.is(cc.constructor, LanguageCCReport);
+	t.expect(cc.constructor).toBe(LanguageCCReport);
 
-	t.is(cc.language, "deu");
-	t.is(cc.country, "DE");
+	t.expect(cc.language).toBe("deu");
+	t.expect(cc.country).toBe("DE");
 });
 
 test("deserializing an unsupported command should return an unspecified version of LanguageCC", (t) => {
@@ -118,7 +118,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		serializedCC,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCC;
-	t.is(cc.constructor, LanguageCC);
+	t.expect(cc.constructor).toBe(LanguageCC);
 });
 
 // test("the CC values should have the correct metadata", (t) => {

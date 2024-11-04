@@ -44,22 +44,22 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
-import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI } from "../lib/API";
+import { wait } from "alcalzone-shared/async/index.js";
+import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
 	type InterviewContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
-} from "../lib/CommandClassDecorators";
+} from "../lib/CommandClassDecorators.js";
 import {
 	MGRPExtension,
 	MOSExtension,
@@ -68,13 +68,17 @@ import {
 	Security2Extension,
 	ValidateS2ExtensionResult,
 	validateS2Extension,
-} from "../lib/Security2/Extension";
-import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
-import { Security2Command } from "../lib/_Types";
-import { CRC16CC } from "./CRC16CC";
-import { MultiChannelCC } from "./MultiChannelCC";
-import { SecurityCC } from "./SecurityCC";
-import { TransportServiceCC } from "./TransportServiceCC";
+} from "../lib/Security2/Extension.js";
+import {
+	ECDHProfiles,
+	KEXFailType,
+	KEXSchemes,
+} from "../lib/Security2/shared.js";
+import { Security2Command } from "../lib/_Types.js";
+import { CRC16CC } from "./CRC16CC.js";
+import { MultiChannelCC } from "./MultiChannelCC.js";
+import { SecurityCC } from "./SecurityCC.js";
+import { TransportServiceCC } from "./TransportServiceCC.js";
 
 function securityClassToBitMask(key: SecurityClass): Bytes {
 	return encodeBitMask(

@@ -32,14 +32,14 @@ import {
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
-} from "../lib/API";
+} from "../lib/API.js";
 import {
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-} from "../lib/CommandClass";
+} from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
@@ -48,10 +48,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
-} from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
-import { SceneControllerConfigurationCommand } from "../lib/_Types";
-import { AssociationCC } from "./AssociationCC";
+} from "../lib/CommandClassDecorators.js";
+import { V } from "../lib/Values.js";
+import { SceneControllerConfigurationCommand } from "../lib/_Types.js";
+import { AssociationCC } from "./AssociationCC.js";
 
 export const SceneControllerConfigurationCCValues = Object.freeze({
 	...V.defineDynamicCCValues(

@@ -1,12 +1,12 @@
 import { Powerlevel } from "@zwave-js/cc/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
-import { padStart } from "alcalzone-shared/strings";
+import { padStart } from "alcalzone-shared/strings/index.js";
 import type {
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
-} from "./_Types";
+} from "./_Types.js";
 
 export const healthCheckTestFrameCount = 10;
 

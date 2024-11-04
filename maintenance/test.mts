@@ -4,6 +4,9 @@ import execa from "execa";
 import path from "node:path";
 import { readJSON } from "../packages/shared/src/fs";
 
+import { fileURLToPath } from "node:url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const repoRoot = path.join(__dirname, "..");
 
 const filenames = process.argv

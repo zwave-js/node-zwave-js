@@ -1,6 +1,6 @@
 import path from "node:path";
 import sinon from "sinon";
-import { integrationTest } from "../integrationTestSuite";
+import { integrationTest } from "../integrationTestSuite.js";
 
 // repro from https://github.com/zwave-js/zwave-js-ui/issues/101#issuecomment-749007701
 
@@ -21,8 +21,8 @@ integrationTest(
 				"not-a-number",
 			);
 
-			await t.throwsAsync(promise);
-			t.is(spy.callCount, 0);
+			await t.expect(() => promise).rejects.toThrowError();
+			t.expect(spy.callCount).toBe(0);
 		},
 	},
 );

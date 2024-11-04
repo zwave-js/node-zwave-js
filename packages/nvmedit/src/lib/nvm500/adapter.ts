@@ -4,26 +4,26 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
-import { assertNever } from "alcalzone-shared/helpers";
-import { SUC_MAX_UPDATES } from "../../consts";
-import { type NVM500, type NVM500Info } from "../NVM500";
+import { assertNever } from "alcalzone-shared/helpers/index.js";
+import { SUC_MAX_UPDATES } from "../../consts.js";
+import { type NVM500, type NVM500Info } from "../NVM500.js";
 import {
 	type ControllerNVMProperty,
 	type NVMAdapter,
 	type NVMProperty,
 	type NVMPropertyToDataType,
 	type NodeNVMProperty,
-} from "../common/definitions";
-import { type Route } from "../common/routeCache";
-import { type SUCUpdateEntry } from "../common/sucUpdateEntry";
-import { type NodeInfo } from "../nvm3/files";
-import { type NVM500NodeInfo } from "./EntryParsers";
+} from "../common/definitions.js";
+import { type Route } from "../common/routeCache.js";
+import { type SUCUpdateEntry } from "../common/sucUpdateEntry.js";
+import { type NodeInfo } from "../nvm3/files/index.js";
+import { type NVM500NodeInfo } from "./EntryParsers.js";
 import {
 	APPL_NODEPARM_MAX,
 	type NVMData,
 	type NVMEntryName,
 	NVM_SERIALAPI_HOST_SIZE,
-} from "./shared";
+} from "./shared.js";
 
 export class NVM500Adapter implements NVMAdapter {
 	public constructor(nvm: NVM500) {

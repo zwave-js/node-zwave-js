@@ -1,13 +1,13 @@
-import test from "ava";
-import { getSensor, getSensorScale } from "./Sensors";
+import { test } from "vitest";
+import { getSensor, getSensorScale } from "./Sensors.js";
 
 test(
 	"getSensor() returns the sensor definition if it is defined",
 	async (t) => {
 		const test1 = getSensor(0x0a);
-		t.is(test1.label, "Solar radiation");
+		t.expect(test1.label).toBe("Solar radiation");
 
-		t.is(getSensor(0xff), undefined);
+		t.expect(getSensor(0xff)).toBeUndefined();
 	},
 );
 
@@ -16,11 +16,11 @@ test(
 	async (t) => {
 		const test1 = getSensorScale(0x01, 0x01);
 
-		t.like(test1, {
+		t.expect(test1).toMatchObject({
 			key: 0x01,
 			label: "Fahrenheit",
 		});
 
-		t.is(getSensorScale(0xff, 0xff), undefined);
+		t.expect(getSensorScale(0xff, 0xff)).toBeUndefined();
 	},
 );

@@ -8,7 +8,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
-import test from "ava";
+import { test } from "vitest";
 
 function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	return Bytes.concat([
@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", (t) => {
 			ThermostatFanModeCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (off = false)", (t) => {
@@ -41,7 +41,7 @@ test("the Set command should serialize correctly (off = false)", (t) => {
 			0x04, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (off = true)", (t) => {
@@ -56,7 +56,7 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 			0b1000_0100, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -70,10 +70,10 @@ test("the Report command should be deserialized correctly", (t) => {
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as ThermostatFanModeCCReport;
-	t.is(cc.constructor, ThermostatFanModeCCReport);
+	t.expect(cc.constructor).toBe(ThermostatFanModeCCReport);
 
-	t.is(cc.mode, ThermostatFanMode["Auto high"]);
-	t.is(cc.off, true);
+	t.expect(cc.mode).toBe(ThermostatFanMode["Auto high"]);
+	t.expect(cc.off).toBe(true);
 });
 
 // TODO: add tests for getting supported features, interview, etc
