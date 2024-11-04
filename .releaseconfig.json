@@ -1,0 +1,5 @@
+{
+	"exec": {
+		"before_commit": "yarn turbo run codegen"
+	}
+}
