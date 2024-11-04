@@ -1,6 +1,6 @@
 /* @forbiddenImports external */
 
-import "reflect-metadata.js";
+import "reflect-metadata";
 
 export type {
 	NVMJSON,

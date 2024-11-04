@@ -58,7 +58,7 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@alcalzone/esm2cjs": "^1.1.2",
+    "@alcalzone/esm2cjs": "^1.2.3",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.63",
     "del-cli": "^6.0.0",

@@ -137,7 +137,7 @@ async function main() {
 	console.log(`Transpiling to CommonJS...`);
 	await execa(
 		"yarn",
-		["workspaces", "foreach", "--all", "run", "postbuild"],
+		["workspaces", "foreach", "--all", "--parallel", "run", "postbuild"],
 		execOptions,
 	);
 }

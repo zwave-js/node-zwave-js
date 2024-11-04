@@ -45,7 +45,6 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@alcalzone/esm2cjs": "^1.1.2",
     "@types/node": "^18.19.63",
     "@types/yargs": "^17.0.33",
     "del-cli": "^6.0.0",
