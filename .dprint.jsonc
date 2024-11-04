@@ -62,6 +62,9 @@
 		"packages/*/*.api.md",
 		"CHANGELOG*.md",
 		".yarnrc.yml",
+		// I have no idea why, but using dprint programmatically on this file
+		// results in a different formatting than using the CLI
+		"packages/config/src/LogicParser.ts",
 	],
 	"plugins": [
 		"https://plugins.dprint.dev/typescript-0.93.0.wasm",
