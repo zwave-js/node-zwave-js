@@ -2667,7 +2667,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/flash@workspace:packages/flash"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
     "@types/node": "npm:^18.19.63"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
