@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 14.0.0-beta.3 (2024-11-04)
+## 14.0.0-beta.4 (2024-11-04)
 Z-Wave JS is now released as hybrid ESM/CJS packages.
 
 ### Changes under the hood
