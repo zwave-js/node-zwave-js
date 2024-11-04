@@ -182,9 +182,12 @@ test("Higher priority tasks interrupt lower priority ones", async (t) => {
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			await wait(1);
 			yield;
@@ -194,7 +197,8 @@ test("Higher priority tasks interrupt lower priority ones", async (t) => {
 			order.push("1c");
 		},
 	});
-	await wait(0);
+	// The test expects that task 1 has started executing before task 2 is queued
+	await t1WasStarted;
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
 		task: async function*() {
@@ -314,14 +318,14 @@ test("Interrupting a task with the Restart interrupt behavior restarts it comple
 	const order: string[] = [];
 	scheduler.start();
 
-	const t1HasPushed1a = createDeferredPromise<void>();
+	const t1WasStarted = createDeferredPromise<void>();
 
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		interrupt: TaskInterruptBehavior.Restart,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
-			t1HasPushed1a.resolve();
 			await wait(1);
 			yield;
 			order.push("1b");
@@ -330,7 +334,8 @@ test("Interrupting a task with the Restart interrupt behavior restarts it comple
 			order.push("1c");
 		},
 	});
-	await t1HasPushed1a;
+	// The test expects that task 1 has started executing before task 2 is queued
+	await t1WasStarted;
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
 		task: async function*() {
