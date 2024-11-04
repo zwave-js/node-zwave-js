@@ -511,10 +511,12 @@ test("Waiting tasks are deprioritized over tasks with a higher priority", async 
 	scheduler.start();
 
 	const yieldedPromise = createDeferredPromise<void>();
+	const t1WasStarted = createDeferredPromise<void>();
 
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			yield () => yieldedPromise;
 			order.push("1b");
@@ -522,7 +524,8 @@ test("Waiting tasks are deprioritized over tasks with a higher priority", async 
 		},
 	});
 
-	await wait(1);
+	// The test expects that task 1 has started executing before task 2 is queued
+	await t1WasStarted;
 
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
@@ -1208,9 +1211,12 @@ test("The task rejection uses the given error, if any", async (t) => {
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			yield () => wait(10);
 			order.push("1b");
@@ -1222,8 +1228,8 @@ test("The task rejection uses the given error, if any", async (t) => {
 		},
 	});
 
-	await wait(1);
-	// The task should have run to the first yield
+	// task 1 has run to the first yield
+	await t1WasStarted;
 	t.expect(order).toStrictEqual(["1a"]);
 
 	await scheduler.removeTasks(
