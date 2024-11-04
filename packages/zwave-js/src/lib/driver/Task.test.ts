@@ -314,11 +314,14 @@ test("Interrupting a task with the Restart interrupt behavior restarts it comple
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1HasPushed1a = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		interrupt: TaskInterruptBehavior.Restart,
 		task: async function*() {
 			order.push("1a");
+			t1HasPushed1a.resolve();
 			await wait(1);
 			yield;
 			order.push("1b");
@@ -327,7 +330,7 @@ test("Interrupting a task with the Restart interrupt behavior restarts it comple
 			order.push("1c");
 		},
 	});
-	await wait(0);
+	await t1HasPushed1a;
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
 		task: async function*() {
