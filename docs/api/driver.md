@@ -322,6 +322,8 @@ installConfigUpdate(): Promise<boolean>
 
 Checks whether there is a compatible update for the currently installed config package and tries to install it. Returns `true` when an update was installed, `false` otherwise.
 
+This requires an external configuration directory to be configured using the `deviceConfigExternalDir` driver option or the `ZWAVEJS_EXTERNAL_CONFIG` environment variable.
+
 > [!NOTE] Although the updated config gets loaded after the update, bugfixes and changes to device configuration generally require either a driver restart or re-interview of the changed devices to take effect.
 
 ## Driver properties

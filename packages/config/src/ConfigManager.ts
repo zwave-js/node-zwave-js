@@ -24,15 +24,17 @@ import {
 	loadFulltextDeviceIndexInternal,
 } from "./devices/DeviceConfig.js";
 import {
+	type SyncExternalConfigDirResult,
 	configDir,
-	externalConfigDir,
 	getDeviceEntryPredicate,
+	getExternalConfigDirEnvVariable,
 	syncExternalConfigDir,
 } from "./utils.js";
 
 export interface ConfigManagerOptions {
 	logContainer?: ZWaveLogContainer;
 	deviceConfigPriorityDir?: string;
+	deviceConfigExternalDir?: string;
 }
 
 export class ConfigManager {
@@ -41,6 +43,8 @@ export class ConfigManager {
 			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
+		this.deviceConfigExternalDir = options.deviceConfigExternalDir;
+
 		this._configVersion = PACKAGE_VERSION;
 	}
 
@@ -63,6 +67,12 @@ export class ConfigManager {
 	}
 
 	private deviceConfigPriorityDir: string | undefined;
+	private deviceConfigExternalDir: string | undefined;
+	public get externalConfigDir(): string | undefined {
+		return this.deviceConfigExternalDir
+			?? getExternalConfigDirEnvVariable();
+	}
+
 	private index: DeviceConfigIndex | undefined;
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 
@@ -74,11 +84,19 @@ export class ConfigManager {
 	public async loadAll(): Promise<void> {
 		// If the environment option for an external config dir is set
 		// try to sync it and then use it
-		const syncResult = await syncExternalConfigDir(this.logger);
-		if (syncResult.success) {
+		let syncResult: SyncExternalConfigDirResult | undefined;
+		const externalConfigDir = this.externalConfigDir;
+		if (externalConfigDir) {
+			syncResult = await syncExternalConfigDir(
+				externalConfigDir,
+				this.logger,
+			);
+		}
+
+		if (syncResult?.success) {
 			this._useExternalConfig = true;
 			this.logger.print(
-				`Using external configuration dir ${externalConfigDir()}`,
+				`Using external configuration dir ${externalConfigDir}`,
 			);
 			this._configVersion = syncResult.version;
 		} else {
@@ -94,7 +112,7 @@ export class ConfigManager {
 	public async loadManufacturers(): Promise<void> {
 		try {
 			this._manufacturers = await loadManufacturersInternal(
-				this._useExternalConfig,
+				this._useExternalConfig && this.externalConfigDir || undefined,
 			);
 		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
@@ -163,7 +181,7 @@ export class ConfigManager {
 			// The index of config files included in this package
 			const embeddedIndex = await loadDeviceIndexInternal(
 				this.logger,
-				this._useExternalConfig,
+				this._useExternalConfig && this.externalConfigDir || undefined,
 			);
 			// A dynamic index of the user-defined priority device config files
 			const priorityIndex: DeviceConfigIndex = [];
@@ -251,7 +269,7 @@ export class ConfigManager {
 
 		if (indexEntry) {
 			const devicesDir = getDevicesPaths(
-				this._useExternalConfig ? externalConfigDir()! : configDir,
+				this._useExternalConfig && this.externalConfigDir || configDir,
 			).devicesDir;
 			const filePath = path.isAbsolute(indexEntry.filename)
 				? indexEntry.filename

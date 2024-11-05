@@ -44,11 +44,7 @@ import {
 	isMultiEncapsulatingCommandClass,
 	isTransportServiceEncapsulation,
 } from "@zwave-js/cc";
-import {
-	ConfigManager,
-	type DeviceConfig,
-	externalConfigDir,
-} from "@zwave-js/config";
+import { ConfigManager, type DeviceConfig } from "@zwave-js/config";
 import {
 	type CCId,
 	CommandClasses,
@@ -174,7 +170,6 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
-	isDocker,
 	isUint8Array,
 	mergeDeep,
 	noop,
@@ -260,11 +255,7 @@ import {
 	type TransportServiceRXInterpreter,
 	createTransportServiceRXMachine,
 } from "./TransportServiceMachine.js";
-import {
-	checkForConfigUpdates,
-	installConfigUpdate,
-	installConfigUpdateInDocker,
-} from "./UpdateConfig.js";
+import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig.js";
 import { mergeUserAgent, userAgentComponentsToString } from "./UserAgent.js";
 import type {
 	EditableZWaveOptions,
@@ -705,6 +696,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir:
 				this._options.storage.deviceConfigPriorityDir,
+			deviceConfigExternalDir:
+				this._options.storage.deviceConfigExternalDir,
 		});
 
 		const self = this;
@@ -7213,25 +7206,23 @@ ${handlers.length} left`,
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
-		try {
+		const extConfigDir = this.configManager.externalConfigDir;
+		if (!this.configManager.useExternalConfig || !extConfigDir) {
 			this.driverLog.print(
-				`Installing version ${newVersion} of configuration DB...`,
+				`Cannot update configuration DB update - external config directory is not set`,
+				"error",
 			);
-			// We have 3 variants of this.
-			const extConfigDir = externalConfigDir();
-			if (this.configManager.useExternalConfig && extConfigDir) {
-				// 1. external config dir, leave node_modules alone
-				await installConfigUpdateInDocker(newVersion, {
-					cacheDir: this._options.storage.cacheDir,
-					configDir: extConfigDir,
-				});
-			} else if (isDocker()) {
-				// 2. Docker, but no external config dir, extract into node_modules
-				await installConfigUpdateInDocker(newVersion);
-			} else {
-				// 3. normal environment, use npm/yarn to install a new version of @zwave-js/config
-				await installConfigUpdate(newVersion);
-			}
+			return false;
+		}
+
+		this.driverLog.print(
+			`Installing version ${newVersion} of configuration DB...`,
+		);
+		try {
+			await installConfigUpdate(newVersion, {
+				cacheDir: this.cacheDir,
+				configDir: extConfigDir,
+			});
 		} catch (e) {
 			this.driverLog.print(getErrorMessage(e), "error");
 			return false;

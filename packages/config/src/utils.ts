@@ -14,8 +14,9 @@ export const configDir = path.resolve(
 	path.dirname(require.resolve("@zwave-js/config/package.json")),
 	"config",
 );
+
 /** The (optional) absolute path of an external configuration directory */
-export function externalConfigDir(): string | undefined {
+export function getExternalConfigDirEnvVariable(): string | undefined {
 	return process.env.ZWAVEJS_EXTERNAL_CONFIG;
 }
 
@@ -59,9 +60,9 @@ export type SyncExternalConfigDirResult =
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
 export async function syncExternalConfigDir(
+	extConfigDir: string,
 	logger: ConfigLogger,
 ): Promise<SyncExternalConfigDirResult> {
-	const extConfigDir = externalConfigDir();
 	if (!extConfigDir) return { success: false };
 
 	// Make sure the config dir exists
