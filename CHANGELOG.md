@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Decorators have been migrated from the legacy specification to the accepted proposal (#7360)
+
 ## 14.0.0-beta.4 (2024-11-04)
 Z-Wave JS is now released as hybrid ESM/CJS packages.
 
