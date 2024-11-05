@@ -338,7 +338,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		validatePayload(raw.payload.length >= 1);
 		const mode: ThermostatMode = raw.payload[0] & 0b11111;
 		if (mode !== ThermostatMode["Manufacturer specific"]) {
-			return new ThermostatModeCCSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				mode,
 			});
@@ -353,7 +353,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			1 + manufacturerDataLength,
 		);
 
-		return new ThermostatModeCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			mode,
 			manufacturerData,
@@ -428,7 +428,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		const mode: ThermostatMode = raw.payload[0] & 0b11111;
 
 		if (mode !== ThermostatMode["Manufacturer specific"]) {
-			return new ThermostatModeCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				mode,
 			});
@@ -444,7 +444,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			1 + manufacturerDataLength,
 		);
 
-		return new ThermostatModeCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			mode,
 			manufacturerData,
@@ -547,7 +547,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 			ThermostatMode.Off,
 		);
 
-		return new ThermostatModeCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});

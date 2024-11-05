@@ -706,7 +706,7 @@ export class VersionCCReport extends VersionCC {
 			}
 		}
 
-		return new VersionCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			libraryType,
 			protocolVersion,
@@ -802,7 +802,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 		const requestedCC: CommandClasses = raw.payload[0];
 		const ccVersion = raw.payload[1];
 
-		return new VersionCCCommandClassReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestedCC,
 			ccVersion,
@@ -861,7 +861,7 @@ export class VersionCCCommandClassGet extends VersionCC {
 		validatePayload(raw.payload.length >= 1);
 		const requestedCC: CommandClasses = raw.payload[0];
 
-		return new VersionCCCommandClassGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestedCC,
 		});
@@ -909,7 +909,7 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		const capabilities = raw.payload[0];
 		const supportsZWaveSoftwareGet = !!(capabilities & 0b100);
 
-		return new VersionCCCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsZWaveSoftwareGet,
 		});
@@ -1037,7 +1037,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			applicationBuildNumber = 0;
 		}
 
-		return new VersionCCZWaveSoftwareReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sdkVersion,
 			applicationFrameworkAPIVersion,

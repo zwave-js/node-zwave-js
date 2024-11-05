@@ -574,7 +574,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			raw.payload.subarray(1),
 		);
 
-		return new ThermostatSetpointCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			setpointType,
 			value,
@@ -640,7 +640,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 
 		if (type === 0) {
 			// Not supported
-			return new ThermostatSetpointCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				type,
 				value: 0,
@@ -653,7 +653,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			raw.payload.subarray(1),
 		);
 
-		return new ThermostatSetpointCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			value,
@@ -750,7 +750,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		validatePayload(raw.payload.length >= 1);
 		const setpointType: ThermostatSetpointType = raw.payload[0] & 0b1111;
 
-		return new ThermostatSetpointCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			setpointType,
 		});
@@ -817,7 +817,7 @@ export class ThermostatSetpointCCCapabilitiesReport
 			raw.payload.subarray(1 + bytesRead),
 		);
 
-		return new ThermostatSetpointCCCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			minValue,
@@ -895,7 +895,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		validatePayload(raw.payload.length >= 1);
 		const setpointType: ThermostatSetpointType = raw.payload[0] & 0b1111;
 
-		return new ThermostatSetpointCCCapabilitiesGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			setpointType,
 		});
@@ -962,7 +962,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			(i) => thermostatSetpointTypeMap[i],
 		);
 
-		return new ThermostatSetpointCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSetpointTypes,
 		});

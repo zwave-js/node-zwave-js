@@ -576,7 +576,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 			raw.payload.length === HALF_NONCE_SIZE,
 		);
 
-		return new SecurityCCNonceReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			nonce: raw.payload,
 		});
@@ -893,7 +893,7 @@ export class SecurityCCSchemeReport extends SecurityCC {
 	): SecurityCCSchemeReport {
 		validatePayload(raw.payload.length >= 1);
 		// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
-		return new SecurityCCSchemeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 		});
 	}
@@ -980,7 +980,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		validatePayload(raw.payload.length >= 16);
 		const networkKey: Uint8Array = raw.payload.subarray(0, 16);
 
-		return new SecurityCCNetworkKeySet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			networkKey,
 		});
@@ -1030,7 +1030,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		const supportedCCs: CommandClasses[] = list.supportedCCs;
 		const controlledCCs: CommandClasses[] = list.controlledCCs;
 
-		return new SecurityCCCommandsSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			reportsToFollow,
 			supportedCCs,

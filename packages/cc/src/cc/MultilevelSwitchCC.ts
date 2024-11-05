@@ -648,7 +648,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			duration = Duration.parseReport(raw.payload[1]);
 		}
 
-		return new MultilevelSwitchCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			targetValue,
 			duration,
@@ -731,7 +731,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			duration = Duration.parseReport(raw.payload[2]);
 		}
 
-		return new MultilevelSwitchCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			currentValue,
 			targetValue,
@@ -821,7 +821,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			duration = Duration.parseSet(raw.payload[2]);
 		}
 
-		return new MultilevelSwitchCCStartLevelChange({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			ignoreStartLevel,
 			direction,
@@ -901,7 +901,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		validatePayload(raw.payload.length >= 1);
 		const switchType: SwitchType = raw.payload[0] & 0b11111;
 
-		return new MultilevelSwitchCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			switchType,
 		});

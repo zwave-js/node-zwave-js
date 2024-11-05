@@ -114,7 +114,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		);
 		const status: InclusionControllerStatus = raw.payload[1];
 
-		return new InclusionControllerCCComplete({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			step,
 			status,
@@ -171,7 +171,7 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 			step in InclusionControllerStep,
 		);
 
-		return new InclusionControllerCCInitiate({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			includedNodeId,
 			step,

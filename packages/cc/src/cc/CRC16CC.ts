@@ -137,7 +137,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		validatePayload(expectedCRC === actualCRC);
 
 		const encapsulated = CommandClass.parse(ccBuffer, ctx);
-		return new CRC16CCCommandEncapsulation({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			encapsulated,
 		});

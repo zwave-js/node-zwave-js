@@ -254,7 +254,7 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		validatePayload(raw.payload.length >= 1);
 		const recordsCount = raw.payload[0];
 
-		return new DoorLockLoggingCCRecordsSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			recordsCount,
 		});
@@ -347,7 +347,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			};
 		}
 
-		return new DoorLockLoggingCCRecordReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			recordNumber,
 			record,

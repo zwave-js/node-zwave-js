@@ -1285,7 +1285,7 @@ export class UserCodeCCSet extends UserCodeCC {
 		}
 
 		if (userIdStatus === UserIDStatus.Available) {
-			return new UserCodeCCSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				userId,
 				userIdStatus,
@@ -1294,7 +1294,7 @@ export class UserCodeCCSet extends UserCodeCC {
 
 		const userCode = raw.payload.subarray(2);
 
-		return new UserCodeCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			userIdStatus,
@@ -1384,7 +1384,7 @@ export class UserCodeCCReport extends UserCodeCC
 			}
 		}
 
-		return new UserCodeCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			userIdStatus,
@@ -1460,7 +1460,7 @@ export class UserCodeCCGet extends UserCodeCC {
 		validatePayload(raw.payload.length >= 1);
 		const userId = raw.payload[0];
 
-		return new UserCodeCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 		});
@@ -1513,7 +1513,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 			supportedUsers = raw.payload[0];
 		}
 
-		return new UserCodeCCUsersNumberReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedUsers,
 		});
@@ -1654,7 +1654,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			),
 		).toString("ascii");
 
-		return new UserCodeCCCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsAdminCode,
 			supportsAdminCodeDeactivation,
@@ -1773,7 +1773,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		validatePayload(raw.payload.length >= 1);
 		const keypadMode: KeypadMode = raw.payload[0];
 
-		return new UserCodeCCKeypadModeSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			keypadMode,
 		});
@@ -1816,7 +1816,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		validatePayload(raw.payload.length >= 1);
 		const keypadMode: KeypadMode = raw.payload[0];
 
-		return new UserCodeCCKeypadModeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			keypadMode,
 		});
@@ -1890,7 +1890,7 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 			.subarray(1, 1 + codeLength)
 			.toString("ascii");
 
-		return new UserCodeCCAdminCodeSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			adminCode,
 		});
@@ -1940,7 +1940,7 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 			.subarray(1, 1 + codeLength)
 			.toString("ascii");
 
-		return new UserCodeCCAdminCodeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			adminCode,
 		});
@@ -1990,7 +1990,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		validatePayload(raw.payload.length >= 2);
 		const userCodeChecksum = raw.payload.readUInt16BE(0);
 
-		return new UserCodeCCUserCodeChecksumReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userCodeChecksum,
 		});
@@ -2130,7 +2130,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		validatePayload(raw.payload.length >= offset + 2);
 		const nextUserId = raw.payload.readUInt16BE(offset);
 
-		return new UserCodeCCExtendedUserCodeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userCodes,
 			nextUserId,

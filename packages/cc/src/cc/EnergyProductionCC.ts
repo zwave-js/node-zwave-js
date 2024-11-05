@@ -221,7 +221,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 			rawScale,
 		);
 
-		return new EnergyProductionCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			value,
@@ -305,7 +305,7 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 		validatePayload(raw.payload.length >= 1);
 		const parameter: EnergyProductionParameter = raw.payload[0];
 
-		return new EnergyProductionCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});

@@ -577,7 +577,7 @@ export class SceneControllerConfigurationCCReport
 		const dimmingDuration: Duration = Duration.parseReport(raw.payload[2])
 			?? Duration.unknown();
 
-		return new SceneControllerConfigurationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			sceneId,

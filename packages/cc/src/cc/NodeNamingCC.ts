@@ -361,7 +361,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 			name = nameBuffer.toString("ascii");
 		}
 
-		return new NodeNamingAndLocationCCNameReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			name,
 		});
@@ -475,7 +475,7 @@ export class NodeNamingAndLocationCCLocationReport
 			location = locationBuffer.toString("ascii");
 		}
 
-		return new NodeNamingAndLocationCCLocationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			location,
 		});

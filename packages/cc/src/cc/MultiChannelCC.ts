@@ -854,7 +854,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			aggregatedCount = raw.payload[2] & 0b01111111;
 		}
 
-		return new MultiChannelCCEndPointReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			countIsDynamic,
 			identicalCapabilities,
@@ -950,7 +950,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			&& genericDeviceClass === 0xff // "Non-Interoperable"
 			&& specificDeviceClass === 0x00;
 
-		return new MultiChannelCCCapabilityReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			isDynamic,
@@ -1051,7 +1051,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		validatePayload(raw.payload.length >= 1);
 		const requestedEndpoint = raw.payload[0] & 0b01111111;
 
-		return new MultiChannelCCCapabilityGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestedEndpoint,
 		});
@@ -1108,7 +1108,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.map((e) => e & 0b01111111)
 			.filter((e) => e !== 0);
 
-		return new MultiChannelCCEndPointFindReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			reportsToFollow,
 			genericClass,
@@ -1199,7 +1199,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		const genericClass = raw.payload[0];
 		const specificClass = raw.payload[1];
 
-		return new MultiChannelCCEndPointFind({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			genericClass,
 			specificClass,
@@ -1263,7 +1263,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		const bitMask = raw.payload.subarray(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 
-		return new MultiChannelCCAggregatedMembersReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			aggregatedEndpointIndex,
 			members,
@@ -1434,7 +1434,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		}
 		// No need to validate further, each CC does it for itself
 		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
-		return new MultiChannelCCCommandEncapsulation({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			destination,
@@ -1514,7 +1514,7 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 		const requestedCC: CommandClasses = raw.payload[0];
 		const endpointCount = raw.payload[1];
 
-		return new MultiChannelCCV1Report({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestedCC,
 			endpointCount,
@@ -1643,7 +1643,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			ctx,
 		);
 
-		return new MultiChannelCCV1CommandEncapsulation({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			encapsulated,

@@ -368,7 +368,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 			type = raw.payload[1];
 		}
 
-		return new BinarySensorCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			value,
 			type,
@@ -452,7 +452,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 			sensorType = raw.payload[0];
 		}
 
-		return new BinarySensorCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sensorType,
 		});
@@ -512,7 +512,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 				(t) => t !== 0,
 			);
 
-		return new BinarySensorCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSensorTypes,
 		});

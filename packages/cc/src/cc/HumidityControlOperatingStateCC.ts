@@ -187,7 +187,7 @@ export class HumidityControlOperatingStateCCReport
 		validatePayload(raw.payload.length >= 1);
 		const state: HumidityControlOperatingState = raw.payload[0] & 0b1111;
 
-		return new HumidityControlOperatingStateCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			state,
 		});

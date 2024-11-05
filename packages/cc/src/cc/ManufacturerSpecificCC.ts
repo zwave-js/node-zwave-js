@@ -257,7 +257,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		const productType = raw.payload.readUInt16BE(2);
 		const productId = raw.payload.readUInt16BE(4);
 
-		return new ManufacturerSpecificCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			manufacturerId,
 			productType,
@@ -334,7 +334,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 			? deviceIdData.toString("utf8")
 			: "0x" + deviceIdData.toString("hex");
 
-		return new ManufacturerSpecificCCDeviceSpecificReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			deviceId,

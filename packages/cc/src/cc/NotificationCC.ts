@@ -944,7 +944,7 @@ export class NotificationCCSet extends NotificationCC {
 		const notificationType = raw.payload[0];
 		const notificationStatus = raw.payload[1] === 0xff;
 
-		return new NotificationCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			notificationType,
 			notificationStatus,
@@ -1017,7 +1017,7 @@ export class NotificationCCReport extends NotificationCC {
 		// Byte 2 used to be zensorNetSourceNodeId in V2 and V3, but we don't care about that
 
 		if (raw.payload.length < 7) {
-			return new NotificationCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				alarmType,
 				alarmLevel,
@@ -1047,7 +1047,7 @@ export class NotificationCCReport extends NotificationCC {
 			sequenceNumber = raw.payload[7 + numEventParams];
 		}
 
-		return new NotificationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			alarmType,
 			alarmLevel,
@@ -1501,14 +1501,14 @@ export class NotificationCCGet extends NotificationCC {
 			if (raw.payload.length >= 3 && notificationType != 0xff) {
 				notificationEvent = raw.payload[2];
 			}
-			return new NotificationCCGet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				notificationType,
 				notificationEvent,
 			});
 		} else {
 			const alarmType = raw.payload[0];
-			return new NotificationCCGet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				alarmType,
 			});
@@ -1599,7 +1599,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			0,
 		);
 
-		return new NotificationCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsV1Alarm,
 			supportedNotificationTypes,
@@ -1671,7 +1671,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		if (numBitMaskBytes === 0) {
 			// Notification type is not supported
-			return new NotificationCCEventSupportedReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				notificationType,
 				supportedEvents: [],
@@ -1686,7 +1686,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			0,
 		);
 
-		return new NotificationCCEventSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			notificationType,
 			supportedEvents,
@@ -1809,7 +1809,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		validatePayload(raw.payload.length >= 1);
 		const notificationType = raw.payload[0];
 
-		return new NotificationCCEventSupportedGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			notificationType,
 		});

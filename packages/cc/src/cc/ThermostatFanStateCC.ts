@@ -177,7 +177,7 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 		validatePayload(raw.payload.length == 1);
 		const state: ThermostatFanState = raw.payload[0] & 0b1111;
 
-		return new ThermostatFanStateCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			state,
 		});

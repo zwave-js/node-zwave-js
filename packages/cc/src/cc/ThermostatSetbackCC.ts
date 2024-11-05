@@ -198,7 +198,7 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
 			|| rawSetbackState;
 
-		return new ThermostatSetbackCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			setbackType,
 			setbackState,
@@ -262,7 +262,7 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
 			|| rawSetbackState;
 
-		return new ThermostatSetbackCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			setbackType,
 			setbackState,

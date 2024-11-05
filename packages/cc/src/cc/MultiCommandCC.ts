@@ -138,7 +138,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 			offset += 1 + cmdLength;
 		}
 
-		return new MultiCommandCCCommandEncapsulation({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			encapsulated,
 		});

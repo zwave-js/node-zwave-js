@@ -669,7 +669,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			raw.payload.subarray(1),
 		);
 
-		return new MultilevelSensorCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			value,
@@ -812,13 +812,13 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		if (raw.payload.length >= 2) {
 			const sensorType = raw.payload[0];
 			const scale = (raw.payload[1] >> 3) & 0b11;
-			return new MultilevelSensorCCGet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				sensorType,
 				scale,
 			});
 		} else {
-			return new MultilevelSensorCCGet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 			});
 		}
@@ -891,7 +891,7 @@ export class MultilevelSensorCCSupportedSensorReport
 		validatePayload(raw.payload.length >= 1);
 		const supportedSensorTypes = parseBitMask(raw.payload);
 
-		return new MultilevelSensorCCSupportedSensorReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSensorTypes,
 		});
@@ -955,7 +955,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 			0,
 		);
 
-		return new MultilevelSensorCCSupportedScaleReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sensorType,
 			supportedScales,
@@ -1015,7 +1015,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		validatePayload(raw.payload.length >= 1);
 		const sensorType = raw.payload[0];
 
-		return new MultilevelSensorCCGetSupportedScale({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sensorType,
 		});

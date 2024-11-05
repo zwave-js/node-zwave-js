@@ -136,7 +136,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 		validatePayload(partialDatagram.length <= MAX_SEGMENT_SIZE);
 
-		return new TransportServiceCCFirstSegment({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			datagramSize,
 			sessionId,
@@ -281,7 +281,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 		validatePayload(partialDatagram.length <= MAX_SEGMENT_SIZE);
 
-		return new TransportServiceCCSubsequentSegment({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			datagramSize,
 			sessionId,
@@ -468,7 +468,7 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		const datagramOffset = ((raw.payload[1] & 0b111) << 8)
 			+ raw.payload[2];
 
-		return new TransportServiceCCSegmentRequest({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sessionId,
 			datagramOffset,
@@ -519,7 +519,7 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		validatePayload(raw.payload.length >= 2);
 		const sessionId = raw.payload[1] >>> 4;
 
-		return new TransportServiceCCSegmentComplete({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sessionId,
 		});
@@ -561,7 +561,7 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		validatePayload(raw.payload.length >= 2);
 		const pendingSegments = raw.payload[1];
 
-		return new TransportServiceCCSegmentWait({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			pendingSegments,
 		});

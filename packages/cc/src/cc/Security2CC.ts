@@ -2043,7 +2043,7 @@ export class Security2CCNonceReport extends Security2CC {
 				receiverEI,
 			);
 
-			return new Security2CCNonceReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				sequenceNumber,
 				MOS,
@@ -2051,7 +2051,7 @@ export class Security2CCNonceReport extends Security2CC {
 				receiverEI,
 			});
 		} else if (MOS) {
-			return new Security2CCNonceReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				sequenceNumber,
 				MOS,
@@ -2140,7 +2140,7 @@ export class Security2CCNonceGet extends Security2CC {
 			sequenceNumber,
 		);
 
-		return new Security2CCNonceGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 		});
@@ -2226,7 +2226,7 @@ export class Security2CCKEXReport extends Security2CC {
 			SecurityClass.S2_Unauthenticated,
 		);
 
-		return new Security2CCKEXReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestCSA,
 			echo,
@@ -2362,7 +2362,7 @@ export class Security2CCKEXSet extends Security2CC {
 			SecurityClass.S2_Unauthenticated,
 		);
 
-		return new Security2CCKEXSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			_reserved,
 			permitCSA,
@@ -2443,7 +2443,7 @@ export class Security2CCKEXFail extends Security2CC {
 		validatePayload(raw.payload.length >= 1);
 		const failType: KEXFailType = raw.payload[0];
 
-		return new Security2CCKEXFail({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			failType,
 		});
@@ -2488,7 +2488,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		const includingNode = !!(raw.payload[0] & 0b1);
 		const publicKey: Uint8Array = raw.payload.subarray(1);
 
-		return new Security2CCPublicKeyReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			includingNode,
 			publicKey,
@@ -2544,7 +2544,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		);
 		const networkKey = raw.payload.subarray(1, 17);
 
-		return new Security2CCNetworkKeyReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			grantedKey,
 			networkKey,
@@ -2603,7 +2603,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 			0,
 		);
 
-		return new Security2CCNetworkKeyGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestedKey,
 		});
@@ -2656,7 +2656,7 @@ export class Security2CCTransferEnd extends Security2CC {
 		const keyVerified = !!(raw.payload[0] & 0b10);
 		const keyRequestComplete = !!(raw.payload[0] & 0b1);
 
-		return new Security2CCTransferEnd({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			keyVerified,
 			keyRequestComplete,
@@ -2709,7 +2709,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
 		const supportedCCs = CCs.supportedCCs;
 
-		return new Security2CCCommandsSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedCCs,
 		});

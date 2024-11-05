@@ -222,9 +222,12 @@ test("Higher priority tasks interrupt lower priority ones, part 2", async (t) =>
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			await wait(1);
 			yield;
@@ -234,7 +237,9 @@ test("Higher priority tasks interrupt lower priority ones, part 2", async (t) =>
 			order.push("1c");
 		},
 	});
-	await wait(0);
+
+	await t1WasStarted;
+
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
 		task: async function*() {
@@ -1109,9 +1114,12 @@ test("Tasks can be removed while running", async (t) => {
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			await wait(10);
 			yield;
@@ -1137,7 +1145,7 @@ test("Tasks can be removed while running", async (t) => {
 		},
 	});
 
-	await wait(1);
+	await t1WasStarted;
 	// Task 1 should have run to the first yield,
 	// Task 2 should not have started yet
 	t.expect(order).toStrictEqual(["1a"]);
@@ -1160,9 +1168,13 @@ test("Tasks can be removed while running and paused", async (t) => {
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+	const t2WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			yield () => wait(10);
 			order.push("1b");
@@ -1177,6 +1189,7 @@ test("Tasks can be removed while running and paused", async (t) => {
 		name: "task2",
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t2WasStarted.resolve();
 			order.push("2a");
 			await wait(10);
 			yield;
@@ -1188,7 +1201,7 @@ test("Tasks can be removed while running and paused", async (t) => {
 		},
 	});
 
-	await wait(1);
+	await Promise.all([t1WasStarted, t2WasStarted]);
 	// Both tasks should have run to the first yield.
 	t.expect(order).toStrictEqual(["1a", "2a"]);
 

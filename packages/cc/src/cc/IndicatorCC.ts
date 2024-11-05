@@ -924,7 +924,7 @@ export class IndicatorCCSet extends IndicatorCC {
 		if (objCount === 0) {
 			const indicator0Value = raw.payload[0];
 
-			return new IndicatorCCSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				value: indicator0Value,
 			});
@@ -943,7 +943,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			values.push(value);
 		}
 
-		return new IndicatorCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			values,
 		});
@@ -1039,7 +1039,7 @@ export class IndicatorCCReport extends IndicatorCC {
 
 		if (objCount === 0) {
 			const indicator0Value = raw.payload[0];
-			return new IndicatorCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				value: indicator0Value,
 			});
@@ -1058,7 +1058,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			values.push(value);
 		}
 
-		return new IndicatorCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			values,
 		});
@@ -1244,7 +1244,7 @@ export class IndicatorCCGet extends IndicatorCC {
 			indicatorId = raw.payload[0];
 		}
 
-		return new IndicatorCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			indicatorId,
 		});
@@ -1309,7 +1309,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			).filter((v) => v !== 0);
 		}
 
-		return new IndicatorCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			indicatorId,
 			nextIndicatorId,
@@ -1403,7 +1403,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 		validatePayload(raw.payload.length >= 1);
 		const indicatorId = raw.payload[0];
 
-		return new IndicatorCCSupportedGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			indicatorId,
 		});
@@ -1455,7 +1455,7 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 			.subarray(2, 2 + descrptionLength)
 			.toString("utf8");
 
-		return new IndicatorCCDescriptionReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			indicatorId,
 			description,
@@ -1537,7 +1537,7 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 		validatePayload(raw.payload.length >= 1);
 		const indicatorId = raw.payload[0];
 
-		return new IndicatorCCDescriptionGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			indicatorId,
 		});

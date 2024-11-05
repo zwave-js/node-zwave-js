@@ -352,7 +352,7 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		validatePayload(raw.payload.length >= 1);
 		const mode: HumidityControlMode = raw.payload[0] & 0b1111;
 
-		return new HumidityControlModeCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			mode,
 		});
@@ -406,7 +406,7 @@ export class HumidityControlModeCCSupportedReport
 			supportedModes.unshift(HumidityControlMode.Off);
 		}
 
-		return new HumidityControlModeCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});

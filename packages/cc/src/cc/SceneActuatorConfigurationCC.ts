@@ -454,7 +454,7 @@ export class SceneActuatorConfigurationCCReport
 				?? Duration.unknown();
 		}
 
-		return new SceneActuatorConfigurationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sceneId,
 			level,

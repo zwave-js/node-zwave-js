@@ -261,7 +261,7 @@ export class TimeCCTimeReport extends TimeCC {
 			second <= 59,
 		);
 
-		return new TimeCCTimeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			hour,
 			minute,
@@ -326,7 +326,7 @@ export class TimeCCDateReport extends TimeCC {
 		const month = raw.payload[2];
 		const day = raw.payload[3];
 
-		return new TimeCCDateReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			year,
 			month,
@@ -486,7 +486,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 			),
 		);
 
-		return new TimeCCTimeOffsetReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			standardOffset,
 			dstOffset,

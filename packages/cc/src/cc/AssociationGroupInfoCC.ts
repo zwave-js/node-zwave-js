@@ -497,7 +497,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 			raw.payload.subarray(2, 2 + nameLength).toString("utf8"),
 		);
 
-		return new AssociationGroupInfoCCNameReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			name,
@@ -562,7 +562,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		validatePayload(raw.payload.length >= 1);
 		const groupId = raw.payload[0];
 
-		return new AssociationGroupInfoCCNameGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 		});
@@ -632,7 +632,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			groups.push({ groupId, mode, profile, eventCode });
 		}
 
-		return new AssociationGroupInfoCCInfoReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			isListMode,
 			hasDynamicInfo,
@@ -743,7 +743,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			groupId = raw.payload[1];
 		}
 
-		return new AssociationGroupInfoCCInfoGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			refreshCache,
 			listMode,
@@ -826,7 +826,7 @@ export class AssociationGroupInfoCCCommandListReport
 			offset += bytesRead + 1;
 		}
 
-		return new AssociationGroupInfoCCCommandListReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			commands,
@@ -903,7 +903,7 @@ export class AssociationGroupInfoCCCommandListGet
 		const allowCache = !!(raw.payload[0] & 0b1000_0000);
 		const groupId = raw.payload[1];
 
-		return new AssociationGroupInfoCCCommandListGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			allowCache,
 			groupId,
