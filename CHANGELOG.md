@@ -5,6 +5,9 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
+* `Driver.installConfigUpdates()` now requires the external config directory to be configured (#7365)
+
 ### Changes under the hood
 * Decorators have been migrated from the legacy specification to the accepted proposal (#7360)
 
