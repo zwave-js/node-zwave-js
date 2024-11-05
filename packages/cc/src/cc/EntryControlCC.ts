@@ -479,7 +479,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 			dataType = EntryControlDataTypes.None;
 		}
 
-		return new EntryControlCCNotification({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 			dataType,
@@ -549,7 +549,7 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 			0,
 		);
 
-		return new EntryControlCCKeySupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedKeys,
 		});
@@ -635,7 +635,7 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		const minKeyCacheTimeout = raw.payload[offset + 2];
 		const maxKeyCacheTimeout = raw.payload[offset + 3];
 
-		return new EntryControlCCEventSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedDataTypes,
 			supportedEventTypes,
@@ -728,7 +728,7 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		validatePayload(keyCacheSize >= 1 && keyCacheSize <= 32);
 		const keyCacheTimeout = raw.payload[1];
 
-		return new EntryControlCCConfigurationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			keyCacheSize,
 			keyCacheTimeout,

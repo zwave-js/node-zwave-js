@@ -592,7 +592,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			rf = raw.payload[1] & 0b1111;
 		}
 
-		return new ProtectionCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			local,
 			rf,
@@ -669,7 +669,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 			RFProtectionState.Unprotected,
 		);
 
-		return new ProtectionCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsTimeout,
 			supportsExclusiveControl,
@@ -763,7 +763,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		validatePayload(raw.payload.length >= 1);
 		const exclusiveControlNodeId = raw.payload[0];
 
-		return new ProtectionCCExclusiveControlReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			exclusiveControlNodeId,
 		});
@@ -857,7 +857,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		validatePayload(raw.payload.length >= 1);
 		const timeout: Timeout = Timeout.parse(raw.payload[0]);
 
-		return new ProtectionCCTimeoutReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			timeout,
 		});

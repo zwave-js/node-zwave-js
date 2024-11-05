@@ -79,7 +79,7 @@ export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {
 		validatePayload(raw.payload.length === 0);
 		// The driver ensures before handling it that it is only received from the root device
 
-		return new DeviceResetLocallyCCNotification({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 		});
 	}

@@ -376,7 +376,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		const wakeUpInterval = raw.payload.readUIntBE(0, 3);
 		const controllerNodeId = raw.payload[3];
 
-		return new WakeUpCCIntervalSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			wakeUpInterval,
 			controllerNodeId,
@@ -436,7 +436,7 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		const wakeUpInterval = raw.payload.readUIntBE(0, 3);
 		const controllerNodeId = raw.payload[3];
 
-		return new WakeUpCCIntervalReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			wakeUpInterval,
 			controllerNodeId,
@@ -511,7 +511,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 			wakeUpOnDemandSupported = !!(raw.payload[12] & 0b1);
 		}
 
-		return new WakeUpCCIntervalCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			minWakeUpInterval,
 			maxWakeUpInterval,

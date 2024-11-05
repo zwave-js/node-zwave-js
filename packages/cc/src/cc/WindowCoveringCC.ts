@@ -712,7 +712,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 			WindowCoveringParameter["Outbound Left (no position)"],
 		);
 
-		return new WindowCoveringCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedParameters,
 		});
@@ -808,7 +808,7 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		const duration = Duration.parseReport(raw.payload[3])
 			?? Duration.unknown();
 
-		return new WindowCoveringCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			currentValue,
@@ -867,7 +867,7 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		validatePayload(raw.payload.length >= 1);
 		const parameter: WindowCoveringParameter = raw.payload[0];
 
-		return new WindowCoveringCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});
@@ -936,7 +936,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			);
 		}
 
-		return new WindowCoveringCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			targetValues,
 			duration,
@@ -1017,7 +1017,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 			duration = Duration.parseSet(raw.payload[2]);
 		}
 
-		return new WindowCoveringCCStartLevelChange({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			direction,
 			parameter,
@@ -1078,7 +1078,7 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 		validatePayload(raw.payload.length >= 1);
 		const parameter: WindowCoveringParameter = raw.payload[0];
 
-		return new WindowCoveringCCStopLevelChange({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});

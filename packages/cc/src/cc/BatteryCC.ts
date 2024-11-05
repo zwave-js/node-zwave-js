@@ -501,7 +501,7 @@ export class BatteryCCReport extends BatteryCC {
 			};
 		}
 
-		return new BatteryCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			...ccOptions,
 		});
@@ -674,7 +674,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 			true, // The temperature field may be omitted
 		);
 
-		return new BatteryCCHealthReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			maximumCapacity,
 			temperature,

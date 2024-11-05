@@ -709,7 +709,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 			ColorComponent["Warm White"],
 		);
 
-		return new ColorSwitchCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedColorComponents,
 		});
@@ -786,7 +786,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			duration = Duration.parseReport(raw.payload[3]);
 		}
 
-		return new ColorSwitchCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			colorComponent,
 			currentValue,
@@ -929,7 +929,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		validatePayload(raw.payload.length >= 1);
 		const colorComponent: ColorComponent = raw.payload[0];
 
-		return new ColorSwitchCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			colorComponent,
 		});
@@ -1020,7 +1020,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			duration = Duration.parseSet(raw.payload[offset]);
 		}
 
-		return new ColorSwitchCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			...colorTable,
 			duration,
@@ -1129,7 +1129,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			duration = Duration.parseSet(raw.payload[3]);
 		}
 
-		return new ColorSwitchCCStartLevelChange({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			ignoreStartLevel,
 			direction,
@@ -1211,7 +1211,7 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		validatePayload(raw.payload.length >= 1);
 		const colorComponent: ColorComponent = raw.payload[0];
 
-		return new ColorSwitchCCStopLevelChange({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			colorComponent,
 		});

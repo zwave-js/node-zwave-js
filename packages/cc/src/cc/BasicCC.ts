@@ -389,7 +389,7 @@ export class BasicCCSet extends BasicCC {
 		validatePayload(raw.payload.length >= 1);
 		const targetValue = raw.payload[0];
 
-		return new BasicCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			targetValue,
 		});
@@ -450,7 +450,7 @@ export class BasicCCReport extends BasicCC {
 			duration = Duration.parseReport(raw.payload[2]);
 		}
 
-		return new BasicCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			currentValue,
 			targetValue,

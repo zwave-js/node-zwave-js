@@ -314,7 +314,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		if (status === SupervisionStatus.Working) {
 			const duration = Duration.parseReport(raw.payload[2])
 				?? new Duration(0, "seconds");
-			return new SupervisionCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				moreUpdatesFollow,
 				requestWakeUpOnDemand,
@@ -323,7 +323,7 @@ export class SupervisionCCReport extends SupervisionCC {
 				duration,
 			});
 		} else {
-			return new SupervisionCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				moreUpdatesFollow,
 				requestWakeUpOnDemand,
@@ -422,7 +422,7 @@ export class SupervisionCCGet extends SupervisionCC {
 		const sessionId = raw.payload[0] & 0b111111;
 
 		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
-		return new SupervisionCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestStatusUpdates,
 			sessionId,

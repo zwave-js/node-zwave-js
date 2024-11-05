@@ -292,7 +292,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 			false,
 		);
 
-		return new TimeParametersCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			dateAndTime,
 		});
@@ -369,7 +369,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			false,
 		);
 
-		return new TimeParametersCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			dateAndTime,
 		});

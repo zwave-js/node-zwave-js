@@ -273,7 +273,7 @@ export class LanguageCCReport extends LanguageCC {
 			country = raw.payload.subarray(3, 5).toString("ascii");
 		}
 
-		return new LanguageCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			language,
 			country,

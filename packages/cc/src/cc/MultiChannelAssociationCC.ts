@@ -656,7 +656,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 				raw.payload.subarray(1),
 			);
 
-		return new MultiChannelAssociationCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			nodeIds,
@@ -727,7 +727,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				raw.payload.subarray(1),
 			);
 
-		return new MultiChannelAssociationCCRemove({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			nodeIds,
@@ -819,7 +819,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 				raw.payload.subarray(3),
 			);
 
-		return new MultiChannelAssociationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			maxNodes,
@@ -919,7 +919,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 		validatePayload(raw.payload.length >= 1);
 		const groupId = raw.payload[0];
 
-		return new MultiChannelAssociationCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 		});
@@ -967,7 +967,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 		validatePayload(raw.payload.length >= 1);
 		const groupCount = raw.payload[0];
 
-		return new MultiChannelAssociationCCSupportedGroupingsReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupCount,
 		});

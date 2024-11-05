@@ -242,14 +242,14 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		const powerlevel: Powerlevel = raw.payload[0];
 
 		if (powerlevel === Powerlevel["Normal Power"]) {
-			return new PowerlevelCCSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,
 			});
 		} else {
 			validatePayload(raw.payload.length >= 2);
 			const timeout = raw.payload[1];
-			return new PowerlevelCCSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,
 				timeout,
@@ -304,14 +304,14 @@ export class PowerlevelCCReport extends PowerlevelCC {
 		const powerlevel: Powerlevel = raw.payload[0];
 
 		if (powerlevel === Powerlevel["Normal Power"]) {
-			return new PowerlevelCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,
 			});
 		} else {
 			validatePayload(raw.payload.length >= 2);
 			const timeout = raw.payload[1];
-			return new PowerlevelCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,
 				timeout,
@@ -373,7 +373,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		const powerlevel: Powerlevel = raw.payload[1];
 		const testFrameCount = raw.payload.readUInt16BE(2);
 
-		return new PowerlevelCCTestNodeSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			testNodeId,
 			powerlevel,
@@ -431,7 +431,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		const status: PowerlevelTestStatus = raw.payload[1];
 		const acknowledgedFrames = raw.payload.readUInt16BE(2);
 
-		return new PowerlevelCCTestNodeReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			testNodeId,
 			status,

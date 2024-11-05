@@ -330,7 +330,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			duration = Duration.parseSet(raw.payload[1]);
 		}
 
-		return new BinarySwitchCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			targetValue,
 			duration,
@@ -412,7 +412,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			duration = Duration.parseReport(raw.payload[2]);
 		}
 
-		return new BinarySwitchCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			currentValue,
 			targetValue,

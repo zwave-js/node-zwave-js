@@ -460,7 +460,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			tilt = parseMaybeNumber(raw.payload[2]);
 		}
 
-		return new FibaroVenetianBlindCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			position,
 			tilt,
@@ -527,7 +527,7 @@ export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): FibaroVenetianBlindCCGet {
-		return new FibaroVenetianBlindCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 		});
 	}

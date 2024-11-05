@@ -639,7 +639,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			currentState = UNKNOWN_STATE;
 		}
 
-		return new BarrierOperatorCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			position,
 			currentState,
@@ -700,7 +700,7 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 			SubsystemType.Audible,
 		);
 
-		return new BarrierOperatorCCSignalingCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSubsystemTypes,
 		});
@@ -809,7 +809,7 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		const subsystemType: SubsystemType = raw.payload[0];
 		const subsystemState: SubsystemState = raw.payload[1];
 
-		return new BarrierOperatorCCEventSignalingReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			subsystemType,
 			subsystemState,

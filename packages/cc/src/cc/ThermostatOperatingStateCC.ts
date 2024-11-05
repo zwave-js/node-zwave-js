@@ -184,7 +184,7 @@ export class ThermostatOperatingStateCCReport
 		validatePayload(raw.payload.length >= 1);
 		const state: ThermostatOperatingState = raw.payload[0];
 
-		return new ThermostatOperatingStateCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			state,
 		});

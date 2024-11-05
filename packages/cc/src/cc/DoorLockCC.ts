@@ -961,7 +961,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			duration = Duration.parseReport(raw.payload[6]);
 		}
 
-		return new DoorLockCCOperationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			currentMode,
 			outsideHandlesCanOpenDoor,
@@ -1158,7 +1158,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			blockToBlock = !!(flags & 0b10);
 		}
 
-		return new DoorLockCCConfigurationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			operationType,
 			outsideHandlesCanOpenDoorConfiguration,
@@ -1539,7 +1539,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		const holdAndReleaseSupported = !!(raw.payload[offset + 2] & 0b100);
 		const autoRelockSupported = !!(raw.payload[offset + 2] & 0b1000);
 
-		return new DoorLockCCCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedOperationTypes,
 			supportedDoorLockModes,

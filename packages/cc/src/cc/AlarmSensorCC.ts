@@ -360,7 +360,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		// ignore zero durations
 		const duration = raw.payload.readUInt16BE(3) || undefined;
 
-		return new AlarmSensorCCReport({
+		return new this({
 			// Alarm Sensor reports may be forwarded by a different node, in this case
 			// (and only then!) the payload contains the original node ID
 			nodeId: sourceNodeId || ctx.sourceNodeId,
@@ -500,7 +500,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 			AlarmSensorType["General Purpose"],
 		);
 
-		return new AlarmSensorCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSensorTypes,
 		});

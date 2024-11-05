@@ -530,7 +530,7 @@ export class AssociationCCSet extends AssociationCC {
 		const groupId = raw.payload[0];
 		const nodeIds = [...raw.payload.subarray(1)];
 
-		return new AssociationCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			nodeIds,
@@ -589,7 +589,7 @@ export class AssociationCCRemove extends AssociationCC {
 		}
 		const nodeIds = [...raw.payload.subarray(1)];
 
-		return new AssociationCCRemove({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			nodeIds,
@@ -659,7 +659,7 @@ export class AssociationCCReport extends AssociationCC {
 		const reportsToFollow = raw.payload[2];
 		const nodeIds = [...raw.payload.subarray(3)];
 
-		return new AssociationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 			maxNodes,
@@ -743,7 +743,7 @@ export class AssociationCCGet extends AssociationCC {
 		validatePayload(raw.payload.length >= 1);
 		const groupId = raw.payload[0];
 
-		return new AssociationCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
 		});
@@ -787,7 +787,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		validatePayload(raw.payload.length >= 1);
 		const groupCount = raw.payload[0];
 
-		return new AssociationCCSupportedGroupingsReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupCount,
 		});
@@ -834,7 +834,7 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 		validatePayload(raw.payload.length >= 1);
 		const group = raw.payload[0];
 
-		return new AssociationCCSpecificGroupReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			group,
 		});

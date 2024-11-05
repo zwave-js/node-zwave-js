@@ -238,7 +238,7 @@ export class ClockCCReport extends ClockCC {
 			minute <= 59,
 		);
 
-		return new ClockCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			weekday,
 			hour,

@@ -427,7 +427,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			}
 		}
 
-		return new FirmwareUpdateMetaDataCCMetaDataReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			manufacturerId,
 			firmwareId,
@@ -565,7 +565,7 @@ export class FirmwareUpdateMetaDataCCRequestReport
 			nonSecureTransfer = !!(raw.payload[1] & 0b10);
 		}
 
-		return new FirmwareUpdateMetaDataCCRequestReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			status,
 			resume,
@@ -740,7 +740,7 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 		const numReports = raw.payload[0];
 		const reportNumber = raw.payload.readUInt16BE(1) & 0x7fff;
 
-		return new FirmwareUpdateMetaDataCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			numReports,
 			reportNumber,
@@ -871,7 +871,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 			waitTime = raw.payload.readUInt16BE(1);
 		}
 
-		return new FirmwareUpdateMetaDataCCStatusReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			status,
 			waitTime,
@@ -940,7 +940,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 			hardwareVersion = raw.payload[8];
 		}
 
-		return new FirmwareUpdateMetaDataCCActivationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			manufacturerId,
 			firmwareId,
@@ -1081,7 +1081,7 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 		const status: FirmwareDownloadStatus = raw.payload[0];
 		const checksum = raw.payload.readUInt16BE(1);
 
-		return new FirmwareUpdateMetaDataCCPrepareReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			status,
 			checksum,

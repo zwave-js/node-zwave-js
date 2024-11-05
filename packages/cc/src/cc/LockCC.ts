@@ -245,7 +245,7 @@ export class LockCCReport extends LockCC {
 		validatePayload(raw.payload.length >= 1);
 		const locked = raw.payload[0] === 1;
 
-		return new LockCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			locked,
 		});

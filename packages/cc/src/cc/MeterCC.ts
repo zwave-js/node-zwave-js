@@ -947,7 +947,7 @@ export class MeterCCReport extends MeterCC {
 		}
 		const scale = parseScale(scale1, raw.payload, offset);
 
-		return new MeterCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			rateType,
@@ -1150,7 +1150,7 @@ export class MeterCCGet extends MeterCC {
 			}
 		}
 
-		return new MeterCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			rateType,
 			scale,
@@ -1281,7 +1281,7 @@ export class MeterCCSupportedReport extends MeterCC {
 			1,
 		);
 
-		return new MeterCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			supportsReset,
@@ -1419,7 +1419,7 @@ export class MeterCCReset extends MeterCC {
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): MeterCCReset {
 		if (raw.payload.length === 0) {
-			return new MeterCCReset({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 			});
 		}
@@ -1433,7 +1433,7 @@ export class MeterCCReset extends MeterCC {
 		} = parseMeterValueAndInfo(raw.payload, 0);
 		const scale = parseScale(scale1, raw.payload, scale2Offset);
 
-		return new MeterCCReset({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			rateType,

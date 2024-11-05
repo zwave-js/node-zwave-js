@@ -605,7 +605,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		// Setpoint type 0 is not defined in the spec, prevent devices from using it.
 		if (type === 0) {
 			// Not supported
-			return new HumidityControlSetpointCCReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				type,
 				value: 0,
@@ -616,7 +616,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(raw.payload.subarray(1));
 
-		return new HumidityControlSetpointCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			value,
@@ -768,7 +768,7 @@ export class HumidityControlSetpointCCSupportedReport
 				HumidityControlSetpointType["N/A"],
 			);
 
-		return new HumidityControlSetpointCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSetpointTypes,
 		});
@@ -833,7 +833,7 @@ export class HumidityControlSetpointCCScaleSupportedReport
 			0,
 		);
 
-		return new HumidityControlSetpointCCScaleSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedScales,
 		});
@@ -952,7 +952,7 @@ export class HumidityControlSetpointCCCapabilitiesReport
 			raw.payload.subarray(1 + bytesRead),
 		);
 
-		return new HumidityControlSetpointCCCapabilitiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			minValue,

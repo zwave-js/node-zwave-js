@@ -159,7 +159,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			dimmingDuration = Duration.parseSet(raw.payload[1]);
 		}
 
-		return new SceneActivationCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sceneId,
 			dimmingDuration,

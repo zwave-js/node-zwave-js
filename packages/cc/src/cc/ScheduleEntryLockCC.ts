@@ -947,7 +947,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 		const userId = raw.payload[0];
 		const enabled: boolean = raw.payload[1] === 0x01;
 
-		return new ScheduleEntryLockCCEnableSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			enabled,
@@ -995,7 +995,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 		validatePayload(raw.payload.length >= 1);
 		const enabled: boolean = raw.payload[0] === 0x01;
 
-		return new ScheduleEntryLockCCEnableAllSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			enabled,
 		});
@@ -1054,7 +1054,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 			numDailyRepeatingSlots = raw.payload[2];
 		}
 
-		return new ScheduleEntryLockCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			numWeekDaySlots,
 			numYearDaySlots,
@@ -1143,7 +1143,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		const slotId = raw.payload[2];
 
 		if (action !== ScheduleEntryLockSetAction.Set) {
-			return new ScheduleEntryLockCCWeekDayScheduleSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				action,
 				userId,
@@ -1158,7 +1158,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		const stopHour = raw.payload[6];
 		const stopMinute = raw.payload[7];
 
-		return new ScheduleEntryLockCCWeekDayScheduleSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			action,
 			userId,
@@ -1309,7 +1309,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 			};
 		}
 
-		return new ScheduleEntryLockCCWeekDayScheduleReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			...ccOptions,
 		});
@@ -1415,7 +1415,7 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 		const userId = raw.payload[0];
 		const slotId = raw.payload[1];
 
-		return new ScheduleEntryLockCCWeekDayScheduleGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			slotId,
@@ -1492,7 +1492,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		const slotId = raw.payload[2];
 
 		if (action !== ScheduleEntryLockSetAction.Set) {
-			return new ScheduleEntryLockCCYearDayScheduleSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				action,
 				userId,
@@ -1512,7 +1512,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		const stopHour = raw.payload[11];
 		const stopMinute = raw.payload[12];
 
-		return new ScheduleEntryLockCCYearDayScheduleSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			action,
 			userId,
@@ -1715,7 +1715,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 			};
 		}
 
-		return new ScheduleEntryLockCCYearDayScheduleReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			...ccOptions,
 		});
@@ -1839,7 +1839,7 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 		const userId = raw.payload[0];
 		const slotId = raw.payload[1];
 
-		return new ScheduleEntryLockCCYearDayScheduleGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			slotId,
@@ -1888,7 +1888,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	): ScheduleEntryLockCCTimeOffsetSet {
 		const { standardOffset, dstOffset } = parseTimezone(raw.payload);
 
-		return new ScheduleEntryLockCCTimeOffsetSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			standardOffset,
 			dstOffset,
@@ -1939,7 +1939,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 	): ScheduleEntryLockCCTimeOffsetReport {
 		const { standardOffset, dstOffset } = parseTimezone(raw.payload);
 
-		return new ScheduleEntryLockCCTimeOffsetReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			standardOffset,
 			dstOffset,
@@ -2022,7 +2022,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 		const slotId = raw.payload[2];
 
 		if (action !== ScheduleEntryLockSetAction.Set) {
-			return new ScheduleEntryLockCCDailyRepeatingScheduleSet({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				action,
 				userId,
@@ -2040,7 +2040,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 		const durationHour = raw.payload[6];
 		const durationMinute = raw.payload[7];
 
-		return new ScheduleEntryLockCCDailyRepeatingScheduleSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			action,
 			userId,
@@ -2165,7 +2165,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			const durationHour = raw.payload[5];
 			const durationMinute = raw.payload[6];
 
-			return new ScheduleEntryLockCCDailyRepeatingScheduleReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				userId,
 				slotId,
@@ -2176,7 +2176,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 				durationMinute,
 			});
 		} else {
-			return new ScheduleEntryLockCCDailyRepeatingScheduleReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				userId,
 				slotId,
@@ -2301,7 +2301,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 		const userId = raw.payload[0];
 		const slotId = raw.payload[1];
 
-		return new ScheduleEntryLockCCDailyRepeatingScheduleGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,
 			slotId,

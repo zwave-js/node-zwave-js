@@ -1646,7 +1646,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			ConfigValueFormat.SignedInteger,
 		);
 
-		return new ConfigurationCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			valueSize,
@@ -1818,7 +1818,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		validatePayload(raw.payload.length >= 1);
 		const parameter = raw.payload[0];
 
-		return new ConfigurationCCGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});
@@ -1892,7 +1892,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			ConfigValueFormat.SignedInteger,
 		);
 
-		return new ConfigurationCCSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			resetToDefault,
@@ -2194,7 +2194,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 			);
 		}
 
-		return new ConfigurationCCBulkReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			reportsToFollow,
 			defaultValues,
@@ -2370,7 +2370,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		}
 		const name: string = raw.payload.subarray(3).toString("utf8");
 
-		return new ConfigurationCCNameReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			reportsToFollow,
@@ -2476,7 +2476,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		validatePayload(raw.payload.length >= 2);
 		const parameter = raw.payload.readUInt16BE(0);
 
-		return new ConfigurationCCNameGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});
@@ -2532,7 +2532,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		}
 		const info: string = raw.payload.subarray(3).toString("utf8");
 
-		return new ConfigurationCCInfoReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			reportsToFollow,
@@ -2651,7 +2651,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		validatePayload(raw.payload.length >= 2);
 		const parameter = raw.payload.readUInt16BE(0);
 
-		return new ConfigurationCCInfoGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});
@@ -2742,7 +2742,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 		if (valueSize === 0 && raw.payload.length < 5) {
 			nextParameter = 0;
-			return new ConfigurationCCPropertiesReport({
+			return new this({
 				nodeId: ctx.sourceNodeId,
 				parameter,
 				valueFormat,
@@ -2800,7 +2800,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			noBulkSupport = !!(options2 & 0b10);
 		}
 
-		return new ConfigurationCCPropertiesReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 			valueFormat,
@@ -3013,7 +3013,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		validatePayload(raw.payload.length >= 2);
 		const parameter = raw.payload.readUInt16BE(0);
 
-		return new ConfigurationCCPropertiesGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
 		});

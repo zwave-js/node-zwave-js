@@ -491,7 +491,7 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 		validatePayload(raw.payload.length >= 1);
 		const toneCount = raw.payload[0];
 
-		return new SoundSwitchCCTonesNumberReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			toneCount,
 		});
@@ -548,7 +548,7 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 			"utf8",
 		);
 
-		return new SoundSwitchCCToneInfoReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			toneId,
 			duration,
@@ -613,7 +613,7 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		validatePayload(raw.payload.length >= 1);
 		const toneId = raw.payload[0];
 
-		return new SoundSwitchCCToneInfoGet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			toneId,
 		});
@@ -659,7 +659,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		const defaultVolume = raw.payload[0];
 		const defaultToneId = raw.payload[1];
 
-		return new SoundSwitchCCConfigurationSet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			defaultVolume,
 			defaultToneId,
@@ -711,7 +711,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		const defaultVolume = clamp(raw.payload[0], 0, 100);
 		const defaultToneId = raw.payload[1];
 
-		return new SoundSwitchCCConfigurationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			defaultVolume,
 			defaultToneId,
@@ -771,7 +771,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			volume = raw.payload[1];
 		}
 
-		return new SoundSwitchCCTonePlaySet({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			toneId,
 			volume,
@@ -831,7 +831,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 			volume = raw.payload[1];
 		}
 
-		return new SoundSwitchCCTonePlayReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			toneId,
 			volume,

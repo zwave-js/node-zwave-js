@@ -329,7 +329,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 			sp.state !== "Unused"
 		);
 
-		return new ClimateControlScheduleCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			weekday,
 			schedule,
@@ -433,7 +433,7 @@ export class ClimateControlScheduleCCChangedReport
 		validatePayload(raw.payload.length >= 1);
 		const changeCounter = raw.payload[0];
 
-		return new ClimateControlScheduleCCChangedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			changeCounter,
 		});
@@ -486,7 +486,7 @@ export class ClimateControlScheduleCCOverrideReport
 		const overrideState: SetbackState = decodeSetbackState(raw.payload[1])
 			|| raw.payload[1];
 
-		return new ClimateControlScheduleCCOverrideReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			overrideType,
 			overrideState,

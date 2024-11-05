@@ -202,7 +202,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		const installerIcon = raw.payload.readUInt16BE(3);
 		const userIcon = raw.payload.readUInt16BE(5);
 
-		return new ZWavePlusCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			zwavePlusVersion,
 			roleType,

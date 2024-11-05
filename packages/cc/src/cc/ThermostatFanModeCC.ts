@@ -418,7 +418,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		// V3+
 		const off = !!(raw.payload[0] & 0b1000_0000);
 
-		return new ThermostatFanModeCCReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			mode,
 			off,
@@ -473,7 +473,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 			ThermostatFanMode["Auto low"],
 		);
 
-		return new ThermostatFanModeCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});

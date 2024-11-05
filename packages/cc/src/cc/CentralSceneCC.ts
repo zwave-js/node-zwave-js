@@ -337,7 +337,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			slowRefresh = !!(raw.payload[1] & 0b1000_0000);
 		}
 
-		return new CentralSceneCCNotification({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 			keyAttribute,
@@ -456,7 +456,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			}
 		}
 
-		return new CentralSceneCCSupportedReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			sceneCount,
 			supportsSlowRefresh,
@@ -547,7 +547,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		validatePayload(raw.payload.length >= 1);
 		const slowRefresh = !!(raw.payload[0] & 0b1000_0000);
 
-		return new CentralSceneCCConfigurationReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			slowRefresh,
 		});

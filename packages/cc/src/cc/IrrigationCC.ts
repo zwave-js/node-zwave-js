@@ -1384,7 +1384,7 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 		const numValveTables = raw.payload[2];
 		const maxValveTableSize = raw.payload[3] & 0b1111;
 
-		return new IrrigationCCSystemInfoReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsMasterValve,
 			numValves,
@@ -1530,7 +1530,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 			firstOpenZoneId = raw.payload[offset + 3];
 		}
 
-		return new IrrigationCCSystemStatusReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			systemVoltage,
 			flowSensorActive,
@@ -1795,7 +1795,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 			moistureSensorPolarity = (polarity & 0b10) >>> 1;
 		}
 
-		return new IrrigationCCSystemConfigReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			masterValveDelay,
 			highPressureThreshold,
@@ -1902,7 +1902,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			errorLowFlow = !!(raw.payload[3] & 0b10_0000);
 		}
 
-		return new IrrigationCCValveInfoReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			valveId,
 			connected,
@@ -2254,7 +2254,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		const useRainSensor = !!(raw.payload[offset] & 0b1);
 		const useMoistureSensor = !!(raw.payload[offset] & 0b10);
 
-		return new IrrigationCCValveConfigReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			valveId,
 			nominalCurrentHighThreshold,
@@ -2568,7 +2568,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 			});
 		}
 
-		return new IrrigationCCValveTableReport({
+		return new this({
 			nodeId: ctx.sourceNodeId,
 			tableId,
 			entries,
