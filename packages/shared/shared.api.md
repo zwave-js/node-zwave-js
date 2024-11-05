@@ -22,6 +22,16 @@ export type AllOrNone<T extends Record<string, any>> = T | {
 // @public (undocumented)
 export function applyMixin(target: Constructor, mixin: Constructor, includeConstructor?: boolean): void;
 
+// Warning: (ae-missing-release-tag) "areUint8ArraysEqual" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function areUint8ArraysEqual(a: Uint8Array, b: Uint8Array): boolean;
+
+// Warning: (ae-missing-release-tag) "assertUint8Array" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function assertUint8Array(value: unknown): asserts value is Uint8Array;
+
 // Warning: (ae-missing-release-tag) "AsyncQueue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -41,7 +51,232 @@ export class AsyncQueue<T> implements AsyncIterable<T> {
 // Warning: (ae-missing-release-tag) "buffer2hex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function buffer2hex(buffer: Buffer, uppercase?: boolean): string;
+export function buffer2hex(buffer: Uint8Array, uppercase?: boolean): string;
+
+// Warning: (ae-missing-release-tag) "Bytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class Bytes extends Uint8Array {
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/shared" does not have an export "constants"
+    static alloc(size: number, fill?: number): Bytes;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/shared" does not have an export "Uint8Array"
+    static concat(list: readonly (Uint8Array | ArrayLike<number>)[], totalLength?: number): Bytes;
+    equals(other: Uint8Array): boolean;
+    // (undocumented)
+    static from(data: Uint8Array | ArrayBuffer | ArrayLike<number> | Iterable<number>): Bytes;
+    // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+    // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+    // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+    // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+    // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+    // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+    static from(data: string, encoding?: BufferEncoding): Bytes;
+    // (undocumented)
+    static from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Bytes;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    includes(value: number | Bytes, byteOffset?: number): boolean;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readBigInt64BE(offset?: number): bigint;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readBigInt64LE(offset?: number): bigint;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readBigUInt64BE(offset?: number): bigint;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readBigUInt64LE(offset?: number): bigint;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readInt16BE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readInt16LE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readInt32BE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readInt32LE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readInt8(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    readIntBE(offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    readIntLE(offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readUInt16BE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readUInt16LE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readUInt32BE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readUInt32LE(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    readUInt8(offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    readUIntBE(offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    readUIntLE(offset: number, byteLength: number): number;
+    // (undocumented)
+    subarray(start?: number, end?: number): Bytes;
+    // (undocumented)
+    toString(encoding?: BufferEncoding): string;
+    // Warning: (ae-forgotten-export) The symbol "TypedArray" needs to be exported by the entry point index.d.ts
+    static view(value: TypedArray | ArrayBuffer | DataView): Bytes;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeBigInt64BE(value: bigint, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeBigInt64LE(value: bigint, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeBigUInt64BE(value: bigint, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeBigUInt64LE(value: bigint, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeInt16BE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeInt16LE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeInt32BE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeInt32LE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeInt8(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeIntBE(value: number, offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeIntLE(value: number, offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUInt16BE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUInt16LE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUInt32BE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUInt32LE(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-with-invalid-optional-name) The @param should not include a JSDoc-style optional name; it must not be enclosed in '[ ]' brackets.
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUInt8(value: number, offset?: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUIntBE(value: number, offset: number, byteLength: number): number;
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@since" is not defined in this configuration
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-undefined-tag) The TSDoc tag "@return" is not defined in this configuration
+    writeUIntLE(value: number, offset: number, byteLength: number): number;
+}
 
 // Warning: (ae-missing-release-tag) "cloneDeep" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -57,6 +292,11 @@ export function compareStrings(a: string, b: string): number;
 //
 // @public (undocumented)
 export type Constructor<T = object> = new (...args: any[]) => T;
+
+// Warning: (ae-missing-release-tag) "copyFilesRecursive" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function copyFilesRecursive(sourceDir: string, targetDir: string, predicate?: (filename: string) => boolean): Promise<void>;
 
 // Warning: (ae-missing-release-tag) "cpp2js" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -152,6 +392,11 @@ export function getEnumMemberName(enumeration: unknown, value: number): string;
 // @public (undocumented)
 export function getErrorMessage(e: unknown, includeStack?: boolean): string;
 
+// Warning: (ae-missing-release-tag) "hexToUint8Array" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function hexToUint8Array(hexString: string): Uint8Array;
+
 // Warning: (ae-missing-release-tag) "IsAny" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -178,6 +423,11 @@ export function isPrintableASCII(text: string): boolean;
 //
 // @public (undocumented)
 export function isPrintableASCIIWithWhitespace(text: string): boolean;
+
+// Warning: (ae-missing-release-tag) "isUint8Array" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isUint8Array(value: unknown): value is Uint8Array;
 
 // Warning: (ae-missing-release-tag) "JSONObject" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -257,6 +507,11 @@ export type OnlyMethods<T> = {
 // @public
 export function padVersion(version: string): string;
 
+// Warning: (ae-missing-release-tag) "pathExists" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function pathExists(filename: string): Promise<boolean>;
+
 // Warning: (ae-missing-release-tag) "pick" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -266,6 +521,11 @@ export function pick<T extends Record<any, any>, K extends keyof T>(obj: T, keys
 //
 // @public
 export function pickDeep<T = unknown>(object: Record<string, any>, path: string): T;
+
+// Warning: (ae-missing-release-tag) "readJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function readJSON<T = any>(filename: string): Promise<T>;
 
 // Warning: (ae-forgotten-export) The symbol "PickSymbolIterator" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "ReadonlyObjectKeyMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -285,11 +545,6 @@ export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
 // @public (undocumented)
 export type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R : T;
 
-// Warning: (ae-missing-release-tag) "skipBytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function skipBytes(buf: Buffer, n: number): Buffer;
-
 // Warning: (ae-missing-release-tag) "staticExtends" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -299,6 +554,11 @@ export function staticExtends<T extends new (...args: any[]) => any>(constructor
 //
 // @public (undocumented)
 export function stringify(arg: unknown, space?: 4 | "\t"): string;
+
+// Warning: (ae-missing-release-tag) "stringToUint8ArrayUTF16BE" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function stringToUint8ArrayUTF16BE(str: string): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "sum" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -334,7 +594,7 @@ export class TimedExpectation<TResult = void, TPredicate = never> implements Pro
 // Warning: (ae-missing-release-tag) "TypedClassDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TypedClassDecorator<TTarget extends object> = <T extends TTarget, TConstructor extends new (...args: any[]) => T>(apiClass: TConstructor) => TConstructor | void;
+export type TypedClassDecorator<Class extends abstract new (...args: any) => any> = (target: Class, context: ClassDecoratorContext<Class>) => Class | void;
 
 // Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -379,6 +639,21 @@ export class TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandle
 //
 // @public (undocumented)
 export type TypedPropertyDecorator<TTarget extends object> = <T extends TTarget>(target: T, propertyKey: string | symbol) => void;
+
+// Warning: (ae-missing-release-tag) "uint8ArrayToHex" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function uint8ArrayToHex(array: Uint8Array): string;
+
+// Warning: (ae-missing-release-tag) "uint8ArrayToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function uint8ArrayToString(array: Uint8Array | ArrayBuffer, encoding?: string): string;
+
+// Warning: (ae-missing-release-tag) "uint8ArrayToStringUTF16BE" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function uint8ArrayToStringUTF16BE(arr: Uint8Array): string;
 
 // Warning: (ae-missing-release-tag) "UnionToIntersection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

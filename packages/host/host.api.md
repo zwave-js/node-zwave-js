@@ -87,7 +87,7 @@ export interface FileSystem {
     // (undocumented)
     readFile(file: string, encoding: BufferEncoding): Promise<string>;
     // (undocumented)
-    writeFile(file: string, data: string | Buffer, options?: {
+    writeFile(file: string, data: string | Uint8Array, options?: {
         encoding: BufferEncoding;
     } | BufferEncoding): Promise<void>;
 }

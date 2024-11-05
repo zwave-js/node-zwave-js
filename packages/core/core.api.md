@@ -4,11 +4,13 @@
 
 ```ts
 
+import { Bytes } from '@zwave-js/shared/safe';
 import * as crypto from 'node:crypto';
-import type { ExecutionContext } from 'ava';
+import { ExpectStatic } from 'vitest';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
 import type { JSONObject } from '@zwave-js/shared';
+import { JSONObject as JSONObject_2 } from '@zwave-js/shared/safe';
 import type { Logger } from 'winston';
 import type { TransformableInfo } from 'logform';
 import type Transport from 'winston-transport';
@@ -53,7 +55,7 @@ export function assertValueID(param: Record<any, any>): asserts param is ValueID
 // Warning: (ae-missing-release-tag) "assertZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function assertZWaveError<T>(t: ExecutionContext, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
+export function assertZWaveError<T>(expect: ExpectStatic, valueOrFactory: T, options?: AssertZWaveErrorOptions): T extends () => PromiseLike<any> ? Promise<void> : void;
 
 // Warning: (ae-missing-release-tag) "AssertZWaveErrorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -70,7 +72,7 @@ export interface AssertZWaveErrorOptions {
 // Warning: (ae-missing-release-tag) "authHomeIdFromDSK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function authHomeIdFromDSK(dsk: Buffer): Buffer;
+export function authHomeIdFromDSK(dsk: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "averageRSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -463,22 +465,22 @@ export interface CommandClassInfo {
 // Warning: (ae-missing-release-tag) "computeCMAC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function computeCMAC(message: Buffer, key: Buffer): Buffer;
+export function computeCMAC(message: Uint8Array, key: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "computeMAC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function computeMAC(authData: Buffer, key: Buffer, iv?: Buffer): Buffer;
+export function computeMAC(authData: Uint8Array, key: Uint8Array, iv?: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "computeNoncePRK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function computeNoncePRK(senderEI: Buffer, receiverEI: Buffer): Buffer;
+export function computeNoncePRK(senderEI: Uint8Array, receiverEI: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "computePRK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function computePRK(ecdhSharedSecret: Buffer, pubKeyA: Buffer, pubKeyB: Buffer): Buffer;
+export function computePRK(ecdhSharedSecret: Uint8Array, pubKeyA: Uint8Array, pubKeyB: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "ConfigurationMetadata" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -668,7 +670,7 @@ export interface ControlsCC {
 // Warning: (ae-missing-release-tag) "CRC16_CCITT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function CRC16_CCITT(data: Buffer, startValue?: number): number;
+export function CRC16_CCITT(data: Uint8Array, startValue?: number): number;
 
 // Warning: (ae-missing-release-tag) "createDefaultTransportFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -689,12 +691,12 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format;
 // Warning: (ae-missing-release-tag) "createReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
+export function createReflectionDecorator<TBase extends abstract new (...args: any) => any, TArgs extends any[], TValue, TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CreateReflectionDecoratorOptions<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface CreateReflectionDecoratorOptions<TBase extends abstract new (...args: any) => any, TArgs extends any[], TValue, TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>> {
     constructorLookupKey?: false | ((target: TConstructor, ...args: TArgs) => string);
     name: string;
     valueFromArgs: (...args: TArgs) => TValue;
@@ -703,7 +705,7 @@ export interface CreateReflectionDecoratorOptions<TBase extends object, TArgs ex
 // Warning: (ae-missing-release-tag) "createReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
+export function createReflectionDecoratorPair<TBase extends abstract new (...args: any) => any, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorPairOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -716,7 +718,7 @@ export interface CreateReflectionDecoratorPairOptions {
 // Warning: (ae-missing-release-tag) "createSimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createSimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
+export function createSimpleReflectionDecorator<TBase extends abstract new (...args: any) => any, TArgs extends [any], TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateSimpleReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -728,7 +730,7 @@ export interface CreateSimpleReflectionDecoratorOptions {
 // Warning: (ae-missing-release-tag) "createValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createValuelessReflectionDecorator<TBase extends object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
+export function createValuelessReflectionDecorator<TBase extends abstract new (...args: any) => any>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
 
 // Warning: (ae-missing-release-tag) "CreateValuelessReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -741,19 +743,19 @@ export interface CreateValuelessReflectionDecoratorOptions {
 //
 // @public (undocumented)
 export class CtrDRBG {
-    constructor(bits: 128, derivation: boolean, entropy?: Buffer, nonce?: Buffer, pers?: Buffer);
+    constructor(bits: 128, derivation: boolean, entropy?: Uint8Array, nonce?: Uint8Array, pers?: Uint8Array);
     // (undocumented)
-    derive(...input: Buffer[]): Buffer;
+    derive(...input: Uint8Array[]): Uint8Array;
     // (undocumented)
-    generate(len: number, add?: Buffer): Buffer;
+    generate(len: number, add?: Uint8Array): Uint8Array;
     // (undocumented)
-    init(entropy: Buffer, nonce?: Buffer, pers?: Buffer): this;
+    init(entropy: Uint8Array, nonce?: Uint8Array, pers?: Uint8Array): this;
     // (undocumented)
-    reseed(entropy: Buffer, add?: Buffer): this;
+    reseed(entropy: Uint8Array, add?: Uint8Array): this;
     // (undocumented)
-    serialize(...input: Buffer[]): Buffer;
+    serialize(...input: Uint8Array[]): Uint8Array;
     // (undocumented)
-    update(seed?: Buffer): this;
+    update(seed?: Uint8Array): this;
 }
 
 // Warning: (ae-missing-release-tag) "DataDirection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -778,41 +780,41 @@ export function dbKeyToValueIdFast(key: string): {
 // Warning: (ae-missing-release-tag) "decodeX25519KeyDER" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function decodeX25519KeyDER(key: Buffer): Buffer;
+export function decodeX25519KeyDER(key: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "decryptAES128CCM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function decryptAES128CCM(key: Buffer, iv: Buffer, ciphertext: Buffer, additionalData: Buffer, authTag: Buffer): {
-    plaintext: Buffer;
+export function decryptAES128CCM(key: Uint8Array, iv: Uint8Array, ciphertext: Uint8Array, additionalData: Uint8Array, authTag: Uint8Array): {
+    plaintext: Uint8Array;
     authOK: boolean;
 };
 
 // Warning: (ae-missing-release-tag) "decryptAES128OFB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const decryptAES128OFB: (input: Buffer, key: Buffer, iv: Buffer) => Buffer;
+export const decryptAES128OFB: (input: Uint8Array, key: Uint8Array, iv: Uint8Array) => Uint8Array;
 
 // Warning: (ae-missing-release-tag) "deriveMEI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function deriveMEI(noncePRK: Buffer): Buffer;
+export function deriveMEI(noncePRK: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "deriveNetworkKeys" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function deriveNetworkKeys(PNK: Buffer): {
-    keyCCM: Buffer;
-    keyMPAN: Buffer;
-    personalizationString: Buffer;
+export function deriveNetworkKeys(PNK: Uint8Array): {
+    keyCCM: Uint8Array;
+    keyMPAN: Uint8Array;
+    personalizationString: Uint8Array;
 };
 
 // Warning: (ae-missing-release-tag) "deriveTempKeys" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function deriveTempKeys(PRK: Buffer): {
-    tempKeyCCM: Buffer;
-    tempPersonalizationString: Buffer;
+export function deriveTempKeys(PRK: Uint8Array): {
+    tempKeyCCM: Uint8Array;
+    tempPersonalizationString: Uint8Array;
 };
 
 // Warning: (ae-missing-release-tag) "deserializeCacheValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -828,12 +830,12 @@ export const directionPrefixPadding: string;
 // Warning: (ae-missing-release-tag) "dskFromString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function dskFromString(dsk: string): Buffer;
+export function dskFromString(dsk: string): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "dskToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function dskToString(dsk: Buffer): string;
+export function dskToString(dsk: Uint8Array): string;
 
 // Warning: (ae-missing-release-tag) "DSTInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -916,12 +918,12 @@ export enum EncapsulationFlags {
 // Warning: (ae-missing-release-tag) "encodeApplicationNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation): Buffer;
+export function encodeApplicationNodeInformation(nif: ApplicationNodeInformation): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeBitMask(values: readonly number[], maxValue?: number, startValue?: number): Buffer;
+export function encodeBitMask(values: readonly number[], maxValue?: number, startValue?: number): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -931,12 +933,12 @@ export function encodeBoolean(val: boolean): number;
 // Warning: (ae-missing-release-tag) "encodeCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeCCId(ccId: CommandClasses, payload: Buffer, offset?: number): number;
+export function encodeCCId(ccId: CommandClasses, payload: Bytes, offset?: number): number;
 
 // Warning: (ae-missing-release-tag) "encodeCCList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeCCList(supportedCCs: readonly CommandClasses[], controlledCCs: readonly CommandClasses[]): Buffer;
+export function encodeCCList(supportedCCs: readonly CommandClasses[], controlledCCs: readonly CommandClasses[]): Bytes;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (ae-missing-release-tag) "encodeFloatWithScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -945,12 +947,12 @@ export function encodeCCList(supportedCCs: readonly CommandClasses[], controlled
 export function encodeFloatWithScale(value: number, scale: number, override?: {
     size?: number;
     precision?: number;
-}): Buffer;
+}): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeLongRangeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeLongRangeNodeBitMask(nodeIDs: readonly number[], startValue: number): Buffer;
+export function encodeLongRangeNodeBitMask(nodeIDs: readonly number[], startValue: number): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
@@ -961,32 +963,32 @@ export function encodeMaybeBoolean(val: MaybeUnknown<boolean>): number;
 // Warning: (ae-missing-release-tag) "encodeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer;
+export function encodeNodeBitMask(nodeIDs: readonly number[]): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeID(nodeId: number, type?: NodeIDType): Buffer;
+export function encodeNodeID(nodeId: number, type?: NodeIDType): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeInformationFrame(info: NodeInformationFrame, isLongRange?: boolean): Buffer;
+export function encodeNodeInformationFrame(info: NodeInformationFrame, isLongRange?: boolean): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeProtocolInfo(info: NodeProtocolInfo, isLongRange?: boolean): Buffer;
+export function encodeNodeProtocolInfo(info: NodeProtocolInfo, isLongRange?: boolean): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDeviceClass, isLongRange?: boolean): Buffer;
+export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDeviceClass, isLongRange?: boolean): Bytes;
 
 // Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeUpdatePayload(nif: NodeUpdatePayload, nodeIdType?: NodeIDType): Buffer;
+export function encodeNodeUpdatePayload(nif: NodeUpdatePayload, nodeIdType?: NodeIDType): Bytes;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -999,30 +1001,30 @@ export function encodePartial(fullValue: number, partialValue: number, bitMask: 
 // Warning: (ae-missing-release-tag) "encodeX25519KeyDERPKCS8" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeX25519KeyDERPKCS8(key: Buffer): Buffer;
+export function encodeX25519KeyDERPKCS8(key: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "encodeX25519KeyDERSPKI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encodeX25519KeyDERSPKI(key: Buffer): Buffer;
+export function encodeX25519KeyDERSPKI(key: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "encryptAES128CCM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encryptAES128CCM(key: Buffer, iv: Buffer, plaintext: Buffer, additionalData: Buffer, authTagLength: number): {
-    ciphertext: Buffer;
-    authTag: Buffer;
+export function encryptAES128CCM(key: Uint8Array, iv: Uint8Array, plaintext: Uint8Array, additionalData: Uint8Array, authTagLength: number): {
+    ciphertext: Uint8Array;
+    authTag: Uint8Array;
 };
 
 // Warning: (ae-missing-release-tag) "encryptAES128ECB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function encryptAES128ECB(plaintext: Buffer, key: Buffer): Buffer;
+export function encryptAES128ECB(plaintext: Uint8Array, key: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "encryptAES128OFB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const encryptAES128OFB: (input: Buffer, key: Buffer, iv: Buffer) => Buffer;
+export const encryptAES128OFB: (input: Uint8Array, key: Uint8Array, iv: Uint8Array) => Uint8Array;
 
 // Warning: (ae-missing-release-tag) "EndpointId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1044,24 +1046,24 @@ export function enumValuesToMetadataStates<T extends Record<string, any>>(enumer
 // Warning: (ae-missing-release-tag) "extractFirmware" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware;
+export function extractFirmware(rawData: Uint8Array, format: FirmwareFileFormat): Firmware;
 
 // Warning: (ae-missing-release-tag) "extractRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function extractRawECDHPrivateKey(privateKey: crypto.KeyObject): Buffer;
+export function extractRawECDHPrivateKey(privateKey: crypto.KeyObject): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "extractRawECDHPublicKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function extractRawECDHPublicKey(publicKey: crypto.KeyObject): Buffer;
+export function extractRawECDHPublicKey(publicKey: crypto.KeyObject): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "Firmware" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface Firmware {
     // (undocumented)
-    data: Buffer;
+    data: Uint8Array;
     // (undocumented)
     firmwareTarget?: number;
 }
@@ -1107,7 +1109,7 @@ export type FrameType = "singlecast" | "broadcast" | "multicast";
 // Warning: (ae-missing-release-tag) "generateAuthKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function generateAuthKey(networkKey: Buffer): Buffer;
+export function generateAuthKey(networkKey: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "generateECDHKeyPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1117,7 +1119,7 @@ export function generateECDHKeyPair(): KeyPair;
 // Warning: (ae-missing-release-tag) "generateEncryptionKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function generateEncryptionKey(networkKey: Buffer): Buffer;
+export function generateEncryptionKey(networkKey: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "GenericDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1411,7 +1413,7 @@ export class GraphNode<T> {
 // Warning: (ae-missing-release-tag) "guessFirmwareFileFormat" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat;
+export function guessFirmwareFileFormat(filename: string, rawData: Uint8Array): FirmwareFileFormat;
 
 // Warning: (ae-missing-release-tag) "highResTimestamp" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1426,12 +1428,12 @@ export const HOMEID_BYTES = 4;
 // Warning: (ae-missing-release-tag) "importRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function importRawECDHPrivateKey(privateKey: Buffer): crypto.KeyObject;
+export function importRawECDHPrivateKey(privateKey: Uint8Array): crypto.KeyObject;
 
 // Warning: (ae-missing-release-tag) "importRawECDHPublicKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function importRawECDHPublicKey(publicKey: Buffer): crypto.KeyObject;
+export function importRawECDHPublicKey(publicKey: Uint8Array): crypto.KeyObject;
 
 // Warning: (ae-missing-release-tag) "indexDBsByNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1901,7 +1903,7 @@ export interface KeyPair {
 // Warning: (ae-missing-release-tag) "keyPairFromRawECDHPrivateKey" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair;
+export function keyPairFromRawECDHPrivateKey(privateKey: Uint8Array): KeyPair;
 
 // Warning: (ae-missing-release-tag) "ListenBehavior" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2277,7 +2279,7 @@ export type MPANTableEntry = {
     type: MPANState.OutOfSync;
 } | {
     type: MPANState.MPAN;
-    currentMPAN: Buffer;
+    currentMPAN: Uint8Array;
 };
 
 // Warning: (ae-missing-release-tag) "MPDUHeaderType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2600,17 +2602,17 @@ export const NUM_NODEMASK_BYTES: number;
 // Warning: (ae-missing-release-tag) "nwiHomeIdFromDSK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function nwiHomeIdFromDSK(dsk: Buffer): Buffer;
+export function nwiHomeIdFromDSK(dsk: Uint8Array): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "parseApplicationNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseApplicationNodeInformation(nif: Buffer): ApplicationNodeInformation;
+export function parseApplicationNodeInformation(nif: Uint8Array): ApplicationNodeInformation;
 
 // Warning: (ae-missing-release-tag) "parseBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function parseBitMask(mask: Buffer, startValue?: number, numBits?: number): number[];
+export function parseBitMask(mask: Uint8Array | ArrayLike<number>, startValue?: number, numBits?: number): number[];
 
 // Warning: (ae-missing-release-tag) "parseBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2621,7 +2623,7 @@ export function parseBoolean(val: number): boolean | undefined;
 // Warning: (ae-missing-release-tag) "parseCCId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function parseCCId(payload: Buffer, offset?: number): {
+export function parseCCId(payload: Uint8Array, offset?: number): {
     ccId: CommandClasses;
     bytesRead: number;
 };
@@ -2629,7 +2631,7 @@ export function parseCCId(payload: Buffer, offset?: number): {
 // Warning: (ae-missing-release-tag) "parseCCList" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseCCList(payload: Buffer): {
+export function parseCCList(payload: Uint8Array): {
     supportedCCs: CommandClasses[];
     controlledCCs: CommandClasses[];
 };
@@ -2638,7 +2640,7 @@ export function parseCCList(payload: Buffer): {
 // Warning: (ae-missing-release-tag) "parseFloatWithScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function parseFloatWithScale(payload: Buffer, allowEmpty?: false): {
+export function parseFloatWithScale(payload: Uint8Array, allowEmpty?: false): {
     value: number;
     scale: number;
     bytesRead: number;
@@ -2647,7 +2649,7 @@ export function parseFloatWithScale(payload: Buffer, allowEmpty?: false): {
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 //
 // @public
-export function parseFloatWithScale(payload: Buffer, allowEmpty: true): {
+export function parseFloatWithScale(payload: Uint8Array, allowEmpty: true): {
     value?: number;
     scale?: number;
     bytesRead: number;
@@ -2656,7 +2658,7 @@ export function parseFloatWithScale(payload: Buffer, allowEmpty: true): {
 // Warning: (ae-missing-release-tag) "parseLongRangeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseLongRangeNodeBitMask(mask: Buffer, startValue: number): number[];
+export function parseLongRangeNodeBitMask(mask: Uint8Array | ArrayLike<number>, startValue: number): number[];
 
 // Warning: (ae-missing-release-tag) "parseMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
@@ -2673,12 +2675,12 @@ export function parseMaybeNumber(val: number): MaybeUnknown<number> | undefined;
 // Warning: (ae-missing-release-tag) "parseNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeBitMask(mask: Buffer): number[];
+export function parseNodeBitMask(mask: Uint8Array): number[];
 
 // Warning: (ae-missing-release-tag) "parseNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeID(buffer: Buffer, type?: NodeIDType, offset?: number): {
+export function parseNodeID(buffer: Uint8Array, type?: NodeIDType, offset?: number): {
     nodeId: number;
     bytesRead: number;
 };
@@ -2686,17 +2688,17 @@ export function parseNodeID(buffer: Buffer, type?: NodeIDType, offset?: number):
 // Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeInformationFrame(buffer: Buffer, isLongRange?: boolean): NodeInformationFrame;
+export function parseNodeInformationFrame(buffer: Uint8Array, isLongRange?: boolean): NodeInformationFrame;
 
 // Warning: (ae-missing-release-tag) "parseNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeProtocolInfo(buffer: Buffer, offset: number, isLongRange?: boolean): NodeProtocolInfo;
+export function parseNodeProtocolInfo(buffer: Uint8Array, offset: number, isLongRange?: boolean): NodeProtocolInfo;
 
 // Warning: (ae-missing-release-tag) "parseNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer, isLongRange?: boolean): {
+export function parseNodeProtocolInfoAndDeviceClass(buffer: Uint8Array, isLongRange?: boolean): {
     info: NodeProtocolInfoAndDeviceClass;
     bytesRead: number;
 };
@@ -2704,7 +2706,7 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer, isLongRange?
 // Warning: (ae-missing-release-tag) "parseNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeUpdatePayload(nif: Buffer, nodeIdType?: NodeIDType): NodeUpdatePayload;
+export function parseNodeUpdatePayload(nif: Uint8Array, nodeIdType?: NodeIDType): NodeUpdatePayload;
 
 // Warning: (ae-missing-release-tag) "parseNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2909,24 +2911,24 @@ export interface QuerySecurityClasses {
 // Warning: (ae-missing-release-tag) "ReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecorator<TBase extends abstract new (...args: any) => any, TArgs extends any[], TValue, TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructorByKey: (key: string) => TConstructor | undefined;
     lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
-    lookupValue: (target: TBase) => TValue | undefined;
-    lookupValueStatic: (constr: Function) => TValue | undefined;
+    lookupValue: (target: InstanceType<TBase>) => TValue | undefined;
+    lookupValueStatic: (constr: TBase) => TValue | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "ReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecoratorPair<TBase extends abstract new (...args: any) => any, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>> {
     lookupSubConstructor: (...args: [...TSuperArgs, ...TSubArgs]) => TConstructor | undefined;
-    lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
-    lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
+    lookupSubValue: (target: InstanceType<TBase>) => TSubArgs[0] | undefined;
+    lookupSubValueStatic: (constr: TBase) => TSubArgs[0] | undefined;
     lookupSuperConstructor: (...args: TSuperArgs) => TConstructor | undefined;
-    lookupSuperValue: (target: TBase) => TSuperArgs[0] | undefined;
-    lookupSuperValueStatic: (constr: Function) => TSuperArgs[0] | undefined;
+    lookupSuperValue: (target: InstanceType<TBase>) => TSuperArgs[0] | undefined;
+    lookupSuperValueStatic: (constr: TBase) => TSuperArgs[0] | undefined;
     subDecorator: <TTarget extends TBase>(...args: TSubArgs) => TypedClassDecorator<TTarget>;
     superDecorator: <TTarget extends TBase>(...args: TSuperArgs) => TypedClassDecorator<TTarget>;
 }
@@ -3100,6 +3102,26 @@ export interface ScaleDefinition {
 // @public (undocumented)
 export type ScaleGroup = Record<number, ScaleDefinition>;
 
+// Warning: (ae-missing-release-tag) "sdkVersionGt" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function sdkVersionGt(sdkVersion: MaybeNotKnown<string>, compareVersion: string): MaybeNotKnown<boolean>;
+
+// Warning: (ae-missing-release-tag) "sdkVersionGte" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function sdkVersionGte(sdkVersion: MaybeNotKnown<string>, compareVersion: string): MaybeNotKnown<boolean>;
+
+// Warning: (ae-missing-release-tag) "sdkVersionLt" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function sdkVersionLt(sdkVersion: MaybeNotKnown<string>, compareVersion: string): MaybeNotKnown<boolean>;
+
+// Warning: (ae-missing-release-tag) "sdkVersionLte" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function sdkVersionLte(sdkVersion: MaybeNotKnown<string>, compareVersion: string): MaybeNotKnown<boolean>;
+
 // Warning: (ae-missing-release-tag) "SECURITY_S2_AUTH_TAG_LENGTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3143,24 +3165,24 @@ export const securityClassOrder: readonly [SecurityClass.S2_AccessControl, Secur
 export class SecurityManager {
     constructor(options: SecurityManagerOptions);
     // (undocumented)
-    get authKey(): Buffer;
+    get authKey(): Uint8Array;
     deleteAllNoncesForReceiver(receiver: number): void;
     // (undocumented)
     deleteNonce(id: number | NonceKey): void;
     // (undocumented)
-    get encryptionKey(): Buffer;
-    generateNonce(receiver: number, length: number): Buffer;
+    get encryptionKey(): Uint8Array;
+    generateNonce(receiver: number, length: number): Uint8Array;
     // (undocumented)
-    getFreeNonce(nodeId: number): Buffer | undefined;
+    getFreeNonce(nodeId: number): Uint8Array | undefined;
     // (undocumented)
-    getNonce(id: number | NonceKey): Buffer | undefined;
+    getNonce(id: number | NonceKey): Uint8Array | undefined;
     // (undocumented)
-    getNonceId(nonce: Buffer): number;
+    getNonceId(nonce: Uint8Array): number;
     // (undocumented)
     hasNonce(id: number | NonceKey): boolean;
     // (undocumented)
-    get networkKey(): Buffer;
-    set networkKey(v: Buffer);
+    get networkKey(): Uint8Array;
+    set networkKey(v: Uint8Array);
     // Warning: (ae-forgotten-export) The symbol "NonceKey" needs to be exported by the entry point index.d.ts
     // Warning: (ae-forgotten-export) The symbol "NonceEntry" needs to be exported by the entry point index.d.ts
     //
@@ -3176,9 +3198,9 @@ export class SecurityManager2 {
     createMulticastGroup(nodeIDs: number[], s2SecurityClass: S2SecurityClass): number;
     deleteNonce(receiver: number): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    generateNonce(receiver: number | undefined): Buffer;
+    generateNonce(receiver: number | undefined): Uint8Array;
     // (undocumented)
-    getInnerMPANState(groupId: number): Buffer | undefined;
+    getInnerMPANState(groupId: number): Uint8Array | undefined;
     // (undocumented)
     getKeysForNode(peerNodeID: number): NetworkKeys | TempNetworkKeys;
     // Warning: (ae-forgotten-export) The symbol "NetworkKeys" needs to be exported by the entry point index.d.ts
@@ -3189,8 +3211,8 @@ export class SecurityManager2 {
     getMulticastGroup(group: number): Readonly<MulticastGroup> | undefined;
     // (undocumented)
     getMulticastKeyAndIV(groupId: number): {
-        key: Buffer;
-        iv: Buffer;
+        key: Uint8Array;
+        iv: Uint8Array;
     };
     getPeerMPAN(peerNodeId: number, groupId: number): MPANTableEntry | {
         type: MPANState.None;
@@ -3202,22 +3224,22 @@ export class SecurityManager2 {
     // (undocumented)
     hasKeysForSecurityClass(securityClass: SecurityClass): boolean;
     hasUsedSecurityClass(peerNodeID: number, securityClass: SecurityClass): boolean;
-    initializeSPAN(peerNodeId: number, securityClass: SecurityClass, senderEI: Buffer, receiverEI: Buffer): void;
-    initializeTempSPAN(peerNodeId: number, senderEI: Buffer, receiverEI: Buffer): void;
+    initializeSPAN(peerNodeId: number, securityClass: SecurityClass, senderEI: Uint8Array, receiverEI: Uint8Array): void;
+    initializeTempSPAN(peerNodeId: number, senderEI: Uint8Array, receiverEI: Uint8Array): void;
     isDuplicateSinglecast(peerNodeId: number, sequenceNumber: number): boolean;
     nextMulticastSequenceNumber(groupId: number): number;
-    nextNonce(peerNodeId: number, store?: boolean): Buffer;
-    nextPeerMPAN(peerNodeId: number, groupId: number): Buffer;
+    nextNonce(peerNodeId: number, store?: boolean): Uint8Array;
+    nextPeerMPAN(peerNodeId: number, groupId: number): Uint8Array;
     nextSequenceNumber(peerNodeId: number): number;
     resetOutOfSyncMPANs(peerNodeId: number): void;
-    setKey(securityClass: SecurityClass, key: Buffer): void;
+    setKey(securityClass: SecurityClass, key: Uint8Array): void;
     setSPANState(peerNodeID: number, state: SPANTableEntry | {
         type: SPANState.None;
     }): void;
     // (undocumented)
     storePeerMPAN(peerNodeId: number, groupId: number, mpanState: MPANTableEntry): void;
     // (undocumented)
-    storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void;
+    storeRemoteEI(peerNodeId: number, remoteEI: Uint8Array): void;
     storeSequenceNumber(peerNodeId: number, sequenceNumber: number): number | undefined;
     // Warning: (ae-forgotten-export) The symbol "TempNetworkKeys" needs to be exported by the entry point index.d.ts
     readonly tempKeys: Map<number, TempNetworkKeys>;
@@ -3230,7 +3252,7 @@ export class SecurityManager2 {
 // @public (undocumented)
 export interface SecurityManagerOptions {
     // (undocumented)
-    networkKey: Buffer;
+    networkKey: Uint8Array;
     // (undocumented)
     nonceTimeout: number;
     // (undocumented)
@@ -3353,7 +3375,7 @@ export function serializeCacheValue(value: unknown): SerializedValue;
 // Warning: (ae-missing-release-tag) "SerializedValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type SerializedValue = number | string | boolean | JSONObject | undefined;
+export type SerializedValue = number | string | boolean | JSONObject_2 | undefined;
 
 // Warning: (ae-missing-release-tag) "SetNonceOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3385,11 +3407,11 @@ export interface SetValueOptions {
 // Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface SimpleReflectionDecorator<TBase extends abstract new (...args: any) => any, TArgs extends [any], TConstructor extends Constructor<InstanceType<TBase>> = Constructor<InstanceType<TBase>>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructor: (...args: TArgs) => TConstructor | undefined;
-    lookupValue: (target: TBase) => TArgs[0] | undefined;
-    lookupValueStatic: (constr: Function) => TArgs[0] | undefined;
+    lookupValue: (target: InstanceType<TBase>) => TArgs[0] | undefined;
+    lookupValueStatic: (constr: TBase) => TArgs[0] | undefined;
 }
 
 // Warning: (ae-missing-release-tag) "SinglecastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3417,16 +3439,16 @@ export enum SPANState {
 // @public (undocumented)
 export type SPANTableEntry = {
     type: SPANState.RemoteEI;
-    receiverEI: Buffer;
+    receiverEI: Uint8Array;
 } | {
     type: SPANState.LocalEI;
-    receiverEI: Buffer;
+    receiverEI: Uint8Array;
 } | {
     type: SPANState.SPAN;
     securityClass: SecurityClass;
     rng: CtrDRBG;
     currentSPAN?: {
-        nonce: Buffer;
+        nonce: Uint8Array;
         expires: number;
     };
 };
@@ -3789,10 +3811,10 @@ export function valueIdToString(valueID: ValueID): string;
 // Warning: (ae-missing-release-tag) "ValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ValuelessReflectionDecorator<TBase extends object> {
+export interface ValuelessReflectionDecorator<TBase extends abstract new (...args: any) => any> {
     decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
-    isDecorated: (target: TBase) => boolean;
-    isDecoratedStatic: (constr: Function) => boolean;
+    isDecorated: (target: InstanceType<TBase>) => boolean;
+    isDecoratedStatic: (constr: TBase) => boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ValueLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4618,9 +4640,9 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:117:79 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/security/Manager2.ts:117:98 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/security/QR.ts:99:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
+// src/security/Manager2.ts:118:79 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/security/Manager2.ts:118:98 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/security/QR.ts:100:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
 
