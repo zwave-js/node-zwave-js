@@ -4,37 +4,24 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 14.0.0-beta.5 (2024-11-05)
+## __WORK IN PROGRESS__
+In this release, a lot of the internal API was refactored to decrease interdependencies. Technically this results in a huge list of breaking changes, but most of those should not affect any application, unless very low-level APIs are frequently used. For example, Z-Wave JS UI and Z-Wave JS Server had just two small breaks. In addition, Z-Wave JS is now released as hybrid ESM/CJS packages.
+
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
 * `Driver.installConfigUpdates()` now requires the external config directory to be configured (#7365)
-
-### Changes under the hood
-* Decorators have been migrated from the legacy specification to the accepted proposal (#7360)
-
-## 14.0.0-beta.4 (2024-11-04)
-Z-Wave JS is now released as hybrid ESM/CJS packages.
-
-### Changes under the hood
-* Transition modules to hybrid ESM/CJS, switch to vitest for testing (#7349)
-
-## 14.0.0-beta.2 (2024-10-30)
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
 * Replace Node.js Buffer with `Uint8Array` portable replacement class `Bytes` (#7332)
 * `zwave-js` no longer loops up the package version at runtime (#7344)
 * Changed some paths to be relative to `process.cwd()` instead of source location (#7345)
+* Decouple CCs and messages from host, split parsing and creation, split ZWaveNode class (#7305)
 
 ### Config file changes
 * Add Aeotec TriSensor 8 (#7342)
 
 ### Changes under the hood
+* Decorators have been migrated from the legacy specification to the accepted proposal (#7360)
+* Transition modules to hybrid ESM/CJS, switch to vitest for testing (#7349)
 * Removed dependency on `fs-extra` in favor of `node:fs/promises` (#7335)
 * `@zwave-js/config` no longer loops up the package version at runtime (#7343)
-
-## 14.0.0-beta.0 (2024-10-25)
-In this release, a lot of the internal API was refactored to decrease interdependencies. Technically this results in a huge list of breaking changes, but most of those should not affect any application, unless very low-level APIs are frequently used. For example, Z-Wave JS UI and Z-Wave JS Server had just two small breaks.
-
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
-* Decouple CCs and messages from host, split parsing and creation, split ZWaveNode class (#7305)
 
 ## 13.10.3 (2024-10-29)
 ### Config file changes
