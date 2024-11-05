@@ -483,8 +483,9 @@ export class ClimateControlScheduleCCOverrideReport
 	): ClimateControlScheduleCCOverrideReport {
 		validatePayload(raw.payload.length >= 2);
 		const overrideType: ScheduleOverrideType = raw.payload[0] & 0b11;
-		const overrideState: SetbackState = decodeSetbackState(raw.payload[1])
-			|| raw.payload[1];
+		const overrideState: SetbackState = decodeSetbackState(raw.payload, 1)
+			// If we receive an unknown setback state, return the raw value
+			|| raw.payload.readInt8(1);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -554,8 +555,8 @@ export class ClimateControlScheduleCCOverrideSet
 	public overrideState: SetbackState;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = Bytes.from([
-			this.overrideType & 0b11,
+		this.payload = Bytes.concat([
+			[this.overrideType & 0b11],
 			encodeSetbackState(this.overrideState),
 		]);
 		return super.serialize(ctx);
