@@ -10,6 +10,7 @@ import {
 	type NodeUpdatePayload,
 	Protocols,
 	encodeNodeUpdatePayload,
+	isLongRangeNodeId,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
@@ -78,7 +79,7 @@ export function computeNeighborDiscoveryTimeout(
 	host: GetAllNodes<NodeId & ListenBehavior>,
 	nodeType: NodeType,
 ): number {
-	const allNodes = [...host.getAllNodes()];
+	const allNodes = host.getAllNodes().filter((n) => !isLongRangeNodeId(n.id));
 	const numListeningNodes = allNodes.filter((n) => n.isListening).length;
 	const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening).length;
 	const numNodes = allNodes.length;
