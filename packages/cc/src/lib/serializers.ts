@@ -18,17 +18,29 @@ export const setbackSpecialStateValues: Record<SetbackSpecialState, number> = {
  * @publicAPI
  * Encodes a setback state to use in a ThermostatSetbackCC
  */
-export function encodeSetbackState(state: SetbackState): number {
-	if (typeof state === "string") return setbackSpecialStateValues[state];
-	state = clamp(state, -12.8, 12);
-	return Math.round(state * 10);
+export function encodeSetbackState(state: SetbackState): Bytes {
+	let rawValue: number;
+	if (typeof state === "string") {
+		rawValue = setbackSpecialStateValues[state];
+	} else {
+		state = clamp(state, -12.8, 12);
+		rawValue = Math.round(state * 10);
+	}
+
+	const ret = new Bytes(1);
+	ret.writeInt8(rawValue);
+	return ret;
 }
 
 /**
  * @publicAPI
  * Decodes a setback state used in a ThermostatSetbackCC
  */
-export function decodeSetbackState(val: number): SetbackState | undefined {
+export function decodeSetbackState(
+	data: Uint8Array,
+	offset: number = 0,
+): SetbackState | undefined {
+	const val = Bytes.view(data).readInt8(offset);
 	if (val > 120) {
 		// Special state, try to look it up
 		const foundEntry = Object.entries(setbackSpecialStateValues).find(
@@ -49,7 +61,7 @@ export function decodeSwitchpoint(data: Uint8Array): Switchpoint {
 	return {
 		hour: data[0] & 0b000_11111,
 		minute: data[1] & 0b00_111111,
-		state: decodeSetbackState(data[2]),
+		state: decodeSetbackState(data, 2),
 	};
 }
 
@@ -64,9 +76,11 @@ export function encodeSwitchpoint(point: Switchpoint): Bytes {
 			ZWaveErrorCodes.CC_Invalid,
 		);
 	}
-	return Bytes.from([
-		point.hour & 0b000_11111,
-		point.minute & 0b00_111111,
+	return Bytes.concat([
+		[
+			point.hour & 0b000_11111,
+			point.minute & 0b00_111111,
+		],
 		encodeSetbackState(point.state),
 	]);
 }

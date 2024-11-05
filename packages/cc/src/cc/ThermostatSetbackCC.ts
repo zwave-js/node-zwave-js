@@ -193,10 +193,9 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		validatePayload(raw.payload.length >= 2);
 		const setbackType: SetbackType = raw.payload[0] & 0b11;
 
-		// If we receive an unknown setback state, return the raw value
-		const rawSetbackState = raw.payload.readInt8(1);
-		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
-			|| rawSetbackState;
+		const setbackState: SetbackState = decodeSetbackState(raw.payload, 1)
+			// If we receive an unknown setback state, return the raw value
+			|| raw.payload.readInt8(1);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -210,8 +209,8 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public setbackState: SetbackState;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = Bytes.from([
-			this.setbackType & 0b11,
+		this.payload = Bytes.concat([
+			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
 		return super.serialize(ctx);
@@ -257,10 +256,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		validatePayload(raw.payload.length >= 2);
 		const setbackType: SetbackType = raw.payload[0] & 0b11;
 
-		// If we receive an unknown setback state, return the raw value
-		const rawSetbackState = raw.payload.readInt8(1);
-		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
-			|| rawSetbackState;
+		const setbackState: SetbackState = decodeSetbackState(raw.payload, 1)
+			// If we receive an unknown setback state, return the raw value
+			|| raw.payload.readInt8(1);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -274,8 +272,8 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public readonly setbackState: SetbackState;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = Bytes.from([
-			this.setbackType & 0b11,
+		this.payload = Bytes.concat([
+			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
 		return super.serialize(ctx);
