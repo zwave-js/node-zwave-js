@@ -10,6 +10,7 @@
   "exports": {
     ".": {
       "@@dev": "./src/index.ts",
+      "browser": "./build/esm/index_browser.js",
       "import": "./build/esm/index.js",
       "require": "./build/cjs/index.js"
     },

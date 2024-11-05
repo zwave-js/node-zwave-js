@@ -10,6 +10,7 @@ const whitelistedImports = [
 	"alcalzone-shared/async/index.js",
 	"alcalzone-shared/comparable/index.js",
 	"alcalzone-shared/deferred-promise/index.js",
+	"alcalzone-shared/helpers/index.js",
 	"alcalzone-shared/math/index.js",
 	"alcalzone-shared/objects/index.js",
 	"alcalzone-shared/sorted-list/index.js",

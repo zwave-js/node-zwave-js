@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-exports */
 /* @forbiddenImports external */
 
 export * from "./AsyncQueue.js";
@@ -7,10 +6,8 @@ export { ObjectKeyMap } from "./ObjectKeyMap.js";
 export type { ReadonlyObjectKeyMap } from "./ObjectKeyMap.js";
 export * from "./ThrowingMap.js";
 export * from "./TimedExpectation.js";
-export * from "./errors.js";
-export * from "./inheritance.js";
 export * from "./strings.js";
-export * from "./types.js";
+export type * from "./types.js";
 export {
 	areUint8ArraysEqual,
 	assertUint8Array,

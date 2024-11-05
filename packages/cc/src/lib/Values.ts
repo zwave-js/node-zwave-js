@@ -3,7 +3,7 @@ import {
 	type EndpointId,
 	type ValueID,
 	ValueMetadata,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import type { GetDeviceConfig, GetValueDB } from "@zwave-js/host";
 import {
 	type FnOrStatic,

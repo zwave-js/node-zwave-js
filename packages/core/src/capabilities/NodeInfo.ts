@@ -1,7 +1,7 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { sum } from "@zwave-js/shared/safe";
 import { NodeIDType } from "../consts/index.js";
-import { type BasicDeviceClass } from "../index_safe.js";
+import { type BasicDeviceClass } from "../registries/DeviceClasses.js";
 import { validatePayload } from "../util/misc.js";
 import { CommandClasses } from "./CommandClasses.js";
 
