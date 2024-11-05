@@ -18,7 +18,7 @@ import path from "node:path";
 import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate.js";
 import type { ConfigLogger } from "../Logger.js";
-import { configDir, externalConfigDir } from "../utils.js";
+import { configDir } from "../utils.js";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe.js";
 import {
 	type AssociationConfig,
@@ -305,10 +305,10 @@ export async function generatePriorityDeviceIndex(
  */
 export async function loadDeviceIndexInternal(
 	logger?: ConfigLogger,
-	externalConfig?: boolean,
+	externalConfigDir?: string,
 ): Promise<DeviceConfigIndex> {
 	const { devicesDir, indexPath } = getDevicesPaths(
-		(externalConfig && externalConfigDir()) || configDir,
+		externalConfigDir || configDir,
 	);
 
 	return loadDeviceIndexShared(

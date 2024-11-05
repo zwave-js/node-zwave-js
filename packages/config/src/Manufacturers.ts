@@ -4,17 +4,17 @@ import { isObject } from "alcalzone-shared/typeguards/index.js";
 import JSON5 from "json5";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { configDir, externalConfigDir } from "./utils.js";
+import { configDir } from "./utils.js";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe.js";
 
 export type ManufacturersMap = Map<number, string>;
 
 /** @internal */
 export async function loadManufacturersInternal(
-	externalConfig?: boolean,
+	externalConfigDir?: string,
 ): Promise<ManufacturersMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
+		externalConfigDir || configDir,
 		"manufacturers.json",
 	);
 

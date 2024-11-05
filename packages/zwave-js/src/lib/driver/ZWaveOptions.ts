@@ -131,6 +131,15 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
 		 */
 		lockDir?: string;
+
+		/**
+		 * Allows you to specify a directory where the embedded device configuration files are stored.
+		 * When set, the configuration files can automatically be updated using `Driver.installConfigUpdate()`
+		 * without having to update the npm packages.
+		 * Can also be set using the ZWAVEJS_EXTERNAL_CONFIG env variable.
+		 */
+		deviceConfigExternalDir?: string;
+
 		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.

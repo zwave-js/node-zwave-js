@@ -1,20 +1,12 @@
-import { type PackageManager, detectPackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import {
-	copyFilesRecursive,
-	getErrorMessage,
-	readJSON,
-} from "@zwave-js/shared";
+import { copyFilesRecursive, getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards/index.js";
 import execa from "execa";
 import fs from "node:fs/promises";
-import { createRequire } from "node:module";
 import os from "node:os";
 import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
-
-const require = createRequire(import.meta.url);
 
 /**
  * Checks whether there is a compatible update for the currently installed config package.
@@ -62,68 +54,12 @@ export async function checkForConfigUpdates(
 }
 
 /**
- * Installs the update for @zwave-js/config with the given version.
+ * Downloads and installs the given configuration update.
+ * This only works if an external configuation directory is used.
  */
-export async function installConfigUpdate(newVersion: string): Promise<void> {
-	// Check which package manager to use for the update
-	let pak: PackageManager;
-	try {
-		pak = await detectPackageManager({
-			cwd: __dirname,
-			requireLockfile: false,
-			setCwdToPackageRoot: true,
-		});
-	} catch {
-		throw new ZWaveError(
-			`Config update failed: No package manager detected or package.json not found!`,
-			ZWaveErrorCodes.Config_Update_PackageManagerNotFound,
-		);
-	}
-
-	const packageJsonPath = path.join(pak.cwd, "package.json");
-	try {
-		await lockfile.lock(packageJsonPath, {
-			onCompromised: () => {
-				// do nothing
-			},
-		});
-	} catch {
-		throw new ZWaveError(
-			`Config update failed: Another installation is already in progress!`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	}
-
-	// And install it
-	const result = await pak.overrideDependencies({
-		"@zwave-js/config": newVersion,
-	});
-
-	// Free the lock
-	try {
-		if (await lockfile.check(packageJsonPath)) {
-			await lockfile.unlock(packageJsonPath);
-		}
-	} catch {
-		// whatever - just don't crash
-	}
-
-	if (result.success) return;
-
-	throw new ZWaveError(
-		`Config update failed: Package manager exited with code ${result.exitCode}
-${result.stderr}`,
-		ZWaveErrorCodes.Config_Update_InstallFailed,
-	);
-}
-
-/**
- * Installs the update for @zwave-js/config with the given version.
- * Version for Docker images that does not mess up the container if there's no yarn cache
- */
-export async function installConfigUpdateInDocker(
+export async function installConfigUpdate(
 	newVersion: string,
-	external?: {
+	external: {
 		configDir: string;
 		cacheDir: string;
 	},
@@ -150,32 +86,10 @@ export async function installConfigUpdateInDocker(
 		);
 	}
 
-	let lockfilePath: string;
-	let lockfileOptions: lockfile.LockOptions;
-	if (external) {
-		lockfilePath = external.cacheDir;
-		lockfileOptions = {
-			lockfilePath: path.join(external.cacheDir, "config-update.lock"),
-		};
-	} else {
-		// Acquire a lock so the installation doesn't run twice
-		let pak: PackageManager;
-		try {
-			pak = await detectPackageManager({
-				cwd: __dirname,
-				requireLockfile: false,
-				setCwdToPackageRoot: true,
-			});
-		} catch {
-			throw new ZWaveError(
-				`Config update failed: No package manager detected or package.json not found!`,
-				ZWaveErrorCodes.Config_Update_PackageManagerNotFound,
-			);
-		}
-
-		lockfilePath = path.join(pak.cwd, "package.json");
-		lockfileOptions = {};
-	}
+	const lockfilePath = external.cacheDir;
+	const lockfileOptions: lockfile.LockOptions = {
+		lockfilePath: path.join(external.cacheDir, "config-update.lock"),
+	};
 
 	try {
 		await lockfile.lock(lockfilePath, {
@@ -219,12 +133,8 @@ export async function installConfigUpdateInDocker(
 		);
 	}
 
+	// Download the package tarball into the temporary directory
 	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
-	const configModuleDir = path.dirname(
-		require.resolve("@zwave-js/config/package.json"),
-	);
-	const extractedDir = path.join(tmpDir, "extracted");
-
 	try {
 		const handle = await fs.open(tarFilename, "w");
 		const fstream = handle.createWriteStream({ autoClose: true });
@@ -256,8 +166,9 @@ export async function installConfigUpdateInDocker(
 		return path;
 	}
 
-	// Extract it into a temporary folder, then overwrite the config node_modules with it
+	const extractedDir = path.join(tmpDir, "extracted");
 	try {
+		// Extract the tarball in the temporary folder
 		await fs.rm(extractedDir, { recursive: true, force: true });
 		await fs.mkdir(extractedDir, { recursive: true });
 		await execa("tar", [
@@ -267,43 +178,26 @@ export async function installConfigUpdateInDocker(
 			"-C",
 			normalizeToUnixStyle(extractedDir),
 		]);
-		// How we install now depends on whether we're installing into the external config dir.
-		// If we are, we just need to copy the `devices` subdirectory. If not, copy the entire extracted dir
-		if (external) {
-			await fs.rm(external.configDir, { recursive: true, force: true });
-			await fs.mkdir(external.configDir, { recursive: true });
-			await copyFilesRecursive(
-				path.join(extractedDir, "config"),
-				external.configDir,
-				(src) => src.endsWith(".json"),
-			);
-			const externalVersionFilename = path.join(
-				external.configDir,
-				"version",
-			);
-			await fs.writeFile(externalVersionFilename, newVersion, "utf8");
-		} else {
-			await fs.rm(configModuleDir, { recursive: true, force: true });
-			await fs.rename(extractedDir, configModuleDir);
-		}
+
+		// then overwrite the files in the external config directory
+		await fs.rm(external.configDir, { recursive: true, force: true });
+		await fs.mkdir(external.configDir, { recursive: true });
+		await copyFilesRecursive(
+			path.join(extractedDir, "config"),
+			external.configDir,
+			(src) => src.endsWith(".json"),
+		);
+		const externalVersionFilename = path.join(
+			external.configDir,
+			"version",
+		);
+		await fs.writeFile(externalVersionFilename, newVersion, "utf8");
 	} catch {
 		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not extract tarball`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
-	}
-
-	// Try to update our own package.json if we're working with the internal structure
-	if (!external) {
-		try {
-			const packageJsonPath = require.resolve("zwave-js/package.json");
-			const json = await readJSON(packageJsonPath);
-			json.dependencies["@zwave-js/config"] = newVersion;
-			await fs.writeFile(packageJsonPath, JSON.stringify(json, null, 2));
-		} catch {
-			// ignore
-		}
 	}
 
 	// Clean up the temp dir and ignore errors

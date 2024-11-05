@@ -24,6 +24,7 @@ zwave-js.tgz
 # ZWave cache
 */cache
 packages/*/cache
+/test/config
 
 # Temporary (import) config files
 .tmp

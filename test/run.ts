@@ -64,6 +64,7 @@ const driver = new Driver(port, {
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
+		deviceConfigExternalDir: path.join(__dirname, "config"),
 	},
 	allowBootloaderOnly: true,
 })

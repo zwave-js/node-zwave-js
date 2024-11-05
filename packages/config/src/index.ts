@@ -10,4 +10,3 @@ export * from "./devices/DeviceMetadata.js";
 export * from "./devices/EndpointConfig.js";
 export * from "./devices/ParamInformation.js";
 export * from "./devices/shared.js";
-export { externalConfigDir } from "./utils.js";
