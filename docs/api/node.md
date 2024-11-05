@@ -394,6 +394,10 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 - `"hec"` - An encrypted Intel HEX firmware file
 - `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
+If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
+
+If no firmware data can be extracted, the method will throw.
+
 > [!ATTENTION] At the moment, only some `.exe` files contain `firmwareTarget` information. **All** other formats only contain the firmware `data`.
 > This means that the `firmwareTarget` property usually needs to be provided, unless it is `0`.
 
@@ -406,10 +410,6 @@ guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat
 - `filename`: The name of the firmware file (including the extension)
 - `rawData`: A buffer containing the original firmware update file
 
-If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
-
-If no firmware data can be extracted, the method will throw.
-
 Example usage:
 
 ```ts
@@ -417,6 +417,57 @@ Example usage:
 let actualFirmware: Firmware;
 try {
 	const format = guessFirmwareFileFormat(filename, rawData);
+	actualFirmware = extractFirmware(rawData, format);
+} catch (e) {
+	// handle the error, then abort the update
+}
+
+if (actualFirmware.firmwareTarget == undefined) {
+	actualFirmware.firmwareTarget = getFirmwareTargetSomehow();
+}
+
+// try the update
+try {
+	const result = await this.driver.controller.nodes
+		.get(nodeId)!
+		.updateFirmware([actualFirmware]);
+	// check result
+} catch (e) {
+	// handle error
+}
+```
+
+In some cases, the firmware update file has to be extracted from a ZIP archive first. Z-Wave JS provides a utility method to do so, which must be used instead of `guessFirmwareFileFormat`:
+
+```ts
+tryUnzipFirmwareFile(zipData: Uint8Array): {
+	filename: string;
+	format: FirmwareFileFormat;
+	rawData: Uint8Array;
+} | undefined;
+```
+
+If the given ZIP archive contains a compatible firmware update file, the method returns an object with the following properties:
+
+- `filename`: The name of the unzipped firmware file.
+- `format`: The guessed format of the unzipped firmware file (see `guessFirmwareFileFormat` above)
+- `rawData`: A buffer containing the unzipped firmware update file.
+
+Otherwise `undefined` is returned.
+
+The unzipped firmware file can then be passed to `extractFirmware` to get the firmware data. Example usage:
+
+```ts
+// Unzip the firmware archive
+const unzippedFirmware = tryUnzipFirmwareFile(zipData);
+if (!unzippedFirmware) {
+	// No firmware file found in the ZIP archive, abort update
+}
+
+const { filename, format, rawData } = unzippedFirmware;
+// Extract the firmware from a given firmware file
+let actualFirmware: Firmware;
+try {
 	actualFirmware = extractFirmware(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
