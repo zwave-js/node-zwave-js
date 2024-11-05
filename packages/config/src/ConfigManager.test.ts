@@ -51,8 +51,7 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
-		await syncExternalConfigDir(logger);
+		await syncExternalConfigDir(configDir, logger);
 
 		expect(await pathExists(configDir)).toBe(true);
 		expect(
@@ -68,7 +67,6 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		const otherVersion = semver.inc(ownVersion, "major");
 
 		await fs.mkdir(configDir, { recursive: true });
@@ -78,7 +76,7 @@ test.sequential(
 			"utf8",
 		);
 
-		await syncExternalConfigDir(logger);
+		await syncExternalConfigDir(configDir, logger);
 
 		expect(await pathExists(configDir)).toBe(true);
 
@@ -95,7 +93,6 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 		const otherVersion = semver.inc(ownVersion, "prerelease")!;
 
 		await fs.mkdir(configDir, { recursive: true });
@@ -105,7 +102,7 @@ test.sequential(
 			"utf8",
 		);
 
-		await syncExternalConfigDir(logger);
+		await syncExternalConfigDir(configDir, logger);
 
 		expect(await pathExists(configDir)).toBe(true);
 
