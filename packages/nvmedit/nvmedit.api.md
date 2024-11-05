@@ -5,6 +5,8 @@
 ```ts
 
 import { AllOrNone } from '@zwave-js/shared/safe';
+import { Bytes } from '@zwave-js/shared';
+import { Bytes as Bytes_2 } from '@zwave-js/shared/safe';
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
 import { Expand } from '@zwave-js/shared';
@@ -29,13 +31,13 @@ export class BufferedNVMReader implements NVMIO {
     open(access: NVMAccess.Read | NVMAccess.Write): Promise<NVMAccess>;
     // (undocumented)
     read(offset: number, length: number): Promise<{
-        buffer: Buffer;
+        buffer: Uint8Array;
         endOfFile: boolean;
     }>;
     // (undocumented)
     get size(): number;
     // (undocumented)
-    write(offset: number, data: Buffer): Promise<{
+    write(offset: number, data: Uint8Array): Promise<{
         bytesWritten: number;
         endOfFile: boolean;
     }>;
@@ -53,7 +55,7 @@ export class ControllerInfoFile extends NVMFile {
     // (undocumented)
     dcdcConfig?: number;
     // (undocumented)
-    homeId: Buffer;
+    homeId: Uint8Array;
     // (undocumented)
     lastNodeId: number;
     // (undocumented)
@@ -72,7 +74,7 @@ export class ControllerInfoFile extends NVMFile {
     reservedIdLR?: number;
     // (undocumented)
     serialize(): NVM3Object & {
-        data: Buffer;
+        data: Bytes;
     };
     // (undocumented)
     staticControllerNodeId: number;
@@ -132,12 +134,12 @@ export function json700To500(json: NVMJSON): NVM500JSON;
 // Warning: (ae-missing-release-tag) "jsonToNVM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function jsonToNVM(json: NVMJSON, targetSDKVersion: string): Promise<Buffer>;
+export function jsonToNVM(json: NVMJSON, targetSDKVersion: string): Promise<Uint8Array>;
 
 // Warning: (ae-missing-release-tag) "jsonToNVM500" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function jsonToNVM500(json: Required<NVM500JSON>, protocolVersion: string): Promise<Buffer>;
+export function jsonToNVM500(json: Required<NVM500JSON>, protocolVersion: string): Promise<Uint8Array>;
 
 // Warning: (ae-missing-release-tag) "LRNodeNVMProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -156,7 +158,7 @@ export type LRNodeNVMPropertyToDataType<P extends LRNodeNVMProperty> = P["type"]
 // Warning: (ae-missing-release-tag) "migrateNVM" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Promise<Buffer>;
+export function migrateNVM(sourceNVM: Uint8Array, targetNVM: Uint8Array): Promise<Uint8Array>;
 
 // Warning: (ae-missing-release-tag) "NodeNVMProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -185,14 +187,14 @@ export interface NVM<ID, Data> {
 // Warning: (ae-missing-release-tag) "NVM3" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class NVM3 implements NVM<number, Buffer> {
+export class NVM3 implements NVM<number, Uint8Array> {
     constructor(io: NVMIO);
     // (undocumented)
     delete(property: number): Promise<void>;
     // (undocumented)
     erase(options?: NVM3EraseOptions): Promise<void>;
     // (undocumented)
-    get(fileId: number): Promise<Buffer | undefined>;
+    get(fileId: number): Promise<Uint8Array | undefined>;
     // (undocumented)
     has(fileId: number): Promise<boolean>;
     // Warning: (ae-forgotten-export) The symbol "NVM3FileSystemInfo" needs to be exported by the entry point index.d.ts
@@ -204,10 +206,10 @@ export class NVM3 implements NVM<number, Buffer> {
     // Warning: (ae-forgotten-export) The symbol "NVM3ObjectHeader" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
-    readObjectData(object: NVM3ObjectHeader): Promise<Buffer>;
+    readObjectData(object: NVM3ObjectHeader): Promise<Uint8Array>;
     // (undocumented)
-    set(property: number, value: Buffer): Promise<void>;
-    setMany(values: [number, Buffer | null | undefined][]): Promise<void>;
+    set(property: number, value: Uint8Array): Promise<void>;
+    setMany(values: [number, Uint8Array | null | undefined][]): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "NVM3Adapter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -260,7 +262,7 @@ export interface NVM3Meta {
 // @public (undocumented)
 export interface NVM3Object {
     // (undocumented)
-    data?: Buffer;
+    data?: Uint8Array;
     // (undocumented)
     fragmentType: FragmentType;
     // (undocumented)
@@ -506,7 +508,7 @@ export interface NVM500Meta {
 // Warning: (ae-missing-release-tag) "nvm500ToJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function nvm500ToJSON(buffer: Buffer): Promise<Required<NVM500JSON>>;
+export function nvm500ToJSON(buffer: Uint8Array): Promise<Required<NVM500JSON>>;
 
 // Warning: (ae-missing-release-tag) "NVMAccess" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -543,11 +545,11 @@ export class NVMFile {
     fileId: number;
     // (undocumented)
     fileVersion: string;
-    static from(fileId: number, data: Buffer, fileVersion: string): NVMFile;
+    static from(fileId: number, data: Uint8Array, fileVersion: string): NVMFile;
     // (undocumented)
-    protected payload: Buffer;
+    protected payload: Bytes;
     serialize(): NVM3Object & {
-        data: Buffer;
+        data: Bytes;
     };
     // (undocumented)
     toJSON(): Record<string, any>;
@@ -568,13 +570,13 @@ export class NVMFileIO implements NVMIO {
     open(access: NVMAccess): Promise<NVMAccess>;
     // (undocumented)
     read(offset: number, length: number): Promise<{
-        buffer: Buffer;
+        buffer: Uint8Array;
         endOfFile: boolean;
     }>;
     // (undocumented)
     get size(): number;
     // (undocumented)
-    write(offset: number, data: Buffer): Promise<{
+    write(offset: number, data: Uint8Array): Promise<{
         bytesWritten: number;
         endOfFile: boolean;
     }>;
@@ -589,11 +591,11 @@ export interface NVMIO {
     determineChunkSize(): Promise<number>;
     open(access: NVMAccess.Read | NVMAccess.Write): Promise<NVMAccess>;
     read(offset: number, length: number): Promise<{
-        buffer: Buffer;
+        buffer: Uint8Array;
         endOfFile: boolean;
     }>;
     get size(): number;
-    write(offset: number, data: Buffer): Promise<{
+    write(offset: number, data: Uint8Array): Promise<{
         bytesWritten: number;
         endOfFile: boolean;
     }>;
@@ -756,7 +758,7 @@ export type NVMPropertyToDataType<P extends NVMProperty> = P extends ControllerN
 // Warning: (ae-missing-release-tag) "nvmToJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function nvmToJSON(buffer: Buffer, debugLogs?: boolean): Promise<NVMJSONWithMeta>;
+export function nvmToJSON(buffer: Uint8Array, debugLogs?: boolean): Promise<NVMJSONWithMeta>;
 
 // Warning: (ae-missing-release-tag) "ObjectType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -800,9 +802,9 @@ export enum PageWriteSize {
 
 // Warnings were encountered during analysis:
 //
-// src/lib/NVM500.ts:51:2 - (ae-forgotten-export) The symbol "ResolvedNVMLayout" needs to be exported by the entry point index.d.ts
-// src/lib/NVM500.ts:53:2 - (ae-forgotten-export) The symbol "NVM500Impl" needs to be exported by the entry point index.d.ts
-// src/lib/NVM500.ts:54:2 - (ae-forgotten-export) The symbol "NVMDescriptor" needs to be exported by the entry point index.d.ts
+// src/lib/NVM500.ts:56:2 - (ae-forgotten-export) The symbol "ResolvedNVMLayout" needs to be exported by the entry point index.d.ts
+// src/lib/NVM500.ts:58:2 - (ae-forgotten-export) The symbol "NVM500Impl" needs to be exported by the entry point index.d.ts
+// src/lib/NVM500.ts:59:2 - (ae-forgotten-export) The symbol "NVMDescriptor" needs to be exported by the entry point index.d.ts
 // src/lib/common/definitions.ts:208:2 - (ae-forgotten-export) The symbol "ControllerNVMPropertyTypes" needs to be exported by the entry point index.d.ts
 // src/lib/common/definitions.ts:217:2 - (ae-forgotten-export) The symbol "NodeNVMPropertyTypes" needs to be exported by the entry point index.d.ts
 // src/lib/common/definitions.ts:228:2 - (ae-forgotten-export) The symbol "LRNodeNVMPropertyTypes" needs to be exported by the entry point index.d.ts

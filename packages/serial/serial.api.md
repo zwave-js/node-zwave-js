@@ -4,34 +4,808 @@
 
 ```ts
 
+import { AllOrNone } from '@zwave-js/shared';
+import { BasicDeviceClass } from '@zwave-js/core';
+import { Bytes } from '@zwave-js/shared/safe';
+import { Bytes as Bytes_2 } from '@zwave-js/shared';
+import { CCEncodingContext } from '@zwave-js/host';
+import { CommandClass } from '@zwave-js/cc';
+import { CommandClasses } from '@zwave-js/core';
 import type { DataDirection } from '@zwave-js/core/safe';
 import { DataDirection as DataDirection_2 } from '@zwave-js/core';
+import { DataRate } from '@zwave-js/core';
 import { Duplex } from 'node:stream';
 import { EventEmitter } from 'node:events';
+import { FLiRS } from '@zwave-js/core';
+import { FrameType } from '@zwave-js/core';
+import { FunctionType as FunctionType_2 } from '@zwave-js/serial';
+import type { GetAllNodes } from '@zwave-js/host';
 import type { GetDeviceConfig } from '@zwave-js/host';
 import type { GetNode } from '@zwave-js/host';
 import type { GetSupportedCCVersion } from '@zwave-js/host';
 import type { HostIDs } from '@zwave-js/host';
-import type { JSONObject } from '@zwave-js/shared/safe';
+import { JSONObject } from '@zwave-js/shared/safe';
+import { ListenBehavior } from '@zwave-js/core';
 import type { LogContext } from '@zwave-js/core/safe';
+import { LongRangeChannel } from '@zwave-js/core';
 import { MaybeNotKnown } from '@zwave-js/core';
+import { Message as Message_2 } from '@zwave-js/serial';
+import { MessageBaseOptions as MessageBaseOptions_2 } from '@zwave-js/serial';
+import { MessageEncodingContext as MessageEncodingContext_2 } from '@zwave-js/serial';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
+import { MessageParsingContext as MessageParsingContext_2 } from '@zwave-js/serial';
 import { MessagePriority } from '@zwave-js/core';
+import { MessageRaw as MessageRaw_2 } from '@zwave-js/serial';
+import { MessageRecord } from '@zwave-js/core/safe';
+import { MulticastCC } from '@zwave-js/core';
+import { MulticastDestination } from '@zwave-js/core';
+import type { MultiStageCallback as MultiStageCallback_2 } from '@zwave-js/serial';
 import type * as net from 'node:net';
 import { NodeId } from '@zwave-js/core';
 import { NodeIDType } from '@zwave-js/core';
+import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
+import { NodeType } from '@zwave-js/core';
+import { NodeUpdatePayload } from '@zwave-js/core';
 import { PassThrough } from 'node:stream';
+import { Powerlevel } from '@zwave-js/cc';
+import { Protocols } from '@zwave-js/core';
+import type { ProtocolType } from '@zwave-js/core';
+import { ProtocolVersion } from '@zwave-js/core';
+import { RFRegion } from '@zwave-js/core';
+import { RouteKind } from '@zwave-js/core';
 import { RSSI } from '@zwave-js/core';
+import { RSSI as RSSI_2 } from '@zwave-js/core/safe';
 import { SecurityClass } from '@zwave-js/core';
 import { SecurityManagers } from '@zwave-js/core';
+import { SerialApiInitData } from '@zwave-js/core';
+import { SerializableTXReport } from '@zwave-js/core';
+import { SerializableTXReport as SerializableTXReport_2 } from '@zwave-js/core/safe';
 import { SerialPort } from 'serialport';
+import { SinglecastCC } from '@zwave-js/core';
+import { SuccessIndicator as SuccessIndicator_2 } from '@zwave-js/serial';
 import { Transform } from 'node:stream';
 import { TransformCallback } from 'node:stream';
-import type { TypedClassDecorator } from '@zwave-js/shared/safe';
+import { TransmitOptions } from '@zwave-js/core';
+import { TransmitStatus } from '@zwave-js/core';
+import { TXReport } from '@zwave-js/core';
+import { TXReport as TXReport_2 } from '@zwave-js/core/safe';
+import { TypedClassDecorator } from '@zwave-js/shared/safe';
 import { UnknownZWaveChipType } from '@zwave-js/core';
 import { ZnifferProtocolDataRate } from '@zwave-js/core';
+import { ZWaveApiVersion } from '@zwave-js/core';
+import { ZWaveDataRate } from '@zwave-js/core';
+import { ZWaveLibraryTypes } from '@zwave-js/core';
 import { ZWaveLogContainer } from '@zwave-js/core';
 import { ZWaveLoggerBase } from '@zwave-js/core';
+
+// Warning: (ae-missing-release-tag) "AddNodeDSKToNetworkRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
+    constructor(options: AddNodeDSKToNetworkRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    authHomeId: Uint8Array;
+    highPower: boolean;
+    networkWide: boolean;
+    nwiHomeId: Uint8Array;
+    protocol: Protocols;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeDSKToNetworkRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AddNodeDSKToNetworkRequestOptions {
+    // (undocumented)
+    authHomeId: Uint8Array;
+    // (undocumented)
+    highPower?: boolean;
+    // (undocumented)
+    networkWide?: boolean;
+    // (undocumented)
+    nwiHomeId: Uint8Array;
+    // (undocumented)
+    protocol?: Protocols;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum AddNodeStatus {
+    // (undocumented)
+    AddingController = 4,
+    // (undocumented)
+    AddingSlave = 3,
+    // (undocumented)
+    Done = 6,
+    // (undocumented)
+    Failed = 7,
+    // (undocumented)
+    NodeFound = 2,
+    // (undocumented)
+    ProtocolDone = 5,
+    // (undocumented)
+    Ready = 1
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeStatusContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AddNodeStatusContext {
+    // (undocumented)
+    basicDeviceClass?: BasicDeviceClass;
+    // (undocumented)
+    controlledCCs?: CommandClasses[];
+    // (undocumented)
+    genericDeviceClass?: number;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    specificDeviceClass?: number;
+    // (undocumented)
+    supportedCCs?: CommandClasses[];
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeToNetworkRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
+    constructor(options: AddNodeToNetworkRequestOptions & MessageBaseOptions_2);
+    addNodeType: AddNodeType | undefined;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AddNodeToNetworkRequest;
+    highPower: boolean;
+    networkWide: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeToNetworkRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AddNodeToNetworkRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AddNodeToNetworkRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeToNetworkRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AddNodeToNetworkRequestOptions {
+    // (undocumented)
+    addNodeType?: AddNodeType;
+    // (undocumented)
+    highPower?: boolean;
+    // (undocumented)
+    networkWide?: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeToNetworkRequestStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AddNodeToNetworkRequestStatusReport extends AddNodeToNetworkRequestBase implements SuccessIndicator_2 {
+    constructor(options: AddNodeToNetworkRequestStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AddNodeToNetworkRequestStatusReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    readonly status: AddNodeStatus;
+    // (undocumented)
+    readonly statusContext: AddNodeStatusContext | undefined;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AddNodeToNetworkRequestStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type AddNodeToNetworkRequestStatusReportOptions = {
+    status: AddNodeStatus.Ready | AddNodeStatus.NodeFound | AddNodeStatus.ProtocolDone | AddNodeStatus.Failed;
+} | {
+    status: AddNodeStatus.Done;
+    nodeId: number;
+} | {
+    status: AddNodeStatus.AddingController | AddNodeStatus.AddingSlave;
+    nodeInfo: NodeUpdatePayload;
+};
+
+// Warning: (ae-missing-release-tag) "AddNodeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum AddNodeType {
+    // (undocumented)
+    Any = 1,
+    // (undocumented)
+    Controller = 2,
+    // (undocumented)
+    Existing = 4,
+    // (undocumented)
+    Slave = 3,
+    // (undocumented)
+    SmartStartDSK = 8,
+    // (undocumented)
+    SmartStartListen = 9,
+    // (undocumented)
+    Stop = 5,
+    // (undocumented)
+    StopControllerReplication = 6
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationCommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationCommandRequest extends Message_2 implements MessageWithCC {
+    constructor(options: ApplicationCommandRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: CommandClass | undefined;
+    // (undocumented)
+    readonly frameType: FrameType;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ApplicationCommandRequest;
+    // (undocumented)
+    readonly fromForeignHomeId: boolean;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    // (undocumented)
+    readonly isExploreFrame: boolean;
+    // (undocumented)
+    readonly isForeignFrame: boolean;
+    // (undocumented)
+    readonly routedBusy: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationCommandRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ApplicationCommandRequestOptions = ({
+    command: CommandClass;
+} | {
+    nodeId: number;
+    serializedCC: Uint8Array;
+}) & {
+    frameType?: ApplicationCommandRequest["frameType"];
+    routedBusy?: boolean;
+    isExploreFrame?: boolean;
+    isForeignFrame?: boolean;
+    fromForeignHomeId?: boolean;
+};
+
+// Warning: (ae-missing-release-tag) "ApplicationCommandStatusFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ApplicationCommandStatusFlags {
+    // (undocumented)
+    Explore = 16,// A response route is locked by the application
+    // (undocumented)
+    ForeignFrame = 64,// Received at low output power level
+    // (undocumented)
+    ForeignHomeId = 128,// Received a single cast frame
+    // (undocumented)
+    LowPower = 2,// Received a broad cast frame
+    // (undocumented)
+    RoutedBusy = 1,// Received a multi cast frame
+    // (undocumented)
+    TypeBroad = 4,
+    // (undocumented)
+    TypeMask = 12,// Received an explore frame
+    // (undocumented)
+    TypeMulti = 8,// Received a foreign frame (only promiscuous mode)
+    // (undocumented)
+    TypeSingle = 0
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequest extends Message_2 {
+    constructor(options?: ApplicationUpdateRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ApplicationUpdateRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    readonly updateType: ApplicationUpdateTypes;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestNodeAdded" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestNodeAdded extends ApplicationUpdateRequestWithNodeInfo {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestNodeInfoReceived" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequestWithNodeInfo {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestNodeInfoRequestFailed" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest implements SuccessIndicator_2 {
+    // (undocumented)
+    isOK(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestNodeRemoved" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestNodeRemoved extends ApplicationUpdateRequest {
+    constructor(options: ApplicationUpdateRequestNodeRemovedOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ApplicationUpdateRequestNodeRemoved;
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestNodeRemovedOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationUpdateRequestNodeRemovedOptions {
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationUpdateRequestOptions {
+    // (undocumented)
+    updateType?: ApplicationUpdateTypes;
+}
+
+// Warning: (ae-forgotten-export) The symbol "ApplicationUpdateRequestSmartStartHomeIDReceivedBase" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestSmartStartHomeIDReceived" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestSmartStartHomeIDReceivedBaseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationUpdateRequestSmartStartHomeIDReceivedBaseOptions {
+    // (undocumented)
+    basicDeviceClass: BasicDeviceClass;
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    nwiHomeId: Uint8Array;
+    // (undocumented)
+    remoteNodeId: number;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestSUCIdChanged" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestSUCIdChanged extends ApplicationUpdateRequest {
+    constructor(options: ApplicationUpdateRequestSUCIdChangedOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ApplicationUpdateRequestSUCIdChanged;
+    // (undocumented)
+    sucNodeID: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestSUCIdChangedOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationUpdateRequestSUCIdChangedOptions {
+    // (undocumented)
+    sucNodeID: number;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestWithNodeInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationUpdateRequestWithNodeInfo extends ApplicationUpdateRequest {
+    constructor(options: ApplicationUpdateRequestWithNodeInfoOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ApplicationUpdateRequestWithNodeInfo;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    nodeInformation: NodeUpdatePayload;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateRequestWithNodeInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationUpdateRequestWithNodeInfoOptions {
+    // (undocumented)
+    nodeInformation: NodeUpdatePayload;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationUpdateTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ApplicationUpdateTypes {
+    // (undocumented)
+    Node_Added = 64,// An included smart start node has been powered up
+    // (undocumented)
+    Node_Removed = 32,// A smart start node requests inclusion
+    // (undocumented)
+    NodeInfo_Received = 132,// A smart start long range note requests inclusion
+    // (undocumented)
+    NodeInfo_RequestDone = 130,
+    // (undocumented)
+    NodeInfo_RequestFailed = 129,
+    // (undocumented)
+    RoutingPending = 128,
+    // (undocumented)
+    SmartStart_HomeId_Received = 133,
+    // (undocumented)
+    SmartStart_LongRange_HomeId_Received = 135,// A new node was added to the network by another controller
+    // (undocumented)
+    SmartStart_NodeInfo_Received = 134,// A new node was removed from the network by another controller
+    // (undocumented)
+    SUC_IdChanged = 16
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPriorityReturnRouteRequest extends AssignPriorityReturnRouteRequestBase {
+    constructor(options: AssignPriorityReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPriorityReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeSpeed: ZWaveDataRate;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPriorityReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AssignPriorityReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPriorityReturnRouteRequestOptions {
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeSpeed: ZWaveDataRate;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPriorityReturnRouteRequestTransmitReport extends AssignPriorityReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: AssignPriorityReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPriorityReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPriorityReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPriorityReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: AssignPriorityReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPriorityReturnRouteResponse;
+    // (undocumented)
+    readonly hasStarted: boolean;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPriorityReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPriorityReturnRouteResponseOptions {
+    // (undocumented)
+    hasStarted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPrioritySUCReturnRouteRequest extends AssignPrioritySUCReturnRouteRequestBase {
+    constructor(options: AssignPrioritySUCReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPrioritySUCReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeSpeed: ZWaveDataRate;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPrioritySUCReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AssignPrioritySUCReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPrioritySUCReturnRouteRequestOptions {
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeSpeed: ZWaveDataRate;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPrioritySUCReturnRouteRequestTransmitReport extends AssignPrioritySUCReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: AssignPrioritySUCReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPrioritySUCReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPrioritySUCReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignPrioritySUCReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: AssignPrioritySUCReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignPrioritySUCReturnRouteResponse;
+    // (undocumented)
+    readonly hasStarted: boolean;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AssignPrioritySUCReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignPrioritySUCReturnRouteResponseOptions {
+    // (undocumented)
+    hasStarted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase {
+    constructor(options: AssignReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AssignReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignReturnRouteRequestOptions {
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignReturnRouteRequestTransmitReport extends AssignReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: AssignReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: AssignReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignReturnRouteResponse;
+    // (undocumented)
+    readonly hasStarted: boolean;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "AssignReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignReturnRouteResponseOptions {
+    // (undocumented)
+    hasStarted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase {
+    constructor(options: AssignSUCReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly disableCallbackFunctionTypeCheck?: boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignSUCReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignSUCReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): AssignSUCReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignSUCReturnRouteRequestOptions {
+    // (undocumented)
+    disableCallbackFunctionTypeCheck?: boolean;
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignSUCReturnRouteRequestTransmitReport extends AssignSUCReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: AssignSUCReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignSUCReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignSUCReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssignSUCReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: AssignSUCReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): AssignSUCReturnRouteResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasExecuted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "AssignSUCReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssignSUCReturnRouteResponseOptions {
+    // (undocumented)
+    wasExecuted: boolean;
+}
 
 // Warning: (ae-missing-release-tag) "BootloaderChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -74,7 +848,7 @@ export enum BootloaderChunkType {
 // Warning: (ae-missing-release-tag) "bootloaderMenuPreamble" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export const bootloaderMenuPreamble = "Gecko Bootloader";
+export const bootloaderMenuPreamble = "Gecko Boo";
 
 // Warning: (ae-missing-release-tag) "BootloaderParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -94,20 +868,906 @@ export class BootloaderScreenParser extends Transform {
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
 
-// Warning: (ae-missing-release-tag) "DeserializingZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "BridgeApplicationCommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type DeserializingZnifferMessageConstructor<T extends ZnifferMessage> = new (options: ZnifferMessageDeserializationOptions) => T;
+export class BridgeApplicationCommandRequest extends Message_2 implements MessageWithCC {
+    constructor(options: BridgeApplicationCommandRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: CommandClass | undefined;
+    // (undocumented)
+    readonly frameType: FrameType;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): BridgeApplicationCommandRequest;
+    // (undocumented)
+    readonly fromForeignHomeId: boolean;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    // (undocumented)
+    readonly isExploreFrame: boolean;
+    // (undocumented)
+    readonly isForeignFrame: boolean;
+    // (undocumented)
+    readonly ownNodeId: number;
+    // (undocumented)
+    readonly routedBusy: boolean;
+    // (undocumented)
+    readonly rssi?: RSSI;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    // (undocumented)
+    readonly targetNodeId: number | number[];
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "BridgeApplicationCommandRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BridgeApplicationCommandRequestOptions = ({
+    command: CommandClass;
+} | {
+    nodeId: number;
+    serializedCC: Uint8Array;
+}) & {
+    routedBusy: boolean;
+    frameType: FrameType;
+    isExploreFrame: boolean;
+    isForeignFrame: boolean;
+    fromForeignHomeId: boolean;
+    ownNodeId: number;
+    targetNodeId: number | number[];
+    rssi?: number;
+};
+
+// Warning: (ae-missing-release-tag) "CommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CommandRequest = ApplicationCommandRequest | BridgeApplicationCommandRequest;
+
+// Warning: (ae-missing-release-tag) "computeNeighborDiscoveryTimeout" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function computeNeighborDiscoveryTimeout(host: GetAllNodes<NodeId & ListenBehavior>, nodeType: NodeType): number;
+
+// Warning: (ae-missing-release-tag) "ContainsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ContainsCC<T extends CommandClass = CommandClass> {
+    // (undocumented)
+    command: T;
+}
+
+// Warning: (ae-missing-release-tag) "containsCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function containsCC<T extends object>(container: T | undefined): container is T & ContainsCC;
+
+// Warning: (ae-missing-release-tag) "ContainsSerializedCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ContainsSerializedCC {
+    // (undocumented)
+    serializedCC: Uint8Array;
+}
+
+// Warning: (ae-missing-release-tag) "containsSerializedCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function containsSerializedCC<T extends object>(container: T | undefined): container is T & ContainsSerializedCC;
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase {
+    constructor(options: DeleteReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): DeleteReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteReturnRouteRequestOptions {
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteReturnRouteRequestTransmitReport extends DeleteReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: DeleteReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: DeleteReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteReturnRouteResponse;
+    // (undocumented)
+    readonly hasStarted: boolean;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteReturnRouteResponseOptions {
+    // (undocumented)
+    hasStarted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase {
+    constructor(options: DeleteSUCReturnRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly disableCallbackFunctionTypeCheck?: boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteSUCReturnRouteRequest;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteSUCReturnRouteRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): DeleteSUCReturnRouteRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteSUCReturnRouteRequestOptions {
+    // (undocumented)
+    disableCallbackFunctionTypeCheck?: boolean;
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteSUCReturnRouteRequestTransmitReport extends DeleteSUCReturnRouteRequestBase implements SuccessIndicator_2 {
+    constructor(options: DeleteSUCReturnRouteRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteSUCReturnRouteRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteSUCReturnRouteRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class DeleteSUCReturnRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: DeleteSUCReturnRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): DeleteSUCReturnRouteResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly wasExecuted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "DeleteSUCReturnRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DeleteSUCReturnRouteResponseOptions {
+    // (undocumented)
+    wasExecuted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "EnableSmartStartListenRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "encodeTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeTXReport(report: SerializableTXReport_2): Uint8Array;
 
 // Warning: (ae-missing-release-tag) "expectedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function expectedCallback<TSent extends Message>(typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>): TypedClassDecorator<Message>;
+export function expectedCallback<TSent extends typeof Message>(typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<InstanceType<TSent>>): TypedClassDecorator<TSent>;
 
 // Warning: (ae-missing-release-tag) "expectedResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const expectedResponse: <TTarget extends Message>(typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<Message>) => TypedClassDecorator<TTarget>;
+export const expectedResponse: <TTarget extends typeof Message>(typeOrPredicate: typeof Message | FunctionType | ResponsePredicate<Message>) => TypedClassDecorator<TTarget>;
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsCloseRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsCloseRequest extends ExtendedNVMOperationsRequest {
+    constructor(options?: MessageBaseOptions_2);
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ExtendedNVMOperationsCommand {
+    // (undocumented)
+    Close = 3,
+    // (undocumented)
+    Open = 0,
+    // (undocumented)
+    Read = 1,
+    // (undocumented)
+    Write = 2
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsOpenRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsOpenRequest extends ExtendedNVMOperationsRequest {
+    constructor(options?: MessageBaseOptions_2);
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsReadRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsReadRequest extends ExtendedNVMOperationsRequest {
+    constructor(options: ExtendedNVMOperationsReadRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtendedNVMOperationsReadRequest;
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsReadRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtendedNVMOperationsReadRequestOptions {
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsRequest extends Message_2 {
+    // (undocumented)
+    command: ExtendedNVMOperationsCommand;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: ExtendedNVMOperationsResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly bufferOrBitmask: Uint8Array;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtendedNVMOperationsResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly offsetOrSize: number;
+    // (undocumented)
+    readonly status: ExtendedNVMOperationStatus;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtendedNVMOperationsResponseOptions {
+    // (undocumented)
+    bufferOrBitmask: Uint8Array;
+    // (undocumented)
+    offsetOrSize: number;
+    // (undocumented)
+    status: ExtendedNVMOperationStatus;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ExtendedNVMOperationStatus {
+    // (undocumented)
+    EndOfFile = 255,
+    // (undocumented)
+    Error = 1,
+    // (undocumented)
+    Error_OperationInterference = 3,
+    // (undocumented)
+    Error_OperationMismatch = 2,
+    // (undocumented)
+    Error_SubCommandNotSupported = 4,
+    // (undocumented)
+    OK = 0
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsWriteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtendedNVMOperationsWriteRequest extends ExtendedNVMOperationsRequest {
+    constructor(options: ExtendedNVMOperationsWriteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtendedNVMOperationsWriteRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtendedNVMOperationsWriteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtendedNVMOperationsWriteRequestOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongBufferRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMReadLongBufferRequest extends Message_2 {
+    constructor(options: ExtNVMReadLongBufferRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMReadLongBufferRequest;
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongBufferRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMReadLongBufferRequestOptions {
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongBufferResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMReadLongBufferResponse extends Message_2 {
+    constructor(options: ExtNVMReadLongBufferResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly buffer: Uint8Array;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMReadLongBufferResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongBufferResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMReadLongBufferResponseOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongByteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMReadLongByteRequest extends Message_2 {
+    constructor(options: ExtNVMReadLongByteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMReadLongByteRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongByteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMReadLongByteRequestOptions {
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongByteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMReadLongByteResponse extends Message_2 {
+    constructor(options: ExtNVMReadLongByteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly byte: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMReadLongByteResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMReadLongByteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMReadLongByteResponseOptions {
+    // (undocumented)
+    byte: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongBufferRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMWriteLongBufferRequest extends Message_2 {
+    constructor(options: ExtNVMWriteLongBufferRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMWriteLongBufferRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongBufferRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMWriteLongBufferRequestOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongBufferResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMWriteLongBufferResponse extends Message_2 {
+    constructor(options: ExtNVMWriteLongBufferResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMWriteLongBufferResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongBufferResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMWriteLongBufferResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongByteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMWriteLongByteRequest extends Message_2 {
+    constructor(options: ExtNVMWriteLongByteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    byte: number;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMWriteLongByteRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongByteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMWriteLongByteRequestOptions {
+    // (undocumented)
+    byte: number;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongByteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ExtNVMWriteLongByteResponse extends Message_2 {
+    constructor(options: ExtNVMWriteLongByteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ExtNVMWriteLongByteResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ExtNVMWriteLongByteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ExtNVMWriteLongByteResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_GetNewImageRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_GetNewImageRequest extends FirmwareUpdateNVMRequest {
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_GetNewImageResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_GetNewImageResponse extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_GetNewImageResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_GetNewImageResponse;
+    // (undocumented)
+    readonly newImage: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_GetNewImageResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_GetNewImageResponseOptions {
+    // (undocumented)
+    newImage: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_InitRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_InitRequest extends FirmwareUpdateNVMRequest {
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_InitResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_InitResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_InitResponse;
+    // (undocumented)
+    readonly supported: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_InitResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_InitResponseOptions {
+    // (undocumented)
+    supported: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_IsValidCRC16Request" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_IsValidCRC16Request extends FirmwareUpdateNVMRequest {
+    // (undocumented)
+    getResponseTimeout(): number | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_IsValidCRC16Response" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_IsValidCRC16Response extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_IsValidCRC16ResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_IsValidCRC16Response;
+    // (undocumented)
+    readonly isValid: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_IsValidCRC16ResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_IsValidCRC16ResponseOptions {
+    // (undocumented)
+    isValid: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_SetNewImageRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_SetNewImageRequest extends FirmwareUpdateNVMRequest {
+    constructor(options: FirmwareUpdateNVM_SetNewImageRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_SetNewImageRequest;
+    // (undocumented)
+    newImage: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_SetNewImageRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_SetNewImageRequestOptions {
+    // (undocumented)
+    newImage: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_SetNewImageResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_SetNewImageResponse extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_SetNewImageResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly changed: boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_SetNewImageResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_SetNewImageResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_SetNewImageResponseOptions {
+    // (undocumented)
+    changed: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_UpdateCRC16Request" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_UpdateCRC16Request extends FirmwareUpdateNVMRequest {
+    constructor(options: FirmwareUpdateNVM_UpdateCRC16RequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    blockLength: number;
+    // (undocumented)
+    crcSeed: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_UpdateCRC16Request;
+    // (undocumented)
+    getResponseTimeout(): number | undefined;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_UpdateCRC16RequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_UpdateCRC16RequestOptions {
+    // (undocumented)
+    blockLength: number;
+    // (undocumented)
+    crcSeed: number;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_UpdateCRC16Response" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_UpdateCRC16Response extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_UpdateCRC16ResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly crc16: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_UpdateCRC16Response;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_UpdateCRC16ResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_UpdateCRC16ResponseOptions {
+    // (undocumented)
+    crc16: number;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_WriteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
+    constructor(options: FirmwareUpdateNVM_WriteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_WriteRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_WriteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_WriteRequestOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_WriteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVM_WriteResponse extends FirmwareUpdateNVMResponse {
+    constructor(options: FirmwareUpdateNVM_WriteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): FirmwareUpdateNVM_WriteResponse;
+    // (undocumented)
+    readonly overwritten: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_WriteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVM_WriteResponseOptions {
+    // (undocumented)
+    overwritten: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVMCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum FirmwareUpdateNVMCommand {
+    // (undocumented)
+    GetNewImage = 2,
+    // (undocumented)
+    Init = 0,
+    // (undocumented)
+    IsValidCRC16 = 4,
+    // (undocumented)
+    SetNewImage = 1,
+    // (undocumented)
+    UpdateCRC16 = 3,
+    // (undocumented)
+    Write = 5
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVMRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVMRequest extends Message_2 {
+    constructor(options?: FirmwareUpdateNVMRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: FirmwareUpdateNVMCommand;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): FirmwareUpdateNVMRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVMRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVMRequestOptions {
+    // (undocumented)
+    command?: FirmwareUpdateNVMCommand;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVMResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class FirmwareUpdateNVMResponse extends Message_2 {
+    constructor(options: FirmwareUpdateNVMResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: FirmwareUpdateNVMCommand;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): FirmwareUpdateNVMResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateNVMResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateNVMResponseOptions {
+    // (undocumented)
+    command?: FirmwareUpdateNVMCommand;
+}
 
 // Warning: (ae-missing-release-tag) "FunctionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -409,6 +2069,156 @@ export enum FunctionType {
     VirtualNodeSetNodeInfo = 160
 }
 
+// Warning: (ae-missing-release-tag) "GetBackgroundRSSIRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetBackgroundRSSIRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetBackgroundRSSIResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetBackgroundRSSIResponse extends Message_2 {
+    constructor(options: GetBackgroundRSSIResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetBackgroundRSSIResponse;
+    // (undocumented)
+    readonly rssiChannel0: RSSI;
+    // (undocumented)
+    readonly rssiChannel1: RSSI;
+    // (undocumented)
+    readonly rssiChannel2?: RSSI;
+    // (undocumented)
+    readonly rssiChannel3?: RSSI;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetBackgroundRSSIResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetBackgroundRSSIResponseOptions {
+    // (undocumented)
+    rssiChannel0: number;
+    // (undocumented)
+    rssiChannel1: number;
+    // (undocumented)
+    rssiChannel2?: number;
+    // (undocumented)
+    rssiChannel3?: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerCapabilitiesRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerCapabilitiesRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerCapabilitiesResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerCapabilitiesResponse extends Message_2 {
+    constructor(options: GetControllerCapabilitiesResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetControllerCapabilitiesResponse;
+    // (undocumented)
+    isSecondary: boolean;
+    // (undocumented)
+    isSISPresent: boolean;
+    // (undocumented)
+    isStaticUpdateController: boolean;
+    // (undocumented)
+    isUsingHomeIdFromOtherNetwork: boolean;
+    // (undocumented)
+    noNodesIncluded: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    wasRealPrimary: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerCapabilitiesResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetControllerCapabilitiesResponseOptions {
+    // (undocumented)
+    isSecondary: boolean;
+    // (undocumented)
+    isSISPresent: boolean;
+    // (undocumented)
+    isStaticUpdateController: boolean;
+    // (undocumented)
+    isUsingHomeIdFromOtherNetwork: boolean;
+    // (undocumented)
+    noNodesIncluded: boolean;
+    // (undocumented)
+    wasRealPrimary: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerIdRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerIdRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerIdResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerIdResponse extends Message_2 {
+    constructor(options: GetControllerIdResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): GetControllerIdResponse;
+    // (undocumented)
+    homeId: number;
+    // (undocumented)
+    ownNodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerIdResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetControllerIdResponseOptions {
+    // (undocumented)
+    homeId: number;
+    // (undocumented)
+    ownNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerVersionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerVersionRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerVersionResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetControllerVersionResponse extends Message_2 {
+    constructor(options: GetControllerVersionResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    controllerType: ZWaveLibraryTypes;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetControllerVersionResponse;
+    // (undocumented)
+    libraryVersion: string;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "GetControllerVersionResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetControllerVersionResponseOptions {
+    // (undocumented)
+    controllerType: ZWaveLibraryTypes;
+    // (undocumented)
+    libraryVersion: string;
+}
+
 // Warning: (ae-missing-release-tag) "getDefaultPriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -449,6 +2259,89 @@ export function getFunctionType<T extends Message>(messageClass: T): FunctionTyp
 // @public
 export function getFunctionTypeStatic<T extends MessageConstructor<Message>>(classConstructor: T): FunctionType | undefined;
 
+// Warning: (ae-missing-release-tag) "GetLongRangeChannelRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetLongRangeChannelRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeChannelResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetLongRangeChannelResponse extends Message_2 {
+    constructor(options: GetLongRangeChannelResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly autoChannelSelectionActive: boolean;
+    // (undocumented)
+    readonly channel: LongRangeChannel.A | LongRangeChannel.B | LongRangeChannel.Unsupported;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetLongRangeChannelResponse;
+    // (undocumented)
+    readonly supportsAutoChannelSelection: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeChannelResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetLongRangeChannelResponseOptions {
+    // (undocumented)
+    autoChannelSelectionActive: boolean;
+    // (undocumented)
+    channel: LongRangeChannel.Unsupported | LongRangeChannel.A | LongRangeChannel.B;
+    // (undocumented)
+    supportsAutoChannelSelection: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeNodesRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetLongRangeNodesRequest extends Message_2 {
+    constructor(options: GetLongRangeNodesRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetLongRangeNodesRequest;
+    // (undocumented)
+    segmentNumber: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeNodesRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetLongRangeNodesRequestOptions {
+    // (undocumented)
+    segmentNumber: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeNodesResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetLongRangeNodesResponse extends Message_2 {
+    constructor(options: GetLongRangeNodesResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetLongRangeNodesResponse;
+    // (undocumented)
+    moreNodes: boolean;
+    // (undocumented)
+    nodeIds: readonly number[];
+    // (undocumented)
+    segmentNumber: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+}
+
+// Warning: (ae-missing-release-tag) "GetLongRangeNodesResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetLongRangeNodesResponseOptions {
+    // (undocumented)
+    moreNodes: boolean;
+    // (undocumented)
+    nodeIds: number[];
+    // (undocumented)
+    segmentNumber: number;
+}
+
 // Warning: (ae-missing-release-tag) "getMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -459,33 +2352,531 @@ export function getMessageType<T extends Message>(messageClass: T): MessageType 
 // @public
 export function getMessageTypeStatic<T extends MessageConstructor<Message>>(classConstructor: T): MessageType | undefined;
 
-// Warning: (ae-missing-release-tag) "INodeQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "GetNodeProtocolInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface INodeQuery {
+export class GetNodeProtocolInfoRequest extends Message_2 {
+    constructor(options: GetNodeProtocolInfoRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): GetNodeProtocolInfoRequest;
+    // (undocumented)
+    requestedNodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "GetNodeProtocolInfoRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetNodeProtocolInfoRequestOptions {
+    // (undocumented)
+    requestedNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetNodeProtocolInfoResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetNodeProtocolInfoResponse extends Message_2 {
+    constructor(options: GetNodeProtocolInfoResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    basicDeviceClass: BasicDeviceClass;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): GetNodeProtocolInfoResponse;
+    // (undocumented)
+    genericDeviceClass: number;
+    isFrequentListening: FLiRS;
+    isListening: boolean;
+    isRouting: boolean;
+    nodeType: NodeType;
+    optionalFunctionality: boolean;
+    // (undocumented)
+    protocolVersion: ProtocolVersion;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedDataRates: DataRate[];
+    supportsBeaming: boolean;
+    supportsSecurity: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetNodeProtocolInfoResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetNodeProtocolInfoResponseOptions extends NodeProtocolInfoAndDeviceClass {
+}
+
+// Warning: (ae-missing-release-tag) "GetNVMIdRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetNVMIdRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetNVMIdResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetNVMIdResponse extends Message_2 {
+    constructor(options: GetNVMIdResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetNVMIdResponse;
+    // (undocumented)
+    readonly memorySize: NVMSize;
+    // (undocumented)
+    readonly memoryType: NVMType;
+    // (undocumented)
+    readonly nvmManufacturerId: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetNVMIdResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetNVMIdResponseOptions {
+    // (undocumented)
+    memorySize: NVMSize;
+    // (undocumented)
+    memoryType: NVMType;
+    // (undocumented)
+    nvmManufacturerId: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetPriorityRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetPriorityRouteRequest extends Message_2 {
+    constructor(options: GetPriorityRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetPriorityRouteRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetPriorityRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetPriorityRouteRequestOptions {
+    // (undocumented)
+    destinationNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetPriorityRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetPriorityRouteResponse extends Message_2 {
+    constructor(options: GetPriorityRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly destinationNodeId: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): GetPriorityRouteResponse;
+    // (undocumented)
+    readonly repeaters?: number[];
+    // (undocumented)
+    readonly routeKind: RouteKind;
+    // (undocumented)
+    readonly routeSpeed?: ZWaveDataRate;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetPriorityRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetPriorityRouteResponseOptions {
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    repeaters?: number[];
+    // (undocumented)
+    routeKind: RouteKind;
+    // (undocumented)
+    routeSpeed?: ZWaveDataRate;
+}
+
+// Warning: (ae-missing-release-tag) "GetProtocolVersionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetProtocolVersionRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetProtocolVersionResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetProtocolVersionResponse extends Message_2 {
+    constructor(options: GetProtocolVersionResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly applicationFrameworkBuildNumber?: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetProtocolVersionResponse;
+    // (undocumented)
+    readonly gitCommitHash?: string;
+    // (undocumented)
+    readonly protocolType: ProtocolType;
+    // (undocumented)
+    readonly protocolVersion: string;
+}
+
+// Warning: (ae-missing-release-tag) "GetProtocolVersionResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetProtocolVersionResponseOptions {
+    // (undocumented)
+    applicationFrameworkBuildNumber?: number;
+    // (undocumented)
+    gitCommitHash?: string;
+    // (undocumented)
+    protocolType: ProtocolType;
+    // (undocumented)
+    protocolVersion: string;
+}
+
+// Warning: (ae-missing-release-tag) "GetRoutingInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetRoutingInfoRequest extends Message_2 {
+    constructor(options: GetRoutingInfoRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    removeBadLinks: boolean;
+    // (undocumented)
+    removeNonRepeaters: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    sourceNodeId: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetRoutingInfoRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetRoutingInfoRequestOptions {
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    removeBadLinks?: boolean;
+    // (undocumented)
+    removeNonRepeaters?: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "GetRoutingInfoResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetRoutingInfoResponse extends Message_2 {
+    constructor(options: GetRoutingInfoResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetRoutingInfoResponse;
+    // (undocumented)
+    nodeIds: number[];
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "GetRoutingInfoResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetRoutingInfoResponseOptions {
+    // (undocumented)
+    nodeIds: number[];
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiCapabilitiesRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSerialApiCapabilitiesRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiCapabilitiesResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSerialApiCapabilitiesResponse extends Message_2 {
+    constructor(options: GetSerialApiCapabilitiesResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    firmwareVersion: string;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetSerialApiCapabilitiesResponse;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    productId: number;
+    // (undocumented)
+    productType: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    supportedFunctionTypes: FunctionType_2[];
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiCapabilitiesResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetSerialApiCapabilitiesResponseOptions {
+    // (undocumented)
+    firmwareVersion: string;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    productId: number;
+    // (undocumented)
+    productType: number;
+    // (undocumented)
+    supportedFunctionTypes: FunctionType_2[];
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiInitDataRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSerialApiInitDataRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiInitDataResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSerialApiInitDataResponse extends Message_2 {
+    constructor(options: GetSerialApiInitDataResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): GetSerialApiInitDataResponse;
+    // (undocumented)
+    isPrimary: boolean;
+    // (undocumented)
+    isSIS: boolean;
+    // (undocumented)
+    nodeIds: readonly number[];
+    // (undocumented)
+    nodeType: NodeType;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    supportsTimers: boolean;
+    // (undocumented)
+    zwaveApiVersion: ZWaveApiVersion;
+    // (undocumented)
+    zwaveChipType?: string | UnknownZWaveChipType;
+}
+
+// Warning: (ae-missing-release-tag) "GetSerialApiInitDataResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetSerialApiInitDataResponseOptions extends SerialApiInitData {
+}
+
+// Warning: (ae-missing-release-tag) "GetSUCNodeIdRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSUCNodeIdRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "GetSUCNodeIdResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class GetSUCNodeIdResponse extends Message_2 {
+    constructor(options: GetSUCNodeIdResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): GetSUCNodeIdResponse;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    sucNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "GetSUCNodeIdResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetSUCNodeIdResponseOptions {
+    // (undocumented)
+    sucNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "HardResetCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class HardResetCallback extends HardResetRequestBase {
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): HardResetCallback;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "HardResetRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class HardResetRequest extends HardResetRequestBase {
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "HardResetRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class HardResetRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): HardResetRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "HasNodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HasNodeId {
     // (undocumented)
     nodeId: number;
 }
+
+// Warning: (ae-missing-release-tag) "hasNodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function hasNodeId<T extends Message>(msg: T): msg is T & HasNodeId;
+
+// Warning: (ae-missing-release-tag) "hasTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function hasTXReport(msg: unknown): msg is (SendDataRequestTransmitReport | SendDataBridgeRequestTransmitReport) & {
+    txReport: TXReport_2;
+};
+
+// Warning: (ae-missing-release-tag) "isCommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isCommandRequest(msg: Message_2): msg is CommandRequest;
+
+// Warning: (ae-missing-release-tag) "IsFailedNodeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IsFailedNodeRequest extends Message_2 {
+    constructor(options: IsFailedNodeRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    failedNodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "IsFailedNodeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IsFailedNodeRequestOptions {
+    // (undocumented)
+    failedNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "IsFailedNodeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class IsFailedNodeResponse extends Message_2 {
+    constructor(options: IsFailedNodeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): IsFailedNodeResponse;
+    // (undocumented)
+    readonly result: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "IsFailedNodeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IsFailedNodeResponseOptions {
+    // (undocumented)
+    result: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "isMessageWithCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMessageWithCC(msg: Message_2): msg is SendDataMessage | CommandRequest;
 
 // Warning: (ae-missing-release-tag) "isMultiStageCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isMultiStageCallback<T extends Message>(msg: T): msg is T & MultiStageCallback;
 
-// Warning: (ae-missing-release-tag) "isNodeQuery" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "isSendData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export function isNodeQuery<T extends Message>(msg: T): msg is T & INodeQuery;
+// @public (undocumented)
+export function isSendData(msg: unknown): msg is SendDataMessage;
+
+// Warning: (ae-missing-release-tag) "isSendDataMulticast" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isSendDataMulticast(msg: unknown): msg is SendDataMulticastRequest | SendDataMulticastBridgeRequest;
+
+// Warning: (ae-missing-release-tag) "isSendDataSinglecast" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isSendDataSinglecast(msg: unknown): msg is SendDataRequest | SendDataBridgeRequest;
+
+// Warning: (ae-missing-release-tag) "isSendDataTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isSendDataTransmitReport(msg: unknown): msg is SendDataTransmitReport;
 
 // Warning: (ae-missing-release-tag) "isSuccessIndicator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isSuccessIndicator<T extends Message>(msg: T): msg is T & SuccessIndicator;
 
+// Warning: (ae-missing-release-tag) "isTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isTransmitReport(msg: unknown): msg is TransmitReport;
+
 // Warning: (ae-missing-release-tag) "isZWaveSerialPortImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function isZWaveSerialPortImplementation(obj: unknown): obj is ZWaveSerialPortImplementation;
+
+// Warning: (ae-missing-release-tag) "LearnModeIntent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum LearnModeIntent {
+    // (undocumented)
+    DirectExclusion = 130,
+    // (undocumented)
+    Inclusion = 129,
+    // (undocumented)
+    LegacyInclusionExclusion = 1,
+    // (undocumented)
+    LegacyNetworkWideExclusion = 3,
+    // (undocumented)
+    LegacyNetworkWideInclusion = 2,
+    // (undocumented)
+    LegacyStop = 0,
+    // (undocumented)
+    NetworkWideExclusion = 131,
+    // (undocumented)
+    SmartStart = 132,
+    // (undocumented)
+    Stop = 128
+}
+
+// Warning: (ae-missing-release-tag) "LearnModeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum LearnModeStatus {
+    // (undocumented)
+    Completed = 6,
+    // (undocumented)
+    Failed = 7,// Not specified, but used in firmware
+    // (undocumented)
+    ProtocolDone = 5,
+    // (undocumented)
+    Started = 1
+}
+
+// Warning: (ae-missing-release-tag) "LongRangeShadowNodeIDsRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LongRangeShadowNodeIDsRequestOptions {
+    // (undocumented)
+    shadowNodeIds: number[];
+}
+
+// Warning: (ae-missing-release-tag) "MAX_SEND_ATTEMPTS" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const MAX_SEND_ATTEMPTS = 5;
 
 // Warning: (ae-missing-release-tag) "Message" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -524,12 +2915,12 @@ export class Message {
     needsCallbackId(): boolean;
     nodeUpdateTimeout: number | undefined;
     // (undocumented)
-    static parse(data: Buffer, ctx: MessageParsingContext): Message;
+    static parse(data: Uint8Array, ctx: MessageParsingContext): Message;
     // (undocumented)
-    payload: Buffer;
+    payload: Bytes;
     prematureNodeUpdate: Message | undefined;
     get rtt(): number | undefined;
-    serialize(ctx: MessageEncodingContext): Buffer;
+    serialize(ctx: MessageEncodingContext): Bytes;
     toJSON(): JSONObject;
     toLogEntry(): MessageOrCCLogEntry;
     get transmissionTimestamp(): number | undefined;
@@ -591,7 +2982,7 @@ export interface MessageOptions extends MessageBaseOptions {
     // (undocumented)
     functionType?: FunctionType;
     // (undocumented)
-    payload?: Buffer;
+    payload?: Bytes;
     // (undocumented)
     type?: MessageType;
 }
@@ -623,17 +3014,17 @@ export interface MessageParsingContext extends HostIDs, GetDeviceConfig {
 //
 // @public (undocumented)
 export class MessageRaw {
-    constructor(type: MessageType, functionType: FunctionType, payload: Buffer);
+    constructor(type: MessageType, functionType: FunctionType, payload: Bytes);
     // (undocumented)
     readonly functionType: FunctionType;
     // (undocumented)
-    static parse(data: Buffer): MessageRaw;
+    static parse(data: Uint8Array): MessageRaw;
     // (undocumented)
-    readonly payload: Buffer;
+    readonly payload: Bytes;
     // (undocumented)
     readonly type: MessageType;
     // (undocumented)
-    withPayload(payload: Buffer): MessageRaw;
+    withPayload(payload: Bytes): MessageRaw;
 }
 
 // Warning: (ae-missing-release-tag) "MessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -649,7 +3040,17 @@ export enum MessageType {
 // Warning: (ae-missing-release-tag) "messageTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const messageTypes: <TTarget extends Message>(messageType: MessageType, functionType: FunctionType) => TypedClassDecorator<TTarget>;
+export const messageTypes: <TTarget extends typeof Message>(messageType: MessageType, functionType: FunctionType) => TypedClassDecorator<TTarget>;
+
+// Warning: (ae-missing-release-tag) "MessageWithCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MessageWithCC {
+    // (undocumented)
+    command: CommandClass | undefined;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+}
 
 // Warning: (ae-missing-release-tag) "MultiStageCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -658,10 +3059,614 @@ export interface MultiStageCallback {
     isFinal(): boolean;
 }
 
+// Warning: (ae-missing-release-tag) "NodeNeighborUpdateStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NodeNeighborUpdateStatus {
+    // (undocumented)
+    UpdateDone = 34,
+    // (undocumented)
+    UpdateFailed = 35,
+    // (undocumented)
+    UpdateStarted = 33
+}
+
+// Warning: (ae-missing-release-tag) "NVMId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NVMId = Pick<GetNVMIdResponse, "nvmManufacturerId" | "memoryType" | "memorySize">;
+
+// Warning: (ae-missing-release-tag) "NVMOperationsCloseRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsCloseRequest extends NVMOperationsRequest {
+    constructor(options?: MessageBaseOptions_2);
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NVMOperationsCommand {
+    // (undocumented)
+    Close = 3,
+    // (undocumented)
+    Open = 0,
+    // (undocumented)
+    Read = 1,
+    // (undocumented)
+    Write = 2
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsOpenRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsOpenRequest extends NVMOperationsRequest {
+    constructor(options?: MessageBaseOptions_2);
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsReadRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsReadRequest extends NVMOperationsRequest {
+    constructor(options: NVMOperationsReadRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): NVMOperationsReadRequest;
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsReadRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMOperationsReadRequestOptions {
+    // (undocumented)
+    length: number;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsRequest extends Message_2 {
+    // (undocumented)
+    command: NVMOperationsCommand;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: NVMOperationsResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly buffer: Uint8Array;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): NVMOperationsResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly offsetOrSize: number;
+    // (undocumented)
+    readonly status: NVMOperationStatus;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMOperationsResponseOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    offsetOrSize: number;
+    // (undocumented)
+    status: NVMOperationStatus;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NVMOperationStatus {
+    // (undocumented)
+    EndOfFile = 255,
+    // (undocumented)
+    Error = 1,
+    // (undocumented)
+    Error_OperationInterference = 3,
+    // (undocumented)
+    Error_OperationMismatch = 2,
+    // (undocumented)
+    OK = 0
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsWriteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NVMOperationsWriteRequest extends NVMOperationsRequest {
+    constructor(options: NVMOperationsWriteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): NVMOperationsWriteRequest;
+    // (undocumented)
+    offset: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "NVMOperationsWriteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMOperationsWriteRequestOptions {
+    // (undocumented)
+    buffer: Uint8Array;
+    // (undocumented)
+    offset: number;
+}
+
+// Warning: (ae-missing-release-tag) "NVMSize" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NVMSize {
+    // (undocumented)
+    "128KB" = 17,
+    // (undocumented)
+    "16KB" = 14,
+    // (undocumented)
+    "16MB" = 24,
+    // (undocumented)
+    "1MB" = 20,
+    // (undocumented)
+    "256KB" = 18,
+    // (undocumented)
+    "2MB" = 21,
+    // (undocumented)
+    "32KB" = 15,
+    // (undocumented)
+    "4MB" = 22,
+    // (undocumented)
+    "512KB" = 19,
+    // (undocumented)
+    "64KB" = 16,
+    // (undocumented)
+    "8MB" = 23,
+    // (undocumented)
+    Unknown = 255
+}
+
+// Warning: (ae-missing-release-tag) "nvmSizeToBufferSize" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nvmSizeToBufferSize(size: NVMSize): number | undefined;
+
+// Warning: (ae-missing-release-tag) "NVMType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum NVMType {
+    // (undocumented)
+    DataFlash = 129,
+    // (undocumented)
+    EEPROM = 255,
+    // (undocumented)
+    Flash = 128
+}
+
+// Warning: (ae-missing-release-tag) "parseRSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseRSSI(payload: Uint8Array, offset?: number): RSSI_2;
+
+// Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// Warning: (ae-missing-release-tag) "parseTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function parseTXReport(includeACK: boolean, payload: Uint8Array): TXReport_2 | undefined;
+
 // Warning: (ae-missing-release-tag) "priority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export const priority: <TTarget extends Message>(prio: MessagePriority) => TypedClassDecorator<TTarget>;
+export const priority: <TTarget extends typeof Message>(prio: MessagePriority) => TypedClassDecorator<TTarget>;
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
+    constructor(options: RemoveFailedNodeRequestOptions & MessageBaseOptions_2);
+    failedNodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveFailedNodeRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): RemoveFailedNodeRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RemoveFailedNodeRequestOptions {
+    // (undocumented)
+    failedNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeRequestStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequestBase implements SuccessIndicator_2 {
+    constructor(options: RemoveFailedNodeRequestStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): RemoveFailedNodeRequestStatusReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    removeStatus: RemoveFailedNodeStatus;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeRequestStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RemoveFailedNodeRequestStatusReportOptions {
+    // (undocumented)
+    removeStatus: RemoveFailedNodeStatus;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveFailedNodeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: RemoveFailedNodeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): RemoveFailedNodeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    removeStatus: RemoveFailedNodeStartFlags;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RemoveFailedNodeResponseOptions {
+    // (undocumented)
+    removeStatus: RemoveFailedNodeStartFlags;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeStartFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum RemoveFailedNodeStartFlags {
+    NoCallbackFunction = 4,
+    NodeNotFound = 8,
+    NotPrimaryController = 2,
+    // (undocumented)
+    OK = 0,
+    RemoveFailed = 32,
+    RemoveProcessBusy = 16
+}
+
+// Warning: (ae-missing-release-tag) "RemoveFailedNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum RemoveFailedNodeStatus {
+    NodeNotRemoved = 2,
+    NodeOK = 0,
+    NodeRemoved = 1
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeFromNetworkRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveNodeFromNetworkRequest extends RemoveNodeFromNetworkRequestBase {
+    constructor(options: RemoveNodeFromNetworkRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): RemoveNodeFromNetworkRequest;
+    highPower: boolean;
+    networkWide: boolean;
+    removeNodeType: RemoveNodeType | undefined;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeFromNetworkRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveNodeFromNetworkRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): RemoveNodeFromNetworkRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeFromNetworkRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RemoveNodeFromNetworkRequestOptions {
+    // (undocumented)
+    highPower?: boolean;
+    // (undocumented)
+    networkWide?: boolean;
+    // (undocumented)
+    removeNodeType?: RemoveNodeType;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeFromNetworkRequestStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RemoveNodeFromNetworkRequestStatusReport extends RemoveNodeFromNetworkRequestBase implements SuccessIndicator_2 {
+    constructor(options: RemoveNodeFromNetworkRequestStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): RemoveNodeFromNetworkRequestStatusReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    readonly status: RemoveNodeStatus;
+    // Warning: (ae-forgotten-export) The symbol "RemoveNodeStatusContext" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly statusContext: RemoveNodeStatusContext | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeFromNetworkRequestStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type RemoveNodeFromNetworkRequestStatusReportOptions = {
+    status: RemoveNodeStatus.Ready | RemoveNodeStatus.NodeFound | RemoveNodeStatus.Failed | RemoveNodeStatus.Reserved_0x05 | RemoveNodeStatus.Done;
+} | {
+    status: RemoveNodeStatus.RemovingController | RemoveNodeStatus.RemovingSlave;
+    nodeId: number;
+};
+
+// Warning: (ae-missing-release-tag) "RemoveNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum RemoveNodeStatus {
+    // (undocumented)
+    Done = 6,
+    // (undocumented)
+    Failed = 7,
+    // (undocumented)
+    NodeFound = 2,
+    // (undocumented)
+    Ready = 1,
+    // (undocumented)
+    RemovingController = 4,
+    // (undocumented)
+    RemovingSlave = 3,
+    // (undocumented)
+    Reserved_0x05 = 5
+}
+
+// Warning: (ae-missing-release-tag) "RemoveNodeType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum RemoveNodeType {
+    // (undocumented)
+    Any = 1,
+    // (undocumented)
+    Controller = 2,
+    // (undocumented)
+    Slave = 3,
+    // (undocumented)
+    Stop = 5
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
+    constructor(options: ReplaceFailedNodeRequestOptions & MessageBaseOptions_2);
+    failedNodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReplaceFailedNodeRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): ReplaceFailedNodeRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ReplaceFailedNodeRequestOptions {
+    // (undocumented)
+    failedNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeRequestStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReplaceFailedNodeRequestStatusReport extends ReplaceFailedNodeRequestBase implements SuccessIndicator_2 {
+    constructor(options: ReplaceFailedNodeRequestStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ReplaceFailedNodeRequestStatusReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    replaceStatus: ReplaceFailedNodeStatus;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeRequestStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ReplaceFailedNodeRequestStatusReportOptions {
+    // (undocumented)
+    replaceStatus: ReplaceFailedNodeStatus;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ReplaceFailedNodeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: ReplaceFailedNodeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ReplaceFailedNodeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    replaceStatus: ReplaceFailedNodeStartFlags;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ReplaceFailedNodeResponseOptions {
+    // (undocumented)
+    replaceStatus: ReplaceFailedNodeStartFlags;
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeStartFlags" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ReplaceFailedNodeStartFlags {
+    NoCallbackFunction = 4,
+    NodeNotFound = 8,
+    NotPrimaryController = 2,
+    // (undocumented)
+    OK = 0,
+    ReplaceFailed = 32,
+    ReplaceProcessBusy = 16
+}
+
+// Warning: (ae-missing-release-tag) "ReplaceFailedNodeStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ReplaceFailedNodeStatus {
+    FailedNodeReplace = 3,/* The node cannot be replaced because it is working properly (removed from the failed nodes list ) */
+    FailedNodeReplaceDone = 4,
+    FailedNodeReplaceFailed = 5,
+    // (undocumented)
+    NodeOK = 0
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RequestNodeInfoRequest extends Message_2 {
+    constructor(options: RequestNodeInfoRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): RequestNodeInfoRequest;
+    // (undocumented)
+    needsCallbackId(): boolean;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeInfoRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RequestNodeInfoRequestOptions {
+    // (undocumented)
+    nodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeInfoResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RequestNodeInfoResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: RequestNodeInfoResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): RequestNodeInfoResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeInfoResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RequestNodeInfoResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeNeighborUpdateReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase implements SuccessIndicator_2, MultiStageCallback_2 {
+    constructor(options: RequestNodeNeighborUpdateReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): RequestNodeNeighborUpdateReport;
+    // (undocumented)
+    isFinal(): boolean;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    updateStatus: NodeNeighborUpdateStatus;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeNeighborUpdateReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RequestNodeNeighborUpdateReportOptions {
+    // (undocumented)
+    updateStatus: NodeNeighborUpdateStatus;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeNeighborUpdateRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
+    constructor(options: RequestNodeNeighborUpdateRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    discoveryTimeout: number;
+    // (undocumented)
+    getCallbackTimeout(): number | undefined;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeNeighborUpdateRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RequestNodeNeighborUpdateRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): RequestNodeNeighborUpdateRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "RequestNodeNeighborUpdateRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RequestNodeNeighborUpdateRequestOptions {
+    discoveryTimeout: number;
+    // (undocumented)
+    nodeId: number;
+}
 
 // Warning: (ae-missing-release-tag) "ResponsePredicate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -673,16 +3678,1240 @@ export type ResponsePredicate<TSent extends Message = Message> = (sentMessage: T
 // @public (undocumented)
 export type ResponseRole = "unexpected" | "confirmation" | "final" | "fatal_controller" | "fatal_node";
 
+// Warning: (ae-missing-release-tag) "SendDataAbort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataAbort extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass> extends SendDataBridgeRequestBase implements MessageWithCC {
+    constructor(options: SendDataBridgeRequestOptions<CCType> & MessageBaseOptions_2);
+    command: SinglecastCC<CCType> | undefined;
+    // (undocumented)
+    expectsNodeUpdate(): boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataBridgeRequestBase;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    // (undocumented)
+    isExpectedNodeUpdate(msg: Message_2): boolean;
+    get maxSendAttempts(): number;
+    set maxSendAttempts(value: number);
+    // (undocumented)
+    prepareRetransmission(): void;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    sourceNodeId: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    transmitOptions: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataBridgeRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataBridgeRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataBridgeRequestOptions<CCType extends CommandClass = CommandClass> = ({
+    command: CCType;
+} | {
+    nodeId: number;
+    serializedCC: Uint8Array;
+}) & {
+    sourceNodeId: number;
+    transmitOptions?: TransmitOptions;
+    maxSendAttempts?: number;
+};
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataBridgeRequestTransmitReport extends SendDataBridgeRequestBase implements SuccessIndicator_2 {
+    constructor(options: SendDataBridgeRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataBridgeRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly transmitStatus: TransmitStatus;
+    // (undocumented)
+    readonly txReport: TXReport | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataBridgeRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+    // (undocumented)
+    txReport?: TXReport;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataBridgeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SendDataBridgeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataBridgeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataBridgeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataBridgeResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataMessage = SendDataRequest | SendDataMulticastRequest | SendDataBridgeRequest | SendDataMulticastBridgeRequest;
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastBridgeRequest<CCType extends CommandClass = CommandClass> extends SendDataMulticastBridgeRequestBase implements MessageWithCC {
+    constructor(options: SendDataMulticastBridgeRequestOptions<CCType> & MessageBaseOptions_2);
+    command: MulticastCC<CCType> | undefined;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataMulticastBridgeRequest;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    get maxSendAttempts(): number;
+    set maxSendAttempts(value: number);
+    // (undocumented)
+    nodeIds: MulticastDestination;
+    // (undocumented)
+    prepareRetransmission(): void;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    sourceNodeId: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    transmitOptions: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastBridgeRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataMulticastBridgeRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataMulticastBridgeRequestOptions<CCType extends CommandClass> = ({
+    command: CCType;
+} | {
+    nodeIds: MulticastDestination;
+    serializedCC: Uint8Array;
+}) & {
+    sourceNodeId: number;
+    transmitOptions?: TransmitOptions;
+    maxSendAttempts?: number;
+};
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastBridgeRequestTransmitReport extends SendDataMulticastBridgeRequestBase implements SuccessIndicator_2 {
+    constructor(options: SendDataMulticastBridgeRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataMulticastBridgeRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataMulticastBridgeRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastBridgeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SendDataMulticastBridgeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataMulticastBridgeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastBridgeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataMulticastBridgeResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastRequest<CCType extends CommandClass = CommandClass> extends SendDataMulticastRequestBase implements MessageWithCC {
+    constructor(options: SendDataMulticastRequestOptions<CCType> & MessageBaseOptions_2);
+    command: MulticastCC<CCType> | undefined;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataMulticastRequest;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    get maxSendAttempts(): number;
+    set maxSendAttempts(value: number);
+    // (undocumented)
+    nodeIds: MulticastDestination;
+    // (undocumented)
+    prepareRetransmission(): void;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    transmitOptions: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataMulticastRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataMulticastRequestOptions<CCType extends CommandClass> = ({
+    command: CCType;
+} | {
+    nodeIds: MulticastDestination;
+    serializedCC: Uint8Array;
+}) & {
+    transmitOptions?: TransmitOptions;
+    maxSendAttempts?: number;
+};
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastRequestTransmitReport extends SendDataMulticastRequestBase implements SuccessIndicator_2 {
+    constructor(options: SendDataMulticastRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataMulticastRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataMulticastRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataMulticastResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SendDataMulticastResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataMulticastResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataMulticastResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataMulticastResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataRequest<CCType extends CommandClass = CommandClass> extends SendDataRequestBase implements MessageWithCC {
+    constructor(options: SendDataRequestOptions<CCType> & MessageBaseOptions_2);
+    command: SinglecastCC<CCType> | undefined;
+    // (undocumented)
+    expectsNodeUpdate(): boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataRequest;
+    // (undocumented)
+    getNodeId(): number | undefined;
+    // (undocumented)
+    isExpectedNodeUpdate(msg: Message_2): boolean;
+    get maxSendAttempts(): number;
+    set maxSendAttempts(value: number);
+    // (undocumented)
+    prepareRetransmission(): void;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializedCC: Uint8Array | undefined;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    transmitOptions: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendDataRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataRequestOptions<CCType extends CommandClass = CommandClass> = ({
+    command: CCType;
+} | {
+    nodeId: number;
+    serializedCC: Uint8Array;
+}) & {
+    transmitOptions?: TransmitOptions;
+    maxSendAttempts?: number;
+};
+
+// Warning: (ae-missing-release-tag) "SendDataRequestTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataRequestTransmitReport extends SendDataRequestBase implements SuccessIndicator_2 {
+    constructor(options: SendDataRequestTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataRequestTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+    // (undocumented)
+    txReport: TXReport | undefined;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataRequestTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataRequestTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+    // (undocumented)
+    txReport?: SerializableTXReport;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendDataResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SendDataResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendDataResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendDataResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendDataTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SendDataTransmitReport = SendDataRequestTransmitReport | SendDataMulticastRequestTransmitReport | SendDataBridgeRequestTransmitReport | SendDataMulticastBridgeRequestTransmitReport;
+
+// Warning: (ae-missing-release-tag) "SendTestFrameRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendTestFrameRequest extends SendTestFrameRequestBase {
+    constructor(options: SendTestFrameRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendTestFrameRequest;
+    // (undocumented)
+    powerlevel: Powerlevel;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    testNodeId: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendTestFrameRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SendTestFrameRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendTestFrameRequestOptions {
+    // (undocumented)
+    powerlevel: Powerlevel;
+    // (undocumented)
+    testNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendTestFrameResponse extends Message_2 {
+    constructor(options: SendTestFrameResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendTestFrameResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    readonly wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendTestFrameResponseOptions {
+    // (undocumented)
+    wasSent: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameTransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SendTestFrameTransmitReport extends SendTestFrameRequestBase implements SuccessIndicator_2 {
+    constructor(options: SendTestFrameTransmitReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SendTestFrameTransmitReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SendTestFrameTransmitReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SendTestFrameTransmitReportOptions {
+    // (undocumented)
+    transmitStatus: TransmitStatus;
+}
+
 // Warning: (ae-missing-release-tag) "SerialAPIParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SerialAPIParser extends Transform {
-    constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Buffer) => void) | undefined);
+    constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Uint8Array) => void) | undefined);
     // (undocumented)
     ignoreAckHighNibble: boolean;
     // (undocumented)
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_CommandUnsupportedResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_CommandUnsupportedResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_CommandUnsupportedResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_CommandUnsupportedResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_CommandUnsupportedResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_CommandUnsupportedResponseOptions {
+    // (undocumented)
+    command: SerialAPISetupCommand;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetLongRangeMaximumPayloadSizeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse;
+    // (undocumented)
+    readonly maxPayloadSize: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumPayloadSizeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetLongRangeMaximumPayloadSizeResponseOptions {
+    // (undocumented)
+    maxPayloadSize: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumTxPowerRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetLongRangeMaximumTxPowerRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumTxPowerResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetLongRangeMaximumTxPowerResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetLongRangeMaximumTxPowerResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetLongRangeMaximumTxPowerResponse;
+    readonly limit: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetLongRangeMaximumTxPowerResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetLongRangeMaximumTxPowerResponseOptions {
+    // (undocumented)
+    limit: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetMaximumPayloadSizeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetMaximumPayloadSizeRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetMaximumPayloadSizeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetMaximumPayloadSizeResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetMaximumPayloadSizeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetMaximumPayloadSizeResponse;
+    // (undocumented)
+    readonly maxPayloadSize: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetMaximumPayloadSizeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetMaximumPayloadSizeResponseOptions {
+    // (undocumented)
+    maxPayloadSize: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevel16BitRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetPowerlevel16BitRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevel16BitResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetPowerlevel16BitResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetPowerlevel16BitResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetPowerlevel16BitResponse;
+    readonly measured0dBm: number;
+    readonly powerlevel: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevel16BitResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetPowerlevel16BitResponseOptions {
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevelRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetPowerlevelRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevelResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetPowerlevelResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetPowerlevelResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetPowerlevelResponse;
+    readonly measured0dBm: number;
+    readonly powerlevel: number;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetPowerlevelResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetPowerlevelResponseOptions {
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRegionInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetRegionInfoOptions {
+    // (undocumented)
+    region: RFRegion;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRegionInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_GetRegionInfoOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetRegionInfoRequest;
+    // (undocumented)
+    region: RFRegion;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRegionInfoResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetRegionInfoResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetRegionInfoResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetRegionInfoResponse;
+    // (undocumented)
+    readonly includesRegion?: RFRegion;
+    // (undocumented)
+    readonly region: RFRegion;
+    // (undocumented)
+    readonly supportsLongRange: boolean;
+    // (undocumented)
+    readonly supportsZWave: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRegionInfoResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetRegionInfoResponseOptions {
+    // (undocumented)
+    includesRegion?: RFRegion;
+    // (undocumented)
+    region: RFRegion;
+    // (undocumented)
+    supportsLongRange: boolean;
+    // (undocumented)
+    supportsZWave: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRFRegionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetRFRegionRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRFRegionResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetRFRegionResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetRFRegionResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetRFRegionResponse;
+    // (undocumented)
+    readonly region: RFRegion;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetRFRegionResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetRFRegionResponseOptions {
+    // (undocumented)
+    region: RFRegion;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedCommandsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetSupportedCommandsRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedCommandsResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetSupportedCommandsResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SerialAPISetup_GetSupportedCommandsResponse;
+    // (undocumented)
+    readonly supportedCommands: SerialAPISetupCommand[];
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedCommandsResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetSupportedCommandsResponseOptions {
+    // (undocumented)
+    supportedCommands: SerialAPISetupCommand[];
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedRegionsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetSupportedRegionsRequest extends SerialAPISetupRequest {
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedRegionsResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_GetSupportedRegionsResponse extends SerialAPISetupResponse {
+    constructor(options: SerialAPISetup_GetSupportedRegionsResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_GetSupportedRegionsResponse;
+    // (undocumented)
+    readonly supportedRegions: RFRegion[];
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_GetSupportedRegionsResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_GetSupportedRegionsResponseOptions {
+    // (undocumented)
+    supportedRegions: RFRegion[];
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetLongRangeMaximumTxPowerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetLongRangeMaximumTxPowerOptions {
+    // (undocumented)
+    limit: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetLongRangeMaximumTxPowerRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetLongRangeMaximumTxPowerOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetLongRangeMaximumTxPowerRequest;
+    limit: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetLongRangeMaximumTxPowerResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetLongRangeMaximumTxPowerResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetLongRangeMaximumTxPowerResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetLongRangeMaximumTxPowerResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetLongRangeMaximumTxPowerResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetLongRangeMaximumTxPowerResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetNodeIDTypeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetNodeIDTypeOptions {
+    // (undocumented)
+    nodeIdType: NodeIDType;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetNodeIDTypeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetNodeIDTypeOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetNodeIDTypeRequest;
+    // (undocumented)
+    nodeIdType: NodeIDType;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetNodeIDTypeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetNodeIDTypeResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetNodeIDTypeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetNodeIDTypeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetNodeIDTypeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetNodeIDTypeResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevel16BitOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetPowerlevel16BitOptions {
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevel16BitRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetPowerlevel16BitRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetPowerlevel16BitOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetPowerlevel16BitRequest;
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevel16BitResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetPowerlevel16BitResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetPowerlevel16BitResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetPowerlevel16BitResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevel16BitResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetPowerlevel16BitResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevelOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetPowerlevelOptions {
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevelRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetPowerlevelOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetPowerlevelRequest;
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    powerlevel: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevelResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetPowerlevelResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetPowerlevelResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetPowerlevelResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetPowerlevelResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetPowerlevelResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetRFRegionOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetRFRegionOptions {
+    // (undocumented)
+    region: RFRegion;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetRFRegionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetRFRegionOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetRFRegionRequest;
+    // (undocumented)
+    region: RFRegion;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetRFRegionResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetRFRegionResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetRFRegionResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetRFRegionResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetRFRegionResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetRFRegionResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetTXStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetTXStatusReportOptions {
+    // (undocumented)
+    enabled: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetTXStatusReportRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetTXStatusReportRequest extends SerialAPISetupRequest {
+    constructor(options: SerialAPISetup_SetTXStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetTXStatusReportRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetTXStatusReportResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetup_SetTXStatusReportResponse extends SerialAPISetupResponse implements SuccessIndicator_2 {
+    constructor(options: SerialAPISetup_SetTXStatusReportResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SerialAPISetup_SetTXStatusReportResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetup_SetTXStatusReportResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetup_SetTXStatusReportResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetupCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum SerialAPISetupCommand {
+    // (undocumented)
+    GetLongRangeMaximumPayloadSize = 17,
+    // (undocumented)
+    GetLongRangeMaximumTxPower = 5,
+    // (undocumented)
+    GetMaximumPayloadSize = 16,
+    // (undocumented)
+    GetPowerlevel = 8,
+    // (undocumented)
+    GetPowerlevel16Bit = 19,
+    // (undocumented)
+    GetRegionInfo = 22,
+    // (undocumented)
+    GetRFRegion = 32,
+    // (undocumented)
+    GetSupportedCommands = 1,
+    // (undocumented)
+    GetSupportedRegions = 21,
+    // (undocumented)
+    SetLongRangeMaximumTxPower = 3,
+    // (undocumented)
+    SetNodeIDType = 128,
+    // (undocumented)
+    SetPowerlevel = 4,
+    // (undocumented)
+    SetPowerlevel16Bit = 18,
+    // (undocumented)
+    SetRFRegion = 64,
+    // (undocumented)
+    SetTxStatusReport = 2,
+    // (undocumented)
+    Unsupported = 0
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetupRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetupRequest extends Message_2 {
+    constructor(options?: SerialAPISetupRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: SerialAPISetupCommand;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SerialAPISetupRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetupRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetupRequestOptions {
+    // (undocumented)
+    command?: SerialAPISetupCommand;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetupResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPISetupResponse extends Message_2 {
+    constructor(options: SerialAPISetupResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    command: SerialAPISetupCommand;
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SerialAPISetupResponse;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPISetupResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPISetupResponseOptions {
+    // (undocumented)
+    command?: SerialAPISetupCommand;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPIStartedRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialAPIStartedRequest extends Message_2 {
+    constructor(options: SerialAPIStartedRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    controlledCCs: CommandClasses[];
+    // (undocumented)
+    static from(raw: MessageRaw_2): SerialAPIStartedRequest;
+    // (undocumented)
+    genericDeviceClass: number;
+    isListening: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+    // (undocumented)
+    supportsLongRange: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wakeUpReason: SerialAPIWakeUpReason;
+    // (undocumented)
+    watchdogEnabled: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPIStartedRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SerialAPIStartedRequestOptions {
+    // (undocumented)
+    controlledCCs: CommandClasses[];
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isListening: boolean;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+    // (undocumented)
+    supportsLongRange: boolean;
+    // (undocumented)
+    wakeUpReason: SerialAPIWakeUpReason;
+    // (undocumented)
+    watchdogEnabled: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SerialAPIWakeUpReason" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum SerialAPIWakeUpReason {
+    BrownoutCircuit = 9,
+    EmergencyWatchdogReset = 8,
+    ExternalInterrupt = 4,
+    PowerUp = 5,
+    Reset = 0,
+    SoftwareReset = 7,
+    Unknown = 255,
+    USBSuspend = 6,
+    WakeUpBeam = 2,
+    WakeUpTimer = 1,
+    WatchdogReset = 3
+}
+
+// Warning: (ae-missing-release-tag) "serializableTXReportToTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function serializableTXReportToTXReport(report: SerializableTXReport_2): TXReport_2;
 
 // Warning: (ae-missing-release-tag) "SerialLogContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -707,18 +4936,493 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
     CAN(direction: DataDirection_2): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    data(direction: DataDirection_2, data: Buffer): void;
-    discarded(data: Buffer): void;
+    data(direction: DataDirection_2, data: Uint8Array): void;
+    discarded(data: Uint8Array): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     message(message: string): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     NAK(direction: DataDirection_2): void;
 }
 
-// Warning: (ae-missing-release-tag) "skipBytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "SetApplicationNodeInformationRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
-export function skipBytes(buf: Buffer, n: number): Buffer;
+// @public (undocumented)
+export class SetApplicationNodeInformationRequest extends Message_2 {
+    constructor(options: SetApplicationNodeInformationRequestOptions);
+    // (undocumented)
+    controlledCCs: CommandClasses[];
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isListening: boolean;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetApplicationNodeInformationRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetApplicationNodeInformationRequestOptions extends MessageBaseOptions_2 {
+    // (undocumented)
+    controlledCCs: CommandClasses[];
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isListening: boolean;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLearnModeCallback extends SetLearnModeRequestBase implements SuccessIndicator_2 {
+    constructor(options: SetLearnModeCallbackOptions & MessageBaseOptions_2);
+    // (undocumented)
+    readonly assignedNodeId: number;
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLearnModeCallback;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly status: LearnModeStatus;
+    // (undocumented)
+    readonly statusMessage?: Uint8Array;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeCallbackOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetLearnModeCallbackOptions {
+    // (undocumented)
+    assignedNodeId: number;
+    // (undocumented)
+    status: LearnModeStatus;
+    // (undocumented)
+    statusMessage?: Uint8Array;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLearnModeRequest extends SetLearnModeRequestBase {
+    constructor(options: SetLearnModeRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLearnModeRequest;
+    // (undocumented)
+    intent: LearnModeIntent;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLearnModeRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SetLearnModeRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetLearnModeRequestOptions {
+    // (undocumented)
+    intent: LearnModeIntent;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLearnModeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SetLearnModeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLearnModeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetLearnModeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetLearnModeResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetLongRangeChannelRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLongRangeChannelRequest extends Message_2 {
+    constructor(options: SetLongRangeChannelRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    channel: LongRangeChannel;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLongRangeChannelRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetLongRangeChannelRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetLongRangeChannelRequestOptions {
+    // (undocumented)
+    channel: LongRangeChannel;
+}
+
+// Warning: (ae-missing-release-tag) "SetLongRangeChannelResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLongRangeChannelResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SetLongRangeChannelResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLongRangeChannelResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetLongRangeChannelResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetLongRangeChannelResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetLongRangeShadowNodeIDsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetLongRangeShadowNodeIDsRequest extends Message_2 {
+    constructor(options: LongRangeShadowNodeIDsRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetLongRangeShadowNodeIDsRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    shadowNodeIds: number[];
+}
+
+// Warning: (ae-missing-release-tag) "SetPriorityRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetPriorityRouteRequest extends Message_2 {
+    constructor(options: SetPriorityRouteRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetPriorityRouteRequest;
+    // (undocumented)
+    repeaters: number[] | undefined;
+    // (undocumented)
+    routeSpeed: ZWaveDataRate | undefined;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetPriorityRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SetPriorityRouteRequestOptions = {
+    destinationNodeId: number;
+} & AllOrNone<{
+    repeaters: number[];
+    routeSpeed: ZWaveDataRate;
+}>;
+
+// Warning: (ae-missing-release-tag) "SetPriorityRouteResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetPriorityRouteResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SetPriorityRouteResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SetPriorityRouteResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetPriorityRouteResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetPriorityRouteResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetRFReceiveModeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetRFReceiveModeRequest extends Message_2 {
+    constructor(options: SetRFReceiveModeRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetRFReceiveModeRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetRFReceiveModeRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetRFReceiveModeRequestOptions {
+    enabled: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetRFReceiveModeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetRFReceiveModeResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SetRFReceiveModeResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetRFReceiveModeResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "SetRFReceiveModeResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetRFReceiveModeResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetSerialApiTimeoutsRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSerialApiTimeoutsRequest extends Message_2 {
+    constructor(options: SetSerialApiTimeoutsRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    ackTimeout: number;
+    // (undocumented)
+    byteTimeout: number;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes;
+}
+
+// Warning: (ae-missing-release-tag) "SetSerialApiTimeoutsRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetSerialApiTimeoutsRequestOptions {
+    // (undocumented)
+    ackTimeout: number;
+    // (undocumented)
+    byteTimeout: number;
+}
+
+// Warning: (ae-missing-release-tag) "SetSerialApiTimeoutsResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSerialApiTimeoutsResponse extends Message_2 {
+    constructor(options: SetSerialApiTimeoutsResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetSerialApiTimeoutsResponse;
+    // (undocumented)
+    oldAckTimeout: number;
+    // (undocumented)
+    oldByteTimeout: number;
+}
+
+// Warning: (ae-missing-release-tag) "SetSerialApiTimeoutsResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetSerialApiTimeoutsResponseOptions {
+    // (undocumented)
+    oldAckTimeout: number;
+    // (undocumented)
+    oldByteTimeout: number;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
+    constructor(options: SetSUCNodeIdRequestOptions & MessageBaseOptions_2);
+    // (undocumented)
+    enableSIS: boolean;
+    // (undocumented)
+    enableSUC: boolean;
+    // (undocumented)
+    expectsCallback(): boolean;
+    // (undocumented)
+    static from(_raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetSUCNodeIdRequest;
+    // (undocumented)
+    serialize(ctx: MessageEncodingContext_2): Bytes_2;
+    // (undocumented)
+    sucNodeId: number;
+    // (undocumented)
+    transmitOptions: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdRequestBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSUCNodeIdRequestBase extends Message_2 {
+    // (undocumented)
+    static from(raw: MessageRaw_2, ctx: MessageParsingContext_2): SetSUCNodeIdRequestBase;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetSUCNodeIdRequestOptions {
+    // (undocumented)
+    enableSIS: boolean;
+    // (undocumented)
+    enableSUC: boolean;
+    // (undocumented)
+    ownNodeId: number;
+    // (undocumented)
+    sucNodeId: number;
+    // (undocumented)
+    transmitOptions?: TransmitOptions;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdRequestStatusReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase implements SuccessIndicator_2 {
+    constructor(options: SetSUCNodeIdRequestStatusReportOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetSUCNodeIdRequestStatusReport;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    status: SetSUCNodeIdStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdRequestStatusReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetSUCNodeIdRequestStatusReportOptions {
+    // (undocumented)
+    status: SetSUCNodeIdStatus;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SetSUCNodeIdResponse extends Message_2 implements SuccessIndicator_2 {
+    constructor(options: SetSUCNodeIdResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): SetSUCNodeIdResponse;
+    // (undocumented)
+    isOK(): boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+    // (undocumented)
+    wasExecuted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SetSUCNodeIdResponseOptions {
+    // (undocumented)
+    wasExecuted: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SetSUCNodeIdStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum SetSUCNodeIdStatus {
+    // (undocumented)
+    Failed = 6,
+    // (undocumented)
+    Succeeded = 5
+}
+
+// Warning: (ae-missing-release-tag) "ShutdownRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ShutdownRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "ShutdownRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ShutdownRequestOptions {
+    // (undocumented)
+    someProperty: number;
+}
+
+// Warning: (ae-missing-release-tag) "ShutdownResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ShutdownResponse extends Message_2 {
+    constructor(options: ShutdownResponseOptions & MessageBaseOptions_2);
+    // (undocumented)
+    static from(raw: MessageRaw_2, _ctx: MessageParsingContext_2): ShutdownResponse;
+    // (undocumented)
+    readonly success: boolean;
+    // (undocumented)
+    toLogEntry(): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ShutdownResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ShutdownResponseOptions {
+    // (undocumented)
+    success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "SoftResetRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SoftResetRequest extends Message_2 {
+}
+
+// Warning: (ae-missing-release-tag) "StartWatchdogRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StartWatchdogRequest extends Message_2 {
+    // (undocumented)
+    expectsAck(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "StopWatchdogRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class StopWatchdogRequest extends Message_2 {
+    // (undocumented)
+    expectsAck(): boolean;
+}
 
 // Warning: (ae-missing-release-tag) "SuccessIndicator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -726,6 +5430,21 @@ export function skipBytes(buf: Buffer, n: number): Buffer;
 export interface SuccessIndicator {
     isOK(): boolean;
 }
+
+// Warning: (ae-missing-release-tag) "TransmitReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type TransmitReport = SendDataTransmitReport | AssignReturnRouteRequestTransmitReport | AssignSUCReturnRouteRequestTransmitReport | AssignPriorityReturnRouteRequestTransmitReport | AssignPrioritySUCReturnRouteRequestTransmitReport | DeleteReturnRouteRequestTransmitReport | DeleteSUCReturnRouteRequestTransmitReport;
+
+// Warning: (ae-missing-release-tag) "tryParseRSSI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function tryParseRSSI(payload: Uint8Array, offset?: number): RSSI_2 | undefined;
+
+// Warning: (ae-missing-release-tag) "txReportToMessageRecord" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function txReportToMessageRecord(report: TXReport_2): MessageRecord;
 
 // Warning: (ae-missing-release-tag) "XModemMessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -749,7 +5468,7 @@ export enum XModemMessageHeaders {
 //
 // @public (undocumented)
 export class ZnifferDataMessage extends ZnifferMessage implements ZnifferFrameInfo {
-    constructor(options: ZnifferMessageOptions);
+    constructor(options: ZnifferDataMessageOptions & ZnifferMessageBaseOptions);
     // (undocumented)
     readonly channel: number;
     // (undocumented)
@@ -757,11 +5476,33 @@ export class ZnifferDataMessage extends ZnifferMessage implements ZnifferFrameIn
     // (undocumented)
     readonly frameType: ZnifferFrameType;
     // (undocumented)
+    static from(raw: ZnifferMessageRaw): ZnifferDataMessage;
+    // (undocumented)
     readonly protocolDataRate: ZnifferProtocolDataRate;
     // (undocumented)
     readonly region: number;
     // (undocumented)
     readonly rssiRaw: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferDataMessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferDataMessageOptions {
+    // (undocumented)
+    channel: number;
+    // (undocumented)
+    checksumOK: boolean;
+    // (undocumented)
+    frameType: ZnifferFrameType;
+    // (undocumented)
+    payload: Bytes_2;
+    // (undocumented)
+    protocolDataRate: ZnifferProtocolDataRate;
+    // (undocumented)
+    region: number;
+    // (undocumented)
+    rssiRaw: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferFrameInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -829,11 +5570,23 @@ export class ZnifferGetFrequenciesRequest extends ZnifferMessage {
 //
 // @public (undocumented)
 export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
-    constructor(options: ZnifferMessageOptions);
+    constructor(options: ZnifferGetFrequenciesResponseOptions & ZnifferMessageBaseOptions);
     // (undocumented)
     readonly currentFrequency: number;
     // (undocumented)
+    static from(raw: ZnifferMessageRaw): ZnifferGetFrequenciesResponse;
+    // (undocumented)
     readonly supportedFrequencies: readonly number[];
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequenciesResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferGetFrequenciesResponseOptions {
+    // (undocumented)
+    currentFrequency: number;
+    // (undocumented)
+    supportedFrequencies: number[];
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -844,7 +5597,7 @@ export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
     // (undocumented)
     frequency: number;
     // (undocumented)
-    serialize(): Buffer;
+    serialize(): Bytes_2;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -859,13 +5612,27 @@ export interface ZnifferGetFrequencyInfoRequestOptions {
 //
 // @public (undocumented)
 export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
-    constructor(options: ZnifferMessageOptions);
+    constructor(options: ZnifferGetFrequencyInfoResponseOptions & ZnifferMessageBaseOptions);
     // (undocumented)
     readonly frequency: number;
     // (undocumented)
     readonly frequencyName: string;
     // (undocumented)
+    static from(raw: ZnifferMessageRaw): ZnifferGetFrequencyInfoResponse;
+    // (undocumented)
     readonly numChannels: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferGetFrequencyInfoResponseOptions {
+    // (undocumented)
+    frequency: number;
+    // (undocumented)
+    frequencyName: string;
+    // (undocumented)
+    numChannels: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferGetVersionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -879,13 +5646,27 @@ export class ZnifferGetVersionRequest extends ZnifferMessage {
 //
 // @public (undocumented)
 export class ZnifferGetVersionResponse extends ZnifferMessage {
-    constructor(options: ZnifferMessageOptions);
+    constructor(options: ZnifferGetVersionResponseOptions & ZnifferMessageBaseOptions);
     // (undocumented)
     readonly chipType: string | UnknownZWaveChipType;
+    // (undocumented)
+    static from(raw: ZnifferMessageRaw): ZnifferGetVersionResponse;
     // (undocumented)
     readonly majorVersion: number;
     // (undocumented)
     readonly minorVersion: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetVersionResponseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferGetVersionResponseOptions {
+    // (undocumented)
+    chipType: string | UnknownZWaveChipType;
+    // (undocumented)
+    majorVersion: number;
+    // (undocumented)
+    minorVersion: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -893,13 +5674,14 @@ export class ZnifferGetVersionResponse extends ZnifferMessage {
 // @public
 export class ZnifferMessage {
     constructor(options: ZnifferMessageOptions);
-    static from(options: ZnifferMessageDeserializationOptions): ZnifferMessage;
+    static from(raw: ZnifferMessageRaw): ZnifferMessage;
     // (undocumented)
     functionType?: ZnifferFunctionType;
-    static getConstructor(data: Buffer): ZnifferMessageConstructor<ZnifferMessage>;
     // (undocumented)
-    payload: Buffer;
-    serialize(): Buffer;
+    static parse(data: Uint8Array): ZnifferMessage;
+    // (undocumented)
+    payload: Bytes_2;
+    serialize(): Bytes_2;
     // (undocumented)
     type: ZnifferMessageType;
 }
@@ -913,27 +5695,9 @@ export interface ZnifferMessageBaseOptions {
 // Warning: (ae-missing-release-tag) "ZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZnifferMessageConstructor<T extends ZnifferMessage> = new (options: ZnifferMessageOptions) => T;
-
-// Warning: (ae-missing-release-tag) "ZnifferMessageCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZnifferMessageCreationOptions extends ZnifferMessageBaseOptions {
-    // (undocumented)
-    functionType?: ZnifferFunctionType;
-    // (undocumented)
-    messageType: ZnifferMessageType;
-    // (undocumented)
-    payload?: Buffer;
-}
-
-// Warning: (ae-missing-release-tag) "ZnifferMessageDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZnifferMessageDeserializationOptions {
-    // (undocumented)
-    data: Buffer;
-}
+export type ZnifferMessageConstructor<T extends ZnifferMessage> = typeof ZnifferMessage & {
+    new (options: ZnifferMessageOptions): T;
+};
 
 // Warning: (ae-missing-release-tag) "ZnifferMessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -948,7 +5712,31 @@ export enum ZnifferMessageHeaders {
 // Warning: (ae-missing-release-tag) "ZnifferMessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZnifferMessageOptions = ZnifferMessageCreationOptions | ZnifferMessageDeserializationOptions;
+export interface ZnifferMessageOptions extends ZnifferMessageBaseOptions {
+    // (undocumented)
+    functionType?: ZnifferFunctionType;
+    // (undocumented)
+    payload?: Bytes_2;
+    // (undocumented)
+    type: ZnifferMessageType;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageRaw" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferMessageRaw {
+    constructor(type: ZnifferMessageType, functionType: ZnifferFunctionType | undefined, payload: Bytes_2);
+    // (undocumented)
+    readonly functionType: ZnifferFunctionType | undefined;
+    // (undocumented)
+    static parse(data: Uint8Array): ZnifferMessageRaw;
+    // (undocumented)
+    readonly payload: Bytes_2;
+    // (undocumented)
+    readonly type: ZnifferMessageType;
+    // (undocumented)
+    withPayload(payload: Bytes_2): ZnifferMessageRaw;
+}
 
 // Warning: (ae-missing-release-tag) "ZnifferMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -993,7 +5781,7 @@ export interface ZnifferSerialPortBase {
 // @public (undocumented)
 export class ZnifferSerialPortBase extends PassThrough {
     // (undocumented)
-    [Symbol.asyncIterator]: () => AsyncIterableIterator<Buffer>;
+    [Symbol.asyncIterator]: () => AsyncIterableIterator<Uint8Array>;
     constructor(implementation: ZWaveSerialPortImplementation, loggers: ZWaveLogContainer);
     // (undocumented)
     close(): Promise<void>;
@@ -1006,7 +5794,7 @@ export class ZnifferSerialPortBase extends PassThrough {
     // (undocumented)
     protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
     // (undocumented)
-    writeAsync(data: Buffer): Promise<void>;
+    writeAsync(data: Uint8Array): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1014,9 +5802,9 @@ export class ZnifferSerialPortBase extends PassThrough {
 // @public (undocumented)
 export interface ZnifferSerialPortEventCallbacks {
     // (undocumented)
-    data: (data: Buffer) => void;
+    data: (data: Uint8Array) => void;
     // (undocumented)
-    discardedData: (data: Buffer) => void;
+    discardedData: (data: Uint8Array) => void;
     // (undocumented)
     error: (e: Error) => void;
 }
@@ -1034,7 +5822,7 @@ export class ZnifferSetBaudRateRequest extends ZnifferMessage {
     // (undocumented)
     baudrate: 0;
     // (undocumented)
-    serialize(): Buffer;
+    serialize(): Bytes_2;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferSetBaudRateRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1059,7 +5847,7 @@ export class ZnifferSetFrequencyRequest extends ZnifferMessage {
     // (undocumented)
     frequency: number;
     // (undocumented)
-    serialize(): Buffer;
+    serialize(): Bytes_2;
 }
 
 // Warning: (ae-missing-release-tag) "ZnifferSetFrequencyRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1112,7 +5900,7 @@ export class ZnifferStopResponse extends ZnifferMessage {
 // Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type ZWaveSerialChunk = MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer;
+export type ZWaveSerialChunk = MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Uint8Array;
 
 // Warning: (ae-missing-release-tag) "ZWaveSerialMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1174,7 +5962,7 @@ export class ZWaveSerialPortBase extends PassThrough {
     // (undocumented)
     protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
     // (undocumented)
-    writeAsync(data: Buffer): Promise<void>;
+    writeAsync(data: Uint8Array): Promise<void>;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1186,7 +5974,7 @@ export interface ZWaveSerialPortEventCallbacks {
     // (undocumented)
     data: (data: ZWaveSerialChunk) => void;
     // (undocumented)
-    discardedData: (data: Buffer) => void;
+    discardedData: (data: Uint8Array) => void;
     // (undocumented)
     error: (e: Error) => void;
 }
@@ -1219,6 +6007,27 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 //
 // @public (undocumented)
 export type ZWaveSocketOptions = Omit<net.TcpSocketConnectOpts, "onread"> | Omit<net.IpcSocketConnectOpts, "onread">;
+
+// Warnings were encountered during analysis:
+//
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:481:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+//   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
+//     Type 'undefined' is not assignable to type 'string | number | symbol'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:466:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1663:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1666:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1816:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// src/serialport/ZWaveSerialPortBase.ts:78:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
+//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
+// src/zniffer/ZnifferSerialPortBase.ts:59:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
+//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
 
 // (No @packageDocumentation comment for this package)
 

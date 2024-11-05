@@ -375,6 +375,8 @@ export class ConfigManager {
     // (undocumented)
     get configVersion(): string;
     // (undocumented)
+    get externalConfigDir(): string | undefined;
+    // (undocumented)
     getFulltextIndex(): FulltextDeviceConfigIndex | undefined;
     // (undocumented)
     getIndex(): DeviceConfigIndex | undefined;
@@ -413,6 +415,8 @@ export class ConfigManager {
 //
 // @public (undocumented)
 export interface ConfigManagerOptions {
+    // (undocumented)
+    deviceConfigExternalDir?: string;
     // (undocumented)
     deviceConfigPriorityDir?: string;
     // (undocumented)
@@ -471,7 +475,7 @@ export class DeviceConfig {
         deviceId?: DeviceID;
     }): Promise<DeviceConfig>;
     getAssociationConfigForEndpoint(endpointIndex: number, group: number): AssociationConfig | undefined;
-    getHash(): Buffer;
+    getHash(): Uint8Array;
     readonly isEmbedded: boolean;
     // (undocumented)
     readonly label: string;
@@ -556,11 +560,6 @@ export type EndpointConfig = Omit<ConditionalEndpointConfig, "condition" | "eval
     paramInformation?: ParamInfoMap;
 };
 
-// Warning: (ae-missing-release-tag) "externalConfigDir" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export function externalConfigDir(): string | undefined;
-
 // Warning: (ae-missing-release-tag) "FirmwareVersionRange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -614,6 +613,11 @@ export function getDevicesPaths(configDir: string): {
 //
 // @public (undocumented)
 export type ManufacturersMap = Map<number, string>;
+
+// Warning: (ae-missing-release-tag) "PACKAGE_VERSION" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const PACKAGE_VERSION = "14.0.0";
 
 // Warning: (ae-missing-release-tag) "ParamInfoMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
