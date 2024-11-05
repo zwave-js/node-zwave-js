@@ -8207,7 +8207,7 @@ export class ZWaveController
 					productType,
 					productId,
 					firmwareVersion,
-					rfRegion: this.rfRegion,
+					rfRegion: this.rfRegion ?? options?.rfRegion,
 				},
 				{
 					userAgent: this.driver.getUserAgentStringWithComponents(
@@ -8250,6 +8250,7 @@ export class ZWaveController
 	): Promise<void> {
 		if (
 			deviceId.rfRegion !== undefined
+			&& this.rfRegion !== NOT_KNOWN
 			&& deviceId.rfRegion !== this.rfRegion
 		) {
 			throw new ZWaveError(
