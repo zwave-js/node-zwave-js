@@ -34,7 +34,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -777,6 +777,21 @@ export interface MultiChannelAssociationCCReportOptions {
 }
 
 @CCCommand(MultiChannelAssociationCommand.Report)
+@ccValueProperty(
+	"maxNodes",
+	MultiChannelAssociationCCValues.maxNodes,
+	(self) => [self.groupId],
+)
+@ccValueProperty(
+	"nodeIds",
+	MultiChannelAssociationCCValues.nodeIds,
+	(self) => [self.groupId],
+)
+@ccValueProperty(
+	"endpoints",
+	MultiChannelAssociationCCValues.endpoints,
+	(self) => [self.groupId],
+)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
 		options: WithAddress<MultiChannelAssociationCCReportOptions>,
@@ -816,22 +831,10 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 
 	public readonly groupId: number;
 
-	@ccValue(
-		MultiChannelAssociationCCValues.maxNodes,
-		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
-	)
 	public maxNodes: number;
 
-	@ccValue(
-		MultiChannelAssociationCCValues.nodeIds,
-		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
-	)
 	public nodeIds: number[];
 
-	@ccValue(
-		MultiChannelAssociationCCValues.endpoints,
-		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
-	)
 	public endpoints: EndpointAddress[];
 
 	public reportsToFollow: number;
@@ -943,6 +946,7 @@ export interface MultiChannelAssociationCCSupportedGroupingsReportOptions {
 }
 
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
+@ccValueProperty("groupCount", MultiChannelAssociationCCValues.groupCount)
 export class MultiChannelAssociationCCSupportedGroupingsReport
 	extends MultiChannelAssociationCC
 {
@@ -969,7 +973,6 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 		});
 	}
 
-	@ccValue(MultiChannelAssociationCCValues.groupCount)
 	public readonly groupCount: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

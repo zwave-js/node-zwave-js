@@ -114,9 +114,9 @@ export type NVMFileConstructor<T extends NVMFile> = typeof NVMFile & {
 /**
  * Defines the ID associated with a NVM file class
  */
-export function nvmFileID(
+export function nvmFileID<Class extends typeof NVMFile>(
 	id: number | ((id: number) => boolean),
-): TypedClassDecorator<NVMFile> {
+): TypedClassDecorator<Class> {
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_nvmFileID, id, messageClass);
 
@@ -188,7 +188,7 @@ export function getNVMFileIDStatic<T extends NVMFileConstructor<NVMFile>>(
 export type NVMSection = "application" | "protocol";
 
 const nvmSectionDecorator = createSimpleReflectionDecorator<
-	NVMFile,
+	typeof NVMFile,
 	[section: NVMSection]
 >({
 	name: "nvmSection",

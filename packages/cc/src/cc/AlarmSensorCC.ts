@@ -31,7 +31,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -474,6 +474,10 @@ export interface AlarmSensorCCSupportedReportOptions {
 }
 
 @CCCommand(AlarmSensorCommand.SupportedReport)
+@ccValueProperty(
+	"supportedSensorTypes",
+	AlarmSensorCCValues.supportedSensorTypes,
+)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
 		options: WithAddress<AlarmSensorCCSupportedReportOptions>,
@@ -502,7 +506,6 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		});
 	}
 
-	@ccValue(AlarmSensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: AlarmSensorType[];
 
 	public persistValues(ctx: PersistValuesContext): boolean {

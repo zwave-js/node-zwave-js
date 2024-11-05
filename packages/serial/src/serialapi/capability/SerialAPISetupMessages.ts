@@ -55,7 +55,7 @@ const {
 	lookupConstructor: getSubCommandRequestConstructor,
 	lookupValue: getSubCommandForRequest,
 } = createSimpleReflectionDecorator<
-	SerialAPISetupRequest,
+	typeof SerialAPISetupRequest,
 	[command: SerialAPISetupCommand],
 	MessageConstructor<SerialAPISetupRequest>
 >({
@@ -67,7 +67,7 @@ const {
 	lookupConstructor: getSubCommandResponseConstructor,
 	lookupValue: getSubCommandForResponse,
 } = createSimpleReflectionDecorator<
-	SerialAPISetupResponse,
+	typeof SerialAPISetupResponse,
 	[command: SerialAPISetupCommand],
 	MessageConstructor<SerialAPISetupResponse>
 >({

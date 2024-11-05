@@ -29,7 +29,7 @@ import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	implementedVersion,
@@ -134,6 +134,8 @@ export interface SceneActivationCCSetOptions {
 
 @CCCommand(SceneActivationCommand.Set)
 @useSupervision()
+@ccValueProperty("sceneId", SceneActivationCCValues.sceneId)
+@ccValueProperty("dimmingDuration", SceneActivationCCValues.dimmingDuration)
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
 		options: WithAddress<SceneActivationCCSetOptions>,
@@ -164,10 +166,8 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		});
 	}
 
-	@ccValue(SceneActivationCCValues.sceneId)
 	public sceneId: number;
 
-	@ccValue(SceneActivationCCValues.dimmingDuration)
 	public dimmingDuration: Duration | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

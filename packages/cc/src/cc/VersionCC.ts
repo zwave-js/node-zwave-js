@@ -33,7 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -650,6 +650,10 @@ export interface VersionCCReportOptions {
 }
 
 @CCCommand(VersionCommand.Report)
+@ccValueProperty("libraryType", VersionCCValues.libraryType)
+@ccValueProperty("protocolVersion", VersionCCValues.protocolVersion)
+@ccValueProperty("firmwareVersions", VersionCCValues.firmwareVersions)
+@ccValueProperty("hardwareVersion", VersionCCValues.hardwareVersion)
 export class VersionCCReport extends VersionCC {
 	public constructor(
 		options: WithAddress<VersionCCReportOptions>,
@@ -711,16 +715,12 @@ export class VersionCCReport extends VersionCC {
 		});
 	}
 
-	@ccValue(VersionCCValues.libraryType)
 	public readonly libraryType: ZWaveLibraryTypes;
 
-	@ccValue(VersionCCValues.protocolVersion)
 	public readonly protocolVersion: string;
 
-	@ccValue(VersionCCValues.firmwareVersions)
 	public readonly firmwareVersions: string[];
 
-	@ccValue(VersionCCValues.hardwareVersion)
 	public readonly hardwareVersion: number | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -888,6 +888,10 @@ export interface VersionCCCapabilitiesReportOptions {
 }
 
 @CCCommand(VersionCommand.CapabilitiesReport)
+@ccValueProperty(
+	"supportsZWaveSoftwareGet",
+	VersionCCValues.supportsZWaveSoftwareGet,
+)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
 		options: WithAddress<VersionCCCapabilitiesReportOptions>,
@@ -911,7 +915,6 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		});
 	}
 
-	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
 	public supportsZWaveSoftwareGet: boolean;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -950,6 +953,30 @@ export interface VersionCCZWaveSoftwareReportOptions {
 }
 
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
+@ccValueProperty("sdkVersion", VersionCCValues.sdkVersion)
+@ccValueProperty(
+	"applicationFrameworkAPIVersion",
+	VersionCCValues.applicationFrameworkAPIVersion,
+)
+@ccValueProperty(
+	"applicationFrameworkBuildNumber",
+	VersionCCValues.applicationFrameworkBuildNumber,
+)
+@ccValueProperty("hostInterfaceVersion", VersionCCValues.serialAPIVersion)
+@ccValueProperty(
+	"hostInterfaceBuildNumber",
+	VersionCCValues.serialAPIBuildNumber,
+)
+@ccValueProperty("zWaveProtocolVersion", VersionCCValues.zWaveProtocolVersion)
+@ccValueProperty(
+	"zWaveProtocolBuildNumber",
+	VersionCCValues.zWaveProtocolBuildNumber,
+)
+@ccValueProperty("applicationVersion", VersionCCValues.applicationVersion)
+@ccValueProperty(
+	"applicationBuildNumber",
+	VersionCCValues.applicationBuildNumber,
+)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
 		options: WithAddress<VersionCCZWaveSoftwareReportOptions>,
@@ -1024,31 +1051,22 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		});
 	}
 
-	@ccValue(VersionCCValues.sdkVersion)
 	public readonly sdkVersion: string;
 
-	@ccValue(VersionCCValues.applicationFrameworkAPIVersion)
 	public readonly applicationFrameworkAPIVersion: string;
 
-	@ccValue(VersionCCValues.applicationFrameworkBuildNumber)
 	public readonly applicationFrameworkBuildNumber: number;
 
-	@ccValue(VersionCCValues.serialAPIVersion)
 	public readonly hostInterfaceVersion: string;
 
-	@ccValue(VersionCCValues.serialAPIBuildNumber)
 	public readonly hostInterfaceBuildNumber: number;
 
-	@ccValue(VersionCCValues.zWaveProtocolVersion)
 	public readonly zWaveProtocolVersion: string;
 
-	@ccValue(VersionCCValues.zWaveProtocolBuildNumber)
 	public readonly zWaveProtocolBuildNumber: number;
 
-	@ccValue(VersionCCValues.applicationVersion)
 	public readonly applicationVersion: string;
 
-	@ccValue(VersionCCValues.applicationBuildNumber)
 	public readonly applicationBuildNumber: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

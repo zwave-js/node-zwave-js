@@ -40,7 +40,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -337,6 +337,7 @@ export interface NodeNamingAndLocationCCNameReportOptions {
 }
 
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
+@ccValueProperty("name", NodeNamingAndLocationCCValues.name)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
 		options: WithAddress<NodeNamingAndLocationCCNameReportOptions>,
@@ -366,7 +367,6 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		});
 	}
 
-	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -449,6 +449,7 @@ export interface NodeNamingAndLocationCCLocationReportOptions {
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
+@ccValueProperty("location", NodeNamingAndLocationCCValues.location)
 export class NodeNamingAndLocationCCLocationReport
 	extends NodeNamingAndLocationCC
 {
@@ -480,7 +481,6 @@ export class NodeNamingAndLocationCCLocationReport
 		});
 	}
 
-	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -68,7 +68,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -1563,6 +1563,11 @@ export interface NotificationCCSupportedReportOptions {
 }
 
 @CCCommand(NotificationCommand.SupportedReport)
+@ccValueProperty("supportsV1Alarm", NotificationCCValues.supportsV1Alarm)
+@ccValueProperty(
+	"supportedNotificationTypes",
+	NotificationCCValues.supportedNotificationTypes,
+)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
 		options: WithAddress<NotificationCCSupportedReportOptions>,
@@ -1601,10 +1606,8 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		});
 	}
 
-	@ccValue(NotificationCCValues.supportsV1Alarm)
 	public supportsV1Alarm: boolean;
 
-	@ccValue(NotificationCCValues.supportedNotificationTypes)
 	public supportedNotificationTypes: number[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {

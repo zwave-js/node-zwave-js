@@ -40,7 +40,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -334,6 +334,7 @@ export interface HumidityControlModeCCReportOptions {
 }
 
 @CCCommand(HumidityControlModeCommand.Report)
+@ccValueProperty("mode", HumidityControlModeCCValues.mode)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
 		options: WithAddress<HumidityControlModeCCReportOptions>,
@@ -357,7 +358,6 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		});
 	}
 
-	@ccValue(HumidityControlModeCCValues.mode)
 	public readonly mode: HumidityControlMode;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -380,6 +380,7 @@ export interface HumidityControlModeCCSupportedReportOptions {
 }
 
 @CCCommand(HumidityControlModeCommand.SupportedReport)
+@ccValueProperty("supportedModes", HumidityControlModeCCValues.supportedModes)
 export class HumidityControlModeCCSupportedReport
 	extends HumidityControlModeCC
 {
@@ -427,7 +428,6 @@ export class HumidityControlModeCCSupportedReport
 		return true;
 	}
 
-	@ccValue(HumidityControlModeCCValues.supportedModes)
 	public supportedModes: HumidityControlMode[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -38,7 +38,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -815,6 +815,19 @@ export interface MultiChannelCCEndPointReportOptions {
 }
 
 @CCCommand(MultiChannelCommand.EndPointReport)
+@ccValueProperty("countIsDynamic", MultiChannelCCValues.endpointCountIsDynamic)
+@ccValueProperty(
+	"identicalCapabilities",
+	MultiChannelCCValues.endpointsHaveIdenticalCapabilities,
+)
+@ccValueProperty(
+	"individualCount",
+	MultiChannelCCValues.individualEndpointCount,
+)
+@ccValueProperty(
+	"aggregatedCount",
+	MultiChannelCCValues.aggregatedEndpointCount,
+)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
 		options: WithAddress<MultiChannelCCEndPointReportOptions>,
@@ -850,16 +863,12 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		});
 	}
 
-	@ccValue(MultiChannelCCValues.endpointCountIsDynamic)
 	public countIsDynamic: boolean;
 
-	@ccValue(MultiChannelCCValues.endpointsHaveIdenticalCapabilities)
 	public identicalCapabilities: boolean;
 
-	@ccValue(MultiChannelCCValues.individualEndpointCount)
 	public individualCount: number;
 
-	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
 	public aggregatedCount: MaybeNotKnown<number>;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -1227,6 +1236,11 @@ export interface MultiChannelCCAggregatedMembersReportOptions {
 }
 
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
+@ccValueProperty(
+	"members",
+	MultiChannelCCValues.aggregatedEndpointMembers,
+	(self) => [self.aggregatedEndpointIndex],
+)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
 		options: WithAddress<MultiChannelCCAggregatedMembersReportOptions>,
@@ -1258,11 +1272,6 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 
 	public readonly aggregatedEndpointIndex: number;
 
-	@ccValue(
-		MultiChannelCCValues.aggregatedEndpointMembers,
-		(self: MultiChannelCCAggregatedMembersReport) =>
-			[self.aggregatedEndpointIndex] as const,
-	)
 	public readonly members: readonly number[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

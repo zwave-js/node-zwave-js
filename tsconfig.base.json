@@ -9,8 +9,6 @@
 
 		"noEmitOnError": true,
 		"removeComments": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": false,
 		"sourceMap": true,
 		"inlineSourceMap": false,
 		"stripInternal": true,

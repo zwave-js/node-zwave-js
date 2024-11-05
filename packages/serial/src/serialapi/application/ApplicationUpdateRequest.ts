@@ -43,7 +43,7 @@ const {
 	lookupConstructor: getApplicationUpdateRequestConstructor,
 	lookupValue: getApplicationUpdateType,
 } = createSimpleReflectionDecorator<
-	ApplicationUpdateRequest,
+	typeof ApplicationUpdateRequest,
 	[updateType: ApplicationUpdateTypes],
 	MessageConstructor<ApplicationUpdateRequest>
 >({

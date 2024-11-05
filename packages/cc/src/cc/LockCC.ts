@@ -37,7 +37,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -230,6 +230,7 @@ export interface LockCCReportOptions {
 }
 
 @CCCommand(LockCommand.Report)
+@ccValueProperty("locked", LockCCValues.locked)
 export class LockCCReport extends LockCC {
 	public constructor(
 		options: WithAddress<LockCCReportOptions>,
@@ -250,7 +251,6 @@ export class LockCCReport extends LockCC {
 		});
 	}
 
-	@ccValue(LockCCValues.locked)
 	public readonly locked: boolean;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

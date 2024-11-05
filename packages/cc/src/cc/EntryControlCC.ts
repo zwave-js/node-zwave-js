@@ -41,7 +41,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -526,6 +526,7 @@ export interface EntryControlCCKeySupportedReportOptions {
 }
 
 @CCCommand(EntryControlCommand.KeySupportedReport)
+@ccValueProperty("supportedKeys", EntryControlCCValues.supportedKeys)
 export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	public constructor(
 		options: WithAddress<EntryControlCCKeySupportedReportOptions>,
@@ -554,7 +555,6 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		});
 	}
 
-	@ccValue(EntryControlCCValues.supportedKeys)
 	public readonly supportedKeys: readonly number[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -580,6 +580,11 @@ export interface EntryControlCCEventSupportedReportOptions {
 }
 
 @CCCommand(EntryControlCommand.EventSupportedReport)
+@ccValueProperty("supportedDataTypes", EntryControlCCValues.supportedDataTypes)
+@ccValueProperty(
+	"supportedEventTypes",
+	EntryControlCCValues.supportedEventTypes,
+)
 export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public constructor(
 		options: WithAddress<EntryControlCCEventSupportedReportOptions>,
@@ -662,10 +667,8 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		return true;
 	}
 
-	@ccValue(EntryControlCCValues.supportedDataTypes)
 	public readonly supportedDataTypes: readonly EntryControlDataTypes[];
 
-	@ccValue(EntryControlCCValues.supportedEventTypes)
 	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
 	public readonly minKeyCacheSize: number;
@@ -703,6 +706,8 @@ export interface EntryControlCCConfigurationReportOptions {
 }
 
 @CCCommand(EntryControlCommand.ConfigurationReport)
+@ccValueProperty("keyCacheSize", EntryControlCCValues.keyCacheSize)
+@ccValueProperty("keyCacheTimeout", EntryControlCCValues.keyCacheTimeout)
 export class EntryControlCCConfigurationReport extends EntryControlCC {
 	public constructor(
 		options: WithAddress<EntryControlCCConfigurationReportOptions>,
@@ -730,10 +735,8 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		});
 	}
 
-	@ccValue(EntryControlCCValues.keyCacheSize)
 	public readonly keyCacheSize: number;
 
-	@ccValue(EntryControlCCValues.keyCacheTimeout)
 	public readonly keyCacheTimeout: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

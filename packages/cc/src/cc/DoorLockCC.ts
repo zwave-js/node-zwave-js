@@ -45,7 +45,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -888,6 +888,18 @@ export interface DoorLockCCOperationReportOptions {
 }
 
 @CCCommand(DoorLockCommand.OperationReport)
+@ccValueProperty("currentMode", DoorLockCCValues.currentMode)
+@ccValueProperty("targetMode", DoorLockCCValues.targetMode)
+@ccValueProperty("duration", DoorLockCCValues.duration)
+@ccValueProperty(
+	"outsideHandlesCanOpenDoor",
+	DoorLockCCValues.outsideHandlesCanOpenDoor,
+)
+@ccValueProperty(
+	"insideHandlesCanOpenDoor",
+	DoorLockCCValues.insideHandlesCanOpenDoor,
+)
+@ccValueProperty("lockTimeout", DoorLockCCValues.lockTimeout)
 export class DoorLockCCOperationReport extends DoorLockCC {
 	public constructor(
 		options: WithAddress<DoorLockCCOperationReportOptions>,
@@ -1004,26 +1016,20 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		return true;
 	}
 
-	@ccValue(DoorLockCCValues.currentMode)
 	public readonly currentMode: DoorLockMode;
 
-	@ccValue(DoorLockCCValues.targetMode)
 	public readonly targetMode?: DoorLockMode;
 
-	@ccValue(DoorLockCCValues.duration)
 	public readonly duration?: Duration;
 
-	@ccValue(DoorLockCCValues.outsideHandlesCanOpenDoor)
 	public readonly outsideHandlesCanOpenDoor: DoorHandleStatus;
 
-	@ccValue(DoorLockCCValues.insideHandlesCanOpenDoor)
 	public readonly insideHandlesCanOpenDoor: DoorHandleStatus;
 
 	public readonly latchStatus?: "open" | "closed";
 	public readonly boltStatus?: "locked" | "unlocked";
 	public readonly doorStatus?: "open" | "closed";
 
-	@ccValue(DoorLockCCValues.lockTimeout)
 	public readonly lockTimeout?: number; // in seconds
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -1079,6 +1085,19 @@ export interface DoorLockCCConfigurationReportOptions {
 }
 
 @CCCommand(DoorLockCommand.ConfigurationReport)
+@ccValueProperty("operationType", DoorLockCCValues.operationType)
+@ccValueProperty(
+	"outsideHandlesCanOpenDoorConfiguration",
+	DoorLockCCValues.outsideHandlesCanOpenDoorConfiguration,
+)
+@ccValueProperty(
+	"insideHandlesCanOpenDoorConfiguration",
+	DoorLockCCValues.insideHandlesCanOpenDoorConfiguration,
+)
+@ccValueProperty(
+	"lockTimeoutConfiguration",
+	DoorLockCCValues.lockTimeoutConfiguration,
+)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public constructor(
 		options: WithAddress<DoorLockCCConfigurationReportOptions>,
@@ -1152,16 +1171,12 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		});
 	}
 
-	@ccValue(DoorLockCCValues.operationType)
 	public readonly operationType: DoorLockOperationType;
 
-	@ccValue(DoorLockCCValues.outsideHandlesCanOpenDoorConfiguration)
 	public readonly outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
-	@ccValue(DoorLockCCValues.insideHandlesCanOpenDoorConfiguration)
 	public readonly insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
-	@ccValue(DoorLockCCValues.lockTimeoutConfiguration)
 	public readonly lockTimeoutConfiguration?: number;
 
 	// These are not always supported and have to be persisted manually
@@ -1443,6 +1458,24 @@ export interface DoorLockCCCapabilitiesReportOptions {
 }
 
 @CCCommand(DoorLockCommand.CapabilitiesReport)
+@ccValueProperty(
+	"supportedOutsideHandles",
+	DoorLockCCValues.supportedOutsideHandles,
+)
+@ccValueProperty(
+	"supportedInsideHandles",
+	DoorLockCCValues.supportedInsideHandles,
+)
+@ccValueProperty("autoRelockSupported", DoorLockCCValues.autoRelockSupported)
+@ccValueProperty(
+	"holdAndReleaseSupported",
+	DoorLockCCValues.holdAndReleaseSupported,
+)
+@ccValueProperty("twistAssistSupported", DoorLockCCValues.twistAssistSupported)
+@ccValueProperty(
+	"blockToBlockSupported",
+	DoorLockCCValues.blockToBlockSupported,
+)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public constructor(
 		options: WithAddress<DoorLockCCCapabilitiesReportOptions>,
@@ -1525,10 +1558,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public readonly supportedOperationTypes: readonly DoorLockOperationType[];
 	public readonly supportedDoorLockModes: readonly DoorLockMode[];
 
-	@ccValue(DoorLockCCValues.supportedOutsideHandles)
 	public readonly supportedOutsideHandles: DoorHandleStatus;
 
-	@ccValue(DoorLockCCValues.supportedInsideHandles)
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
 	// These 3 are not automatically persisted because in CC version 3
@@ -1537,16 +1568,12 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public readonly boltSupported: boolean;
 	public readonly doorSupported: boolean;
 
-	@ccValue(DoorLockCCValues.autoRelockSupported)
 	public readonly autoRelockSupported: boolean;
 
-	@ccValue(DoorLockCCValues.holdAndReleaseSupported)
 	public readonly holdAndReleaseSupported: boolean;
 
-	@ccValue(DoorLockCCValues.twistAssistSupported)
 	public readonly twistAssistSupported: boolean;
 
-	@ccValue(DoorLockCCValues.blockToBlockSupported)
 	public readonly blockToBlockSupported: boolean;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

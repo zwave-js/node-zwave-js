@@ -62,7 +62,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -869,6 +869,10 @@ export interface MultilevelSensorCCSupportedSensorReportOptions {
 }
 
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
+@ccValueProperty(
+	"supportedSensorTypes",
+	MultilevelSensorCCValues.supportedSensorTypes,
+)
 export class MultilevelSensorCCSupportedSensorReport
 	extends MultilevelSensorCC
 {
@@ -894,7 +898,7 @@ export class MultilevelSensorCCSupportedSensorReport
 	}
 
 	// TODO: Use this during interview to precreate values
-	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
+
 	public supportedSensorTypes: readonly number[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -925,6 +929,11 @@ export interface MultilevelSensorCCSupportedScaleReportOptions {
 }
 
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
+@ccValueProperty(
+	"supportedScales",
+	MultilevelSensorCCValues.supportedScales,
+	(self) => [self.sensorType],
+)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
 		options: WithAddress<MultilevelSensorCCSupportedScaleReportOptions>,
@@ -955,11 +964,6 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 
 	public readonly sensorType: number;
 
-	@ccValue(
-		MultilevelSensorCCValues.supportedScales,
-		(self: MultilevelSensorCCSupportedScaleReport) =>
-			[self.sensorType] as const,
-	)
 	public readonly supportedScales: readonly number[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {

@@ -51,7 +51,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -592,6 +592,8 @@ export interface BarrierOperatorCCReportOptions {
 }
 
 @CCCommand(BarrierOperatorCommand.Report)
+@ccValueProperty("currentState", BarrierOperatorCCValues.currentState)
+@ccValueProperty("position", BarrierOperatorCCValues.position)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
 		options: WithAddress<BarrierOperatorCCReportOptions>,
@@ -644,10 +646,8 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		});
 	}
 
-	@ccValue(BarrierOperatorCCValues.currentState)
 	public readonly currentState: MaybeUnknown<BarrierState>;
 
-	@ccValue(BarrierOperatorCCValues.position)
 	public readonly position: MaybeUnknown<number>;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -673,6 +673,10 @@ export interface BarrierOperatorCCSignalingCapabilitiesReportOptions {
 }
 
 @CCCommand(BarrierOperatorCommand.SignalingCapabilitiesReport)
+@ccValueProperty(
+	"supportedSubsystemTypes",
+	BarrierOperatorCCValues.supportedSubsystemTypes,
+)
 export class BarrierOperatorCCSignalingCapabilitiesReport
 	extends BarrierOperatorCC
 {
@@ -702,7 +706,6 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 		});
 	}
 
-	@ccValue(BarrierOperatorCCValues.supportedSubsystemTypes)
 	public readonly supportedSubsystemTypes: readonly SubsystemType[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

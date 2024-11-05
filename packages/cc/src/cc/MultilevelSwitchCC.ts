@@ -44,7 +44,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -699,6 +699,9 @@ export interface MultilevelSwitchCCReportOptions {
 }
 
 @CCCommand(MultilevelSwitchCommand.Report)
+@ccValueProperty("targetValue", MultilevelSwitchCCValues.targetValue)
+@ccValueProperty("duration", MultilevelSwitchCCValues.duration)
+@ccValueProperty("currentValue", MultilevelSwitchCCValues.currentValue)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
 		options: WithAddress<MultilevelSwitchCCReportOptions>,
@@ -736,13 +739,10 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		});
 	}
 
-	@ccValue(MultilevelSwitchCCValues.targetValue)
 	public targetValue: MaybeUnknown<number> | undefined;
 
-	@ccValue(MultilevelSwitchCCValues.duration)
 	public duration: Duration | undefined;
 
-	@ccValue(MultilevelSwitchCCValues.currentValue)
 	public currentValue: MaybeUnknown<number> | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -884,6 +884,7 @@ export interface MultilevelSwitchCCSupportedReportOptions {
 }
 
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
+@ccValueProperty("switchType", MultilevelSwitchCCValues.switchType)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
 		options: WithAddress<MultilevelSwitchCCSupportedReportOptions>,
@@ -907,7 +908,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
-	@ccValue(MultilevelSwitchCCValues.switchType)
+
 	public readonly switchType: SwitchType;
 
 	public persistValues(ctx: PersistValuesContext): boolean {

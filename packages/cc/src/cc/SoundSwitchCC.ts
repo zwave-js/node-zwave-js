@@ -39,7 +39,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -692,6 +692,8 @@ export interface SoundSwitchCCConfigurationReportOptions {
 }
 
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
+@ccValueProperty("defaultVolume", SoundSwitchCCValues.defaultVolume)
+@ccValueProperty("defaultToneId", SoundSwitchCCValues.defaultToneId)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
 		options: WithAddress<SoundSwitchCCConfigurationReportOptions>,
@@ -716,10 +718,8 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		});
 	}
 
-	@ccValue(SoundSwitchCCValues.defaultVolume)
 	public defaultVolume: number;
 
-	@ccValue(SoundSwitchCCValues.defaultToneId)
 	public defaultToneId: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -808,6 +808,8 @@ export interface SoundSwitchCCTonePlayReportOptions {
 }
 
 @CCCommand(SoundSwitchCommand.TonePlayReport)
+@ccValueProperty("toneId", SoundSwitchCCValues.toneId)
+@ccValueProperty("volume", SoundSwitchCCValues.volume)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
 		options: WithAddress<SoundSwitchCCTonePlayReportOptions>,
@@ -836,10 +838,8 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		});
 	}
 
-	@ccValue(SoundSwitchCCValues.toneId)
 	public readonly toneId: ToneId | number;
 
-	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

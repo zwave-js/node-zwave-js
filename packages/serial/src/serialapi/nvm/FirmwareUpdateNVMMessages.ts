@@ -37,7 +37,7 @@ const {
 	lookupConstructor: getSubCommandRequestConstructor,
 	lookupValue: getSubCommandForRequest,
 } = createSimpleReflectionDecorator<
-	FirmwareUpdateNVMRequest,
+	typeof FirmwareUpdateNVMRequest,
 	[command: FirmwareUpdateNVMCommand],
 	MessageConstructor<FirmwareUpdateNVMRequest>
 >({
@@ -49,7 +49,7 @@ const {
 	lookupConstructor: getSubCommandResponseConstructor,
 	lookupValue: getSubCommandForResponse,
 } = createSimpleReflectionDecorator<
-	FirmwareUpdateNVMResponse,
+	typeof FirmwareUpdateNVMResponse,
 	[command: FirmwareUpdateNVMCommand],
 	MessageConstructor<FirmwareUpdateNVMResponse>
 >({

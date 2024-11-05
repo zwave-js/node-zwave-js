@@ -45,7 +45,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -427,6 +427,16 @@ export type BatteryCCReportOptions =
 	}>;
 
 @CCCommand(BatteryCommand.Report)
+@ccValueProperty("level", BatteryCCValues.level)
+@ccValueProperty("isLow", BatteryCCValues.isLow)
+@ccValueProperty("chargingStatus", BatteryCCValues.chargingStatus)
+@ccValueProperty("rechargeable", BatteryCCValues.rechargeable)
+@ccValueProperty("backup", BatteryCCValues.backup)
+@ccValueProperty("overheating", BatteryCCValues.overheating)
+@ccValueProperty("lowFluid", BatteryCCValues.lowFluid)
+@ccValueProperty("rechargeOrReplace", BatteryCCValues.rechargeOrReplace)
+@ccValueProperty("disconnected", BatteryCCValues.disconnected)
+@ccValueProperty("lowTemperatureStatus", BatteryCCValues.lowTemperatureStatus)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
 		options: WithAddress<BatteryCCReportOptions>,
@@ -535,34 +545,24 @@ export class BatteryCCReport extends BatteryCC {
 		return true;
 	}
 
-	@ccValue(BatteryCCValues.level)
 	public readonly level: number;
 
-	@ccValue(BatteryCCValues.isLow)
 	public readonly isLow: boolean;
 
-	@ccValue(BatteryCCValues.chargingStatus)
 	public readonly chargingStatus: BatteryChargingStatus | undefined;
 
-	@ccValue(BatteryCCValues.rechargeable)
 	public readonly rechargeable: boolean | undefined;
 
-	@ccValue(BatteryCCValues.backup)
 	public readonly backup: boolean | undefined;
 
-	@ccValue(BatteryCCValues.overheating)
 	public readonly overheating: boolean | undefined;
 
-	@ccValue(BatteryCCValues.lowFluid)
 	public readonly lowFluid: boolean | undefined;
 
-	@ccValue(BatteryCCValues.rechargeOrReplace)
 	public readonly rechargeOrReplace: BatteryReplacementStatus | undefined;
 
-	@ccValue(BatteryCCValues.disconnected)
 	public readonly disconnected: boolean | undefined;
 
-	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -644,6 +644,8 @@ export interface BatteryCCHealthReportOptions {
 }
 
 @CCCommand(BatteryCommand.HealthReport)
+@ccValueProperty("maximumCapacity", BatteryCCValues.maximumCapacity)
+@ccValueProperty("temperature", BatteryCCValues.temperature)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
 		options: WithAddress<BatteryCCHealthReportOptions>,
@@ -693,10 +695,8 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return true;
 	}
 
-	@ccValue(BatteryCCValues.maximumCapacity)
 	public readonly maximumCapacity: number | undefined;
 
-	@ccValue(BatteryCCValues.temperature)
 	public readonly temperature: number | undefined;
 
 	private readonly temperatureScale: number | undefined;

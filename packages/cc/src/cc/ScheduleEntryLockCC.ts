@@ -38,7 +38,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -1026,6 +1026,12 @@ export interface ScheduleEntryLockCCSupportedReportOptions {
 }
 
 @CCCommand(ScheduleEntryLockCommand.SupportedReport)
+@ccValueProperty("numWeekDaySlots", ScheduleEntryLockCCValues.numWeekDaySlots)
+@ccValueProperty("numYearDaySlots", ScheduleEntryLockCCValues.numYearDaySlots)
+@ccValueProperty(
+	"numDailyRepeatingSlots",
+	ScheduleEntryLockCCValues.numDailyRepeatingSlots,
+)
 export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 	public constructor(
 		options: WithAddress<ScheduleEntryLockCCSupportedReportOptions>,
@@ -1056,11 +1062,10 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 		});
 	}
 
-	@ccValue(ScheduleEntryLockCCValues.numWeekDaySlots)
 	public numWeekDaySlots: number;
-	@ccValue(ScheduleEntryLockCCValues.numYearDaySlots)
+
 	public numYearDaySlots: number;
-	@ccValue(ScheduleEntryLockCCValues.numDailyRepeatingSlots)
+
 	public numDailyRepeatingSlots: number | undefined;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

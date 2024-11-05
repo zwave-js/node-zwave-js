@@ -52,7 +52,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -418,6 +418,9 @@ export interface BasicCCReportOptions {
 }
 
 @CCCommand(BasicCommand.Report)
+@ccValueProperty("currentValue", BasicCCValues.currentValue)
+@ccValueProperty("targetValue", BasicCCValues.targetValue)
+@ccValueProperty("duration", BasicCCValues.duration)
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
@@ -455,13 +458,10 @@ export class BasicCCReport extends BasicCC {
 		});
 	}
 
-	@ccValue(BasicCCValues.currentValue)
 	public currentValue: MaybeUnknown<number> | undefined;
 
-	@ccValue(BasicCCValues.targetValue)
 	public readonly targetValue: MaybeUnknown<number> | undefined;
 
-	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public persistValues(ctx: PersistValuesContext): boolean {

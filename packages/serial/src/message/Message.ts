@@ -485,7 +485,7 @@ function getMessageTypeMapKey(
 }
 
 const messageTypesDecorator = createReflectionDecorator<
-	Message,
+	typeof Message,
 	[messageType: MessageType, functionType: FunctionType],
 	{ messageType: MessageType; functionType: FunctionType },
 	MessageConstructor<Message>
@@ -556,7 +556,7 @@ function getMessageConstructor(
 }
 
 const expectedResponseDecorator = createReflectionDecorator<
-	Message,
+	typeof Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
 	MessageConstructor<Message>
@@ -592,7 +592,7 @@ export function getExpectedResponseStatic<
 }
 
 const expectedCallbackDecorator = createReflectionDecorator<
-	Message,
+	typeof Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
 	MessageConstructor<Message>
@@ -605,9 +605,12 @@ const expectedCallbackDecorator = createReflectionDecorator<
 /**
  * Defines the expected callback function type or message class for a Z-Wave message
  */
-export function expectedCallback<TSent extends Message>(
-	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>,
-): TypedClassDecorator<Message> {
+export function expectedCallback<TSent extends typeof Message>(
+	typeOrPredicate:
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate<InstanceType<TSent>>,
+): TypedClassDecorator<TSent> {
 	return expectedCallbackDecorator.decorator(typeOrPredicate as any);
 }
 
@@ -632,7 +635,7 @@ export function getExpectedCallbackStatic<
 }
 
 const priorityDecorator = createReflectionDecorator<
-	Message,
+	typeof Message,
 	[prio: MessagePriority],
 	MessagePriority
 >({

@@ -40,7 +40,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -262,6 +262,7 @@ export interface TimeParametersCCReportOptions {
 }
 
 @CCCommand(TimeParametersCommand.Report)
+@ccValueProperty("dateAndTime", TimeParametersCCValues.dateAndTime)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
 		options: WithAddress<TimeParametersCCReportOptions>,
@@ -309,7 +310,6 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		return super.persistValues(ctx);
 	}
 
-	@ccValue(TimeParametersCCValues.dateAndTime)
 	public dateAndTime: Date;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

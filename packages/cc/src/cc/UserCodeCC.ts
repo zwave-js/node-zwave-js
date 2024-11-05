@@ -54,7 +54,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -1487,6 +1487,7 @@ export interface UserCodeCCUsersNumberReportOptions {
 }
 
 @CCCommand(UserCodeCommand.UsersNumberReport)
+@ccValueProperty("supportedUsers", UserCodeCCValues.supportedUsers)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
 		options: WithAddress<UserCodeCCUsersNumberReportOptions>,
@@ -1518,7 +1519,6 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		});
 	}
 
-	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -1554,6 +1554,29 @@ export interface UserCodeCCCapabilitiesReportOptions {
 }
 
 @CCCommand(UserCodeCommand.CapabilitiesReport)
+@ccValueProperty("supportsAdminCode", UserCodeCCValues.supportsAdminCode)
+@ccValueProperty(
+	"supportsAdminCodeDeactivation",
+	UserCodeCCValues.supportsAdminCodeDeactivation,
+)
+@ccValueProperty(
+	"supportsUserCodeChecksum",
+	UserCodeCCValues.supportsUserCodeChecksum,
+)
+@ccValueProperty(
+	"supportsMultipleUserCodeReport",
+	UserCodeCCValues.supportsMultipleUserCodeReport,
+)
+@ccValueProperty(
+	"supportsMultipleUserCodeSet",
+	UserCodeCCValues.supportsMultipleUserCodeSet,
+)
+@ccValueProperty(
+	"supportedUserIDStatuses",
+	UserCodeCCValues.supportedUserIDStatuses,
+)
+@ccValueProperty("supportedKeypadModes", UserCodeCCValues.supportedKeypadModes)
+@ccValueProperty("supportedASCIIChars", UserCodeCCValues.supportedASCIIChars)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
 		options: WithAddress<UserCodeCCCapabilitiesReportOptions>,
@@ -1644,28 +1667,20 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		});
 	}
 
-	@ccValue(UserCodeCCValues.supportsAdminCode)
 	public readonly supportsAdminCode: boolean;
 
-	@ccValue(UserCodeCCValues.supportsAdminCodeDeactivation)
 	public readonly supportsAdminCodeDeactivation: boolean;
 
-	@ccValue(UserCodeCCValues.supportsUserCodeChecksum)
 	public readonly supportsUserCodeChecksum: boolean;
 
-	@ccValue(UserCodeCCValues.supportsMultipleUserCodeReport)
 	public readonly supportsMultipleUserCodeReport: boolean;
 
-	@ccValue(UserCodeCCValues.supportsMultipleUserCodeSet)
 	public readonly supportsMultipleUserCodeSet: boolean;
 
-	@ccValue(UserCodeCCValues.supportedUserIDStatuses)
 	public readonly supportedUserIDStatuses: readonly UserIDStatus[];
 
-	@ccValue(UserCodeCCValues.supportedKeypadModes)
 	public readonly supportedKeypadModes: readonly KeypadMode[];
 
-	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -1785,6 +1800,7 @@ export interface UserCodeCCKeypadModeReportOptions {
 }
 
 @CCCommand(UserCodeCommand.KeypadModeReport)
+@ccValueProperty("keypadMode", UserCodeCCValues.keypadMode)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
 		options: WithAddress<UserCodeCCKeypadModeReportOptions>,
@@ -1827,7 +1843,6 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return true;
 	}
 
-	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -1905,6 +1920,7 @@ export interface UserCodeCCAdminCodeReportOptions {
 }
 
 @CCCommand(UserCodeCommand.AdminCodeReport)
+@ccValueProperty("adminCode", UserCodeCCValues.adminCode)
 export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	public constructor(
 		options: WithAddress<UserCodeCCAdminCodeReportOptions>,
@@ -1930,7 +1946,6 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 		});
 	}
 
-	@ccValue(UserCodeCCValues.adminCode)
 	public readonly adminCode: string;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -1959,6 +1974,7 @@ export interface UserCodeCCUserCodeChecksumReportOptions {
 }
 
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
+@ccValueProperty("userCodeChecksum", UserCodeCCValues.userCodeChecksum)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
 		options: WithAddress<UserCodeCCUserCodeChecksumReportOptions>,
@@ -1980,7 +1996,6 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		});
 	}
 
-	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {

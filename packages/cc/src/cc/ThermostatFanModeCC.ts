@@ -41,7 +41,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -396,6 +396,8 @@ export interface ThermostatFanModeCCReportOptions {
 }
 
 @CCCommand(ThermostatFanModeCommand.Report)
+@ccValueProperty("mode", ThermostatFanModeCCValues.fanMode)
+@ccValueProperty("off", ThermostatFanModeCCValues.turnedOff)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
 		options: WithAddress<ThermostatFanModeCCReportOptions>,
@@ -423,10 +425,8 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		});
 	}
 
-	@ccValue(ThermostatFanModeCCValues.fanMode)
 	public readonly mode: ThermostatFanMode;
 
-	@ccValue(ThermostatFanModeCCValues.turnedOff)
 	public readonly off: boolean | undefined;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -453,6 +453,7 @@ export interface ThermostatFanModeCCSupportedReportOptions {
 }
 
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
+@ccValueProperty("supportedModes", ThermostatFanModeCCValues.supportedFanModes)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
 		options: WithAddress<ThermostatFanModeCCSupportedReportOptions>,
@@ -494,7 +495,6 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		return true;
 	}
 
-	@ccValue(ThermostatFanModeCCValues.supportedFanModes)
 	public readonly supportedModes: ThermostatFanMode[];
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

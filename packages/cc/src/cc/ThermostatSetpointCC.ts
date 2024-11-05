@@ -46,7 +46,7 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
+	ccValueProperty,
 	ccValues,
 	commandClass,
 	expectedCCResponse,
@@ -927,6 +927,10 @@ export interface ThermostatSetpointCCSupportedReportOptions {
 }
 
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
+@ccValueProperty(
+	"supportedSetpointTypes",
+	ThermostatSetpointCCValues.supportedSetpointTypes,
+)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
 		options: WithAddress<ThermostatSetpointCCSupportedReportOptions>,
@@ -964,7 +968,6 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		});
 	}
 
-	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)
 	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
 
 	public serialize(ctx: CCEncodingContext): Bytes {
