@@ -6525,6 +6525,10 @@ export class ZWaveController
 
 	/** Configure the RF region at the Z-Wave API Module */
 	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		// Setting the "default" region is not possible. Controllers are supposed to
+		// default to the EU region, so we do just that.
+		if (region === RFRegion["Default (EU)"]) region = RFRegion.Europe;
+
 		// Unless auto-upgrade to LR regions is disabled, try to find a suitable LR replacement region
 		if (this.driver.options.rf?.preferLRRegion !== false) {
 			region = this.tryGetLRCapableRegion(region);
