@@ -19,6 +19,7 @@ export * from "./registries/Notifications.js";
 export * from "./registries/Scales.js";
 export * from "./registries/Sensors.js";
 export * from "./security/DSK.js";
+export * from "./security/QR.js";
 export * from "./security/SecurityClass.js";
 export * from "./security/shared_safe.js";
 export type * from "./traits/CommandClasses.js";

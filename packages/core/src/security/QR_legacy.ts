@@ -1,4 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
+import { createHash } from "node:crypto";
 import { parseBitMask } from "../values/Primitive.js";
 import { dskToString } from "./DSK.js";
 import {
@@ -15,14 +16,11 @@ import {
 } from "./QR_shared.js";
 import { SecurityClass } from "./SecurityClass.js";
 
-const subtleCrypto: typeof import("node:crypto").subtle =
-	// @ts-expect-error The type definitions for globalThis.crypto are missing from @types/node
-	globalThis.crypto.subtle;
-
-/** Parses a string that has been decoded from a Z-Wave (S2 or SmartStart) QR code */
-export async function parseQRCodeStringAsync(
-	qr: string,
-): Promise<QRProvisioningInformation> {
+/**
+ * Parses a string that has been decoded from a Z-Wave (S2 or SmartStart) QR code
+ * @deprecated Use {@link parseQRCodeStringAsync} instead.
+ */
+export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	// Trim off whitespace that might have been copied by accident
 	qr = qr.trim();
 	// Validate the QR code
@@ -35,9 +33,9 @@ export async function parseQRCodeStringAsync(
 
 	const checksum = readUInt16(qr, 4);
 	// The checksum covers the remaining data
-	const checksumInput = new TextEncoder().encode(qr.slice(9));
-	const hashResult = await subtleCrypto.digest("SHA-1", checksumInput);
-	const expectedChecksum = Bytes.view(hashResult).readUInt16BE(0);
+	const hash = createHash("sha1");
+	hash.update(Bytes.from(qr.slice(9), "ascii"));
+	const expectedChecksum = hash.digest().readUInt16BE(0);
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 
 	const requestedKeysBitmask = readUInt8(qr, 9);

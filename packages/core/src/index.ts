@@ -22,6 +22,7 @@ export * from "./security/DSK.js";
 export * from "./security/Manager.js";
 export * from "./security/Manager2.js";
 export * from "./security/QR.js";
+export * from "./security/QR_legacy.js";
 export * from "./security/SecurityClass.js";
 export * from "./security/crypto.js";
 export * from "./security/ctr_drbg.js";
