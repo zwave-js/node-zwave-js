@@ -70,8 +70,6 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		await wait(5000);
-		await driver.controller.hardReset();
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
@@ -81,3 +79,7 @@ void driver.start();
 // 	applicationName: "test",
 // 	applicationVersion: "0.0.1",
 // });
+
+process.on("SIGINT", async () => {
+	await driver.destroy();
+});

@@ -175,3 +175,8 @@ const driver_secondary = new Driver(port_secondary, {
 		// What to do when stuck in the bootloader
 	});
 void driver_secondary.start();
+
+process.on("SIGINT", async () => {
+	await driver_primary.destroy();
+	await driver_secondary.destroy();
+});
