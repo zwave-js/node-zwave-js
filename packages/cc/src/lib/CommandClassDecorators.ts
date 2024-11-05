@@ -351,18 +351,14 @@ export function ccValueProperty<
 			getArgs: (self: InstanceType<Class>) => TArgs,
 		]
 ): TypedClassDecorator<Class> {
-	return function ccValues2_body(target: Class): void {
-		// get the class constructor
-		const constr = target.constructor;
-
+	return function decorator_ccValueProperty(constr: Class): void {
 		// retrieve the current metadata
 		const metadata: Map<
 			string | number,
 			StaticCCValue | StaticCCValueFactory<InstanceType<Class>>
 		> = Reflect.getMetadata(ccValue_METADATA, constr) ?? new Map();
 
-		// Add the variable to the metadata
-
+		// Determine the correct metadata
 		let valueOrFactory:
 			| StaticCCValue
 			| StaticCCValueFactory<InstanceType<Class>>;
@@ -381,10 +377,10 @@ export function ccValueProperty<
 			};
 		}
 
-		// Add the variable
+		// Add the metadata
 		metadata.set(property as string | number, valueOrFactory);
 
-		// And store the metadata back
+		// And store it back
 		Reflect.defineMetadata(ccValue_METADATA, metadata, constr);
 	};
 }
