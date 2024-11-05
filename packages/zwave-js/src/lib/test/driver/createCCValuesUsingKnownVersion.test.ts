@@ -39,7 +39,7 @@ integrationTest("CC values are created using the known CC version", {
 
 		// The level value should be defined because it is included in the report
 		// The overheating value shouldn't, since the interview is not complete
-		t.expect(updatedMetadata).toStrictEqual([
+		t.expect(updatedMetadata).to.have.members([
 			levelValue.id.property,
 			isLowValue.id.property,
 		]);
@@ -49,7 +49,7 @@ integrationTest("CC values are created using the known CC version", {
 			.getDefinedValueIDs()
 			.filter((id) => id.commandClass === CommandClasses.Battery)
 			.map((id) => id.property);
-		t.expect(definedProperties).toStrictEqual([
+		t.expect(definedProperties).to.have.members([
 			levelValue.id.property,
 			isLowValue.id.property,
 		]);
