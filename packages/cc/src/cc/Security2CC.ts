@@ -44,8 +44,8 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async/index.js";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { wait } from "alcalzone-shared/async";
+import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,

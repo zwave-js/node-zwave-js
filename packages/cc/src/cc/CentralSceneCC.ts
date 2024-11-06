@@ -23,7 +23,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -80,14 +79,14 @@ export const CentralSceneCCValues = Object.freeze({
 		...V.dynamicPropertyAndKeyWithName(
 			"scene",
 			"scene",
-			(sceneNumber: number) => padStart(sceneNumber.toString(), 3, "0"),
+			(sceneNumber: number) => sceneNumber.toString().padStart(3, "0"),
 			({ property, propertyKey }) =>
 				property === "scene"
 				&& typeof propertyKey === "string"
 				&& /^\d{3}$/.test(propertyKey),
 			(sceneNumber: number) => ({
 				...ValueMetadata.ReadOnlyUInt8,
-				label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
+				label: `Scene ${sceneNumber.toString().padStart(3, "0")}`,
 			} as const),
 			{ stateful: false } as const,
 		),

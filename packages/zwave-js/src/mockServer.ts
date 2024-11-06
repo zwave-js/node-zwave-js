@@ -40,7 +40,7 @@ import {
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
 } from "@zwave-js/testing";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { type AddressInfo, type Server, createServer } from "node:net";
 import {
 	ProtocolVersion,

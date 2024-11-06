@@ -47,7 +47,7 @@ import {
 	getErrorMessage,
 	num2hex,
 } from "@zwave-js/shared";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import {
 	getAPI,
 	getCCValues,

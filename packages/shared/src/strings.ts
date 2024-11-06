@@ -1,4 +1,3 @@
-import { padStart } from "alcalzone-shared/strings/index.js";
 import { Bytes } from "./Bytes.js";
 import { uint8ArrayToHex } from "./uint8array-extras.js";
 
@@ -33,7 +32,7 @@ export function num2hex(
  */
 export function formatId(id: number | string): string {
 	id = typeof id === "number" ? id.toString(16) : id;
-	return "0x" + padStart(id, 4, "0").toLowerCase();
+	return "0x" + id.padStart(4, "0").toLowerCase();
 }
 
 export function stringify(arg: unknown, space: 4 | "\t" = 4): string {
@@ -72,23 +71,15 @@ export function compareStrings(a: string, b: string): number {
 }
 
 export function formatTime(hour: number, minute: number): string {
-	return `${padStart(hour.toString(), 2, "0")}:${
-		padStart(
-			minute.toString(),
-			2,
-			"0",
-		)
+	return `${hour.toString().padStart(2, "0")}:${
+		minute.toString().padStart(2, "0")
 	}`;
 }
 
 export function formatDate(year: number, month: number, day: number): string {
-	return `${padStart(year.toString(), 4, "0")}-${
-		padStart(
-			month.toString(),
-			2,
-			"0",
-		)
-	}-${padStart(day.toString(), 2, "0")}`;
+	return `${year.toString().padStart(4, "0")}-${
+		month.toString().padStart(2, "0")
+	}-${day.toString().padStart(2, "0")}`;
 }
 
 export function stringToUint8ArrayUTF16BE(str: string): Uint8Array {

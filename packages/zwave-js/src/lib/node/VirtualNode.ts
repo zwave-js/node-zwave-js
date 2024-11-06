@@ -26,7 +26,7 @@ import {
 	supervisedCommandSucceeded,
 	valueIdToString,
 } from "@zwave-js/core";
-import { distinct } from "alcalzone-shared/arrays/index.js";
+import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver.js";
 import type { ZWaveNode } from "./Node.js";
 import { VirtualEndpoint } from "./VirtualEndpoint.js";

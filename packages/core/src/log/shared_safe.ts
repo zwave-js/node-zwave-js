@@ -1,4 +1,3 @@
-import { padStart } from "alcalzone-shared/strings/index.js";
 import type { TransformableInfo } from "logform";
 import type { Logger } from "winston";
 import type Transport from "winston-transport";
@@ -73,7 +72,7 @@ export interface MessageOrCCLogEntry {
 
 /** Returns the tag used to log node related messages */
 export function getNodeTag(nodeId: number): string {
-	return "Node " + padStart(nodeId.toString(), 3, "0");
+	return "Node " + nodeId.toString().padStart(3, "0");
 }
 
 export type ZWaveLogger<TContext extends LogContext = LogContext> =

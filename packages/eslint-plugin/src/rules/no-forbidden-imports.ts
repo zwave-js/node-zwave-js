@@ -6,16 +6,14 @@ import ts from "typescript";
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
 	"reflect-metadata",
-	"alcalzone-shared/arrays/index.js",
-	"alcalzone-shared/async/index.js",
-	"alcalzone-shared/comparable/index.js",
-	"alcalzone-shared/deferred-promise/index.js",
-	"alcalzone-shared/helpers/index.js",
-	"alcalzone-shared/math/index.js",
-	"alcalzone-shared/objects/index.js",
-	"alcalzone-shared/sorted-list/index.js",
-	"alcalzone-shared/strings/index.js",
-	"alcalzone-shared/typeguards/index.js",
+	"alcalzone-shared/arrays",
+	"alcalzone-shared/async",
+	"alcalzone-shared/comparable",
+	"alcalzone-shared/deferred-promise",
+	"alcalzone-shared/helpers",
+	"alcalzone-shared/math",
+	"alcalzone-shared/sorted-list",
+	"alcalzone-shared/typeguards",
 ];
 
 // Whitelist some more imports that should be ignored in the checking

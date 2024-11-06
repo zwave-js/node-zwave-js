@@ -10,7 +10,7 @@ import {
 	type ReturnTypeOrStatic,
 	evalOrStatic,
 } from "@zwave-js/shared/safe";
-import type { Overwrite } from "alcalzone-shared/types/index.js";
+import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API.js";
 
 // HINT: To fully view types for definitions created by this, open

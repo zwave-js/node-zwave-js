@@ -20,7 +20,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
@@ -286,13 +285,9 @@ export class TimeCCTimeReport extends TimeCC {
 		return {
 			...super.toLogEntry(ctx),
 			message: {
-				time: `${padStart(this.hour.toString(), 2, "0")}:${
-					padStart(
-						this.minute.toString(),
-						2,
-						"0",
-					)
-				}:${padStart(this.second.toString(), 2, "0")}`,
+				time: `${this.hour.toString().padStart(2, "0")}:${
+					this.minute.toString().padStart(2, "0")
+				}:${this.second.toString().padStart(2, "0")}`,
 			},
 		};
 	}
@@ -354,13 +349,9 @@ export class TimeCCDateReport extends TimeCC {
 		return {
 			...super.toLogEntry(ctx),
 			message: {
-				date: `${padStart(this.year.toString(), 4, "0")}-${
-					padStart(
-						this.month.toString(),
-						2,
-						"0",
-					)
-				}-${padStart(this.day.toString(), 2, "0")}`,
+				date: `${this.year.toString().padStart(4, "0")}-${
+					this.month.toString().padStart(2, "0")
+				}-${this.day.toString().padStart(2, "0")}`,
 			},
 		};
 	}

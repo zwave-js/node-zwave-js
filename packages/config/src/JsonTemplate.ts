@@ -1,7 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { pathExists } from "@zwave-js/shared";
 import { getErrorMessage } from "@zwave-js/shared/safe";
-import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
 import fs from "node:fs/promises";
 import * as path from "node:path";
@@ -91,12 +91,12 @@ function select(
 	for (const part of selectorParts) {
 		// Special case for paramInformation selectors to select params by #
 		if (isArray(ret)) {
-			const item = ret.find(
-				(r) => isObject(r) && "#" in r && r["#"] === part,
+			const item = (ret as any).find(
+				(r: any) => isObject(r) && "#" in r && r["#"] === part,
 			);
 			if (item != undefined) {
 				// Don't copy the param number
-				const { ["#"]: _, ...rest } = item as any;
+				const { ["#"]: _, ...rest } = item;
 				ret = rest;
 				continue;
 			}

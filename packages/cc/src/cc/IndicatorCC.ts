@@ -24,8 +24,8 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { clamp, roundTo } from "alcalzone-shared/math/index.js";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { clamp, roundTo } from "alcalzone-shared/math";
+import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
 	POLL_VALUE,

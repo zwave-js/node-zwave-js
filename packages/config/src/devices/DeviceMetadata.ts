@@ -1,5 +1,5 @@
 import { type JSONObject, pick } from "@zwave-js/shared/safe";
-import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type ConditionalItem,

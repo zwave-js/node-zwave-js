@@ -1,7 +1,7 @@
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise/index.js";
+} from "alcalzone-shared/deferred-promise";
 
 /** Allows waiting for something for a given amount of time, after which the expectation will automatically be rejected. */
 export class TimedExpectation<TResult = void, TPredicate = never>

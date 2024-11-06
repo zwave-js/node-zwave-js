@@ -1,5 +1,5 @@
 import { formatId } from "@zwave-js/shared";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import fs from "node:fs/promises";
 import xml2js from "xml2js";
 

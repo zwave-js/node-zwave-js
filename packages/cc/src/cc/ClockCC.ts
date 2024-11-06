@@ -19,7 +19,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import { CCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
@@ -195,9 +194,8 @@ export class ClockCCSet extends ClockCC {
 						Weekday,
 						this.weekday,
 					)
-				}, ${padStart(this.hour.toString(), 2, "0")}:${
-					padStart(
-						this.minute.toString(),
+				}, ${this.hour.toString().padStart(2, "0")}:${
+					this.minute.toString().padStart(
 						2,
 						"0",
 					)
@@ -259,9 +257,8 @@ export class ClockCCReport extends ClockCC {
 						Weekday,
 						this.weekday,
 					)
-				}, ${padStart(this.hour.toString(), 2, "0")}:${
-					padStart(
-						this.minute.toString(),
+				}, ${this.hour.toString().padStart(2, "0")}:${
+					this.minute.toString().padStart(
 						2,
 						"0",
 					)

@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared/safe";
-import { isObject } from "alcalzone-shared/typeguards/index.js";
+import { isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe.js";
 import {
 	type AssociationConfig,

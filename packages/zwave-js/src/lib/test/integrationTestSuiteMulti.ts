@@ -6,7 +6,7 @@ import {
 	type MockNode,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";

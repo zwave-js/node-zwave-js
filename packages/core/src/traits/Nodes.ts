@@ -1,5 +1,5 @@
-import { type FLiRS } from "../capabilities/NodeInfo.js";
 import { type NodeStatus } from "../consts/NodeStatus.js";
+import { type FLiRS } from "../definitions/NodeInfo.js";
 import { type MaybeNotKnown } from "../values/Primitive.js";
 import { type EndpointId, type VirtualEndpointId } from "./Endpoints.js";
 

@@ -41,9 +41,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays/index.js";
-import { composeObject } from "alcalzone-shared/objects/index.js";
-import { padStart } from "alcalzone-shared/strings/index.js";
+import { distinct } from "alcalzone-shared/arrays";
 import {
 	CCAPI,
 	type CCAPIEndpoint,
@@ -1409,7 +1407,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				.map((v) => v.property)
 				.filter((p) => typeof p === "number"),
 		);
-		return composeObject(
+		return Object.fromEntries(
 			parameters.map((p) => [
 				p as any,
 				this.getParamInformation(ctx, p),
@@ -1532,7 +1530,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
 				states: info.options.length > 0
-					? composeObject(
+					? Object.fromEntries(
 						info.options.map(({ label, value }) => [
 							value.toString(),
 							label,
@@ -1592,7 +1590,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			);
 			if (paramInfo.label) return paramInfo.label;
 			// fall back to paramXYZ[_key] if none is defined
-			let ret = `param${padStart(property.toString(), 3, "0")}`;
+			let ret = `param${property.toString().padStart(3, "0")}`;
 			if (propertyKey != undefined) {
 				ret += "_" + propertyKey.toString();
 			}

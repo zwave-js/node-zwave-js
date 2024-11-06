@@ -103,33 +103,6 @@ export enum ProtocolType {
 	"Z-Wave for IP" = 2,
 }
 
-export enum RouteKind {
-	None = 0x00,
-	/** Last Working Route */
-	LWR = 0x01,
-	/** Next to Last Working Route */
-	NLWR = 0x02,
-	/** Application-defined priority route */
-	Application = 0x10,
-}
-
-export interface Route {
-	repeaters: number[];
-	routeSpeed: ZWaveDataRate;
-}
-
-export const EMPTY_ROUTE: Route = {
-	repeaters: [],
-	routeSpeed: ZWaveDataRate["9k6"],
-};
-
-export function isEmptyRoute(route: Route): boolean {
-	return (
-		route.repeaters.length === 0
-		&& route.routeSpeed === ZWaveDataRate["9k6"]
-	);
-}
-
 export enum LongRangeChannel {
 	/** Indicates that Long Range is not supported by the currently set RF region */
 	Unsupported = 0x00,
@@ -144,17 +117,9 @@ export function isLongRangeNodeId(nodeId: number): boolean {
 	return nodeId > 255;
 }
 
-export enum MPDUHeaderType {
-	Singlecast = 0x1,
-	Multicast = 0x2,
-	Acknowledgement = 0x3,
-	Explorer = 0x5,
-	Routed = 0x8,
-}
-
-export enum BeamingInfo {
-	None = 0b00,
-	ShortContinuous = 0b01,
-	LongContinuous = 0b10,
-	Fragmented = 0b100,
+export enum ProtocolVersion {
+	"unknown" = 0,
+	"2.0" = 1,
+	"4.2x / 5.0x" = 2,
+	"4.5x / 6.0x" = 3,
 }

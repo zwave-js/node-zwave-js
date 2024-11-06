@@ -69,9 +69,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/esm2cjs@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "@alcalzone/esm2cjs@npm:1.2.3"
+"@alcalzone/esm2cjs@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@alcalzone/esm2cjs@npm:1.3.0"
   dependencies:
     esbuild: "npm:^0.24.0"
     fs-extra: "npm:^10.1.0"
@@ -79,7 +79,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     esm2cjs: bin/esm2cjs.cjs
-  checksum: 10/fc472f63d091db4f3888e2f4be61992ba349a9e98036371713f08fa9a02a38ac611db0dcb1e7967f251f0cdd8a246406fa1557cd9a106718eaca32bacd17573f
+  checksum: 10/71d83742d6ce4c32ce15ed0f11a64118ffd88a07fbb54849208de834ed32b79bd05adec46db773938cbca665863064eadde160dff99dd13c58c865a5333bfb4b
   languageName: node
   linkType: hard
 
@@ -2558,7 +2558,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/cc@workspace:packages/cc"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
     "@zwave-js/core": "workspace:*"
@@ -2566,7 +2566,7 @@ __metadata:
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/transformers": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     del-cli: "npm:^6.0.0"
     es-main: "npm:^1.3.0"
@@ -2581,7 +2581,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/js-levenshtein": "npm:^1.1.3"
     "@types/json-logic-js": "npm:^2.0.7"
@@ -2594,7 +2594,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     comment-json: "npm:^4.2.5"
     del-cli: "npm:^6.0.0"
@@ -2621,7 +2621,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
@@ -2629,7 +2629,7 @@ __metadata:
     "@types/sinon": "npm:^17.0.3"
     "@types/triple-beam": "npm:^1.3.5"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     dayjs: "npm:^1.11.13"
     del-cli: "npm:^6.0.0"
@@ -2652,7 +2652,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@types/eslint": "npm:^9.6.1"
     "@typescript-eslint/utils": "npm:^8.8.1"
     "@zwave-js/core": "workspace:*"
@@ -2697,13 +2697,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/host@workspace:packages/host"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
     typescript: "npm:5.6.2"
   languageName: unknown
@@ -2713,7 +2713,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@dprint/formatter": "npm:^0.4.1"
     "@dprint/json": "npm:^0.19.4"
     "@dprint/markdown": "npm:^0.17.8"
@@ -2745,14 +2745,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
     "@types/semver": "npm:^7.5.8"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.6.3"
@@ -2772,7 +2772,7 @@ __metadata:
     "@actions/core": "npm:^1.11.1"
     "@actions/exec": "npm:^1.1.1"
     "@actions/github": "npm:^6.0.0"
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@alcalzone/monopack": "npm:^1.3.0"
     "@alcalzone/release-script": "npm:~3.8.0"
@@ -2801,7 +2801,7 @@ __metadata:
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     chokidar: "npm:^4.0.1"
     comment-json: "npm:^4.2.5"
@@ -2836,7 +2836,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@serialport/binding-mock": "npm:^10.2.2"
     "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch"
@@ -2847,7 +2847,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     del-cli: "npm:^6.0.0"
     serialport: "npm:^12.0.0"
@@ -2863,11 +2863,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
     "@types/sinon": "npm:^17.0.3"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
     sinon: "npm:^19.0.2"
     tsx: "npm:^4.19.2"
@@ -2880,7 +2880,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/node": "npm:^18.19.63"
     "@types/triple-beam": "npm:^1.3.5"
@@ -2889,7 +2889,7 @@ __metadata:
     "@zwave-js/host": "workspace:*"
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     del-cli: "npm:^6.0.0"
     triple-beam: "npm:*"
@@ -3108,6 +3108,13 @@ __metadata:
   dependencies:
     debug: "npm:^4.3.4"
   checksum: 10/865743df1de64bf26bfa03c92321a7cdaad7dd79ee06eeb8a01599784628462f58dafcd649ea8e8bd72d24fed6933c2559a0eae0f8b58b6790a6c0352cf35f13
+  languageName: node
+  linkType: hard
+
+"alcalzone-shared@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "alcalzone-shared@npm:5.0.0"
+  checksum: 10/79f69256314796b319184b60d013d9b5be65298ad321b55a7eb477e50b5cdb09e9d75d8042efcb747cc41a48677f621c8b9fe163c19c8b0f0fda572e2942a66f
   languageName: node
   linkType: hard
 
@@ -10052,7 +10059,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/esm2cjs": "npm:^1.2.3"
+    "@alcalzone/esm2cjs": "npm:^1.3.0"
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@homebridge/ciao": "npm:^1.3.1"
     "@microsoft/api-extractor": "npm:^7.47.9"
@@ -10073,7 +10080,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
     "@zwave-js/transformers": "workspace:*"
-    alcalzone-shared: "npm:^4.0.8"
+    alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
     del-cli: "npm:^6.0.0"
     execa: "npm:^5.1.1"

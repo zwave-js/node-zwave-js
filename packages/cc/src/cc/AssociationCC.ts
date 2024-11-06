@@ -22,7 +22,7 @@ import type {
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { distinct } from "alcalzone-shared/arrays/index.js";
+import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,

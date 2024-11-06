@@ -1,6 +1,6 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { TypedEventEmitter } from "@zwave-js/shared";
-import type { CommandClasses } from "../capabilities/CommandClasses.js";
+import type { CommandClasses } from "../definitions/CommandClasses.js";
 import {
 	ZWaveError,
 	ZWaveErrorCodes,

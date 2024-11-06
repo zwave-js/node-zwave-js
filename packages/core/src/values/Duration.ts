@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import { clamp } from "alcalzone-shared/math/index.js";
+import { clamp } from "alcalzone-shared/math";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";

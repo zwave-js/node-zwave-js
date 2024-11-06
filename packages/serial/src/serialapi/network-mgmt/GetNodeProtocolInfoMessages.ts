@@ -25,7 +25,7 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards/index.js";
+import { isObject } from "alcalzone-shared/typeguards";
 
 export interface GetNodeProtocolInfoRequestOptions {
 	requestedNodeId: number;
