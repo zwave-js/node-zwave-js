@@ -1,7 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async/index.js";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
+import { wait } from "alcalzone-shared/async";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { test } from "vitest";
 import {
 	type TaskBuilder,

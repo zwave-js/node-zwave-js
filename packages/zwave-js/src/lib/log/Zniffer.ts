@@ -18,7 +18,6 @@ import {
 } from "@zwave-js/core";
 import { type ZnifferDataMessage } from "@zwave-js/serial";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	type BeamStop,
 	type LongRangeBeamStart,
@@ -157,7 +156,7 @@ export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
 				logCC(payloadCC);
 			}
 
-			const homeId = padStart(mpdu.homeId.toString(16), 8, "0")
+			const homeId = mpdu.homeId.toString(16).padStart(8, "0")
 				.toLowerCase();
 
 			this.logger.log({

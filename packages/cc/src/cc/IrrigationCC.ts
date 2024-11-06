@@ -24,7 +24,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	CCAPI,
 	POLL_VALUE,
@@ -555,7 +554,7 @@ export const IrrigationCCValues = Object.freeze({
 
 function valveIdToMetadataPrefix(valveId: ValveId): string {
 	if (valveId === "master") return "Master valve";
-	return `Valve ${padStart(valveId.toString(), 3, "0")}`;
+	return `Valve ${valveId.toString().padStart(3, "0")}`;
 }
 
 const systemConfigProperties = [
@@ -1309,8 +1308,7 @@ moisture sensor polarity: ${
 			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying configuration for valve ${
-					padStart(
-						i.toString(),
+					i.toString().padStart(
 						3,
 						"0",
 					)
@@ -1322,8 +1320,7 @@ moisture sensor polarity: ${
 			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying status for valve ${
-					padStart(
-						i.toString(),
+					i.toString().padStart(
 						3,
 						"0",
 					)
@@ -1342,7 +1339,7 @@ moisture sensor polarity: ${
 		if (property === "master") {
 			return "Master valve";
 		} else if (typeof property === "number") {
-			return `Valve ${padStart(property.toString(), 3, "0")}`;
+			return `Valve ${property.toString().padStart(3, "0")}`;
 		}
 		return super.translateProperty(ctx, property, propertyKey);
 	}
@@ -2522,7 +2519,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		};
 		for (let i = 0; i < this.entries.length; i++) {
 			const entry = this.entries[i];
-			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
+			const valveLabel = entry.valveId.toString().padStart(3, "0");
 			if (entry.duration) {
 				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
 			} else {
@@ -2584,7 +2581,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 		};
 		for (let i = 0; i < this.entries.length; i++) {
 			const entry = this.entries[i];
-			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
+			const valveLabel = entry.valveId.toString().padStart(3, "0");
 			if (entry.duration) {
 				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
 			} else {
@@ -2703,7 +2700,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 			...super.toLogEntry(ctx),
 			message: {
 				"table IDs": this.tableIDs
-					.map((id) => padStart(id.toString(), 3, "0"))
+					.map((id) => id.toString().padStart(3, "0"))
 					.join(", "),
 			},
 		};

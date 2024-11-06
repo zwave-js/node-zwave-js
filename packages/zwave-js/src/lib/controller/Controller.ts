@@ -371,14 +371,14 @@ import {
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
-import { distinct } from "alcalzone-shared/arrays/index.js";
-import { wait } from "alcalzone-shared/async/index.js";
+import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
-} from "alcalzone-shared/deferred-promise/index.js";
-import { roundTo } from "alcalzone-shared/math/index.js";
-import { isObject } from "alcalzone-shared/typeguards/index.js";
+} from "alcalzone-shared/deferred-promise";
+import { roundTo } from "alcalzone-shared/math";
+import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "node:crypto";
 import type { Driver } from "../driver/Driver.js";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache.js";

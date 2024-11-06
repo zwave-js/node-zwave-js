@@ -30,7 +30,7 @@ import {
 	type ReadonlyObjectKeyMap,
 	getEnumMemberName,
 } from "@zwave-js/shared/safe";
-import { distinct } from "alcalzone-shared/arrays/index.js";
+import { distinct } from "alcalzone-shared/arrays";
 import { AssociationCC, AssociationCCValues } from "../cc/AssociationCC.js";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC.js";
 import { MultiChannelAssociationCC } from "../cc/MultiChannelAssociationCC.js";

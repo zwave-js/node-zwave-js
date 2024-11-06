@@ -1,9 +1,10 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { sum } from "@zwave-js/shared/safe";
 import { NodeIDType } from "../consts/index.js";
-import { type BasicDeviceClass } from "../index_safe.js";
+import { type BasicDeviceClass } from "../registries/DeviceClasses.js";
 import { validatePayload } from "../util/misc.js";
 import { CommandClasses } from "./CommandClasses.js";
+import { type ProtocolVersion } from "./Protocol.js";
 
 export interface ApplicationNodeInformation {
 	genericDeviceClass: number;
@@ -77,7 +78,7 @@ export function encodeNodeUpdatePayload(
 	]);
 }
 
-export function isExtendedCCId(ccId: CommandClasses): boolean {
+function isExtendedCCId(ccId: CommandClasses): boolean {
 	return ccId >= 0xf1;
 }
 
@@ -164,13 +165,6 @@ export function encodeCCList(
 	}
 
 	return ret;
-}
-
-export enum ProtocolVersion {
-	"unknown" = 0,
-	"2.0" = 1,
-	"4.2x / 5.0x" = 2,
-	"4.5x / 6.0x" = 3,
 }
 
 export type FLiRS = false | "250ms" | "1000ms";

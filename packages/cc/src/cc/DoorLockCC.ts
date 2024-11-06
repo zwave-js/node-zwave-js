@@ -24,7 +24,7 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
 	POLL_VALUE,

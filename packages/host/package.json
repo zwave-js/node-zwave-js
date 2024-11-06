@@ -55,10 +55,10 @@
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.8"
+    "alcalzone-shared": "^5.0.0"
   },
   "devDependencies": {
-    "@alcalzone/esm2cjs": "^1.2.3",
+    "@alcalzone/esm2cjs": "^1.3.0",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.63",
     "del-cli": "^6.0.0",

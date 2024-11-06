@@ -1,5 +1,5 @@
 import { Bytes, isUint8Array } from "@zwave-js/shared";
-import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import createMDNSServer from "mdns-server";
 
 export interface RemoteSerialPort {

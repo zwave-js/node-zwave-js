@@ -33,7 +33,7 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { clamp } from "alcalzone-shared/math/index.js";
+import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest.js";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest.js";
 import { type MessageWithCC, containsCC } from "../utils.js";

@@ -18,7 +18,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import { CCAPI } from "../lib/API.js";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
@@ -274,9 +273,8 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 					this.switchPoints
 						.map(
 							(sp) => `
-· ${padStart(sp.hour.toString(), 2, "0")}:${
-								padStart(
-									sp.minute.toString(),
+· ${sp.hour.toString().padStart(2, "0")}:${
+								sp.minute.toString().padStart(
 									2,
 									"0",
 								)
@@ -349,9 +347,8 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 					this.schedule
 						.map(
 							(sp) => `
-· ${padStart(sp.hour.toString(), 2, "0")}:${
-								padStart(
-									sp.minute.toString(),
+· ${sp.hour.toString().padStart(2, "0")}:${
+								sp.minute.toString().padStart(
 									2,
 									"0",
 								)

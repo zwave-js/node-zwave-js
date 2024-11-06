@@ -18,8 +18,7 @@ import {
 	readJSON,
 	stringify,
 } from "@zwave-js/shared";
-import { composeObject } from "alcalzone-shared/objects/index.js";
-import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as JSONC from "comment-json";
 import * as JSON5 from "json5";
 import { AssertionError, ok } from "node:assert";
@@ -31,11 +30,14 @@ import { compare } from "semver";
 import xml2js from "xml2js";
 import xml2js_parsers from "xml2js/lib/processors.js";
 import yargs from "yargs";
-import { ConfigManager, type DeviceConfigIndexEntry } from "../src";
+import { hideBin } from "yargs/helpers";
+import { ConfigManager } from "../src/ConfigManager.js";
+import { DeviceConfigIndexEntry } from "../src/devices/DeviceConfig.js";
 
 const execPromise = promisify(child.exec);
+const yargsInstance = yargs(hideBin(process.argv));
 
-const program = yargs
+const program = yargsInstance
 	.option("source", {
 		description: "source of the import",
 		alias: "s",
@@ -1815,7 +1817,7 @@ async function downloadManufacturersOH(): Promise<void> {
 	// Delete the last line
 	process.stdout.write("\r\x1b[K");
 
-	const manufacturers = composeObject(
+	const manufacturers = Object.fromEntries(
 		// @ts-expect-error
 		data.manufacturers.data.map(({ id, label }) => [
 			label

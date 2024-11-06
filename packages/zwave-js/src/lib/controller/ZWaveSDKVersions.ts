@@ -1,5 +1,3 @@
-import { padStart } from "alcalzone-shared/strings/index.js";
-
 // Based on INS13954-13, chapter 7
 const versions = Object.freeze([
 	// Z-Wave 700 uses 7.x SDK versions but also a different NVM format,
@@ -338,7 +336,7 @@ const versions = Object.freeze([
 function semverToLegacy(version: string): string {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [major, minor, _patch] = version.split(".", 3);
-	return `${major}.${padStart(minor, 2, "0")}`;
+	return `${major}.${minor.toString().padStart(2, "0")}`;
 }
 
 /**

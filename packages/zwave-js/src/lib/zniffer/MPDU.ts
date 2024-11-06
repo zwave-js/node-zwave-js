@@ -30,7 +30,6 @@ import {
 	pick,
 	staticExtends,
 } from "@zwave-js/shared";
-import { padStart } from "alcalzone-shared/strings/index.js";
 import {
 	ExplorerFrameCommand,
 	LongRangeFrameType,
@@ -73,7 +72,7 @@ function longRangeBeamPowerToDBm(power: number): number {
 }
 
 function formatNodeId(nodeId: number): string {
-	return padStart(nodeId.toString(), 3, "0");
+	return nodeId.toString().padStart(3, "0");
 }
 
 function formatRoute(
@@ -726,8 +725,7 @@ export class InclusionRequestExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 
 		const message: MessageRecord = {
 			...original,
-			"network home ID": padStart(
-				this.networkHomeId.toString(16),
+			"network home ID": this.networkHomeId.toString(16).padStart(
 				8,
 				"0",
 			),

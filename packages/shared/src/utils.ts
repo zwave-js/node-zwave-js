@@ -1,4 +1,4 @@
-import { isArray, isObject } from "alcalzone-shared/typeguards/index.js";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings.js";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */

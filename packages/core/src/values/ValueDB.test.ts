@@ -1,7 +1,7 @@
 import { pick } from "@zwave-js/shared/safe";
 import sinon from "sinon";
 import { test } from "vitest";
-import { CommandClasses } from "../capabilities/CommandClasses.js";
+import { CommandClasses } from "../definitions/CommandClasses.js";
 import { ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { assertZWaveError } from "../test/assertZWaveError.js";
 import { ValueMetadata } from "./Metadata.js";

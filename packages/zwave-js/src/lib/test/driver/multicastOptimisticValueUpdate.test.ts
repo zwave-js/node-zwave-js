@@ -8,7 +8,7 @@ import {
 	getDefaultMockControllerCapabilities,
 	getDefaultSupportedFunctionTypes,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuiteMulti.js";
 
 // Regression test for #5844

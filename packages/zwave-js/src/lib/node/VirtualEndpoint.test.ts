@@ -19,7 +19,7 @@ import {
 	MockNode,
 	getDefaultSupportedFunctionTypes,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { test as baseTest } from "vitest";
 import {
 	createDefaultMockControllerBehaviors,

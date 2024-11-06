@@ -1,5 +1,3 @@
-import { composeObject, entries } from "alcalzone-shared/objects/index.js";
-
 export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 	public constructor(
 		entries?: [TKey, TValue][],
@@ -93,8 +91,8 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 				if (!(required in filledKey)) filledKey[required as any] = def;
 			}
 		}
-		const _key = composeObject(
-			entries(filledKey)
+		const _key = Object.fromEntries(
+			Object.entries(filledKey)
 				.filter(([, value]) => value != undefined)
 				.sort(([keyA], [keyB]) =>
 					keyA > keyB ? 1 : keyA < keyB ? -1 : 0

@@ -1,4 +1,4 @@
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import { CommandClass } from "./CommandClass.js";
 
 export type EncapsulatedCommandClass = CommandClass & {

@@ -12,8 +12,8 @@ import {
 	type Comparable,
 	type CompareResult,
 	compareNumberOrString,
-} from "alcalzone-shared/comparable/index.js";
-import type { DeferredPromise } from "alcalzone-shared/deferred-promise/index.js";
+} from "alcalzone-shared/comparable";
+import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { NodeStatus } from "../node/_Types.js";
 import type { Driver } from "./Driver.js";
 

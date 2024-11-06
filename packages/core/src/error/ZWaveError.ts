@@ -1,5 +1,3 @@
-import { padStart } from "alcalzone-shared/strings/index.js";
-
 /**
  * Used to identify errors from this library without relying on the specific wording of the error message
  */
@@ -215,7 +213,7 @@ export enum ZWaveErrorCodes {
 }
 
 export function getErrorSuffix(code: ZWaveErrorCodes): string {
-	return `ZW${padStart(code.toString(), 4, "0")}`;
+	return `ZW${code.toString().padStart(4, "0")}`;
 }
 
 function appendErrorSuffix(message: string, code: ZWaveErrorCodes): string {

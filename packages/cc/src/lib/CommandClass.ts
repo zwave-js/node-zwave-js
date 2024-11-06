@@ -54,7 +54,7 @@ import {
 	num2hex,
 	staticExtends,
 } from "@zwave-js/shared";
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import type { CCAPIHost, CCAPINode, ValueIDProperties } from "./API.js";
 import {
 	getCCCommand,

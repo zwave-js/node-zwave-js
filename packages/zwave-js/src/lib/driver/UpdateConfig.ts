@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { copyFilesRecursive, getErrorMessage } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards/index.js";
+import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
 import fs from "node:fs/promises";
 import os from "node:os";

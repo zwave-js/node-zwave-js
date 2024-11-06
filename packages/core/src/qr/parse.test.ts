@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import { test } from "vitest";
+import { SecurityClass } from "../definitions/SecurityClass.js";
 import { ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { assertZWaveError } from "../test/assertZWaveError.js";
-import { QRCodeVersion, parseQRCodeString } from "./QR.js";
-import { SecurityClass } from "./SecurityClass.js";
+import { QRCodeVersion, parseQRCodeString } from "./index.js";
 
 function createDummyQR(firstDigits: string): string {
 	return firstDigits + "0".repeat(52 - firstDigits.length);

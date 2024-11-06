@@ -1,7 +1,7 @@
 import { num2hex } from "@zwave-js/shared/safe";
-import { isObject } from "alcalzone-shared/typeguards/index.js";
-import type { ProtocolDataRate } from "../capabilities/Protocols.js";
-import { type SecurityClass } from "../security/SecurityClass.js";
+import { isObject } from "alcalzone-shared/typeguards";
+import type { ProtocolDataRate } from "../definitions/Protocol.js";
+import { type SecurityClass } from "../definitions/SecurityClass.js";
 import type { CCId } from "../traits/CommandClasses.js";
 import { Duration } from "../values/Duration.js";
 
