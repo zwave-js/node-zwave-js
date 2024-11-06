@@ -1,5 +1,6 @@
 import { getErrorMessage, isUint8Array } from "@zwave-js/shared";
 import { Bytes } from "@zwave-js/shared/safe";
+import { unzipSync } from "fflate";
 import * as crypto from "node:crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import type { Firmware, FirmwareFileFormat } from "./_Types.js";
@@ -53,11 +54,44 @@ export function guessFirmwareFileFormat(
 			.equals(firmwareIndicators.hec)
 	) {
 		return "hec";
-	} else {
-		throw new ZWaveError(
-			"Could not detect firmware format",
-			ZWaveErrorCodes.Invalid_Firmware_File,
-		);
+	}
+
+	throw new ZWaveError(
+		"Could not detect firmware format",
+		ZWaveErrorCodes.Invalid_Firmware_File,
+	);
+}
+
+/**
+ * Given the contents of a ZIP archive with a compatible firmware file,
+ * this function extracts the firmware data and guesses the firmware format
+ * using {@link guessFirmwareFileFormat}.
+ *
+ * @returns An object containing the filename, guessed format and unzipped data
+ * of the firmware file from the ZIP archive, or `undefined` if no compatible
+ * firmware file could be extracted.
+ */
+export function tryUnzipFirmwareFile(zipData: Uint8Array): {
+	filename: string;
+	format: FirmwareFileFormat;
+	rawData: Uint8Array;
+} | undefined {
+	// Extract files we can work with
+	const unzipped = unzipSync(zipData, {
+		filter: (file) => {
+			return /\.(hex|exe|ex_|ota|otz|hec|gbl|bin)$/.test(file.name);
+		},
+	});
+	if (Object.keys(unzipped).length === 1) {
+		// Exactly one file was extracted, inspect that
+		const filename = Object.keys(unzipped)[0];
+		const rawData = unzipped[filename];
+		try {
+			const format = guessFirmwareFileFormat(filename, rawData);
+			return { filename, format, rawData };
+		} catch {
+			return;
+		}
 	}
 }
 
