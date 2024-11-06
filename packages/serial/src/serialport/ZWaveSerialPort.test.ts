@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { PassThrough } from "node:stream";
 import sinon from "sinon";
 import { afterEach, beforeEach, test } from "vitest";

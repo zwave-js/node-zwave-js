@@ -13,7 +13,7 @@ import {
 	type MockNodeBehavior,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(

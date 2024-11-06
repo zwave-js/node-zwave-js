@@ -1,5 +1,5 @@
 import { NodeStatus } from "@zwave-js/core";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 

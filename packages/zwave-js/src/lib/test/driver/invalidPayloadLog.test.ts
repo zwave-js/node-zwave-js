@@ -6,7 +6,7 @@ import {
 	getDefaultMockControllerCapabilities,
 	getDefaultSupportedFunctionTypes,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite.js";
 
 const spyTransport = new SpyTransport();

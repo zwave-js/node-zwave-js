@@ -3,7 +3,7 @@ import {
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
 import { createMockZWaveRequestFrame } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 

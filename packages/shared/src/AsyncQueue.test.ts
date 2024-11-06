@@ -1,4 +1,4 @@
-import { wait } from "alcalzone-shared/async/index.js";
+import { wait } from "alcalzone-shared/async";
 import { test } from "vitest";
 import { AsyncQueue } from "./AsyncQueue.js";
 

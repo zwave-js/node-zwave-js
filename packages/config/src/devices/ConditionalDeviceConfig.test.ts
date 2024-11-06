@@ -1,4 +1,4 @@
-import { isArray } from "alcalzone-shared/typeguards/index.js";
+import { isArray } from "alcalzone-shared/typeguards";
 import { test } from "vitest";
 import { ConditionalDeviceConfig } from "./DeviceConfig.js";
 
