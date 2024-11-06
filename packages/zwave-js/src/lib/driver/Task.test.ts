@@ -364,6 +364,8 @@ test("Completed Restart tasks are not restarted after completion", async (t) => 
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1IsAlmostDone = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		interrupt: TaskInterruptBehavior.Restart,
@@ -372,10 +374,11 @@ test("Completed Restart tasks are not restarted after completion", async (t) => 
 			yield;
 			order.push("1b");
 			yield;
+			t1IsAlmostDone.resolve();
 			order.push("1c");
 		},
 	});
-	await wait(1);
+	await t1IsAlmostDone;
 	const task2 = scheduler.queueTask({
 		priority: TaskPriority.High,
 		task: async function*() {
