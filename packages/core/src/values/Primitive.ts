@@ -3,7 +3,7 @@ import {
 	MAX_NODES_LR,
 	NUM_LR_NODES_PER_SEGMENT,
 	NUM_NODEMASK_BYTES,
-} from "../consts/index.js";
+} from "../definitions/consts.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import {
 	getBitMaskWidth,

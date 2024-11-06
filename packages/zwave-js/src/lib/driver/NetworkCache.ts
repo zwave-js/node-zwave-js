@@ -2,6 +2,7 @@ import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { type AssociationAddress } from "@zwave-js/cc";
 import {
 	type CommandClasses,
+	type FileSystem,
 	NodeType,
 	Protocols,
 	SecurityClass,
@@ -11,7 +12,6 @@ import {
 	dskToString,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { FileSystem } from "@zwave-js/host";
 import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "node:path";

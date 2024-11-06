@@ -1034,9 +1034,12 @@ test("Tasks can be removed while paused", async (t) => {
 	const order: string[] = [];
 	scheduler.start();
 
+	const t1WasStarted = createDeferredPromise<void>();
+
 	const task1 = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
+			t1WasStarted.resolve();
 			order.push("1a");
 			yield () => wait(10);
 			order.push("1b");
@@ -1048,7 +1051,7 @@ test("Tasks can be removed while paused", async (t) => {
 		},
 	});
 
-	await wait(1);
+	await t1WasStarted;
 	// The task should have run to the first yield
 	t.expect(order).toStrictEqual(["1a"]);
 
@@ -1095,8 +1098,8 @@ test("Tasks can be removed while paused, part 2", async (t) => {
 		},
 	});
 
-	await wait(1);
-	// The tasks should have run to the first yield
+	await wait(5);
+	// The tasks have run to the first yield
 	t.expect(order).toStrictEqual(["1a", "2a"]);
 
 	await scheduler.removeTasks((t) => true);

@@ -12,3 +12,5 @@ export enum BeamingInfo {
 	LongContinuous = 0b10,
 	Fragmented = 0b100,
 }
+
+export type FrameType = "singlecast" | "broadcast" | "multicast";

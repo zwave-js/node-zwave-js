@@ -26,3 +26,6 @@ export function isEmptyRoute(route: Route): boolean {
 		&& route.routeSpeed === ZWaveDataRate["9k6"]
 	);
 }
+
+/** How many repeaters can appear in a route */
+export const MAX_REPEATERS = 4;
