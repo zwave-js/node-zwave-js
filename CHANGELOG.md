@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.1.0 (2024-11-06)
 ### Features
 * Allow specifying RF region for OTA firmware updates if the region is unknown or cannot be queried (#7369)
 * Add `tryUnzipFirmwareFile` utility to support zipped OTA firmware files (#7372)
