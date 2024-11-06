@@ -1,6 +1,6 @@
 import { beforeEach, test as baseTest } from "vitest";
-import { InterviewStage } from "../consts/InterviewStage.js";
 import { CommandClasses } from "../definitions/CommandClasses.js";
+import { InterviewStage } from "../definitions/InterviewStage.js";
 import {
 	SpyTransport,
 	assertLogInfo,

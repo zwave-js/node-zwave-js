@@ -1,6 +1,6 @@
 export { MessagePriority } from "@zwave-js/core";
 export type { SendMessageOptions } from "@zwave-js/core";
-export type { FileSystem } from "@zwave-js/host/safe";
+export type { FileSystem } from "@zwave-js/core";
 export { FunctionType, Message, MessageType } from "@zwave-js/serial";
 export type {
 	MessageOptions,

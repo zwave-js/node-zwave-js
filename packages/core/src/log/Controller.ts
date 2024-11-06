@@ -1,6 +1,6 @@
 import { isObject } from "alcalzone-shared/typeguards";
-import { InterviewStage } from "../consts/InterviewStage.js";
 import { CommandClasses } from "../definitions/CommandClasses.js";
+import { InterviewStage } from "../definitions/InterviewStage.js";
 import type {
 	ValueAddedArgs,
 	ValueID,

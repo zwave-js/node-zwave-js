@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
 /* @forbiddenImports external */
 
-export * from "./consts/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
@@ -15,9 +14,10 @@ export * from "./registries/Scales.js";
 export * from "./registries/Sensors.js";
 export * from "./traits/CommandClasses.js";
 export * from "./traits/Endpoints.js";
-export * from "./traits/Nodes.js";
-export * from "./traits/SecurityClasses.js";
-export * from "./traits/SecurityManagers.js";
+export type * from "./traits/FileSystem.js";
+export type * from "./traits/Nodes.js";
+export type * from "./traits/SecurityClasses.js";
+export type * from "./traits/SecurityManagers.js";
 export * from "./util/_Types.js";
 export * from "./util/config.js";
 export * from "./util/crc.js";

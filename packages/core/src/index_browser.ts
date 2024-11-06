@@ -1,7 +1,6 @@
 /* @forbiddenImports external */
 // FIXME: Find a way to make sure that the forbiddenImports lint uses the "browser" condition
 
-export * from "./consts/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
@@ -15,6 +14,7 @@ export * from "./registries/Scales.js";
 export * from "./registries/Sensors.js";
 export type * from "./traits/CommandClasses.js";
 export type * from "./traits/Endpoints.js";
+export type * from "./traits/FileSystem.js";
 export type * from "./traits/Nodes.js";
 export type * from "./traits/SecurityClasses.js";
 export type * from "./traits/SecurityManagers.js";

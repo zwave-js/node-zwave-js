@@ -1,5 +1,10 @@
-import type { LogConfig, LongRangeChannel, RFRegion } from "@zwave-js/core";
-import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
+import type {
+	FileSystem,
+	LogConfig,
+	LongRangeChannel,
+	RFRegion,
+} from "@zwave-js/core";
+import type { ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { SerialPort } from "serialport";

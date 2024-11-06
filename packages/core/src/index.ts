@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
-export * from "./consts/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
@@ -15,6 +14,7 @@ export * from "./security/ctr_drbg.js";
 export * from "./test/assertZWaveError.js";
 export * from "./traits/CommandClasses.js";
 export * from "./traits/Endpoints.js";
+export type * from "./traits/FileSystem.js";
 export * from "./traits/Nodes.js";
 export * from "./traits/SecurityClasses.js";
 export * from "./traits/SecurityManagers.js";

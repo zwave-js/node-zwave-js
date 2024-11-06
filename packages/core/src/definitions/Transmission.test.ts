@@ -1,5 +1,5 @@
 import { test } from "vitest";
-import { MessagePriority, isMessagePriority } from "./Transmission.js";
+import { MessagePriority, isMessagePriority } from "./MessagePriority.js";
 
 test("isMessagePriority() should detect numbers in the enum range as a message priority", (t) => {
 	const numericKeys = Object.keys(MessagePriority)
