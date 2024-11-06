@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Allow specifying RF region for OTA firmware updates if the region is unknown or cannot be queried (#7369)
+* Add `tryUnzipFirmwareFile` utility to support zipped OTA firmware files (#7372)
+
+### Bugfixes
+* Parse negative setback state consistently (#7366)
+* Ignore LR nodes when computing neighbor discovery timeout (#7367)
+* Automatically fall back to `Europe` when setting region to `Default (EU)` (#7368)
+
+### Changes under the hood
+* Improve bundler-friendlyness of `@zwave-js/core` and `@zwave-js/shared` with new browser-specific entry points and `sideEffects` hints (#7374)
+
 ## 14.0.0 (2024-11-05)
 In this release, a lot of the internal API was refactored to decrease interdependencies. Technically this results in a huge list of breaking changes, but most of those should not affect any application, unless very low-level APIs are frequently used. For example, Z-Wave JS UI and Z-Wave JS Server had just two small breaks. In addition, Z-Wave JS is now released as hybrid ESM/CJS packages.
 
