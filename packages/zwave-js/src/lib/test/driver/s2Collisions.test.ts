@@ -29,10 +29,10 @@ import { wait } from "alcalzone-shared/async";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 
-integrationTest.only(
+integrationTest(
 	"S2 Collisions: Both nodes send at the same time, with supervision",
 	{
-		debug: true,
+		// debug: true,
 
 		// We need the cache to skip the CC interviews and mark S2 as supported
 		provisioningDirectory: path.join(
