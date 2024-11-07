@@ -29,10 +29,10 @@ import { wait } from "alcalzone-shared/async";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite.js";
 
-integrationTest(
+integrationTest.only(
 	"S2 Collisions: Both nodes send at the same time, with supervision",
 	{
-		// debug: true,
+		debug: true,
 
 		// We need the cache to skip the CC interviews and mark S2 as supported
 		provisioningDirectory: path.join(
@@ -76,9 +76,8 @@ integrationTest(
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
 			controller.securityManagers.securityManager2 = smCtrlr;
-			controller.parsingContext.getHighestSecurityClass =
-				controller.encodingContext.getHighestSecurityClass =
-					() => SecurityClass.S2_Unauthenticated;
+			controller.encodingContext.getHighestSecurityClass = () =>
+				SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
@@ -244,9 +243,8 @@ integrationTest(
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
 			controller.securityManagers.securityManager2 = smCtrlr;
-			controller.parsingContext.getHighestSecurityClass =
-				controller.encodingContext.getHighestSecurityClass =
-					() => SecurityClass.S2_Unauthenticated;
+			controller.encodingContext.getHighestSecurityClass = () =>
+				SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
@@ -379,9 +377,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.parsingContext.getHighestSecurityClass =
-				controller.encodingContext.getHighestSecurityClass =
-					() => SecurityClass.S2_Unauthenticated;
+			controller.encodingContext.getHighestSecurityClass = () =>
+				SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {

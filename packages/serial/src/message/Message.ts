@@ -190,7 +190,6 @@ export class Message {
 		this.payload = payload;
 	}
 
-	/** @deprecated Use {@link parseAsync} instead */
 	public static parse(
 		data: Uint8Array,
 		ctx: MessageParsingContext,
@@ -200,24 +199,10 @@ export class Message {
 		const Constructor = getMessageConstructor(raw.type, raw.functionType)
 			?? Message;
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return Constructor.from(raw, ctx);
 	}
 
-	public static async parseAsync(
-		data: Uint8Array,
-		ctx: MessageParsingContext,
-	): Promise<Message> {
-		const raw = MessageRaw.parse(data);
-
-		const Constructor = getMessageConstructor(raw.type, raw.functionType)
-			?? Message;
-
-		return Constructor.fromAsync(raw, ctx);
-	}
-
 	/** Creates an instance of the message that is serialized in the given buffer */
-	/** @deprecated Use {@link fromAsync} instead */
 	public static from(
 		raw: MessageRaw,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -228,22 +213,6 @@ export class Message {
 			functionType: raw.functionType,
 			payload: raw.payload,
 		});
-	}
-
-	/** Creates an instance of the message that is serialized in the given buffer */
-	// eslint-disable-next-line @typescript-eslint/require-await
-	public static async fromAsync(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
-	): Promise<Message> {
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return this.from(raw, ctx);
-
-		// TODO: Plan for next major release:
-		// - Message ONLY exposes `public static async from` (renamed!)
-		// - Message internally implements `protected static fromSync` and `protected static async fromAsync`
-		// - The default implementation of `fromAsync` just calls `fromSync`
-		// - Sub-classes override either `fromSync` OR `fromAsync` as needed
 	}
 
 	public type: MessageType;

@@ -9,7 +9,7 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7
 		"hex",
 	);
 
-	const msg = await Message.parseAsync(
+	const msg = Message.parse(
 		data,
 		{ sdkVersion: "7.19.0" } as any,
 	);
@@ -30,7 +30,7 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (post-
 		"hex",
 	);
 
-	const msg = await Message.parseAsync(
+	const msg = Message.parse(
 		data,
 		{ sdkVersion: "7.19.1" } as any,
 	);

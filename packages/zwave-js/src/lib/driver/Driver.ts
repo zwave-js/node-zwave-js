@@ -3542,7 +3542,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = await Message.parseAsync(
+			msg = Message.parse(
 				data,
 				this.getMessageParsingContext(),
 			);

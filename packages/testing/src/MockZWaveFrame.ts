@@ -25,7 +25,7 @@ export interface LazyMockZWaveRequestFrame {
 	/** Whether an ACK is requested from the destination */
 	ackRequested: boolean;
 	/** The Command Class contained in the frame */
-	payload: CommandClass | (() => CommandClass);
+	payload: CommandClass | (() => Promise<CommandClass>);
 }
 
 export interface MockZWaveAckFrame {
@@ -44,7 +44,7 @@ export enum MockZWaveFrameType {
 }
 
 export function createMockZWaveRequestFrame(
-	payload: CommandClass | (() => CommandClass),
+	payload: CommandClass | (() => Promise<CommandClass>),
 	options: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">> = {},
 ): LazyMockZWaveRequestFrame {
 	const { repeaters = [], ackRequested = true } = options;
@@ -68,13 +68,13 @@ export function createMockZWaveAckFrame(
 	};
 }
 
-export function unlazyMockZWaveFrame(
+export async function unlazyMockZWaveFrame(
 	frame: LazyMockZWaveFrame,
-): MockZWaveFrame {
+): Promise<MockZWaveFrame> {
 	if (frame.type === MockZWaveFrameType.ACK) return frame;
 	let payload = frame.payload;
 	if (typeof payload === "function") {
-		payload = payload();
+		payload = await payload();
 	}
 	return {
 		...frame,

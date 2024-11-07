@@ -115,9 +115,8 @@ integrationTest(
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
 			controller.securityManagers.securityManager2 = smCtrlr;
-			controller.parsingContext.getHighestSecurityClass =
-				controller.encodingContext.getHighestSecurityClass =
-					() => SecurityClass.S2_Unauthenticated;
+			controller.encodingContext.getHighestSecurityClass = () =>
+				SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {

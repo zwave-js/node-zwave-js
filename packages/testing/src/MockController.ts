@@ -240,7 +240,7 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = await Message.parseAsync(data, {
+			msg = Message.parse(data, {
 				...this.parsingContext,
 				origin: MessageOrigin.Host,
 			});
@@ -530,7 +530,7 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(frame);
+				const unlazy = await unlazyMockZWaveFrame(frame);
 				onTransmit?.(unlazy);
 				node.onControllerFrame(unlazy).catch((e) => {
 					console.error(e);
@@ -542,7 +542,7 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(frame);
+				const unlazy = await unlazyMockZWaveFrame(frame);
 				onTransmit?.(unlazy);
 				this.onNodeFrame(node, unlazy).catch((e) => {
 					console.error(e);

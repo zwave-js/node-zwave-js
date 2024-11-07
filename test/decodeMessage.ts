@@ -12,8 +12,12 @@ import {
 	generateAuthKey,
 	generateEncryptionKey,
 } from "@zwave-js/core";
-import { Message } from "@zwave-js/serial";
-import { containsCC } from "zwave-js";
+import {
+	Message,
+	containsSerializedCC,
+	isCommandRequest,
+} from "@zwave-js/serial";
+import { CommandClass, containsCC } from "zwave-js";
 
 (async () => {
 	const configManager = new ConfigManager();
@@ -96,10 +100,21 @@ import { containsCC } from "zwave-js";
 		getHighestSecurityClass: () => SecurityClass.S2_AccessControl,
 		hasSecurityClass: () => true,
 	};
-	const msg = await Message.parseAsync(data, ctx as any);
+	const msg = Message.parse(data, ctx as any);
 
+	// Parse embedded CCs
+	if (isCommandRequest(msg) && containsSerializedCC(msg)) {
+		msg.command = await CommandClass.parseAsync(
+			msg.serializedCC,
+			{
+				...ctx,
+				sourceNodeId: msg.getNodeId()!,
+				frameType: msg.frameType,
+			},
+		);
+	}
 	if (containsCC(msg)) {
-		msg.command.mergePartialCCs([], {} as any);
+		await msg.command.mergePartialCCsAsync([], {} as any);
 	}
 	msg;
 	debugger;

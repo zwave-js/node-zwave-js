@@ -109,10 +109,10 @@ function createLazySendDataPayload(
 	controller: MockController,
 	node: MockNode,
 	msg: SendDataMessage,
-): () => CommandClass {
-	return () => {
+): () => Promise<CommandClass> {
+	return async () => {
 		try {
-			const cmd = CommandClass.parse(msg.serializedCC!, {
+			const cmd = await CommandClass.parseAsync(msg.serializedCC!, {
 				sourceNodeId: controller.ownNodeId,
 				__internalIsMockNode: true,
 				...node.encodingContext,

@@ -39,7 +39,7 @@ test("should deserialize and serialize correctly", async (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = await Message.parseAsync(original, {} as any);
+		const parsed = Message.parse(original, {} as any);
 		await t.expect(parsed.serializeAsync({} as any)).resolves.toStrictEqual(
 			original,
 		);
@@ -93,9 +93,9 @@ test("should throw the correct error when parsing a faulty message", async (t) =
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		await assertZWaveError(
+		assertZWaveError(
 			t.expect,
-			() => Message.parseAsync(message, {} as any),
+			() => Message.parse(message, {} as any),
 			{
 				messageMatches: msg,
 				errorCode: code,
@@ -160,7 +160,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 
 test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", async (t) => {
 	const unknown = Bytes.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	const parsed = await Message.parseAsync(unknown, {} as any);
+	const parsed = Message.parse(unknown, {} as any);
 	t.expect(parsed).toBeInstanceOf(Message);
 });
 
