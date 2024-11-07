@@ -123,6 +123,7 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeNodeInformationFrame(this);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -171,6 +172,7 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
 		this.payload = new Bytes(5);
 		this.payload[0] = this.assignedNodeId;
 		this.payload.writeUInt32BE(this.homeId, 1);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -248,6 +250,7 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 			nodesBitmask,
 			Bytes.from([this.wakeUpTime, this.dataRate]),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -306,6 +309,7 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 				? Bytes.from([this.wakeUpTime])
 				: new Bytes(),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -345,6 +349,7 @@ export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.sequenceNumber]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -401,6 +406,7 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 			| (this.excludeNode ? 0b0010 : 0)
 			| (this.includeNode ? 0b0100 : 0),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -479,6 +485,7 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 			Bytes.from([this.sequenceNumber, this.sourceNodeId]),
 			encodeNodeProtocolInfoAndDeviceClass(this),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -537,6 +544,7 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 			]),
 			nodesBitmask,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -572,6 +580,7 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.status]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -646,6 +655,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 			...this.repeaters,
 			speedByte,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -718,6 +728,7 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 			Bytes.from([this.newNodeId]),
 			encodeNodeInformationFrame(this),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -765,6 +776,7 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 			Bytes.from([this.testedNodeId, nodesBitmask.length]),
 			nodesBitmask,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -804,6 +816,7 @@ export class ZWaveProtocolCCTransferNewPrimaryControllerComplete
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.genericDeviceClass]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -850,6 +863,7 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.sucNodeId, this.isSIS ? 0b1 : 0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -887,6 +901,7 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([0x01, this.enableSIS ? 0b1 : 0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -931,6 +946,7 @@ export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
 			this.accepted ? 0x01 : 0x00,
 			this.isSIS ? 0b1 : 0,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -982,6 +998,7 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 		for (let i = 0; i < this.nodeIds.length && i < 5; i++) {
 			this.payload[i] = this.nodeIds[i];
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1014,6 +1031,7 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.lostNodeId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1052,6 +1070,7 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.accepted ? 0x05 : 0x04]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1119,6 +1138,7 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([0, this.powerDampening]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1161,6 +1181,7 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 			this.reservedNodeIDs.length,
 			...this.reservedNodeIDs,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1197,6 +1218,7 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.numNodeIDs]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1240,6 +1262,7 @@ export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
 			this.nodeMaskType,
 			this.nodeListUpdated ? 0x01 : 0x00,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1297,6 +1320,7 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 			this.nodeIDs.length,
 			...this.nodeIDs,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1340,6 +1364,7 @@ export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
 			this.enabled ? 0x01 : 0x00,
 			this.timeoutMinutes ?? 0x00,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1385,6 +1410,7 @@ export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.targetNodeId, this.routeNumber]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1435,6 +1461,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from(this.nwiHomeId);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

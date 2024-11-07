@@ -65,6 +65,7 @@ export class RequestNodeNeighborUpdateRequest
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

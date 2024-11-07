@@ -320,6 +320,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 			nameBuffer.subarray(0, Math.min(16, nameBuffer.length)),
 			0,
 		);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -432,6 +433,7 @@ export class NodeNamingAndLocationCCLocationSet
 			locationBuffer.subarray(0, Math.min(16, locationBuffer.length)),
 			0,
 		);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

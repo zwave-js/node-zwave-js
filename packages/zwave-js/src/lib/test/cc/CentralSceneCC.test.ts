@@ -23,7 +23,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the ConfigurationGet command should serialize correctly", (t) => {
+test("the ConfigurationGet command should serialize correctly", async (t) => {
 	const cc = new CentralSceneCCConfigurationGet({
 		nodeId: 1,
 	});
@@ -32,10 +32,12 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationSet command should serialize correctly (flags set)", (t) => {
+test("the ConfigurationSet command should serialize correctly (flags set)", async (t) => {
 	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: true,
@@ -46,10 +48,12 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 			0b1000_0000,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationSet command should serialize correctly (flags not set)", (t) => {
+test("the ConfigurationSet command should serialize correctly (flags not set)", async (t) => {
 	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: false,
@@ -60,7 +64,9 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 			0,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the ConfigurationReport command should be deserialized correctly", async (t) => {
@@ -79,7 +85,7 @@ test("the ConfigurationReport command should be deserialized correctly", async (
 	t.expect(cc.slowRefresh).toBe(true);
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new CentralSceneCCSupportedGet({
 		nodeId: 1,
 	});
@@ -88,7 +94,9 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the SupportedReport command should be deserialized correctly", async (t) => {

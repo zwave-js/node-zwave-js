@@ -674,6 +674,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -751,6 +752,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			this.targetValue ?? 0xfe,
 			(this.duration ?? Duration.default()).serializeReport(),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -854,6 +856,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -919,6 +922,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.switchType & 0b11111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -546,6 +546,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -819,6 +820,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.exclusiveControlNodeId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -911,6 +913,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.timeout.serialize()]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

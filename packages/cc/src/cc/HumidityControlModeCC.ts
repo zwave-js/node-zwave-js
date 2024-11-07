@@ -315,6 +315,7 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.mode & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

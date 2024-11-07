@@ -34,6 +34,7 @@ export class IsFailedNodeRequest extends Message {
 
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

@@ -101,6 +101,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 				? ControllerCapabilityFlags.NoNodesIncluded
 				: 0),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

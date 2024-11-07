@@ -17,7 +17,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Set command (without Duration) should serialize correctly", (t) => {
+test("the Set command (without Duration) should serialize correctly", async (t) => {
 	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 55,
@@ -29,10 +29,12 @@ test("the Set command (without Duration) should serialize correctly", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command (with Duration) should serialize correctly", (t) => {
+test("the Set command (with Duration) should serialize correctly", async (t) => {
 	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 56,
@@ -45,7 +47,9 @@ test("the Set command (with Duration) should serialize correctly", (t) => {
 			0x80, // 1 minute
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Set command should be deserialized correctly", async (t) => {

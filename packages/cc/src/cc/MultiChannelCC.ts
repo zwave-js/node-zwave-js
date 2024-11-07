@@ -878,6 +878,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			this.individualCount & 0b01111111,
 			this.aggregatedCount ?? 0,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -995,6 +996,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			]),
 			encodeApplicationNodeInformation(this),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1061,6 +1063,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.requestedEndpoint & 0b01111111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1131,6 +1134,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			]),
 			Bytes.from(this.foundEndpoints.map((e) => e & 0b01111111)),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1223,6 +1227,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.genericClass, this.specificClass]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1331,6 +1336,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.requestedEndpoint & 0b0111_1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1500,6 +1506,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: MultiChannelCCDestination;
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		if (
 			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
@@ -1518,9 +1525,34 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Bytes.concat([
 			Bytes.from([this.endpointIndex & 0b0111_1111, destination]),
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			this.encapsulated.serialize(ctx),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		if (
+			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
+				?.treatDestinationEndpointAsSource
+		) {
+			// This device incorrectly responds from the endpoint we've passed as our source endpoint
+			if (typeof this.destination === "number") {
+				this.endpointIndex = this.destination;
+			}
+		}
+
+		const destination = typeof this.destination === "number"
+			// The destination is a single number
+			? this.destination & 0b0111_1111
+			// The destination is a bit mask
+			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
+		this.payload = Bytes.concat([
+			Bytes.from([this.endpointIndex & 0b0111_1111, destination]),
+			await this.encapsulated.serializeAsync(ctx),
+		]);
+		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -1630,6 +1662,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.requestedCC]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1733,12 +1766,23 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 	public encapsulated!: CommandClass;
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.concat([
 			Bytes.from([this.endpointIndex]),
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			this.encapsulated.serialize(ctx),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		this.payload = Bytes.concat([
+			Bytes.from([this.endpointIndex]),
+			await this.encapsulated.serializeAsync(ctx),
+		]);
+		return super.serializeAsync(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

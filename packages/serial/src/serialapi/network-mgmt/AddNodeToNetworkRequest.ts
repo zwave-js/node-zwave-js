@@ -180,6 +180,7 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 
 		this.payload = Bytes.from([data, this.callbackId]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -216,6 +217,7 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 		this.callbackId = 0;
 
 		this.payload = Bytes.from([control, this.callbackId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -267,6 +269,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			this.authHomeId,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -391,6 +394,7 @@ export class AddNodeToNetworkRequestStatusReport
 				),
 			]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

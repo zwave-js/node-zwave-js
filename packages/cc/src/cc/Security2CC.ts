@@ -2161,6 +2161,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		const securityManager = assertSecurityTX(ctx, this.nodeId);
 		this.ensureSequenceNumber(securityManager);
@@ -2185,6 +2186,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				e.serialize(index < unencryptedExtensions.length - 1)
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const serializedCC = this.encapsulated?.serialize(ctx)
 			?? new Bytes();
 		const plaintextPayload = Bytes.concat([
@@ -2253,7 +2255,103 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			ciphertextPayload,
 			authTag,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		const securityManager = assertSecurityTX(ctx, this.nodeId);
+		this.ensureSequenceNumber(securityManager);
+
+		// Include Sender EI in the command if we only have the receiver's EI
+		this.maybeAddSPANExtension(ctx, securityManager);
+
+		const unencryptedExtensions = this.extensions.filter(
+			(e) => !e.isEncrypted(),
+		);
+		const encryptedExtensions = this.extensions.filter((e) =>
+			e.isEncrypted()
+		);
+
+		const unencryptedPayload = Bytes.concat([
+			Bytes.from([
+				this.sequenceNumber,
+				(encryptedExtensions.length > 0 ? 0b10 : 0)
+				| (unencryptedExtensions.length > 0 ? 1 : 0),
+			]),
+			...unencryptedExtensions.map((e, index) =>
+				e.serialize(index < unencryptedExtensions.length - 1)
+			),
+		]);
+		const serializedCC = (await this.encapsulated?.serializeAsync(ctx))
+			?? new Bytes();
+		const plaintextPayload = Bytes.concat([
+			...encryptedExtensions.map((e, index) =>
+				e.serialize(index < encryptedExtensions.length - 1)
+			),
+			serializedCC,
+		]);
+
+		// Generate the authentication data for CCM encryption
+		const destinationTag = getDestinationIDTX.call(
+			this as Security2CCMessageEncapsulation,
+		);
+		const messageLength = this.computeEncapsulationOverhead()
+			+ serializedCC.length;
+		const authData = getAuthenticationData(
+			ctx.ownNodeId,
+			destinationTag,
+			ctx.homeId,
+			messageLength,
+			unencryptedPayload,
+		);
+
+		let key: Uint8Array;
+		let iv: Uint8Array;
+
+		if (this.isSinglecast()) {
+			// Singlecast:
+			// Generate a nonce for encryption, and remember it to attempt decryption
+			// of potential in-flight messages from the target node.
+			iv = securityManager.nextNonce(this.nodeId, true);
+			const { keyCCM } =
+				// Prefer the overridden security class if it was given
+				this.securityClass != undefined
+					? securityManager.getKeysForSecurityClass(
+						this.securityClass,
+					)
+					: securityManager.getKeysForNode(this.nodeId);
+			key = keyCCM;
+		} else {
+			// Multicast:
+			const keyAndIV = securityManager.getMulticastKeyAndIV(
+				destinationTag,
+			);
+			key = keyAndIV.key;
+			iv = keyAndIV.iv;
+		}
+
+		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
+			key,
+			iv,
+			plaintextPayload,
+			authData,
+			SECURITY_S2_AUTH_TAG_LENGTH,
+		);
+
+		// Remember key and IV for debugging purposes
+		this.key = key;
+		this.iv = iv;
+		this.authData = authData;
+		this.authTag = authTag;
+		this.ciphertext = ciphertextPayload;
+
+		this.payload = Bytes.concat([
+			unencryptedPayload,
+			ciphertextPayload,
+			authTag,
+		]);
+		return super.serializeAsync(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -2430,6 +2528,7 @@ export class Security2CCNonceReport extends Security2CC {
 		if (this.SOS) {
 			this.payload = Bytes.concat([this.payload, this.receiverEI!]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2504,6 +2603,7 @@ export class Security2CCNonceGet extends Security2CC {
 		this.ensureSequenceNumber(securityManager);
 
 		this.payload = Bytes.from([this.sequenceNumber]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2604,6 +2704,7 @@ export class Security2CCKEXReport extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2740,6 +2841,7 @@ export class Security2CCKEXSet extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2793,6 +2895,7 @@ export class Security2CCKEXFail extends Security2CC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.failType]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2843,6 +2946,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 			Bytes.from([this.includingNode ? 1 : 0]),
 			this.publicKey,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2899,6 +3003,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 			securityClassToBitMask(this.grantedKey),
 			this.networkKey,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2953,6 +3058,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = securityClassToBitMask(this.requestedKey);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -3010,6 +3116,7 @@ export class Security2CCTransferEnd extends Security2CC {
 		this.payload = Bytes.from([
 			(this.keyVerified ? 0b10 : 0) + (this.keyRequestComplete ? 0b1 : 0),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -3059,6 +3166,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeCCList(this.supportedCCs, []);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

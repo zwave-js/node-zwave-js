@@ -530,6 +530,7 @@ export class SceneControllerConfigurationCCSet
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -669,6 +670,7 @@ export class SceneControllerConfigurationCCGet
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

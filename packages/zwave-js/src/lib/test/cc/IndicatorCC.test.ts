@@ -24,17 +24,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 
 const host = createTestingHost();
 
-test("the Get command (V1) should serialize correctly", (t) => {
+test("the Get command (V1) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			IndicatorCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Get command (V2) should serialize correctly", (t) => {
+test("the Get command (V2) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCGet({
 		nodeId: 1,
 		indicatorId: 5,
@@ -45,10 +47,12 @@ test("the Get command (V2) should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command (v1) should serialize correctly", (t) => {
+test("the Set command (v1) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCSet({
 		nodeId: 2,
 		value: 23,
@@ -59,10 +63,12 @@ test("the Set command (v1) should serialize correctly", (t) => {
 			23, // value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command (v2) should serialize correctly", (t) => {
+test("the Set command (v2) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCSet({
 		nodeId: 2,
 		values: [
@@ -91,7 +97,9 @@ test("the Set command (v2) should serialize correctly", (t) => {
 			1, // value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command (v1) should be deserialized correctly", async (t) => {

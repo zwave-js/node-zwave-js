@@ -26,14 +26,16 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const basicCC = new BasicCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			BasicCommand.Get, // CC Command
 		]),
 	);
-	t.expect(basicCC.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(basicCC.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Get command should be deserialized correctly", async (t) => {
@@ -50,7 +52,7 @@ test("the Get command should be deserialized correctly", async (t) => {
 	t.expect(basicCC.nodeId).toBe(2);
 });
 
-test("the Set command should serialize correctly", (t) => {
+test("the Set command should serialize correctly", async (t) => {
 	const basicCC = new BasicCCSet({
 		nodeId: 2,
 		targetValue: 55,
@@ -61,7 +63,9 @@ test("the Set command should serialize correctly", (t) => {
 			55, // target value
 		]),
 	);
-	t.expect(basicCC.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(basicCC.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command (v1) should be deserialized correctly", async (t) => {

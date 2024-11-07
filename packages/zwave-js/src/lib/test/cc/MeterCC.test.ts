@@ -32,7 +32,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 const host = createTestingHost();
 const node2 = createTestNode(host, { id: 2 });
 
-test("the Get command (V1) should serialize correctly", (t) => {
+test("the Get command (V1) should serialize correctly", async (t) => {
 	const cc = new MeterCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
@@ -45,10 +45,10 @@ test("the Get command (V1) should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the Get command (V2) should serialize correctly", (t) => {
+test("the Get command (V2) should serialize correctly", async (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x03 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
@@ -62,10 +62,10 @@ test("the Get command (V2) should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the Get command (V3) should serialize correctly", (t) => {
+test("the Get command (V3) should serialize correctly", async (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x06 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
@@ -79,10 +79,10 @@ test("the Get command (V3) should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the Get command (V4) should serialize correctly", (t) => {
+test("the Get command (V4) should serialize correctly", async (t) => {
 	const cc = new MeterCCGet({ nodeId: 1, scale: 0x0f });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
@@ -97,30 +97,34 @@ test("the Get command (V4) should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new MeterCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			MeterCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Reset command (V2) should serialize correctly", (t) => {
+test("the Reset command (V2) should serialize correctly", async (t) => {
 	const cc = new MeterCCReset({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			MeterCommand.Reset, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Reset command (V6) should serialize correctly", (t) => {
+test("the Reset command (V6) should serialize correctly", async (t) => {
 	const cc = new MeterCCReset({
 		nodeId: 1,
 		type: 7,
@@ -136,7 +140,9 @@ test("the Reset command (V6) should serialize correctly", (t) => {
 			123, // 12.3
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command (V1) should be deserialized correctly", async (t) => {

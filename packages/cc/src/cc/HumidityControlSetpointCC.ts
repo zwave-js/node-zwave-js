@@ -557,6 +557,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 			Bytes.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -719,6 +720,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -892,6 +894,7 @@ export class HumidityControlSetpointCCScaleSupportedGet
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1039,6 +1042,7 @@ export class HumidityControlSetpointCCCapabilitiesGet
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

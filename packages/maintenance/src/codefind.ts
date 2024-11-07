@@ -2,14 +2,7 @@
  * This scripts helps find certain code patterns via the CLI
  */
 
-import {
-	blueBright,
-	bold,
-	gray,
-	greenBright,
-	redBright,
-	yellow,
-} from "ansi-colors";
+import c from "ansi-colors";
 import { fromJson as themeFromJson, highlight } from "cli-highlight";
 import esMain from "es-main";
 import globrex from "globrex";
@@ -18,6 +11,15 @@ import ts from "typescript";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { loadTSConfig, projectRoot } from "./tsAPITools.js";
+
+const {
+	blueBright,
+	bold,
+	gray,
+	greenBright,
+	redBright,
+	yellow,
+} = c;
 
 function relativeToProject(filename: string): string {
 	return path.relative(projectRoot, filename).replaceAll("\\", "/");

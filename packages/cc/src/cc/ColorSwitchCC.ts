@@ -723,6 +723,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 			15, // fixed 2 bytes
 			ColorComponent["Warm White"],
 		);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -879,6 +880,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				]),
 			]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -951,6 +953,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this._colorComponent]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1057,6 +1060,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1165,6 +1169,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1221,6 +1226,7 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.colorComponent]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

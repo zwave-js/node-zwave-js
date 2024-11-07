@@ -140,6 +140,7 @@ export class RemoveNodeFromNetworkRequest
 
 		this.payload = Bytes.from([data, this.callbackId]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -232,6 +233,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 			]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

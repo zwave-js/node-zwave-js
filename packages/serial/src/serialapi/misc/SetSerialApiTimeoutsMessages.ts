@@ -38,6 +38,7 @@ export class SetSerialApiTimeoutsRequest extends Message {
 			Math.round(this.ackTimeout / 10),
 			Math.round(this.byteTimeout / 10),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

@@ -261,6 +261,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 			Bytes.from([this.weekday & 0b111]),
 			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -394,6 +395,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.weekday & 0b111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -556,6 +558,7 @@ export class ClimateControlScheduleCCOverrideSet
 			[this.overrideType & 0b11],
 			encodeSetbackState(this.overrideState),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

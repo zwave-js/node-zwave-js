@@ -182,7 +182,7 @@ test("supports nested partial/non-partial CCs", async ({ context, expect }) => {
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
-	cc["decryptedCCBytes"] = cc1.serialize({} as any);
+	cc["decryptedCCBytes"] = await cc1.serializeAsync({} as any);
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});

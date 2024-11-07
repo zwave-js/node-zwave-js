@@ -20,7 +20,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the RecordsCountGet command should serialize correctly", (t) => {
+test("the RecordsCountGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockLoggingCCRecordsSupportedGet({
 		nodeId: 1,
 	});
@@ -29,7 +29,9 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the RecordsCountReport command should be deserialized correctly", async (t) => {
@@ -48,7 +50,7 @@ test("the RecordsCountReport command should be deserialized correctly", async (t
 	t.expect(cc.recordsCount).toBe(20);
 });
 
-test("the RecordGet command should serialize correctly", (t) => {
+test("the RecordGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockLoggingCCRecordGet({
 		nodeId: 1,
 		recordNumber: 1,
@@ -59,7 +61,9 @@ test("the RecordGet command should serialize correctly", (t) => {
 			1, // Record Number
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the RecordReport command should be deserialized correctly", async (t) => {

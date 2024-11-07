@@ -23,7 +23,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Set Tilt command should serialize correctly", (t) => {
+test("the Set Tilt command should serialize correctly", async (t) => {
 	const cc = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 99,
@@ -36,7 +36,9 @@ test("the Set Tilt command should serialize correctly", (t) => {
 			0x63, // Tilt
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command should be deserialized correctly", async (t) => {

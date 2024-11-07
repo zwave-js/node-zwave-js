@@ -959,6 +959,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.userId, this.enabled ? 0x01 : 0x00]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1005,6 +1006,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.enabled ? 0x01 : 0x00]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1074,6 +1076,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 			this.numYearDaySlots,
 			this.numDailyRepeatingSlots ?? 0,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1196,6 +1199,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1356,6 +1360,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1427,6 +1432,7 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.userId, this.slotId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1565,6 +1571,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1777,6 +1784,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1851,6 +1859,7 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.userId, this.slotId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1903,6 +1912,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
 		});
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1954,6 +1964,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
 		});
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2086,6 +2097,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			this.payload = Bytes.concat([this.payload, Bytes.alloc(5, 0xff)]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2238,6 +2250,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			this.payload = Bytes.concat([this.payload, Bytes.alloc(5, 0)]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2313,6 +2326,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.userId, this.slotId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

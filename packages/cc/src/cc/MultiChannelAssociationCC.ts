@@ -676,6 +676,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 				this.endpoints,
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -747,6 +748,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				this.endpoints || [],
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -891,6 +893,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			]),
 			destinations,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -945,6 +948,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -993,6 +997,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupCount]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

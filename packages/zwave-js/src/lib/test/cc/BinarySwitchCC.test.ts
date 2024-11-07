@@ -20,17 +20,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new BinarySwitchCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			BinarySwitchCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly (no duration)", (t) => {
+test("the Set command should serialize correctly (no duration)", async (t) => {
 	const cc = new BinarySwitchCCSet({
 		nodeId: 2,
 		targetValue: false,
@@ -48,10 +50,10 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the Set command should serialize correctly", (t) => {
+test("the Set command should serialize correctly", async (t) => {
 	const duration = new Duration(2, "minutes");
 	const cc = new BinarySwitchCCSet({
 		nodeId: 2,
@@ -71,7 +73,7 @@ test("the Set command should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", async (t) => {

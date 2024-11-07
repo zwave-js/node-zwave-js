@@ -26,7 +26,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new HumidityControlModeCCGet({
 		nodeId,
 	});
@@ -35,10 +35,12 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly", (t) => {
+test("the Set command should serialize correctly", async (t) => {
 	const cc = new HumidityControlModeCCSet({
 		nodeId,
 		mode: HumidityControlMode.Auto,
@@ -49,7 +51,9 @@ test("the Set command should serialize correctly", (t) => {
 			0x03, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command should be deserialized correctly", async (t) => {
@@ -111,7 +115,7 @@ test("the Report command should set the correct metadata", async (t) => {
 	});
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new HumidityControlModeCCSupportedGet({
 		nodeId,
 	});
@@ -120,7 +124,9 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the SupportedReport command should be deserialized correctly", async (t) => {

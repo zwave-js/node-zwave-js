@@ -25,7 +25,7 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-test(`creating and serializing should work for unspecified commands`, (t) => {
+test(`creating and serializing should work for unspecified commands`, async (t) => {
 	// Repro for #1219
 	const cc = new CommandClass({
 		nodeId: 2,
@@ -37,9 +37,9 @@ test(`creating and serializing should work for unspecified commands`, (t) => {
 		command: cc,
 		callbackId: 0xfe,
 	});
-	t.expect(
-		msg.serialize({} as any),
-	).toStrictEqual(Bytes.from("010c001302055d0201020325fe63", "hex"));
+	await t.expect(
+		msg.serializeAsync({} as any),
+	).resolves.toStrictEqual(Bytes.from("010c001302055d0201020325fe63", "hex"));
 });
 
 test("parse() returns an un-specialized instance when receiving a non-implemented CC", async (t) => {

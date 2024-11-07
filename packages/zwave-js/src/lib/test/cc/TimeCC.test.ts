@@ -20,14 +20,16 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the TimeGet command should serialize correctly", (t) => {
+test("the TimeGet command should serialize correctly", async (t) => {
 	const cc = new TimeCCTimeGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the TimeReport command should be deserialized correctly", async (t) => {
@@ -50,14 +52,16 @@ test("the TimeReport command should be deserialized correctly", async (t) => {
 	t.expect(cc.second).toBe(59);
 });
 
-test("the DateGet command should serialize correctly", (t) => {
+test("the DateGet command should serialize correctly", async (t) => {
 	const cc = new TimeCCDateGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the DateReport command should be deserialized correctly", async (t) => {

@@ -526,6 +526,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 			Bytes.from([this.groupId, this.name.length]),
 			Bytes.from(this.name, "utf8"),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -572,6 +573,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -678,6 +680,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			// The remaining bytes are zero
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -763,6 +766,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			optionByte,
 			isListMode ? 0 : this.groupId!,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -852,6 +856,7 @@ export class AssociationGroupInfoCCCommandListReport
 		}
 		this.payload[1] = offset - 2; // list length
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -918,6 +923,7 @@ export class AssociationGroupInfoCCCommandListGet
 			this.allowCache ? 0b1000_0000 : 0,
 			this.groupId,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

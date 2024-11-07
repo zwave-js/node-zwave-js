@@ -758,6 +758,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			Bytes.from([this.type]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -837,6 +838,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 				(this.scale & 0b11) << 3,
 			]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -903,6 +905,7 @@ export class MultilevelSensorCCSupportedSensorReport
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = encodeBitMask(this.supportedSensorTypes);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -971,6 +974,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 			Bytes.from([this.sensorType]),
 			encodeBitMask(this.supportedScales, 4, 0),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1025,6 +1029,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.sensorType]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

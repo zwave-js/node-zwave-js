@@ -19,17 +19,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new ThermostatFanModeCCGet({ nodeId: 5 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			ThermostatFanModeCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly (off = false)", (t) => {
+test("the Set command should serialize correctly (off = false)", async (t) => {
 	const cc = new ThermostatFanModeCCSet({
 		nodeId: 5,
 		mode: ThermostatFanMode["Auto medium"],
@@ -41,10 +43,12 @@ test("the Set command should serialize correctly (off = false)", (t) => {
 			0x04, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly (off = true)", (t) => {
+test("the Set command should serialize correctly (off = true)", async (t) => {
 	const cc = new ThermostatFanModeCCSet({
 		nodeId: 5,
 		mode: ThermostatFanMode["Auto medium"],
@@ -56,7 +60,9 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 			0b1000_0100, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command should be deserialized correctly", async (t) => {

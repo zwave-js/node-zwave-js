@@ -11,13 +11,15 @@ import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
 import { test } from "vitest";
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const batteryCC = new BatteryCCGet({ nodeId: 1 });
 	const expected = Bytes.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Get, // CC Command
 	]);
-	t.expect(batteryCC.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(batteryCC.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command (v1) should be deserialized correctly: when the battery is not low", async (t) => {

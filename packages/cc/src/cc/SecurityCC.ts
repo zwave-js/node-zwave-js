@@ -586,6 +586,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.view(this.nonce);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -797,6 +798,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		if (!this.nonce) throwNoNonce();
 		if (this.nonce.length !== HALF_NONCE_SIZE) {
@@ -816,6 +818,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			encryptionKey = ctx.securityManager.encryptionKey;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const serializedCC = this.encapsulated.serialize(ctx);
 		const plaintext = Bytes.concat([
 			Bytes.from([0]), // TODO: frame control
@@ -848,7 +851,62 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			Bytes.from([this.nonceId!]),
 			authCode,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		if (!this.nonce) throwNoNonce();
+		if (this.nonce.length !== HALF_NONCE_SIZE) {
+			throwNoNonce("Invalid nonce size");
+		}
+		assertSecurityTX(ctx);
+
+		let authKey: Uint8Array;
+		let encryptionKey: Uint8Array;
+		if (this.alternativeNetworkKey) {
+			authKey = generateAuthKey(this.alternativeNetworkKey);
+			encryptionKey = generateEncryptionKey(
+				this.alternativeNetworkKey,
+			);
+		} else {
+			authKey = ctx.securityManager.authKey;
+			encryptionKey = ctx.securityManager.encryptionKey;
+		}
+
+		const serializedCC = await this.encapsulated.serializeAsync(ctx);
+		const plaintext = Bytes.concat([
+			Bytes.from([0]), // TODO: frame control
+			serializedCC,
+		]);
+		// Encrypt the payload
+		const senderNonce = randomBytes(HALF_NONCE_SIZE);
+		const iv = Bytes.concat([senderNonce, this.nonce]);
+		const ciphertext = encryptAES128OFB(plaintext, encryptionKey, iv);
+		// And generate the auth code
+		const authData = getAuthenticationData(
+			senderNonce,
+			this.nonce,
+			this.ccCommand,
+			ctx.ownNodeId,
+			this.nodeId,
+			ciphertext,
+		);
+		const authCode = computeMAC(authData, authKey);
+
+		// Remember for debugging purposes
+		this.iv = iv;
+		this.authData = authData;
+		this.authCode = authCode;
+		this.ciphertext = ciphertext;
+
+		this.payload = Bytes.concat([
+			senderNonce,
+			ciphertext,
+			Bytes.from([this.nonceId!]),
+			authCode,
+		]);
+		return super.serializeAsync(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -921,6 +979,7 @@ export class SecurityCCSchemeReport extends SecurityCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -939,6 +998,7 @@ export class SecurityCCSchemeGet extends SecurityCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -957,6 +1017,7 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1010,6 +1071,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.view(this.networkKey);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1102,6 +1164,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			Bytes.from([this.reportsToFollow]),
 			encodeCCList(this.supportedCCs, this.controlledCCs),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

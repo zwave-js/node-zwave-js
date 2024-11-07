@@ -395,14 +395,14 @@ export class MockController {
 	): Promise<void> {
 		let data: Uint8Array;
 		if (fromNode) {
-			data = msg.serialize({
+			data = await msg.serializeAsync({
 				nodeIdType: this.encodingContext.nodeIdType,
 				...fromNode.encodingContext,
 			});
 			// Simulate the frame being transmitted via radio
 			await wait(fromNode.capabilities.txDelay);
 		} else {
-			data = msg.serialize(this.encodingContext);
+			data = await msg.serializeAsync(this.encodingContext);
 		}
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout

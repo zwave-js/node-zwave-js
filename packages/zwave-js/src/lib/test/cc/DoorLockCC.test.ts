@@ -41,17 +41,19 @@ valueDB2.setValue(DoorLockCCValues.doorSupported.id, false);
 valueDB2.setValue(DoorLockCCValues.boltSupported.id, true);
 valueDB2.setValue(DoorLockCCValues.latchSupported.id, true);
 
-test("the OperationGet command should serialize correctly", (t) => {
+test("the OperationGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCOperationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the OperationSet command should serialize correctly", (t) => {
+test("the OperationSet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCOperationSet({
 		nodeId: 2,
 		mode: DoorLockMode.OutsideUnsecured,
@@ -62,7 +64,9 @@ test("the OperationSet command should serialize correctly", (t) => {
 			0x20, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the OperationReport command (v1-v3) should be deserialized correctly", async (t) => {
@@ -150,14 +154,16 @@ test("the OperationReport command (v4) should be deserialized correctly", async 
 	t.expect(cc.duration).toStrictEqual(new Duration(1, "seconds"));
 });
 
-test("the ConfigurationGet command should serialize correctly", (t) => {
+test("the ConfigurationGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCConfigurationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the ConfigurationReport command (v1-v3) should be deserialized correctly", async (t) => {
@@ -281,7 +287,7 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", as
 	t.expect(cc.blockToBlock).toBe(false);
 });
 
-test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
+test("the ConfigurationSet command (v4) should serialize correctly", async (t) => {
 	const cc = new DoorLockCCConfigurationSet({
 		nodeId: 2,
 		operationType: DoorLockOperationType.Timed,
@@ -307,17 +313,21 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 			0b1,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the CapabilitiesGet command should serialize correctly", (t) => {
+test("the CapabilitiesGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCCapabilitiesGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", async (t) => {

@@ -29,7 +29,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 const host = createTestingHost();
 const nodeId = 2;
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new HumidityControlSetpointCCGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
@@ -40,10 +40,12 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Humidifier, // type
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly", (t) => {
+test("the Set command should serialize correctly", async (t) => {
 	const cc = new HumidityControlSetpointCCSet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
@@ -59,7 +61,9 @@ test("the Set command should serialize correctly", (t) => {
 			encodeFloatWithScale(57, 1),
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command should be deserialized correctly", async (t) => {
@@ -148,7 +152,7 @@ test("the Report command should set the correct metadata", async (t) => {
 	});
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new HumidityControlSetpointCCSupportedGet({
 		nodeId: nodeId,
 	});
@@ -157,7 +161,9 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the SupportedReport command should be deserialized correctly", async (t) => {
@@ -204,7 +210,7 @@ test("the SupportedReport command should set the correct value", async (t) => {
 	]);
 });
 
-test("the ScaleSupportedGet command should serialize correctly", (t) => {
+test("the ScaleSupportedGet command should serialize correctly", async (t) => {
 	const cc = new HumidityControlSetpointCCScaleSupportedGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
@@ -215,7 +221,9 @@ test("the ScaleSupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the ScaleSupportedReport command should be deserialized correctly", async (t) => {
@@ -245,7 +253,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", async 
 	// ]);
 });
 
-test("the CapabilitiesGet command should serialize correctly", (t) => {
+test("the CapabilitiesGet command should serialize correctly", async (t) => {
 	const cc = new HumidityControlSetpointCCCapabilitiesGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
@@ -256,7 +264,9 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", async (t) => {

@@ -111,6 +111,7 @@ export class FirmwareUpdateNVMRequest extends Message {
 			this.payload,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -258,6 +259,7 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.newImage ? 1 : 0]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -412,6 +414,7 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 		this.payload.writeUInt16BE(this.blockLength, 3);
 		this.payload.writeUInt16BE(this.crcSeed, 5);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -561,6 +564,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 		this.payload.set(this.buffer, 5);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

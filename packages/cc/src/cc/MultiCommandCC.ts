@@ -178,16 +178,31 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		const buffers: Bytes[] = [];
 		buffers.push(Bytes.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			const cmdBuffer = cmd.serialize(ctx);
 			buffers.push(Bytes.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
 		this.payload = Bytes.concat(buffers);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		const buffers: Bytes[] = [];
+		buffers.push(Bytes.from([this.encapsulated.length]));
+		for (const cmd of this.encapsulated) {
+			const cmdBuffer = await cmd.serializeAsync(ctx);
+			buffers.push(Bytes.from([cmdBuffer.length]));
+			buffers.push(cmdBuffer);
+		}
+		this.payload = Bytes.concat(buffers);
+		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

@@ -262,6 +262,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -324,6 +325,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -388,6 +390,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.testNodeId, this.powerlevel, 0, 0]);
 		this.payload.writeUInt16BE(this.testFrameCount, 2);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -452,6 +455,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.acknowledgedFrames, 2);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

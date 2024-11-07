@@ -52,6 +52,7 @@ export class GetSUCNodeIdResponse extends Message {
 
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

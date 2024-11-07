@@ -1085,6 +1085,7 @@ export class MeterCCReport extends MeterCC {
 			]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1192,6 +1193,7 @@ export class MeterCCGet extends MeterCC {
 		this.payload[0] = (rateTypeFlags << 6) | (scale1 << 3);
 		if (scale2) this.payload[1] = scale2;
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1366,6 +1368,7 @@ export class MeterCCSupportedReport extends MeterCC {
 			]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1470,6 +1473,7 @@ export class MeterCCReset extends MeterCC {
 				]);
 			}
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

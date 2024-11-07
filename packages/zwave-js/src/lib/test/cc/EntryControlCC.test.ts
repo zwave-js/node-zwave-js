@@ -56,7 +56,7 @@ test("the Notification command should deserialize correctly", async (t) => {
 	t.expect(cc.eventData).toStrictEqual("1234");
 });
 
-test("the ConfigurationGet command should serialize correctly", (t) => {
+test("the ConfigurationGet command should serialize correctly", async (t) => {
 	const cc = new EntryControlCCConfigurationGet({
 		nodeId: 1,
 	});
@@ -65,10 +65,12 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationSet command should serialize correctly", (t) => {
+test("the ConfigurationSet command should serialize correctly", async (t) => {
 	const cc = new EntryControlCCConfigurationSet({
 		nodeId: 1,
 		keyCacheSize: 1,
@@ -81,7 +83,9 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 			0x2,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the ConfigurationReport command should be deserialize correctly", async (t) => {
@@ -103,7 +107,7 @@ test("the ConfigurationReport command should be deserialize correctly", async (t
 	t.expect(cc.keyCacheTimeout).toStrictEqual(2);
 });
 
-test("the EventSupportedGet command should serialize correctly", (t) => {
+test("the EventSupportedGet command should serialize correctly", async (t) => {
 	const cc = new EntryControlCCEventSupportedGet({
 		nodeId: 1,
 	});
@@ -112,7 +116,9 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the EventSupportedReport command should be deserialize correctly", async (t) => {
@@ -154,14 +160,16 @@ test("the EventSupportedReport command should be deserialize correctly", async (
 	t.expect(cc.maxKeyCacheTimeout).toStrictEqual(9);
 });
 
-test("the KeySupportedGet command should serialize correctly", (t) => {
+test("the KeySupportedGet command should serialize correctly", async (t) => {
 	const cc = new EntryControlCCKeySupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the KeySupportedReport command should be deserialize correctly", async (t) => {

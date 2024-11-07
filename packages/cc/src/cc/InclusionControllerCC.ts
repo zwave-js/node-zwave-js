@@ -126,6 +126,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.step, this.status]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -183,6 +184,7 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.includedNodeId, this.step]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

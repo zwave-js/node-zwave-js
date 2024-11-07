@@ -20,17 +20,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new PowerlevelCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			PowerlevelCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set NormalPower command should serialize correctly", (t) => {
+test("the Set NormalPower command should serialize correctly", async (t) => {
 	const cc = new PowerlevelCCSet({
 		nodeId: 2,
 		powerlevel: Powerlevel["Normal Power"],
@@ -42,10 +44,12 @@ test("the Set NormalPower command should serialize correctly", (t) => {
 			0, // timeout (ignored)
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set NormalPower command with timeout should serialize correctly", (t) => {
+test("the Set NormalPower command with timeout should serialize correctly", async (t) => {
 	const cc = new PowerlevelCCSet({
 		nodeId: 2,
 		powerlevel: Powerlevel["Normal Power"],
@@ -58,10 +62,12 @@ test("the Set NormalPower command with timeout should serialize correctly", (t) 
 			0x00, // timeout ignored
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set Custom power command should serialize correctly", (t) => {
+test("the Set Custom power command should serialize correctly", async (t) => {
 	const cc = new PowerlevelCCSet({
 		nodeId: 2,
 		powerlevel: Powerlevel["-1 dBm"],
@@ -74,7 +80,9 @@ test("the Set Custom power command should serialize correctly", (t) => {
 			50, // timeout
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command should be deserialized correctly (NormalPower)", async (t) => {

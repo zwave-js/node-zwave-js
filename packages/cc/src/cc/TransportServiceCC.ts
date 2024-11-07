@@ -182,6 +182,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -428,6 +429,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -514,6 +516,7 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -559,6 +562,7 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([(this.sessionId & 0b1111) << 4]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -601,6 +605,7 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.pendingSegments]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

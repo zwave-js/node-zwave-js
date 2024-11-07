@@ -237,6 +237,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			fibaroCCCommand,
 		);
 		if (FibaroConstructor) {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			return FibaroConstructor.from(
 				raw.withPayload(raw.payload.subarray(2)),
 				ctx,
@@ -299,6 +300,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			Bytes.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -406,6 +408,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			this.position ?? 0,
 			this.tilt ?? 0,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

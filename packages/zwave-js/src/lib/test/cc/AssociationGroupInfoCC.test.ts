@@ -24,7 +24,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the NameGet command should serialize correctly", (t) => {
+test("the NameGet command should serialize correctly", async (t) => {
 	const cc = new AssociationGroupInfoCCNameGet({
 		nodeId: 1,
 		groupId: 7,
@@ -35,7 +35,9 @@ test("the NameGet command should serialize correctly", (t) => {
 			7, // group id
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the NameReport command should be deserialized correctly", async (t) => {
@@ -63,7 +65,7 @@ test("the NameReport command should be deserialized correctly", async (t) => {
 	t.expect(cc.name).toBe("foobar");
 });
 
-test("the InfoGet command should serialize correctly (no flag set)", (t) => {
+test("the InfoGet command should serialize correctly (no flag set)", async (t) => {
 	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
@@ -77,10 +79,12 @@ test("the InfoGet command should serialize correctly (no flag set)", (t) => {
 			7, // group id
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the InfoGet command should serialize correctly (refresh cache flag set)", (t) => {
+test("the InfoGet command should serialize correctly (refresh cache flag set)", async (t) => {
 	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
@@ -94,10 +98,12 @@ test("the InfoGet command should serialize correctly (refresh cache flag set)", 
 			7, // group id
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the InfoGet command should serialize correctly (list mode flag set)", (t) => {
+test("the InfoGet command should serialize correctly (list mode flag set)", async (t) => {
 	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
@@ -111,7 +117,9 @@ test("the InfoGet command should serialize correctly (list mode flag set)", (t) 
 			0, // group id is ignored
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Info Report command should be deserialized correctly", async (t) => {
@@ -157,7 +165,7 @@ test("the Info Report command should be deserialized correctly", async (t) => {
 	);
 });
 
-test("the CommandListGet command should serialize correctly", (t) => {
+test("the CommandListGet command should serialize correctly", async (t) => {
 	const cc = new AssociationGroupInfoCCCommandListGet({
 		nodeId: 1,
 		groupId: 6,
@@ -170,7 +178,9 @@ test("the CommandListGet command should serialize correctly", (t) => {
 			6, // group id
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the CommandListReport command should be deserialized correctly", async (t) => {

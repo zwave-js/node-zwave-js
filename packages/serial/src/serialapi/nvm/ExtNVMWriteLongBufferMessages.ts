@@ -67,6 +67,7 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 		this.payload.set(this.buffer, 5);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

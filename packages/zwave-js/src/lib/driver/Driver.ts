@@ -5860,7 +5860,7 @@ ${handlers.length} left`,
 
 		const machine = createSerialAPICommandMachine(
 			msg,
-			msg.serialize(this.getEncodingContext()),
+			await msg.serializeAsync(this.getEncodingContext()),
 			{
 				sendData: (data) => this.writeSerial(data),
 				sendDataAbort: () => this.abortSendData(),
@@ -6425,7 +6425,7 @@ ${handlers.length} left`,
 		try {
 			const abort = new SendDataAbort();
 			await this.writeSerial(
-				abort.serialize(this.getEncodingContext()),
+				await abort.serializeAsync(this.getEncodingContext()),
 			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
@@ -7118,9 +7118,13 @@ ${handlers.length} left`,
 		}
 	}
 
-	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-		return msg.serializeCC(this.getEncodingContext()).length
-			> this.getMaxPayloadLength(msg);
+	public async exceedsMaxPayloadLength(
+		msg: SendDataMessage,
+	): Promise<boolean> {
+		const serializedCC = await msg.serializeCCAsync(
+			this.getEncodingContext(),
+		);
+		return serializedCC.length > this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */

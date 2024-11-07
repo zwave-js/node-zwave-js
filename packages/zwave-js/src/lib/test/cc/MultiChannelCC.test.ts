@@ -37,17 +37,19 @@ test("is an encapsulating CommandClass", (t) => {
 	t.expect(isEncapsulatingCommandClass(cc)).toBe(true);
 });
 
-test("the EndPointGet command should serialize correctly", (t) => {
+test("the EndPointGet command should serialize correctly", async (t) => {
 	const cc = new MultiChannelCCEndPointGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			MultiChannelCommand.EndPointGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the CapabilityGet command should serialize correctly", (t) => {
+test("the CapabilityGet command should serialize correctly", async (t) => {
 	const cc = new MultiChannelCCCapabilityGet({
 		nodeId: 2,
 		requestedEndpoint: 7,
@@ -58,10 +60,12 @@ test("the CapabilityGet command should serialize correctly", (t) => {
 			7, // EndPoint
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the EndPointFind command should serialize correctly", (t) => {
+test("the EndPointFind command should serialize correctly", async (t) => {
 	const cc = new MultiChannelCCEndPointFind({
 		nodeId: 2,
 		genericClass: 0x01,
@@ -74,10 +78,12 @@ test("the EndPointFind command should serialize correctly", (t) => {
 			0x02, // specificClass
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the CommandEncapsulation command should serialize correctly", (t) => {
+test("the CommandEncapsulation command should serialize correctly", async (t) => {
 	let cc: CommandClass = new BasicCCSet({
 		nodeId: 2,
 		targetValue: 5,
@@ -94,10 +100,12 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 			5, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the AggregatedMembersGet command should serialize correctly", (t) => {
+test("the AggregatedMembersGet command should serialize correctly", async (t) => {
 	const cc = new MultiChannelCCAggregatedMembersGet({
 		nodeId: 2,
 		requestedEndpoint: 6,
@@ -108,7 +116,9 @@ test("the AggregatedMembersGet command should serialize correctly", (t) => {
 			6, // EndPoint
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", (t) => {

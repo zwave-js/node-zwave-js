@@ -733,6 +733,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 			bitmask.subarray(0, numBitmaskBytes),
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -877,6 +878,7 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.parameter]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -964,6 +966,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			this.duration ?? Duration.default()
 		).serializeSet();
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1035,6 +1038,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 			this.parameter,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1088,6 +1092,7 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.parameter]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

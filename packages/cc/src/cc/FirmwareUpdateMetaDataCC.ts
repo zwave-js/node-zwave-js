@@ -482,6 +482,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			| (this.supportsNonSecureTransfer ? 0b100 : 0)
 			| (this.supportsResuming ? 0b1000 : 0);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -679,6 +680,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			| (this.resume ? 0b100 : 0);
 		this.payload[10] = this.hardwareVersion ?? 0x00;
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -826,6 +828,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			this.payload = commandBuffer;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1033,6 +1036,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 		this.payload.writeUInt16BE(this.checksum, 4);
 		this.payload[6] = this.firmwareTarget;
 		this.payload[7] = this.hardwareVersion ?? 0x00;
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1155,6 +1159,7 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 		this.payload[4] = this.firmwareTarget;
 		this.payload.writeUInt16BE(this.fragmentSize, 5);
 		this.payload[7] = this.hardwareVersion;
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -350,6 +350,12 @@ export class CommandClass implements CCId {
 	): Promise<CommandClass> {
 		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return this.from(raw, ctx);
+
+		// TODO: Plan for next major release:
+		// - CommandClass ONLY exposes `public static async from` (renamed!)
+		// - CommandClass internally implements `protected static fromSync` and `protected static async fromAsync`
+		// - The default implementation of `fromAsync` just calls `fromSync`
+		// - Sub-classes override either `fromSync` OR `fromAsync` as needed
 	}
 
 	/** This CC's identifier */
@@ -423,6 +429,7 @@ export class CommandClass implements CCId {
 
 	/**
 	 * Serializes this CommandClass to be embedded in a message payload or another CC
+	 * @deprecated Use {@link serializeAsync} instead
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -445,6 +452,21 @@ export class CommandClass implements CCId {
 			data.set(this.payload, 1 + ccIdLength);
 		}
 		return data;
+	}
+
+	/**
+	 * Serializes this CommandClass to be embedded in a message payload or another CC
+	 */
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		return this.serialize(ctx);
+
+		// TODO: Plan for next major release:
+		// - CommandClass ONLY exposes `public async serialize` (renamed!)
+		// - CommandClass internally implements `protected serializeSync` and `protected async serializeAsync`
+		// - The default implementation of `serializeAsync` just calls `serializeSync`
+		// - Sub-classes override either `serializeSync` OR `serializeAsync` as needed
 	}
 
 	public prepareRetransmission(): void {

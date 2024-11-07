@@ -12,12 +12,14 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the CC should serialize correctly", (t) => {
+test("the CC should serialize correctly", async (t) => {
 	const cc = new NoOperationCC({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([]), // No command!
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the CC should be deserialized correctly", (t) => {

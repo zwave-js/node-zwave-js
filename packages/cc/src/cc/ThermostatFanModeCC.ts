@@ -375,6 +375,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 			(this.off ? 0b1000_0000 : 0)
 			| (this.mode & 0b1111),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

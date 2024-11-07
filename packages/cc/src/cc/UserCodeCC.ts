@@ -1313,6 +1313,7 @@ export class UserCodeCCSet extends UserCodeCC {
 				? Bytes.from(this.userCode, "ascii")
 				: this.userCode,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1421,6 +1422,7 @@ export class UserCodeCCReport extends UserCodeCC
 			Bytes.from([this.userId, this.userIdStatus]),
 			userCodeBuffer,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1470,6 +1472,7 @@ export class UserCodeCCGet extends UserCodeCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.userId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1526,6 +1529,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		// If the node implements more than 255 users, this field MUST be set to 255
 		this.payload[0] = Math.min(255, this.supportedUsers);
 		this.payload.writeUInt16BE(this.supportedUsers, 1);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1717,6 +1721,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			Bytes.from([controlByte3]),
 			supportedKeysBitmask,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1783,6 +1788,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.keypadMode]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1847,6 +1853,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.keypadMode]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1903,6 +1910,7 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 			Bytes.from([this.adminCode.length & 0b1111]),
 			Bytes.from(this.adminCode, "ascii"),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1953,6 +1961,7 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 			Bytes.from([this.adminCode.length & 0b1111]),
 			Bytes.from(this.adminCode, "ascii"),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2001,6 +2010,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.userCodeChecksum, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2074,6 +2084,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			Bytes.from([this.userCodes.length]),
 			...userCodeBuffers,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2210,6 +2221,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([0, 0, this.reportMore ? 1 : 0]);
 		this.payload.writeUInt16BE(this.userId, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

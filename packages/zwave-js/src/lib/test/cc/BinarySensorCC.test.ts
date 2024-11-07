@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly (no sensor type)", (t) => {
+test("the Get command should serialize correctly (no sensor type)", async (t) => {
 	const cc = new BinarySensorCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
@@ -29,10 +29,12 @@ test("the Get command should serialize correctly (no sensor type)", (t) => {
 			BinarySensorType.Any, // sensor type
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new BinarySensorCCGet({
 		nodeId: 1,
 		sensorType: BinarySensorType.CO,
@@ -40,7 +42,9 @@ test("the Get command should serialize correctly", (t) => {
 	const expected = buildCCBuffer(
 		Uint8Array.from([BinarySensorCommand.Get, BinarySensorType.CO]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the Report command (v1) should be deserialized correctly", async (t) => {
@@ -77,14 +81,16 @@ test("the Report command (v2) should be deserialized correctly", async (t) => {
 	t.expect(cc.type).toBe(BinarySensorType.CO2);
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new BinarySensorCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			BinarySensorCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the SupportedReport command should be deserialized correctly", async (t) => {

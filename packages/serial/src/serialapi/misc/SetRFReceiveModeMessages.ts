@@ -54,6 +54,7 @@ export class SetRFReceiveModeRequest extends Message {
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.enabled ? 0x01 : 0x00]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -12,7 +12,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("The Get command should serialize correctly", (t) => {
+test("The Get command should serialize correctly", async (t) => {
 	const cc = new ZWavePlusCCGet({
 		nodeId: 1,
 	});
@@ -21,7 +21,9 @@ test("The Get command should serialize correctly", (t) => {
 			ZWavePlusCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 // describe.skip(`interview()`, () => {

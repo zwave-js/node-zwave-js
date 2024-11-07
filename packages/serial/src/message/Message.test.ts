@@ -40,18 +40,22 @@ test("should deserialize and serialize correctly", async (t) => {
 	];
 	for (const original of okayMessages) {
 		const parsed = await Message.parseAsync(original, {} as any);
-		t.expect(parsed.serialize({} as any)).toStrictEqual(original);
+		await t.expect(parsed.serializeAsync({} as any)).resolves.toStrictEqual(
+			original,
+		);
 	}
 });
 
-test("should serialize correctly when the payload is null", (t) => {
+test("should serialize correctly when the payload is null", async (t) => {
 	// synthetic message
 	const expected = Bytes.from([0x01, 0x03, 0x00, 0xff, 0x03]);
 	const message = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.expect(message.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(message.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("should throw the correct error when parsing a faulty message", async (t) => {

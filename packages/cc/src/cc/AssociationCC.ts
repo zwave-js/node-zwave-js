@@ -542,6 +542,7 @@ export class AssociationCCSet extends AssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId, ...this.nodeIds]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -604,6 +605,7 @@ export class AssociationCCRemove extends AssociationCC {
 			this.groupId || 0,
 			...(this.nodeIds || []),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -714,6 +716,7 @@ export class AssociationCCReport extends AssociationCC {
 			this.reportsToFollow,
 			...this.nodeIds,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -765,6 +768,7 @@ export class AssociationCCGet extends AssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -809,6 +813,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupCount]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -856,6 +861,7 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.group]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -3,7 +3,7 @@ import { MessageType } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared";
 
 const defaultImplementations = {
-	serialize: () => Bytes.from([1, 2, 3]),
+	serializeAsync: () => Promise.resolve(Bytes.from([1, 2, 3])),
 	tryGetNode: () => undefined,
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),
