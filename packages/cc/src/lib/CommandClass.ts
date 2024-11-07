@@ -459,8 +459,22 @@ export class CommandClass implements CCId {
 	 */
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return this.serialize(ctx);
+		// This call is for backwards compatibility purposes. Not all
+		// CC subclasses implement serializeAsync, so those need to internally
+		// call serialize()
+		// For those that do, we MUST not call the subclass' serialize method
+		// directly, or the side effects may run twice.
+		if (this.serializeAsync !== CommandClass.prototype.serializeAsync) {
+			// Subclass implements serializeAsync, and we've reached the top
+			// of the inheritance chain. Call CommandClass.serialize to finish.
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			return CommandClass.prototype.serialize.call(this, ctx);
+		} else {
+			// Subclass does not implement serializeAsync, call its
+			// serialize method instead
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			return this.serialize(ctx);
+		}
 
 		// TODO: Plan for next major release:
 		// - CommandClass ONLY exposes `public async serialize` (renamed!)
