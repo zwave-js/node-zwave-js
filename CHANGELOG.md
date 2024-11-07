@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Improved tree-shakability (#7376, #7379)
+* CCs are now parsed and serialized asynchronously, Message instances are serialized asynchronously (#7377)
+
 ## 14.1.0 (2024-11-06)
 ### Features
 * Allow specifying RF region for OTA firmware updates if the region is unknown or cannot be queried (#7369)
