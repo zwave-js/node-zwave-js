@@ -10,6 +10,18 @@ export type {
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
 } from "./convert.js";
+// FIXME: This transitively imports `semver`, which is fine to have in the browser
+// Decide whether we want to add semver as a general exception to the forbidden imports rule
+// eslint-disable-next-line @zwave-js/no-forbidden-imports
+export {
+	json500To700,
+	json700To500,
+	jsonToNVM,
+	jsonToNVM500,
+	migrateNVM,
+	nvm500ToJSON,
+	nvmToJSON,
+} from "./convert.js";
 export type { NVM3EraseOptions, NVM3Meta } from "./lib/NVM3.js";
 export type { NVM500EraseOptions, NVM500Info } from "./lib/NVM500.js";
 export { NVMAccess } from "./lib/common/definitions.js";

@@ -9,7 +9,8 @@ import {
 	Bytes,
 	getEnumMemberName,
 } from "@zwave-js/shared/safe";
-import semver from "semver";
+import semverGte from "semver/functions/gte.js";
+import semverLt from "semver/functions/lt.js";
 import type { NVM3Object } from "../object.js";
 import {
 	NVMFile,
@@ -90,18 +91,18 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public nodeIdType?: NodeIDType;
 
 	public serialize(): NVM3Object & { data: Bytes } {
-		if (semver.lt(this.fileVersion, "7.18.1")) {
+		if (semverLt(this.fileVersion, "7.18.1")) {
 			this.payload = new Bytes(
-				semver.gte(this.fileVersion, "7.15.3") ? 6 : 3,
+				semverGte(this.fileVersion, "7.15.3") ? 6 : 3,
 			).fill(0);
 			this.payload[0] = this.rfRegion;
 			this.payload.writeIntLE(this.txPower * 10, 1, 1);
 			this.payload.writeIntLE(this.measured0dBm * 10, 2, 1);
-			if (semver.gte(this.fileVersion, "7.15.3")) {
+			if (semverGte(this.fileVersion, "7.15.3")) {
 				this.payload[3] = this.enablePTI ?? 0;
 				this.payload.writeInt16LE((this.maxTXPower ?? 0) * 10, 4);
 			}
-		} else if (semver.lt(this.fileVersion, "7.21.0")) {
+		} else if (semverLt(this.fileVersion, "7.21.0")) {
 			this.payload = new Bytes(8).fill(0);
 			this.payload[0] = this.rfRegion;
 			this.payload.writeInt16LE(this.txPower * 10, 1);

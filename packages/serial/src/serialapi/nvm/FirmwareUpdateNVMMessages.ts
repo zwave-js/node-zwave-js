@@ -2,9 +2,9 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
-	createSimpleReflectionDecorator,
 	validatePayload,
 } from "@zwave-js/core";
+import { createSimpleReflectionDecorator } from "@zwave-js/core/reflection";
 import type {
 	MessageBaseOptions,
 	MessageConstructor,

@@ -6,7 +6,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
-import * as semver from "semver";
+import semverInc from "semver/functions/inc.js";
+import semverValid from "semver/functions/valid.js";
+import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
 
 /**
  * Checks whether there is a compatible update for the currently installed config package.
@@ -39,15 +41,15 @@ export async function checkForConfigUpdates(
 
 	// Find the highest possible prepatch update (e.g. 7.2.4 -> 7.2.5-20200424)
 	const allVersions = Object.keys(registry.versions)
-		.filter((v) => !!semver.valid(v))
+		.filter((v) => !!semverValid(v))
 		.filter((v) => /\-\d{8}$/.test(v));
 	const updateRange = `>${currentVersion} <${
-		semver.inc(
+		semverInc(
 			currentVersion,
 			"patch",
 		)
 	}`;
-	const updateVersion = semver.maxSatisfying(allVersions, updateRange, {
+	const updateVersion = semverMaxSatisfying(allVersions, updateRange, {
 		includePrerelease: true,
 	});
 	if (updateVersion) return updateVersion;

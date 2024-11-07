@@ -15,7 +15,7 @@ import JSON5 from "json5";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import semver from "semver";
+import semverGt from "semver/functions/gt.js";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate.js";
 import type { ConfigLogger } from "../Logger.js";
 import { configDir } from "../utils.js";
@@ -455,7 +455,7 @@ firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z 
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;
-			if (semver.gt(padVersion(min), padVersion(max))) {
+			if (semverGt(padVersion(min), padVersion(max))) {
 				throwInvalidConfig(
 					`device`,
 					`packages/config/config/devices/${filename}:

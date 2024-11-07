@@ -1,4 +1,4 @@
-import { createSimpleReflectionDecorator } from "@zwave-js/core";
+import { createSimpleReflectionDecorator } from "@zwave-js/core/reflection";
 import {
 	ZWaveError,
 	ZWaveErrorCodes,

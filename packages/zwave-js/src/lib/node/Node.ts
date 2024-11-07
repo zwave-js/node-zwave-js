@@ -235,7 +235,7 @@ import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
 import path from "node:path";
-import semver from "semver";
+import semverParse from "semver/functions/parse.js";
 import { RemoveNodeReason } from "../controller/Inclusion.js";
 import { determineNIF } from "../controller/NodeInformationFrame.js";
 import { type Driver, libVersion } from "../driver/Driver.js";
@@ -3321,7 +3321,7 @@ protocol version:      ${this.protocolVersion}`;
 					& ~EncapsulationFlags.Supervision,
 			});
 
-		const firmwareVersion1 = semver.parse(libVersion, { loose: true })!;
+		const firmwareVersion1 = semverParse(libVersion, { loose: true })!;
 
 		await api.sendReport({
 			libraryType: ZWaveLibraryTypes["Static Controller"],

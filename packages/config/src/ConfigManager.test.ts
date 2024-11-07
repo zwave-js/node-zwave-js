@@ -3,7 +3,7 @@ import { pathExists } from "@zwave-js/shared";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
-import semver from "semver";
+import semverInc from "semver/functions/inc.js";
 import { type ExpectStatic, beforeEach, test as baseTest } from "vitest";
 import { ConfigManager } from "./ConfigManager.js";
 import { ConfigLogger } from "./Logger.js";
@@ -67,7 +67,7 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		const otherVersion = semver.inc(ownVersion, "major");
+		const otherVersion = semverInc(ownVersion, "major");
 
 		await fs.mkdir(configDir, { recursive: true });
 		await fs.writeFile(
@@ -93,7 +93,7 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		const otherVersion = semver.inc(ownVersion, "prerelease")!;
+		const otherVersion = semverInc(ownVersion, "prerelease")!;
 
 		await fs.mkdir(configDir, { recursive: true });
 		await fs.writeFile(

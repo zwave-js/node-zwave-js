@@ -2,7 +2,11 @@ import { copyFilesRecursive, formatId, padVersion } from "@zwave-js/shared";
 import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
-import * as semver from "semver";
+import semverGte from "semver/functions/gte.js";
+import semverInc from "semver/functions/inc.js";
+import semverLte from "semver/functions/lte.js";
+import semverSatisfies from "semver/functions/satisfies.js";
+import semverValid from "semver/functions/valid.js";
 import type { ConfigLogger } from "./Logger.js";
 import { PACKAGE_VERSION } from "./_version.js";
 import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig.js";
@@ -33,11 +37,11 @@ export function getDeviceEntryPredicate(
 		if (firmwareVersion != undefined) {
 			// A firmware version was given, only look at files with a matching firmware version
 			return (
-				semver.lte(
+				semverLte(
 					padVersion(entry.firmwareVersion.min),
 					padVersion(firmwareVersion),
 				)
-				&& semver.gte(
+				&& semverGte(
 					padVersion(entry.firmwareVersion.max),
 					padVersion(firmwareVersion),
 				)
@@ -79,7 +83,7 @@ export async function syncExternalConfigDir(
 	const externalVersionFilename = path.join(extConfigDir, "version");
 	const currentVersion = PACKAGE_VERSION;
 	const supportedRange = `>=${currentVersion} <${
-		semver.inc(
+		semverInc(
 			currentVersion,
 			"patch",
 		)
@@ -95,10 +99,10 @@ export async function syncExternalConfigDir(
 	let externalVersion: string | undefined;
 	try {
 		externalVersion = await fs.readFile(externalVersionFilename, "utf8");
-		if (!semver.valid(externalVersion)) {
+		if (!semverValid(externalVersion)) {
 			wipe = true;
 		} else if (
-			!semver.satisfies(externalVersion, supportedRange, {
+			!semverSatisfies(externalVersion, supportedRange, {
 				includePrerelease: true,
 			})
 		) {
@@ -141,7 +145,7 @@ export function versionInRange(
 	max: string,
 ): boolean {
 	return (
-		semver.gte(padVersion(version), padVersion(min))
-		&& semver.lte(padVersion(version), padVersion(max))
+		semverGte(padVersion(version), padVersion(min))
+		&& semverLte(padVersion(version), padVersion(max))
 	);
 }

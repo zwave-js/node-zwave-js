@@ -39,6 +39,11 @@
       "import": "./build/esm/error/ZWaveError.js",
       "require": "./build/cjs/error/ZWaveError.js"
     },
+    "./reflection": {
+      "@@dev": "./src/reflection/decorators.ts",
+      "import": "./build/esm/reflection/decorators.js",
+      "require": "./build/cjs/reflection/decorators.js"
+    },
     "./registries": {
       "@@dev": "./src/registries/index.ts",
       "import": "./build/esm/registries/index.js",
@@ -53,7 +58,7 @@
     "./package.json": "./package.json"
   },
   "sideEffects": [
-    "./util/decorators.js"
+    "./reflection/decorators.js"
   ],
   "files": [
     "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
