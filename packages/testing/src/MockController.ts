@@ -240,7 +240,7 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = Message.parse(data, {
+			msg = await Message.parseAsync(data, {
 				...this.parsingContext,
 				origin: MessageOrigin.Host,
 			});

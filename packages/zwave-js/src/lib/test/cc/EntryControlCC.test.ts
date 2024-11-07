@@ -25,7 +25,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Notification command should deserialize correctly", (t) => {
+test("the Notification command should deserialize correctly", async (t) => {
 	const data = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -44,7 +44,7 @@ test("the Notification command should deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCNotification;
@@ -84,7 +84,7 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the ConfigurationReport command should be deserialize correctly", (t) => {
+test("the ConfigurationReport command should be deserialize correctly", async (t) => {
 	const data = buildCCBuffer(
 		Uint8Array.from([
 			EntryControlCommand.ConfigurationReport, // CC Command
@@ -93,7 +93,7 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCConfigurationReport;
@@ -115,7 +115,7 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the EventSupportedReport command should be deserialize correctly", (t) => {
+test("the EventSupportedReport command should be deserialize correctly", async (t) => {
 	const data = buildCCBuffer(
 		Uint8Array.from([
 			EntryControlCommand.EventSupportedReport, // CC Command
@@ -133,7 +133,7 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 		]),
 	);
 
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCEventSupportedReport;
@@ -164,7 +164,7 @@ test("the KeySupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the KeySupportedReport command should be deserialize correctly", (t) => {
+test("the KeySupportedReport command should be deserialize correctly", async (t) => {
 	const data = buildCCBuffer(
 		Uint8Array.from([
 			EntryControlCommand.KeySupportedReport, // CC Command
@@ -173,7 +173,7 @@ test("the KeySupportedReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCKeySupportedReport;

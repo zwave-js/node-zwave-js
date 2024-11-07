@@ -33,14 +33,14 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the SupportedGroupingsReport command should be deserialized correctly", (t) => {
+test("the SupportedGroupingsReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			MultiChannelAssociationCommand.SupportedGroupingsReport, // CC Command
 			7, // # of groups
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCSupportedGroupingsReport;
@@ -151,7 +151,7 @@ test("the Get command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should be deserialized correctly (node IDs only)", (t) => {
+test("the Report command should be deserialized correctly (node IDs only)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
@@ -164,7 +164,7 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 			5,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;
@@ -177,7 +177,7 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 	t.expect(cc.endpoints).toStrictEqual([]);
 });
 
-test("the Report command should be deserialized correctly (endpoint addresses only)", (t) => {
+test("the Report command should be deserialized correctly (endpoint addresses only)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
@@ -193,7 +193,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 			0b11010111,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;
@@ -212,7 +212,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 	]);
 });
 
-test("the Report command should be deserialized correctly (both options)", (t) => {
+test("the Report command should be deserialized correctly (both options)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			MultiChannelAssociationCommand.Report, // CC Command
@@ -231,7 +231,7 @@ test("the Report command should be deserialized correctly (both options)", (t) =
 			0b11010111,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;

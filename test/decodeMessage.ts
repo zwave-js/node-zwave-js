@@ -96,7 +96,7 @@ import { containsCC } from "zwave-js";
 		getHighestSecurityClass: () => SecurityClass.S2_AccessControl,
 		hasSecurityClass: () => true,
 	};
-	const msg = Message.parse(data, ctx as any);
+	const msg = await Message.parseAsync(data, ctx as any);
 
 	if (containsCC(msg)) {
 		msg.command.mergePartialCCs([], {} as any);

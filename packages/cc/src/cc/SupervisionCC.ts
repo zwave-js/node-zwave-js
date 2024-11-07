@@ -416,12 +416,34 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
+	/** @deprecated Use {@link fromAsync} instead */
 	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCGet {
 		validatePayload(raw.payload.length >= 3);
 		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
 		const sessionId = raw.payload[0] & 0b111111;
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			requestStatusUpdates,
+			sessionId,
+			encapsulated,
+		});
+	}
+
+	public static async fromAsync(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Promise<SupervisionCCGet> {
+		validatePayload(raw.payload.length >= 3);
+		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
+		const sessionId = raw.payload[0] & 0b111111;
+
+		const encapsulated = await CommandClass.parseAsync(
+			raw.payload.subarray(2),
+			ctx,
+		);
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestStatusUpdates,

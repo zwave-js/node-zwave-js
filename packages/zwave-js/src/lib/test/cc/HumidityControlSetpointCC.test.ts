@@ -62,7 +62,7 @@ test("the Set command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -72,7 +72,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -88,7 +88,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	t.expect(cc.value).toBe(12);
 });
 
-test("the Report command should set the correct value", (t) => {
+test("the Report command should set the correct value", async (t) => {
 	const ccData = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -98,7 +98,7 @@ test("the Report command should set the correct value", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = CommandClass.parse(
+	const report = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -119,7 +119,7 @@ test("the Report command should set the correct value", (t) => {
 	t.expect(scaleValue).toStrictEqual(1);
 });
 
-test("the Report command should set the correct metadata", (t) => {
+test("the Report command should set the correct metadata", async (t) => {
 	const ccData = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -129,7 +129,7 @@ test("the Report command should set the correct metadata", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = CommandClass.parse(
+	const report = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -160,7 +160,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the SupportedReport command should be deserialized correctly", (t) => {
+test("the SupportedReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
@@ -168,7 +168,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCSupportedReport;
@@ -180,7 +180,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	]);
 });
 
-test("the SupportedReport command should set the correct value", (t) => {
+test("the SupportedReport command should set the correct value", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
@@ -188,7 +188,7 @@ test("the SupportedReport command should set the correct value", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const report = CommandClass.parse(
+	const report = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCSupportedReport;
@@ -218,14 +218,14 @@ test("the ScaleSupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the ScaleSupportedReport command should be deserialized correctly", (t) => {
+test("the ScaleSupportedReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlSetpointCommand.ScaleSupportedReport, // CC Command
 			0b11, // percent + absolute
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCScaleSupportedReport;
@@ -259,7 +259,7 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the CapabilitiesReport command should be deserialized correctly", (t) => {
+test("the CapabilitiesReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -270,7 +270,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCCapabilitiesReport;
@@ -283,7 +283,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 	t.expect(cc.maxValueScale).toStrictEqual(1);
 });
 
-test("the CapabilitiesReport command should set the correct metadata", (t) => {
+test("the CapabilitiesReport command should set the correct metadata", async (t) => {
 	const ccData = buildCCBuffer(
 		Bytes.concat([
 			Uint8Array.from([
@@ -294,7 +294,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const report = CommandClass.parse(
+	const report = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCCapabilitiesReport;

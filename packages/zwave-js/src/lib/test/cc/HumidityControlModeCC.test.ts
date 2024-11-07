@@ -52,14 +52,14 @@ test("the Set command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -68,14 +68,14 @@ test("the Report command should be deserialized correctly", (t) => {
 	t.expect(cc.mode).toBe(HumidityControlMode.Auto);
 });
 
-test("the Report command should set the correct value", (t) => {
+test("the Report command should set the correct value", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const report = CommandClass.parse(
+	const report = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -88,14 +88,14 @@ test("the Report command should set the correct value", (t) => {
 	t.expect(currentValue).toStrictEqual(HumidityControlMode.Auto);
 });
 
-test("the Report command should set the correct metadata", (t) => {
+test("the Report command should set the correct metadata", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlModeCommand.Report, // CC Command
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -123,14 +123,14 @@ test("the SupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the SupportedReport command should be deserialized correctly", (t) => {
+test("the SupportedReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlModeCommand.SupportedReport, // CC Command
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCSupportedReport;
@@ -142,14 +142,14 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	]);
 });
 
-test("the SupportedReport command should set the correct metadata", (t) => {
+test("the SupportedReport command should set the correct metadata", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			HumidityControlModeCommand.SupportedReport, // CC Command
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCSupportedReport;

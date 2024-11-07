@@ -1315,6 +1315,9 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
+					// FIXME: We do not really want to parse asynchronously here. Once parseAsync becomes the standard,
+					// we should add sync methods to only those CCs that will be parsed here - or make the entire call chain async.
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
 					const cc = CommandClass.parse(this.eventParameters, {
 						...ctx,
 						frameType: "singlecast",

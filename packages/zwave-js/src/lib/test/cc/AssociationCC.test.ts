@@ -33,14 +33,14 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the SupportedGroupingsReport command should be deserialized correctly", (t) => {
+test("the SupportedGroupingsReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			AssociationCommand.SupportedGroupingsReport, // CC Command
 			7, // # of groups
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as AssociationCCSupportedGroupingsReport;
@@ -81,7 +81,7 @@ test("the Get command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			AssociationCommand.Report, // CC Command
@@ -94,7 +94,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			5,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationCCReport;

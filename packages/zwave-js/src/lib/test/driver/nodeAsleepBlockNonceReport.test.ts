@@ -61,12 +61,13 @@ integrationTest(
 
 			// Parse Security CC commands. This MUST be defined last, since defineBehavior will prepend it to the list
 			const parseS0CC: MockNodeBehavior = {
-				handleCC(controller, self, receivedCC) {
+				async handleCC(controller, self, receivedCC) {
 					// We don't support sequenced commands here
 					if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-						receivedCC.mergePartialCCs([], {
+						await receivedCC.mergePartialCCsAsync([], {
 							sourceNodeId: controller.ownNodeId,
 							__internalIsMockNode: true,
+							frameType: "singlecast",
 							...self.encodingContext,
 							...self.securityManagers,
 						});

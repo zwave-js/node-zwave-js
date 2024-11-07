@@ -5,7 +5,7 @@ import { test } from "vitest";
 import { FunctionType, MessageType } from "./Constants.js";
 import { Message, messageTypes } from "./Message.js";
 
-test("should deserialize and serialize correctly", (t) => {
+test("should deserialize and serialize correctly", async (t) => {
 	// actual messages from OZW
 	const okayMessages = [
 		Bytes.from([
@@ -39,7 +39,7 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = Message.parse(original, {} as any);
+		const parsed = await Message.parseAsync(original, {} as any);
 		t.expect(parsed.serialize({} as any)).toStrictEqual(original);
 	}
 });
@@ -54,7 +54,7 @@ test("should serialize correctly when the payload is null", (t) => {
 	t.expect(message.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("should throw the correct error when parsing a faulty message", (t) => {
+test("should throw the correct error when parsing a faulty message", async (t) => {
 	// fake messages to produce certain errors
 	const brokenMessages: [Bytes, string, ZWaveErrorCodes][] = [
 		// too short (<5 bytes)
@@ -89,9 +89,9 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		assertZWaveError(
+		await assertZWaveError(
 			t.expect,
-			() => Message.parse(message, {} as any),
+			() => Message.parseAsync(message, {} as any),
 			{
 				messageMatches: msg,
 				errorCode: code,
@@ -154,11 +154,10 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	t.expect(msg4.toJSON()).toStrictEqual(json4);
 });
 
-test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
+test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", async (t) => {
 	const unknown = Bytes.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.expect(
-		Message.parse(unknown, {} as any).constructor,
-	).toBe(Message);
+	const parsed = await Message.parseAsync(unknown, {} as any);
+	t.expect(parsed).toBeInstanceOf(Message);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {

@@ -3542,11 +3542,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.parse(data, this.getMessageParsingContext());
+			msg = await Message.parseAsync(
+				data,
+				this.getMessageParsingContext(),
+			);
 
 			// Parse embedded CCs
 			if (isCommandRequest(msg) && containsSerializedCC(msg)) {
-				msg.command = CommandClass.parse(
+				msg.command = await CommandClass.parseAsync(
 					msg.serializedCC,
 					{
 						...this.getCCParsingContext(),
@@ -3681,7 +3684,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				}
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
-				if (!this.assemblePartialCCs(msg)) {
+				if (!(await this.assemblePartialCCs(msg))) {
 					// Check if a message timer needs to be refreshed.
 					for (const entry of this.awaitedMessages) {
 						if (entry.refreshPredicate?.(msg)) {
@@ -4487,7 +4490,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 * Assembles partial CCs of in a message body. Returns `true` when the message is complete and can be handled further.
 	 * If the message expects another partial one, this returns `false`.
 	 */
-	private assemblePartialCCs(msg: CommandRequest & ContainsCC): boolean {
+	private async assemblePartialCCs(
+		msg: CommandRequest & ContainsCC,
+	): Promise<boolean> {
 		let command: CommandClass | undefined = msg.command;
 		// We search for the every CC that provides us with a session ID
 		// There might be newly-completed CCs that contain a partial CC,
@@ -4512,7 +4517,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(session, {
+						await command.mergePartialCCsAsync(session, {
 							...this.getCCParsingContext(),
 							sourceNodeId: msg.command.nodeId as number,
 							frameType: msg.frameType,

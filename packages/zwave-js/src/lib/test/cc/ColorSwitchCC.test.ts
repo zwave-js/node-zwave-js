@@ -42,7 +42,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the SupportedReport command should deserialize correctly", (t) => {
+test("the SupportedReport command should deserialize correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.SupportedReport, // CC Command
@@ -50,7 +50,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCSupportedReport;
@@ -85,7 +85,7 @@ test("the Get command should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should deserialize correctly (version 1)", (t) => {
+test("the Report command should deserialize correctly (version 1)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
@@ -93,7 +93,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
@@ -105,7 +105,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 	t.expect(cc.duration).toBeUndefined();
 });
 
-test("the Report command should deserialize correctly (version 3)", (t) => {
+test("the Report command should deserialize correctly (version 3)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
@@ -115,7 +115,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;

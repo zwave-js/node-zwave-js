@@ -147,11 +147,11 @@ test("the CommandEncapsulation command should also accept V1CommandEncapsulation
 // 	t.is(cc.duration!.value, 1);
 // });
 
-test("deserializing an unsupported command should return an unspecified version of MultiChannelCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of MultiChannelCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as MultiChannelCC;

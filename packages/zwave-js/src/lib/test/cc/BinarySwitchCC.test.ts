@@ -74,14 +74,14 @@ test("the Set command should serialize correctly", (t) => {
 	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
 });
 
-test("the Report command (v1) should be deserialized correctly", (t) => {
+test("the Report command (v1) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			BinarySwitchCommand.Report, // CC Command
 			0xff, // current value
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCCReport;
@@ -92,7 +92,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	t.expect(cc.duration).toBeUndefined();
 });
 
-test("the Report command (v2) should be deserialized correctly", (t) => {
+test("the Report command (v2) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			BinarySwitchCommand.Report, // CC Command
@@ -101,7 +101,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCCReport;
@@ -113,11 +113,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	t.expect(cc.duration!.value).toBe(1);
 });
 
-test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as BinarySwitchCC;

@@ -28,7 +28,7 @@ test("should match the specs", (t) => {
 	t.expect(serialized).toStrictEqual(expected);
 });
 
-test("serialization and deserialization should be compatible", (t) => {
+test("serialization and deserialization should be compatible", async (t) => {
 	const basicCCSet = new BasicCCSet({
 		nodeId: 3,
 		targetValue: 89,
@@ -38,7 +38,7 @@ test("serialization and deserialization should be compatible", (t) => {
 	t.expect(crc16.encapsulated).toBe(basicCCSet);
 	const serialized = crc16.serialize({} as any);
 
-	const deserialized = CommandClass.parse(
+	const deserialized = await CommandClass.parseAsync(
 		serialized,
 		{ sourceNodeId: basicCCSet.nodeId as number } as any,
 	);
@@ -50,7 +50,7 @@ test("serialization and deserialization should be compatible", (t) => {
 	t.expect(deserializedPayload.targetValue).toBe(basicCCSet.targetValue);
 });
 
-test("deserializing a CC with a wrong checksum should result in an invalid CC", (t) => {
+test("deserializing a CC with a wrong checksum should result in an invalid CC", async (t) => {
 	const basicCCSet = new BasicCCSet({
 		nodeId: 3,
 		targetValue: 89,
@@ -61,7 +61,7 @@ test("deserializing a CC with a wrong checksum should result in an invalid CC", 
 	const serialized = crc16.serialize({} as any);
 	serialized[serialized.length - 1] ^= 0xff;
 
-	const deserialized = CommandClass.parse(
+	const deserialized = await CommandClass.parseAsync(
 		serialized,
 		{ sourceNodeId: basicCCSet.nodeId as number } as any,
 	);

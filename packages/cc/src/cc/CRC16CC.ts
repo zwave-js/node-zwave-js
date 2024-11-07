@@ -120,6 +120,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
+	/** @deprecated Use {@link fromAsync} instead */
 	public static from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
@@ -136,7 +137,31 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		);
 		validatePayload(expectedCRC === actualCRC);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const encapsulated = CommandClass.parse(ccBuffer, ctx);
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			encapsulated,
+		});
+	}
+
+	public static async fromAsync(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Promise<CRC16CCCommandEncapsulation> {
+		validatePayload(raw.payload.length >= 3);
+
+		const ccBuffer = raw.payload.subarray(0, -2);
+
+		// Verify the CRC
+		let expectedCRC = CRC16_CCITT(headerBuffer);
+		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+		const actualCRC = raw.payload.readUInt16BE(
+			raw.payload.length - 2,
+		);
+		validatePayload(expectedCRC === actualCRC);
+
+		const encapsulated = await CommandClass.parseAsync(ccBuffer, ctx);
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			encapsulated,

@@ -762,6 +762,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return !!this.sequenced && !this.secondFrame;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: SecurityCCCommandEncapsulation[],
 		ctx: CCParsingContext,
@@ -773,7 +774,26 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// make sure this contains a complete CC command that's worth splitting
 		validatePayload(this.decryptedCCBytes.length >= 2);
 		// and deserialize the CC
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		this.encapsulated = CommandClass.parse(this.decryptedCCBytes, ctx);
+		this.encapsulated.encapsulatingCC = this as any;
+	}
+
+	public async mergePartialCCsAsync(
+		partials: SecurityCCCommandEncapsulation[],
+		ctx: CCParsingContext,
+	): Promise<void> {
+		// Concat the CC buffers
+		this.decryptedCCBytes = Bytes.concat(
+			[...partials, this].map((cc) => cc.decryptedCCBytes!),
+		);
+		// make sure this contains a complete CC command that's worth splitting
+		validatePayload(this.decryptedCCBytes.length >= 2);
+		// and deserialize the CC
+		this.encapsulated = await CommandClass.parseAsync(
+			this.decryptedCCBytes,
+			ctx,
+		);
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
@@ -1051,6 +1071,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		return this.reportsToFollow > 0;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: SecurityCCCommandsSupportedReport[],
 	): void {
@@ -1061,6 +1082,19 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		this.controlledCCs = [...partials, this]
 			.map((report) => report.controlledCCs)
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
+
+	public mergePartialCCsAsync(
+		partials: SecurityCCCommandsSupportedReport[],
+	): Promise<void> {
+		// Concat the lists of CCs
+		this.supportedCCs = [...partials, this]
+			.map((report) => report.supportedCCs)
+			.reduce((prev, cur) => prev.concat(...cur), []);
+		this.controlledCCs = [...partials, this]
+			.map((report) => report.controlledCCs)
+			.reduce((prev, cur) => prev.concat(...cur), []);
+		return Promise.resolve();
 	}
 
 	public serialize(ctx: CCEncodingContext): Bytes {

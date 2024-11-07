@@ -59,14 +59,14 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ThermostatFanModeCommand.Report, // CC Command
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as ThermostatFanModeCCReport;

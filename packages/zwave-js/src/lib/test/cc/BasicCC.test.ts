@@ -36,13 +36,13 @@ test("the Get command should serialize correctly", (t) => {
 	t.expect(basicCC.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Get command should be deserialized correctly", (t) => {
+test("the Get command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			BasicCommand.Get, // CC Command
 		]),
 	);
-	const basicCC = CommandClass.parse(
+	const basicCC = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BasicCCGet;
@@ -64,14 +64,14 @@ test("the Set command should serialize correctly", (t) => {
 	t.expect(basicCC.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Report command (v1) should be deserialized correctly", (t) => {
+test("the Report command (v1) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			BasicCommand.Report, // CC Command
 			55, // current value
 		]),
 	);
-	const basicCC = CommandClass.parse(
+	const basicCC = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BasicCCReport;
@@ -82,7 +82,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	t.expect(basicCC.duration).toBeUndefined();
 });
 
-test("the Report command (v2) should be deserialized correctly", (t) => {
+test("the Report command (v2) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			BasicCommand.Report, // CC Command
@@ -91,7 +91,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const basicCC = CommandClass.parse(
+	const basicCC = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as BasicCCReport;
@@ -103,11 +103,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	t.expect(basicCC.duration!.value).toBe(1);
 });
 
-test("deserializing an unsupported command should return an unspecified version of BasicCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of BasicCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const basicCC = CommandClass.parse(
+	const basicCC = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as BasicCCReport;

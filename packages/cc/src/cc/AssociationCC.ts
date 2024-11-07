@@ -685,6 +685,7 @@ export class AssociationCCReport extends AssociationCC {
 		return this.reportsToFollow > 0;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: AssociationCCReport[],
 		_ctx: CCParsingContext,
@@ -693,6 +694,17 @@ export class AssociationCCReport extends AssociationCC {
 		this.nodeIds = [...partials, this]
 			.map((report) => report.nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
+
+	public mergePartialCCsAsync(
+		partials: AssociationCCReport[],
+		_ctx: CCParsingContext,
+	): Promise<void> {
+		// Concat the list of nodes
+		this.nodeIds = [...partials, this]
+			.map((report) => report.nodeIds)
+			.reduce((prev, cur) => prev.concat(...cur), []);
+		return Promise.resolve();
 	}
 
 	public serialize(ctx: CCEncodingContext): Bytes {

@@ -48,7 +48,7 @@ test("the Set command (with Duration) should serialize correctly", (t) => {
 	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
 });
 
-test("the Set command should be deserialized correctly", (t) => {
+test("the Set command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			SceneActivationCommand.Set, // CC Command
@@ -56,7 +56,7 @@ test("the Set command should be deserialized correctly", (t) => {
 			0x00, // 0 seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as SceneActivationCCSet;
@@ -66,11 +66,11 @@ test("the Set command should be deserialized correctly", (t) => {
 	t.expect(cc.dimmingDuration).toStrictEqual(new Duration(0, "seconds"));
 });
 
-test("deserializing an unsupported command should return an unspecified version of SceneActivationCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of SceneActivationCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as SceneActivationCC;
