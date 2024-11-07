@@ -4,13 +4,13 @@ import {
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type NodeUpdatePayload,
-	createSimpleReflectionDecorator,
 	encodeNodeUpdatePayload,
 	getCCName,
 	parseCCList,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
+import { createSimpleReflectionDecorator } from "@zwave-js/core/reflection";
 import {
 	FunctionType,
 	Message,

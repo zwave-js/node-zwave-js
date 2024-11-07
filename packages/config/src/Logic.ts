@@ -1,5 +1,9 @@
 import { padVersion } from "@zwave-js/shared";
-import * as semver from "semver";
+import semverEq from "semver/functions/eq.js";
+import semverGt from "semver/functions/gt.js";
+import semverGte from "semver/functions/gte.js";
+import semverLt from "semver/functions/lt.js";
+import semverLte from "semver/functions/lte.js";
 import { parse } from "./LogicParser.js";
 
 // The types are not correct:
@@ -21,23 +25,23 @@ function tryOr<T extends (...args: any[]) => any>(
 
 add_operation(
 	"ver >=",
-	tryOr((a, b) => semver.gte(padVersion(a), padVersion(b)), false),
+	tryOr((a, b) => semverGte(padVersion(a), padVersion(b)), false),
 );
 add_operation(
 	"ver >",
-	tryOr((a, b) => semver.gt(padVersion(a), padVersion(b)), false),
+	tryOr((a, b) => semverGt(padVersion(a), padVersion(b)), false),
 );
 add_operation(
 	"ver <=",
-	tryOr((a, b) => semver.lte(padVersion(a), padVersion(b)), false),
+	tryOr((a, b) => semverLte(padVersion(a), padVersion(b)), false),
 );
 add_operation(
 	"ver <",
-	tryOr((a, b) => semver.lt(padVersion(a), padVersion(b)), false),
+	tryOr((a, b) => semverLt(padVersion(a), padVersion(b)), false),
 );
 add_operation(
 	"ver ===",
-	tryOr((a, b) => semver.eq(padVersion(a), padVersion(b)), false),
+	tryOr((a, b) => semverEq(padVersion(a), padVersion(b)), false),
 );
 
 export function parseLogic(logic: string): RulesLogic {

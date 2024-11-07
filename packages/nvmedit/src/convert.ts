@@ -1,4 +1,9 @@
 import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	isZWaveError,
+} from "@zwave-js/core/error";
+import {
 	type CommandClasses,
 	ControllerCapabilityFlags,
 	MAX_NODES,
@@ -6,9 +11,6 @@ import {
 	type NodeProtocolInfo,
 	NodeType,
 	RFRegion,
-	ZWaveError,
-	ZWaveErrorCodes,
-	isZWaveError,
 	stripUndefined,
 } from "@zwave-js/core/safe";
 import {
@@ -19,7 +21,11 @@ import {
 	pick,
 } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import semver from "semver";
+import type { SemVer } from "semver";
+import semverGte from "semver/functions/gte.js";
+import semverLt from "semver/functions/lt.js";
+import semverLte from "semver/functions/lte.js";
+import semverParse from "semver/functions/parse.js";
 import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts.js";
 import { NVM3, type NVM3Meta } from "./lib/NVM3.js";
 import { NVM500 } from "./lib/NVM500.js";
@@ -1220,7 +1226,7 @@ export async function jsonToNVM(
 	json: NVMJSON,
 	targetSDKVersion: string,
 ): Promise<Uint8Array> {
-	const parsedVersion = semver.parse(targetSDKVersion);
+	const parsedVersion = semverParse(targetSDKVersion);
 	if (!parsedVersion) {
 		throw new ZWaveError(
 			`Invalid SDK version: ${targetSDKVersion}`,
@@ -1244,38 +1250,38 @@ export async function jsonToNVM(
 	};
 
 	// Figure out which SDK version we are targeting
-	let targetApplicationVersion: semver.SemVer;
-	let targetProtocolVersion: semver.SemVer;
+	let targetApplicationVersion: SemVer;
+	let targetProtocolVersion: SemVer;
 	let targetProtocolFormat: number;
 
 	// We currently support application version migrations up to:
 	const HIGHEST_SUPPORTED_SDK_VERSION = "7.21.0";
 	// For all higher ones, set the highest version we support and let the controller handle the migration itself
-	if (semver.lte(targetSDKVersion, HIGHEST_SUPPORTED_SDK_VERSION)) {
-		targetApplicationVersion = semver.parse(targetSDKVersion)!;
+	if (semverLte(targetSDKVersion, HIGHEST_SUPPORTED_SDK_VERSION)) {
+		targetApplicationVersion = semverParse(targetSDKVersion)!;
 	} else {
-		targetApplicationVersion = semver.parse(HIGHEST_SUPPORTED_SDK_VERSION)!;
+		targetApplicationVersion = semverParse(HIGHEST_SUPPORTED_SDK_VERSION)!;
 	}
 
 	// The protocol version file only seems to be updated when the format of the protocol file system changes
 	// Once again, we simply set the highest version we support here and let the controller handle any potential migration
-	if (semver.gte(targetSDKVersion, "7.19.0")) {
-		targetProtocolVersion = semver.parse("7.19.0")!;
+	if (semverGte(targetSDKVersion, "7.19.0")) {
+		targetProtocolVersion = semverParse("7.19.0")!;
 		targetProtocolFormat = 5;
-	} else if (semver.gte(targetSDKVersion, "7.17.0")) {
-		targetProtocolVersion = semver.parse("7.17.0")!;
+	} else if (semverGte(targetSDKVersion, "7.17.0")) {
+		targetProtocolVersion = semverParse("7.17.0")!;
 		targetProtocolFormat = 4;
-	} else if (semver.gte(targetSDKVersion, "7.15.3")) {
-		targetProtocolVersion = semver.parse("7.15.3")!;
+	} else if (semverGte(targetSDKVersion, "7.15.3")) {
+		targetProtocolVersion = semverParse("7.15.3")!;
 		targetProtocolFormat = 3;
-	} else if (semver.gte(targetSDKVersion, "7.12.0")) {
-		targetProtocolVersion = semver.parse("7.12.0")!;
+	} else if (semverGte(targetSDKVersion, "7.12.0")) {
+		targetProtocolVersion = semverParse("7.12.0")!;
 		targetProtocolFormat = 2;
-	} else if (semver.gte(targetSDKVersion, "7.11.0")) {
-		targetProtocolVersion = semver.parse("7.11.0")!;
+	} else if (semverGte(targetSDKVersion, "7.11.0")) {
+		targetProtocolVersion = semverParse("7.11.0")!;
 		targetProtocolFormat = 1;
 	} else {
-		targetProtocolVersion = semver.parse("7.0.0")!;
+		targetProtocolVersion = semverParse("7.0.0")!;
 		targetProtocolFormat = 0;
 	}
 
@@ -1351,11 +1357,11 @@ export async function jsonToNVM(
 
 	// Make sure the RF config format matches the application version.
 	// Otherwise, the controller will ignore the file and not accept any changes to the RF config
-	if (semver.gte(targetSDKVersion, "7.15.3")) {
+	if (semverGte(targetSDKVersion, "7.15.3")) {
 		target.controller.rfConfig.enablePTI ??= 0;
 		target.controller.rfConfig.maxTXPower ??= 14.0;
 	}
-	if (semver.gte(targetSDKVersion, "7.21.0")) {
+	if (semverGte(targetSDKVersion, "7.21.0")) {
 		target.controller.rfConfig.nodeIdType ??= NodeIDType.Short;
 	}
 
@@ -2005,15 +2011,15 @@ export async function migrateNVM(
 		// The 700 series firmware can automatically upgrade backups from a previous protocol version
 		// Not sure when that ability was added. To be on the safe side, allow it for 7.16+ which definitely supports it.
 		if (
-			semver.gte(targetProtocolVersion, "7.16.0")
-			&& semver.gte(targetProtocolVersion, sourceProtocolVersion)
+			semverGte(targetProtocolVersion, "7.16.0")
+			&& semverGte(targetProtocolVersion, sourceProtocolVersion)
 			// the application version is updated on every update, protocol version only when the format changes
 			// so this is a good indicator if the NVMs are in a compatible state
-			&& semver.gte(targetApplicationVersion, targetProtocolVersion)
-			&& semver.gte(sourceApplicationVersion, sourceProtocolVersion)
+			&& semverGte(targetApplicationVersion, targetProtocolVersion)
+			&& semverGte(sourceApplicationVersion, sourceProtocolVersion)
 			// avoid preserving broken 255.x versions which appear on some controllers
-			&& semver.lt(sourceApplicationVersion, "255.0.0")
-			&& semver.lt(targetApplicationVersion, "255.0.0")
+			&& semverLt(sourceApplicationVersion, "255.0.0")
+			&& semverLt(targetApplicationVersion, "255.0.0")
 			// and avoid restoring a backup with a shifted 800 series application version file
 			&& (!hasShiftedAppVersion800File(source.json))
 		) {
@@ -2043,7 +2049,7 @@ export async function migrateNVM(
 	// Some 700 series NVMs have a strange 255.x application version - fix that first
 	if (
 		target.type === 700
-		&& semver.gte(target.json.controller.applicationVersion, "255.0.0")
+		&& semverGte(target.json.controller.applicationVersion, "255.0.0")
 	) {
 		// replace both with the protocol version
 		target.json.controller.applicationVersion =
@@ -2103,11 +2109,11 @@ function hasShiftedAppVersion800File(
 	// We can only detect this on 800 series controllers with the shared FS
 	if (!json.meta.sharedFileSystem) return false;
 
-	const protocolVersion = semver.parse(json.controller.protocolVersion);
+	const protocolVersion = semverParse(json.controller.protocolVersion);
 	// Invalid protocol version, cannot fix anything
 	if (!protocolVersion) return false;
 
-	const applicationVersion = semver.parse(json.controller.applicationVersion);
+	const applicationVersion = semverParse(json.controller.applicationVersion);
 	// Invalid application version, cannot fix anything
 	if (!applicationVersion) return false;
 

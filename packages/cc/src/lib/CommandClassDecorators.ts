@@ -2,10 +2,12 @@ import {
 	type CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import {
 	createReflectionDecorator,
 	createReflectionDecoratorPair,
 	createValuelessReflectionDecorator,
-} from "@zwave-js/core";
+} from "@zwave-js/core/reflection";
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import type { APIConstructor, CCAPI } from "./API.js";
 import {

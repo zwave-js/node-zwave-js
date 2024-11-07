@@ -8,10 +8,10 @@ import {
 	type SecurityManagers,
 	ZWaveError,
 	ZWaveErrorCodes,
-	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
 } from "@zwave-js/core";
+import { createReflectionDecorator } from "@zwave-js/core/reflection";
 import type {
 	GetDeviceConfig,
 	GetNode,

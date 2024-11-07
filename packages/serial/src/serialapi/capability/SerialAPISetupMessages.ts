@@ -6,11 +6,11 @@ import {
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
-	createSimpleReflectionDecorator,
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
 import { sdkVersionLt } from "@zwave-js/core";
+import { createSimpleReflectionDecorator } from "@zwave-js/core/reflection";
 import type {
 	MessageConstructor,
 	MessageEncodingContext,
