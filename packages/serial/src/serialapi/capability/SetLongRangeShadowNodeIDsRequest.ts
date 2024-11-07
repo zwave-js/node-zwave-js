@@ -56,6 +56,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 			LONG_RANGE_SHADOW_NODE_IDS_START,
 		);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

@@ -23,7 +23,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Set Tilt command should serialize correctly", (t) => {
+test("the Set Tilt command should serialize correctly", async (t) => {
 	const cc = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 99,
@@ -36,10 +36,12 @@ test("the Set Tilt command should serialize correctly", (t) => {
 			0x63, // Tilt
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Report command should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			FibaroVenetianBlindCCCommand.Report,
@@ -48,7 +50,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			0x00, // Tilt
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as FibaroVenetianBlindCCReport;
@@ -72,12 +74,12 @@ test("FibaroVenetianBlindCCGet should expect a response", (t) => {
 	t.expect(cc.expectsCCResponse()).toBe(true);
 });
 
-test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t) => {
+test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", async (t) => {
 	const ccRequest = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 7,
 	});
-	const ccResponse = CommandClass.parse(
+	const ccResponse = await CommandClass.parseAsync(
 		buildCCBuffer(
 			Uint8Array.from([
 				FibaroVenetianBlindCCCommand.Report,
@@ -92,11 +94,11 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 	t.expect(ccRequest.isExpectedCCResponse(ccResponse)).toBe(false);
 });
 
-test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) => {
+test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", async (t) => {
 	const ccRequest = new FibaroVenetianBlindCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = CommandClass.parse(
+	const ccResponse = await CommandClass.parseAsync(
 		buildCCBuffer(
 			Uint8Array.from([
 				FibaroVenetianBlindCCCommand.Report,

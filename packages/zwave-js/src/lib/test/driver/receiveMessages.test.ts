@@ -55,7 +55,7 @@ test.sequential(
 			}),
 		});
 		controller.serial.emitData(
-			req.serialize(driver["getEncodingContext"]()),
+			await req.serializeAsync(driver["getEncodingContext"]()),
 		);
 		await controller.expectHostACK(1000);
 	},

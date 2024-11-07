@@ -129,6 +129,7 @@ export class SerialAPISetupRequest extends Message {
 			this.payload,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -355,6 +356,7 @@ export class SerialAPISetup_SetTXStatusReportRequest
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.enabled ? 0xff : 0x00]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -443,6 +445,7 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.nodeIdType]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -570,6 +573,7 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.region]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -733,6 +737,7 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -904,6 +909,7 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1063,6 +1069,7 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1287,6 +1294,7 @@ export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = Bytes.from([this.region]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

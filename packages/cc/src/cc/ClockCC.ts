@@ -182,6 +182,7 @@ export class ClockCCSet extends ClockCC {
 			((this.weekday & 0b111) << 5) | (this.hour & 0b11111),
 			this.minute,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

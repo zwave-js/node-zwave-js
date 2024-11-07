@@ -60,6 +60,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.payload = encodeNodeID(this.requestedNodeId, ctx.nodeIdType);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -189,6 +190,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 			]),
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

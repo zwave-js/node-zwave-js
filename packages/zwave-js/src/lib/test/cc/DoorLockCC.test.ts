@@ -41,17 +41,19 @@ valueDB2.setValue(DoorLockCCValues.doorSupported.id, false);
 valueDB2.setValue(DoorLockCCValues.boltSupported.id, true);
 valueDB2.setValue(DoorLockCCValues.latchSupported.id, true);
 
-test("the OperationGet command should serialize correctly", (t) => {
+test("the OperationGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCOperationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the OperationSet command should serialize correctly", (t) => {
+test("the OperationSet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCOperationSet({
 		nodeId: 2,
 		mode: DoorLockMode.OutsideUnsecured,
@@ -62,10 +64,12 @@ test("the OperationSet command should serialize correctly", (t) => {
 			0x20, // target value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the OperationReport command (v1-v3) should be deserialized correctly", (t) => {
+test("the OperationReport command (v1-v3) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.OperationReport, // CC Command
@@ -76,7 +80,7 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 			20, // timeout seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCOperationReport;
@@ -103,7 +107,7 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 	t.expect(cc.duration).toBeUndefined();
 });
 
-test("the OperationReport command (v4) should be deserialized correctly", (t) => {
+test("the OperationReport command (v4) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.OperationReport, // CC Command
@@ -116,7 +120,7 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 			0x01, // 1 second left
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as DoorLockCCOperationReport;
@@ -150,17 +154,19 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 	t.expect(cc.duration).toStrictEqual(new Duration(1, "seconds"));
 });
 
-test("the ConfigurationGet command should serialize correctly", (t) => {
+test("the ConfigurationGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCConfigurationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationReport command (v1-v3) should be deserialized correctly", (t) => {
+test("the ConfigurationReport command (v1-v3) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
@@ -170,7 +176,7 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 			20, // timeout seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCConfigurationReport;
@@ -196,7 +202,7 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 	t.expect(cc.blockToBlock).toBeUndefined();
 });
 
-test("the ConfigurationReport command must ignore invalid timeouts (constant)", (t) => {
+test("the ConfigurationReport command must ignore invalid timeouts (constant)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
@@ -206,7 +212,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 			20, // timeout seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCConfigurationReport;
@@ -215,7 +221,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 	t.expect(cc.lockTimeoutConfiguration).toBeUndefined();
 });
 
-test("the ConfigurationReport command must ignore invalid timeouts (invalid minutes)", (t) => {
+test("the ConfigurationReport command must ignore invalid timeouts (invalid minutes)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
@@ -225,7 +231,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 			20, // timeout seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCConfigurationReport;
@@ -234,7 +240,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 	t.expect(cc.lockTimeoutConfiguration).toBeUndefined();
 });
 
-test("the ConfigurationReport command must ignore invalid timeouts (invalid seconds)", (t) => {
+test("the ConfigurationReport command must ignore invalid timeouts (invalid seconds)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
@@ -244,7 +250,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 			0xff, // timeout seconds
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCConfigurationReport;
@@ -253,7 +259,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 	t.expect(cc.lockTimeoutConfiguration).toBeUndefined();
 });
 
-test("the ConfigurationReport command (v4) should be deserialized correctly", (t) => {
+test("the ConfigurationReport command (v4) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.ConfigurationReport, // CC Command
@@ -269,7 +275,7 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 			0b01, // flags
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCConfigurationReport;
@@ -281,7 +287,7 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 	t.expect(cc.blockToBlock).toBe(false);
 });
 
-test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
+test("the ConfigurationSet command (v4) should serialize correctly", async (t) => {
 	const cc = new DoorLockCCConfigurationSet({
 		nodeId: 2,
 		operationType: DoorLockOperationType.Timed,
@@ -307,20 +313,24 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 			0b1,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the CapabilitiesGet command should serialize correctly", (t) => {
+test("the CapabilitiesGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockCCCapabilitiesGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the CapabilitiesReport command should be deserialized correctly", (t) => {
+test("the CapabilitiesReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockCommand.CapabilitiesReport, // CC Command
@@ -335,7 +345,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			0b1010, // feature flags
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockCCCapabilitiesReport;

@@ -974,6 +974,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			// V1
 			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1195,6 +1196,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			// V1
 			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1256,6 +1258,7 @@ export class IndicatorCCGet extends IndicatorCC {
 		if (this.indicatorId != undefined) {
 			this.payload = Bytes.from([this.indicatorId]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1348,6 +1351,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			bitmask,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1413,6 +1417,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.indicatorId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1485,6 +1490,7 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 			Bytes.from([this.indicatorId, description.length]),
 			description,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1547,6 +1553,7 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.indicatorId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -34,6 +34,7 @@ export class HardResetRequest extends HardResetRequestBase {
 	public serialize(ctx: MessageEncodingContext): Bytes {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

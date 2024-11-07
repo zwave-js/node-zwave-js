@@ -1765,6 +1765,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this.value,
 		);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1827,6 +1828,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.parameter]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1945,6 +1947,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				);
 			}
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2112,6 +2115,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				}
 			}
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2323,6 +2327,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		this.payload = new Bytes(3);
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2423,6 +2428,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		this.payload[2] = this.reportsToFollow;
 		this.payload.set(nameBuffer, 3);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2435,6 +2441,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this.reportsToFollow > 0;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: ConfigurationCCNameReport[],
 		_ctx: CCParsingContext,
@@ -2443,6 +2450,17 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		this.name = [...partials, this]
 			.map((report) => report.name)
 			.reduce((prev, cur) => prev + cur, "");
+	}
+
+	public mergePartialCCsAsync(
+		partials: ConfigurationCCNameReport[],
+		_ctx: CCParsingContext,
+	): Promise<void> {
+		// Concat the name
+		this.name = [...partials, this]
+			.map((report) => report.name)
+			.reduce((prev, cur) => prev + cur, "");
+		return Promise.resolve();
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -2485,6 +2503,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2598,6 +2617,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		this.payload[2] = this.reportsToFollow;
 		this.payload.set(infoBuffer, 3);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2610,6 +2630,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this.reportsToFollow > 0;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: ConfigurationCCInfoReport[],
 		_ctx: CCParsingContext,
@@ -2618,6 +2639,17 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		this.info = [...partials, this]
 			.map((report) => report.info)
 			.reduce((prev, cur) => prev + cur, "");
+	}
+
+	public mergePartialCCsAsync(
+		partials: ConfigurationCCInfoReport[],
+		_ctx: CCParsingContext,
+	): Promise<void> {
+		// Concat the info
+		this.info = [...partials, this]
+			.map((report) => report.info)
+			.reduce((prev, cur) => prev + cur, "");
+		return Promise.resolve();
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -2660,6 +2692,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2953,6 +2986,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			| (this.noBulkSupport ? 0b10 : 0);
 		this.payload[offset] = options2;
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -3022,6 +3056,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

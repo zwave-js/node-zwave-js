@@ -5,7 +5,7 @@ import { test } from "vitest";
 import { FunctionType, MessageType } from "./Constants.js";
 import { Message, messageTypes } from "./Message.js";
 
-test("should deserialize and serialize correctly", (t) => {
+test("should deserialize and serialize correctly", async (t) => {
 	// actual messages from OZW
 	const okayMessages = [
 		Bytes.from([
@@ -40,21 +40,25 @@ test("should deserialize and serialize correctly", (t) => {
 	];
 	for (const original of okayMessages) {
 		const parsed = Message.parse(original, {} as any);
-		t.expect(parsed.serialize({} as any)).toStrictEqual(original);
+		await t.expect(parsed.serializeAsync({} as any)).resolves.toStrictEqual(
+			original,
+		);
 	}
 });
 
-test("should serialize correctly when the payload is null", (t) => {
+test("should serialize correctly when the payload is null", async (t) => {
 	// synthetic message
 	const expected = Bytes.from([0x01, 0x03, 0x00, 0xff, 0x03]);
 	const message = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.expect(message.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(message.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("should throw the correct error when parsing a faulty message", (t) => {
+test("should throw the correct error when parsing a faulty message", async (t) => {
 	// fake messages to produce certain errors
 	const brokenMessages: [Bytes, string, ZWaveErrorCodes][] = [
 		// too short (<5 bytes)
@@ -154,11 +158,10 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 	t.expect(msg4.toJSON()).toStrictEqual(json4);
 });
 
-test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", (t) => {
+test("Parsing a buffer with an unknown function type returns an unspecified `Message` instance", async (t) => {
 	const unknown = Bytes.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
-	t.expect(
-		Message.parse(unknown, {} as any).constructor,
-	).toBe(Message);
+	const parsed = Message.parse(unknown, {} as any);
+	t.expect(parsed).toBeInstanceOf(Message);
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {

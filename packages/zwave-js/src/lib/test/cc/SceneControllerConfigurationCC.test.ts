@@ -19,7 +19,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new SceneControllerConfigurationCCGet({
 		nodeId: 2,
 		groupId: 1,
@@ -30,10 +30,12 @@ test("the Get command should serialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly", (t) => {
+test("the Set command should serialize correctly", async (t) => {
 	const cc = new SceneControllerConfigurationCCSet({
 		nodeId: 2,
 		groupId: 3,
@@ -48,10 +50,12 @@ test("the Set command should serialize correctly", (t) => {
 			0x05, // dimming duration
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command should serialize correctly with undefined duration", (t) => {
+test("the Set command should serialize correctly with undefined duration", async (t) => {
 	const cc = new SceneControllerConfigurationCCSet({
 		nodeId: 2,
 		groupId: 3,
@@ -66,10 +70,12 @@ test("the Set command should serialize correctly with undefined duration", (t) =
 			0xff, // dimming duration
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Report command (v1) should be deserialized correctly", (t) => {
+test("the Report command (v1) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			SceneControllerConfigurationCommand.Report, // CC Command
@@ -78,7 +84,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x05, // dimming duration
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as SceneControllerConfigurationCCReport;
@@ -89,11 +95,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	t.expect(cc.dimmingDuration).toStrictEqual(Duration.parseReport(0x05)!);
 });
 
-test("deserializing an unsupported command should return an unspecified version of SceneControllerConfigurationCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of SceneControllerConfigurationCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as SceneControllerConfigurationCC;

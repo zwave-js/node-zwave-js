@@ -114,6 +114,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		}
 	}
 
+	/** @deprecated Use {@link fromAsync} instead */
 	public static from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
@@ -127,7 +128,38 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 			const cmdLength = raw.payload[offset];
 			validatePayload(raw.payload.length >= offset + 1 + cmdLength);
 			encapsulated.push(
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
 				CommandClass.parse(
+					raw.payload.subarray(
+						offset + 1,
+						offset + 1 + cmdLength,
+					),
+					ctx,
+				),
+			);
+			offset += 1 + cmdLength;
+		}
+
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			encapsulated,
+		});
+	}
+
+	public static async fromAsync(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Promise<MultiCommandCCCommandEncapsulation> {
+		validatePayload(raw.payload.length >= 1);
+		const numCommands = raw.payload[0];
+		const encapsulated: CommandClass[] = [];
+		let offset = 1;
+		for (let i = 0; i < numCommands; i++) {
+			validatePayload(raw.payload.length >= offset + 1);
+			const cmdLength = raw.payload[offset];
+			validatePayload(raw.payload.length >= offset + 1 + cmdLength);
+			encapsulated.push(
+				await CommandClass.parseAsync(
 					raw.payload.subarray(
 						offset + 1,
 						offset + 1 + cmdLength,
@@ -146,16 +178,31 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
 		const buffers: Bytes[] = [];
 		buffers.push(Bytes.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			const cmdBuffer = cmd.serialize(ctx);
 			buffers.push(Bytes.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
 		this.payload = Bytes.concat(buffers);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		const buffers: Bytes[] = [];
+		buffers.push(Bytes.from([this.encapsulated.length]));
+		for (const cmd of this.encapsulated) {
+			const cmdBuffer = await cmd.serializeAsync(ctx);
+			buffers.push(Bytes.from([cmdBuffer.length]));
+			buffers.push(cmdBuffer);
+		}
+		this.payload = Bytes.concat(buffers);
+		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

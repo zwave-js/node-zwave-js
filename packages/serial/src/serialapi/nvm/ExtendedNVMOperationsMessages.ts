@@ -52,6 +52,7 @@ export class ExtendedNVMOperationsRequest extends Message {
 			this.payload,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -144,6 +145,7 @@ export class ExtendedNVMOperationsReadRequest
 		this.payload[0] = this.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -213,6 +215,7 @@ export class ExtendedNVMOperationsWriteRequest
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 		this.payload.set(this.buffer, 5);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

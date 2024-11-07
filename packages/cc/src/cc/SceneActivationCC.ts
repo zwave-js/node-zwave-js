@@ -175,6 +175,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			this.sceneId,
 			this.dimmingDuration?.serializeSet() ?? 0xff,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

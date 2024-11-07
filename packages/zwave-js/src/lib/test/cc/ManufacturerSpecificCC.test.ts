@@ -17,17 +17,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new ManufacturerSpecificCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			ManufacturerSpecificCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Report command (v1) should be deserialized correctly", (t) => {
+test("the Report command (v1) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ManufacturerSpecificCommand.Report, // CC Command
@@ -39,7 +41,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x06,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as ManufacturerSpecificCCReport;

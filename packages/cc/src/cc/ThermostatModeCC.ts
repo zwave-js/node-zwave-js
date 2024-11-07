@@ -376,6 +376,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			]),
 			manufacturerData,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -502,6 +503,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				1,
 			);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -577,6 +579,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 			ThermostatMode["Manufacturer specific"],
 			ThermostatMode.Off,
 		);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

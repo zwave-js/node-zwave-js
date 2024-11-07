@@ -76,9 +76,8 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			driver.options.securityKeys!.S2_Unauthenticated!,
 		);
 		controller.securityManagers.securityManager2 = smCtrlr;
-		controller.parsingContext.getHighestSecurityClass =
-			controller.encodingContext.getHighestSecurityClass =
-				() => SecurityClass.S2_Unauthenticated;
+		controller.encodingContext.getHighestSecurityClass = () =>
+			SecurityClass.S2_Unauthenticated;
 
 		const sm0Ctrlr = new SecurityManager({
 			ownNodeId: controller.ownNodeId,
@@ -107,16 +106,18 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 
 		// Parse Security CC commands
 		const parseS0CC: MockNodeBehavior = {
-			handleCC(controller, self, receivedCC) {
+			async handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs([], {
+					await receivedCC.mergePartialCCsAsync([], {
 						sourceNodeId: controller.ownNodeId,
 						__internalIsMockNode: true,
+						frameType: "singlecast",
 						...self.encodingContext,
 						...self.securityManagers,
 					});
 				}
+				// This just decodes - we need to call further handlers
 				return undefined;
 			},
 		};

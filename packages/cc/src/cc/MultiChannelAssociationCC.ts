@@ -676,6 +676,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 				this.endpoints,
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -747,6 +748,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				this.endpoints || [],
 			),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -848,6 +850,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return this.reportsToFollow > 0;
 	}
 
+	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
 		partials: MultiChannelAssociationCCReport[],
 		_ctx: CCParsingContext,
@@ -860,6 +863,21 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		this.endpoints = [...partials, this]
 			.map((report) => [...report.endpoints])
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
+
+	public mergePartialCCsAsync(
+		partials: MultiChannelAssociationCCReport[],
+		_ctx: CCParsingContext,
+	): Promise<void> {
+		// Concat the list of nodes
+		this.nodeIds = [...partials, this]
+			.map((report) => [...report.nodeIds])
+			.reduce((prev, cur) => prev.concat(...cur), []);
+		// Concat the list of endpoints
+		this.endpoints = [...partials, this]
+			.map((report) => [...report.endpoints])
+			.reduce((prev, cur) => prev.concat(...cur), []);
+		return Promise.resolve();
 	}
 
 	public serialize(ctx: CCEncodingContext): Bytes {
@@ -875,6 +893,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			]),
 			destinations,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -929,6 +948,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupId]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -977,6 +997,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.groupCount]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

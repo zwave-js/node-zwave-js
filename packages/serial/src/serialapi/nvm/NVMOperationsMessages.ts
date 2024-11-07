@@ -49,6 +49,7 @@ export class NVMOperationsRequest extends Message {
 			this.payload,
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -132,6 +133,7 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 		this.payload[0] = this.length;
 		this.payload.writeUInt16BE(this.offset, 1);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -199,6 +201,7 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt16BE(this.offset, 1);
 		this.payload.set(this.buffer, 3);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

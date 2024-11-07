@@ -107,7 +107,9 @@ integrationTest(
 								"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
 							reportsToFollow: 0,
 						});
-						const serialized = configCC.serialize();
+						const serialized = await configCC.serializeAsync(
+							mockNode.encodingContext,
+						);
 						const segment1 = serialized.subarray(
 							0,
 							MAX_SEGMENT_SIZE,

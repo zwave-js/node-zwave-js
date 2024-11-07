@@ -66,6 +66,7 @@ export class ExtNVMWriteLongByteRequest extends Message {
 		this.payload = new Bytes(4);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload[3] = this.byte;
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -57,6 +57,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 			...ccList.subarray(0, ccListLength),
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

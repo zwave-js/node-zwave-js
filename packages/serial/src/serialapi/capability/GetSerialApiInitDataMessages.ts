@@ -167,6 +167,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			this.payload[3 + NUM_NODEMASK_BYTES + 1] = chipType.version;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

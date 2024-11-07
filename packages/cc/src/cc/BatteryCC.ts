@@ -587,6 +587,7 @@ export class BatteryCCReport extends BatteryCC {
 				]),
 			]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

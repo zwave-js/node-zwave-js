@@ -455,9 +455,9 @@ supported frequencies: ${
 	/**
 	 * Is called when the serial port has received a Zniffer frame
 	 */
-	private serialport_onData(
+	private async serialport_onData(
 		data: Uint8Array,
-	): void {
+	): Promise<void> {
 		let msg: ZnifferMessage | undefined;
 		try {
 			msg = ZnifferMessage.parse(data);
@@ -482,7 +482,7 @@ supported frequencies: ${
 			) {
 				this._capturedFrames.shift();
 			}
-			this.handleDataMessage(dataMsg, capture);
+			await this.handleDataMessage(dataMsg, capture);
 		}
 	}
 
@@ -503,10 +503,10 @@ supported frequencies: ${
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private handleDataMessage(
+	private async handleDataMessage(
 		msg: ZnifferDataMessage,
 		capture: CapturedData,
-	): void {
+	): Promise<void> {
 		try {
 			let convertedRSSI: RSSI | undefined;
 			if (this._options.convertRSSI && this._chipType) {
@@ -577,7 +577,7 @@ supported frequencies: ${
 						? "broadcast"
 						: "singlecast";
 				try {
-					cc = CommandClass.parse(
+					cc = await CommandClass.parseAsync(
 						mpdu.payload,
 						{
 							homeId: mpdu.homeId,

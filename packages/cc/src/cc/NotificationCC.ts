@@ -959,6 +959,7 @@ export class NotificationCCSet extends NotificationCC {
 			this.notificationType,
 			this.notificationStatus ? 0xff : 0x00,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1315,6 +1316,9 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
+					// FIXME: We do not really want to parse asynchronously here. Once parseAsync becomes the standard,
+					// we should add sync methods to only those CCs that will be parsed here - or make the entire call chain async.
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
 					const cc = CommandClass.parse(this.eventParameters, {
 						...ctx,
 						frameType: "singlecast",
@@ -1463,6 +1467,7 @@ export class NotificationCCReport extends NotificationCC {
 			]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1530,6 +1535,7 @@ export class NotificationCCGet extends NotificationCC {
 			this.notificationType ?? 0xff,
 			notificationEvent ?? 0x00,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1622,6 +1628,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			]),
 			bitMask,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1763,6 +1770,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			this.payload = Bytes.concat([this.payload, bitMask]);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1819,6 +1827,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.notificationType]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

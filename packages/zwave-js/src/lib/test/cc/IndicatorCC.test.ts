@@ -24,17 +24,19 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 
 const host = createTestingHost();
 
-test("the Get command (V1) should serialize correctly", (t) => {
+test("the Get command (V1) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Uint8Array.from([
 			IndicatorCommand.Get, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Get command (V2) should serialize correctly", (t) => {
+test("the Get command (V2) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCGet({
 		nodeId: 1,
 		indicatorId: 5,
@@ -45,10 +47,12 @@ test("the Get command (V2) should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command (v1) should serialize correctly", (t) => {
+test("the Set command (v1) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCSet({
 		nodeId: 2,
 		value: 23,
@@ -59,10 +63,12 @@ test("the Set command (v1) should serialize correctly", (t) => {
 			23, // value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Set command (v2) should serialize correctly", (t) => {
+test("the Set command (v2) should serialize correctly", async (t) => {
 	const cc = new IndicatorCCSet({
 		nodeId: 2,
 		values: [
@@ -91,17 +97,19 @@ test("the Set command (v2) should serialize correctly", (t) => {
 			1, // value
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Report command (v1) should be deserialized correctly", (t) => {
+test("the Report command (v1) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			IndicatorCommand.Report, // CC Command
 			55, // value
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCCReport;
@@ -111,7 +119,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	t.expect(cc.values).toBeUndefined();
 });
 
-test("the Report command (v2) should be deserialized correctly", (t) => {
+test("the Report command (v2) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			IndicatorCommand.Report, // CC Command
@@ -125,7 +133,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // value
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCCReport;
@@ -148,11 +156,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	]);
 });
 
-test("deserializing an unsupported command should return an unspecified version of IndicatorCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of IndicatorCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as IndicatorCC;

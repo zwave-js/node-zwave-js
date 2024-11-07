@@ -25,7 +25,7 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-test(`creating and serializing should work for unspecified commands`, (t) => {
+test(`creating and serializing should work for unspecified commands`, async (t) => {
 	// Repro for #1219
 	const cc = new CommandClass({
 		nodeId: 2,
@@ -37,14 +37,14 @@ test(`creating and serializing should work for unspecified commands`, (t) => {
 		command: cc,
 		callbackId: 0xfe,
 	});
-	t.expect(
-		msg.serialize({} as any),
-	).toStrictEqual(Bytes.from("010c001302055d0201020325fe63", "hex"));
+	await t.expect(
+		msg.serializeAsync({} as any),
+	).resolves.toStrictEqual(Bytes.from("010c001302055d0201020325fe63", "hex"));
 });
 
-test("parse() returns an un-specialized instance when receiving a non-implemented CC", (t) => {
+test("parse() returns an un-specialized instance when receiving a non-implemented CC", async (t) => {
 	// This is a Node Provisioning CC. Change it when that CC is implemented
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		Bytes.from("78030100", "hex"),
 		{ sourceNodeId: 5 } as any,
 	);
@@ -56,9 +56,9 @@ test("parse() returns an un-specialized instance when receiving a non-implemente
 });
 
 test("parse() does not throw when the CC is implemented", (t) => {
-	t.expect(() =>
+	t.expect(async () =>
 		// CRC-16 with BasicCC
-		CommandClass.parse(
+		await CommandClass.parseAsync(
 			Bytes.from("560120024d26", "hex"),
 			{ sourceNodeId: 5 } as any,
 		)

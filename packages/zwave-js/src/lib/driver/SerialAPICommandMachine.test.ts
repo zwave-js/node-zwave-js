@@ -440,7 +440,7 @@ testPlans.forEach((plan) => {
 			const message: Message = messages[msgSelector.resp][msgSelector.cb];
 			const machine = createSerialAPICommandMachine(
 				message,
-				message.serialize({} as any),
+				await message.serializeAsync({} as any),
 				implementations,
 				machineParams,
 			);

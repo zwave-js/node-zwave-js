@@ -355,6 +355,7 @@ export class SupervisionCCReport extends SupervisionCC {
 				Bytes.from([this.duration.serializeReport()]),
 			]);
 		}
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -416,12 +417,34 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
+	/** @deprecated Use {@link fromAsync} instead */
 	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCGet {
 		validatePayload(raw.payload.length >= 3);
 		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
 		const sessionId = raw.payload[0] & 0b111111;
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			requestStatusUpdates,
+			sessionId,
+			encapsulated,
+		});
+	}
+
+	public static async fromAsync(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Promise<SupervisionCCGet> {
+		validatePayload(raw.payload.length >= 3);
+		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
+		const sessionId = raw.payload[0] & 0b111111;
+
+		const encapsulated = await CommandClass.parseAsync(
+			raw.payload.subarray(2),
+			ctx,
+		);
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			requestStatusUpdates,
@@ -434,7 +457,9 @@ export class SupervisionCCGet extends SupervisionCC {
 	public sessionId: number;
 	public encapsulated: CommandClass;
 
+	/** @deprecated Use {@link serializeAsync} instead */
 	public serialize(ctx: CCEncodingContext): Bytes {
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const encapCC = this.encapsulated.serialize(ctx);
 		this.payload = Bytes.concat([
 			Bytes.from([
@@ -444,7 +469,21 @@ export class SupervisionCCGet extends SupervisionCC {
 			]),
 			encapCC,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
+	}
+
+	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+		const encapCC = await this.encapsulated.serializeAsync(ctx);
+		this.payload = Bytes.concat([
+			Bytes.from([
+				(this.requestStatusUpdates ? 0b10_000000 : 0)
+				| (this.sessionId & 0b111111),
+				encapCC.length,
+			]),
+			encapCC,
+		]);
+		return super.serializeAsync(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

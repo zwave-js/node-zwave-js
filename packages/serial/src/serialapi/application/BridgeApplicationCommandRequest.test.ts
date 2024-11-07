@@ -5,13 +5,11 @@ import { test } from "vitest";
 
 test("BridgeApplicationCommandRequest can be parsed without RSSI", async (t) => {
 	// Repro for https://github.com/zwave-js/node-zwave-js/issues/4335
-	t.expect(() =>
-		Message.parse(
-			Bytes.from(
-				"011200a80001020a320221340000000000000069",
-				"hex",
-			),
-			{} as any,
-		)
-	).not.toThrow();
+	Message.parse(
+		Bytes.from(
+			"011200a80001020a320221340000000000000069",
+			"hex",
+		),
+		{} as any,
+	);
 });

@@ -594,6 +594,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			Bytes.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -699,6 +700,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			Bytes.from([this.type & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -760,6 +762,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -853,6 +856,7 @@ export class ThermostatSetpointCCCapabilitiesReport
 		const min = encodeFloatWithScale(this.minValue, this.minValueScale);
 		const max = encodeFloatWithScale(this.maxValue, this.maxValueScale);
 		this.payload = Bytes.concat([Bytes.from([this.type]), min, max]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -905,6 +909,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -979,6 +984,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			undefined,
 			ThermostatSetpointType["N/A"],
 		);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -57,20 +57,20 @@ const test = baseTest.extend<LocalTestContext>({
 	],
 });
 
-test.sequential("returns true when a non-partial CC is received", ({ context, expect }) => {
+test("returns true when a non-partial CC is received", async ({ context, expect }) => {
 	const { driver } = context;
 	const cc = new BasicCCSet({ nodeId: 2, targetValue: 50 });
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(driver["assemblePartialCCs"](msg)).toBe(true);
+	expect(await driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.sequential(
+test(
 	"returns true when a partial CC is received that expects no more reports",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc = CommandClass.parse(
+		const cc = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -86,15 +86,15 @@ test.sequential(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		expect(driver["assemblePartialCCs"](msg)).toBe(true);
+		expect(await driver["assemblePartialCCs"](msg)).toBe(true);
 	},
 );
 
-test.sequential(
+test(
 	"returns false when a partial CC is received that expects more reports",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc = CommandClass.parse(
+		const cc = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -110,15 +110,15 @@ test.sequential(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		expect(driver["assemblePartialCCs"](msg)).toBe(false);
+		expect(await driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.sequential(
+test(
 	"returns true when the final partial CC is received and merges its data",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc1 = CommandClass.parse(
+		const cc1 = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -131,7 +131,7 @@ test.sequential(
 			]),
 			{ sourceNodeId: 2 } as any,
 		) as AssociationCCReport;
-		const cc2 = CommandClass.parse(
+		const cc2 = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -147,12 +147,12 @@ test.sequential(
 		const msg1 = new ApplicationCommandRequest({
 			command: cc1,
 		});
-		expect(driver["assemblePartialCCs"](msg1)).toBe(false);
+		await expect(driver["assemblePartialCCs"](msg1)).resolves.toBe(false);
 
 		const msg2 = new ApplicationCommandRequest({
 			command: cc2,
 		});
-		expect(driver["assemblePartialCCs"](msg2)).toBe(true);
+		await expect(driver["assemblePartialCCs"](msg2)).resolves.toBe(true);
 
 		expect(
 			(msg2.command as AssociationCCReport).nodeIds,
@@ -160,7 +160,7 @@ test.sequential(
 	},
 );
 
-test.sequential("does not crash when receiving a Multi Command CC", ({ context, expect }) => {
+test("does not crash when receiving a Multi Command CC", async ({ context, expect }) => {
 	const { driver } = context;
 	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
 	const cc2 = new BasicCCSet({ nodeId: 2, targetValue: 50 });
@@ -171,10 +171,10 @@ test.sequential("does not crash when receiving a Multi Command CC", ({ context, 
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(driver["assemblePartialCCs"](msg)).toBe(true);
+	expect(await driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.sequential("supports nested partial/non-partial CCs", ({ context, expect }) => {
+test("supports nested partial/non-partial CCs", async ({ context, expect }) => {
 	const { driver } = context;
 	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
 	const cc = new SecurityCCCommandEncapsulation({
@@ -182,14 +182,14 @@ test.sequential("supports nested partial/non-partial CCs", ({ context, expect })
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
-	cc["decryptedCCBytes"] = cc1.serialize({} as any);
+	cc["decryptedCCBytes"] = await cc1.serializeAsync({} as any);
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(driver["assemblePartialCCs"](msg)).toBe(true);
+	expect(await driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.sequential("supports nested partial/partial CCs (part 1)", ({ context, expect }) => {
+test("supports nested partial/partial CCs (part 1)", async ({ context, expect }) => {
 	const { driver } = context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
@@ -209,10 +209,10 @@ test.sequential("supports nested partial/partial CCs (part 1)", ({ context, expe
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(driver["assemblePartialCCs"](msg)).toBe(false);
+	expect(await driver["assemblePartialCCs"](msg)).toBe(false);
 });
 
-test.sequential("supports nested partial/partial CCs (part 2)", ({ context, expect }) => {
+test("supports nested partial/partial CCs (part 2)", async ({ context, expect }) => {
 	const { driver } = context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
@@ -232,14 +232,14 @@ test.sequential("supports nested partial/partial CCs (part 2)", ({ context, expe
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(driver["assemblePartialCCs"](msg)).toBe(true);
+	expect(await driver["assemblePartialCCs"](msg)).toBe(true);
 });
 
-test.sequential(
+test(
 	"returns false when a partial CC throws Deserialization_NotImplemented during merging",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc = CommandClass.parse(
+		const cc = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -252,7 +252,7 @@ test.sequential(
 			]),
 			{ sourceNodeId: 2 } as any,
 		) as AssociationCCReport;
-		cc.mergePartialCCs = () => {
+		cc.mergePartialCCsAsync = async () => {
 			throw new ZWaveError(
 				"not implemented",
 				ZWaveErrorCodes.Deserialization_NotImplemented,
@@ -261,15 +261,15 @@ test.sequential(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		expect(driver["assemblePartialCCs"](msg)).toBe(false);
+		expect(await driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.sequential(
+test(
 	"returns false when a partial CC throws CC_NotImplemented during merging",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc = CommandClass.parse(
+		const cc = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -282,7 +282,7 @@ test.sequential(
 			]),
 			{ sourceNodeId: 2 } as any,
 		) as AssociationCCReport;
-		cc.mergePartialCCs = () => {
+		cc.mergePartialCCsAsync = async () => {
 			throw new ZWaveError(
 				"not implemented",
 				ZWaveErrorCodes.CC_NotImplemented,
@@ -291,15 +291,15 @@ test.sequential(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		expect(driver["assemblePartialCCs"](msg)).toBe(false);
+		expect(await driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.sequential(
+test(
 	"returns false when a partial CC throws PacketFormat_InvalidPayload during merging",
-	({ context, expect }) => {
+	async ({ context, expect }) => {
 		const { driver } = context;
-		const cc = CommandClass.parse(
+		const cc = await CommandClass.parseAsync(
 			Uint8Array.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -312,7 +312,7 @@ test.sequential(
 			]),
 			{ sourceNodeId: 2 } as any,
 		) as AssociationCCReport;
-		cc.mergePartialCCs = () => {
+		cc.mergePartialCCsAsync = async () => {
 			throw new ZWaveError(
 				"not implemented",
 				ZWaveErrorCodes.PacketFormat_InvalidPayload,
@@ -321,13 +321,13 @@ test.sequential(
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
-		expect(driver["assemblePartialCCs"](msg)).toBe(false);
+		expect(await driver["assemblePartialCCs"](msg)).toBe(false);
 	},
 );
 
-test.sequential("passes other errors during merging through", ({ context, expect }) => {
+test("passes other errors during merging through", async ({ context, expect }) => {
 	const { driver } = context;
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		Uint8Array.from([
 			CommandClasses.Association,
 			AssociationCommand.Report,
@@ -340,12 +340,12 @@ test.sequential("passes other errors during merging through", ({ context, expect
 		]),
 		{ sourceNodeId: 2 } as any,
 	) as AssociationCCReport;
-	cc.mergePartialCCs = () => {
+	cc.mergePartialCCsAsync = async () => {
 		throw new ZWaveError("invalid", ZWaveErrorCodes.Argument_Invalid);
 	};
 	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
-	expect(() => driver["assemblePartialCCs"](msg))
-		.toThrow("invalid");
+	await expect(() => driver["assemblePartialCCs"](msg))
+		.rejects.toThrow("invalid");
 });

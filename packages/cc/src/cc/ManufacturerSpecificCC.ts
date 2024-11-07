@@ -276,6 +276,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.productType, 2);
 		this.payload.writeUInt16BE(this.productId, 4);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -391,6 +392,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([(this.deviceIdType || 0) & 0b111]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

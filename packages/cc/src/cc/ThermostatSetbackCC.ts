@@ -213,6 +213,7 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -276,6 +277,7 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

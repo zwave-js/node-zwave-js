@@ -89,6 +89,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 			]),
 		]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

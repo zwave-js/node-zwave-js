@@ -20,7 +20,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the RecordsCountGet command should serialize correctly", (t) => {
+test("the RecordsCountGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockLoggingCCRecordsSupportedGet({
 		nodeId: 1,
 	});
@@ -29,17 +29,19 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the RecordsCountReport command should be deserialized correctly", (t) => {
+test("the RecordsCountReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockLoggingCommand.RecordsSupportedReport, // CC Command
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordsSupportedReport;
@@ -48,7 +50,7 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 	t.expect(cc.recordsCount).toBe(20);
 });
 
-test("the RecordGet command should serialize correctly", (t) => {
+test("the RecordGet command should serialize correctly", async (t) => {
 	const cc = new DoorLockLoggingCCRecordGet({
 		nodeId: 1,
 		recordNumber: 1,
@@ -59,10 +61,12 @@ test("the RecordGet command should serialize correctly", (t) => {
 			1, // Record Number
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the RecordReport command should be deserialized correctly", (t) => {
+test("the RecordReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			DoorLockLoggingCommand.RecordReport, // CC Command
@@ -81,7 +85,7 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 		]),
 	);
 
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordReport;

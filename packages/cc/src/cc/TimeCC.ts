@@ -278,6 +278,7 @@ export class TimeCCTimeReport extends TimeCC {
 			this.minute,
 			this.second,
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -342,6 +343,7 @@ export class TimeCCDateReport extends TimeCC {
 			this.day,
 		]);
 		this.payload.writeUInt16BE(this.year, 0);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -417,6 +419,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -506,6 +509,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

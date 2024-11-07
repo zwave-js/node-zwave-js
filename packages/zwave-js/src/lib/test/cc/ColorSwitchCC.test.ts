@@ -30,7 +30,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new ColorSwitchCCSupportedGet({
 		nodeId: 1,
 	});
@@ -39,10 +39,12 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the SupportedReport command should deserialize correctly", (t) => {
+test("the SupportedReport command should deserialize correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.SupportedReport, // CC Command
@@ -50,7 +52,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCSupportedReport;
@@ -71,7 +73,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 	// ]);
 });
 
-test("the Get command should serialize correctly", (t) => {
+test("the Get command should serialize correctly", async (t) => {
 	const cc = new ColorSwitchCCGet({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
@@ -82,10 +84,12 @@ test("the Get command should serialize correctly", (t) => {
 			2, // Color Component
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the Report command should deserialize correctly (version 1)", (t) => {
+test("the Report command should deserialize correctly (version 1)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
@@ -93,7 +97,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
@@ -105,7 +109,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 	t.expect(cc.duration).toBeUndefined();
 });
 
-test("the Report command should deserialize correctly (version 3)", (t) => {
+test("the Report command should deserialize correctly (version 3)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			ColorSwitchCommand.Report, // CC Command
@@ -115,7 +119,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
@@ -128,7 +132,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 	t.expect(cc.duration!.unit).toBe("seconds");
 });
 
-test("the Set command should serialize correctly (without duration)", (t) => {
+test("the Set command should serialize correctly (without duration)", async (t) => {
 	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
@@ -154,10 +158,10 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the Set command should serialize correctly (version 2)", (t) => {
+test("the Set command should serialize correctly (version 2)", async (t) => {
 	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
@@ -183,10 +187,10 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the StartLevelChange command should serialize correctly", (t) => {
+test("the StartLevelChange command should serialize correctly", async (t) => {
 	const cc = new ColorSwitchCCStartLevelChange({
 		nodeId: 1,
 		startLevel: 5,
@@ -210,10 +214,10 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	t.expect(cc.serialize(ctx)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
 });
 
-test("the StopLevelChange command should serialize correctly", (t) => {
+test("the StopLevelChange command should serialize correctly", async (t) => {
 	const cc = new ColorSwitchCCStopLevelChange({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
@@ -225,7 +229,9 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			0b0000_0010, // color: red
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
 test("the setValue API verifies that targetColor isn't set with non-numeric keys", async (t) => {

@@ -137,7 +137,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation<Message> =
 		additionalCommandTimeoutMs = 0,
 	) {
 		// Make sure we can send this message
-		if (isSendData(msg) && driver.exceedsMaxPayloadLength(msg)) {
+		if (isSendData(msg) && await driver.exceedsMaxPayloadLength(msg)) {
 			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
 			// Try disabling explorer frames for this message and see if it fits now.
 			function fail(): never {
@@ -148,7 +148,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation<Message> =
 			}
 			if (msg.transmitOptions & TransmitOptions.Explore) {
 				msg.transmitOptions &= ~TransmitOptions.Explore;
-				if (driver.exceedsMaxPayloadLength(msg)) {
+				if (await driver.exceedsMaxPayloadLength(msg)) {
 					// Still too large
 					fail();
 				}
@@ -237,7 +237,9 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation<
 		node?.supportsCC(CommandClasses["Transport Service"])
 		&& node.getCCVersion(CommandClasses["Transport Service"]) >= 2;
 
-	if (!mayUseTransportService || !driver.exceedsMaxPayloadLength(msg)) {
+	if (
+		!mayUseTransportService || !(await driver.exceedsMaxPayloadLength(msg))
+	) {
 		// Transport Service isn't needed for this message
 		return yield* simpleMessageGenerator(
 			driver,
@@ -249,7 +251,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation<
 	}
 
 	// Send the command split into multiple segments
-	const payload = msg.serializeCC(ctx);
+	const payload = await msg.serializeCCAsync(ctx);
 	const numSegments = Math.ceil(payload.length / MAX_SEGMENT_SIZE);
 	const segmentDelay = numSegments > RELAXED_TIMING_THRESHOLD
 		? TransportServiceTimeouts.relaxedTimingDelayR2

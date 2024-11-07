@@ -23,7 +23,7 @@ function buildCCBuffer(payload: Uint8Array): Uint8Array {
 	]);
 }
 
-test("the ConfigurationGet command should serialize correctly", (t) => {
+test("the ConfigurationGet command should serialize correctly", async (t) => {
 	const cc = new CentralSceneCCConfigurationGet({
 		nodeId: 1,
 	});
@@ -32,10 +32,12 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationSet command should serialize correctly (flags set)", (t) => {
+test("the ConfigurationSet command should serialize correctly (flags set)", async (t) => {
 	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: true,
@@ -46,10 +48,12 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 			0b1000_0000,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationSet command should serialize correctly (flags not set)", (t) => {
+test("the ConfigurationSet command should serialize correctly (flags not set)", async (t) => {
 	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: false,
@@ -60,17 +64,19 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 			0,
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the ConfigurationReport command should be deserialized correctly", (t) => {
+test("the ConfigurationReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			CentralSceneCommand.ConfigurationReport, // CC Command
 			0b1000_0000,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCConfigurationReport;
@@ -79,7 +85,7 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 	t.expect(cc.slowRefresh).toBe(true);
 });
 
-test("the SupportedGet command should serialize correctly", (t) => {
+test("the SupportedGet command should serialize correctly", async (t) => {
 	const cc = new CentralSceneCCSupportedGet({
 		nodeId: 1,
 	});
@@ -88,10 +94,12 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.expect(cc.serialize({} as any)).toStrictEqual(expected);
+	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+		expected,
+	);
 });
 
-test("the SupportedReport command should be deserialized correctly", (t) => {
+test("the SupportedReport command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			CentralSceneCommand.SupportedReport, // CC Command
@@ -103,7 +111,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCSupportedReport;
@@ -117,7 +125,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	t.expect(cc.supportedKeyAttributes.get(2)).toStrictEqual([0, 2, 4]);
 });
 
-test("the Notification command should be deserialized correctly", (t) => {
+test("the Notification command should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			CentralSceneCommand.Notification, // CC Command
@@ -126,7 +134,7 @@ test("the Notification command should be deserialized correctly", (t) => {
 			8, // scene number
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
@@ -139,7 +147,7 @@ test("the Notification command should be deserialized correctly", (t) => {
 	t.expect(cc.sceneNumber).toBe(8);
 });
 
-test("the Notification command should be deserialized correctly (KeyHeldDown)", (t) => {
+test("the Notification command should be deserialized correctly (KeyHeldDown)", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([
 			CentralSceneCommand.Notification, // CC Command
@@ -148,7 +156,7 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 			8, // scene number
 		]),
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
@@ -160,11 +168,11 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 	t.expect(cc.sceneNumber).toBe(8);
 });
 
-test("deserializing an unsupported command should return an unspecified version of CentralSceneCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of CentralSceneCC", async (t) => {
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = CommandClass.parse(
+	const cc = await CommandClass.parseAsync(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCC;

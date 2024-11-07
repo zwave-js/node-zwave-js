@@ -62,6 +62,7 @@ export class GetControllerIdResponse extends Message {
 
 		this.payload = Bytes.concat([homeId, nodeId]);
 
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

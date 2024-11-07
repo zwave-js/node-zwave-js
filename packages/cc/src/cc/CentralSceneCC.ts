@@ -599,6 +599,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		this.payload = Bytes.from([this.slowRefresh ? 0b1000_0000 : 0]);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
