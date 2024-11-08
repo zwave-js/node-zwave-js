@@ -60,6 +60,14 @@
   "sideEffects": [
     "./reflection/decorators.js"
   ],
+  "imports": {
+    "#webcrypto": {
+      "@@dev": "./src/crypto/webcrypto.node.ts",
+      "browser": "./build/esm/crypto/webcrypto.browser.js",
+      "import": "./build/cjs/crypto/webcrypto.browser.js",
+      "require": "./build/cjs/crypto/webcrypto.node.js"
+    }
+  },
   "files": [
     "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
     "build/**/package.json"

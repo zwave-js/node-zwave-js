@@ -36,7 +36,7 @@ test("encryptAES128OFB() -> should work correctly", (t) => {
 	t.expect(encryptAES128OFB(plaintext, key, iv)).toStrictEqual(expected);
 });
 
-test("encryptAES128OFB() -> should correctly decrypt a real packet", (t) => {
+test("decryptAES128OFB() -> should correctly decrypt a real packet", (t) => {
 	// Taken from an OZW log:
 	// Raw: 0x9881 78193fd7b91995ba 47645ec33fcdb3994b104ebd712e8b7fbd9120d049 28 4e39c14a0dc9aee5
 	// Decrypted Packet: 0x009803008685598e60725a845b7170807aef2526ef
