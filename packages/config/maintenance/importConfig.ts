@@ -25,6 +25,7 @@ import { AssertionError, ok } from "node:assert";
 import * as child from "node:child_process";
 import fs from "node:fs/promises";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { compare } from "semver";
 import xml2js from "xml2js";
@@ -32,7 +33,9 @@ import xml2js_parsers from "xml2js/lib/processors.js";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { ConfigManager } from "../src/ConfigManager.js";
-import { DeviceConfigIndexEntry } from "../src/devices/DeviceConfig.js";
+import { type DeviceConfigIndexEntry } from "../src/devices/DeviceConfig.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const execPromise = promisify(child.exec);
 const yargsInstance = yargs(hideBin(process.argv));
