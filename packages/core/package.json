@@ -61,11 +61,11 @@
     "./reflection/decorators.js"
   ],
   "imports": {
-    "#webcrypto": {
-      "@@dev": "./src/crypto/webcrypto.node.ts",
-      "browser": "./build/esm/crypto/webcrypto.browser.js",
-      "import": "./build/cjs/crypto/webcrypto.browser.js",
-      "require": "./build/cjs/crypto/webcrypto.node.js"
+    "#crypto_primitives": {
+      "@@dev": "./src/crypto/primitives/primitives.node.ts",
+      "require": "./build/cjs/crypto/primitives/primitives.node.js",
+      "node": "./build/esm/crypto/primitives/primitives.node.js",
+      "default": "./build/esm/crypto/primitives/primitives.browser.js"
     }
   },
   "files": [

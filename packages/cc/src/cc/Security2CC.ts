@@ -6,7 +6,6 @@ import {
 	type MessageRecord,
 	type MulticastDestination,
 	type S2SecurityClass,
-	SECURITY_S2_AUTH_TAG_LENGTH,
 	SPANState,
 	type SPANTableEntry,
 	SecurityClass,
@@ -15,9 +14,10 @@ import {
 	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
-	decryptAES128CCM,
+	decryptAES128CCMSync,
 	encodeBitMask,
-	encryptAES128CCM,
+	encryptAES128CCMAsync,
+	encryptAES128CCMSync,
 	getCCName,
 	highResTimestamp,
 	isLongRangeNodeId,
@@ -99,6 +99,8 @@ function bitMaskToSecurityClass(
 	validatePayload(keys.length === 1);
 	return keys[0];
 }
+
+const SECURITY_S2_AUTH_TAG_LENGTH = 8;
 
 function getAuthenticationData(
 	sendingNodeId: number,
@@ -243,7 +245,7 @@ function decryptSinglecast(
 		return {
 			key,
 			iv,
-			...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+			...decryptAES128CCMSync(key, iv, ciphertext, authData, authTag),
 		};
 	};
 	const getNonceAndDecrypt = () => {
@@ -410,7 +412,7 @@ function decryptMulticast(
 	return {
 		key,
 		iv,
-		...decryptAES128CCM(key, iv, ciphertext, authData, authTag),
+		...decryptAES128CCMSync(key, iv, ciphertext, authData, authTag),
 		// The security class is irrelevant when decrypting multicast commands
 		securityClass: undefined,
 	};
@@ -2235,7 +2237,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			iv = keyAndIV.iv;
 		}
 
-		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
+		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCMSync(
 			key,
 			iv,
 			plaintextPayload,
@@ -2331,13 +2333,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			iv = keyAndIV.iv;
 		}
 
-		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
-			key,
-			iv,
-			plaintextPayload,
-			authData,
-			SECURITY_S2_AUTH_TAG_LENGTH,
-		);
+		const { ciphertext: ciphertextPayload, authTag } =
+			await encryptAES128CCMAsync(
+				plaintextPayload,
+				key,
+				iv,
+				authData,
+				SECURITY_S2_AUTH_TAG_LENGTH,
+			);
 
 		// Remember key and IV for debugging purposes
 		this.key = key;

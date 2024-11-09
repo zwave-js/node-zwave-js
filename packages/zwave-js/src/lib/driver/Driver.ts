@@ -87,8 +87,8 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	deserializeCacheValue,
-	extractRawECDHPrivateKey,
-	generateECDHKeyPair,
+	extractRawECDHPrivateKeySync,
+	generateECDHKeyPairSync,
 	getCCName,
 	highResTimestamp,
 	isEncapsulationCC,
@@ -97,7 +97,7 @@ import {
 	isMissingControllerCallback,
 	isMissingControllerResponse,
 	isZWaveError,
-	keyPairFromRawECDHPrivateKey,
+	keyPairFromRawECDHPrivateKeySync,
 	messageRecordToLines,
 	securityClassIsS2,
 	securityClassOrder,
@@ -1005,13 +1005,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 			if (privateKey) {
 				this._learnModeAuthenticatedKeyPair =
-					keyPairFromRawECDHPrivateKey(privateKey);
+					keyPairFromRawECDHPrivateKeySync(privateKey);
 			} else {
 				// Not found in cache, create a new one and cache it
-				this._learnModeAuthenticatedKeyPair = generateECDHKeyPair();
+				this._learnModeAuthenticatedKeyPair = generateECDHKeyPairSync();
 				this.cacheSet(
 					cacheKeys.controller.privateKey,
-					extractRawECDHPrivateKey(
+					extractRawECDHPrivateKeySync(
 						this._learnModeAuthenticatedKeyPair.privateKey,
 					),
 				);

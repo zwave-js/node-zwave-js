@@ -10,10 +10,12 @@ import {
 	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
-	computeMAC,
-	decryptAES128OFB,
+	computeMACAsync,
+	computeMACSync,
+	decryptAES128OFBSync,
 	encodeCCList,
-	encryptAES128OFB,
+	encryptAES128OFBAsync,
+	encryptAES128OFBSync,
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
@@ -686,7 +688,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			ctx.ownNodeId,
 			encryptedPayload,
 		);
-		const expectedAuthCode = computeMAC(
+		const expectedAuthCode = computeMACSync(
 			authData,
 			ctx.securityManager.authKey,
 		);
@@ -696,7 +698,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		)(authCode.equals(expectedAuthCode));
 
 		// Decrypt the encapsulated CC
-		const frameControlAndDecryptedCC = decryptAES128OFB(
+		const frameControlAndDecryptedCC = decryptAES128OFBSync(
 			encryptedPayload,
 			ctx.securityManager.encryptionKey,
 			Bytes.concat([iv, nonce]),
@@ -827,7 +829,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Bytes.concat([senderNonce, this.nonce]);
-		const ciphertext = encryptAES128OFB(plaintext, encryptionKey, iv);
+		const ciphertext = encryptAES128OFBSync(plaintext, encryptionKey, iv);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
@@ -837,7 +839,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.nodeId,
 			ciphertext,
 		);
-		const authCode = computeMAC(authData, authKey);
+		const authCode = computeMACSync(authData, authKey);
 
 		// Remember for debugging purposes
 		this.iv = iv;
@@ -882,7 +884,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Bytes.concat([senderNonce, this.nonce]);
-		const ciphertext = encryptAES128OFB(plaintext, encryptionKey, iv);
+		const ciphertext = await encryptAES128OFBAsync(
+			plaintext,
+			encryptionKey,
+			iv,
+		);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
@@ -892,7 +898,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.nodeId,
 			ciphertext,
 		);
-		const authCode = computeMAC(authData, authKey);
+		const authCode = await computeMACAsync(authData, authKey);
 
 		// Remember for debugging purposes
 		this.iv = iv;

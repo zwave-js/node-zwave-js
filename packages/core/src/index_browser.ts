@@ -1,6 +1,8 @@
 /* @forbiddenImports external */
 // FIXME: Find a way to make sure that the forbiddenImports lint uses the "browser" condition
 
+// eslint-disable-next-line @zwave-js/no-forbidden-imports -- FIXME: The lint fails here
+export * from "./crypto/index.browser.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
