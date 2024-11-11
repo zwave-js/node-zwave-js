@@ -8954,9 +8954,9 @@ export class ZWaveController
 	 * Is called when a RemoveNode request is received from the controller.
 	 * Handles and controls the exclusion process.
 	 */
-	private handleLearnModeCallback(
+	private async handleLearnModeCallback(
 		msg: SetLearnModeCallback,
-	): boolean {
+	): Promise<boolean> {
 		// not sure what to do with this message, we're not in learn mode
 		if (this._currentLearnMode == undefined) return false;
 
@@ -9003,8 +9003,10 @@ export class ZWaveController
 			if (wasJoining) {
 				this._currentLearnMode = undefined;
 				this.driver["_securityManager"] = undefined;
-				this.driver["_securityManager2"] = new SecurityManager2();
-				this.driver["_securityManagerLR"] = new SecurityManager2();
+				this.driver["_securityManager2"] = await SecurityManager2
+					.create();
+				this.driver["_securityManagerLR"] = await SecurityManager2
+					.create();
 				this._nodes.clear();
 
 				process.nextTick(() => this.afterJoiningNetwork().catch(noop));
@@ -9555,7 +9557,10 @@ export class ZWaveController
 
 				// Store the network key
 				receivedKeys.set(securityClass, keyReport.networkKey);
-				securityManager.setKey(securityClass, keyReport.networkKey);
+				await securityManager.setKeyAsync(
+					securityClass,
+					keyReport.networkKey,
+				);
 				if (securityClass === SecurityClass.S0_Legacy) {
 					// TODO: This is awkward to have here
 					this.driver["_securityManager"] = new SecurityManager({

@@ -565,7 +565,7 @@ supported frequencies: ${
 						securityManager: destSecurityManager,
 						securityManager2: destSecurityManager2,
 						securityManagerLR: destSecurityManagerLR,
-					} = this.getSecurityManagers(mpdu.destinationNodeId));
+					} = await this.getSecurityManagers(mpdu.destinationNodeId));
 				}
 
 				// TODO: Support parsing multicast S2 frames
@@ -606,7 +606,7 @@ supported frequencies: ${
 			// Update the security managers when nonces are exchanged, so we can
 			// decrypt the communication
 			if (cc?.ccId === CommandClasses["Security 2"]) {
-				const securityManagers = this.getSecurityManagers(
+				const securityManagers = await this.getSecurityManagers(
 					mpdu.sourceNodeId,
 				);
 				const isLR = isLongRangeNodeId(mpdu.sourceNodeId)
@@ -656,9 +656,11 @@ supported frequencies: ${
 				&& cc instanceof SecurityCCNonceReport
 			) {
 				const senderSecurityManager =
-					this.getSecurityManagers(mpdu.sourceNodeId).securityManager;
+					(await this.getSecurityManagers(mpdu.sourceNodeId))
+						.securityManager;
 				const destSecurityManager =
-					this.getSecurityManagers(destNodeId).securityManager;
+					(await this.getSecurityManagers(destNodeId))
+						.securityManager;
 
 				if (senderSecurityManager && destSecurityManager) {
 					// Both nodes have a shared nonce now
@@ -828,7 +830,7 @@ supported frequencies: ${
 		);
 	}
 
-	private getSecurityManagers(
+	private async getSecurityManagers(
 		sourceNodeId: number,
 	) {
 		if (this.securityManagers.has(sourceNodeId)) {
@@ -870,7 +872,7 @@ supported frequencies: ${
 			// this.znifferLog.print(
 			// 	"At least one network key for S2 configured, enabling S2 security manager...",
 			// );
-			securityManager2 = new SecurityManager2();
+			securityManager2 = await SecurityManager2.create();
 			// Small hack: Zniffer does not care about S2 duplicates
 			securityManager2.isDuplicateSinglecast = () => false;
 
@@ -885,7 +887,10 @@ supported frequencies: ${
 			) {
 				const key = this._options.securityKeys[secClass];
 				if (key) {
-					securityManager2.setKey(SecurityClass[secClass], key);
+					await securityManager2.setKeyAsync(
+						SecurityClass[secClass],
+						key,
+					);
 				}
 			}
 			// } else {
@@ -903,19 +908,19 @@ supported frequencies: ${
 			// this.znifferLog.print(
 			// 	"At least one network key for Z-Wave Long Range configured, enabling security manager...",
 			// );
-			securityManagerLR = new SecurityManager2();
+			securityManagerLR = await SecurityManager2.create();
 			// Small hack: Zniffer does not care about S2 duplicates
 			securityManagerLR.isDuplicateSinglecast = () => false;
 
 			// Set up all keys
 			if (this._options.securityKeysLongRange?.S2_AccessControl) {
-				securityManagerLR.setKey(
+				await securityManagerLR.setKeyAsync(
 					SecurityClass.S2_AccessControl,
 					this._options.securityKeysLongRange.S2_AccessControl,
 				);
 			}
 			if (this._options.securityKeysLongRange?.S2_Authenticated) {
-				securityManagerLR.setKey(
+				await securityManagerLR.setKeyAsync(
 					SecurityClass.S2_Authenticated,
 					this._options.securityKeysLongRange.S2_Authenticated,
 				);

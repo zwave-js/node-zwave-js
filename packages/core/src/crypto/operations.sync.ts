@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import { Bytes } from "@zwave-js/shared/safe";
 import crypto from "node:crypto";
 import { leftShift1, xor, zeroPad } from "./shared.js";
@@ -9,6 +10,10 @@ const constantTE = new Uint8Array(15).fill(0x88);
 const constantNK = new Uint8Array(15).fill(0x55);
 const constantNonce = new Uint8Array(16).fill(0x26);
 const constantEI = new Uint8Array(15).fill(0x88);
+
+export function randomBytes(length: number): Uint8Array {
+	return crypto.randomBytes(length);
+}
 
 function encrypt(
 	algorithm: string,
@@ -52,7 +57,10 @@ function decrypt(
 	}
 }
 
-/** Encrypts a payload using AES-128-ECB (as described in SDS10865) */
+/**
+ * Encrypts a payload using AES-128-ECB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export function encryptAES128ECB(
 	plaintext: Uint8Array,
 	key: Uint8Array,
@@ -60,7 +68,10 @@ export function encryptAES128ECB(
 	return encrypt("aes-128-ecb", 16, false, plaintext, key, new Uint8Array());
 }
 
-/** Encrypts a payload using AES-OFB (as described in SDS10865) */
+/**
+ * Encrypts a payload using AES-OFB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export const encryptAES128OFB = encrypt.bind(
 	undefined,
 	"aes-128-ofb",
@@ -68,7 +79,10 @@ export const encryptAES128OFB = encrypt.bind(
 	true,
 );
 
-/** Decrypts a payload using AES-OFB (as described in SDS10865) */
+/**
+ * Decrypts a payload using AES-OFB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export const decryptAES128OFB = decrypt.bind(
 	undefined,
 	"aes-128-ofb",
@@ -76,7 +90,10 @@ export const decryptAES128OFB = decrypt.bind(
 	true,
 );
 
-/** Computes a message authentication code for Security S0 (as described in SDS10865) */
+/**
+ * Computes a message authentication code for Security S0 (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export function computeMAC(
 	authData: Uint8Array,
 	key: Uint8Array,
@@ -97,7 +114,10 @@ function generateAES128CMACSubkeys(
 	return [k1, k2];
 }
 
-/** Computes a message authentication code for Security S2 (as described in SDS13783) */
+/**
+ * Computes a message authentication code for Security S2 (as described in SDS13783)
+ * @deprecated Use the async version of this function instead
+ */
 export function computeCMAC(message: Uint8Array, key: Uint8Array): Uint8Array {
 	const blockSize = 16;
 	const numBlocks = Math.ceil(message.length / blockSize);
@@ -125,7 +145,10 @@ export function computeCMAC(message: Uint8Array, key: Uint8Array): Uint8Array {
 	return ret.subarray(0, blockSize);
 }
 
-/** Computes the Pseudo Random Key (PRK) used to derive auth, encryption and nonce keys */
+/**
+ * Computes the Pseudo Random Key (PRK) used to derive auth, encryption and nonce keys
+ * @deprecated Use the async version of this function instead
+ */
 export function computePRK(
 	ecdhSharedSecret: Uint8Array,
 	pubKeyA: Uint8Array,
@@ -135,7 +158,10 @@ export function computePRK(
 	return computeCMAC(message, constantPRK);
 }
 
-/** Derives the temporary auth, encryption and nonce keys from the PRK */
+/**
+ * Derives the temporary auth, encryption and nonce keys from the PRK
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveTempKeys(PRK: Uint8Array): {
 	tempKeyCCM: Uint8Array;
 	tempPersonalizationString: Uint8Array;
@@ -158,7 +184,10 @@ export function deriveTempKeys(PRK: Uint8Array): {
 	};
 }
 
-/** Derives the CCM, MPAN keys and the personalization string from the permanent network key (PNK) */
+/**
+ * Derives the CCM, MPAN keys and the personalization string from the permanent network key (PNK)
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveNetworkKeys(PNK: Uint8Array): {
 	keyCCM: Uint8Array;
 	keyMPAN: Uint8Array;
@@ -187,7 +216,10 @@ export function deriveNetworkKeys(PNK: Uint8Array): {
 	};
 }
 
-/** Computes the Pseudo Random Key (PRK) used to derive the mixed entropy input (MEI) for nonce generation */
+/**
+ * Computes the Pseudo Random Key (PRK) used to derive the mixed entropy input (MEI) for nonce generation
+ * @deprecated Use the async version of this function instead
+ */
 export function computeNoncePRK(
 	senderEI: Uint8Array,
 	receiverEI: Uint8Array,
@@ -196,7 +228,10 @@ export function computeNoncePRK(
 	return computeCMAC(message, constantNonce);
 }
 
-/** Derives the MEI from the nonce PRK */
+/**
+ * Derives the MEI from the nonce PRK
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveMEI(noncePRK: Uint8Array): Uint8Array {
 	const T1 = computeCMAC(
 		Bytes.concat([
@@ -214,6 +249,10 @@ export function deriveMEI(noncePRK: Uint8Array): Uint8Array {
 	return Bytes.concat([T1, T2]);
 }
 
+/**
+ * Encrypts a payload using AES-CCM
+ * @deprecated Use the async version of this function instead
+ */
 export function encryptAES128CCM(
 	key: Uint8Array,
 	iv: Uint8Array,
@@ -234,6 +273,10 @@ export function encryptAES128CCM(
 	return { ciphertext, authTag };
 }
 
+/**
+ * Decrypts a payload using AES-CCM
+ * @deprecated Use the async version of this function instead
+ */
 export function decryptAES128CCM(
 	key: Uint8Array,
 	iv: Uint8Array,

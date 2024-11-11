@@ -33,17 +33,17 @@ integrationTest(
 
 		customSetup: async (driver, controller, mockNode) => {
 			// Create a security manager for the node
-			const sm2Node = new SecurityManager2();
+			const sm2Node = await SecurityManager2.create();
 			// Copy keys from the driver
-			sm2Node.setKey(
+			await sm2Node.setKeyAsync(
 				SecurityClass.S2_AccessControl,
 				driver.options.securityKeys!.S2_AccessControl!,
 			);
-			sm2Node.setKey(
+			await sm2Node.setKeyAsync(
 				SecurityClass.S2_Authenticated,
 				driver.options.securityKeys!.S2_Authenticated!,
 			);
-			sm2Node.setKey(
+			await sm2Node.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -53,17 +53,17 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
-			const smCtrlr = new SecurityManager2();
+			const smCtrlr = await SecurityManager2.create();
 			// Copy keys from the driver
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_AccessControl,
 				driver.options.securityKeys!.S2_AccessControl!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Authenticated,
 				driver.options.securityKeys!.S2_Authenticated!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -73,9 +73,9 @@ integrationTest(
 
 			// Respond to S2 Nonce Get
 			const respondToS2NonceGet: MockNodeBehavior = {
-				handleCC(controller, self, receivedCC) {
+				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
-						const nonce = sm2Node.generateNonce(
+						const nonce = await sm2Node.generateNonceAsync(
 							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport({

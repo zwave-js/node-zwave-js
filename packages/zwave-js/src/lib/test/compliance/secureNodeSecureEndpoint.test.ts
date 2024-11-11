@@ -81,17 +81,17 @@ integrationTest(
 
 		customSetup: async (driver, controller, mockNode) => {
 			// Create a security manager for the node
-			const smNode = new SecurityManager2();
+			const smNode = await SecurityManager2.create();
 			// Copy keys from the driver
-			// smNode.setKey(
+			// await smNode.setKeyAsync(
 			// 	SecurityClass.S2_AccessControl,
 			// 	driver.options.securityKeys!.S2_AccessControl!,
 			// );
-			// smNode.setKey(
+			// await smNode.setKeyAsync(
 			// 	SecurityClass.S2_Authenticated,
 			// 	driver.options.securityKeys!.S2_Authenticated!,
 			// );
-			smNode.setKey(
+			await smNode.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -100,17 +100,17 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
-			const smCtrlr = new SecurityManager2();
+			const smCtrlr = await SecurityManager2.create();
 			// Copy keys from the driver
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_AccessControl,
 				driver.options.securityKeys!.S2_AccessControl!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Authenticated,
 				driver.options.securityKeys!.S2_Authenticated!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -120,9 +120,9 @@ integrationTest(
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
-				handleCC(controller, self, receivedCC) {
+				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
-						const nonce = smNode.generateNonce(
+						const nonce = await smNode.generateNonceAsync(
 							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport({
@@ -139,7 +139,7 @@ integrationTest(
 
 			// Handle decode errors
 			const handleInvalidCC: MockNodeBehavior = {
-				handleCC(controller, self, receivedCC) {
+				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof InvalidCC) {
 						if (
 							receivedCC.reason
@@ -147,7 +147,7 @@ integrationTest(
 							|| receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
-							const nonce = smNode.generateNonce(
+							const nonce = await smNode.generateNonceAsync(
 								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport({

@@ -1780,7 +1780,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.driverLog.print(
 					"At least one network key for S2 configured, enabling S2 security manager...",
 				);
-				this._securityManager2 = new SecurityManager2();
+				this._securityManager2 = await SecurityManager2.create();
 				// Set up all keys
 				for (
 					const secClass of [
@@ -1792,7 +1792,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				) {
 					const key = this._options.securityKeys[secClass];
 					if (key) {
-						this._securityManager2.setKey(
+						await this._securityManager2.setKeyAsync(
 							SecurityClass[secClass],
 							key,
 						);
@@ -1812,15 +1812,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.driverLog.print(
 					"At least one network key for Z-Wave Long Range configured, enabling security manager...",
 				);
-				this._securityManagerLR = new SecurityManager2();
+				this._securityManagerLR = await SecurityManager2.create();
 				if (this._options.securityKeysLongRange?.S2_AccessControl) {
-					this._securityManagerLR.setKey(
+					await this._securityManagerLR.setKeyAsync(
 						SecurityClass.S2_AccessControl,
 						this._options.securityKeysLongRange.S2_AccessControl,
 					);
 				}
 				if (this._options.securityKeysLongRange?.S2_Authenticated) {
-					this._securityManagerLR.setKey(
+					await this._securityManagerLR.setKeyAsync(
 						SecurityClass.S2_Authenticated,
 						this._options.securityKeysLongRange.S2_Authenticated,
 					);
@@ -1853,9 +1853,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.driverLog.print(
 						"At least one network key for Z-Wave Long Range found in cache, enabling security manager...",
 					);
-					this._securityManagerLR = new SecurityManager2();
+					this._securityManagerLR = await SecurityManager2.create();
 					for (const [sc, key] of securityKeysLongRange) {
-						this._securityManagerLR.setKey(sc, key);
+						await this._securityManagerLR.setKeyAsync(sc, key);
 					}
 				} else if (
 					this._options.securityKeysLongRange?.S2_AccessControl
@@ -1864,16 +1864,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.driverLog.print(
 						"Fallback to configured network keys for Z-Wave Long Range, enabling security manager...",
 					);
-					this._securityManagerLR = new SecurityManager2();
+					this._securityManagerLR = await SecurityManager2.create();
 					if (this._options.securityKeysLongRange?.S2_AccessControl) {
-						this._securityManagerLR.setKey(
+						await this._securityManagerLR.setKeyAsync(
 							SecurityClass.S2_AccessControl,
 							this._options.securityKeysLongRange
 								.S2_AccessControl,
 						);
 					}
 					if (this._options.securityKeysLongRange?.S2_Authenticated) {
-						this._securityManagerLR.setKey(
+						await this._securityManagerLR.setKeyAsync(
 							SecurityClass.S2_Authenticated,
 							this._options.securityKeysLongRange
 								.S2_Authenticated,
@@ -1927,9 +1927,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.driverLog.print(
 						"At least one network key for S2 found in cache, enabling S2 security manager...",
 					);
-					this._securityManager2 = new SecurityManager2();
+					this._securityManager2 = await SecurityManager2.create();
 					for (const [sc, key] of securityKeys) {
-						this._securityManager2.setKey(sc, key);
+						await this._securityManager2.setKeyAsync(sc, key);
 					}
 				} else if (
 					this._options.securityKeys
@@ -1943,7 +1943,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.driverLog.print(
 						"Fallback to configured network keys for S2, enabling S2 security manager...",
 					);
-					this._securityManager2 = new SecurityManager2();
+					this._securityManager2 = await SecurityManager2.create();
 					// Set up all keys
 					for (
 						const secClass of [
@@ -1955,7 +1955,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					) {
 						const key = this._options.securityKeys[secClass];
 						if (key) {
-							this._securityManager2.setKey(
+							await this._securityManager2.setKeyAsync(
 								SecurityClass[secClass],
 								key,
 							);

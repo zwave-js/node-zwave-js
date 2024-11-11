@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import { Bytes } from "@zwave-js/shared/safe";
 import { type ExpectStatic, test } from "vitest";
 import { computeCMAC, computeMAC } from "./operations.sync.js";

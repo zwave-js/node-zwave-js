@@ -3,13 +3,13 @@ import * as fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "vitest";
-import { CtrDRBG } from "./ctr_drbg.js";
+import { CtrDrbgAsync } from "./ctr_drbg.async.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function getVectors(alg: string) {
 	const text = fs.readFileSync(
-		path.join(__dirname, "ctr_drbg.test.vectors.txt"),
+		path.join(__dirname, "ctr_drbg.test.vectors.limited.txt"),
 		"utf8",
 	);
 	const vectors = [];
@@ -42,44 +42,36 @@ function getVectors(alg: string) {
 	return vectors;
 }
 
-for (const df of [false, true]) {
-	for (const id of ["AES-128"]) {
-		const name = id + (df ? " use df" : " no df");
-		const vectors = getVectors(name);
-		const bits = parseInt(id.slice(-3)) as 128;
+for (const id of ["AES-128"]) {
+	const name = id + " no df";
+	const vectors = getVectors(name);
 
-		for (const [i, vector] of vectors.entries()) {
-			test(
-				`CtrDRBG -> should pass ${name} NIST vector #${
-					i + 1
-				} (ctr,df=${df})`,
-				(t) => {
-					const drbg = new CtrDRBG(bits, df);
+	for (const [i, vector] of vectors.entries()) {
+		test(
+			`CtrDrbgAsync -> should pass ${name} NIST vector #${
+				i + 1
+			} (ctr,df=false)`,
+			async (t) => {
+				const drbg = new CtrDrbgAsync();
 
-					drbg.init(
-						vector.EntropyInput,
-						vector.Nonce,
-						vector.PersonalizationString,
-					);
+				await drbg.init(
+					vector.EntropyInput,
+				);
 
-					drbg.reseed(
-						vector.EntropyInputReseed,
-						vector.AdditionalInputReseed,
-					);
+				await drbg["reseed"](
+					vector.EntropyInputReseed,
+				);
 
-					drbg.generate(
-						vector.ReturnedBits.byteLength,
-						vector.AdditionalInput[0],
-					);
+				await drbg.generate(
+					vector.ReturnedBits.byteLength,
+				);
 
-					const result = drbg.generate(
-						vector.ReturnedBits.byteLength,
-						vector.AdditionalInput[1],
-					);
+				const result = await drbg.generate(
+					vector.ReturnedBits.byteLength,
+				);
 
-					t.expect(result).toStrictEqual(vector.ReturnedBits);
-				},
-			);
-		}
+				t.expect(result).toStrictEqual(vector.ReturnedBits);
+			},
+		);
 	}
 }

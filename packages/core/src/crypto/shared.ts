@@ -43,14 +43,15 @@ export function increment(buffer: Uint8Array): void {
 		buffer[i] += 1;
 		if (buffer[i] !== 0x00) break;
 	}
-} /** Decodes a DER-encoded x25519 key (PKCS#8 or SPKI) */
+}
 
+/** Decodes a DER-encoded x25519 key (PKCS#8 or SPKI) */
 export function decodeX25519KeyDER(key: Uint8Array): Uint8Array {
 	// We could parse this with asn1js but that doesn't seem necessary for now
 	return key.subarray(-32);
 }
-/** Encodes an x25519 key from a raw buffer with DER/PKCS#8 */
 
+/** Encodes an x25519 key from a raw buffer with DER/PKCS#8 */
 export function encodeX25519KeyDERPKCS8(key: Uint8Array): Uint8Array {
 	// We could encode this with asn1js but that doesn't seem necessary for now
 	return Bytes.concat([
@@ -58,8 +59,8 @@ export function encodeX25519KeyDERPKCS8(key: Uint8Array): Uint8Array {
 		key,
 	]);
 }
-/** Encodes an x25519 key from a raw buffer with DER/SPKI */
 
+/** Encodes an x25519 key from a raw buffer with DER/SPKI */
 export function encodeX25519KeyDERSPKI(key: Uint8Array): Uint8Array {
 	// We could encode this with asn1js but that doesn't seem necessary for now
 	return Bytes.concat([Bytes.from("302a300506032b656e032100", "hex"), key]);

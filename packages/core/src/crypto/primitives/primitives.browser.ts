@@ -2,12 +2,14 @@ import { Bytes } from "@zwave-js/shared/safe";
 import { BLOCK_SIZE, xor, zeroPad } from "../shared.js";
 import { type CryptoPrimitives } from "./primitives.js";
 
-const webcrypto =
-	typeof process !== "undefined" && (globalThis as any).crypto === undefined
-		// Node.js <= 18
-		? (await import("node:crypto")).webcrypto
-		// @ts-expect-error Node.js 18 is missing the types for this
-		: globalThis.crypto as typeof import("node:crypto").webcrypto;
+const webcrypto = typeof process !== "undefined"
+		&& (globalThis as any).crypto === undefined
+		&& typeof require === "function"
+	// Node.js <= 18
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	? require("node:crypto").webcrypto
+	// @ts-expect-error Node.js 18 is missing the types for this
+	: globalThis.crypto as typeof import("node:crypto").webcrypto;
 
 const { subtle } = webcrypto;
 

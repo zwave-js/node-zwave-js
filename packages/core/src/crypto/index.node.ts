@@ -20,7 +20,7 @@ export {
 	encryptAES128CCM as encryptAES128CCMAsync,
 	encryptAES128ECB as encryptAES128ECBAsync,
 	encryptAES128OFB as encryptAES128OFBAsync,
-	randomBytes,
+	randomBytes as randomBytesAsync,
 } from "./operations.async.js";
 export {
 	computeCMAC as computeCMACSync,
@@ -32,4 +32,5 @@ export {
 	encryptAES128CCM as encryptAES128CCMSync,
 	encryptAES128ECB as encryptAES128ECBSync,
 	encryptAES128OFB as encryptAES128OFBSync,
+	randomBytes as randomBytesSync,
 } from "./operations.sync.js";

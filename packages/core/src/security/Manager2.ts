@@ -4,10 +4,18 @@ import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
 import { deflateSync } from "node:zlib";
 import {
-	computeNoncePRK,
-	deriveMEI,
-	deriveNetworkKeys,
-	encryptAES128ECB,
+	encryptAES128ECBSync,
+	randomBytesAsync,
+} from "../crypto/index.node.js";
+import {
+	computeNoncePRK as computeNoncePRKAsync,
+	deriveMEI as deriveMEIAsync,
+	deriveNetworkKeys as deriveNetworkKeysAsync,
+} from "../crypto/operations.async.js";
+import {
+	computeNoncePRK as computeNoncePRKSync,
+	deriveMEI as deriveMEISync,
+	deriveNetworkKeys as deriveNetworkKeysSync,
 } from "../crypto/operations.sync.js";
 import { increment } from "../crypto/shared.js";
 import {
@@ -16,9 +24,10 @@ import {
 } from "../definitions/SecurityClass.js";
 import { MAX_NODES_LR } from "../definitions/consts.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import { encryptAES128ECBAsync } from "../index_browser.js";
 import { highResTimestamp } from "../util/date.js";
 import { encodeBitMask } from "../values/Primitive.js";
-import { CtrDRBG } from "./ctr_drbg.js";
+import { CtrDRBG } from "./ctr_drbg.wrapper.js";
 
 interface NetworkKeys {
 	pnk: Uint8Array;
@@ -96,18 +105,18 @@ const SINGLECAST_MAX_SEQ_NUMS = 1; // more than 1 will confuse the certification
 const SINGLECAST_NONCE_EXPIRY_NS = 500 * 1000 * 1000; // 500 ms in nanoseconds
 
 export class SecurityManager2 {
-	public constructor() {
-		this.rng = new CtrDRBG(
-			128,
-			false,
-			crypto.randomBytes(32),
-			undefined,
-			new Uint8Array(32).fill(0),
-		);
+	private constructor() {
+		// Consumers must use the async factory method
+	}
+
+	public static async create(): Promise<SecurityManager2> {
+		const ret = new SecurityManager2();
+		await ret.rng.initAsync(randomBytesAsync(32));
+		return ret;
 	}
 
 	/** PRNG used to initialize the others */
-	private rng: CtrDRBG;
+	private rng: CtrDRBG = new CtrDRBG();
 
 	/** A map of SPAN states for each node */
 	private spanTable = new Map<number, SPANTableEntry>();
@@ -129,7 +138,10 @@ export class SecurityManager2 {
 
 	private getNextMulticastGroupId = createWrappingCounter(255);
 
-	/** Sets the PNK for a given security class and derives the encryption keys from it */
+	/**
+	 * Sets the PNK for a given security class and derives the encryption keys from it
+	 * @deprecated Use {@link setKeyAsync} instead
+	 */
 	public setKey(securityClass: SecurityClass, key: Uint8Array): void {
 		if (key.length !== 16) {
 			throw new ZWaveError(
@@ -147,7 +159,33 @@ export class SecurityManager2 {
 		}
 		this.networkKeys.set(securityClass, {
 			pnk: key,
-			...deriveNetworkKeys(key),
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			...deriveNetworkKeysSync(key),
+		});
+	}
+
+	/** Sets the PNK for a given security class and derives the encryption keys from it */
+	public async setKeyAsync(
+		securityClass: SecurityClass,
+		key: Uint8Array,
+	): Promise<void> {
+		if (key.length !== 16) {
+			throw new ZWaveError(
+				`The network key must consist of 16 bytes!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			!(securityClass in SecurityClass)
+			|| securityClass <= SecurityClass.None
+		) {
+			throw new ZWaveError(
+				`Invalid security class!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.networkKeys.set(securityClass, {
+			pnk: key,
+			...(await deriveNetworkKeysAsync(key)),
 		});
 	}
 
@@ -260,9 +298,27 @@ export class SecurityManager2 {
 	/**
 	 * Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input
 	 * @param receiver The node this nonce is for. If none is given, the nonce is not stored.
+	 * @deprecated Use {@link generateNonceAsync} instead
 	 */
 	public generateNonce(receiver: number | undefined): Uint8Array {
-		const receiverEI = this.rng.generate(16);
+		const receiverEI = this.rng.generateSync(16);
+		if (receiver != undefined) {
+			this.spanTable.set(receiver, {
+				type: SPANState.LocalEI,
+				receiverEI,
+			});
+		}
+		return receiverEI;
+	}
+
+	/**
+	 * Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input
+	 * @param receiver The node this nonce is for. If none is given, the nonce is not stored.
+	 */
+	public async generateNonceAsync(
+		receiver: number | undefined,
+	): Promise<Uint8Array> {
+		const receiverEI = await this.rng.generateAsync(16);
 		if (receiver != undefined) {
 			this.spanTable.set(receiver, {
 				type: SPANState.LocalEI,
@@ -293,7 +349,10 @@ export class SecurityManager2 {
 		// Keep our own sequence number
 	}
 
-	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
+	/**
+	 * Initializes the singlecast PAN generator for a given node based on the given entropy inputs
+	 * @deprecated Use {@link initializeSPANAsync} instead
+	 */
 	public initializeSPAN(
 		peerNodeId: number,
 		securityClass: SecurityClass,
@@ -308,23 +367,53 @@ export class SecurityManager2 {
 		}
 
 		const keys = this.getKeysForSecurityClass(securityClass);
-		const noncePRK = computeNoncePRK(senderEI, receiverEI);
-		const MEI = deriveMEI(noncePRK);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const noncePRK = computeNoncePRKSync(senderEI, receiverEI);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const MEI = deriveMEISync(noncePRK);
+
+		const rng = new CtrDRBG();
+		rng.initSync(MEI, keys.personalizationString);
 
 		this.spanTable.set(peerNodeId, {
 			securityClass,
 			type: SPANState.SPAN,
-			rng: new CtrDRBG(
-				128,
-				false,
-				MEI,
-				undefined,
-				keys.personalizationString,
-			),
+			rng,
 		});
 	}
 
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
+	public async initializeSPANAsync(
+		peerNodeId: number,
+		securityClass: SecurityClass,
+		senderEI: Uint8Array,
+		receiverEI: Uint8Array,
+	): Promise<void> {
+		if (senderEI.length !== 16 || receiverEI.length !== 16) {
+			throw new ZWaveError(
+				`The entropy input must consist of 16 bytes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const keys = this.getKeysForSecurityClass(securityClass);
+		const noncePRK = await computeNoncePRKAsync(senderEI, receiverEI);
+		const MEI = await deriveMEIAsync(noncePRK);
+
+		const rng = new CtrDRBG();
+		await rng.initAsync(MEI, keys.personalizationString);
+
+		this.spanTable.set(peerNodeId, {
+			securityClass,
+			type: SPANState.SPAN,
+			rng,
+		});
+	}
+
+	/**
+	 * Initializes the singlecast PAN generator for a given node based on the given entropy inputs
+	 * @deprecated Use {@link initializeTempSPANAsync} instead
+	 */
 	public initializeTempSPAN(
 		peerNodeId: number,
 		senderEI: Uint8Array,
@@ -338,19 +427,45 @@ export class SecurityManager2 {
 		}
 
 		const keys = this.tempKeys.get(peerNodeId)!;
-		const noncePRK = computeNoncePRK(senderEI, receiverEI);
-		const MEI = deriveMEI(noncePRK);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const noncePRK = computeNoncePRKSync(senderEI, receiverEI);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const MEI = deriveMEISync(noncePRK);
+
+		const rng = new CtrDRBG();
+		rng.initSync(MEI, keys.personalizationString);
 
 		this.spanTable.set(peerNodeId, {
 			securityClass: SecurityClass.Temporary,
 			type: SPANState.SPAN,
-			rng: new CtrDRBG(
-				128,
-				false,
-				MEI,
-				undefined,
-				keys.personalizationString,
-			),
+			rng,
+		});
+	}
+
+	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
+	public async initializeTempSPANAsync(
+		peerNodeId: number,
+		senderEI: Uint8Array,
+		receiverEI: Uint8Array,
+	): Promise<void> {
+		if (senderEI.length !== 16 || receiverEI.length !== 16) {
+			throw new ZWaveError(
+				`The entropy input must consist of 16 bytes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const keys = this.tempKeys.get(peerNodeId)!;
+		const noncePRK = await computeNoncePRKAsync(senderEI, receiverEI);
+		const MEI = await deriveMEIAsync(noncePRK);
+
+		const rng = new CtrDRBG();
+		await rng.initAsync(MEI, keys.personalizationString);
+
+		this.spanTable.set(peerNodeId, {
+			securityClass: SecurityClass.Temporary,
+			type: SPANState.SPAN,
+			rng,
 		});
 	}
 
@@ -399,6 +514,7 @@ export class SecurityManager2 {
 	/**
 	 * Generates the next nonce for the given peer and returns it.
 	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
+	 * @deprecated Use {@link nextNonceAsync} instead
 	 */
 	public nextNonce(peerNodeId: number, store?: boolean): Uint8Array {
 		const spanState = this.spanTable.get(peerNodeId);
@@ -408,7 +524,32 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const nonce = spanState.rng.generate(16).subarray(0, 13);
+		const nonce = spanState.rng.generateSync(16).subarray(0, 13);
+		spanState.currentSPAN = store
+			? {
+				nonce,
+				expires: highResTimestamp() + SINGLECAST_NONCE_EXPIRY_NS,
+			}
+			: undefined;
+		return nonce;
+	}
+
+	/**
+	 * Generates the next nonce for the given peer and returns it.
+	 * @param store - Whether the nonce should be stored/remembered as the current SPAN.
+	 */
+	public async nextNonceAsync(
+		peerNodeId: number,
+		store?: boolean,
+	): Promise<Uint8Array> {
+		const spanState = this.spanTable.get(peerNodeId);
+		if (spanState?.type !== SPANState.SPAN) {
+			throw new ZWaveError(
+				`The Singlecast PAN has not been initialized for Node ${peerNodeId}`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const nonce = (await spanState.rng.generateAsync(16)).subarray(0, 13);
 		spanState.currentSPAN = store
 			? {
 				nonce,
@@ -450,6 +591,7 @@ export class SecurityManager2 {
 		return this.mpanStates.get(groupId);
 	}
 
+	/** @deprecated Use {@link getMulticastKeyAndIVAsync} instead */
 	public getMulticastKeyAndIV(groupId: number): {
 		key: Uint8Array;
 		iv: Uint8Array;
@@ -467,13 +609,47 @@ export class SecurityManager2 {
 
 		// We may have to initialize the inner MPAN state
 		if (!this.mpanStates.has(groupId)) {
-			this.mpanStates.set(groupId, this.rng.generate(16));
+			this.mpanStates.set(groupId, this.rng.generateSync(16));
 		}
 
 		// Compute the next MPAN
 		const stateN = this.mpanStates.get(groupId)!;
 		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN).subarray(0, 13);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const ret = encryptAES128ECBSync(stateN, keys.keyMPAN).subarray(0, 13);
+		// Increment the inner state
+		increment(stateN);
+
+		return {
+			key: keys.keyCCM,
+			iv: ret,
+		};
+	}
+
+	public async getMulticastKeyAndIVAsync(
+		groupId: number,
+	): Promise<{ key: Uint8Array; iv: Uint8Array }> {
+		const group = this.getMulticastGroup(groupId);
+
+		if (!group) {
+			throw new ZWaveError(
+				`Multicast group ${groupId} does not exist!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+
+		const keys = this.getKeysForSecurityClass(group.securityClass);
+
+		// We may have to initialize the inner MPAN state
+		if (!this.mpanStates.has(groupId)) {
+			this.mpanStates.set(groupId, await this.rng.generateAsync(16));
+		}
+
+		// Compute the next MPAN
+		const stateN = this.mpanStates.get(groupId)!;
+		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
+		const ret = (await encryptAES128ECBAsync(stateN, keys.keyMPAN))
+			.subarray(0, 13);
 		// Increment the inner state
 		increment(stateN);
 
@@ -491,6 +667,7 @@ export class SecurityManager2 {
 
 	/**
 	 * Generates the next nonce for the given peer and returns it.
+	 * @deprecated Use {@link nextPeerMPANAsync} instead
 	 */
 	public nextPeerMPAN(peerNodeId: number, groupId: number): Uint8Array {
 		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
@@ -511,7 +688,40 @@ export class SecurityManager2 {
 		// Compute the next MPAN
 		const stateN = mpanState.currentMPAN;
 		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
-		const ret = encryptAES128ECB(stateN, keys.keyMPAN).subarray(0, 13);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const ret = encryptAES128ECBSync(stateN, keys.keyMPAN).subarray(0, 13);
+		// Increment the inner state
+		increment(stateN);
+		return ret;
+	}
+
+	/**
+	 * Generates the next nonce for the given peer and returns it.
+	 */
+	public async nextPeerMPANAsync(
+		peerNodeId: number,
+		groupId: number,
+	): Promise<Uint8Array> {
+		const mpanState = this.getPeerMPAN(peerNodeId, groupId);
+		if (mpanState.type !== MPANState.MPAN) {
+			throw new ZWaveError(
+				`No peer multicast PAN exists for Node ${peerNodeId}, group ${groupId}`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const keys = this.getKeysForNode(peerNodeId);
+		if (!keys || !("keyMPAN" in keys)) {
+			throw new ZWaveError(
+				`The network keys for the security class of Node ${peerNodeId} have not been set up yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+
+		// Compute the next MPAN
+		const stateN = mpanState.currentMPAN;
+		// The specs don't mention this step for multicast, but the IV for AES-CCM is limited to 13 bytes
+		const ret = (await encryptAES128ECBAsync(stateN, keys.keyMPAN))
+			.subarray(0, 13);
 		// Increment the inner state
 		increment(stateN);
 		return ret;
