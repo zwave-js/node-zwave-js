@@ -1,4 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
+import { digest } from "../crypto/operations.async.js";
 import { SecurityClass } from "../definitions/SecurityClass.js";
 import { dskToString } from "../dsk/index.js";
 import { parseBitMask } from "../values/Primitive.js";
@@ -29,11 +30,7 @@ export async function parseQRCodeStringAsync(
 	// The checksum covers the remaining data
 	const checksumInput = new TextEncoder().encode(qr.slice(9));
 
-	const subtleCrypto: typeof import("node:crypto").subtle =
-		// @ts-expect-error Node.js 18 does not support this yet
-		globalThis.crypto.subtle;
-
-	const hashResult = await subtleCrypto.digest("SHA-1", checksumInput);
+	const hashResult = await digest("sha-1", checksumInput);
 	const expectedChecksum = Bytes.view(hashResult).readUInt16BE(0);
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 

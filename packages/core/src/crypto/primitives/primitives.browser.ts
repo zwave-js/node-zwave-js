@@ -359,6 +359,19 @@ async function decryptAES128CCM(
 	}
 }
 
+function digest(
+	algorithm: "md5" | "sha-1" | "sha-256",
+	data: Uint8Array,
+): Promise<Uint8Array> {
+	// The WebCrypto API does not support MD5, but we don't actually care.
+	// MD5 is only used for hashing cached device configurations, and if anyone
+	// is going to use these methods, they should be on a new installation anyways.
+	if (algorithm === "md5") {
+		algorithm = "sha-256";
+	}
+	return subtle.digest(algorithm, data);
+}
+
 export default {
 	randomBytes,
 	encryptAES128ECB,
@@ -367,4 +380,5 @@ export default {
 	decryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	digest,
 } satisfies CryptoPrimitives;

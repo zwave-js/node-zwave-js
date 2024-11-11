@@ -11,11 +11,13 @@ const {
 	encryptAES128CCM,
 	decryptAES128CCM,
 	randomBytes,
+	digest,
 } = primitives;
 
 export {
 	decryptAES128CCM,
 	decryptAES128OFB,
+	digest,
 	encryptAES128CBC,
 	encryptAES128CCM,
 	encryptAES128ECB,

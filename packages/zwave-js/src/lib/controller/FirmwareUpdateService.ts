@@ -3,12 +3,12 @@ import {
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
+	digest,
 	extractFirmware,
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
-import { formatId } from "@zwave-js/shared";
+import { Bytes, formatId } from "@zwave-js/shared";
 import type { Headers, OptionsOfTextResponseBody } from "got";
-import crypto from "node:crypto";
 import type PQueue from "p-queue";
 import type {
 	FirmwareUpdateDeviceID,
@@ -61,10 +61,12 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 	// Replaces got's built-in cache functionality because it uses Keyv internally
 	// which apparently has some issues: https://github.com/zwave-js/node-zwave-js/issues/5404
 
-	const hash = crypto
-		.createHash("sha256")
-		.update(JSON.stringify(config.json))
-		.digest("hex");
+	const hash = Bytes.view(
+		await digest(
+			"sha-256",
+			Bytes.from(JSON.stringify(config.json)),
+		),
+	).toString("hex");
 	const cacheKey = `${config.method}:${config.url!.toString()}:${hash}`;
 
 	// Return cached requests if they are not stale yet
@@ -281,9 +283,9 @@ export async function downloadFirmwareUpdate(
 	const firmware = extractFirmware(rawData, format);
 
 	// Ensure the hash matches
-	const hasher = crypto.createHash("sha256");
-	hasher.update(firmware.data);
-	const actualHash = hasher.digest("hex");
+	const actualHash = Bytes.view(
+		await digest("sha-256", firmware.data),
+	).toString("hex");
 
 	if (actualHash !== expectedHash) {
 		throw new ZWaveError(

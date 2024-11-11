@@ -39,4 +39,8 @@ export interface CryptoPrimitives {
 		additionalData: Uint8Array,
 		authTag: Uint8Array,
 	): Promise<{ plaintext: Uint8Array; authOK: boolean }>;
+	digest(
+		algorithm: "md5" | "sha-1" | "sha-256",
+		data: Uint8Array,
+	): Promise<Uint8Array>;
 }

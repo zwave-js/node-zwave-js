@@ -171,6 +171,15 @@ function decryptAES128CCM(
 	return Promise.resolve({ plaintext, authOK });
 }
 
+function digest(
+	algorithm: "md5" | "sha-1" | "sha-256",
+	data: Uint8Array,
+): Promise<Uint8Array> {
+	const hash = crypto.createHash(algorithm);
+	hash.update(data);
+	return Promise.resolve(hash.digest());
+}
+
 export default {
 	randomBytes,
 	encryptAES128ECB,
@@ -179,4 +188,5 @@ export default {
 	decryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	digest,
 } satisfies CryptoPrimitives;
