@@ -138,6 +138,14 @@ jobs:
         node -e 'assert.equal(require("zwave-js").libVersion, require("zwave-js/package.json").version)'
         node -e 'assert.equal(require("zwave-js").libName, require("zwave-js/package.json").name)'
 
+    # Test if bundling for the browser is supported yet
+    - name: Are we browser yet?
+      continue-on-error: true
+      run: |
+        npm i -D esbuild
+        echo "import 'zwave-js'" > test.mjs
+        esbuild test.mjs --bundle --format=esm --outdir=build --sourcemap --target=es2022 --platform=browser --analyze=verbose --external:node:crypto
+        
   # ===================
 
   lint:
