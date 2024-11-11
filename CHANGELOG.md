@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release adds support for using the WebCrypto API as the cryptography backend. Unlike the `node:crypto` module, this API is supported by all modern browsers and JS runtimes.
+
+Technically this is a breaking change, as `SecurityManager2` now needs to be instantiated asynchronously using `await SecurityManager2.create()` instead of `new SecurityManager2()`. However, we don't expect anyone to use this class directly, so this will not be marked as a semver-major release.
+
+### Changes under the hood
+* Improve portability of the library by supporting the WebCrypto API as cryptography backend (#7386)
+
 ## 14.2.0 (2024-11-07)
 ### Changes under the hood
 * Improved tree-shakability (#7376, #7379)
