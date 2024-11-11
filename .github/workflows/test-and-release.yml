@@ -149,7 +149,7 @@ jobs:
         cd $TMP_DIR
         npm i -D esbuild
         echo "import 'zwave-js'" > test.mjs
-        esbuild test.mjs --bundle --format=esm --outdir=build --sourcemap --target=es2022 --platform=browser --analyze=verbose --external:node:crypto
+        npx esbuild test.mjs --bundle --format=esm --outdir=build --sourcemap --target=es2022 --platform=browser --analyze=verbose --external:node:crypto
         
   # ===================
 
