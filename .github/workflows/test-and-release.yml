@@ -83,8 +83,10 @@ jobs:
     # I'd love to use yalc or something for this, but it doesn't use yarn pack to pack the tarballs
     # so we need to fake the install
     - name: Import main entry points for each package
+      id: monopack
       run: |
         TMP_DIR=$(mktemp -d)
+        echo TMP_DIR=$TMP_DIR >> $GITHUB_OUTPUT
 
         echo "Re-creating a production environment..."
         yarn monopack --target "$TMP_DIR/.tarballs" --no-version
@@ -138,6 +140,17 @@ jobs:
         node -e 'assert.equal(require("zwave-js").libVersion, require("zwave-js/package.json").version)'
         node -e 'assert.equal(require("zwave-js").libName, require("zwave-js/package.json").name)'
 
+    # Test if bundling for the browser is supported yet
+    - name: Are we browser yet?
+      continue-on-error: true
+      env:
+        TMP_DIR: ${{ steps.monopack.outputs.TMP_DIR }}
+      run: |
+        cd $TMP_DIR
+        npm i -D esbuild
+        echo "import 'zwave-js'" > test.mjs
+        npx esbuild test.mjs --bundle --format=esm --outdir=build --sourcemap --target=es2022 --platform=browser --analyze=verbose --external:node:crypto
+        
   # ===================
 
   lint:
