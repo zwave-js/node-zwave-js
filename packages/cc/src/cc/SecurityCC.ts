@@ -24,6 +24,7 @@ import {
 	getCCName,
 	isTransmissionError,
 	parseCCList,
+	randomBytes,
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
@@ -35,7 +36,6 @@ import type {
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
-import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
 import {
 	type CCRaw,
