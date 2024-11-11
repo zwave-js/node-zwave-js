@@ -33,13 +33,15 @@ vi.mock("node:crypto", async () => {
 	};
 });
 
-test("constructor() -> should set the network key, auth key and encryption key", (t) => {
+test("constructor() -> should set the network key, auth key and encryption key", async (t) => {
 	const man = new SecurityManager(options);
 	t.expect(man.networkKey).toStrictEqual(networkKey);
-	t.expect(isUint8Array(man.authKey)).toBe(true);
-	t.expect(man.authKey.length).toBe(16);
-	t.expect(isUint8Array(man.encryptionKey)).toBe(true);
-	t.expect(man.encryptionKey.length).toBe(16);
+	const authKey = await man.getAuthKey();
+	const encryptionKey = await man.getEncryptionKey();
+	t.expect(isUint8Array(authKey)).toBe(true);
+	t.expect(authKey).toHaveLength(16);
+	t.expect(isUint8Array(encryptionKey)).toBe(true);
+	t.expect(encryptionKey).toHaveLength(16);
 });
 
 test("constructor() -> should throw if the network key doesn't have length 16", (t) => {

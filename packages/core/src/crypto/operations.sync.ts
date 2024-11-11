@@ -1,6 +1,19 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import { Bytes } from "@zwave-js/shared/safe";
-import * as crypto from "node:crypto";
-import { leftShift1, xor, zeroPad } from "./bufferUtils.js";
+import crypto from "node:crypto";
+import { leftShift1, xor, zeroPad } from "./shared.js";
+
+const Z128 = new Uint8Array(16).fill(0);
+const R128 = Bytes.from("00000000000000000000000000000087", "hex");
+const constantPRK = new Uint8Array(16).fill(0x33);
+const constantTE = new Uint8Array(15).fill(0x88);
+const constantNK = new Uint8Array(15).fill(0x55);
+const constantNonce = new Uint8Array(16).fill(0x26);
+const constantEI = new Uint8Array(15).fill(0x88);
+
+export function randomBytes(length: number): Uint8Array {
+	return crypto.randomBytes(length);
+}
 
 function encrypt(
 	algorithm: string,
@@ -44,7 +57,10 @@ function decrypt(
 	}
 }
 
-/** Encrypts a payload using AES-128-ECB (as described in SDS10865) */
+/**
+ * Encrypts a payload using AES-128-ECB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export function encryptAES128ECB(
 	plaintext: Uint8Array,
 	key: Uint8Array,
@@ -52,7 +68,10 @@ export function encryptAES128ECB(
 	return encrypt("aes-128-ecb", 16, false, plaintext, key, new Uint8Array());
 }
 
-/** Encrypts a payload using AES-OFB (as described in SDS10865) */
+/**
+ * Encrypts a payload using AES-OFB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export const encryptAES128OFB = encrypt.bind(
 	undefined,
 	"aes-128-ofb",
@@ -60,7 +79,10 @@ export const encryptAES128OFB = encrypt.bind(
 	true,
 );
 
-/** Decrypts a payload using AES-OFB (as described in SDS10865) */
+/**
+ * Decrypts a payload using AES-OFB (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export const decryptAES128OFB = decrypt.bind(
 	undefined,
 	"aes-128-ofb",
@@ -68,7 +90,10 @@ export const decryptAES128OFB = decrypt.bind(
 	true,
 );
 
-/** Computes a message authentication code for Security S0 (as described in SDS10865) */
+/**
+ * Computes a message authentication code for Security S0 (as described in SDS10865)
+ * @deprecated Use the async version of this function instead
+ */
 export function computeMAC(
 	authData: Uint8Array,
 	key: Uint8Array,
@@ -78,109 +103,6 @@ export function computeMAC(
 	// The MAC is the first 8 bytes of the last 16 byte block
 	return ciphertext.subarray(-16, -8);
 }
-
-/** Decodes a DER-encoded x25519 key (PKCS#8 or SPKI) */
-export function decodeX25519KeyDER(key: Uint8Array): Uint8Array {
-	// We could parse this with asn1js but that doesn't seem necessary for now
-	return key.subarray(-32);
-}
-
-/** Encodes an x25519 key from a raw buffer with DER/PKCS#8 */
-export function encodeX25519KeyDERPKCS8(key: Uint8Array): Uint8Array {
-	// We could encode this with asn1js but that doesn't seem necessary for now
-	return Bytes.concat([
-		Bytes.from("302e020100300506032b656e04220420", "hex"),
-		key,
-	]);
-}
-
-/** Encodes an x25519 key from a raw buffer with DER/SPKI */
-export function encodeX25519KeyDERSPKI(key: Uint8Array): Uint8Array {
-	// We could encode this with asn1js but that doesn't seem necessary for now
-	return Bytes.concat([Bytes.from("302a300506032b656e032100", "hex"), key]);
-}
-
-export interface KeyPair {
-	publicKey: crypto.KeyObject;
-	privateKey: crypto.KeyObject;
-}
-
-/** Generates an x25519 / ECDH key pair */
-export function generateECDHKeyPair(): KeyPair {
-	return crypto.generateKeyPairSync("x25519");
-}
-
-export function keyPairFromRawECDHPrivateKey(privateKey: Uint8Array): KeyPair {
-	const privateKeyObject = importRawECDHPrivateKey(privateKey);
-	const publicKeyObject = crypto.createPublicKey(privateKeyObject);
-	return {
-		privateKey: privateKeyObject,
-		publicKey: publicKeyObject,
-	};
-}
-
-/** Takes an ECDH public KeyObject and returns the raw key as a buffer */
-export function extractRawECDHPublicKey(
-	publicKey: crypto.KeyObject,
-): Uint8Array {
-	return decodeX25519KeyDER(
-		publicKey.export({
-			type: "spki",
-			format: "der",
-		}),
-	);
-}
-
-/** Converts a raw public key to an ECDH KeyObject */
-export function importRawECDHPublicKey(
-	publicKey: Uint8Array,
-): crypto.KeyObject {
-	return crypto.createPublicKey({
-		// eslint-disable-next-line no-restricted-globals -- crypto API requires Buffer instances
-		key: Buffer.from(encodeX25519KeyDERSPKI(publicKey).buffer),
-		format: "der",
-		type: "spki",
-	});
-}
-
-/** Takes an ECDH private KeyObject and returns the raw key as a buffer */
-export function extractRawECDHPrivateKey(
-	privateKey: crypto.KeyObject,
-): Uint8Array {
-	return decodeX25519KeyDER(
-		privateKey.export({
-			type: "pkcs8",
-			format: "der",
-		}),
-	);
-}
-
-/** Converts a raw private key to an ECDH KeyObject */
-export function importRawECDHPrivateKey(
-	privateKey: Uint8Array,
-): crypto.KeyObject {
-	return crypto.createPrivateKey({
-		// eslint-disable-next-line no-restricted-globals -- crypto API requires Buffer instances
-		key: Buffer.from(encodeX25519KeyDERPKCS8(privateKey).buffer),
-		format: "der",
-		type: "pkcs8",
-	});
-}
-
-// Decoding with asn1js for reference:
-// const asn1 = require("asn1js");
-// const public = asn1.fromBER(keypair.publicKey.buffer);
-// const private = asn1.fromBER(keypair.privateKey.buffer);
-// const privateKeyBER = private.result.valueBlock.value[2].valueBlock.valueHex;
-// const privateKey = Buffer.from(
-// 	asn1.fromBER(privateKeyBER).result.valueBlock.valueHex,
-// );
-// const publicKey = Buffer.from(
-// 	public.result.valueBlock.value[1].valueBlock.valueHex,
-// );
-
-const Z128 = new Uint8Array(16).fill(0);
-const R128 = Bytes.from("00000000000000000000000000000087", "hex");
 
 function generateAES128CMACSubkeys(
 	key: Uint8Array,
@@ -192,7 +114,10 @@ function generateAES128CMACSubkeys(
 	return [k1, k2];
 }
 
-/** Computes a message authentication code for Security S2 (as described in SDS13783) */
+/**
+ * Computes a message authentication code for Security S2 (as described in SDS13783)
+ * @deprecated Use the async version of this function instead
+ */
 export function computeCMAC(message: Uint8Array, key: Uint8Array): Uint8Array {
 	const blockSize = 16;
 	const numBlocks = Math.ceil(message.length / blockSize);
@@ -220,9 +145,10 @@ export function computeCMAC(message: Uint8Array, key: Uint8Array): Uint8Array {
 	return ret.subarray(0, blockSize);
 }
 
-const constantPRK = new Uint8Array(16).fill(0x33);
-
-/** Computes the Pseudo Random Key (PRK) used to derive auth, encryption and nonce keys */
+/**
+ * Computes the Pseudo Random Key (PRK) used to derive auth, encryption and nonce keys
+ * @deprecated Use the async version of this function instead
+ */
 export function computePRK(
 	ecdhSharedSecret: Uint8Array,
 	pubKeyA: Uint8Array,
@@ -232,9 +158,10 @@ export function computePRK(
 	return computeCMAC(message, constantPRK);
 }
 
-const constantTE = new Uint8Array(15).fill(0x88);
-
-/** Derives the temporary auth, encryption and nonce keys from the PRK */
+/**
+ * Derives the temporary auth, encryption and nonce keys from the PRK
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveTempKeys(PRK: Uint8Array): {
 	tempKeyCCM: Uint8Array;
 	tempPersonalizationString: Uint8Array;
@@ -257,9 +184,10 @@ export function deriveTempKeys(PRK: Uint8Array): {
 	};
 }
 
-const constantNK = new Uint8Array(15).fill(0x55);
-
-/** Derives the CCM, MPAN keys and the personalization string from the permanent network key (PNK) */
+/**
+ * Derives the CCM, MPAN keys and the personalization string from the permanent network key (PNK)
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveNetworkKeys(PNK: Uint8Array): {
 	keyCCM: Uint8Array;
 	keyMPAN: Uint8Array;
@@ -288,9 +216,10 @@ export function deriveNetworkKeys(PNK: Uint8Array): {
 	};
 }
 
-const constantNonce = new Uint8Array(16).fill(0x26);
-
-/** Computes the Pseudo Random Key (PRK) used to derive the mixed entropy input (MEI) for nonce generation */
+/**
+ * Computes the Pseudo Random Key (PRK) used to derive the mixed entropy input (MEI) for nonce generation
+ * @deprecated Use the async version of this function instead
+ */
 export function computeNoncePRK(
 	senderEI: Uint8Array,
 	receiverEI: Uint8Array,
@@ -299,9 +228,10 @@ export function computeNoncePRK(
 	return computeCMAC(message, constantNonce);
 }
 
-const constantEI = new Uint8Array(15).fill(0x88);
-
-/** Derives the MEI from the nonce PRK */
+/**
+ * Derives the MEI from the nonce PRK
+ * @deprecated Use the async version of this function instead
+ */
 export function deriveMEI(noncePRK: Uint8Array): Uint8Array {
 	const T1 = computeCMAC(
 		Bytes.concat([
@@ -319,8 +249,10 @@ export function deriveMEI(noncePRK: Uint8Array): Uint8Array {
 	return Bytes.concat([T1, T2]);
 }
 
-export const SECURITY_S2_AUTH_TAG_LENGTH = 8;
-
+/**
+ * Encrypts a payload using AES-CCM
+ * @deprecated Use the async version of this function instead
+ */
 export function encryptAES128CCM(
 	key: Uint8Array,
 	iv: Uint8Array,
@@ -341,6 +273,10 @@ export function encryptAES128CCM(
 	return { ciphertext, authTag };
 }
 
+/**
+ * Decrypts a payload using AES-CCM
+ * @deprecated Use the async version of this function instead
+ */
 export function decryptAES128CCM(
 	key: Uint8Array,
 	iv: Uint8Array,

@@ -1,18 +1,35 @@
 /** Management class and utils for Security S0 */
 
 import { randomBytes } from "node:crypto";
+import { encryptAES128ECB as encryptAES128ECBAsync } from "../crypto/operations.async.js";
+import { encryptAES128ECB as encryptAES128ECBSync } from "../crypto/operations.sync.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
-import { encryptAES128ECB } from "./crypto.js";
 
 const authKeyBase = new Uint8Array(16).fill(0x55);
 const encryptionKeyBase = new Uint8Array(16).fill(0xaa);
 
-export function generateAuthKey(networkKey: Uint8Array): Uint8Array {
-	return encryptAES128ECB(authKeyBase, networkKey);
+/** @deprecated Use {@link generateAuthKeyAsync} instead */
+export function generateAuthKeySync(networkKey: Uint8Array): Uint8Array {
+	// eslint-disable-next-line @typescript-eslint/no-deprecated
+	return encryptAES128ECBSync(authKeyBase, networkKey);
 }
 
-export function generateEncryptionKey(networkKey: Uint8Array): Uint8Array {
-	return encryptAES128ECB(encryptionKeyBase, networkKey);
+export function generateAuthKeyAsync(
+	networkKey: Uint8Array,
+): Promise<Uint8Array> {
+	return encryptAES128ECBAsync(authKeyBase, networkKey);
+}
+
+/** @deprecated Use {@link generateEncryptionKeyAsync} instead */
+export function generateEncryptionKeySync(networkKey: Uint8Array): Uint8Array {
+	// eslint-disable-next-line @typescript-eslint/no-deprecated
+	return encryptAES128ECBSync(encryptionKeyBase, networkKey);
+}
+
+export function generateEncryptionKeyAsync(
+	networkKey: Uint8Array,
+): Promise<Uint8Array> {
+	return encryptAES128ECBAsync(encryptionKeyBase, networkKey);
 }
 
 interface NonceKey {
@@ -59,17 +76,43 @@ export class SecurityManager {
 			);
 		}
 		this._networkKey = v;
-		this._authKey = generateAuthKey(this._networkKey);
-		this._encryptionKey = generateEncryptionKey(this._networkKey);
+		this._authKey = undefined;
+		this._encryptionKey = undefined;
 	}
 
-	private _authKey!: Uint8Array;
+	private _authKey: Uint8Array | undefined;
+	/** @deprecated Use {@link getAuthKey} instead */
 	public get authKey(): Uint8Array {
+		if (!this._authKey) {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			this._authKey = generateAuthKeySync(this.networkKey);
+		}
 		return this._authKey;
 	}
 
-	private _encryptionKey!: Uint8Array;
+	public async getAuthKey(): Promise<Uint8Array> {
+		if (!this._authKey) {
+			this._authKey = await generateAuthKeyAsync(this.networkKey);
+		}
+		return this._authKey;
+	}
+
+	private _encryptionKey: Uint8Array | undefined;
+	/** @deprecated Use {@link getEncryptionKey} instead */
 	public get encryptionKey(): Uint8Array {
+		if (!this._encryptionKey) {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			this._encryptionKey = generateEncryptionKeySync(this.networkKey);
+		}
+		return this._encryptionKey;
+	}
+
+	public async getEncryptionKey(): Promise<Uint8Array> {
+		if (!this._encryptionKey) {
+			this._encryptionKey = await generateEncryptionKeyAsync(
+				this.networkKey,
+			);
+		}
 		return this._encryptionKey;
 	}
 

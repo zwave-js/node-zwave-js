@@ -10,12 +10,17 @@ import {
 	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
-	computeMAC,
-	decryptAES128OFB,
+	computeMACAsync,
+	computeMACSync,
+	decryptAES128OFBAsync,
+	decryptAES128OFBSync,
 	encodeCCList,
-	encryptAES128OFB,
-	generateAuthKey,
-	generateEncryptionKey,
+	encryptAES128OFBAsync,
+	encryptAES128OFBSync,
+	generateAuthKeyAsync,
+	generateAuthKeySync,
+	generateEncryptionKeyAsync,
+	generateEncryptionKeySync,
 	getCCName,
 	isTransmissionError,
 	parseCCList,
@@ -686,8 +691,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			ctx.ownNodeId,
 			encryptedPayload,
 		);
-		const expectedAuthCode = computeMAC(
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const expectedAuthCode = computeMACSync(
 			authData,
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			ctx.securityManager.authKey,
 		);
 		// Only accept messages with a correct auth code
@@ -696,9 +703,88 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		)(authCode.equals(expectedAuthCode));
 
 		// Decrypt the encapsulated CC
-		const frameControlAndDecryptedCC = decryptAES128OFB(
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const frameControlAndDecryptedCC = decryptAES128OFBSync(
 			encryptedPayload,
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			ctx.securityManager.encryptionKey,
+			Bytes.concat([iv, nonce]),
+		);
+		const frameControl = frameControlAndDecryptedCC[0];
+		const sequenceCounter = frameControl & 0b1111;
+		const sequenced = !!(frameControl & 0b1_0000);
+		const secondFrame = !!(frameControl & 0b10_0000);
+		const decryptedCCBytes: Uint8Array | undefined =
+			frameControlAndDecryptedCC
+				.subarray(1);
+
+		const ret = new SecurityCCCommandEncapsulation({
+			nodeId: ctx.sourceNodeId,
+			sequenceCounter,
+			sequenced,
+			secondFrame,
+			decryptedCCBytes,
+		});
+
+		ret.authData = authData;
+		ret.authCode = authCode;
+		ret.iv = iv;
+
+		return ret;
+	}
+
+	public static async fromAsync(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Promise<SecurityCCCommandEncapsulation> {
+		assertSecurityRX(ctx);
+
+		// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
+		validatePayload(
+			raw.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
+		);
+		const iv = raw.payload.subarray(0, HALF_NONCE_SIZE);
+		const encryptedPayload = raw.payload.subarray(HALF_NONCE_SIZE, -9);
+		const nonceId = raw.payload.at(-9)!;
+		const authCode = raw.payload.subarray(-8);
+
+		// Retrieve the used nonce from the nonce store
+		const nonce = ctx.securityManager.getNonce(nonceId);
+		// Only accept the message if the nonce hasn't expired
+		if (!nonce) {
+			validatePayload.fail(
+				`Nonce ${
+					num2hex(
+						nonceId,
+					)
+				} expired, cannot decode security encapsulated command.`,
+			);
+		}
+		// and mark the nonce as used
+		ctx.securityManager.deleteNonce(nonceId);
+
+		// Validate the encrypted data
+		const authData = getAuthenticationData(
+			iv,
+			nonce,
+			SecurityCommand.CommandEncapsulation,
+			ctx.sourceNodeId,
+			ctx.ownNodeId,
+			encryptedPayload,
+		);
+		const expectedAuthCode = await computeMACAsync(
+			authData,
+			await ctx.securityManager.getAuthKey(),
+		);
+		// Only accept messages with a correct auth code
+		validatePayload.withReason(
+			"Invalid auth code, won't accept security encapsulated command.",
+		)(authCode.equals(expectedAuthCode));
+
+		// Decrypt the encapsulated CC
+		const frameControlAndDecryptedCC = await decryptAES128OFBAsync(
+			encryptedPayload,
+			await ctx.securityManager.getEncryptionKey(),
 			Bytes.concat([iv, nonce]),
 		);
 		const frameControl = frameControlAndDecryptedCC[0];
@@ -809,12 +895,16 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		let authKey: Uint8Array;
 		let encryptionKey: Uint8Array;
 		if (this.alternativeNetworkKey) {
-			authKey = generateAuthKey(this.alternativeNetworkKey);
-			encryptionKey = generateEncryptionKey(
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			authKey = generateAuthKeySync(this.alternativeNetworkKey);
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			encryptionKey = generateEncryptionKeySync(
 				this.alternativeNetworkKey,
 			);
 		} else {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			authKey = ctx.securityManager.authKey;
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			encryptionKey = ctx.securityManager.encryptionKey;
 		}
 
@@ -827,7 +917,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Bytes.concat([senderNonce, this.nonce]);
-		const ciphertext = encryptAES128OFB(plaintext, encryptionKey, iv);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const ciphertext = encryptAES128OFBSync(plaintext, encryptionKey, iv);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
@@ -837,7 +928,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.nodeId,
 			ciphertext,
 		);
-		const authCode = computeMAC(authData, authKey);
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const authCode = computeMACSync(authData, authKey);
 
 		// Remember for debugging purposes
 		this.iv = iv;
@@ -865,13 +957,13 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		let authKey: Uint8Array;
 		let encryptionKey: Uint8Array;
 		if (this.alternativeNetworkKey) {
-			authKey = generateAuthKey(this.alternativeNetworkKey);
-			encryptionKey = generateEncryptionKey(
+			authKey = await generateAuthKeyAsync(this.alternativeNetworkKey);
+			encryptionKey = await generateEncryptionKeyAsync(
 				this.alternativeNetworkKey,
 			);
 		} else {
-			authKey = ctx.securityManager.authKey;
-			encryptionKey = ctx.securityManager.encryptionKey;
+			authKey = await ctx.securityManager.getAuthKey();
+			encryptionKey = await ctx.securityManager.getEncryptionKey();
 		}
 
 		const serializedCC = await this.encapsulated.serializeAsync(ctx);
@@ -882,7 +974,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Bytes.concat([senderNonce, this.nonce]);
-		const ciphertext = encryptAES128OFB(plaintext, encryptionKey, iv);
+		const ciphertext = await encryptAES128OFBAsync(
+			plaintext,
+			encryptionKey,
+			iv,
+		);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
@@ -892,7 +988,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.nodeId,
 			ciphertext,
 		);
-		const authCode = computeMAC(authData, authKey);
+		const authCode = await computeMACAsync(authData, authKey);
 
 		// Remember for debugging purposes
 		this.iv = iv;

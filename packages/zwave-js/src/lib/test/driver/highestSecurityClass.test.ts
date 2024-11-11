@@ -79,17 +79,17 @@ integrationTest(
 			driver.options.timeouts.report = 200;
 
 			// Create a security manager for the node
-			const smNode = new SecurityManager2();
+			const smNode = await SecurityManager2.create();
 			// Copy keys from the driver
-			smNode.setKey(
+			await smNode.setKeyAsync(
 				SecurityClass.S2_AccessControl,
 				driver.options.securityKeys!.S2_AccessControl!,
 			);
-			smNode.setKey(
+			await smNode.setKeyAsync(
 				SecurityClass.S2_Authenticated,
 				driver.options.securityKeys!.S2_Authenticated!,
 			);
-			smNode.setKey(
+			await smNode.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -98,24 +98,23 @@ integrationTest(
 				SecurityClass.None;
 
 			// Create a security manager for the controller
-			const smCtrlr = new SecurityManager2();
+			const smCtrlr = await SecurityManager2.create();
 			// Copy keys from the driver
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_AccessControl,
 				driver.options.securityKeys!.S2_AccessControl!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Authenticated,
 				driver.options.securityKeys!.S2_Authenticated!,
 			);
-			smCtrlr.setKey(
+			await smCtrlr.setKeyAsync(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
 			controller.securityManagers.securityManager2 = smCtrlr;
-			controller.encodingContext.getHighestSecurityClass =
-				controller.parsingContext.getHighestSecurityClass =
-					() => NOT_KNOWN;
+			controller.encodingContext.getHighestSecurityClass = () =>
+				NOT_KNOWN;
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {

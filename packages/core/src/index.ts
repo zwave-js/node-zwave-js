@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
+export * from "./crypto/index.node.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
@@ -10,8 +11,7 @@ export * from "./reflection/decorators.js";
 export * from "./registries/index.js";
 export * from "./security/Manager.js";
 export * from "./security/Manager2.js";
-export * from "./security/crypto.js";
-export * from "./security/ctr_drbg.js";
+export * from "./security/ctr_drbg.wrapper.js";
 export * from "./test/assertZWaveError.js";
 export * from "./traits/CommandClasses.js";
 export * from "./traits/Endpoints.js";

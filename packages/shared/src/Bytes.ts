@@ -389,7 +389,7 @@ export class Bytes extends Uint8Array {
 		}
 	}
 	/**
-	 * Writes `byteLength` bytes of `value` to `buf` at the specified `offset`as big-endian. Supports up to 48 bits of accuracy. Behavior is undefined
+	 * Writes `byteLength` bytes of `value` to `buf` at the specified `offset`as big-endian. Supports up to 64 bits of accuracy. Behavior is undefined
 	 * when `value` is anything other than an unsigned integer.
 	 *
 	 * ```js
@@ -405,7 +405,7 @@ export class Bytes extends Uint8Array {
 	 * @since v0.5.5
 	 * @param value Number to be written to `buf`.
 	 * @param offset Number of bytes to skip before starting to write. Must satisfy `0 <= offset <= buf.length - byteLength`.
-	 * @param byteLength Number of bytes to write. Must satisfy `0 < byteLength <= 6`.
+	 * @param byteLength Number of bytes to write. Must satisfy `0 < byteLength <= 8`.
 	 * @return `offset` plus the number of bytes written.
 	 */
 	writeUIntBE(value: number, offset: number, byteLength: number): number {
@@ -437,6 +437,20 @@ export class Bytes extends Uint8Array {
 				const low = Number(big & 0xffffn);
 				let ret = this.writeUInt32BE(high, offset);
 				ret = this.writeUInt16BE(low, ret);
+				return ret;
+			}
+			case 7: {
+				const big = BigInt(value);
+				const high = Number(big >> 24n);
+				const mid = Number((big >> 8n) & 0xffffn);
+				const low = Number(big & 0xffn);
+				let ret = this.writeUInt32BE(high, offset);
+				ret = this.writeUInt16BE(mid, ret);
+				ret = this.writeUInt8(low, ret);
+				return ret;
+			}
+			case 8: {
+				const ret = this.writeBigUInt64BE(BigInt(value), offset);
 				return ret;
 			}
 			default:

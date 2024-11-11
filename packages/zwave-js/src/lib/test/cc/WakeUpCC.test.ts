@@ -3,7 +3,10 @@ import {
 	SecurityCC,
 	WakeUpCCNoMoreInformation,
 } from "@zwave-js/cc";
-import { generateAuthKey, generateEncryptionKey } from "@zwave-js/core";
+import {
+	generateAuthKeyAsync,
+	generateEncryptionKeyAsync,
+} from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
 import { randomBytes } from "node:crypto";
 import { test } from "vitest";
@@ -34,8 +37,8 @@ test("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 
 	const securityManager = {
 		getNonce: () => nonce,
-		authKey: generateAuthKey(networkKey),
-		encryptionKey: generateEncryptionKey(networkKey),
+		getAuthKey: generateAuthKeyAsync(networkKey),
+		getEncryptionKey: generateEncryptionKeyAsync(networkKey),
 	};
 
 	const ccRequest = SecurityCC.encapsulate(

@@ -59,7 +59,7 @@
     "test:dirty": "tsx ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@alcalzone/esm2cjs": "^1.3.0",
+    "@alcalzone/esm2cjs": "^1.4.0",
     "@microsoft/api-extractor": "^7.47.9",
     "@types/node": "^18.19.63",
     "@types/sinon": "^17.0.3",
