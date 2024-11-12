@@ -550,12 +550,21 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	 * @internal
 	 * The hash of the device config that was applied during the last interview.
 	 */
-	public get deviceConfigHash(): Uint8Array | undefined {
+	public get cachedDeviceConfigHash(): Uint8Array | undefined {
 		return this.driver.cacheGet(cacheKeys.node(this.id).deviceConfigHash);
 	}
 
-	private set deviceConfigHash(value: Uint8Array | undefined) {
+	private set cachedDeviceConfigHash(value: Uint8Array | undefined) {
 		this.driver.cacheSet(cacheKeys.node(this.id).deviceConfigHash, value);
+	}
+
+	private _currentDeviceConfigHash: Uint8Array | undefined;
+	/**
+	 * @internal
+	 * The hash of the currently used device config
+	 */
+	public get currentDeviceConfigHash(): Uint8Array | undefined {
+		return this._currentDeviceConfigHash;
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
@@ -969,7 +978,8 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		this.supportsSecurity = undefined;
 		this.supportsBeaming = undefined;
 		this._deviceConfig = undefined;
-		this.deviceConfigHash = undefined;
+		this._currentDeviceConfigHash = undefined;
+		this.cachedDeviceConfigHash = undefined;
 		this._hasEmittedNoS0NetworkKeyError = false;
 		this._hasEmittedNoS2NetworkKeyError = false;
 		for (const ep of this.getAllEndpoints()) {
@@ -1103,7 +1113,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		}
 
 		// Remember the state of the device config that is used for this node
-		this.deviceConfigHash = this._deviceConfig?.getHash();
+		this.cachedDeviceConfigHash = await this._deviceConfig?.getHash();
 
 		this.setInterviewStage(InterviewStage.Complete);
 		this.readyMachine.send("INTERVIEW_DONE");
@@ -1348,6 +1358,15 @@ protocol version:      ${this.protocolVersion}`;
 				this.firmwareVersion,
 			);
 			if (this._deviceConfig) {
+				// Also remember the current hash of the device config
+				if (this.cachedDeviceConfigHash?.length === 16) {
+					// legacy hash using MD5
+					this._currentDeviceConfigHash = await this._deviceConfig
+						.getHash("md5");
+				} else {
+					this._currentDeviceConfigHash = await this._deviceConfig
+						.getHash();
+				}
 				this.driver.controllerLog.logNode(
 					this.id,
 					`${
@@ -6276,14 +6295,15 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		if (this.isControllerNode) return false;
 
 		// If the hash was never stored, we can only (very likely) know if the config has not changed
-		const actualHash = this.deviceConfig?.getHash();
-		if (this.deviceConfigHash == undefined) {
-			return actualHash == undefined ? false : NOT_KNOWN;
+		if (this.cachedDeviceConfigHash == undefined) {
+			return this.deviceConfig == undefined ? false : NOT_KNOWN;
 		}
 
 		// If it was, a change in hash means the config has changed
-		if (actualHash && this.deviceConfigHash) {
-			return !Bytes.view(actualHash).equals(this.deviceConfigHash);
+		if (this._currentDeviceConfigHash) {
+			return !Bytes.view(this._currentDeviceConfigHash).equals(
+				this.cachedDeviceConfigHash,
+			);
 		}
 		return true;
 	}

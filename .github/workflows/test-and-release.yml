@@ -140,6 +140,9 @@ jobs:
         node -e 'assert.equal(require("zwave-js").libVersion, require("zwave-js/package.json").version)'
         node -e 'assert.equal(require("zwave-js").libName, require("zwave-js/package.json").name)'
 
+        echo "Doing spot checks for some exports"
+        node -e 'assert.equal(typeof require("@zwave-js/core").randomBytes, "function")'
+
     # Test if bundling for the browser is supported yet
     - name: Are we browser yet?
       continue-on-error: true

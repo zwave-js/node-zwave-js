@@ -91,6 +91,17 @@ export const decryptAES128OFB = decrypt.bind(
 );
 
 /**
+ * Decrypts a payload using AES-256-CBC
+ * @deprecated Use the async version of this function instead
+ */
+export const decryptAES256CBC = decrypt.bind(
+	undefined,
+	"aes-256-cbc",
+	16,
+	true,
+);
+
+/**
  * Computes a message authentication code for Security S0 (as described in SDS10865)
  * @deprecated Use the async version of this function instead
  */

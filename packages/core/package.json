@@ -49,6 +49,11 @@
       "import": "./build/esm/registries/index.js",
       "require": "./build/cjs/registries/index.js"
     },
+    "./traits": {
+      "@@dev": "./src/traits/index.ts",
+      "import": "./build/esm/traits/index.js",
+      "require": "./build/cjs/traits/index.js"
+    },
     "./qr": {
       "@@dev": "./src/qr/index.ts",
       "browser": "./build/esm/qr/index.browser.js",

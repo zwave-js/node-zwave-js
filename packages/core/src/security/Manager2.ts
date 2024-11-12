@@ -1,12 +1,11 @@
 /** Management class and utils for Security S2 */
 
-import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
-import * as crypto from "node:crypto";
-import { deflateSync } from "node:zlib";
 import {
-	encryptAES128ECBSync,
-	randomBytesAsync,
-} from "../crypto/index.node.js";
+	Bytes,
+	createWrappingCounter,
+	getEnumMemberName,
+} from "@zwave-js/shared/safe";
+import { encryptAES128ECBSync, randomBytes } from "../crypto/index.node.js";
 import {
 	computeNoncePRK as computeNoncePRKAsync,
 	deriveMEI as deriveMEIAsync,
@@ -25,6 +24,7 @@ import {
 import { MAX_NODES_LR } from "../definitions/consts.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { encryptAES128ECBAsync } from "../index_browser.js";
+import { deflateSync } from "../util/compression.js";
 import { highResTimestamp } from "../util/date.js";
 import { encodeBitMask } from "../values/Primitive.js";
 import { CtrDRBG } from "./ctr_drbg.wrapper.js";
@@ -111,7 +111,7 @@ export class SecurityManager2 {
 
 	public static async create(): Promise<SecurityManager2> {
 		const ret = new SecurityManager2();
-		await ret.rng.initAsync(randomBytesAsync(32));
+		await ret.rng.initAsync(randomBytes(32));
 		return ret;
 	}
 
@@ -218,7 +218,7 @@ export class SecurityManager2 {
 		this.multicastGroups.set(groupId, {
 			nodeIDs,
 			securityClass: s2SecurityClass,
-			sequenceNumber: crypto.randomInt(256),
+			sequenceNumber: randomBytes(1)[0],
 		});
 		this.multicastGroupLookup.set(newHash, groupId);
 		// And reset the MPAN state
@@ -563,7 +563,7 @@ export class SecurityManager2 {
 	public nextSequenceNumber(peerNodeId: number): number {
 		let seq = this.ownSequenceNumbers.get(peerNodeId);
 		if (seq == undefined) {
-			seq = crypto.randomInt(256);
+			seq = randomBytes(1)[0];
 		} else {
 			seq = (seq + 1) & 0xff;
 		}
@@ -777,5 +777,5 @@ function hashNodeIds(nodeIds: readonly number[]): string {
 	// Compress the bitmask to avoid 1000 character strings as keys.
 	// This compresses considerably well, usually in the 12-20 byte range
 	const compressed = deflateSync(raw);
-	return compressed.toString("hex");
+	return Bytes.view(compressed).toString("hex");
 }

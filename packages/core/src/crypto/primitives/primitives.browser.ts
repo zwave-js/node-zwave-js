@@ -56,6 +56,33 @@ async function encryptAES128CBC(
 	return new Uint8Array(ciphertext, 0, paddedLength);
 }
 
+/** Decrypts a payload using AES-256-CBC */
+async function decryptAES256CBC(
+	ciphertext: Uint8Array,
+	key: Uint8Array,
+	iv: Uint8Array,
+): Promise<Uint8Array> {
+	const cryptoKey = await subtle.importKey(
+		"raw",
+		key,
+		{ name: "AES-CBC" },
+		true,
+		["decrypt"],
+	);
+
+	const plaintext = await subtle.decrypt(
+		{
+			name: "AES-CBC",
+			iv,
+		},
+		cryptoKey,
+		ciphertext,
+	);
+
+	// Padding is removed automatically
+	return new Uint8Array(plaintext);
+}
+
 /** Encrypts a payload using AES-128-OFB */
 async function encryptAES128OFB(
 	plaintext: Uint8Array,
@@ -359,7 +386,20 @@ async function decryptAES128CCM(
 	}
 }
 
-export default {
+function digest(
+	algorithm: "md5" | "sha-1" | "sha-256",
+	data: Uint8Array,
+): Promise<Uint8Array> {
+	// The WebCrypto API does not support MD5, but we don't actually care.
+	// MD5 is only used for hashing cached device configurations, and if anyone
+	// is going to use these methods, they should be on a new installation anyways.
+	if (algorithm === "md5") {
+		algorithm = "sha-256";
+	}
+	return subtle.digest(algorithm, data);
+}
+
+export const primitives = {
 	randomBytes,
 	encryptAES128ECB,
 	encryptAES128CBC,
@@ -367,4 +407,6 @@ export default {
 	decryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	decryptAES256CBC,
+	digest,
 } satisfies CryptoPrimitives;

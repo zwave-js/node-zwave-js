@@ -23,7 +23,7 @@ for (
 		encryptAES128CCM,
 		decryptAES128CCM,
 		randomBytes,
-	}: CryptoPrimitives = (await import(primitives)).default;
+	}: CryptoPrimitives = (await import(primitives)).primitives;
 
 	test(`${primitives} -> encryptAES128ECB() -> should work correctly`, async (t) => {
 		// // Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf

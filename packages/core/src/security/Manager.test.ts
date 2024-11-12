@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals -- crypto methods return Buffers */
 import { isUint8Array } from "@zwave-js/shared";
 import { randomBytes } from "node:crypto";
 import sinon from "sinon";
@@ -72,34 +71,15 @@ test("generateNonce() should return a random Buffer of the given length", (t) =>
 });
 
 test("generateNonce() -> should ensure that no collisions happen", async (t) => {
-	const buf1a = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
-	const buf1b = Buffer.from([1, 2, 3, 4, 5, 6, 7, 9]); // has the same nonce id
-	const buf2 = Buffer.from([2, 2, 3, 4, 5, 6, 7, 8]);
-
-	const originalCrypto = await vi.importActual("node:crypto");
-	const mockCrypto = await import("node:crypto");
-	mockCrypto.randomBytes = vi.fn()
-		.mockImplementationOnce(() => buf1a)
-		.mockImplementationOnce(() => buf1b)
-		.mockImplementationOnce(() => buf2);
-	t.onTestFinished(() => {
-		// @ts-expect-error
-		mockCrypto.randomBytes = originalCrypto.randomBytes;
-	});
-
-	const SM: typeof SecurityManager =
-		(await import("./Manager.js")).SecurityManager;
-
-	const man = new SM(options);
-	const nonce1 = man.generateNonce(2, 8);
-	const nonce2 = man.generateNonce(2, 8);
-	t.expect(nonce1).toStrictEqual(buf1a);
-	t.expect(nonce2).toStrictEqual(buf2);
-
-	t.expect(man.getNonce(1)).toStrictEqual(buf1a);
-	t.expect(man.getNonce(2)).toStrictEqual(buf2);
-
-	sinon.restore();
+	// No collisions means that it is possible to generate 256 nonces without reusing the first byte
+	const man = new SecurityManager(options);
+	const generatedNonceIds = new Set<number>();
+	for (let i = 0; i <= 255; i++) {
+		const nonce = man.generateNonce(2, 8);
+		const nonceId = nonce[0];
+		t.expect(generatedNonceIds.has(nonceId)).toBe(false);
+		generatedNonceIds.add(nonceId);
+	}
 });
 
 test("generateNonce() should store nonces for the current node id", (t) => {
