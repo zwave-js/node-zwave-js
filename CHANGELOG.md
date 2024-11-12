@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.2 (2024-11-12)
 ### Bugfixes
 * Fixed an issue where encoding a buffer as an ASCII string would throw an error on Node.js builds without full ICU (#7395)
 
