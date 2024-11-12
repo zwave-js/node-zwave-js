@@ -3,10 +3,7 @@
 import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
 import { deflateSync } from "node:zlib";
-import {
-	encryptAES128ECBSync,
-	randomBytesAsync,
-} from "../crypto/index.node.js";
+import { encryptAES128ECBSync, randomBytes } from "../crypto/index.node.js";
 import {
 	computeNoncePRK as computeNoncePRKAsync,
 	deriveMEI as deriveMEIAsync,
@@ -111,7 +108,7 @@ export class SecurityManager2 {
 
 	public static async create(): Promise<SecurityManager2> {
 		const ret = new SecurityManager2();
-		await ret.rng.initAsync(randomBytesAsync(32));
+		await ret.rng.initAsync(randomBytes(32));
 		return ret;
 	}
 
