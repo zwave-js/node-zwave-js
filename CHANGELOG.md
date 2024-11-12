@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.1 (2024-11-12)
 ### Config file changes
 * Ignore setpoint range for Ecolink TBZ500 (#7393)
 
