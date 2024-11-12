@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where encoding a buffer as an ASCII string would throw an error on Node.js builds without full ICU (#7395)
+
 ## 14.3.1 (2024-11-12)
 ### Config file changes
 * Ignore setpoint range for Ecolink TBZ500 (#7393)
