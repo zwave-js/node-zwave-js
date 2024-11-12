@@ -132,8 +132,20 @@ export class Bytes extends Uint8Array {
 				return uint8ArrayToBase64(this);
 			case "base64url":
 				return uint8ArrayToBase64(this, { urlSafe: true });
+				return uint8ArrayToString(this, "utf8");
+			case "ucs-2":
+			case "ucs2":
+			case "utf16le":
+				return uint8ArrayToString(this, "utf-16le");
+			case "ascii":
+			case "latin1":
+			case "binary":
+			// For TextDecoder, these are aliases for "windows-1252"
+			// which is not supported with small-icu or without ICU.
+			// When dealing with actual ASCII data, there is no difference
+			// to simply using "utf8" instead.
 			default:
-				return uint8ArrayToString(this, encoding);
+				return uint8ArrayToString(this, "utf-8");
 		}
 	}
 
