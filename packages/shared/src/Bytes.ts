@@ -132,7 +132,6 @@ export class Bytes extends Uint8Array {
 				return uint8ArrayToBase64(this);
 			case "base64url":
 				return uint8ArrayToBase64(this, { urlSafe: true });
-				return uint8ArrayToString(this, "utf8");
 			case "ucs-2":
 			case "ucs2":
 			case "utf16le":
