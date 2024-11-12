@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Ignore setpoint range for Ecolink TBZ500 (#7393)
+
+### Changes under the hood
+* Further reduce dependency on Node.js internals (#7394)
+
 ## 14.3.0 (2024-11-11)
 This release adds support for using the WebCrypto API as the cryptography backend. Unlike the `node:crypto` module, this API is supported by all modern browsers and JS runtimes.
 
