@@ -689,6 +689,19 @@
 			]
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device claims to support v3, but encodes the setpoint range
+				// with mixed units (43..99 °C). To avoid this nonsense, we force
+				// version 2 of the CC, so the range is not queried.
+				"Thermostat Setpoint": {
+					"isSupported": true,
+					"version": 2
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions provided with your system for enrolling the thermostat.\n2. Press and hold the FAN button on the Thermostat until the screen changes to the Menu screen.\n3. Press the UP button until ZWAVE is shown in the Status Display line then press Select.\n4. INSTALL should be shown on the status line.\n5. When instructed by your system installation to add the thermostat to the network press the “Select” button to install. Wait until SUCCESS or FAILED is shown on thestatus display.\n6. Press Done on the Thermostat to exit the ZWAVE screen.\n7. Press Done on the Thermostat again to exit the Menu screen.\n8. Once enrolled on your system’s network, continue to follow the instructions provided to complete the enrollment and naming of the thermostat.\n9. The indicator should be shown on the Thermostat Main screen indicating the thermostat has successfully been enrolled into the Z-Wave network.",
 		"exclusion": "It may be necessary to remove and/or reinstall the thermostat from a Z-Wave network if the thermostat has been previously installed on another network. Follow the instructions supplied with your Z-Wave system to remove/uninstall a Z-Wave device. When the system instructs you to press and release the Z-Wave button on the thermostat, follow these steps:\n\n1. Press and hold the FAN button for 3 seconds until the Menu screen is displayed.\n2. Press the UP arrow button to scroll to the “ZWAVE” menu.\n3. Press “Select” to select the ZWAVE screen.\n4. The display will show “REMOVE” in the text line.\n5. Press “Select” to perform the remove action.\n6. “WAIT” will be displayed in the text line. The remove operation is in process.\n7. “SUCCESS” will be display when the thermostat has been excluded from the network.\n8. Press “Done” to exit back to the thermostat screen.\n9. Thermostat is now ready to be added to any Z-Wave network.",
