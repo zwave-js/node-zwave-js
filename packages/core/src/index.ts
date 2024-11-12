@@ -21,6 +21,7 @@ export * from "./traits/SecurityClasses.js";
 export * from "./traits/SecurityManagers.js";
 export * from "./util/_Types.js";
 export * from "./util/compareVersions.js";
+export { deflateSync } from "./util/compression.js";
 export * from "./util/config.js";
 export * from "./util/crc.js";
 export * from "./util/date.js";

@@ -23,6 +23,12 @@ export interface CryptoPrimitives {
 		key: Uint8Array,
 		iv: Uint8Array,
 	): Promise<Uint8Array>;
+	/** Decrypts a payload using AES-256-CBC */
+	decryptAES256CBC(
+		ciphertext: Uint8Array,
+		key: Uint8Array,
+		iv: Uint8Array,
+	): Promise<Uint8Array>;
 	/** Encrypts and authenticates a payload using AES-128-CCM */
 	encryptAES128CCM(
 		plaintext: Uint8Array,

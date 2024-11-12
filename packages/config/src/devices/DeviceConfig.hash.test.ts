@@ -21,7 +21,7 @@ test(
 		))!;
 		t.expect(config).toBeDefined();
 
-		const hash = config.getHash();
+		const hash = await config.getHash();
 		t.expect(isUint8Array(hash)).toBe(true);
 	},
 	// This test might take a while
@@ -42,11 +42,11 @@ test(
 		))!;
 		t.expect(config).toBeDefined();
 
-		const hash1 = config.getHash();
+		const hash1 = await config.getHash();
 
 		// @ts-expect-error
 		config.paramInformation!.get({ parameter: 2 })!.unit = "lightyears";
-		const hash2 = config.getHash();
+		const hash2 = await config.getHash();
 
 		t.expect(hash1).not.toStrictEqual(hash2);
 	},
@@ -68,14 +68,14 @@ test(
 		))!;
 		t.expect(config).toBeDefined();
 
-		const hash1 = config.getHash();
+		const hash1 = await config.getHash();
 
 		const removeCCs = new Map();
 		removeCCs.set(CommandClasses["All Switch"], "*");
 		// @ts-expect-error
 		config.compat!.removeCCs = removeCCs;
 
-		const hash2 = config.getHash();
+		const hash2 = await config.getHash();
 
 		t.expect(hash1).not.toStrictEqual(hash2);
 	},

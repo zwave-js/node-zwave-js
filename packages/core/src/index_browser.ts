@@ -21,6 +21,7 @@ export type * from "./traits/Nodes.js";
 export type * from "./traits/SecurityClasses.js";
 export type * from "./traits/SecurityManagers.js";
 export type * from "./util/_Types.js";
+export { deflateSync } from "./util/compression.js";
 export * from "./util/config.js";
 export * from "./util/crc.js";
 export * from "./util/graph.js";

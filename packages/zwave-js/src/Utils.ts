@@ -6,9 +6,11 @@ export {
 	QRCodeVersion,
 	RouteProtocolDataRate,
 	extractFirmware,
+	extractFirmwareAsync,
 	guessFirmwareFileFormat,
 	parseQRCodeString,
 	rssiToString,
+	tryUnzipFirmwareFile,
 } from "@zwave-js/core";
 export type {
 	Firmware,

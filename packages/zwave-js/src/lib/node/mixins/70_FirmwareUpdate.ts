@@ -21,6 +21,7 @@ import {
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
+	randomBytes,
 	securityClassIsS2,
 	timespan,
 } from "@zwave-js/core";
@@ -33,7 +34,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
-import { randomBytes } from "node:crypto";
 import {
 	type Task,
 	type TaskBuilder,

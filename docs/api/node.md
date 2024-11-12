@@ -383,7 +383,7 @@ interface FirmwareUpdateResult {
 The library includes helper methods (exported from `zwave-js/Utils`) to prepare the firmware update.
 
 ```ts
-extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
+async extractFirmwareAsync(rawData: Buffer, format: FirmwareFileFormat): Promise<Firmware>
 ```
 
 `rawData` is a buffer containing the original firmware update file, `format` describes which kind of file that is. The following formats are available:
@@ -394,7 +394,7 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 - `"hec"` - An encrypted Intel HEX firmware file
 - `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
-If successful, `extractFirmware` returns an `Firmware` object which can be passed to the `updateFirmware` method.
+If successful, `extractFirmwareAsync` returns an `Firmware` object which can be passed to the `updateFirmware` method.
 
 If no firmware data can be extracted, the method will throw.
 
@@ -417,7 +417,7 @@ Example usage:
 let actualFirmware: Firmware;
 try {
 	const format = guessFirmwareFileFormat(filename, rawData);
-	actualFirmware = extractFirmware(rawData, format);
+	actualFirmware = await extractFirmwareAsync(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
 }
@@ -455,7 +455,7 @@ If the given ZIP archive contains a compatible firmware update file, the method 
 
 Otherwise `undefined` is returned.
 
-The unzipped firmware file can then be passed to `extractFirmware` to get the firmware data. Example usage:
+The unzipped firmware file can then be passed to `extractFirmwareAsync` to get the firmware data. Example usage:
 
 ```ts
 // Unzip the firmware archive
@@ -468,7 +468,7 @@ const { filename, format, rawData } = unzippedFirmware;
 // Extract the firmware from a given firmware file
 let actualFirmware: Firmware;
 try {
-	actualFirmware = extractFirmware(rawData, format);
+	actualFirmware = await extractFirmwareAsync(rawData, format);
 } catch (e) {
 	// handle the error, then abort the update
 }

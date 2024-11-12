@@ -2,7 +2,7 @@ import { Bytes } from "@zwave-js/shared/safe";
 import { BLOCK_SIZE, leftShift1, xor, zeroPad } from "./shared.js";
 
 // Import the correct primitives based on the environment
-import primitives from "#crypto_primitives";
+import { primitives } from "#crypto_primitives";
 const {
 	decryptAES128OFB,
 	encryptAES128CBC,
@@ -10,6 +10,7 @@ const {
 	encryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	decryptAES256CBC,
 	randomBytes,
 	digest,
 } = primitives;
@@ -17,6 +18,7 @@ const {
 export {
 	decryptAES128CCM,
 	decryptAES128OFB,
+	decryptAES256CBC,
 	digest,
 	encryptAES128CBC,
 	encryptAES128CCM,

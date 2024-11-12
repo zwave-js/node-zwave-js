@@ -99,6 +99,7 @@ import {
 	isZWaveError,
 	keyPairFromRawECDHPrivateKeySync,
 	messageRecordToLines,
+	randomBytes,
 	securityClassIsS2,
 	securityClassOrder,
 	serializeCacheValue,
@@ -184,7 +185,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { randomBytes } from "node:crypto";
 import type { EventEmitter } from "node:events";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -2504,7 +2504,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	public async getUUID(): Promise<string> {
 		// To anonymously identify a network, we create a unique ID and use it to salt the Home ID
 		if (!this._valueDB!.has("uuid")) {
-			this._valueDB!.set("uuid", randomBytes(32).toString("hex"));
+			this._valueDB!.set(
+				"uuid",
+				Bytes.view(randomBytes(32)).toString("hex"),
+			);
 		}
 		const ret = this._valueDB!.get("uuid") as string;
 		return ret;

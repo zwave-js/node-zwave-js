@@ -1,7 +1,9 @@
 /** Management class and utils for Security S0 */
 
-import { randomBytes } from "node:crypto";
-import { encryptAES128ECB as encryptAES128ECBAsync } from "../crypto/operations.async.js";
+import {
+	encryptAES128ECB as encryptAES128ECBAsync,
+	randomBytes,
+} from "../crypto/operations.async.js";
 import { encryptAES128ECB as encryptAES128ECBSync } from "../crypto/operations.sync.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 

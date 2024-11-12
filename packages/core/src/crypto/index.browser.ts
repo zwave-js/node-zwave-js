@@ -5,6 +5,7 @@ export {
 	computePRK as computePRKAsync,
 	decryptAES128CCM as decryptAES128CCMAsync,
 	decryptAES128OFB as decryptAES128OFBAsync,
+	decryptAES256CBC as decryptAES256CBCAsync,
 	deriveMEI as deriveMEIAsync,
 	deriveNetworkKeys as deriveNetworkKeysAsync,
 	deriveTempKeys as deriveTempKeysAsync,

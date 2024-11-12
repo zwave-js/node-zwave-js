@@ -123,6 +123,24 @@ function encryptAES128CBC(
 	);
 }
 
+/** Decrypts a payload using AES-256-CBC */
+function decryptAES256CBC(
+	ciphertext: Uint8Array,
+	key: Uint8Array,
+	iv: Uint8Array,
+): Promise<Uint8Array> {
+	return Promise.resolve(
+		decrypt(
+			"aes-256-cbc",
+			BLOCK_SIZE,
+			true,
+			ciphertext,
+			key,
+			iv,
+		),
+	);
+}
+
 function encryptAES128CCM(
 	plaintext: Uint8Array,
 	key: Uint8Array,
@@ -180,7 +198,7 @@ function digest(
 	return Promise.resolve(hash.digest());
 }
 
-export default {
+export const primitives = {
 	randomBytes,
 	encryptAES128ECB,
 	encryptAES128CBC,
@@ -188,5 +206,6 @@ export default {
 	decryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	decryptAES256CBC,
 	digest,
 } satisfies CryptoPrimitives;

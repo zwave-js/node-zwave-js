@@ -6,6 +6,8 @@ import ts from "typescript";
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
 	"reflect-metadata",
+	// fflate is browser-compatible
+	"fflate",
 	"alcalzone-shared/arrays",
 	"alcalzone-shared/async",
 	"alcalzone-shared/comparable",

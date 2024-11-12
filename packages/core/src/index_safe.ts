@@ -5,6 +5,7 @@ export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
 export * from "./log/shared_safe.js";
+// eslint-disable-next-line @zwave-js/no-forbidden-imports -- FIXME: We know this import is safe, but the lint rule doesn't
 export * from "./qr/index.browser.js";
 export * from "./registries/DeviceClasses.js";
 export * from "./registries/Indicators.js";
@@ -19,6 +20,7 @@ export type * from "./traits/Nodes.js";
 export type * from "./traits/SecurityClasses.js";
 export type * from "./traits/SecurityManagers.js";
 export * from "./util/_Types.js";
+export { deflateSync } from "./util/compression.js";
 export * from "./util/config.js";
 export * from "./util/crc.js";
 export * from "./util/graph.js";

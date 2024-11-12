@@ -5,6 +5,7 @@ import {
 	NodeIDType,
 	SecurityClass,
 	type SecurityManagers,
+	randomBytes,
 	securityClassOrder,
 } from "@zwave-js/core";
 import {
@@ -20,7 +21,6 @@ import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
-import { randomInt } from "node:crypto";
 import {
 	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
@@ -421,7 +421,7 @@ export class MockController {
 	 */
 	public ackHostMessage(): void {
 		if (this.corruptACK) {
-			const highNibble = randomInt(1, 0xf) << 4;
+			const highNibble = randomBytes(1)[0] & 0xf0;
 			this.serial.emitData(
 				Uint8Array.from([highNibble | MessageHeaders.ACK]),
 			);

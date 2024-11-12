@@ -56,6 +56,33 @@ async function encryptAES128CBC(
 	return new Uint8Array(ciphertext, 0, paddedLength);
 }
 
+/** Decrypts a payload using AES-256-CBC */
+async function decryptAES256CBC(
+	ciphertext: Uint8Array,
+	key: Uint8Array,
+	iv: Uint8Array,
+): Promise<Uint8Array> {
+	const cryptoKey = await subtle.importKey(
+		"raw",
+		key,
+		{ name: "AES-CBC" },
+		true,
+		["decrypt"],
+	);
+
+	const plaintext = await subtle.decrypt(
+		{
+			name: "AES-CBC",
+			iv,
+		},
+		cryptoKey,
+		ciphertext,
+	);
+
+	// Padding is removed automatically
+	return new Uint8Array(plaintext);
+}
+
 /** Encrypts a payload using AES-128-OFB */
 async function encryptAES128OFB(
 	plaintext: Uint8Array,
@@ -372,7 +399,7 @@ function digest(
 	return subtle.digest(algorithm, data);
 }
 
-export default {
+export const primitives = {
 	randomBytes,
 	encryptAES128ECB,
 	encryptAES128CBC,
@@ -380,5 +407,6 @@ export default {
 	decryptAES128OFB,
 	encryptAES128CCM,
 	decryptAES128CCM,
+	decryptAES256CBC,
 	digest,
 } satisfies CryptoPrimitives;
