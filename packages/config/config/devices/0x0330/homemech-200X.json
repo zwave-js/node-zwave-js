@@ -50,10 +50,6 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Dimmer default",
-					"value": 1
-				},
-				{
 					"label": "Instant",
 					"value": 0
 				}
