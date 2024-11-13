@@ -62,13 +62,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 15,
-			"options": [
-				{
-					"label": "Dimmer default",
-					"value": 15
-				}
-			]
+			"defaultValue": 15
 		},
 		{
 			"#": "6",
