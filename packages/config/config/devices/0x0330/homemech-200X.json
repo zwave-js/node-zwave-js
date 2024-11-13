@@ -208,7 +208,6 @@
 		{
 			"#": "32",
 			"$import": "~/templates/master_template.json#default_dim_level_0-99",
-			"unit": "%",
 			"defaultValue": 0
 		}
 	],
