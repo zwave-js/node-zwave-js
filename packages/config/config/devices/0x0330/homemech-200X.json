@@ -73,7 +73,6 @@
 		{
 			"#": "6",
 			"label": "Maximum Brightness",
-			"description": "Valid value: 0~100, the bigger the value is, the higher the load’s maximum brightness is",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
