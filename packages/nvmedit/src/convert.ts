@@ -1155,7 +1155,7 @@ export async function nvm500ToJSON(
 	const systemState = await adapter.get({
 		domain: "controller",
 		type: "systemState",
-	}, true);
+	});
 
 	const watchdogStarted = await adapter.get({
 		domain: "controller",
@@ -1165,23 +1165,23 @@ export async function nvm500ToJSON(
 	const powerLevelNormal = await adapter.get({
 		domain: "controller",
 		type: "powerLevelNormal",
-	}, true);
+	});
 	const powerLevelLow = await adapter.get({
 		domain: "controller",
 		type: "powerLevelLow",
-	}, true);
+	});
 	const powerMode = await adapter.get({
 		domain: "controller",
 		type: "powerMode",
-	}, true);
+	});
 	const powerModeExtintEnable = await adapter.get({
 		domain: "controller",
 		type: "powerModeExtintEnable",
-	}, true);
+	});
 	const powerModeWutTimeout = await adapter.get({
 		domain: "controller",
 		type: "powerModeWutTimeout",
-	}, true);
+	});
 
 	const controller: NVM500JSONController = {
 		protocolVersion: info.nvmDescriptor.protocolVersion,
@@ -1611,36 +1611,48 @@ export async function jsonToNVM500(
 		c.sucLastIndex,
 	);
 
-	await adapter.set(
-		{ domain: "controller", type: "systemState" },
-		c.systemState,
-	);
+	if (c.systemState != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "systemState" },
+			c.systemState,
+		);
+	}
 
 	await adapter.set(
 		{ domain: "controller", type: "watchdogStarted" },
 		c.watchdogStarted,
 	);
 
-	await adapter.set(
-		{ domain: "controller", type: "powerLevelNormal" },
-		c.rfConfig.powerLevelNormal,
-	);
-	await adapter.set(
-		{ domain: "controller", type: "powerLevelLow" },
-		c.rfConfig.powerLevelLow,
-	);
-	await adapter.set(
-		{ domain: "controller", type: "powerMode" },
-		c.rfConfig.powerMode,
-	);
-	await adapter.set(
-		{ domain: "controller", type: "powerModeExtintEnable" },
-		c.rfConfig.powerModeExtintEnable,
-	);
-	await adapter.set(
-		{ domain: "controller", type: "powerModeWutTimeout" },
-		c.rfConfig.powerModeWutTimeout,
-	);
+	if (c.rfConfig.powerLevelNormal != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "powerLevelNormal" },
+			c.rfConfig.powerLevelNormal,
+		);
+	}
+	if (c.rfConfig.powerLevelLow != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "powerLevelLow" },
+			c.rfConfig.powerLevelLow,
+		);
+	}
+	if (c.rfConfig.powerMode != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "powerMode" },
+			c.rfConfig.powerMode,
+		);
+	}
+	if (c.rfConfig.powerModeExtintEnable != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "powerModeExtintEnable" },
+			c.rfConfig.powerModeExtintEnable,
+		);
+	}
+	if (c.rfConfig.powerModeWutTimeout != undefined) {
+		await adapter.set(
+			{ domain: "controller", type: "powerModeWutTimeout" },
+			c.rfConfig.powerModeWutTimeout,
+		);
+	}
 
 	await adapter.set(
 		{ domain: "controller", type: "preferredRepeaters" },
@@ -1825,7 +1837,7 @@ export function json500To700(
 			sucUpdateEntries: source.controller.sucUpdateEntries,
 			maxNodeId,
 			reservedId,
-			systemState: source.controller.systemState,
+			systemState: source.controller.systemState ?? 0,
 			preferredRepeaters: source.controller.preferredRepeaters,
 
 			// RF config exists on both series but isn't compatible
