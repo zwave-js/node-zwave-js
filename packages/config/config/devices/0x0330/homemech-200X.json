@@ -197,11 +197,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Linear dimming",
+					"label": "Linear",
 					"value": 0
 				},
 				{
-					"label": "Logarithmic dimming",
+					"label": "Logarithmic",
 					"value": 1
 				}
 			]
