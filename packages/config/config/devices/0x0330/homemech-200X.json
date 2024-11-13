@@ -1,0 +1,214 @@
+{
+	"manufacturer": "HomeSys",
+	"manufacturerId": "0x0330",
+	"label": [
+		{
+			// If 1.31 then we have a 2002 unit (push button)
+			"$if": "firmwareVersion === 1.31",
+			"value": "HomeMech-2002"
+		},
+		// Else 2001 (rotary)
+		"HomeMech-2001"
+	],
+	"description": [
+		{
+			// If 1.31 then we have a 2002 unit (push button)
+			"$if": "firmwareVersion === 1.31",
+			"value": "Smart switch and dimmer (push button)"
+		},
+		// Else 2001 (rotary)
+		"Smart switch and dimmer (rotary)"
+	],
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0xd01c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "3.0"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report When Load State Changes",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"label": "Default Dimming Duration",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Minimum Brightness",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 15
+		},
+		{
+			"#": "6",
+			"label": "Maximum Brightness",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "10",
+			"label": "Detect Load After Re-Power On",
+			"description": "Detect load type, minimum brightness, maximum brightness. When the device does not belong to any network, load detection will be enabled after every re-power on",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Every time after re-power on",
+					"value": 1
+				},
+				{
+					"label": "Only after first re-power on",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Over Current Protection",
+			"description": "Triggered when module goes over current limit (over 1.8A for 20 seconds continuously)",
+			"defaultValue": 1
+		},
+		{
+			"#": "14",
+			"label": "Power Change Report Threshold Watts",
+			"description": "When power changes above the absolute threshold, immediately report current power value",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 360,
+			"defaultValue": 10
+		},
+		{
+			"#": "15",
+			"label": "Power Change Report Threshold Percentage",
+			"description": "When power changes above the absolute threshold, immediately report current power value",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20
+		},
+		{
+			"#": "21",
+			"label": "Power Metering Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Energy Metering Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Voltage Metering Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Current Metering Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Dimming Curve",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#default_dim_level_0-99",
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode.\n2. Power on the push button dimmer and set it into inclusion mode. There are two methods to set the push button dimmer into inclusion mode:\n1)Repower on the dimmer, LED indicator blinks blue quickly, it will be set into inclusion mode automatically, and waiting to be included.\n2)Triple press the button, LED indicator turns off for 2 seconds, within the 2 seconds press and hold the button for over 3 seconds, LED indicator will blink blue quickly, the dimmer will be set into inclusion mode.\nThe LED indicator will stay solid blue to indicate successful inclusion.",
+		"exclusion": "There are two exclusion methods:\nMethod 1: Exclusion from the primary controller/gateway as follows:\n1. Set the primary controller/gateway into exclusion mode (Please refer to your primary controllers manual on how to set your controller into exclusion).\n2. Triple press the button, LED indicator turns off for 2 seconds, within the 2 seconds press and hold the button for over 3 seconds, LED indicator will blink blue quickly, the dimmer will be set to exclusion mode, and waiting to be excluded, then the dimmer will be excluded from the network.\nMethod 2: Factory reset the dimmer will force it to be excluded from a network. (please refer to the part “Factory Reset” of this manual)\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable.",
+		"reset": "Short press the button 5 times quickly, LED indicator will turn on cyan for 3 seconds, within the 3 seconds press and hold down the button for over 10 seconds (during the long press process LED indicator will blink cyan quickly), the dimmer will be reset to factory defaults, and detect the load maximum brightness, the load brightness will be restored to 50% and LED indicator will blink cyan slowly.",
+		"manual": "https://drive.usercontent.google.com/download?id=1FKzKvF0CMpwFQNbj80jSLZzegZvNsJqE&export=download&authuser=0"
+	}
+}
