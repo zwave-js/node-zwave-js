@@ -202,6 +202,15 @@ const NVM_Layout_Bridge_6_7x: NVMLayout = [
 export const Bridge_6_7x: NVM500Impl = {
 	name: "Bridge 6.7x",
 	library: "bridge",
-	protocolVersions: ["4.60", "4.61", "5.02", "5.03"],
+	protocolVersions: [
+		"4.60",
+		"4.61",
+		"5.02",
+		"5.03",
+		// Technically the following is a 6.8x SDK, but according to
+		// https://github.com/zwave-js/node-zwave-js/issues/7385, it still uses
+		// a 6.7x NVM layout
+		"6.01",
+	],
 	layout: NVM_Layout_Bridge_6_7x,
 };

@@ -215,7 +215,6 @@ export const Static_6_8x: NVM500Impl = {
 	name: "Static 6.8x",
 	library: "static",
 	protocolVersions: [
-		"6.01",
 		"6.02",
 		"6.03",
 		"6.04",
