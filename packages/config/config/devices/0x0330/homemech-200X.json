@@ -38,7 +38,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic report to the Lifeline When the Load State Changed",
+			"label": "Send Basic report To The Lifeline When The Load State Changes",
 			"description": "When value set as 1, repower on the dimmer, it will send Basic report automatically",
 			"defaultValue": 1
 		},
@@ -46,12 +46,11 @@
 			"#": "4",
 			"label": "Default Fade Time",
 			"description": "Duration dimmer will take to reach requested level. This value has the same function as Duration of Multilevel",
-			"defaultValue": 1,
-			"unit": "seconds",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Dimmer default",
@@ -67,12 +66,11 @@
 			"#": "5",
 			"label": "Minimum Brightness",
 			"description": "Valid value: 0~50, the bigger the value is, the higher the load’s minimum brightness is",
-			"defaultValue": 15,
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
+			"defaultValue": 15,
 			"options": [
 				{
 					"label": "Dimmer default",
@@ -84,12 +82,11 @@
 			"#": "6",
 			"label": "Maximim Brightness",
 			"description": "Valid value: 0~100, the bigger the value is, the higher the load’s maximum brightness is",
-			"defaultValue": 100,
-			"unit": "%",
-			"unsigned": true,
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
+			"defaultValue": 100,
 			"options": [
 				{
 					"label": "Dimmer default",
@@ -132,10 +129,10 @@
 			"description": "When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 2,
 			"unit": "W",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 360,
 			"defaultValue": 10
+
 		},
 		{
 			"#": "15",
@@ -143,7 +140,6 @@
 			"description": "When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 1,
 			"unit": "%",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
@@ -153,7 +149,6 @@
 			"label": "Power Metering Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600,
@@ -169,7 +164,6 @@
 			"label": "Energy Metering Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 1800,
@@ -185,7 +179,6 @@
 			"label": "Voltage Metering Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
@@ -201,7 +194,6 @@
 			"label": "Current Metering Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
-			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
