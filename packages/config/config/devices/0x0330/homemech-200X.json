@@ -33,7 +33,6 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
-			"label": "Save Load State Before Power Failure"
 		},
 		{
 			"#": "3",
