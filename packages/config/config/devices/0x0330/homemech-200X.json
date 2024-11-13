@@ -2,23 +2,23 @@
 	"manufacturer": "HomeSys",
 	"manufacturerId": "0x0330",
 	"label": [
-        {
-            // If 1.31 then we have a 2002 unit (push button)
-            "$if": "firmwareVersion === 1.31",
-            "value": "HomeMech-2002"
-        },
-        // Else 2001 (rotary)
-        "HomeMech-2001"
-    ],
+		{
+			// If 1.31 then we have a 2002 unit (push button)
+			"$if": "firmwareVersion === 1.31",
+			"value": "HomeMech-2002"
+		},
+		// Else 2001 (rotary)
+		"HomeMech-2001"
+	],
 	"description": [
-        {
-            // If 1.31 then we have a 2002 unit (push button)
-            "$if": "firmwareVersion === 1.31",
-            "value": "Smart switch and dimmer (push button)"
-        },
-        // Else 2001 (rotary)
-        "Smart switch and dimmer (rotary)"
-    ],
+		{
+			// If 1.31 then we have a 2002 unit (push button)
+			"$if": "firmwareVersion === 1.31",
+			"value": "Smart switch and dimmer (push button)"
+		},
+		// Else 2001 (rotary)
+		"Smart switch and dimmer (rotary)"
+	],
 	"devices": [
 		{
 			"productType": "0x0202",
@@ -132,7 +132,6 @@
 			"minValue": 0,
 			"maxValue": 360,
 			"defaultValue": 10
-
 		},
 		{
 			"#": "15",
