@@ -42,8 +42,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Default Fade Time",
-			"description": "Duration dimmer will take to reach requested level. This value has the same function as Duration of Multilevel",
+			"label": "Default Dimming Duration",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
