@@ -192,7 +192,6 @@
 			"#": "31",
 			"label": "Dimming Curve",
 			"valueSize": 1,
-			"unit": "seconds",
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
