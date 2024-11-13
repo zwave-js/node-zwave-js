@@ -38,7 +38,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report To The Lifeline When The Load State Changes",
+			"label": "Send Basic Report to the Lifeline When Load State Changes",
 			"description": "When value set as 1, repower on the dimmer, it will send Basic report automatically",
 			"defaultValue": 1
 		},
