@@ -2,7 +2,7 @@
 
 // @ts-check
 const { MockServer, createMockNodeOptionsFromDump } = require(
-	"../build/mockServer",
+	"../build/cjs/mockServer.js",
 );
 const { readFileSync, statSync, readdirSync } = require("fs");
 const path = require("path");
@@ -85,7 +85,7 @@ Each node ID may only be used once in mock configs. Node ID ${nodeConfig.id} is 
  * @param {string} filename
  */
 function getConfig(filename) {
-	if (filename.endsWith(".js")) {
+	if (filename.endsWith(".js") || filename.endsWith(".cjs")) {
 		// The export can either be a static config object or a function that accepts a require
 		let config = require(filename).default;
 		if (typeof config === "function") {
@@ -156,7 +156,7 @@ No config files found in ${absolutePath}
 const interfaceIndex = args.findIndex(
 	(arg) => arg === "--interface" || arg === "-i",
 );
-const interface = interfaceIndex === -1 ? undefined : args[interfaceIndex + 1];
+const iface = interfaceIndex === -1 ? undefined : args[interfaceIndex + 1];
 
 // Parse port
 const portIndex = args.findIndex((arg) => arg === "--port" || arg === "-p");
@@ -166,7 +166,7 @@ if (Number.isNaN(port)) port = undefined;
 let server;
 (async () => {
 	server = new MockServer({
-		interface,
+		interface: iface,
 		port,
 		config,
 	});

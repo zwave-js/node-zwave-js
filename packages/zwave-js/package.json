@@ -63,7 +63,7 @@
     "build/**/package.json"
   ],
   "bin": {
-    "mock-server": "bin/mock-server.js"
+    "mock-server": "bin/mock-server.cjs"
   },
   "author": {
     "name": "AlCalzone",
