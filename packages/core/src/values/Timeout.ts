@@ -24,6 +24,15 @@ export class Timeout {
 		this._value = clamp(v, 0, this.unit === "seconds" ? 60 : 191);
 	}
 
+	public static isTimeout(value: any): value is Timeout {
+		return typeof value === "object"
+			&& value != null
+			&& "value" in value
+			&& typeof value.value === "number"
+			&& "unit" in value
+			&& typeof value.unit === "string";
+	}
+
 	/** Parses a timeout as represented in Report commands */
 	public static parse(payload: number): Timeout;
 	public static parse(payload: undefined): undefined;

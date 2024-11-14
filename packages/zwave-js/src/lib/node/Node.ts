@@ -538,7 +538,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	public set defaultTransitionDuration(value: string | Duration | undefined) {
 		// Normalize to strings
 		if (typeof value === "string") value = Duration.from(value);
-		if (value instanceof Duration) value = value.toString();
+		if (Duration.isDuration(value)) value = value.toString();
 
 		this.driver.cacheSet(
 			cacheKeys.node(this.id).defaultTransitionDuration,

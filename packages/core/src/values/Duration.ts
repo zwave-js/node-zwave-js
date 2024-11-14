@@ -39,6 +39,15 @@ export class Duration {
 		return new Duration(0, "default");
 	}
 
+	public static isDuration(value: any): value is Duration {
+		return typeof value === "object"
+			&& value != null
+			&& "value" in value
+			&& typeof value.value === "number"
+			&& "unit" in value
+			&& typeof value.unit === "string";
+	}
+
 	/** Parses a duration as represented in Report commands */
 	public static parseReport(payload?: number): Duration | undefined {
 		if (payload == undefined) return undefined;
@@ -97,7 +106,7 @@ export class Duration {
 	public static from(input?: Duration | string): Duration | undefined;
 
 	public static from(input?: Duration | string): Duration | undefined {
-		if (input instanceof Duration) {
+		if (Duration.isDuration(input)) {
 			return input;
 		} else if (input) {
 			return Duration.parseString(input);
