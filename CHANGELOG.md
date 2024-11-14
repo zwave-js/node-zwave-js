@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fix parsing of some older 500 series NVM formats (#7399)
+* Fixed an issue where `mock-server` would not start due to an incorrect module format (#7401)
+* Fixed an issue where the auto-generated argument validation for CC API methods would not work correctly in some cases when `zwave-js` was bundled (#7403)
+
+### Config file changes
+* Add HomeSys HomeMech-2001/2 (#7400)
+
 ## 14.3.2 (2024-11-12)
 ### Bugfixes
 * Fixed an issue where encoding a buffer as an ASCII string would throw an error on Node.js builds without full ICU (#7395)
