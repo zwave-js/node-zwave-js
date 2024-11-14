@@ -173,29 +173,79 @@ function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		}
 	}
 
+	const makeClass = () =>
+		importPath
+			// Create an import for classes in other files
+			// require("./bar").Foo
+			? f.createPropertyAccessExpression(
+				f.createCallExpression(
+					f.createIdentifier("require"),
+					undefined,
+					[f.createStringLiteral(importPath)],
+				),
+				f.createIdentifier(identifier),
+			)
+			// Foo
+			: f.createIdentifier(identifier);
+	const makeInstanceofCheck = () =>
+		f.createBinaryExpression(
+			// foo
+			VisitorUtils.objectIdentifier,
+			// instanceof
+			f.createToken(ts.SyntaxKind.InstanceOfKeyword),
+			// require("./bar").Foo
+			makeClass(),
+		);
+	// require("./bar").Foo.isFoo
+	const makePredicate = () =>
+		f.createPropertyAccessExpression(
+			makeClass(),
+			f.createIdentifier(`is${identifier}`),
+		);
+	// typeof require("./bar").Foo.isFoo === "function"
+	const makeFunctionCheck = () =>
+		f.createBinaryExpression(
+			f.createTypeOfExpression(makePredicate()),
+			f.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+			f.createStringLiteral("function"),
+		);
+	// require("./bar").Foo.isFoo(foo)
+	const makePredicateCall = () =>
+		f.createCallExpression(
+			makePredicate(),
+			undefined,
+			[VisitorUtils.objectIdentifier],
+		);
+
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 		return VisitorUtils.createAssertionFunction(
-			// !(foo instanceof require("./bar").Foo)
+			// !( ...
 			f.createPrefixUnaryExpression(
 				ts.SyntaxKind.ExclamationToken,
 				f.createParenthesizedExpression(
 					f.createBinaryExpression(
-						VisitorUtils.objectIdentifier,
-						f.createToken(ts.SyntaxKind.InstanceOfKeyword),
-						// Create an import for classes in other files
-						importPath
-							? f.createPropertyAccessExpression(
-								f.createCallExpression(
-									f.createIdentifier("require"),
-									undefined,
-									[f.createStringLiteral(importPath)],
+						// foo instanceof require("./bar").Foo
+						makeInstanceofCheck(),
+						// ||
+						f.createToken(ts.SyntaxKind.BarBarToken),
+						// (...
+						f.createParenthesizedExpression(
+							f.createBinaryExpression(
+								// typeof require("./bar").Foo.isFoo === "function"
+								makeFunctionCheck(),
+								// &&
+								f.createToken(
+									ts.SyntaxKind.AmpersandAmpersandToken,
 								),
-								f.createIdentifier(identifier),
-							)
-							: f.createIdentifier(identifier),
+								// require("./bar").Foo.isFoo(foo)
+								makePredicateCall(),
+							),
+						),
+						// ...)
 					),
 				),
 			),
+			// ...)
 			{ type: "class", name: identifier },
 			name,
 			visitorContext,

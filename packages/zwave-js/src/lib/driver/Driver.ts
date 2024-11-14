@@ -2798,7 +2798,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			if (ccArgs.parameters) {
 				if (isUint8Array(ccArgs.parameters)) {
 					msg.parameters = buffer2hex(ccArgs.parameters);
-				} else if (ccArgs.parameters instanceof Duration) {
+				} else if (Duration.isDuration(ccArgs.parameters)) {
 					msg.duration = ccArgs.parameters.toString();
 				} else if (isObject(ccArgs.parameters)) {
 					Object.assign(msg, ccArgs.parameters);

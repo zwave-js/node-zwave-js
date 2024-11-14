@@ -44,7 +44,7 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 			),
 			[SPECIAL_TYPE_KEY]: "map",
 		};
-	} else if (value instanceof Duration) {
+	} else if (Duration.isDuration(value)) {
 		const valueAsJSON = value.toJSON();
 		return {
 			...(typeof valueAsJSON === "string"

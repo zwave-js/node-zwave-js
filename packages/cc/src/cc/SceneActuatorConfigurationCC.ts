@@ -129,7 +129,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 						);
 				return this.set(propertyKey, dimmingDuration, value);
 			} else if (property === "dimmingDuration") {
-				if (typeof value !== "string" && !(value instanceof Duration)) {
+				if (typeof value !== "string" && !Duration.isDuration(value)) {
 					throwWrongValueType(
 						this.ccId,
 						property,
