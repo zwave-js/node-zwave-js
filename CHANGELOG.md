@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.3 (2024-11-14)
 ### Bugfixes
 * Fix parsing of some older 500 series NVM formats (#7399)
 * Fixed an issue where `mock-server` would not start due to an incorrect module format (#7401)

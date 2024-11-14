@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/transformers",
-  "version": "14.0.0",
+  "version": "14.3.3",
   "description": "zwave-js: compile-time transformers",
   "private": true,
   "keywords": [],
