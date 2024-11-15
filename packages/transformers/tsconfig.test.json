@@ -7,8 +7,15 @@
 		"declaration": false,
 		"declarationMap": false,
 		"sourceMap": false,
-		"plugins": [{ "transform": "./build" }],
+		"plugins": [
+			{
+				"transform": "./build/validateArgs2/transformProgram.js",
+				"transformProgram": true
+			},
+			{ "transform": "./build/validateArgs2/transformDecorators.js" }
+		],
 		"incremental": false
 	},
-	"include": ["test/fixtures/**/*.ts"]
+	// "include": ["test/fixtures/**/*.ts"]
+	"include": ["test/fixtures/testEnum.ts"]
 }

@@ -28,8 +28,13 @@ test.foo(1, { a: 1, b: 2 }, undefined);
 // These should throw
 assert.throws(
 	// @ts-expect-error
-	() => test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2 }),
-	/arg3 has the wrong type/,
+	() => test.foo(true, { a: 1, b: 2 }, undefined),
+	/parameter arg1 to be a number/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(undefined, { a: 1, b: 2 }, undefined),
+	/parameter arg1 to be a number/,
 );
 assert.throws(
 	// @ts-expect-error
@@ -38,16 +43,11 @@ assert.throws(
 );
 assert.throws(
 	// @ts-expect-error
-	() => test.foo(true, { a: 1, b: 2 }, undefined),
-	/arg1 is not a number/,
-);
-assert.throws(
-	// @ts-expect-error
-	() => test.foo(undefined, { a: 1, b: 2 }, undefined),
-	/arg1 is not a number/,
-);
-assert.throws(
-	// @ts-expect-error
 	() => test.foo(2, 2, undefined),
 	/arg2 is not a \(optional\) Foo/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2 }),
+	/arg3 has the wrong type/,
 );
