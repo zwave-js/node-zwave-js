@@ -39,6 +39,9 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	} else if (e.type === "enum") {
 		ret +=
 			`Expected ${optional}${e.kind} ${e.name} to be a member of enum ${e.enum}, got ${e.actual}`;
+	} else if (e.type === "date") {
+		ret +=
+			`Expected ${optional}${e.kind} ${e.name} to be a Date, got ${e.actual}`;
 	} else if (e.type === "missing") {
 		ret += `ERROR: Missing validation for ${optional}${e.kind} ${e.name}`;
 	} else {
@@ -94,6 +97,9 @@ type ErrorElaboration =
 		actual: string;
 	} | {
 		type: "null" | "undefined";
+		actual: string;
+	} | {
+		type: "date";
 		actual: string;
 	} | {
 		type: "union";
@@ -181,6 +187,19 @@ export const nul = (ctx: ValidatorContext) => (value: any): ValidatorResult => {
 	};
 };
 export { nul as null };
+
+export const date =
+	(ctx: ValidatorContext) => (value: any): ValidatorResult => {
+		if (value instanceof globalThis.Date) return { success: true };
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "date",
+				actual: formatActualType(value),
+			},
+		};
+	};
 
 export const optional =
 	(ctx: ValidatorContext, otherwise: ValidatorFunction) =>

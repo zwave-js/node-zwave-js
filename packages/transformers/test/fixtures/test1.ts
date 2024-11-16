@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { validateArgs } from "@zwave-js/transformers";
 import assert from "node:assert";
 

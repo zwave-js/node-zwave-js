@@ -304,8 +304,25 @@ function getValidationFunction(
 		return ret;
 	}
 
+	if (param.type.isInterface()) {
+		const symbol = param.type.getSymbol();
+		const valueDeclaration = symbol?.getValueDeclaration();
+		const variableDeclaration = valueDeclaration?.asKind(
+			tsm.SyntaxKind.VariableDeclaration,
+		);
+
+		if (
+			symbol?.getName() === "Date"
+			&& variableDeclaration
+			&& !!(variableDeclaration.getCombinedModifierFlags()
+				& tsm.ModifierFlags.Ambient)
+		) {
+			return `v.date(${ctx})`;
+		}
+	}
+
 	debugger;
 
 	// FIXME: Define validation for all types
-	return `() => { success: true }`;
+	return `(() => ({ success: true }))`;
 }

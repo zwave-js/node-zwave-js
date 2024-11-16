@@ -17,5 +17,5 @@
 		"incremental": false
 	},
 	// "include": ["test/fixtures/**/*.ts"]
-	"include": ["test/fixtures/testEnum.ts"]
+	"include": ["test/fixtures/testDate.ts"]
 }
