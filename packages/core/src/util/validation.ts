@@ -10,22 +10,34 @@ const primivitiveTypes = new Set([
 	"undefined",
 ]);
 
+function addIndexToName(e: ErrorElaboration, index?: number): ErrorElaboration {
+	if (index != undefined) {
+		return {
+			...e,
+			name: `${e.name}[${index}]`,
+		};
+	}
+	return e;
+}
+
 function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	let ret: string = " ".repeat(indent * 2);
 	const optional = e.optional ? "optional " : "";
+	let what = `${optional}${e.kind} ${e.name}`;
+	if (e.index != undefined) what += `[${e.index}]`;
+
+	// TODO: Show actual value if it's a primitive type
+
 	if (e.type === "primitive") {
-		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be a ${e.expected}, got ${e.actual}`;
+		ret += `Expected ${what} to be a ${e.expected}, got ${e.actual}`;
 	} else if (e.type === "null") {
-		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be null, got ${e.actual}`;
+		ret += `Expected ${what} to be null, got ${e.actual}`;
 	} else if (e.type === "undefined") {
-		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be undefined, got ${e.actual}`;
+		ret += `Expected ${what} to be undefined, got ${e.actual}`;
 	} else if (e.type === "union") {
-		ret += `Expected ${optional}${e.kind} ${e.name} to be one of ${
-			e.nested.map((n) => n.name).join(" | ")
-		}`;
+		ret += `Expected ${what} to be one of ${
+			// FIXME: This is wrong I think
+			e.nested.map((n) => n.name).join(" | ")}`;
 		const allPrimitive = e.nested.every((n) =>
 			n.type === "primitive"
 			|| n.type === "null"
@@ -35,19 +47,49 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 			ret += `, got ${e.actual}`;
 		}
 		for (const nested of e.nested) {
-			ret += "\n" + formatElaboration(nested, indent + 1);
+			ret += "\n"
+				+ formatElaboration(
+					addIndexToName(nested, e.index),
+					indent + 1,
+				);
 		}
 	} else if (e.type === "enum") {
 		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be a member of enum ${e.enum}, got ${e.actual}`;
+			`Expected ${what} to be a member of enum ${e.enum}, got ${e.actual}`;
 	} else if (e.type === "date") {
-		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be a Date, got ${e.actual}`;
+		ret += `Expected ${what} to be a Date, got ${e.actual}`;
+	} else if (e.type === "array") {
+		if (e.nested) {
+			ret += `${what} is not assignable to Array<${e.itemType}>`;
+			for (const nested of e.nested) {
+				ret += "\n"
+					+ formatElaboration(
+						addIndexToName(nested, e.index),
+						indent + 1,
+					);
+			}
+		} else {
+			ret +=
+				`Expected ${what} to be an Array<${e.itemType}>, got ${e.actual}`;
+		}
+	} else if (e.type === "tuple") {
+		if (e.nested) {
+			ret += `${what} is not assignable to ${e.tupleType}`;
+			for (const nested of e.nested) {
+				ret += "\n"
+					+ formatElaboration(
+						addIndexToName(nested, e.index),
+						indent + 1,
+					);
+			}
+		} else {
+			ret +=
+				`Expected ${what} to be of type ${e.tupleType}, got ${e.actual}`;
+		}
 	} else if (e.type === "uint8array") {
-		ret +=
-			`Expected ${optional}${e.kind} ${e.name} to be a Uint8Array, got ${e.actual}`;
+		ret += `Expected ${what} to be a Uint8Array, got ${e.actual}`;
 	} else if (e.type === "missing") {
-		ret += `ERROR: Missing validation for ${optional}${e.kind} ${e.name}`;
+		ret += `ERROR: Missing validation for ${what}`;
 	} else {
 		assertNever(e.type);
 	}
@@ -84,7 +126,7 @@ function formatActualValue(value: any): string {
 }
 
 export interface ValidatorContext {
-	kind: "parameter" | "object" | "property";
+	kind: "parameter" | "item" | "object" | "property";
 	name: string;
 }
 
@@ -94,6 +136,8 @@ type ErrorElaboration =
 	& ValidatorContext
 	& {
 		optional?: boolean;
+		// Only for array item elaborations
+		index?: number;
 	}
 	& ({
 		type: "primitive";
@@ -112,6 +156,18 @@ type ErrorElaboration =
 		type: "union";
 		actual: string;
 		nested: ErrorElaboration[];
+	} | {
+		type: "array";
+		itemType: string;
+		actual: string;
+		// Only defined if the value is an array
+		nested?: ErrorElaboration[];
+	} | {
+		type: "tuple";
+		tupleType: string;
+		actual: string;
+		// Only defined if the value is an array
+		nested?: ErrorElaboration[];
 	} | {
 		type: "enum";
 		enum: string;
@@ -204,6 +260,98 @@ export const date =
 				...ctx,
 				type: "date",
 				actual: formatActualType(value),
+			},
+		};
+	};
+
+export const array =
+	(ctx: ValidatorContext, itemType: string, item: ValidatorFunction) =>
+	(value: any): ValidatorResult => {
+		if (!Array.isArray(value)) {
+			return {
+				success: false,
+				elaboration: {
+					...ctx,
+					type: "array",
+					itemType,
+					actual: formatActualType(value),
+				},
+			};
+		}
+		const results = value.map(item);
+		results.forEach((r, index) => {
+			if (!r.success) r.elaboration.index = index;
+		});
+		const failed: (ValidatorResult & { success: false })[] = results.filter(
+			(r) => !r.success,
+		);
+		// Empty arrays pass the validation
+		if (failed.length === 0) return { success: true };
+
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "array",
+				itemType,
+				actual: formatActualType(value),
+				nested: failed.map((r) => ({
+					...r.elaboration,
+					kind: "item",
+				})),
+			},
+		};
+	};
+
+export const tuple =
+	(ctx: ValidatorContext, tupleType: string, ...items: ValidatorFunction[]) =>
+	(value: any): ValidatorResult => {
+		if (!Array.isArray(value)) {
+			return {
+				success: false,
+				elaboration: {
+					...ctx,
+					type: "tuple",
+					tupleType,
+					actual: formatActualType(value),
+				},
+			};
+		}
+
+		if (value.length > items.length) {
+			return {
+				success: false,
+				elaboration: {
+					...ctx,
+					type: "tuple",
+					tupleType,
+					actual: `tuple with ${value.length} items`,
+				},
+			};
+		}
+
+		const results = items.map((validator, index) => {
+			const ret = validator(value[index]);
+			if (!ret.success) ret.elaboration.index = index;
+			return ret;
+		});
+
+		const failed: (ValidatorResult & { success: false })[] = results.filter(
+			(r) => !r.success,
+		);
+		if (failed.length === 0) return { success: true };
+
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "tuple",
+				tupleType,
+				actual: `tuple with ${value.length} items`,
+				nested: failed.map((r) => ({
+					...r.elaboration,
+					kind: "item",
+				})),
 			},
 		};
 	};

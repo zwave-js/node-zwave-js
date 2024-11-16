@@ -235,8 +235,9 @@ interface ParameterInfo {
 function getValidationFunction(
 	param: ParameterInfo,
 	options: ValidateArgsOptions,
+	kind: "parameter" | "item" | "object" | "property" = "parameter",
 ): string {
-	const ctx = `{ kind: "parameter", name: "${param.name}" }`;
+	const ctx = `{ kind: "${kind}", name: "${param.name}" }`;
 	if (param.type.isNumber()) {
 		return `v.primitive(${ctx}, "number")`;
 	}
@@ -283,11 +284,15 @@ function getValidationFunction(
 		});
 
 		const recurse = actualUnionTypes.map((t) =>
-			getValidationFunction({
-				name: param.name,
-				type: t,
-				typeName: t.getText(),
-			}, options)
+			getValidationFunction(
+				{
+					name: param.name,
+					type: t,
+					typeName: t.getText(),
+				},
+				options,
+				kind,
+			)
 		);
 		if (typeIsBoolean) {
 			recurse.push(`v.primitive(${ctx}, "boolean")`);
@@ -326,8 +331,46 @@ function getValidationFunction(
 		debugger;
 	}
 
+	if (param.type.isArray()) {
+		const elementType = param.type.getArrayElementType();
+		if (elementType) {
+			const elementTypeName = elementType.getText();
+			const itemValidation = getValidationFunction(
+				{
+					name: param.name,
+					type: elementType,
+					typeName: elementTypeName,
+				},
+				options,
+				"item",
+			);
+
+			// TODO: elementTypeName may need to be escaped here
+			return `v.array(${ctx}, '${elementTypeName}', ${itemValidation})`;
+		}
+	}
+
+	if (param.type.isTuple()) {
+		const elementTypes = param.type.getTupleElements();
+		const itemValidations = elementTypes.map((t) =>
+			getValidationFunction(
+				{
+					name: param.name,
+					type: t,
+					typeName: t.getText(),
+				},
+				options,
+				"item",
+			)
+		);
+
+		return `v.tuple(${ctx}, '${param.typeName}', ${
+			itemValidations.join(", ")
+		})`;
+	}
+
 	debugger;
 
 	// FIXME: Define validation for all types
-	return `(() => ({ success: true }))`;
+	return `((_: any) => ({ success: true }))`;
 }
