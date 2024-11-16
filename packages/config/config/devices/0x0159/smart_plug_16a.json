@@ -15,31 +15,6 @@
 	},
 	"paramInformation": [
 		{
-			"#": "10",
-			"label": "Activate / Deactivate Functions ALL ON / ALL OFF",
-			"valueSize": 2,
-			"defaultValue": 255,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "All on disabled, all off disabled",
-					"value": 0
-				},
-				{
-					"label": "All on disabled, al off active",
-					"value": 1
-				},
-				{
-					"label": "All on active, all off disabled",
-					"value": 2
-				},
-				{
-					"label": "All on active, all off active",
-					"value": 255
-				}
-			]
-		},
-		{
 			"#": "11",
 			"label": "Auto-Off Timer",
 			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
@@ -67,23 +42,6 @@
 				{
 					"label": "Disabled",
 					"value": 0
-				}
-			]
-		},
-		{
-			"#": "15",
-			"label": "Timer Unit",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Seconds",
-					"value": 0
-				},
-				{
-					"label": "Milliseconds",
-					"value": 1
 				}
 			]
 		},
