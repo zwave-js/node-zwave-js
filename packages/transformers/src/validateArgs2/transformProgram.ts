@@ -306,19 +306,24 @@ function getValidationFunction(
 
 	if (param.type.isInterface()) {
 		const symbol = param.type.getSymbol();
+		const symbolName = symbol?.getName();
 		const valueDeclaration = symbol?.getValueDeclaration();
 		const variableDeclaration = valueDeclaration?.asKind(
 			tsm.SyntaxKind.VariableDeclaration,
 		);
+		const isAmbient = !!variableDeclaration
+			&& !!(variableDeclaration?.getCombinedModifierFlags()
+				& tsm.ModifierFlags.Ambient);
 
-		if (
-			symbol?.getName() === "Date"
-			&& variableDeclaration
-			&& !!(variableDeclaration.getCombinedModifierFlags()
-				& tsm.ModifierFlags.Ambient)
-		) {
+		if (isAmbient && symbolName === "Date") {
 			return `v.date(${ctx})`;
 		}
+
+		if (isAmbient && symbolName === "Uint8Array") {
+			return `v.uint8array(${ctx})`;
+		}
+
+		debugger;
 	}
 
 	debugger;

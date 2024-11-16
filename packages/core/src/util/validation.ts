@@ -1,3 +1,4 @@
+import { isUint8Array } from "@zwave-js/shared";
 import { assertNever } from "alcalzone-shared/helpers";
 import { ZWaveError, ZWaveErrorCodes } from "../index_browser.js";
 
@@ -42,6 +43,9 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	} else if (e.type === "date") {
 		ret +=
 			`Expected ${optional}${e.kind} ${e.name} to be a Date, got ${e.actual}`;
+	} else if (e.type === "uint8array") {
+		ret +=
+			`Expected ${optional}${e.kind} ${e.name} to be a Uint8Array, got ${e.actual}`;
 	} else if (e.type === "missing") {
 		ret += `ERROR: Missing validation for ${optional}${e.kind} ${e.name}`;
 	} else {
@@ -100,6 +104,9 @@ type ErrorElaboration =
 		actual: string;
 	} | {
 		type: "date";
+		actual: string;
+	} | {
+		type: "uint8array";
 		actual: string;
 	} | {
 		type: "union";
@@ -196,6 +203,19 @@ export const date =
 			elaboration: {
 				...ctx,
 				type: "date",
+				actual: formatActualType(value),
+			},
+		};
+	};
+
+export const uint8array =
+	(ctx: ValidatorContext) => (value: any): ValidatorResult => {
+		if (isUint8Array(value)) return { success: true };
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "uint8array",
 				actual: formatActualType(value),
 			},
 		};

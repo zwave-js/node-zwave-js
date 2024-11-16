@@ -22,15 +22,15 @@ test.foo(Buffer.alloc(0));
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("string"),
-	/arg1 is not a Uint8Array/,
+	/arg1 to be a Uint8Array/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo(undefined),
-	/arg1 is not a Uint8Array/,
+	/arg1 to be a Uint8Array/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo({ type: "Buffer", data: [170, 187, 204] }),
-	/arg1 is not a Uint8Array/,
+	/arg1 to be a Uint8Array/,
 );
