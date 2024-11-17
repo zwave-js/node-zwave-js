@@ -237,6 +237,12 @@ function getValidationFunction(
 	options: ValidateArgsOptions,
 	kind: "parameter" | "item" | "object" | "property" = "parameter",
 ): string {
+	if (param.type.isAny() || param.type.isUnknown()) {
+		// Technically there's no need to type the parameter, but this
+		// serves as documentation which type is being checked
+		return `((_: ${param.typeName}) => ({ success: true }))`;
+	}
+
 	const ctx = `{ kind: "${kind}", name: "${param.name}" }`;
 	if (param.type.isNumber()) {
 		return `v.primitive(${ctx}, "number")`;
