@@ -1,11 +1,11 @@
 import path from "node:path";
-import { Project, type Type, ts as tsm } from "ts-morph";
+import { Project, type SourceFile, type Type, ts as tsm } from "ts-morph";
 import { type PluginConfig, type ProgramTransformerExtras } from "ts-patch";
 import {
 	type CompilerHost,
 	type CompilerOptions,
 	type Program,
-	type SourceFile,
+	type SourceFile as TSSourceFile,
 } from "typescript";
 import type ts from "typescript";
 import { type ValidateArgsOptions } from "..";
@@ -22,7 +22,7 @@ function getPatchedHost(
 	maybeHost: CompilerHost | undefined,
 	tsInstance: typeof ts,
 	compilerOptions: CompilerOptions,
-): CompilerHost & { fileCache: Map<string, SourceFile> } {
+): CompilerHost & { fileCache: Map<string, TSSourceFile> } {
 	const fileCache = new Map();
 	const compilerHost = maybeHost
 		?? tsInstance.createCompilerHost(compilerOptions, true);
@@ -172,6 +172,9 @@ export default function transformProgram(
 
 		let newSourceText = `import * as v from "@zwave-js/core/validation";`;
 
+		// import specifier -> [exported name, renamed to?]
+		const additionalImports = new Map<string, Set<[string, string?]>>();
+
 		for (
 			const { methodName, className, parameters, options }
 				of withMethodAndClassName
@@ -180,6 +183,13 @@ export default function transformProgram(
 				`${p.name}: unknown`
 			).join(", ");
 			const paramSpread = parameters.map((p) => p.name).join(", ");
+
+			const context: TransformContext = {
+				sourceFile: mfile,
+				options,
+				additionalImports,
+			};
+
 			newSourceText += `
 
 export function validateArgs_${className}_${methodName}(options: any = {}) {
@@ -188,9 +198,10 @@ export function validateArgs_${className}_${methodName}(options: any = {}) {
 			return function ${methodName}(this: any, ${paramSpreadWithUnknown}) {
 				v.assert(${
 				parameters.map((p) => `
-					${getValidationFunction(p, options)}(${p.name}),`).join(
-					"\n",
-				)
+					${getValidationFunction(context, p)}(${p.name}),`)
+					.join(
+						"\n",
+					)
 			}
 				);
 				return value.call(this, ${paramSpread});
@@ -198,6 +209,19 @@ export function validateArgs_${className}_${methodName}(options: any = {}) {
 		}
 	};
 }`;
+		}
+
+		for (const [specifier, imports] of additionalImports) {
+			const namedImports = [...imports].map(([imp, rename]) => {
+				if (rename) {
+					return `${imp} as ${rename}`;
+				}
+				return imp;
+			});
+			newSourceText =
+				`import { ${namedImports.join(", ")} } from "${specifier}";`
+				+ "\n"
+				+ newSourceText;
 		}
 
 		compilerHost.fileCache.set(
@@ -232,9 +256,15 @@ interface ParameterInfo {
 	typeName: string | undefined;
 }
 
+interface TransformContext {
+	sourceFile: SourceFile;
+	options: ValidateArgsOptions;
+	additionalImports: Map<string, Set<[string, string?]>>;
+}
+
 function getValidationFunction(
+	context: TransformContext,
 	param: ParameterInfo,
-	options: ValidateArgsOptions,
 	kind: "parameter" | "item" | "object" | "property" = "parameter",
 ): string {
 	if (param.type.isAny() || param.type.isUnknown()) {
@@ -261,7 +291,7 @@ function getValidationFunction(
 	}
 	if (param.type.isEnum()) {
 		// Enums are unions of their members. If strictEnums is false, we just check if the argument is a number instead
-		if (options.strictEnums) {
+		if (context.options.strictEnums) {
 			const values = param.type.getUnionTypes().map((t) =>
 				t.getLiteralValue() as number
 			);
@@ -291,12 +321,12 @@ function getValidationFunction(
 
 		const recurse = actualUnionTypes.map((t) =>
 			getValidationFunction(
+				context,
 				{
 					name: param.name,
 					type: t,
 					typeName: t.getText(),
 				},
-				options,
 				kind,
 			)
 		);
@@ -315,63 +345,17 @@ function getValidationFunction(
 		return ret;
 	}
 
-	const symbol = param.type.getSymbol();
-	if (symbol && param.type.isInterface()) {
-		const symbolName = symbol.getName();
-		const valueDeclaration = symbol.getValueDeclaration();
-		const variableDeclaration = valueDeclaration?.asKind(
-			tsm.SyntaxKind.VariableDeclaration,
-		);
-		const isAmbient = !!variableDeclaration
-			&& !!(variableDeclaration?.getCombinedModifierFlags()
-				& tsm.ModifierFlags.Ambient);
-
-		if (isAmbient && symbolName === "Date") {
-			return `v.date(${ctx})`;
-		}
-
-		if (isAmbient && symbolName === "Uint8Array") {
-			return `v.uint8array(${ctx})`;
-		}
-
-		// Collect all property definitions from all interface declarations
-		const properties = symbol.getDeclarations()
-			.map((d) => d.asKind(tsm.SyntaxKind.InterfaceDeclaration))
-			.filter((d) => d != undefined)
-			.flatMap((d) => d.getProperties())
-			.map((p) => {
-				return {
-					name: p.getName(),
-					type: p.getType(),
-					typeName: p.getText(),
-					// optional: p.hasQuestionToken(),
-				};
-			});
-
-		const recurse = properties.map((p) =>
-			`"${p.name}": ${
-				getValidationFunction(
-					p,
-					options,
-					"property",
-				)
-			}`
-		);
-
-		return `v.object(${ctx}, '${symbolName}', { ${recurse.join(", ")} })`;
-	}
-
 	if (param.type.isArray()) {
 		const elementType = param.type.getArrayElementType();
 		if (elementType) {
 			const elementTypeName = elementType.getText();
 			const itemValidation = getValidationFunction(
+				context,
 				{
 					name: param.name,
 					type: elementType,
 					typeName: elementTypeName,
 				},
-				options,
 				"item",
 			);
 
@@ -384,12 +368,12 @@ function getValidationFunction(
 		const elementTypes = param.type.getTupleElements();
 		const itemValidations = elementTypes.map((t) =>
 			getValidationFunction(
+				context,
 				{
 					name: param.name,
 					type: t,
 					typeName: t.getText(),
 				},
-				options,
 				"item",
 			)
 		);
@@ -399,8 +383,122 @@ function getValidationFunction(
 		})`;
 	}
 
+	const symbol = param.type.getSymbol();
+	if (symbol && param.type.isClassOrInterface()) {
+		const symbolName = symbol.getName();
+		const valueDeclaration = symbol.getValueDeclaration();
+
+		const isClass = param.type.isClass();
+		const isInterface = param.type.isInterface();
+
+		if (isClass) {
+			const sourceFilePath = context.sourceFile.getFilePath();
+			const isLocalClass = valueDeclaration?.getSourceFile().getFilePath()
+				=== sourceFilePath;
+
+			if (isLocalClass) {
+				throw new Error(
+					`Error transforming ${sourceFilePath}:
+Local class ${param.typeName} must not be used as a parameter type for @validateArgs.
+Use interfaces instead or move the class to a separate file.`,
+				);
+			}
+
+			if (!valueDeclaration) {
+				throw new Error(
+					`Error transforming ${sourceFilePath}:
+Class ${param.typeName} which is used as a parameter type for @validateArgs has no value declaration.`,
+				);
+			}
+
+			const declarationSourceFile = valueDeclaration.getSourceFile();
+			const importDeclaration = context.sourceFile.getImportDeclaration(
+				(d) =>
+					d.getModuleSpecifierSourceFile() === declarationSourceFile,
+			);
+			const namedImport = importDeclaration?.getNamedImports().find(
+				(imp) => imp.getSymbol()?.getEscapedName() === param.typeName,
+			);
+
+			if (!importDeclaration || !namedImport) {
+				throw new Error(
+					`Error transforming ${sourceFilePath}:
+Unable to find import specifier for class ${param.typeName}.`,
+				);
+			}
+
+			const declaredName = namedImport.getName();
+			const importedName = namedImport.getSymbol()!.getEscapedName();
+
+			const importSpecifier = importDeclaration
+				?.getModuleSpecifierValue();
+			const importsForFile =
+				context.additionalImports.get(importSpecifier)
+					?? new Set();
+			// TODO: We may need to namespace the import here
+			// import { OriginalName as RenamedName } from "module";
+			// TODO: Consider ignoring the rename, but make sure
+			// not to introduce naming conflicts that way
+			importsForFile.add([declaredName, importedName]);
+			context.additionalImports.set(
+				importSpecifier,
+				importsForFile,
+			);
+
+			// The validation function needs to know the original name of the class
+			// so it can try and find the built-in typeguard function
+			return `v.class(${ctx}, "${declaredName}", ${param.typeName})`;
+		}
+
+		if (isInterface) {
+			const variableDeclaration = valueDeclaration?.asKind(
+				tsm.SyntaxKind.VariableDeclaration,
+			);
+			const isAmbient = !!variableDeclaration
+				&& !!(variableDeclaration?.getCombinedModifierFlags()
+					& tsm.ModifierFlags.Ambient);
+
+			if (isAmbient && symbolName === "Date") {
+				return `v.date(${ctx})`;
+			}
+
+			if (isAmbient && symbolName === "Uint8Array") {
+				return `v.uint8array(${ctx})`;
+			}
+
+			// Collect all property definitions from all interface declarations
+			const properties = symbol.getDeclarations()
+				.map((d) => d.asKind(tsm.SyntaxKind.InterfaceDeclaration))
+				.filter((d) => d != undefined)
+				.flatMap((d) => d.getProperties())
+				.map((p) => {
+					return {
+						name: p.getName(),
+						type: p.getType(),
+						typeName: p.getText(),
+						// optional: p.hasQuestionToken(),
+					};
+				});
+
+			const recurse = properties.map((p) =>
+				`"${p.name}": ${
+					getValidationFunction(
+						context,
+						p,
+						"property",
+					)
+				}`
+			);
+
+			return `v.object(${ctx}, '${symbolName}', { ${
+				recurse.join(", ")
+			} })`;
+		}
+	}
+
 	debugger;
 
-	// FIXME: Define validation for all types
-	return `((_: any) => ({ success: true }))`;
+	throw new Error(
+		`Encountered unsupported type ${param.typeName} while transforming ${context.sourceFile.getFilePath()}`,
+	);
 }

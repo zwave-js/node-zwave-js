@@ -113,6 +113,9 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 		ret += `Expected ${what} to be a Uint8Array, got ${e.actual}`;
 	} else if (e.type === "missing") {
 		ret += `ERROR: Missing validation for ${what}`;
+	} else if (e.type === "class") {
+		ret +=
+			`Expected ${what} to be an instance of class ${e.class}, got ${e.actual}`;
 	} else {
 		assertNever(e.type);
 	}
@@ -200,6 +203,10 @@ type ErrorElaboration =
 	} | {
 		type: "enum";
 		enum: string;
+		actual: string;
+	} | {
+		type: "class";
+		class: string;
 		actual: string;
 	} | {
 		type: "missing";
@@ -427,6 +434,35 @@ export const object = (
 		},
 	};
 };
+
+const klass = (
+	ctx: ValidatorContext,
+	name: string,
+	klass: new (...args: any[]) => any,
+) =>
+(value: any): ValidatorResult => {
+	// First do an instanceof check
+	if (value instanceof klass) return { success: true };
+	// Then try to call the class's static isXyz method
+	if (
+		typeof (klass as any)[`is${name}`] === "function"
+		&& (klass as any)[`is${name}`](value)
+	) {
+		return { success: true };
+	}
+
+	return {
+		success: false,
+		elaboration: {
+			...ctx,
+			type: "class",
+			class: name,
+			actual: formatActualType(value),
+		},
+	};
+};
+
+export { klass as class };
 
 export const uint8array =
 	(ctx: ValidatorContext) => (value: any): ValidatorResult => {
