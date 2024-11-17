@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { validateArgs } from "@zwave-js/transformers";
 import assert from "node:assert";
-import type { Baz, FooBar as Imported } from "./_includes";
+import type { Baz, FooBar as Imported } from "./testClass._imports.js";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ImportedFooBar = require("./_includes").FooBar;

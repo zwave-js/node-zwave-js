@@ -309,10 +309,10 @@ function getValidationFunction(
 		return ret;
 	}
 
-	if (param.type.isInterface()) {
-		const symbol = param.type.getSymbol();
-		const symbolName = symbol?.getName();
-		const valueDeclaration = symbol?.getValueDeclaration();
+	const symbol = param.type.getSymbol();
+	if (symbol && param.type.isInterface()) {
+		const symbolName = symbol.getName();
+		const valueDeclaration = symbol.getValueDeclaration();
 		const variableDeclaration = valueDeclaration?.asKind(
 			tsm.SyntaxKind.VariableDeclaration,
 		);
@@ -328,7 +328,31 @@ function getValidationFunction(
 			return `v.uint8array(${ctx})`;
 		}
 
-		debugger;
+		// Collect all property definitions from all interface declarations
+		const properties = symbol.getDeclarations()
+			.map((d) => d.asKind(tsm.SyntaxKind.InterfaceDeclaration))
+			.filter((d) => d != undefined)
+			.flatMap((d) => d.getProperties())
+			.map((p) => {
+				return {
+					name: p.getName(),
+					type: p.getType(),
+					typeName: p.getText(),
+					// optional: p.hasQuestionToken(),
+				};
+			});
+
+		const recurse = properties.map((p) =>
+			`"${p.name}": ${
+				getValidationFunction(
+					p,
+					options,
+					"property",
+				)
+			}`
+		);
+
+		return `v.object(${ctx}, '${symbolName}', { ${recurse.join(", ")} })`;
 	}
 
 	if (param.type.isArray()) {

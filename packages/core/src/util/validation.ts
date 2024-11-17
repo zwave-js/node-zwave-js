@@ -10,7 +10,10 @@ const primivitiveTypes = new Set([
 	"undefined",
 ]);
 
-function addIndexToName(e: ErrorElaboration, index?: number): ErrorElaboration {
+function addIndexToName(
+	e: ErrorElaboration,
+	index?: number,
+): ErrorElaboration {
 	if (index != undefined) {
 		return {
 			...e,
@@ -85,6 +88,26 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 		} else {
 			ret +=
 				`Expected ${what} to be of type ${e.tupleType}, got ${e.actual}`;
+		}
+	} else if (e.type === "object") {
+		if (e.nested) {
+			ret += `${what} is not assignable to ${e.objectType}`;
+			for (const nested of e.nested) {
+				if ("actual" in nested && nested.actual === "undefined") {
+					ret += `\n${
+						" ".repeat((indent + 1) * 2)
+					}required property ${nested.name} is missing`;
+				} else {
+					ret += "\n"
+						+ formatElaboration(
+							addIndexToName(nested, e.index),
+							indent + 1,
+						);
+				}
+			}
+		} else {
+			ret +=
+				`Expected ${what} to be of type ${e.objectType}, got ${e.actual}`;
 		}
 	} else if (e.type === "uint8array") {
 		ret += `Expected ${what} to be a Uint8Array, got ${e.actual}`;
@@ -167,6 +190,12 @@ type ErrorElaboration =
 		tupleType: string;
 		actual: string;
 		// Only defined if the value is an array
+		nested?: ErrorElaboration[];
+	} | {
+		type: "object";
+		objectType: string;
+		actual: string;
+		// Only defined if the value is an object
 		nested?: ErrorElaboration[];
 	} | {
 		type: "enum";
@@ -355,6 +384,49 @@ export const tuple =
 			},
 		};
 	};
+
+export const object = (
+	ctx: ValidatorContext,
+	objectType: string,
+	properties: Record<string, ValidatorFunction>,
+) =>
+(value: any): ValidatorResult => {
+	if (
+		typeof value !== "object" || Array.isArray(value) || value === null
+	) {
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "object",
+				objectType,
+				actual: formatActualType(value),
+			},
+		};
+	}
+
+	const result: ErrorElaboration[] = [];
+	for (const [prop, validator] of Object.entries(properties)) {
+		const ret = validator(value[prop]);
+		if (!ret.success) {
+			ret.elaboration.kind = "property";
+			result.push(ret.elaboration);
+		}
+	}
+
+	if (result.length === 0) return { success: true };
+
+	return {
+		success: false,
+		elaboration: {
+			...ctx,
+			type: "object",
+			objectType,
+			actual: "", // not relevant
+			nested: result,
+		},
+	};
+};
 
 export const uint8array =
 	(ctx: ValidatorContext) => (value: any): ValidatorResult => {
