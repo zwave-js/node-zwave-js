@@ -1,0 +1,26 @@
+{
+	"manufacturer": "Springs Window Fashions",
+	"manufacturerId": "0x026e",
+	"label": "CRZB",
+	"description": "Cellular Shade Radio Z-Wave",
+	"devices": [
+		{
+			"productType": "0x4254",
+			"productId": "0x5a42"
+		},
+		{
+			"productType": "0x5252",
+			"productId": "0x5a42"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put Primary Controller into Inclusion Mode\n\n2. Press and Hold Shade Programming Button for 3 seconds (release when LED flashes).\n\n\n\nTo include a shade and shade remote to the Z-Wave network, and pair the remote to the shade you must follow this sequence:\n\n1. Do a shade Z-Wave reset and then include into the Z-Wave network.\n\n2. Do a remote reset and then include the remote into the Z-Wave network.\n\n3. Pair the remote to the shade.",
+		"exclusion": "1. Put Primary Controller into Exclusion Mode\n\n2. Press and Hold Shade Programming Button for 3 seconds (release when LED flashes).",
+		"reset": "Z-Wave Reset:Exclude from the controller before doing this. Press and hold the button on the shade for approximately 10 seconds (release when the shade jogs, holding longer will perform a full reset).\n\nFull Reset: Please use this procedure only when the network primary controller is missing or otherwise inoperable. Press and hold the button on the shade for approximately 15 seconds (the LED will stop flashing when complete) - you will need to set top / bottom / home positions.",
+		"manual": "Part 1: https://fcc.report/FCC-ID/2AAVX-CRZB/7119957\n\nPart 2: https://fcc.report/FCC-ID/2AAVX-CRZB/7119970"
+	}
+}
