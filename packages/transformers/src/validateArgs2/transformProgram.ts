@@ -260,6 +260,7 @@ interface TransformContext {
 	sourceFile: SourceFile;
 	options: ValidateArgsOptions;
 	additionalImports: Map<string, Set<[string, string?]>>;
+	typeStack?: WeakSet<Type<tsm.Type>>;
 }
 
 function getValidationFunction(
@@ -267,6 +268,19 @@ function getValidationFunction(
 	param: ParameterInfo,
 	kind: "parameter" | "item" | "object" | "property" = "parameter",
 ): string {
+	// Detect and avoid recursive references for now.
+	// TODO: Solve this by generating a new validation function that calls itself
+	const typeStack = context.typeStack ?? new WeakSet();
+	const possiblyRecursive = param.type.isUnionOrIntersection()
+		|| param.type.isClassOrInterface();
+	if (possiblyRecursive && typeStack.has(param.type)) {
+		throw new Error(
+			`Error while transforming ${context.sourceFile.getFilePath()}
+Type ${param.typeName} recursively references itself`,
+		);
+	}
+	typeStack.add(param.type);
+
 	if (param.type.isAny() || param.type.isUnknown()) {
 		// Technically there's no need to type the parameter, but this
 		// serves as documentation which type is being checked
@@ -274,6 +288,18 @@ function getValidationFunction(
 	}
 
 	const ctx = `{ kind: "${kind}", name: "${param.name}" }`;
+	if (
+		param.type.isNumberLiteral()
+		|| param.type.isStringLiteral()
+		|| param.type.isBooleanLiteral()
+	) {
+		const literal = param.type.getLiteralValue() as string | number;
+		if (typeof literal === "string") {
+			return `v.literal(${ctx}, ${JSON.stringify(literal)})`;
+		} else if (typeof literal === "number") {
+			return `v.literal(${ctx}, ${literal})`;
+		}
+	}
 	if (param.type.isNumber()) {
 		return `v.primitive(${ctx}, "number")`;
 	}
@@ -343,6 +369,24 @@ function getValidationFunction(
 		}
 
 		return ret;
+	}
+
+	if (param.type.isIntersection()) {
+		const types = param.type.getIntersectionTypes();
+
+		const recurse = types.map((t) =>
+			getValidationFunction(
+				context,
+				{
+					name: param.name,
+					type: t,
+					typeName: t.getText(),
+				},
+				kind,
+			)
+		);
+
+		return `v.allOf(${ctx}, ${recurse.join(", ")})`;
 	}
 
 	if (param.type.isArray()) {

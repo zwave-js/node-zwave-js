@@ -16,6 +16,6 @@
 		],
 		"incremental": false
 	},
-	// "include": ["test/fixtures/**/*.ts"]
-	"include": ["test/fixtures/testClass.ts"]
+	"include": ["test/fixtures/**/*.ts"]
+	// "include": ["test/fixtures/testLiteral.ts"]
 }

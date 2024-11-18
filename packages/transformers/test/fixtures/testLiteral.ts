@@ -2,20 +2,15 @@
 import { validateArgs } from "@zwave-js/transformers";
 import assert from "node:assert";
 
-interface Foo {
-	p1: number;
-	p2?: string | number;
-}
-
 class Test {
 	@validateArgs()
-	foo(arg1?: Foo | string): void {
+	string(arg1: "literal"): void {
 		arg1;
 		return void 0;
 	}
 
 	@validateArgs()
-	bar(arg1?: number | null): void {
+	number(arg1: 1): void {
 		arg1;
 		return void 0;
 	}
@@ -23,20 +18,22 @@ class Test {
 
 const test = new Test();
 // These should not throw
-test.foo({ p1: 1 });
-test.foo(undefined);
-test.bar(1);
-test.bar(undefined);
-test.bar(null);
+test.string("literal");
+test.number(1);
 
 // These should throw
 assert.throws(
 	// @ts-expect-error
-	() => test.foo({ p2: "a string" }),
-	/arg1 has the wrong type/,
+	() => test.string("another string"),
+	/arg1 to be "literal", got "another string"/,
 );
 assert.throws(
 	// @ts-expect-error
-	() => test.foo(null),
-	/arg1 has the wrong type/,
+	() => test.number(2),
+	/arg1 to be 1, got 2/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.number({}),
+	/arg1 to be 1, got object/,
 );

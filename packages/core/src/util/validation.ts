@@ -23,6 +23,32 @@ function addIndexToName(
 	return e;
 }
 
+function getTypeName(e: ErrorElaboration): string {
+	switch (e.type) {
+		case "primitive":
+			return e.expected;
+		case "union":
+			return e.nested.map(getTypeName).join(" | ");
+		case "enum":
+			return e.enum;
+		case "date":
+			return "Date";
+		case "array":
+			return `Array<${e.itemType}>`;
+		case "tuple":
+			return e.tupleType;
+		case "object":
+			return e.objectType;
+		case "uint8array":
+			return "Uint8Array";
+		case "class":
+			return e.class;
+	}
+	throw new Error(
+		`Cannot determine type name for error ${JSON.stringify(e)}`,
+	);
+}
+
 function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	let ret: string = " ".repeat(indent * 2);
 	const optional = e.optional ? "optional " : "";
@@ -32,23 +58,30 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	// TODO: Show actual value if it's a primitive type
 
 	if (e.type === "primitive") {
-		ret += `Expected ${what} to be a ${e.expected}, got ${e.actual}`;
-	} else if (e.type === "null") {
-		ret += `Expected ${what} to be null, got ${e.actual}`;
-	} else if (e.type === "undefined") {
-		ret += `Expected ${what} to be undefined, got ${e.actual}`;
+		if (e.expected === "null" || e.expected === "undefined") {
+			ret += `Expected ${what} to be ${e.expected}, got ${e.actual}`;
+		} else {
+			ret += `Expected ${what} to be a ${e.expected}, got ${e.actual}`;
+		}
+	} else if (e.type === "literal") {
+		ret += `Expected ${what} to be ${e.expected}, got ${e.actual}`;
 	} else if (e.type === "union") {
-		ret += `Expected ${what} to be one of ${
-			// FIXME: This is wrong I think
-			e.nested.map((n) => n.name).join(" | ")}`;
-		const allPrimitive = e.nested.every((n) =>
-			n.type === "primitive"
-			|| n.type === "null"
-			|| n.type === "undefined"
-		);
+		ret += `Expected ${what} to be one of ${getTypeName(e)}`;
+		const allPrimitive = e.nested.every((n) => n.type === "primitive");
 		if (allPrimitive || primivitiveTypes.has(e.actual)) {
 			ret += `, got ${e.actual}`;
+		} else {
+			for (const nested of e.nested) {
+				if (nested.type === "primitive") continue;
+				ret += "\n"
+					+ formatElaboration(
+						addIndexToName(nested, e.index),
+						indent + 1,
+					);
+			}
 		}
+	} else if (e.type === "intersection") {
+		ret += `${what} is violating multiple constraints`;
 		for (const nested of e.nested) {
 			ret += "\n"
 				+ formatElaboration(
@@ -117,7 +150,7 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 		ret +=
 			`Expected ${what} to be an instance of class ${e.class}, got ${e.actual}`;
 	} else {
-		assertNever(e.type);
+		assertNever(e);
 	}
 
 	return ret;
@@ -148,6 +181,7 @@ function formatActualValue(value: any): string {
 
 	if (Array.isArray(value)) return "(array)";
 	if (value === null) return "null";
+	if (typeof value === "object") return "object";
 	return String(value);
 }
 
@@ -167,10 +201,11 @@ type ErrorElaboration =
 	}
 	& ({
 		type: "primitive";
-		expected: "string" | "number" | "boolean";
+		expected: "string" | "number" | "boolean" | "null" | "undefined";
 		actual: string;
 	} | {
-		type: "null" | "undefined";
+		type: "literal";
+		expected: string;
 		actual: string;
 	} | {
 		type: "date";
@@ -180,6 +215,10 @@ type ErrorElaboration =
 		actual: string;
 	} | {
 		type: "union";
+		actual: string;
+		nested: ErrorElaboration[];
+	} | {
+		type: "intersection";
 		actual: string;
 		nested: ErrorElaboration[];
 	} | {
@@ -237,6 +276,23 @@ export const primitive = (
 	};
 };
 
+export const literal = (
+	ctx: ValidatorContext,
+	expected: string | number | boolean,
+) =>
+(value: any): ValidatorResult => {
+	if (value === expected) return { success: true };
+	return {
+		success: false,
+		elaboration: {
+			...ctx,
+			type: "literal",
+			expected: formatActualValue(expected),
+			actual: formatActualValue(value),
+		},
+	};
+};
+
 const enm = (
 	ctx: ValidatorContext,
 	name: string,
@@ -267,7 +323,8 @@ export const undef =
 			success: false,
 			elaboration: {
 				...ctx,
-				type: "undefined",
+				type: "primitive",
+				expected: "undefined",
 				actual: formatActualType(value),
 			},
 		};
@@ -280,7 +337,8 @@ export const nul = (ctx: ValidatorContext) => (value: any): ValidatorResult => {
 		success: false,
 		elaboration: {
 			...ctx,
-			type: "null",
+			type: "primitive",
+			expected: "null",
 			actual: formatActualType(value),
 		},
 	};
@@ -512,26 +570,39 @@ export const oneOf =
 			failed.push(result);
 		}
 
-		// FIXME: The formatting of this is incorrect. Ideally we'd have text like this
-		// Expected parameter foo to be one of number | string | boolean, got object
-		// or
-		// Expected parameter foo to be one of Foo | Bar
-		//   parameter foo is not assignable to Foo:
-		//     ... elaboration of Foo error path (foo is object)
-		//   parameter foo is not assignable to Bar:
-		//     ... elaboration of Bar error path (foo is object)
-		// or
-		// Expected parameter foo to be one of number | Foo, got boolean (foo is primitive)
-		// or
-		// Expected parameter foo to be one of Foo | number
-		//   parameter foo is not assignable to Foo:
-		//     ... elaboration of Foo error path (foo is object)
-
 		return {
 			success: false,
 			elaboration: {
 				...ctx,
 				type: "union",
+				actual: formatActualType(value),
+				nested: failed.map((r) => r.elaboration),
+			},
+		};
+	};
+
+export const allOf =
+	(ctx: ValidatorContext, ...nested: ValidatorFunction[]) =>
+	(value: any): ValidatorResult => {
+		if (!nested.length) {
+			return {
+				success: false,
+				elaboration: {
+					...ctx,
+					type: "missing",
+				},
+			};
+		}
+
+		const results = nested.map((f) => f(value));
+		const failed = results.filter((r) => !r.success);
+		if (failed.length === 0) return { success: true };
+
+		return {
+			success: false,
+			elaboration: {
+				...ctx,
+				type: "intersection",
 				actual: formatActualType(value),
 				nested: failed.map((r) => r.elaboration),
 			},

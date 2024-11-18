@@ -1,0 +1,26 @@
+// This is not supported for now
+
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import { validateArgs } from "@zwave-js/transformers";
+
+interface Rec {
+	inner: number | Rec;
+}
+
+class Test {
+	@validateArgs()
+	recursive(arg1: Rec): void {
+		arg1;
+		return void 0;
+	}
+}
+
+const test = new Test();
+// These should not throw
+test.recursive({
+	inner: {
+		inner: {
+			inner: 1,
+		},
+	},
+});
