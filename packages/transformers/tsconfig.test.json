@@ -9,10 +9,10 @@
 		"sourceMap": false,
 		"plugins": [
 			{
-				"transform": "./build/validateArgs2/transformProgram.js",
+				"transform": "./build/validateArgs/transformProgram.js",
 				"transformProgram": true
 			},
-			{ "transform": "./build/validateArgs2/transformDecorators.js" }
+			{ "transform": "./build/validateArgs/transformDecorators.js" }
 		],
 		"incremental": false
 	},

@@ -8,7 +8,8 @@
   "types": "build/index.d.ts",
   "exports": {
     ".": "./build/index.js",
-    "./v2/program": "./build/validateArgs2/transformProgram.js"
+    "./validateArgs/program": "./build/validateArgs/transformProgram.js",
+    "./validateArgs/decorators": "./build/validateArgs/transformDecorators.js"
   },
   "files": [
     "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
