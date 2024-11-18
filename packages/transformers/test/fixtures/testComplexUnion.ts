@@ -44,7 +44,7 @@ test.complex({ bar: "a string" });
 assert.throws(
 	// @ts-expect-error
 	() => test.primitive(true),
-	/arg1 to be one of (number \| string|string \| number), got boolean/,
+	/arg1 to be one of (number \| string|string \| number), got true/,
 );
 assert.throws(
 	// @ts-expect-error
@@ -55,7 +55,7 @@ assert.throws(
 assert.throws(
 	// @ts-expect-error
 	() => test.mixed("string"),
-	/arg1 to be one of (number \| Foo|Foo \| number), got string/,
+	/arg1 to be one of (number \| Foo|Foo \| number), got string "string"/,
 );
 
 assert.throws(
@@ -82,7 +82,7 @@ assert.throws(
 assert.throws(
 	// @ts-expect-error
 	() => test.complex("string"),
-	/arg1 to be one of (Foo \| Bar|Bar \| Foo), got string/,
+	/arg1 to be one of (Foo \| Bar|Bar \| Foo), got string "string"/,
 );
 
 assert.throws(

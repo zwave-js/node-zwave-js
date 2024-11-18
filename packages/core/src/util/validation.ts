@@ -68,7 +68,7 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	} else if (e.type === "union") {
 		ret += `Expected ${what} to be one of ${getTypeName(e)}`;
 		const allPrimitive = e.nested.every((n) => n.type === "primitive");
-		if (allPrimitive || primivitiveTypes.has(e.actual)) {
+		if (allPrimitive || primivitiveTypes.has(e.actualType)) {
 			ret += `, got ${e.actual}`;
 		} else {
 			for (const nested of e.nested) {
@@ -158,29 +158,43 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 
 function formatActualType(value: any): string {
 	if (value === null) return "null";
+	if (value === undefined) return "undefined";
 	const type = typeof value;
-	if (primivitiveTypes.has(type)) return type;
-	if (typeof value === "function") return "function";
-	if (Array.isArray(value)) return "array";
-	// TODO: Elaborate on object and arrays a bit, detect classes/functions
+	switch (type) {
+		case "string":
+		case "number":
+		case "boolean":
+		case "function":
+			return type;
+	}
+
+	if (Array.isArray(value)) return `array`;
 	return "object";
 }
 
 function formatActualValue(value: any): string {
+	if (value === null) return "null";
+	if (value === undefined) return "undefined";
+
 	switch (typeof value) {
 		case "string":
-			return `"${value}"`;
+			return `string "${value}"`;
 		case "number":
 		case "boolean":
 			return value.toString();
 
-		case "undefined":
 		case "function":
-			return typeof value;
+			return `function ${value.name || "<anonymous>"}`;
 	}
 
-	if (Array.isArray(value)) return "(array)";
-	if (value === null) return "null";
+	if (Array.isArray(value)) {
+		return `array [ ...${value.length} item${
+			value.length !== 1 ? "s" : ""
+		} ]`;
+	}
+
+	// 	// TODO: Elaborate on objects a bit, detect classes/functions
+
 	if (typeof value === "object") return "object";
 	return String(value);
 }
@@ -216,6 +230,7 @@ type ErrorElaboration =
 	} | {
 		type: "union";
 		actual: string;
+		actualType: string;
 		nested: ErrorElaboration[];
 	} | {
 		type: "intersection";
@@ -271,7 +286,7 @@ export const primitive = (
 			...ctx,
 			type: "primitive",
 			expected,
-			actual: formatActualType(value),
+			actual: formatActualValue(value),
 		},
 	};
 };
@@ -309,7 +324,7 @@ const enm = (
 			...ctx,
 			type: "enum",
 			enum: name,
-			actual: values ? formatActualValue(value) : formatActualType(value),
+			actual: formatActualValue(value),
 		},
 	};
 };
@@ -325,7 +340,7 @@ export const undef =
 				...ctx,
 				type: "primitive",
 				expected: "undefined",
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 			},
 		};
 	};
@@ -339,7 +354,7 @@ export const nul = (ctx: ValidatorContext) => (value: any): ValidatorResult => {
 			...ctx,
 			type: "primitive",
 			expected: "null",
-			actual: formatActualType(value),
+			actual: formatActualValue(value),
 		},
 	};
 };
@@ -353,7 +368,7 @@ export const date =
 			elaboration: {
 				...ctx,
 				type: "date",
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 			},
 		};
 	};
@@ -368,7 +383,7 @@ export const array =
 					...ctx,
 					type: "array",
 					itemType,
-					actual: formatActualType(value),
+					actual: formatActualValue(value),
 				},
 			};
 		}
@@ -388,7 +403,7 @@ export const array =
 				...ctx,
 				type: "array",
 				itemType,
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 				nested: failed.map((r) => ({
 					...r.elaboration,
 					kind: "item",
@@ -407,7 +422,7 @@ export const tuple =
 					...ctx,
 					type: "tuple",
 					tupleType,
-					actual: formatActualType(value),
+					actual: formatActualValue(value),
 				},
 			};
 		}
@@ -465,7 +480,7 @@ export const object = (
 				...ctx,
 				type: "object",
 				objectType,
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 			},
 		};
 	}
@@ -515,7 +530,7 @@ const klass = (
 			...ctx,
 			type: "class",
 			class: name,
-			actual: formatActualType(value),
+			actual: formatActualValue(value),
 		},
 	};
 };
@@ -530,7 +545,7 @@ export const uint8array =
 			elaboration: {
 				...ctx,
 				type: "uint8array",
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 			},
 		};
 	};
@@ -575,7 +590,8 @@ export const oneOf =
 			elaboration: {
 				...ctx,
 				type: "union",
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
+				actualType: formatActualType(value),
 				nested: failed.map((r) => r.elaboration),
 			},
 		};
@@ -603,7 +619,7 @@ export const allOf =
 			elaboration: {
 				...ctx,
 				type: "intersection",
-				actual: formatActualType(value),
+				actual: formatActualValue(value),
 				nested: failed.map((r) => r.elaboration),
 			},
 		};

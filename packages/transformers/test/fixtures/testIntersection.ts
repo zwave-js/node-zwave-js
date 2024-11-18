@@ -36,12 +36,12 @@ assert.throws(
 assert.throws(
 	// @ts-expect-error
 	() => test.both(true),
-	/arg1 to be of type Foo, got boolean/,
+	/arg1 to be of type Foo, got true/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.both(true),
-	/arg1 to be of type Bar, got boolean/,
+	/arg1 to be of type Bar, got true/,
 );
 
 assert.throws(

@@ -25,7 +25,7 @@ test.number(1);
 assert.throws(
 	// @ts-expect-error
 	() => test.string("another string"),
-	/arg1 to be "literal", got "another string"/,
+	/arg1 to be string "literal", got string "another string"/,
 );
 assert.throws(
 	// @ts-expect-error

@@ -37,17 +37,17 @@ test.bar(My.Eye);
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("string"),
-	/arg1 to be a member of enum My, got string/,
+	/arg1 to be a member of enum My, got string "string"/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("Hand"),
-	/arg1 to be a member of enum My, got string/,
+	/arg1 to be a member of enum My, got string "Hand"/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo(true),
-	/arg1 to be a member of enum My, got boolean/,
+	/arg1 to be a member of enum My, got true/,
 );
 
 assert.throws(

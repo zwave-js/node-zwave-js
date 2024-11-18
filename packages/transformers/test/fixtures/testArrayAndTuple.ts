@@ -48,7 +48,7 @@ test.nested([[[], []]]);
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("string"),
-	/arg1 to be an Array<number>, got string/,
+	/arg1 to be an Array<number>, got string "string"/,
 );
 
 assert.throws(
@@ -59,7 +59,7 @@ assert.throws(
 assert.throws(
 	// @ts-expect-error
 	() => test.foo(["1", 2]),
-	/arg1\[0\] to be a number, got string/,
+	/arg1\[0\] to be a number, got string "1"/,
 );
 
 assert.throws(
@@ -70,12 +70,12 @@ assert.throws(
 assert.throws(
 	// @ts-expect-error
 	() => test.bar(["1", 2]),
-	/arg1\[0\] to be a number, got string/,
+	/arg1\[0\] to be a number, got string "1"/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.bar(["1", 2]),
-	/arg1\[1\] to be a string, got number/,
+	/arg1\[1\] to be a string, got 2/,
 );
 
 assert.throws(
