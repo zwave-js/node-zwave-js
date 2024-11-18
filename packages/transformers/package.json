@@ -38,7 +38,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "bootstrap": "yarn build",
-    "pretest": "del-cli \"test/fixtures/*.{js,map}\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
+    "pretest": "del-cli \"test/fixtures/*.{mjs,map}\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.mjs\" test/fixtures && del-cli test/build",
     "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "vitest",

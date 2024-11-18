@@ -28,7 +28,11 @@ function getTypeName(e: ErrorElaboration): string {
 		case "primitive":
 			return e.expected;
 		case "union":
+			if (e.typeName) return e.typeName;
 			return e.nested.map(getTypeName).join(" | ");
+		case "intersection":
+			if (e.typeName) return e.typeName;
+			return e.nested.map(getTypeName).join(" & ");
 		case "enum":
 			return e.enum;
 		case "date":
@@ -66,11 +70,18 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 	} else if (e.type === "literal") {
 		ret += `Expected ${what} to be ${e.expected}, got ${e.actual}`;
 	} else if (e.type === "union") {
-		ret += `Expected ${what} to be one of ${getTypeName(e)}`;
 		const allPrimitive = e.nested.every((n) => n.type === "primitive");
 		if (allPrimitive || primivitiveTypes.has(e.actualType)) {
-			ret += `, got ${e.actual}`;
+			ret += `Expected ${what} to be one of ${
+				e.nested.map(getTypeName).join(" | ")
+			}, got ${e.actual}`;
 		} else {
+			if (e.typeName) {
+				ret +=
+					`${what} is not assignable to ${e.typeName}. Expected one of the following constraints to pass:`;
+			} else {
+				ret += `Expected ${what} to be one of ${getTypeName(e)}`;
+			}
 			for (const nested of e.nested) {
 				if (nested.type === "primitive") continue;
 				ret += "\n"
@@ -81,12 +92,20 @@ function formatElaboration(e: ErrorElaboration, indent: number = 0): string {
 			}
 		}
 	} else if (e.type === "intersection") {
-		ret += `${what} is violating multiple constraints`;
-		for (const nested of e.nested) {
-			ret += "\n"
+		if (e.nested.length > 1) {
+			ret += `${what} is violating multiple constraints`;
+			for (const nested of e.nested) {
+				ret += "\n"
+					+ formatElaboration(
+						addIndexToName(nested, e.index),
+						indent + 1,
+					);
+			}
+		} else {
+			ret = ret.slice(0, -2)
 				+ formatElaboration(
-					addIndexToName(nested, e.index),
-					indent + 1,
+					addIndexToName(e.nested[0], e.index),
+					indent,
 				);
 		}
 	} else if (e.type === "enum") {
@@ -229,11 +248,13 @@ type ErrorElaboration =
 		actual: string;
 	} | {
 		type: "union";
+		typeName: string | undefined;
 		actual: string;
 		actualType: string;
 		nested: ErrorElaboration[];
 	} | {
 		type: "intersection";
+		typeName: string | undefined;
 		actual: string;
 		nested: ErrorElaboration[];
 	} | {
@@ -565,65 +586,73 @@ export const optional =
 		};
 	};
 
-export const oneOf =
-	(ctx: ValidatorContext, ...nested: ValidatorFunction[]) =>
-	(value: any): ValidatorResult => {
-		if (!nested.length) {
-			return {
-				success: false,
-				elaboration: {
-					...ctx,
-					type: "missing",
-				},
-			};
-		}
-
-		const failed: (ValidatorResult & { success: false })[] = [];
-		for (const f of nested) {
-			const result = f(value);
-			if (result.success) return result;
-			failed.push(result);
-		}
-
+export const oneOf = (
+	ctx: ValidatorContext,
+	typeName: string | undefined,
+	...nested: ValidatorFunction[]
+) =>
+(value: any): ValidatorResult => {
+	if (!nested.length) {
 		return {
 			success: false,
 			elaboration: {
 				...ctx,
-				type: "union",
-				actual: formatActualValue(value),
-				actualType: formatActualType(value),
-				nested: failed.map((r) => r.elaboration),
+				type: "missing",
 			},
 		};
+	}
+
+	const failed: (ValidatorResult & { success: false })[] = [];
+	for (const f of nested) {
+		const result = f(value);
+		if (result.success) return result;
+		failed.push(result);
+	}
+
+	return {
+		success: false,
+		elaboration: {
+			...ctx,
+			type: "union",
+			typeName,
+			actual: formatActualValue(value),
+			actualType: formatActualType(value),
+			nested: failed.map((r) => r.elaboration),
+		},
 	};
+};
 
-export const allOf =
-	(ctx: ValidatorContext, ...nested: ValidatorFunction[]) =>
-	(value: any): ValidatorResult => {
-		if (!nested.length) {
-			return {
-				success: false,
-				elaboration: {
-					...ctx,
-					type: "missing",
-				},
-			};
-		}
-
-		const results = nested.map((f) => f(value));
-		const failed = results.filter((r) => !r.success);
-		if (failed.length === 0) return { success: true };
-
+export const allOf = (
+	ctx: ValidatorContext,
+	typeName: string | undefined,
+	...nested: ValidatorFunction[]
+) =>
+(value: any): ValidatorResult => {
+	if (!nested.length) {
 		return {
 			success: false,
 			elaboration: {
 				...ctx,
-				type: "intersection",
-				actual: formatActualValue(value),
-				nested: failed.map((r) => r.elaboration),
+				type: "missing",
 			},
 		};
+	}
+
+	const results = nested.map((f) => f(value));
+	const failed = results.filter((r) => !r.success);
+	if (failed.length === 0) return { success: true };
+
+	return {
+		success: false,
+		elaboration: {
+			...ctx,
+			type: "intersection",
+			typeName,
+			actual: formatActualValue(value),
+			nested: failed.map((r) => r.elaboration),
+		},
 	};
+};
 
 export function assert(...results: ValidatorResult[]): void {
 	const failed = results.filter((r) => !r.success);

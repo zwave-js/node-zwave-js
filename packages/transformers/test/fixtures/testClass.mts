@@ -6,10 +6,9 @@ import {
 	type Baz as ImportedBaz,
 	Foo,
 	type Foo as BarFoo,
-} from "./testClass._imports.js";
+} from "./testClass._imports.mjs";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const ImportedFooBar = require("./testClass._imports").Foo;
+const { Foo: ImportedFooBar } = await import("./testClass._imports.mjs");
 
 class LocalFoo {
 	public foo: "foo" = "foo" as const;

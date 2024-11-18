@@ -9,10 +9,13 @@ const files: string[] = [];
 beforeAll(async (t) => {
 	await execa("yarn", ["run", "pretest"], { cwd: __dirname });
 	const jsFiles = (await fs.readdir(fixturesDir)).filter(
-		(f) => f.startsWith("test") && f.endsWith(".js"),
+		(f) =>
+			f.startsWith("test")
+			&& f.endsWith(".mjs")
+			&& !f.endsWith("._validateArgs.mjs"),
 	);
 	files.push(...jsFiles);
-}, 180000);
+}, 360000);
 
 test("run fixtures", async (t) => {
 	for (const file of files) {
@@ -22,4 +25,4 @@ test("run fixtures", async (t) => {
 			throw new Error(`${file} failed to run: ${e.stack}`);
 		}
 	}
-});
+}, 360000);

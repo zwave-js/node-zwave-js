@@ -13,7 +13,16 @@ export default function transformer(
 	pluginConfig: PluginConfig,
 	{ ts: t }: TransformerExtras,
 ): ts.TransformerFactory<ts.SourceFile> {
+	const compilerOptions = program.getCompilerOptions();
+	// Only enable the transforms if the custom condition is not set
+	// Not sure why, but otherwise the LSP has issues and moving the transforms
+	// to tsconfig.build.json results in some type references not working
+	const shouldTransform = !compilerOptions.customConditions?.includes("@@dev")
+		|| compilerOptions.customConditions?.includes("@@test_transformers");
+
 	return (context: ts.TransformationContext) => (file: ts.SourceFile) => {
+		if (!shouldTransform) return file;
+
 		// Bail early if there is no import for "@zwave-js/transformers". In this case, there's nothing to transform
 		if (!file.getFullText().includes("@zwave-js/transformers")) {
 			// if (options?.verbose) {

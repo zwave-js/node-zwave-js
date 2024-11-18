@@ -3,6 +3,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"composite": false,
+		"rootDir": ".",
 		"outDir": "test/build",
 		"declaration": false,
 		"declarationMap": false,
@@ -14,8 +15,9 @@
 			},
 			{ "transform": "./build/validateArgs/transformDecorators.js" }
 		],
-		"incremental": false
+		"incremental": false,
+		"customConditions": ["@@dev", "@@test_transformers"]
 	},
-	"include": ["test/fixtures/**/*.ts"]
-	// "include": ["test/fixtures/testLiteral.ts"]
+	"include": ["test/fixtures/**/*.mts"]
+	// "include": ["test/fixtures/testCrossPackageImports.mts"]
 }

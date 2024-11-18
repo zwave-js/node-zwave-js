@@ -55,7 +55,7 @@
       "require": "./build/cjs/traits/index.js"
     },
     "./validation": {
-      "@@dev": "./src/utils/validation.ts",
+      "@@dev": "./src/util/validation.ts",
       "import": "./build/esm/util/validation.js",
       "require": "./build/cjs/util/validation.js"
     },
