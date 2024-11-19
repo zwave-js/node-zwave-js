@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { validateArgs } from "@zwave-js/transformers";
 import assert from "node:assert";
 
@@ -36,17 +37,20 @@ test.bar(My.Eye);
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("string"),
-	/arg1 is not a My/,
+	/arg1 to be a member of enum My, got string "string"/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("Hand"),
-	/arg1 is not a My/,
+	/arg1 to be a member of enum My, got string "Hand"/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo(true),
-	/arg1 is not a My/,
+	/arg1 to be a member of enum My, got true/,
 );
 
-assert.throws(() => test.bar(10000 as any), /arg1 is not a My/);
+assert.throws(
+	() => test.bar(10000 as any),
+	/arg1 to be a member of enum My, got 10000/,
+);

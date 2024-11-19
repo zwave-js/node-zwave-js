@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { validateArgs } from "@zwave-js/transformers";
 import assert from "node:assert";
 
@@ -18,10 +19,10 @@ test.foo(new Date(1996));
 assert.throws(
 	// @ts-expect-error
 	() => test.foo("string"),
-	/arg1 is not a Date/,
+	/arg1 to be a Date/,
 );
 assert.throws(
 	// @ts-expect-error
 	() => test.foo(undefined),
-	/arg1 is not a Date/,
+	/arg1 to be a Date/,
 );

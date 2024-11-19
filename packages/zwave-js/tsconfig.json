@@ -4,7 +4,11 @@
 	"compilerOptions": {
 		"plugins": [
 			{
-				"transform": "@zwave-js/transformers"
+				"transform": "@zwave-js/transformers/validateArgs/program",
+				"transformProgram": true
+			},
+			{
+				"transform": "@zwave-js/transformers/validateArgs/decorators"
 			}
 		],
 		"typeRoots": [

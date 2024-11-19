@@ -54,6 +54,11 @@
       "import": "./build/esm/traits/index.js",
       "require": "./build/cjs/traits/index.js"
     },
+    "./validation": {
+      "@@dev": "./src/util/validation.ts",
+      "import": "./build/esm/util/validation.js",
+      "require": "./build/cjs/util/validation.js"
+    },
     "./qr": {
       "@@dev": "./src/qr/index.ts",
       "browser": "./build/esm/qr/index.browser.js",

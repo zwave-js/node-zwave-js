@@ -1,10 +1,12 @@
-export class FooBar {
+class FooBar {
 	constructor() {
 		this.foo = "foo";
 	}
 
 	public foo: "foo";
 }
+
+export { FooBar as Foo };
 
 export class Baz {
 	constructor() {
@@ -19,4 +21,12 @@ export class Baz {
 			&& "baz" in value
 			&& value.baz === "baz";
 	}
+}
+
+export class Bar {
+	constructor() {
+		this.bar = "bar";
+	}
+
+	public bar: "bar";
 }
