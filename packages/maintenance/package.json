@@ -38,7 +38,7 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@alcalzone/esm2cjs": "^1.4.0",
+    "@alcalzone/esm2cjs": "^1.4.1",
     "@dprint/formatter": "^0.4.1",
     "@dprint/json": "^0.19.4",
     "@dprint/markdown": "^0.17.8",
