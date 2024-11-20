@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.4 (2024-11-20)
 ### Bugfixes
 * Fixed an issue where CC classes would have a different name when `zwave-js` was loaded as CommonJS, changing how those CCs were handled (#7426)
 
