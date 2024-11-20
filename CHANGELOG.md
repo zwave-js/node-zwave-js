@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where CC classes would have a different name when `zwave-js` was loaded as CommonJS, changing how those CCs were handled (#7426)
+
+### Changes under the hood
+* Argument validation of CC APIs no longer uses `require` calls and explains the validation errors much better (#7407)
+
 ## 14.3.3 (2024-11-14)
 ### Bugfixes
 * Fix parsing of some older 500 series NVM formats (#7399)
