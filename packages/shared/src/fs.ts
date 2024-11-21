@@ -1,19 +1,23 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import path from "pathe";
+import { Bytes } from "./Bytes.js";
+import { type FileSystem } from "./bindings.js";
 import { getErrorMessage } from "./errors.js";
 
 export async function enumFilesRecursive(
+	fs: FileSystem,
 	rootDir: string,
 	predicate?: (filename: string) => boolean,
 ): Promise<string[]> {
 	const ret: string[] = [];
 	try {
-		const filesAndDirs = await fs.readdir(rootDir);
+		const filesAndDirs = await fs.readDir(rootDir);
 		for (const f of filesAndDirs) {
 			const fullPath = path.join(rootDir, f);
 
 			if ((await fs.stat(fullPath)).isDirectory()) {
-				ret.push(...(await enumFilesRecursive(fullPath, predicate)));
+				ret.push(
+					...(await enumFilesRecursive(fs, fullPath, predicate)),
+				);
 			} else if (predicate == undefined || predicate(fullPath)) {
 				ret.push(fullPath);
 			}
@@ -28,26 +32,55 @@ export async function enumFilesRecursive(
 }
 
 export async function copyFilesRecursive(
+	fs: FileSystem,
 	sourceDir: string,
 	targetDir: string,
 	predicate?: (filename: string) => boolean,
 ): Promise<void> {
-	const files = await enumFilesRecursive(sourceDir, predicate);
+	const files = await enumFilesRecursive(fs, sourceDir, predicate);
 	for (const file of files) {
 		const relative = path.relative(sourceDir, file);
 		const target = path.join(targetDir, relative);
-		await fs.mkdir(path.dirname(target), { recursive: true });
+		await fs.ensureDir(path.dirname(target));
 		await fs.copyFile(file, target);
 	}
 }
 
-export async function readJSON<T = any>(filename: string): Promise<T> {
-	const data = await fs.readFile(filename, "utf8");
-	return JSON.parse(data);
+export async function readTextFile(
+	fs: FileSystem,
+	filename: string,
+	encoding: BufferEncoding = "utf8",
+): Promise<string> {
+	const buffer = await fs.readFile(filename);
+	return Bytes.view(buffer).toString(encoding);
 }
 
-export async function pathExists(filename: string): Promise<boolean> {
-	return fs.access(filename)
-		.then(() => true)
-		.catch(() => false);
+export async function writeTextFile(
+	fs: FileSystem,
+	filename: string,
+	content: string,
+	encoding: BufferEncoding = "utf8",
+): Promise<void> {
+	const buffer = Bytes.from(content, encoding);
+	await fs.writeFile(filename, buffer);
+}
+
+export async function readJSON<T = any>(
+	fs: FileSystem,
+	filename: string,
+): Promise<T> {
+	const content = await readTextFile(fs, filename);
+	return JSON.parse(content);
+}
+
+export async function pathExists(
+	fs: FileSystem,
+	filename: string,
+): Promise<boolean> {
+	try {
+		await fs.stat(filename);
+		return true;
+	} catch {
+		return false;
+	}
 }

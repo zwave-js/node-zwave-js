@@ -7,6 +7,7 @@ import type {
 import type { ZWaveHostOptions } from "@zwave-js/host";
 import { type ZWaveSerialStream } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
+import type { FileSystem as FileSystemBindings } from "@zwave-js/shared/bindings";
 import type {
 	InclusionUserCallbacks,
 	JoinNetworkUserCallbacks,
@@ -125,9 +126,20 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		disableOnNodeAdded?: boolean;
 	};
 
+	bindings?: {
+		/**
+		 * Specifies which bindings are used to access the file system when
+		 * reading or writing the cache, or loading device configuration files.
+		 */
+		fs?: FileSystemBindings;
+	};
+
 	storage: {
-		/** Allows you to replace the default file system driver used to store and read the cache */
-		driver: FileSystem;
+		/**
+		 * Allows you to replace the default file system driver used to store and read the cache
+		 * @deprecated Use `bindings.fs` instead.
+		 */
+		driver?: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
@@ -395,6 +407,7 @@ export type PartialZWaveOptions = Expand<
 			| "joinNetworkUserCallbacks"
 			| "logConfig"
 			| "testingHooks"
+			| "bindings"
 		>
 	>
 	& Partial<
@@ -402,6 +415,7 @@ export type PartialZWaveOptions = Expand<
 			ZWaveOptions,
 			| "testingHooks"
 			| "vendor"
+			| "bindings"
 		>
 	>
 	& {

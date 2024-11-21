@@ -3,9 +3,10 @@
  * Execute with `yarn ts packages/maintenance/src/convert-json.ts`
  */
 
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { enumFilesRecursive } from "@zwave-js/shared";
 import esMain from "es-main";
-import fs from "node:fs/promises";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Project, ts } from "ts-morph";
@@ -19,6 +20,7 @@ async function main() {
 	const devicesDir = path.join(__dirname, "../../config/config/devices");
 
 	const configFiles = await enumFilesRecursive(
+		fs,
 		devicesDir,
 		(file) =>
 			file.endsWith(".json")
@@ -28,7 +30,7 @@ async function main() {
 	);
 
 	for (const filename of configFiles) {
-		const content = await fs.readFile(filename, "utf8");
+		const content = await fsp.readFile(filename, "utf8");
 		const sourceFile = project.createSourceFile(filename, content, {
 			overwrite: true,
 			scriptKind: ts.ScriptKind.JSON,
@@ -102,7 +104,7 @@ async function main() {
 		if (didChange) {
 			let output = sourceFile.getFullText();
 			output = formatWithDprint(filename, output);
-			await fs.writeFile(filename, output, "utf8");
+			await fsp.writeFile(filename, output, "utf8");
 		}
 	}
 }
