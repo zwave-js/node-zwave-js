@@ -148,11 +148,12 @@ export default function transformProgram(
 			const methodName = method?.getName();
 			if (!methodName) return;
 
-			const parameters = method
+			const parameters: ParameterInfo[] = method
 				.getParameters()
 				.map((p) => {
 					return {
 						name: p.getName(),
+						isRest: p.isRestParameter(),
 						type: p.getType(),
 						typeName: p.getTypeNode()?.getText(),
 					};
@@ -188,9 +189,13 @@ export default function transformProgram(
 				of withMethodAndClassName
 		) {
 			const paramSpreadWithUnknown = parameters.map((p) =>
-				`${p.name}: unknown`
+				`${p.isRest ? "..." : ""}${p.name}: unknown${
+					p.isRest ? "[]" : ""
+				}`
 			).join(", ");
-			const paramSpread = parameters.map((p) => p.name).join(", ");
+			const paramSpread = parameters.map((p) =>
+				`${p.isRest ? "..." : ""}${p.name}`
+			).join(", ");
 
 			const context: TransformContext = {
 				sourceFile: mfile,
@@ -267,6 +272,7 @@ function getTypeName(t: Type<tsm.Type>): string {
 
 interface ParameterInfo {
 	name: string;
+	isRest?: boolean;
 	type: Type<tsm.Type>;
 	typeName: string | undefined;
 }
