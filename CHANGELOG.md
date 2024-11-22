@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.6 (2024-11-22)
 ### Bugfixes
 * Fixed another issue where some CC API methods would incorrectly fail validation of their arguments, causing the node interview to fail (#7435)
 
