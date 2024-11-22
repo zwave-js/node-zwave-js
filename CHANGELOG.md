@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed another issue where some CC API methods would incorrectly fail validation of their arguments, causing the node interview to fail (#7435)
+
 ## 14.3.5 (2024-11-22)
 ### Bugfixes
 * Fixed an issue that prevented the `nvmedit` CI utility from starting (#7432)
