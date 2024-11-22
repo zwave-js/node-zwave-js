@@ -154,6 +154,7 @@ export default function transformProgram(
 					return {
 						name: p.getName(),
 						isRest: p.isRestParameter(),
+						hasInitializer: p.hasInitializer(),
 						type: p.getType(),
 						typeName: p.getTypeNode()?.getText(),
 					};
@@ -205,7 +206,7 @@ export default function transformProgram(
 
 			newSourceText += `
 
-export function validateArgs_${className}_${methodName}(options: any = {}) {
+export function validateArgs_${className}_${methodName}() {
 	return <T extends Function>(__decoratedMethod: T, { kind }: ClassMethodDecoratorContext): T | void => {
 		if (kind === "method") {
 			return function ${methodName}(this: any, ${paramSpreadWithUnknown}) {
@@ -273,6 +274,7 @@ function getTypeName(t: Type<tsm.Type>): string {
 interface ParameterInfo {
 	name: string;
 	isRest?: boolean;
+	hasInitializer?: boolean;
 	type: Type<tsm.Type>;
 	typeName: string | undefined;
 }
@@ -310,6 +312,24 @@ Type ${param.typeName} recursively references itself`,
 	}
 
 	const ctx = `{ kind: "${kind}", name: "${param.name}" }`;
+
+	// Parameters with a default value, but no `| undefined` in the type need to be treated as optional
+	if (
+		param.hasInitializer
+		&& !(
+			param.type.isUnion()
+			&& param.type.getUnionTypes().some((t) => t.isUndefined())
+		)
+	) {
+		return `v.optional(${ctx}, ${
+			getValidationFunction(
+				context,
+				{ ...param, hasInitializer: false },
+				kind,
+			)
+		})`;
+	}
+
 	if (
 		param.type.isNumberLiteral()
 		|| param.type.isStringLiteral()
@@ -554,21 +574,56 @@ Unable to find import specifier for class ${param.typeName}.`,
 			return `v.class(${ctx}, "${declaredName}", ${param.typeName})`;
 		}
 
-		if (isInterface) {
-			const variableDeclaration = valueDeclaration?.asKind(
-				tsm.SyntaxKind.VariableDeclaration,
-			);
-			const isAmbient = !!variableDeclaration
-				&& !!(variableDeclaration?.getCombinedModifierFlags()
-					& tsm.ModifierFlags.Ambient);
+		const variableDeclaration = valueDeclaration?.asKind(
+			tsm.SyntaxKind.VariableDeclaration,
+		);
+		const isAmbient = !!variableDeclaration
+			&& !!(variableDeclaration?.getCombinedModifierFlags()
+				& tsm.ModifierFlags.Ambient);
 
-			if (isAmbient && symbolName === "Date") {
-				return `v.date(${ctx})`;
+		if (isAmbient) {
+			if (isInterface) {
+				if (symbolName === "Date") {
+					return `v.date(${ctx})`;
+				}
+				if (symbolName === "Uint8Array") {
+					return `v.uint8array(${ctx})`;
+				}
 			}
 
-			if (isAmbient && symbolName === "Uint8Array") {
-				return `v.uint8array(${ctx})`;
+			const structure = variableDeclaration?.getStructure();
+
+			if (
+				structure?.name === "Map"
+				&& structure.type === "MapConstructor"
+			) {
+				return `v.class(${ctx}, "Map", Map)`;
 			}
+
+			if (
+				structure?.name === "Set"
+				&& structure.type === "SetConstructor"
+			) {
+				return `v.class(${ctx}, "Set", Set)`;
+			}
+		}
+
+		// Those are not detected as ambient interfaces for some reason
+		if (
+			symbolName === "ReadonlyMap"
+			&& symbol.getDeclarations().every((d) =>
+				d.isKind(tsm.SyntaxKind.InterfaceDeclaration)
+			)
+		) {
+			return `v.class(${ctx}, "Map", Map)`;
+		}
+		if (
+			symbolName === "ReadonlySet"
+			&& symbol.getDeclarations().every((d) =>
+				d.isKind(tsm.SyntaxKind.InterfaceDeclaration)
+			)
+		) {
+			return `v.class(${ctx}, "Set", Set)`;
 		}
 
 		if (isInterface || isObject) {
