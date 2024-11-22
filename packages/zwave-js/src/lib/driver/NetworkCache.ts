@@ -12,7 +12,7 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
-import type { FileSystem } from "@zwave-js/shared/bindings";
+import type { ReadFile, ReadFileSystemInfo } from "@zwave-js/shared/bindings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "pathe";
 import {
@@ -623,7 +623,7 @@ export async function migrateLegacyNetworkCache(
 	homeId: number,
 	networkCache: JsonlDB,
 	valueDB: JsonlDB,
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	cacheDir: string,
 ): Promise<void> {
 	const cacheFile = path.join(cacheDir, `${homeId.toString(16)}.json`);

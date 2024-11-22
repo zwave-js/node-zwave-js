@@ -6,7 +6,11 @@ import {
 	stringify,
 	writeTextFile,
 } from "@zwave-js/shared";
-import { type FileSystem } from "@zwave-js/shared/bindings";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
 import path from "pathe";
@@ -17,7 +21,7 @@ export type ManufacturersMap = Map<number, string>;
 
 /** @internal */
 export async function loadManufacturersInternal(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	externalConfigDir?: string,
 ): Promise<ManufacturersMap> {
 	const configPath = path.join(
@@ -73,7 +77,7 @@ export async function loadManufacturersInternal(
  * Write current manufacturers map to json
  */
 export async function saveManufacturersInternal(
-	fs: FileSystem,
+	fs: WriteFile,
 	manufacturers: ManufacturersMap,
 ): Promise<void> {
 	const data: Record<string, string> = {};

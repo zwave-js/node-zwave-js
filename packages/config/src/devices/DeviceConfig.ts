@@ -13,7 +13,11 @@ import {
 	stringify,
 	writeTextFile,
 } from "@zwave-js/shared";
-import { type FileSystem } from "@zwave-js/shared/bindings";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
 import path from "pathe";
@@ -87,7 +91,7 @@ export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo,
 	devicesRoot: string,
 	dir: string,
 	lastChange: Date,
@@ -127,7 +131,7 @@ async function hasChangedDeviceFiles(
  * Does not update the index itself.
  */
 async function generateIndex<T extends Record<string, unknown>>(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	devicesDir: string,
 	isEmbedded: boolean,
 	extractIndexEntries: (config: DeviceConfig) => T[],
@@ -199,7 +203,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 }
 
 async function loadDeviceIndexShared<T extends Record<string, unknown>>(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	devicesDir: string,
 	indexPath: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
@@ -287,7 +291,7 @@ ${stringify(index, "\t")}
  * Transparently handles updating the index if necessary
  */
 export async function generatePriorityDeviceIndex(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	deviceConfigPriorityDir: string,
 	logger?: ConfigLogger,
 ): Promise<DeviceConfigIndex> {
@@ -325,7 +329,7 @@ export async function generatePriorityDeviceIndex(
  * Transparently handles updating the index if necessary
  */
 export async function loadDeviceIndexInternal(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	logger?: ConfigLogger,
 	externalConfigDir?: string,
 ): Promise<DeviceConfigIndex> {
@@ -357,7 +361,7 @@ export async function loadDeviceIndexInternal(
  * Transparently handles updating the index if necessary
  */
 export async function loadFulltextDeviceIndexInternal(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	logger?: ConfigLogger,
 ): Promise<FulltextDeviceConfigIndex> {
 	// This method is not meant to operate with the external device index!
@@ -400,7 +404,7 @@ function isFirmwareVersion(val: any): val is string {
 /** This class represents a device config entry whose conditional settings have not been evaluated yet */
 export class ConditionalDeviceConfig {
 	public static async from(
-		fs: FileSystem,
+		fs: ReadFileSystemInfo & ReadFile,
 		filename: string,
 		isEmbedded: boolean,
 		options: {
@@ -693,7 +697,7 @@ metadata is not an object`,
 
 export class DeviceConfig {
 	public static async from(
-		fs: FileSystem,
+		fs: ReadFileSystemInfo & ReadFile,
 		filename: string,
 		isEmbedded: boolean,
 		options: {

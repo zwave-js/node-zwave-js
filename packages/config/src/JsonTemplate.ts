@@ -1,6 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { pathExists, readTextFile } from "@zwave-js/shared";
-import { type FileSystem } from "@zwave-js/shared/bindings";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+} from "@zwave-js/shared/bindings";
 import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
@@ -22,7 +25,7 @@ export function clearTemplateCache(): void {
 
 /** Parses a JSON file with $import keys and replaces them with the selected objects */
 export async function readJsonWithTemplate(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	filename: string,
 	rootDirs?: string | string[],
 ): Promise<Record<string, unknown>> {
@@ -129,7 +132,7 @@ function getImportStack(
 }
 
 async function readJsonWithTemplateInternal(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	filename: string,
 	selector: string | undefined,
 	visited: string[],
@@ -202,7 +205,7 @@ ${getImportStack(visited, selector)}`,
 
 /** Replaces all `$import` properties in a JSON object with object spreads of the referenced file/property */
 async function resolveJsonImports(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	json: Record<string, unknown>,
 	filename: string,
 	visited: string[],

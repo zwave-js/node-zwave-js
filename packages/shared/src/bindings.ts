@@ -74,21 +74,36 @@ export interface FileHandle {
 	stat(): Promise<FSStats>;
 }
 
-export interface FileSystem {
-	/** Lists files and subdirectories in the given directory */
-	readDir(path: string): Promise<string[]>;
+export interface ReadFile {
 	/** Reads the given file */
 	readFile(path: string): Promise<Uint8Array>;
+}
+
+export interface WriteFile {
 	/** Writes the given data to a file */
 	writeFile(path: string, data: Uint8Array): Promise<void>;
+}
+
+export interface CopyFile {
 	/** Copies a file */
 	copyFile(source: string, dest: string): Promise<void>;
+}
+
+export interface ReadFileSystemInfo {
+	/** Lists files and subdirectories in the given directory */
+	readDir(path: string): Promise<string[]>;
+	/** Returns information about a file or directory, or throws if it does not exist */
+	stat(path: string): Promise<FSStats>;
+}
+
+export interface ManageDirectory {
 	/** Recursively creates a directory and all its parent directories that do not exist */
 	ensureDir(path: string): Promise<void>;
 	/** Deletes a directory and all its contents */
 	deleteDir(path: string): Promise<void>;
-	/** Returns information about a file or directory, or throws if it does not exist */
-	stat(path: string): Promise<FSStats>;
+}
+
+export interface OpenFile {
 	/** Opens a file handle */
 	open(path: string, flags: {
 		// FIXME: Define expected behavior for each flag
@@ -98,3 +113,13 @@ export interface FileSystem {
 		truncate: boolean;
 	}): Promise<FileHandle>;
 }
+
+export interface FileSystem
+	extends
+		ReadFile,
+		WriteFile,
+		CopyFile,
+		OpenFile,
+		ReadFileSystemInfo,
+		ManageDirectory
+{}

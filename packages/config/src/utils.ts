@@ -5,7 +5,13 @@ import {
 	readTextFile,
 	writeTextFile,
 } from "@zwave-js/shared";
-import { type FileSystem } from "@zwave-js/shared/bindings";
+import {
+	type CopyFile,
+	type ManageDirectory,
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { createRequire } from "node:module";
 import path from "pathe";
 import semverGte from "semver/functions/gte.js";
@@ -70,7 +76,7 @@ export type SyncExternalConfigDirResult =
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
 export async function syncExternalConfigDir(
-	fs: FileSystem,
+	fs: ManageDirectory & ReadFileSystemInfo & ReadFile & CopyFile & WriteFile,
 	extConfigDir: string,
 	logger: ConfigLogger,
 ): Promise<SyncExternalConfigDirResult> {

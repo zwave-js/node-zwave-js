@@ -1,10 +1,16 @@
 import path from "pathe";
 import { Bytes } from "./Bytes.js";
-import { type FileSystem } from "./bindings.js";
+import {
+	type CopyFile,
+	type ManageDirectory,
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "./bindings.js";
 import { getErrorMessage } from "./errors.js";
 
 export async function enumFilesRecursive(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo,
 	rootDir: string,
 	predicate?: (filename: string) => boolean,
 ): Promise<string[]> {
@@ -32,7 +38,7 @@ export async function enumFilesRecursive(
 }
 
 export async function copyFilesRecursive(
-	fs: FileSystem,
+	fs: ManageDirectory & CopyFile & ReadFileSystemInfo,
 	sourceDir: string,
 	targetDir: string,
 	predicate?: (filename: string) => boolean,
@@ -47,7 +53,7 @@ export async function copyFilesRecursive(
 }
 
 export async function readTextFile(
-	fs: FileSystem,
+	fs: ReadFile,
 	filename: string,
 	encoding: BufferEncoding = "utf8",
 ): Promise<string> {
@@ -56,7 +62,7 @@ export async function readTextFile(
 }
 
 export async function writeTextFile(
-	fs: FileSystem,
+	fs: WriteFile,
 	filename: string,
 	content: string,
 	encoding: BufferEncoding = "utf8",
@@ -66,7 +72,7 @@ export async function writeTextFile(
 }
 
 export async function readJSON<T = any>(
-	fs: FileSystem,
+	fs: ReadFile,
 	filename: string,
 ): Promise<T> {
 	const content = await readTextFile(fs, filename);
@@ -74,7 +80,7 @@ export async function readJSON<T = any>(
 }
 
 export async function pathExists(
-	fs: FileSystem,
+	fs: ReadFileSystemInfo,
 	filename: string,
 ): Promise<boolean> {
 	try {

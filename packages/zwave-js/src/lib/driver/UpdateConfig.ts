@@ -5,7 +5,12 @@ import {
 	noop,
 	writeTextFile,
 } from "@zwave-js/shared";
-import { type FileSystem } from "@zwave-js/shared/bindings";
+import {
+	type CopyFile,
+	type ManageDirectory,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
 import fsp from "node:fs/promises";
@@ -66,7 +71,7 @@ export async function checkForConfigUpdates(
  * This only works if an external configuation directory is used.
  */
 export async function installConfigUpdate(
-	fs: FileSystem,
+	fs: ManageDirectory & ReadFileSystemInfo & WriteFile & CopyFile,
 	newVersion: string,
 	external: {
 		configDir: string;
