@@ -154,6 +154,7 @@ export default function transformProgram(
 					return {
 						name: p.getName(),
 						isRest: p.isRestParameter(),
+						hasInitializer: p.hasInitializer(),
 						type: p.getType(),
 						typeName: p.getTypeNode()?.getText(),
 					};
@@ -273,6 +274,7 @@ function getTypeName(t: Type<tsm.Type>): string {
 interface ParameterInfo {
 	name: string;
 	isRest?: boolean;
+	hasInitializer?: boolean;
 	type: Type<tsm.Type>;
 	typeName: string | undefined;
 }
@@ -310,6 +312,24 @@ Type ${param.typeName} recursively references itself`,
 	}
 
 	const ctx = `{ kind: "${kind}", name: "${param.name}" }`;
+
+	// Parameters with a default value, but no `| undefined` in the type need to be treated as optional
+	if (
+		param.hasInitializer
+		&& !(
+			param.type.isUnion()
+			&& param.type.getUnionTypes().some((t) => t.isUndefined())
+		)
+	) {
+		return `v.optional(${ctx}, ${
+			getValidationFunction(
+				context,
+				{ ...param, hasInitializer: false },
+				kind,
+			)
+		})`;
+	}
+
 	if (
 		param.type.isNumberLiteral()
 		|| param.type.isStringLiteral()
