@@ -2762,7 +2762,7 @@ __metadata:
     vitest: "npm:^2.1.4"
     yargs: "npm:^17.7.2"
   bin:
-    nvmedit: bin/nvmedit.js
+    nvmedit: bin/nvmedit.mjs
   languageName: unknown
   linkType: soft
 
