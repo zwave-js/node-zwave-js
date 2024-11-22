@@ -26,7 +26,7 @@
     "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
     "build/**/package.json"
   ],
-  "bin": "bin/nvmedit.js",
+  "bin": "bin/nvmedit.mjs",
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
