@@ -234,7 +234,7 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
-import path from "node:path";
+import path from "pathe";
 import semverParse from "semver/functions/parse.js";
 import { RemoveNodeReason } from "../controller/Inclusion.js";
 import { determineNIF } from "../controller/NodeInformationFrame.js";

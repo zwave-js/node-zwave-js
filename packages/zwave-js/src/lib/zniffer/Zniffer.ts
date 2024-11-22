@@ -70,7 +70,6 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
 import { ZnifferLogger } from "../log/Zniffer.js";
 import {
@@ -119,6 +118,8 @@ export interface ZnifferOptions {
 	securityKeys?: ZWaveOptions["securityKeys"];
 	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+
+	bindings?: ZWaveOptions["bindings"];
 
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
@@ -265,6 +266,12 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	private _options: ZnifferOptions;
 
+	/**
+	 * The bindings used to access file system etc.
+	 */
+	// This is set during `init()` and should not be accessed before
+	private bindings!: Required<NonNullable<ZWaveOptions["bindings"]>>;
+
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
 	private parsingContext: Omit<
@@ -329,6 +336,13 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				ZWaveErrorCodes.Driver_Destroyed,
 			);
 		}
+
+		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
+		// on Node.js internals
+		this.bindings = {
+			fs: this._options.bindings?.fs
+				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+		};
 
 		// Open the serial port
 		if (typeof this.port === "string") {
@@ -984,7 +998,10 @@ supported frequencies: ${
 		filePath: string,
 		frameFilter?: (frame: CapturedFrame) => boolean,
 	): Promise<void> {
-		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer(frameFilter));
+		await this.bindings.fs.writeFile(
+			filePath,
+			this.getCaptureAsZLFBuffer(frameFilter),
+		);
 	}
 
 	/**

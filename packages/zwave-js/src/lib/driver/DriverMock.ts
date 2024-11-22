@@ -4,10 +4,10 @@ import {
 	type MockPortBinding,
 	SerialPortMock,
 } from "@zwave-js/serial/mock";
+import { type FileSystem } from "@zwave-js/shared/bindings";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
-import path from "node:path";
+import path from "pathe";
 import type { SerialPort } from "serialport";
 import { Driver } from "./Driver.js";
 import type { PartialZWaveOptions, ZWaveOptions } from "./ZWaveOptions.js";
@@ -111,6 +111,7 @@ export interface CreateAndStartTestingDriverOptions {
 	loadConfiguration?: boolean;
 
 	portAddress: string;
+	fs?: FileSystem;
 }
 
 export async function createAndStartTestingDriver(
@@ -124,6 +125,7 @@ export async function createAndStartTestingDriver(
 		skipBootloaderCheck = true,
 		skipNodeInterview = false,
 		loadConfiguration = true,
+		fs = (await import("@zwave-js/core/bindings/fs/node")).fs,
 		...internalOptions
 	} = options;
 
@@ -167,7 +169,7 @@ export async function createAndStartTestingDriver(
 	const originalDestroy = driver.destroy.bind(driver);
 	driver.destroy = async () => {
 		await originalDestroy();
-		await fs.rm(cacheDir, { recursive: true, force: true });
+		await fs.deleteDir(cacheDir);
 	};
 
 	return new Promise((resolve) => {

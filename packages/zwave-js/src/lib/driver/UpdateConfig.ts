@@ -1,10 +1,21 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { copyFilesRecursive, getErrorMessage } from "@zwave-js/shared";
+import {
+	copyFilesRecursive,
+	getErrorMessage,
+	noop,
+	writeTextFile,
+} from "@zwave-js/shared";
+import {
+	type CopyFile,
+	type ManageDirectory,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
-import fs from "node:fs/promises";
+import fsp from "node:fs/promises";
 import os from "node:os";
-import * as path from "node:path";
+import path from "pathe";
 import * as lockfile from "proper-lockfile";
 import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
@@ -60,6 +71,7 @@ export async function checkForConfigUpdates(
  * This only works if an external configuation directory is used.
  */
 export async function installConfigUpdate(
+	fs: ManageDirectory & ReadFileSystemInfo & WriteFile & CopyFile,
 	newVersion: string,
 	external: {
 		configDir: string;
@@ -120,7 +132,7 @@ export async function installConfigUpdate(
 	// Download tarball to a temporary directory
 	let tmpDir: string;
 	try {
-		tmpDir = await fs.mkdtemp(
+		tmpDir = await fsp.mkdtemp(
 			path.join(os.tmpdir(), "zjs-config-update-"),
 		);
 	} catch (e) {
@@ -138,7 +150,7 @@ export async function installConfigUpdate(
 	// Download the package tarball into the temporary directory
 	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
 	try {
-		const handle = await fs.open(tarFilename, "w");
+		const handle = await fsp.open(tarFilename, "w");
 		const fstream = handle.createWriteStream({ autoClose: true });
 		const response = got.stream.get(url);
 		response.pipe(fstream);
@@ -171,8 +183,8 @@ export async function installConfigUpdate(
 	const extractedDir = path.join(tmpDir, "extracted");
 	try {
 		// Extract the tarball in the temporary folder
-		await fs.rm(extractedDir, { recursive: true, force: true });
-		await fs.mkdir(extractedDir, { recursive: true });
+		await fs.deleteDir(extractedDir);
+		await fs.ensureDir(extractedDir);
 		await execa("tar", [
 			"--strip-components=1",
 			"-xzf",
@@ -182,9 +194,10 @@ export async function installConfigUpdate(
 		]);
 
 		// then overwrite the files in the external config directory
-		await fs.rm(external.configDir, { recursive: true, force: true });
-		await fs.mkdir(external.configDir, { recursive: true });
+		await fs.deleteDir(external.configDir);
+		await fs.ensureDir(external.configDir);
 		await copyFilesRecursive(
+			fs,
 			path.join(extractedDir, "config"),
 			external.configDir,
 			(src) => src.endsWith(".json"),
@@ -193,7 +206,7 @@ export async function installConfigUpdate(
 			external.configDir,
 			"version",
 		);
-		await fs.writeFile(externalVersionFilename, newVersion, "utf8");
+		await writeTextFile(fs, externalVersionFilename, newVersion);
 	} catch {
 		await freeLock();
 		throw new ZWaveError(
@@ -203,9 +216,7 @@ export async function installConfigUpdate(
 	}
 
 	// Clean up the temp dir and ignore errors
-	void fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {
-		// ignore
-	});
+	await fs.deleteDir(tmpDir).catch(noop);
 
 	// Free the lock
 	await freeLock();

@@ -1,9 +1,19 @@
 import { ZWaveError, ZWaveErrorCodes, isZWaveError } from "@zwave-js/core";
-import { formatId, pathExists, stringify } from "@zwave-js/shared";
+import {
+	formatId,
+	pathExists,
+	readTextFile,
+	stringify,
+	writeTextFile,
+} from "@zwave-js/shared";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
-import fs from "node:fs/promises";
-import path from "node:path";
+import path from "pathe";
 import { configDir } from "./utils.js";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe.js";
 
@@ -11,6 +21,7 @@ export type ManufacturersMap = Map<number, string>;
 
 /** @internal */
 export async function loadManufacturersInternal(
+	fs: ReadFileSystemInfo & ReadFile,
 	externalConfigDir?: string,
 ): Promise<ManufacturersMap> {
 	const configPath = path.join(
@@ -18,14 +29,14 @@ export async function loadManufacturersInternal(
 		"manufacturers.json",
 	);
 
-	if (!(await pathExists(configPath))) {
+	if (!(await pathExists(fs, configPath))) {
 		throw new ZWaveError(
 			"The manufacturer config file does not exist!",
 			ZWaveErrorCodes.Config_Invalid,
 		);
 	}
 	try {
-		const fileContents = await fs.readFile(configPath, "utf8");
+		const fileContents = await readTextFile(fs, configPath, "utf8");
 		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig(
@@ -66,6 +77,7 @@ export async function loadManufacturersInternal(
  * Write current manufacturers map to json
  */
 export async function saveManufacturersInternal(
+	fs: WriteFile,
 	manufacturers: ManufacturersMap,
 ): Promise<void> {
 	const data: Record<string, string> = {};
@@ -79,5 +91,5 @@ export async function saveManufacturersInternal(
 	}
 
 	const configPath = path.join(configDir, "manufacturers.json");
-	await fs.writeFile(configPath, stringify(data, "\t") + "\n");
+	await writeTextFile(fs, configPath, stringify(data, "\t") + "\n");
 }

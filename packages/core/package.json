@@ -14,6 +14,11 @@
       "import": "./build/esm/index.js",
       "require": "./build/cjs/index.js"
     },
+    "./bindings/*": {
+      "@@dev": "./src/bindings/*.ts",
+      "import": "./build/esm/bindings/*.js",
+      "require": "./build/cjs/bindings/*.js"
+    },
     "./safe": {
       "@@dev": "./src/index_safe.ts",
       "import": "./build/esm/index_safe.js",
@@ -120,6 +125,7 @@
     "fflate": "^0.8.2",
     "logform": "^2.6.1",
     "nrf-intel-hex": "^1.4.0",
+    "pathe": "^1.1.2",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.3",
     "triple-beam": "*",

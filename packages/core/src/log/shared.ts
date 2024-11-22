@@ -1,6 +1,6 @@
 import { flatMap } from "@zwave-js/shared";
 import type { Format, TransformFunction } from "logform";
-import * as path from "node:path";
+import path from "pathe";
 import { MESSAGE, configs } from "triple-beam";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
