@@ -165,7 +165,7 @@ import {
 	AsyncQueue,
 	Bytes,
 	type ThrowingMap,
-	TypedEventEmitter,
+	TypedEventTarget,
 	areUint8ArraysEqual,
 	buffer2hex,
 	cloneDeep,
@@ -185,7 +185,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import type { EventEmitter } from "node:events";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -632,7 +631,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends TypedEventEmitter<DriverEventCallbacks>
+export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	implements
 		CCAPIHost,
 		InterviewContext,
@@ -1292,17 +1291,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
-
-		// Enforce that an error handler is attached, except for testing with a mocked serialport
-		if (
-			!this._options.testingHooks
-			&& (this as unknown as EventEmitter).listenerCount("error") === 0
-		) {
-			throw new ZWaveError(
-				`Before starting the driver, a handler for the "error" event must be attached.`,
-				ZWaveErrorCodes.Driver_NoErrorHandler,
-			);
-		}
 
 		const spOpenPromise = createDeferredPromise();
 

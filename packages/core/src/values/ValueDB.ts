@@ -1,5 +1,5 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
-import { TypedEventEmitter } from "@zwave-js/shared";
+import { TypedEventTarget } from "@zwave-js/shared";
 import type { CommandClasses } from "../definitions/CommandClasses.js";
 import {
 	ZWaveError,
@@ -95,7 +95,7 @@ export function valueIdToString(valueID: ValueID): string {
 /**
  * The value store for a single node
  */
-export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
+export class ValueDB extends TypedEventTarget<ValueDBEventCallbacks> {
 	// This is a wrapper around the driver's on-disk value and metadata key value stores
 
 	/**
