@@ -215,7 +215,7 @@ import { containsCC } from "@zwave-js/serial/serialapi";
 import {
 	Bytes,
 	Mixin,
-	type TypedEventEmitter,
+	TypedEventTarget,
 	cloneDeep,
 	discreteLinearSearch,
 	formatId,
@@ -233,7 +233,6 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { EventEmitter } from "node:events";
 import path from "node:path";
 import semverParse from "semver/functions/parse.js";
 import { RemoveNodeReason } from "../controller/Inclusion.js";
@@ -279,14 +278,14 @@ type AllNodeEvents =
 	& StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>;
 
 export interface ZWaveNode
-	extends TypedEventEmitter<AllNodeEvents>, NodeStatisticsHost
+	extends TypedEventTarget<AllNodeEvents>, NodeStatisticsHost
 {}
 
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
  * of its root endpoint (index 0)
  */
-@Mixin([EventEmitter, NodeStatisticsHost])
+@Mixin([TypedEventTarget, NodeStatisticsHost])
 export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	public constructor(
 		id: number,

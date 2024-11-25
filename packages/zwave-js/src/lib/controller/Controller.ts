@@ -360,7 +360,7 @@ import {
 	type ReadonlyObjectKeyMap,
 	type ReadonlyThrowingMap,
 	type ThrowingMap,
-	TypedEventEmitter,
+	TypedEventTarget,
 	areUint8ArraysEqual,
 	cloneDeep,
 	createThrowingMap,
@@ -482,7 +482,7 @@ export interface ZWaveController extends ControllerStatisticsHost {}
 
 @Mixin([ControllerStatisticsHost])
 export class ZWaveController
-	extends TypedEventEmitter<ControllerEventCallbacks>
+	extends TypedEventTarget<ControllerEventCallbacks>
 {
 	/** @internal */
 	public constructor(

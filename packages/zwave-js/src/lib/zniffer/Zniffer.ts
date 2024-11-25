@@ -59,7 +59,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	Bytes,
-	TypedEventEmitter,
+	TypedEventTarget,
 	getEnumMemberName,
 	isEnumMember,
 	noop,
@@ -184,7 +184,7 @@ export interface CapturedFrame {
 	parsedFrame: Frame | CorruptedFrame;
 }
 
-export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
+export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
 		options: ZnifferOptions = {},

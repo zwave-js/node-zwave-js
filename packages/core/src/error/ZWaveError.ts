@@ -22,7 +22,6 @@ export enum ZWaveErrorCodes {
 	Driver_InvalidOptions,
 	/** The driver tried to do something that requires security */
 	Driver_NoSecurity,
-	Driver_NoErrorHandler,
 	Driver_FeatureDisabled,
 
 	/** The task was removed from the task queue */

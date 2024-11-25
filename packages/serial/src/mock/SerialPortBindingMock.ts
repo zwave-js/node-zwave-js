@@ -11,7 +11,7 @@ import type {
 	SetOptions,
 	UpdateOptions,
 } from "@serialport/bindings-interface";
-import { Bytes, TypedEventEmitter, isUint8Array } from "@zwave-js/shared";
+import { Bytes, TypedEventTarget, isUint8Array } from "@zwave-js/shared";
 
 export interface MockPortInternal {
 	data: Uint8Array;
@@ -158,7 +158,7 @@ interface MockPortBindingEvents {
 /**
  * Mock bindings for pretend serialport access
  */
-export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
+export class MockPortBinding extends TypedEventTarget<MockPortBindingEvents>
 	implements BindingPortInterface
 {
 	readonly openOptions: Required<OpenOptions>;
