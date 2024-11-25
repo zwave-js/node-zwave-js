@@ -1,5 +1,6 @@
 import { Bytes } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
+import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { ZnifferFrameType } from "../message/Constants.js";
 import { ZnifferMessageHeaders } from "../message/MessageHeaders.js";
@@ -88,5 +89,69 @@ export class ZnifferParser extends Transform {
 			}
 		}
 		callback();
+	}
+}
+
+class ZnifferWebParserTransformer implements Transformer<Uint8Array, Bytes> {
+	constructor(
+		private logger?: SerialLogger,
+		private onDiscarded?: (data: Uint8Array) => void,
+	) {}
+
+	private receiveBuffer = new Bytes();
+
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibble: boolean = false;
+
+	transform(chunk: Uint8Array, controller: TransformStreamDefaultController) {
+		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
+
+		while (this.receiveBuffer.length > 0) {
+			// Scan ahead until the next valid byte and log the invalid bytes, if any
+
+			let skip = 0;
+			while (
+				skip < this.receiveBuffer.length
+				&& this.receiveBuffer[skip] !== ZnifferMessageHeaders.SOCF
+				&& this.receiveBuffer[skip] !== ZnifferMessageHeaders.SODF
+			) {
+				skip++;
+			}
+			if (skip > 0) {
+				const discarded = this.receiveBuffer.subarray(0, skip);
+				this.logger?.discarded(discarded);
+				this.onDiscarded?.(discarded);
+
+				// Continue with the next valid byte
+				this.receiveBuffer = this.receiveBuffer.subarray(skip);
+				continue;
+			}
+
+			const msgLength = getMessageLength(this.receiveBuffer);
+
+			if (
+				msgLength == undefined || this.receiveBuffer.length < msgLength
+			) {
+				// The buffer contains no complete message, we're done here for now
+				break;
+			} else {
+				// We have at least one complete message.
+				// emit it and slice the read bytes from the buffer
+				const msg = this.receiveBuffer.subarray(0, msgLength);
+				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
+
+				this.logger?.data("inbound", msg);
+				controller.enqueue(msg);
+			}
+		}
+	}
+}
+
+export class ZnifferWebParser extends TransformStream {
+	constructor(
+		logger?: SerialLogger,
+		onDiscarded?: (data: Uint8Array) => void,
+	) {
+		super(new ZnifferWebParserTransformer(logger, onDiscarded));
 	}
 }
