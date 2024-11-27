@@ -3,39 +3,12 @@ import { Transform, type TransformCallback } from "node:stream";
 import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { XModemMessageHeaders } from "../message/MessageHeaders.js";
-
-export enum BootloaderChunkType {
-	Error,
-	Menu,
-	Message,
-	FlowControl,
-}
-
-export type BootloaderChunk =
-	| {
-		type: BootloaderChunkType.Error;
-		error: string;
-		_raw: string;
-	}
-	| {
-		type: BootloaderChunkType.Menu;
-		version: string;
-		options: { num: number; option: string }[];
-		_raw: string;
-	}
-	| {
-		type: BootloaderChunkType.Message;
-		message: string;
-		_raw: string;
-	}
-	| {
-		type: BootloaderChunkType.FlowControl;
-		command:
-			| XModemMessageHeaders.ACK
-			| XModemMessageHeaders.NAK
-			| XModemMessageHeaders.CAN
-			| XModemMessageHeaders.C;
-	};
+import {
+	type BootloaderChunk,
+	BootloaderChunkType,
+	type ZWaveSerialFrame,
+	ZWaveSerialFrameType,
+} from "./ZWaveSerialFrame.js";
 
 function isFlowControl(byte: number): boolean {
 	return (
@@ -262,16 +235,30 @@ export class BootloaderParser extends Transform {
 }
 
 /** Transforms the bootloader screen output into meaningful chunks */
-export class BootloaderWebParser extends TransformStream {
+export class BootloaderWebParser extends TransformStream<
+	number | string,
+	ZWaveSerialFrame & { type: ZWaveSerialFrameType.Bootloader }
+> {
 	constructor() {
-		const transformer: Transformer<number | string, BootloaderChunk> = {
+		function wrapChunk(
+			chunk: BootloaderChunk,
+		): ZWaveSerialFrame & { type: ZWaveSerialFrameType.Bootloader } {
+			return {
+				type: ZWaveSerialFrameType.Bootloader,
+				data: chunk,
+			};
+		}
+		const transformer: Transformer<
+			number | string,
+			ZWaveSerialFrame & { type: ZWaveSerialFrameType.Bootloader }
+		> = {
 			transform(chunk, controller) {
 				// Flow control bytes come in as numbers
 				if (typeof chunk === "number") {
-					controller.enqueue({
+					controller.enqueue(wrapChunk({
 						type: BootloaderChunkType.FlowControl,
 						command: chunk,
-					});
+					}));
 					return;
 				}
 
@@ -288,11 +275,11 @@ export class BootloaderWebParser extends TransformStream {
 					screen = screen.slice(menuPreambleIndex);
 					const version = preambleRegex.exec(screen)?.groups?.version;
 					if (!version) {
-						controller.enqueue({
+						controller.enqueue(wrapChunk({
 							type: BootloaderChunkType.Error,
 							error: "Could not determine bootloader version",
 							_raw: screen,
-						} /* satisfies BootloaderChunk */);
+						}) /* satisfies BootloaderChunk */);
 						return;
 					}
 
@@ -306,21 +293,21 @@ export class BootloaderWebParser extends TransformStream {
 					}
 
 					controller.enqueue(
-						{
+						wrapChunk({
 							type: BootloaderChunkType.Menu,
 							_raw: screen,
 							version,
 							options,
-						}, /* satisfies BootloaderChunk */
+						}), /* satisfies BootloaderChunk */
 					);
 				} else {
 					// Some output
 					controller.enqueue(
-						{
+						wrapChunk({
 							type: BootloaderChunkType.Message,
 							_raw: screen,
 							message: screen,
-						}, /* satisfies BootloaderChunk */
+						}), /* satisfies BootloaderChunk */
 					);
 				}
 			},

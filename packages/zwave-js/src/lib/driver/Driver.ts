@@ -125,11 +125,11 @@ import {
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
+	ZWaveSerialFrameType,
 	ZWaveSerialMode,
-	ZWaveSerialPort,
-	ZWaveSerialPortBase,
 	type ZWaveSerialPortImplementation,
-	ZWaveSocket,
+	ZWaveSerialStream,
+	createNodeSerialPortBinding,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
@@ -170,6 +170,7 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
+	isAbortError,
 	isUint8Array,
 	mergeDeep,
 	noop,
@@ -187,7 +188,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
 import { ZWaveController } from "../controller/Controller.js";
@@ -753,7 +753,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	/** The serial port instance */
-	private serial: ZWaveSerialPortBase | undefined;
+	private serial: ZWaveSerialStream | undefined;
 
 	private messageEncodingContext: Omit<
 		MessageEncodingContext,
@@ -1302,51 +1302,54 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Open the serial port
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
-				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
-				);
-			} else {
-				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSerialPort(
-					this.port,
-					this._logContainer,
-					this._options.testingHooks?.serialPortBinding,
-				);
-			}
-		} else {
-			this.driverLog.print(
-				"opening serial port using the provided custom implementation",
-			);
-			this.serial = new ZWaveSerialPortBase(
+			// if (this.port.startsWith("tcp://")) {
+			// 	const url = new URL(this.port);
+			// 	this.driverLog.print(`opening serial port ${this.port}`);
+			// 	this.serial = new ZWaveSocket(
+			// 		{
+			// 			host: url.hostname,
+			// 			port: parseInt(url.port),
+			// 		},
+			// 		this._logContainer,
+			// 	);
+			// } else {
+			this.driverLog.print(`opening serial port ${this.port}`);
+			const binding = createNodeSerialPortBinding(
 				this.port,
+				this._options.testingHooks?.serialPortBinding,
+			);
+			this.serial = new ZWaveSerialStream(
+				binding,
 				this._logContainer,
 			);
+			// 	}
+			// } else {
+			// 	this.driverLog.print(
+			// 		"opening serial port using the provided custom implementation",
+			// 	);
+			// 	this.serial = new ZWaveSerialPortBase(
+			// 		this.port,
+			// 		this._logContainer,
+			// 	);
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-			.on("error", (err) => {
-				if (this.isSoftResetting && !this.serial?.isOpen) {
-					// A disconnection while soft resetting is to be expected
-					return;
-				} else if (!this._isOpen) {
-					// tryOpenSerialport takes care of error handling
-					return;
-				}
+		// this.serial
+		// 	.on("data", this.serialport_onData.bind(this))
+		// 	.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
+		// 	.on("error", (err) => {
+		// 		if (this.isSoftResetting && !this.serial?.isOpen) {
+		// 			// A disconnection while soft resetting is to be expected
+		// 			return;
+		// 		} else if (!this._isOpen) {
+		// 			// tryOpenSerialport takes care of error handling
+		// 			return;
+		// 		}
 
-				void this.destroyWithMessage(
-					`Serial port errored: ${err.message}`,
-				);
-			});
-		// If the port is already open, close it first
-		if (this.serial.isOpen) await this.serial.close();
+		// 		void this.destroyWithMessage(
+		// 			`Serial port errored: ${err.message}`,
+		// 		);
+		// 	});
+		// // If the port is already open, close it first
+		// if (this.serial.isOpen) await this.serial.close();
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
@@ -1376,12 +1379,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			// Start the task scheduler
 			this._scheduler.start();
 
-			if (
-				typeof this._options.testingHooks?.onSerialPortOpen
-					=== "function"
-			) {
-				await this._options.testingHooks.onSerialPortOpen(this.serial!);
-			}
+			// if (
+			// 	typeof this._options.testingHooks?.onSerialPortOpen
+			// 		=== "function"
+			// ) {
+			// 	await this._options.testingHooks.onSerialPortOpen(this.serial!);
+			// }
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
@@ -1506,6 +1509,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		) {
 			try {
 				await this.serial!.open();
+				// Start reading from the serial port
+				void this.handleSerialData(this.serial!);
 				return;
 			} catch (e) {
 				lastError = e;
@@ -3415,7 +3420,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
+			// this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
@@ -3479,6 +3484,26 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._logContainer.destroy();
 
 		this._destroyPromise.resolve();
+	}
+
+	private async handleSerialData(serial: ZWaveSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				if (frame.type === ZWaveSerialFrameType.SerialAPI) {
+					await this.serialport_onData(frame.data);
+				} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
+					this.serialport_onBootloaderData(frame.data);
+				} else {
+					// Handle discarded data?
+				}
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				console.error("handleSerialData finished");
+				return;
+			}
+			throw e;
+		}
 	}
 
 	/**

@@ -3,6 +3,11 @@ import { Transform, type TransformCallback } from "node:stream";
 import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
+import {
+	type SerialAPIChunk,
+	type ZWaveSerialFrame,
+	ZWaveSerialFrameType,
+} from "./ZWaveSerialFrame.js";
 
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message
@@ -124,19 +129,28 @@ export class SerialAPIParser extends Transform {
 	}
 }
 
-type SerialAPIWebParserOutput =
-	| Bytes
-	| MessageHeaders.ACK
-	| MessageHeaders.NAK
-	| MessageHeaders.CAN;
+type SerialAPIWebParserTransformerOutput = ZWaveSerialFrame & {
+	type:
+		| ZWaveSerialFrameType.SerialAPI
+		| ZWaveSerialFrameType.Discarded;
+};
 
-class SerialAPIWebParserTransformer
-	implements Transformer<Uint8Array, SerialAPIWebParserOutput>
+function wrapSerialAPIChunk(
+	chunk: SerialAPIChunk,
+): SerialAPIWebParserTransformerOutput {
+	return {
+		type: ZWaveSerialFrameType.SerialAPI,
+		data: chunk,
+	};
+}
+
+class SerialAPIWebParserTransformer implements
+	Transformer<
+		Uint8Array,
+		SerialAPIWebParserTransformerOutput
+	>
 {
-	constructor(
-		private logger?: SerialLogger,
-		private onDiscarded?: (data: Uint8Array) => void,
-	) {}
+	constructor(private logger?: SerialLogger) {}
 
 	private receiveBuffer = new Bytes();
 
@@ -145,7 +159,9 @@ class SerialAPIWebParserTransformer
 
 	transform(
 		chunk: Uint8Array,
-		controller: TransformStreamDefaultController<SerialAPIWebParserOutput>,
+		controller: TransformStreamDefaultController<
+			SerialAPIWebParserTransformerOutput
+		>,
 	) {
 		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
@@ -157,18 +173,24 @@ class SerialAPIWebParserTransformer
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
 						this.logger?.ACK("inbound");
-						controller.enqueue(MessageHeaders.ACK);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.ACK),
+						);
 						this.ignoreAckHighNibble = false;
 						break;
 					}
 					case MessageHeaders.NAK: {
 						this.logger?.NAK("inbound");
-						controller.enqueue(MessageHeaders.NAK);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.NAK),
+						);
 						break;
 					}
 					case MessageHeaders.CAN: {
 						this.logger?.CAN("inbound");
-						controller.enqueue(MessageHeaders.CAN);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.CAN),
+						);
 						break;
 					}
 					default: {
@@ -188,7 +210,9 @@ class SerialAPIWebParserTransformer
 								}`,
 							);
 							this.logger?.ACK("inbound");
-							controller.enqueue(MessageHeaders.ACK);
+							controller.enqueue(
+								wrapSerialAPIChunk(MessageHeaders.ACK),
+							);
 							this.ignoreAckHighNibble = false;
 							break;
 						}
@@ -209,7 +233,10 @@ class SerialAPIWebParserTransformer
 						}
 						const discarded = this.receiveBuffer.subarray(0, skip);
 						this.logger?.discarded(discarded);
-						this.onDiscarded?.(discarded);
+						controller.enqueue({
+							type: ZWaveSerialFrameType.Discarded,
+							data: discarded,
+						});
 					}
 				}
 				// Continue with the next valid byte
@@ -228,7 +255,7 @@ class SerialAPIWebParserTransformer
 				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
 
 				this.logger?.data("inbound", msg);
-				controller.enqueue(msg);
+				controller.enqueue(wrapSerialAPIChunk(msg));
 			}
 		}
 	}
@@ -236,8 +263,18 @@ class SerialAPIWebParserTransformer
 export class SerialAPIWebParser extends TransformStream {
 	constructor(
 		logger?: SerialLogger,
-		onDiscarded?: (data: Uint8Array) => void,
 	) {
-		super(new SerialAPIWebParserTransformer(logger, onDiscarded));
+		const transformer = new SerialAPIWebParserTransformer(logger);
+		super(transformer);
+		this.#transformer = transformer;
+	}
+
+	#transformer: SerialAPIWebParserTransformer;
+
+	public get ignoreAckHighNibble(): boolean {
+		return this.#transformer.ignoreAckHighNibble;
+	}
+	public set ignoreAckHighNibble(value: boolean) {
+		this.#transformer.ignoreAckHighNibble = value;
 	}
 }

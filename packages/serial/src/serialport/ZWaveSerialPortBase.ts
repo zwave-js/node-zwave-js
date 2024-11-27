@@ -5,12 +5,12 @@ import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
 import {
-	type BootloaderChunk,
 	BootloaderParser,
 	BootloaderScreenParser,
 	bootloaderMenuPreamble,
 } from "../parsers/BootloaderParsers.js";
 import { SerialAPIParser } from "../parsers/SerialAPIParser.js";
+import { type BootloaderChunk } from "../parsers/ZWaveSerialFrame.js";
 import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation.js";
 
 export type ZWaveSerialChunk =
