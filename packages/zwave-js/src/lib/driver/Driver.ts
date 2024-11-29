@@ -1449,30 +1449,48 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				// If we are, the bootloader will reply with its menu.
 				await wait(1000);
 				if (this._bootloader) {
-					this.driverLog.print(
-						"Controller is in bootloader, attempting to recover...",
-						"warn",
-					);
-					await this.leaveBootloaderInternal();
-
-					// Wait a short time again. If we're in bootloader mode again, we're stuck
-					await wait(1000);
-					if (this._bootloader) {
-						if (this._options.allowBootloaderOnly) {
-							this.driverLog.print(
-								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
-								"warn",
-							);
-							// Needed for the OTW feature to be available
-							this._controller = new ZWaveController(this, true);
-							this.emit("bootloader ready");
-						} else {
-							void this.destroyWithMessage(
-								"Failed to recover from bootloader. Please flash a new firmware to continue...",
-							);
-						}
+					if (this._options.forceBootloaderOnly) {
+						this.driverLog.print(
+							"Controller is in bootloader mode. Staying in bootloader as requested.",
+							"warn",
+						);
+						// Needed for the OTW feature to be available
+						this._controller = new ZWaveController(
+							this,
+							true,
+						);
+						this.emit("bootloader ready");
 
 						return;
+					} else {
+						this.driverLog.print(
+							"Controller is in bootloader, attempting to recover...",
+							"warn",
+						);
+						await this.leaveBootloaderInternal();
+
+						// Wait a short time again. If we're in bootloader mode again, we're stuck
+						await wait(1000);
+						if (this._bootloader) {
+							if (this._options.allowBootloaderOnly) {
+								this.driverLog.print(
+									"Failed to recover from bootloader. Staying in bootloader mode as requested.",
+									"warn",
+								);
+								// Needed for the OTW feature to be available
+								this._controller = new ZWaveController(
+									this,
+									true,
+								);
+								this.emit("bootloader ready");
+							} else {
+								void this.destroyWithMessage(
+									"Failed to recover from bootloader. Please flash a new firmware to continue...",
+								);
+							}
+
+							return;
+						}
 					}
 				}
 			}
