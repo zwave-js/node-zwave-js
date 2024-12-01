@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.1",
-    "@microsoft/api-extractor": "^7.47.9",
+    "@microsoft/api-extractor": "^7.48.0",
     "@serialport/binding-mock": "^10.2.2",
     "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch",
     "@types/node": "^18.19.63",
