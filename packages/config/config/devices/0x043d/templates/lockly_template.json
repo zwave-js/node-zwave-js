@@ -1,0 +1,19 @@
+{
+	"secure_plus_lock_fp_sensor": {
+		"description": "Whether the fingerprint sensor is enabled",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Activated fp module",
+				"value": 0 // This seems flipped but this is from the product manual
+			},
+			{
+				"label": "Deactivated fp module",
+				"value": 1
+			}
+		]
+	}
+}
