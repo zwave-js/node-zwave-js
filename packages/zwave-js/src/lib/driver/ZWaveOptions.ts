@@ -335,6 +335,8 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	allowBootloaderOnly?: boolean;
 
+	forceBootloaderOnly?: boolean;
+
 	/**
 	 * An object with application/module/component names and their versions.
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
