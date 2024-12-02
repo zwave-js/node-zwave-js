@@ -1052,6 +1052,11 @@ Consider converting this parameter to unsigned using ${
 		// Check if any parameter has the lintSkip flag for duplicatedPartials
 		const param = paramInformation.get({ parameter });
 		if (param?.lintSkip?.includes("duplicatedPartials")) {
+			addWarning(
+				file,
+				`Skipping "duplicatedPartials" lint check for parameter #${parameter} due to "lintSkip" configuration.`,
+				variant
+			);			
 			return false;
 		}
 		return paramInformation.has({ parameter });
