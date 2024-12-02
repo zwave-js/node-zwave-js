@@ -475,7 +475,7 @@ export class DeviceConfig {
         deviceId?: DeviceID;
     }): Promise<DeviceConfig>;
     getAssociationConfigForEndpoint(endpointIndex: number, group: number): AssociationConfig | undefined;
-    getHash(): Uint8Array;
+    getHash(algorithm?: "md5" | "sha-256"): Promise<Uint8Array>;
     readonly isEmbedded: boolean;
     // (undocumented)
     readonly label: string;
@@ -617,7 +617,7 @@ export type ManufacturersMap = Map<number, string>;
 // Warning: (ae-missing-release-tag) "PACKAGE_VERSION" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export const PACKAGE_VERSION = "14.0.0";
+export const PACKAGE_VERSION = "14.3.7";
 
 // Warning: (ae-missing-release-tag) "ParamInfoMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

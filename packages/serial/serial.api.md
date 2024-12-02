@@ -260,10 +260,18 @@ export class ApplicationCommandRequest extends Message_2 implements MessageWithC
     readonly isForeignFrame: boolean;
     // (undocumented)
     readonly routedBusy: boolean;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -893,10 +901,18 @@ export class BridgeApplicationCommandRequest extends Message_2 implements Messag
     readonly routedBusy: boolean;
     // (undocumented)
     readonly rssi?: RSSI;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -2920,7 +2936,11 @@ export class Message {
     payload: Bytes;
     prematureNodeUpdate: Message | undefined;
     get rtt(): number | undefined;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated
     serialize(ctx: MessageEncodingContext): Bytes;
+    serializeAsync(ctx: MessageEncodingContext): Promise<Bytes>;
     toJSON(): JSONObject;
     toLogEntry(): MessageOrCCLogEntry;
     get transmissionTimestamp(): number | undefined;
@@ -3702,10 +3722,18 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass> e
     set maxSendAttempts(value: number);
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     sourceNodeId: number;
@@ -3809,10 +3837,18 @@ export class SendDataMulticastBridgeRequest<CCType extends CommandClass = Comman
     nodeIds: MulticastDestination;
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     sourceNodeId: number;
@@ -3905,10 +3941,18 @@ export class SendDataMulticastRequest<CCType extends CommandClass = CommandClass
     nodeIds: MulticastDestination;
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -4005,10 +4049,18 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
     set maxSendAttempts(value: number);
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -6013,17 +6065,20 @@ export type ZWaveSocketOptions = Omit<net.TcpSocketConnectOpts, "onread"> | Omit
 // /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:481:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1282:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1289:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1413:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:466:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1663:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1666:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1816:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:758:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:766:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1915:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1918:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2201:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2204:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2358:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2427:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 // src/serialport/ZWaveSerialPortBase.ts:78:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
 //   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
 // src/zniffer/ZnifferSerialPortBase.ts:59:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
