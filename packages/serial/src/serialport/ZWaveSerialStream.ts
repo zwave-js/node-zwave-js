@@ -10,8 +10,7 @@
 // 1 └─────────────────┘ └─────────────────┘ └──
 
 import { type ZWaveLogContainer } from "@zwave-js/core";
-import { isAbortError } from "@zwave-js/shared";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { noop } from "@zwave-js/shared";
 import {
 	type ReadableWritablePair,
 	type UnderlyingSink,
@@ -20,13 +19,8 @@ import {
 import { ReadableStream } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
-import {
-	BootloaderScreenWebParser,
-	BootloaderWebParser,
-} from "../parsers/BootloaderParsers.js";
-import { SerialAPIWebParser } from "../parsers/SerialAPIParser.js";
-import { SerialModeSwitch } from "../parsers/SerialModeSwitch.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
+import { ZWaveSerialParser } from "../plumbing/ZWaveSerialParser.js";
 import { ZWaveSerialMode } from "./ZWaveSerialPortBase.js";
 
 /** The low level bindings used by ZWaveSerialStream.
@@ -37,6 +31,29 @@ export interface ZWaveSerialBinding {
 	source: UnderlyingSource<Uint8Array>;
 }
 
+export type ZWaveSerialBindingFactory = () => Promise<ZWaveSerialBinding>;
+
+/** Re-usable stream factory to create new serial streams */
+export class ZWaveSerialStreamFactory {
+	constructor(
+		binding: ZWaveSerialBindingFactory,
+		loggers: ZWaveLogContainer,
+	) {
+		this.binding = binding;
+		this.logger = new SerialLogger(loggers);
+	}
+
+	private binding: ZWaveSerialBindingFactory;
+	protected logger: SerialLogger;
+
+	public async createStream(): Promise<ZWaveSerialStream> {
+		// Set up streams for the underlying resource
+		const { source, sink } = await this.binding();
+		return new ZWaveSerialStream(source, sink, this.logger);
+	}
+}
+
+/** Single-use serial stream. Has to be re-created after being closed. */
 export class ZWaveSerialStream implements
 	ReadableWritablePair<
 		// The serial binding emits ZWaveSerialFrames
@@ -46,126 +63,57 @@ export class ZWaveSerialStream implements
 	>
 {
 	constructor(
-		bindings: ZWaveSerialBinding,
-		loggers: ZWaveLogContainer,
+		source: UnderlyingSource<Uint8Array>,
+		sink: UnderlyingSink<Uint8Array>,
+		logger: SerialLogger,
 	) {
-		this.logger = new SerialLogger(loggers);
-
-		// Set up streams for the underlying resource
-		this.#source = new ReadableStream(bindings.source);
-		this.#sink = new WritableStream(bindings.sink);
-
-		// Set up an identity stream pair for the public interface of the writable stream
-		const { readable: input, writable } = new TransformStream();
-		this.writable = writable;
-		this.#input = input;
-
-		// Prepare parsers for reading from the serial port
-		// -> Serial API mode
-		this.parser = new SerialAPIWebParser(this.logger);
-
-		// -> Bootloader mode
-		// This one looks for NUL chars which terminate each bootloader output screen
-		this.bootloaderScreenParser = new BootloaderScreenWebParser(
-			this.logger,
-		);
-		// This one parses the bootloader output into a more usable format
-		this.bootloaderParser = new BootloaderWebParser();
-
-		// Mode switch
-		this.modeSwitch = new SerialModeSwitch();
-
-		// Prepare aborting the streams
+		this.logger = logger;
 		this.#abort = new AbortController();
 
-		// Now set up the plumbing:
-		//                       ┌>         parser         ┐
-		// #source -> modeSwitch ┤                         ├> readable
-		//                       └> BL screen -> BL parser ┘
-		//
-		// #sink                     <---                     writable
+		// Expose the underlying sink as the writable side of this stream.
+		// We use an identity stream in the middle to pipe through, so we
+		// can properly abort the stream
+		const { readable: input, writable } = new TransformStream();
+		this.writable = writable;
+		const sinkStream = new WritableStream(sink);
+		void input
+			.pipeTo(sinkStream, { signal: this.#abort.signal })
+			.catch(noop);
 
-		const pipe1 = this.#source.pipeTo(
-			this.modeSwitch,
-			{ signal: this.#abort.signal },
-		);
-
-		const pipe2 = this.modeSwitch.toSerialAPI
-			.pipeTo(this.parser.writable, { signal: this.#abort.signal });
-
-		const pipe3 = this.modeSwitch.toBootloader
-			.pipeThrough(
-				this.bootloaderScreenParser,
-				{ signal: this.#abort.signal },
-			)
-			.pipeTo(
-				this.bootloaderParser.writable,
-				{ signal: this.#abort.signal },
-			);
-
-		// Join the output streams from the parsers and expose it as the public readable stream
-		this.readable = mergeReadableStreams(
-			this.parser.readable,
-			this.bootloaderParser.readable,
-		);
-
-		// Pipe the input stream to the sink - we do not modify written data
-		const pipe4 = this.#input.pipeTo(
-			this.#sink,
-			{ signal: this.#abort.signal },
-		);
-
-		this.#pipePromise = Promise.allSettled([pipe1, pipe2, pipe3, pipe4]);
+		// Pipe the underlying source through the parser to the readable side
+		this.parser = new ZWaveSerialParser(logger, this.#abort.signal);
+		this.readable = this.parser.readable;
+		const sourceStream = new ReadableStream(source);
+		void sourceStream.pipeTo(this.parser.writable, {
+			signal: this.#abort.signal,
+		}).catch((_e) => {
+			this._isOpen = false;
+		});
 	}
 
 	protected logger: SerialLogger;
-
-	// Internal streams for accessing the underlying resource
-	#sink: WritableStream<Uint8Array>;
-	#source: ReadableStream<Uint8Array>;
 
 	// Public interface to let consumers read from and write to this stream
 	public readonly readable: ReadableStream<ZWaveSerialFrame>;
 	public readonly writable: WritableStream<Uint8Array>;
 
-	// Internal ends of the public interface
-	#input: ReadableStream<Uint8Array>;
-
 	// Signal to close the underlying stream
 	#abort: AbortController;
-	#pipePromise: Promise<any>;
 
 	// Serial API parser
-	private parser: SerialAPIWebParser;
-	// Bootloader parsers
-	private bootloaderScreenParser: BootloaderScreenWebParser;
-	private bootloaderParser: BootloaderWebParser;
+	private parser: ZWaveSerialParser;
 
 	// Allow switching between modes
-	private modeSwitch: SerialModeSwitch;
 	public get mode(): ZWaveSerialMode | undefined {
-		return this.modeSwitch.mode;
+		return this.parser.mode;
 	}
 	public set mode(mode: ZWaveSerialMode | undefined) {
-		this.modeSwitch.mode = mode;
+		this.parser.mode = mode;
 	}
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibbleOnce(): void {
-		this.parser.ignoreAckHighNibble = true;
-	}
-
-	public async open(): Promise<void> {
-		// Try to write to the sink to make sure the underlying resource is not in an error state
-		const writer = this.writable.getWriter();
-		try {
-			await writer.write(new Uint8Array());
-			await writer.ready;
-		} finally {
-			writer.releaseLock();
-		}
-
-		this._isOpen = true;
+		this.parser.ignoreAckHighNibbleOnce();
 	}
 
 	public async close(): Promise<void> {
@@ -173,11 +121,13 @@ export class ZWaveSerialStream implements
 		// Close the underlying stream
 		this.#abort.abort();
 
-		// Wait for streams to finish
-		await this.#pipePromise;
+		return Promise.resolve();
+
+		// // Wait for streams to finish
+		// await this.#pipePromise;
 	}
 
-	private _isOpen: boolean = false;
+	private _isOpen: boolean = true;
 	public get isOpen(): boolean {
 		return this._isOpen;
 	}
@@ -211,39 +161,4 @@ export class ZWaveSerialStream implements
 			writer.releaseLock();
 		}
 	}
-}
-
-/**
- * Merge multiple streams into a single one, not taking order into account.
- * If a stream ends before other ones, the other will continue adding data,
- * and the finished one will not add any more data.
- */
-export function mergeReadableStreams<T>(
-	...streams: ReadableStream<T>[]
-): ReadableStream<T> {
-	const resolvePromises = streams.map(() => createDeferredPromise<void>());
-	return new ReadableStream<T>({
-		start(controller) {
-			void Promise.all(resolvePromises).then(() => {
-				controller.close();
-			});
-			try {
-				for (const [key, stream] of Object.entries(streams)) {
-					void (async () => {
-						try {
-							for await (const data of stream) {
-								controller.enqueue(data);
-							}
-						} catch (e) {
-							// AbortErrors are expected when the stream is closed
-							if (!isAbortError(e)) throw e;
-						}
-						resolvePromises[+key].resolve();
-					})();
-				}
-			} catch (e) {
-				controller.error(e);
-			}
-		},
-	});
 }

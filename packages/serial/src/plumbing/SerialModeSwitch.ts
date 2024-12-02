@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared";
+import { bootloaderMenuPreamble } from "../parsers/BootloaderParsers.js";
 import { ZWaveSerialMode } from "../serialport/ZWaveSerialPortBase.js";
-import { bootloaderMenuPreamble } from "./BootloaderParsers.js";
 
 const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 
@@ -68,6 +68,19 @@ export class SerialModeSwitch extends WritableStream<Uint8Array> {
 					await write();
 				} else {
 					setImmediate(write);
+				}
+			},
+			abort: async (reason) => {
+				// We need to abort our sinks so the error is propagated
+				try {
+					await this.#bootloaderWriter.abort(reason);
+				} catch {
+					// Don't care
+				}
+				try {
+					await this.#serialAPIWriter.abort(reason);
+				} catch {
+					// Don't care
 				}
 			},
 		});

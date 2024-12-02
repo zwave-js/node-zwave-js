@@ -2,77 +2,61 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { type UnderlyingSink, type UnderlyingSource } from "node:stream/web";
 import { SerialPort } from "serialport";
 import { type DisconnectError } from "./DisconnectError.js";
-import { type ZWaveSerialBinding } from "./ZWaveSerialStream.js";
+import { type ZWaveSerialBindingFactory } from "./ZWaveSerialStream.js";
 
-/** The default version of the Z-Wave serial binding that works using node-serialport */
-export function createNodeSerialPortBinding(
+/** The default version of the Z-Wave serial binding factory that works using node-serialport */
+export function createNodeSerialPortFactory(
 	port: string,
 	Binding: typeof SerialPort = SerialPort,
-): ZWaveSerialBinding {
-	const serial = new Binding({
-		path: port,
-		autoOpen: false,
-		baudRate: 115200,
-		dataBits: 8,
-		stopBits: 1,
-		parity: "none",
-	});
-
-	let removeListeners: (removeOnClose: boolean) => void;
-	let isOpen = serial.isOpen;
-
-	async function close(): Promise<void> {
-		if (!isOpen) return;
-		isOpen = false;
-
-		return new Promise((resolve) => {
-			removeListeners(true);
-			serial.once("close", resolve);
-			serial.close();
+): ZWaveSerialBindingFactory {
+	return async function() {
+		const serial = new Binding({
+			path: port,
+			autoOpen: false,
+			baudRate: 115200,
+			dataBits: 8,
+			stopBits: 1,
+			parity: "none",
 		});
-	}
 
-	// The sink is opened first, so we set up the serial port there
-	const sink: UnderlyingSink<Uint8Array> = {
-		async start(controller) {
-			await close();
+		let isOpen = serial.isOpen;
 
+		function removeListeners() {
+			serial.removeAllListeners("close");
+			serial.removeAllListeners("error");
+			serial.removeAllListeners("open");
+		}
+
+		async function close(): Promise<void> {
+			if (!isOpen) return;
+			isOpen = false;
+
+			return new Promise((resolve) => {
+				removeListeners();
+				serial.once("close", resolve);
+				serial.close();
+			});
+		}
+
+		function open(): Promise<void> {
 			return new Promise<void>((resolve, reject) => {
-				const onClose = (err?: DisconnectError) => {
-					// detect serial disconnection errors
-					if (err?.disconnected === true) {
-						removeListeners(true);
-						const error = new ZWaveError(
+				const onClose = () => {
+					removeListeners();
+					reject(
+						new ZWaveError(
 							`The serial port closed unexpectedly!`,
 							ZWaveErrorCodes.Driver_Failed,
-						);
-						if (isOpen) {
-							controller.error(error);
-						} else {
-							reject(error);
-						}
-					}
+						),
+					);
 				};
 				const onError = (err: Error) => {
-					removeListeners(true);
-					// controller.error(err);
+					removeListeners();
 					reject(err);
 				};
 				const onOpen = () => {
-					removeListeners(false);
+					removeListeners();
 					isOpen = true;
 					resolve();
-				};
-
-				// We need to remove the listeners again no matter which of the handlers is called
-				// Otherwise this would cause an EventEmitter leak.
-				// Hence this somewhat ugly construct
-				removeListeners = (removeOnClose: boolean) => {
-					if (removeOnClose) {
-						serial.removeListener("close", onClose);
-					}
-					serial.removeListener("error", onError);
-					serial.removeListener("open", onOpen);
 				};
 
 				serial.once("close", onClose);
@@ -81,35 +65,59 @@ export function createNodeSerialPortBinding(
 
 				serial.open();
 			});
-		},
-		write(data, controller) {
-			if (!isOpen) {
-				controller.error(new Error("The serial port is not open!"));
-			}
+		}
 
-			return new Promise((resolve, reject) => {
-				serial.write(data, (err) => {
-					if (err) reject(err);
-					else resolve();
+		await close();
+		await open();
+
+		// Once the serialport is opened, wrap it as web streams.
+		// This could be done in the start method of the sink, but handling async errors is a pain there.
+
+		const sink: UnderlyingSink<Uint8Array> = {
+			start(controller) {
+				serial.on("error", (err) => controller.error(err));
+			},
+			write(data, controller) {
+				if (!isOpen) {
+					controller.error(new Error("The serial port is not open!"));
+				}
+
+				return new Promise((resolve, reject) => {
+					serial.write(data, (err) => {
+						if (err) reject(err);
+						else resolve();
+					});
 				});
-			});
-		},
-		close() {
-			return close();
-		},
-		abort(_reason) {
-			return close();
-		},
-	};
+			},
+			close() {
+				return close();
+			},
+			abort(_reason) {
+				return close();
+			},
+		};
 
-	const source: UnderlyingSource<Uint8Array> = {
-		start(controller) {
-			serial.on("data", (data) => controller.enqueue(data));
-		},
-		cancel() {
-			serial.removeAllListeners("data");
-		},
-	};
+		const source: UnderlyingSource<Uint8Array> = {
+			start(controller) {
+				serial.on("data", (data) => controller.enqueue(data));
+				// Abort source controller too if the serial port closes
+				serial.on("close", (err?: DisconnectError) => {
+					if (err?.disconnected === true) {
+						isOpen = false;
+						controller.error(
+							new ZWaveError(
+								`The serial port closed unexpectedly!`,
+								ZWaveErrorCodes.Driver_Failed,
+							),
+						);
+					}
+				});
+			},
+			cancel() {
+				serial.removeAllListeners();
+			},
+		};
 
-	return { source, sink };
+		return { source, sink };
+	};
 }

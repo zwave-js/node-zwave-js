@@ -128,8 +128,9 @@ import {
 	ZWaveSerialFrameType,
 	ZWaveSerialMode,
 	type ZWaveSerialPortImplementation,
-	ZWaveSerialStream,
-	createNodeSerialPortBinding,
+	type ZWaveSerialStream,
+	ZWaveSerialStreamFactory,
+	createNodeSerialPortFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
@@ -752,6 +753,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._scheduler = new TaskScheduler();
 	}
 
+	private serialFactory: ZWaveSerialStreamFactory | undefined;
 	/** The serial port instance */
 	private serial: ZWaveSerialStream | undefined;
 
@@ -1314,11 +1316,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			// 	);
 			// } else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			const binding = createNodeSerialPortBinding(
+			const binding = createNodeSerialPortFactory(
 				this.port,
 				this._options.testingHooks?.serialPortBinding,
 			);
-			this.serial = new ZWaveSerialStream(
+			this.serialFactory = new ZWaveSerialStreamFactory(
 				binding,
 				this._logContainer,
 			);
@@ -1332,24 +1334,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			// 		this._logContainer,
 			// 	);
 		}
-		// this.serial
-		// 	.on("data", this.serialport_onData.bind(this))
-		// 	.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-		// 	.on("error", (err) => {
-		// 		if (this.isSoftResetting && !this.serial?.isOpen) {
-		// 			// A disconnection while soft resetting is to be expected
-		// 			return;
-		// 		} else if (!this._isOpen) {
-		// 			// tryOpenSerialport takes care of error handling
-		// 			return;
-		// 		}
-
-		// 		void this.destroyWithMessage(
-		// 			`Serial port errored: ${err.message}`,
-		// 		);
-		// 	});
-		// // If the port is already open, close it first
-		// if (this.serial.isOpen) await this.serial.close();
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
@@ -1508,9 +1492,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			attempt++
 		) {
 			try {
-				await this.serial!.open();
+				this.serial = await this.serialFactory!.createStream();
 				// Start reading from the serial port
-				void this.handleSerialData(this.serial!);
+				void this.handleSerialData(this.serial);
 				return;
 			} catch (e) {
 				lastError = e;
@@ -3499,7 +3483,15 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			}
 		} catch (e) {
 			if (isAbortError(e)) {
-				console.error("handleSerialData finished");
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				// A disconnection while soft resetting is to be expected.
+				// The soft reset method will handle reopening
+				if (this.isSoftResetting) return;
+
+				void this.destroyWithMessage(e.message);
 				return;
 			}
 			throw e;
