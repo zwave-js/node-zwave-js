@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed: Firmware updates fail to start on some devices with error "invalid hardware version" (#7452)
+
+### Changes under the hood
+* Classes that emit events are now based on the DOM compatible `EventTarget` class instead of Node.js's proprietary `EventEmitter`. This means that some methods like `prependListener` no longer exist, but we haven't found any usage of this in the wild.
+
 ## 14.3.6 (2024-11-22)
 ### Bugfixes
 * Fixed another issue where some CC API methods would incorrectly fail validation of their arguments, causing the node interview to fail (#7435)
