@@ -222,6 +222,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 				// Prepare the firmware update
 				let fragmentSizeSecure: number;
 				let fragmentSizeNonSecure: number;
+				let hardwareVersion: number | undefined;
 				let meta: FirmwareUpdateMetaData;
 				try {
 					const prepareResult = await self
@@ -250,6 +251,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 					({
 						fragmentSizeSecure,
 						fragmentSizeNonSecure,
+						hardwareVersion,
 						...meta
 					} = prepareResult!);
 				} catch {
@@ -353,6 +355,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 							meta,
 							fragmentSize,
 							checksum,
+							hardwareVersion,
 							shouldResume,
 							options.nonSecureTransfer,
 						);
@@ -646,8 +649,9 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		meta: FirmwareUpdateMetaData,
 		fragmentSize: number,
 		checksum: number,
-		resume: boolean | undefined,
-		nonSecureTransfer: boolean | undefined,
+		hardwareVersion?: number,
+		resume?: boolean,
+		nonSecureTransfer?: boolean,
 	) {
 		const api = this.commandClasses["Firmware Update Meta Data"];
 
@@ -669,6 +673,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 			firmwareTarget: target,
 			fragmentSize,
 			checksum,
+			hardwareVersion,
 			resume,
 			nonSecureTransfer,
 		});
