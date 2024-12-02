@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.7 (2024-12-02)
 ### Bugfixes
 * Fixed: Firmware updates fail to start on some devices with error "invalid hardware version" (#7452)
 
