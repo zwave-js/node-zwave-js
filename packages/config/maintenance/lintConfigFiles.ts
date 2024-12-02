@@ -1055,13 +1055,13 @@ Consider converting this parameter to unsigned using ${
 			addWarning(
 				file,
 				`Skipping "duplicatedPartials" lint check for parameter #${parameter} due to "lintSkip" configuration.`,
-				variant
-			);			
+				variant,
+			);
 			return false;
 		}
 		return paramInformation.has({ parameter });
 	});
-	
+
 	if (duplicatedPartials.length) {
 		addError(
 			file,

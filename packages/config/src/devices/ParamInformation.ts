@@ -166,7 +166,10 @@ Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 
 		if (
 			definition.lintSkip != undefined
-			&& (!isArray(definition.lintSkip) || !definition.lintSkip.every((rule: unknown) => typeof rule === "string"))
+			&& (!isArray(definition.lintSkip)
+				|| !definition.lintSkip.every((rule: unknown) =>
+					typeof rule === "string"
+				))
 		) {
 			throwInvalidConfig(
 				"devices",
