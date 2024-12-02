@@ -748,23 +748,23 @@
 		},
 		{
 			"#": "25[0xff]",
-			"label": "Fan LED Effect Color",
-			"$import": "#paramInformation/24[0xff]"
+			"$import": "#paramInformation/24[0xff]",
+			"label": "Fan LED Effect Color"
 		},
 		{
 			"#": "25[0xff00]",
-			"label": "Fan LED Effect Brightness",
-			"$import": "#paramInformation/24[0xff00]"
+			"$import": "#paramInformation/24[0xff00]",
+			"label": "Fan LED Effect Brightness"
 		},
 		{
 			"#": "25[0xff0000]",
-			"label": "Fan LED Effect Duration",
-			"$import": "#paramInformation/24[0xff0000]"
+			"$import": "#paramInformation/24[0xff0000]",
+			"label": "Fan LED Effect Duration"
 		},
 		{
 			"#": "25[0x7f000000]",
-			"label": "Fan LED Effect Type",
-			"$import": "#paramInformation/24[0x7f000000]"
+			"$import": "#paramInformation/24[0x7f000000]",
+			"label": "Fan LED Effect Type"
 		},
 		{
 			"#": "26",
