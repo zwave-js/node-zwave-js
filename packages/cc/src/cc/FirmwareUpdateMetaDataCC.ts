@@ -667,7 +667,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public nonSecureTransfer?: boolean;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = Bytes.alloc(11, 0);
+		this.payload = Bytes.alloc(10, 0);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
@@ -678,7 +678,13 @@ export class FirmwareUpdateMetaDataCCRequestGet
 		this.payload[9] = (this.activation ? 0b1 : 0)
 			| (this.nonSecureTransfer ? 0b10 : 0)
 			| (this.resume ? 0b100 : 0);
-		this.payload[10] = this.hardwareVersion ?? 0x00;
+		// Hardware version is not always set, but devices check it
+		if (this.hardwareVersion != undefined) {
+			this.payload = Bytes.concat([
+				this.payload,
+				[this.hardwareVersion],
+			]);
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
@@ -1030,12 +1036,17 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public hardwareVersion?: number;
 
 	public serialize(ctx: CCEncodingContext): Bytes {
-		this.payload = new Bytes(8);
+		this.payload = new Bytes(7);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
 		this.payload[6] = this.firmwareTarget;
-		this.payload[7] = this.hardwareVersion ?? 0x00;
+		if (this.hardwareVersion != undefined) {
+			this.payload = Bytes.concat([
+				this.payload,
+				[this.hardwareVersion],
+			]);
+		}
 		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
