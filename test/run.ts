@@ -24,6 +24,7 @@ process.on("unhandledRejection", (_r) => {
 const port = os.platform() === "win32"
 	? "COM5"
 	: "/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
+// const port = "tcp://127.0.0.1:5555";
 
 const driver = new Driver(port, {
 	// logConfig: {

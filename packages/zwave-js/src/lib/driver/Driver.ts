@@ -125,16 +125,19 @@ import {
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
+	type ZWaveSerialBindingFactory,
 	ZWaveSerialFrameType,
 	ZWaveSerialMode,
 	type ZWaveSerialPortImplementation,
 	type ZWaveSerialStream,
 	ZWaveSerialStreamFactory,
 	createNodeSerialPortFactory,
+	createNodeSocketFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
@@ -639,7 +642,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		PersistValuesContext
 {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
@@ -1303,37 +1310,41 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.driverLog.print("starting driver...");
 
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			// if (this.port.startsWith("tcp://")) {
-			// 	const url = new URL(this.port);
-			// 	this.driverLog.print(`opening serial port ${this.port}`);
-			// 	this.serial = new ZWaveSocket(
-			// 		{
-			// 			host: url.hostname,
-			// 			port: parseInt(url.port),
-			// 		},
-			// 		this._logContainer,
-			// 	);
-			// } else {
-			this.driverLog.print(`opening serial port ${this.port}`);
-			const binding = createNodeSerialPortFactory(
-				this.port,
-				this._options.testingHooks?.serialPortBinding,
+			if (this.port.startsWith("tcp://")) {
+				const url = new URL(this.port);
+				this.driverLog.print(`opening serial port ${this.port}`);
+				binding = createNodeSocketFactory({
+					host: url.hostname,
+					port: parseInt(url.port),
+				});
+			} else {
+				this.driverLog.print(`opening serial port ${this.port}`);
+				binding = createNodeSerialPortFactory(
+					this.port,
+					this._options.testingHooks?.serialPortBinding,
+				);
+			}
+		} else if (isZWaveSerialPortImplementation(this.port)) {
+			this.driverLog.print(
+				"opening serial port using the provided custom implementation",
 			);
-			this.serialFactory = new ZWaveSerialStreamFactory(
-				binding,
-				this._logContainer,
+			this.driverLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
 			);
-			// 	}
-			// } else {
-			// 	this.driverLog.print(
-			// 		"opening serial port using the provided custom implementation",
-			// 	);
-			// 	this.serial = new ZWaveSerialPortBase(
-			// 		this.port,
-			// 		this._logContainer,
-			// 	);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.driverLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
+		this.serialFactory = new ZWaveSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
