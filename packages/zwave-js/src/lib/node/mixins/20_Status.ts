@@ -4,7 +4,8 @@ import { cacheKeys } from "../../driver/NetworkCache.js";
 import { type Extended, interpretEx } from "../../driver/StateMachineShared.js";
 import { type DeviceClass } from "../DeviceClass.js";
 import {
-	type NodeReadyInterpreter,
+	type NodeReadyMachine,
+	type NodeReadyMachineInput,
 	createNodeReadyMachine,
 } from "../NodeReadyMachine.js";
 import {
@@ -81,13 +82,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 		});
 		this.statusMachine.start();
 
-		this.readyMachine = interpretEx(createNodeReadyMachine());
-		this.readyMachine.onTransition((state) => {
-			if (state.changed) {
-				this.onReadyChange(state.value === "ready");
-			}
-		});
-		this.readyMachine.start();
+		this.readyMachine = createNodeReadyMachine();
 	}
 
 	protected statusMachine: Extended<NodeStatusInterpreter>;
@@ -120,11 +115,13 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 		// To be marked ready, a node must be known to be not dead.
 		// This means that listening nodes must have communicated with us and
 		// sleeping nodes are assumed to be ready
-		this.readyMachine.send(
-			this._status !== NodeStatus.Unknown
-				&& this._status !== NodeStatus.Dead
-				? "NOT_DEAD"
-				: "MAYBE_DEAD",
+		this.updateReadyMachine(
+			{
+				input: this._status !== NodeStatus.Unknown
+						&& this._status !== NodeStatus.Dead
+					? "NOT_DEAD"
+					: "MAYBE_DEAD",
+			},
 		);
 	}
 
@@ -163,8 +160,21 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	// The node is only ready when the interview has been completed
 	// to a certain degree
 
-	protected readyMachine: Extended<NodeReadyInterpreter>;
+	private readyMachine: NodeReadyMachine;
 	private _ready: boolean = false;
+
+	protected restartReadyMachine(): void {
+		this.readyMachine.restart();
+		this.onReadyChange(false);
+	}
+
+	protected updateReadyMachine(input: NodeReadyMachineInput): void {
+		const newState = this.readyMachine.next(input)?.newState;
+		if (newState) {
+			this.readyMachine.transition(newState);
+			this.onReadyChange(newState.value === "ready");
+		}
+	}
 
 	private onReadyChange(ready: boolean) {
 		// Ignore duplicate events
