@@ -1,7 +1,7 @@
 import {
+	type InferStateMachineTransitions,
 	StateMachine,
 	type StateMachineTransition,
-	type StateMachineTransitions,
 } from "@zwave-js/core";
 
 export type NodeReadyState = {
@@ -15,7 +15,7 @@ export type NodeReadyState = {
 };
 
 export type NodeReadyMachineInput = {
-	input: "NOT_DEAD" | "MAYBE_DEAD" | "RESTART_FROM_CACHE" | "INTERVIEW_DONE";
+	value: "NOT_DEAD" | "MAYBE_DEAD" | "RESTART_FROM_CACHE" | "INTERVIEW_DONE";
 };
 
 export type NodeReadyMachine = StateMachine<
@@ -35,11 +35,11 @@ export function createNodeReadyMachine(): NodeReadyMachine {
 
 	const READY: NodeReadyState = { value: "ready", done: true };
 
-	const transitions: StateMachineTransitions<NodeReadyMachine> =
+	const transitions: InferStateMachineTransitions<NodeReadyMachine> =
 		(state) => (input) => {
 			switch (state.value) {
 				case "notReady": {
-					switch (input.input) {
+					switch (input.value) {
 						case "NOT_DEAD":
 							return to({ ...state, maybeDead: false });
 						case "MAYBE_DEAD":
@@ -56,10 +56,7 @@ export function createNodeReadyMachine(): NodeReadyMachine {
 					break;
 				}
 				case "readyIfNotDead": {
-					switch (input.input) {
-						case "NOT_DEAD":
-							return to(READY);
-					}
+					if (input.value === "NOT_DEAD") return to(READY);
 					break;
 				}
 			}

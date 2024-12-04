@@ -1,7 +1,6 @@
 import { type CommandClasses, InterviewStage } from "@zwave-js/core";
 import { type Driver } from "../../driver/Driver.js";
 import { cacheKeys } from "../../driver/NetworkCache.js";
-import { type Extended, interpretEx } from "../../driver/StateMachineShared.js";
 import { type DeviceClass } from "../DeviceClass.js";
 import {
 	type NodeReadyMachine,
@@ -9,7 +8,8 @@ import {
 	createNodeReadyMachine,
 } from "../NodeReadyMachine.js";
 import {
-	type NodeStatusInterpreter,
+	type NodeStatusMachine,
+	type NodeStatusMachineInput,
 	createNodeStatusMachine,
 	nodeStatusMachineStateToNodeStatus,
 } from "../NodeStatusMachine.js";
@@ -69,23 +69,12 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	) {
 		super(nodeId, driver, index, deviceClass, supportedCCs);
 
-		// Create and hook up the status machine
-		this.statusMachine = interpretEx(
-			createNodeStatusMachine(this),
-		);
-		this.statusMachine.onTransition((state) => {
-			if (state.changed) {
-				this.onStatusChange(
-					nodeStatusMachineStateToNodeStatus(state.value as any),
-				);
-			}
-		});
-		this.statusMachine.start();
-
+		// Create the state machines
+		this.statusMachine = createNodeStatusMachine(this);
 		this.readyMachine = createNodeReadyMachine();
 	}
 
-	protected statusMachine: Extended<NodeStatusInterpreter>;
+	private statusMachine: NodeStatusMachine;
 
 	private _status: NodeStatus = NodeStatus.Unknown;
 
@@ -94,6 +83,21 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	 */
 	public get status(): NodeStatus {
 		return this._status;
+	}
+
+	protected restartStatusMachine(): void {
+		this.statusMachine.restart();
+		this.onStatusChange(NodeStatus.Unknown);
+	}
+
+	protected updateStatusMachine(input: NodeStatusMachineInput): void {
+		const newState = this.statusMachine.next(input)?.newState;
+		if (newState) {
+			this.statusMachine.transition(newState);
+			this.onStatusChange(
+				nodeStatusMachineStateToNodeStatus(newState.value),
+			);
+		}
 	}
 
 	private onStatusChange(newStatus: NodeStatus) {
@@ -117,7 +121,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 		// sleeping nodes are assumed to be ready
 		this.updateReadyMachine(
 			{
-				input: this._status !== NodeStatus.Unknown
+				value: this._status !== NodeStatus.Unknown
 						&& this._status !== NodeStatus.Dead
 					? "NOT_DEAD"
 					: "MAYBE_DEAD",
@@ -130,7 +134,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	 * Marks this node as dead (if applicable)
 	 */
 	public markAsDead(): void {
-		this.statusMachine.send("DEAD");
+		this.updateStatusMachine({ value: "DEAD" });
 	}
 
 	/**
@@ -138,7 +142,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	 * Marks this node as alive (if applicable)
 	 */
 	public markAsAlive(): void {
-		this.statusMachine.send("ALIVE");
+		this.updateStatusMachine({ value: "ALIVE" });
 	}
 
 	/**
@@ -146,7 +150,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	 * Marks this node as asleep (if applicable)
 	 */
 	public markAsAsleep(): void {
-		this.statusMachine.send("ASLEEP");
+		this.updateStatusMachine({ value: "ASLEEP" });
 	}
 
 	/**
@@ -154,7 +158,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	 * Marks this node as awake (if applicable)
 	 */
 	public markAsAwake(): void {
-		this.statusMachine.send("AWAKE");
+		this.updateStatusMachine({ value: "AWAKE" });
 	}
 
 	// The node is only ready when the interview has been completed

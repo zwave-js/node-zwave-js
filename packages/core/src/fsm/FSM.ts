@@ -13,7 +13,7 @@ export interface StateMachineState {
 }
 
 export interface StateMachineInput {
-	input: number | string;
+	value: number | string;
 }
 
 export type StateMachineTransitionMap<
@@ -24,10 +24,11 @@ export type StateMachineTransitionMap<
 	state: State,
 ) => (input: Input) => StateMachineTransition<State, Effect> | undefined;
 
-export type StateMachineTransitions<T extends StateMachine<any, any, any>> =
-	T extends StateMachine<infer S, infer I, infer E>
-		? StateMachineTransitionMap<S, I, E>
-		: never;
+export type InferStateMachineTransitions<
+	T extends StateMachine<any, any, any>,
+> = T extends StateMachine<infer S, infer I, infer E>
+	? StateMachineTransitionMap<S, I, E>
+	: never;
 
 export class StateMachine<
 	State extends StateMachineState,

@@ -1,17 +1,26 @@
-import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
-import { NodeStatus } from "./_Types.js";
+import {
+	type InferStateMachineTransitions,
+	NodeStatus,
+	StateMachine,
+	type StateMachineTransition,
+} from "@zwave-js/core";
 import { type NodeNetworkRole } from "./mixins/01_NetworkRole.js";
 
-export interface NodeStatusStateSchema {
-	states: {
-		unknown: object;
-		// non-sleeping nodes are either dead or alive
-		dead: object;
-		alive: object;
-		// sleeping nodes are asleep or awake
-		asleep: object;
-		awake: object;
-	};
+export type NodeStatusState = {
+	value: "unknown" | "dead" | "alive" | "asleep" | "awake";
+};
+
+export type NodeStatusMachineInput = {
+	value: "DEAD" | "ALIVE" | "ASLEEP" | "AWAKE";
+};
+
+export type NodeStatusMachine = StateMachine<
+	NodeStatusState,
+	NodeStatusMachineInput
+>;
+
+function to(state: NodeStatusState): StateMachineTransition<NodeStatusState> {
+	return { newState: state };
 }
 
 const statusDict = {
@@ -21,94 +30,73 @@ const statusDict = {
 	asleep: NodeStatus.Asleep,
 	awake: NodeStatus.Awake,
 } as const;
+
 export function nodeStatusMachineStateToNodeStatus(
-	state: keyof NodeStatusStateSchema["states"],
+	state: NodeStatusState["value"],
 ): NodeStatus {
 	return statusDict[state] ?? NodeStatus.Unknown;
 }
 
-export type NodeStatusEvent =
-	| { type: "DEAD" }
-	| { type: "ALIVE" }
-	| { type: "ASLEEP" }
-	| { type: "AWAKE" };
-
-export type NodeStatusMachine = StateMachine<
-	any,
-	NodeStatusStateSchema,
-	NodeStatusEvent,
-	any,
-	any,
-	any,
-	any
->;
-export type NodeStatusInterpreter = InterpreterFrom<NodeStatusMachine>;
-
 export function createNodeStatusMachine(
 	node: NodeNetworkRole,
 ): NodeStatusMachine {
-	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
-		{
-			id: "nodeStatus",
-			initial: "unknown",
-			states: {
-				unknown: {
-					on: {
-						DEAD: {
-							target: "dead",
-							cond: "cannotSleep",
-						},
-						ALIVE: {
-							target: "alive",
-							cond: "cannotSleep",
-						},
-						ASLEEP: {
-							target: "asleep",
-							cond: "canSleep",
-						},
-						AWAKE: {
-							target: "awake",
-							cond: "canSleep",
-						},
-					},
-				},
-				dead: {
-					on: {
-						ALIVE: "alive",
-					},
-				},
-				alive: {
-					on: {
-						DEAD: "dead",
+	const initialState: NodeStatusState = {
+		value: "unknown",
+	};
+
+	const transitions: InferStateMachineTransitions<NodeStatusMachine> =
+		(state) => (input) => {
+			switch (state.value) {
+				case "unknown": {
+					switch (input.value) {
+						case "DEAD":
+							if (!node.canSleep) return to({ value: "dead" });
+							break;
+						case "ALIVE":
+							if (!node.canSleep) return to({ value: "alive" });
+							break;
+						case "ASLEEP":
+							if (node.canSleep) return to({ value: "asleep" });
+							break;
+						case "AWAKE":
+							if (node.canSleep) return to({ value: "awake" });
+							break;
+					}
+					break;
+				}
+				case "dead": {
+					if (input.value === "ALIVE") return to({ value: "alive" });
+					break;
+				}
+				case "alive": {
+					switch (input.value) {
+						case "DEAD":
+							return to({ value: "dead" });
 						// GH#1054 we must have a way to send a node to sleep even if
 						// it was previously detected as a non-sleeping device
-						ASLEEP: {
-							target: "asleep",
-							cond: "canSleep",
-						},
-						AWAKE: {
-							target: "awake",
-							cond: "canSleep",
-						},
-					},
-				},
-				asleep: {
-					on: {
-						AWAKE: "awake",
-					},
-				},
-				awake: {
-					on: {
-						ASLEEP: "asleep",
-					},
-				},
-			},
-		},
-		{
-			guards: {
-				canSleep: () => !!node.canSleep,
-				cannotSleep: () => !node.canSleep,
-			},
-		},
-	);
+						case "ASLEEP": {
+							if (node.canSleep) return to({ value: "asleep" });
+							break;
+						}
+						case "AWAKE": {
+							if (node.canSleep) return to({ value: "awake" });
+							break;
+						}
+					}
+					break;
+				}
+				case "asleep": {
+					if (input.value === "AWAKE") return to({ value: "awake" });
+					break;
+				}
+				case "awake": {
+					if (input.value === "ASLEEP") {
+						return to({ value: "asleep" });
+					}
+					break;
+				}
+			}
+		};
+
+	return new StateMachine(initialState, transitions);
 }

@@ -313,9 +313,6 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	 * Cleans up all resources used by this node
 	 */
 	public destroy(): void {
-		// Stop all state machines
-		this.statusMachine.stop();
-
 		// Remove all timeouts
 		for (
 			const timeout of [
@@ -989,7 +986,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 
 		// Restart all state machines
 		this.restartReadyMachine();
-		this.statusMachine.restart();
+		this.restartStatusMachine();
 
 		// Remove queued polls that would interfere with the interview
 		this.cancelAllScheduledPolls();
@@ -1114,7 +1111,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		this.cachedDeviceConfigHash = await this._deviceConfig?.getHash();
 
 		this.setInterviewStage(InterviewStage.Complete);
-		this.updateReadyMachine({ input: "INTERVIEW_DONE" });
+		this.updateReadyMachine({ value: "INTERVIEW_DONE" });
 
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
@@ -4923,7 +4920,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Mark already-interviewed nodes as potentially ready
 		if (this.interviewStage === InterviewStage.Complete) {
-			this.updateReadyMachine({ input: "RESTART_FROM_CACHE" });
+			this.updateReadyMachine({ value: "RESTART_FROM_CACHE" });
 		}
 	}
 
