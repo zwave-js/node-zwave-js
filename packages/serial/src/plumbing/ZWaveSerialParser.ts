@@ -6,7 +6,7 @@ import {
 } from "../parsers/BootloaderParsers.js";
 import { SerialAPIWebParser } from "../parsers/SerialAPIParser.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
-import { type ZWaveSerialMode } from "../serialport/ZWaveSerialPortBase.js";
+import { type ZWaveSerialMode } from "../serialport/definitions.js";
 import { mergeReadableStreams } from "./Merge.js";
 import { SerialModeSwitch } from "./SerialModeSwitch.js";
 

@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared";
 import { bootloaderMenuPreamble } from "../parsers/BootloaderParsers.js";
-import { ZWaveSerialMode } from "../serialport/ZWaveSerialPortBase.js";
+import { ZWaveSerialMode } from "../serialport/definitions.js";
 
 const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 

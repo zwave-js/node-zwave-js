@@ -21,7 +21,7 @@ import { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
 import { ZWaveSerialParser } from "../plumbing/ZWaveSerialParser.js";
-import { ZWaveSerialMode } from "./ZWaveSerialPortBase.js";
+import { ZWaveSerialMode } from "./definitions.js";
 
 /** The low level bindings used by ZWaveSerialStream.
  * The `sink` is guaranteed to be opened first, so possible setup should be done in
@@ -32,6 +32,13 @@ export interface ZWaveSerialBinding {
 }
 
 export type ZWaveSerialBindingFactory = () => Promise<ZWaveSerialBinding>;
+
+/** Tests if `obj` is (probably) a ZWaveSerialBindingFactory */
+export function isZWaveSerialBindingFactory(
+	obj: unknown,
+): obj is ZWaveSerialBindingFactory {
+	return typeof obj === "function" && obj.length === 0;
+}
 
 /** Re-usable stream factory to create new serial streams */
 export class ZWaveSerialStreamFactory {

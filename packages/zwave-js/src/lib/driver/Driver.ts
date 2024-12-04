@@ -136,6 +136,7 @@ import {
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
+	isZWaveSerialBindingFactory,
 	isZWaveSerialPortImplementation,
 	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
@@ -655,6 +656,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (
 			typeof port !== "string"
 			&& !isZWaveSerialPortImplementation(port)
+			&& !isZWaveSerialBindingFactory(port)
 		) {
 			throw new ZWaveError(
 				`The port must be a string or a valid custom serial port implementation!`,
@@ -1323,7 +1325,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				this.driverLog.print(`opening serial port ${this.port}`);
 				binding = createNodeSerialPortFactory(
 					this.port,
-					this._options.testingHooks?.serialPortBinding,
+					// this._options.testingHooks?.serialPortBinding,
 				);
 			}
 		} else if (isZWaveSerialPortImplementation(this.port)) {
@@ -1374,12 +1376,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			// Start the task scheduler
 			this._scheduler.start();
 
-			// if (
-			// 	typeof this._options.testingHooks?.onSerialPortOpen
-			// 		=== "function"
-			// ) {
-			// 	await this._options.testingHooks.onSerialPortOpen(this.serial!);
-			// }
+			if (
+				typeof this._options.testingHooks?.onSerialPortOpen
+					=== "function"
+			) {
+				await this._options.testingHooks.onSerialPortOpen(this.serial!);
+			}
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
@@ -3485,9 +3487,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		try {
 			for await (const frame of serial.readable) {
 				if (frame.type === ZWaveSerialFrameType.SerialAPI) {
-					await this.serialport_onData(frame.data);
+					void this.serialport_onData(frame.data);
 				} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
-					this.serialport_onBootloaderData(frame.data);
+					void this.serialport_onBootloaderData(frame.data);
 				} else {
 					// Handle discarded data?
 				}
