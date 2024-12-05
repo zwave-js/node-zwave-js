@@ -242,6 +242,10 @@ import {
 	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine.js";
 import {
+	type SerialAPICommandMachine2Input,
+	createSerialAPICommandMachine2,
+} from "./SerialAPICommandMachine2.js";
+import {
 	type TransactionReducer,
 	type TransactionReducerResult,
 	createMessageDroppedUnexpectedError,
@@ -3496,36 +3500,49 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	): Promise<void> {
 		if (typeof data === "number") {
 			switch (data) {
-				// single-byte messages - just forward them to the send thread
-				case MessageHeaders.ACK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("ACK");
-					}
-					return;
-				}
-				case MessageHeaders.NAK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("NAK");
-					}
-					this._controller?.incrementStatistics("NAK");
-					return;
-				}
+				case MessageHeaders.ACK:
+				case MessageHeaders.NAK:
 				case MessageHeaders.CAN: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("CAN");
+					// check if someone is waiting for this
+					for (const entry of this.awaitedMessageHeaders) {
+						if (entry.predicate(data)) {
+							entry.handler(data);
+							break;
+						}
 					}
-					this._controller?.incrementStatistics("CAN");
 					return;
 				}
+
+					// // single-byte messages - just forward them to the send thread
+					// case MessageHeaders.ACK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("ACK");
+					// 	}
+					// 	return;
+					// }
+					// case MessageHeaders.NAK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("NAK");
+					// 	}
+					// 	this._controller?.incrementStatistics("NAK");
+					// 	return;
+					// }
+					// case MessageHeaders.CAN: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("CAN");
+					// 	}
+					// 	this._controller?.incrementStatistics("CAN");
+					// 	return;
+					// }
 			}
 		}
 
@@ -3747,17 +3764,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				}
 			}
 
-			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
-			if (
-				this.serialAPIInterpreter?.status === InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send({
-					type: "message",
-					message: msg,
-				});
-			} else {
-				void this.handleUnsolicitedMessage(msg);
-			}
+			// // Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
+			// if (
+			// 	this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			// ) {
+			// 	this.serialAPIInterpreter.send({
+			// 		type: "message",
+			// 		message: msg,
+			// 	});
+			// } else {
+			void this.handleUnsolicitedMessage(msg);
+			// }
 		}
 	}
 
@@ -4683,26 +4700,26 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
-		if (msg.type === MessageType.Request) {
-			// This is a request we might have registered handlers for
-			try {
+		// FIXME: Rename this - msg might not be unsolicited
+		// This is a message we might have registered handlers for
+		try {
+			if (msg.type === MessageType.Request) {
 				await this.handleRequest(msg);
-			} catch (e) {
-				if (
-					isZWaveError(e)
-					&& e.code === ZWaveErrorCodes.Driver_NotReady
-				) {
-					this.driverLog.print(
-						`Cannot handle message because the driver is not ready to handle it yet.`,
-						"warn",
-					);
-				} else {
-					throw e;
-				}
+			} else {
+				await this.handleResponse(msg);
 			}
-		} else {
-			this.driverLog.transactionResponse(msg, undefined, "unexpected");
-			this.driverLog.print("unexpected response, discarding...", "warn");
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				this.driverLog.print(
+					`Cannot handle message because the driver is not ready to handle it yet.`,
+					"warn",
+				);
+			} else {
+				throw e;
+			}
 		}
 	}
 
@@ -5020,6 +5037,25 @@ ${handlers.length} left`,
 		}
 
 		return false;
+	}
+
+	/**
+	 * Is called when a Response-type message was received
+	 */
+	private handleResponse(msg: Message): Promise<void> {
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// We do
+				entry.handler(msg);
+				return Promise.resolve();
+			}
+		}
+
+		this.driverLog.transactionResponse(msg, undefined, "unexpected");
+		this.driverLog.print("unexpected response, discarding...", "warn");
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -5773,7 +5809,7 @@ ${handlers.length} left`,
 		for await (const item of this.serialAPIQueue) {
 			const { msg, transactionSource, result } = item;
 			try {
-				const ret = await this.executeSerialAPICommand(
+				const ret = await this.executeSerialAPICommand2(
 					msg,
 					transactionSource,
 				);
@@ -5834,6 +5870,174 @@ ${handlers.length} left`,
 		}
 
 		return attemptNumber < msg.maxSendAttempts;
+	}
+
+	/**
+	 * Executes a Serial API command and returns or throws the result.
+	 * This method should not be called outside of {@link drainSerialAPIQueue}.
+	 */
+	private async executeSerialAPICommand2(
+		msg: Message,
+		transactionSource?: string,
+	): Promise<Message | undefined> {
+		// Give the command a callback ID if it needs one
+		if (msg.needsCallbackId() && !msg.hasCallbackId()) {
+			msg.callbackId = this.getNextCallbackId();
+		}
+
+		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
+		// This was broken in 7.19, not fixed so far
+		if (
+			msg.functionType === FunctionType.SoftReset
+			&& this.controller.sdkVersionGte("7.19.0")
+		) {
+			this.serial?.ignoreAckHighNibbleOnce();
+		}
+
+		const machine = createSerialAPICommandMachine2(msg);
+
+		let nextInput: SerialAPICommandMachine2Input | undefined = {
+			value: "start",
+		};
+
+		while (!machine.done) {
+			if (nextInput == undefined) {
+				// We should not be in a situation where we have no input for the state machine
+				throw new Error(
+					"Serial API Command machine is in an invalid state: no input provided",
+				);
+			}
+			const transition = machine.next(nextInput);
+			if (transition == undefined) {
+				// We should not be in a situation where the state machine does not transition
+				throw new Error(
+					"Serial API Command machine is in an invalid state: no transition taken",
+				);
+			}
+
+			// The input was used
+			nextInput = undefined;
+
+			// Transition to the new state
+			machine.transition(transition.newState);
+
+			// Now check what needs to be done in the new state
+			switch (machine.state.value) {
+				case "initial":
+					// This should never happen
+					throw new Error(
+						"Serial API Command machine is in an invalid state: transitioned to initial state",
+					);
+
+				case "sending": {
+					const data = await msg.serializeAsync(
+						this.getEncodingContext(),
+					);
+					await this.writeSerial(data);
+					nextInput = { value: "message sent" };
+					break;
+				}
+
+				case "waitingForACK": {
+					const controlFlow = await this.waitForMessageHeader(
+						() => true,
+						this.options.timeouts.ack,
+					).catch(() => "timeout" as const);
+
+					if (controlFlow === "timeout") {
+						nextInput = { value: "timeout" };
+					} else if (controlFlow === MessageHeaders.ACK) {
+						nextInput = { value: "ACK" };
+					} else if (controlFlow === MessageHeaders.CAN) {
+						nextInput = { value: "CAN" };
+					} else if (controlFlow === MessageHeaders.NAK) {
+						nextInput = { value: "NAK" };
+					}
+
+					break;
+				}
+
+				case "waitingForResponse": {
+					const response = await this.waitForMessage(
+						(resp) => msg.isExpectedResponse(resp),
+						msg.getResponseTimeout()
+							?? this.options.timeouts.response,
+					).catch(() => "timeout" as const);
+
+					if (response === "timeout") {
+						if (isSendData(msg)) {
+							// Timed out SendData commands must be aborted
+							void this.abortSendData();
+						}
+
+						nextInput = { value: "timeout" };
+					} else if (
+						isSuccessIndicator(response) && !response.isOK()
+					) {
+						nextInput = { value: "response NOK", response };
+					} else {
+						nextInput = { value: "response", response };
+					}
+
+					break;
+				}
+
+				case "waitingForCallback": {
+					let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+					if (isSendData(msg)) {
+						// We abort timed out SendData commands before the callback times out
+						sendDataAbortTimeout = setTimeout(() => {
+							void this.abortSendData();
+						}, this.options.timeouts.sendDataCallback).unref();
+					}
+
+					const callback = await this.waitForMessage(
+						(resp) => msg.isExpectedCallback(resp),
+						msg.getCallbackTimeout()
+							?? this.options.timeouts.sendDataCallback,
+					).catch(() => "timeout" as const);
+
+					if (sendDataAbortTimeout) {
+						clearTimeout(sendDataAbortTimeout);
+					}
+
+					if (callback === "timeout") {
+						nextInput = { value: "timeout" };
+					} else if (
+						isSuccessIndicator(callback) && !callback.isOK()
+					) {
+						nextInput = { value: "callback NOK", callback };
+					} else {
+						nextInput = { value: "callback", callback };
+					}
+
+					break;
+				}
+
+				case "success": {
+					return machine.state.result;
+				}
+
+				case "failure": {
+					const { reason, result } = machine.state;
+					if (
+						reason === "callback NOK"
+						&& (isSendData(msg) || isTransmitReport(result))
+					) {
+						// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+						// ... so we treat it as a result
+						return result;
+					} else {
+						throw serialAPICommandErrorToZWaveError(
+							reason,
+							msg,
+							result,
+							transactionSource,
+						);
+					}
+				}
+			}
+		}
 	}
 
 	/**
