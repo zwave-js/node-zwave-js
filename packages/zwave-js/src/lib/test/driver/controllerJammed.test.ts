@@ -41,10 +41,10 @@ const controllerCapabilitiesNoBridge: MockControllerCapabilities = {
 	),
 };
 
-integrationTest.only(
+integrationTest(
 	"update the controller status and wait if TX status is Fail",
 	{
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
