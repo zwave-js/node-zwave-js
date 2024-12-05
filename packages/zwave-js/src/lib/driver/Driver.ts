@@ -5988,7 +5988,7 @@ ${handlers.length} left`,
 						// We abort timed out SendData commands before the callback times out
 						sendDataAbortTimeout = setTimeout(() => {
 							void this.abortSendData();
-						}, this.options.timeouts.sendDataCallback).unref();
+						}, this.options.timeouts.sendDataAbort).unref();
 					}
 
 					const callback = await this.waitForMessage(
