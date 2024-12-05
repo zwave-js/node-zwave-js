@@ -213,7 +213,6 @@ export class MockController {
 	private async handleSerialData(): Promise<void> {
 		try {
 			for await (const data of this.mockPort.readable) {
-				console.log("handleSerialData", data);
 				if (data.length === 1) {
 					const header = data[0];
 					switch (header) {
@@ -227,10 +226,7 @@ export class MockController {
 				void this.serialOnData(data).catch(noop);
 			}
 		} catch (e) {
-			console.error("handleSerialData errored", e);
-			if (isAbortError(e)) {
-				return;
-			}
+			if (isAbortError(e)) return;
 			throw e;
 		}
 	}

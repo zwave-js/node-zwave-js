@@ -3486,13 +3486,15 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	private async handleSerialData(serial: ZWaveSerialStream): Promise<void> {
 		try {
 			for await (const frame of serial.readable) {
-				if (frame.type === ZWaveSerialFrameType.SerialAPI) {
-					void this.serialport_onData(frame.data);
-				} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
-					void this.serialport_onBootloaderData(frame.data);
-				} else {
-					// Handle discarded data?
-				}
+				setImmediate(() => {
+					if (frame.type === ZWaveSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
+						void this.serialport_onBootloaderData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
 			}
 		} catch (e) {
 			if (isAbortError(e)) {
