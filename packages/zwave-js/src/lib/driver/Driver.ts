@@ -90,7 +90,6 @@ import {
 	extractRawECDHPrivateKeySync,
 	generateECDHKeyPairSync,
 	getCCName,
-	highResTimestamp,
 	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
@@ -191,7 +190,7 @@ import path from "node:path";
 import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
-import { InterpreterStatus, interpret } from "xstate";
+import { interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
 import { DriverLogger } from "../log/Driver.js";
@@ -237,14 +236,9 @@ import {
 } from "./NetworkCache.js";
 import { type SerialAPIQueueItem, TransactionQueue } from "./Queue.js";
 import {
-	type SerialAPICommandDoneData,
-	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineInput,
 	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine.js";
-import {
-	type SerialAPICommandMachine2Input,
-	createSerialAPICommandMachine2,
-} from "./SerialAPICommandMachine2.js";
 import {
 	type TransactionReducer,
 	type TransactionReducerResult,
@@ -815,8 +809,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	private queuePaused = false;
-	/** The interpreter for the currently active Serial API command */
-	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
 	/** Used to immediately abort ongoing Serial API commands */
 	private abortSerialAPICommand: DeferredPromise<Error> | undefined;
 
@@ -3419,9 +3411,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		for (const queue of this.queues) {
 			queue.abort();
 		}
-		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
-			this.serialAPIInterpreter.stop();
-		}
+
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
 			this.serial.removeAllListeners();
@@ -4749,13 +4739,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				);
 
 				// In this situation, we may be executing a Serial API command, which will never complete.
-				// Bail out of it, without rejecting the actual transaction
-				if (
-					this.serialAPIInterpreter?.status
-						=== InterpreterStatus.Running
-				) {
-					this.serialAPIInterpreter.stop();
-				}
+				// Abort it, so it can be retried
 				if (this.abortSerialAPICommand) {
 					this.controllerLog.print(
 						`Currently active command will be retried...`,
@@ -5811,7 +5795,7 @@ ${handlers.length} left`,
 		for await (const item of this.serialAPIQueue) {
 			const { msg, transactionSource, result } = item;
 			try {
-				const ret = await this.executeSerialAPICommand2(
+				const ret = await this.executeSerialAPICommand(
 					msg,
 					transactionSource,
 				);
@@ -5878,7 +5862,7 @@ ${handlers.length} left`,
 	 * Executes a Serial API command and returns or throws the result.
 	 * This method should not be called outside of {@link drainSerialAPIQueue}.
 	 */
-	private async executeSerialAPICommand2(
+	private async executeSerialAPICommand(
 		msg: Message,
 		transactionSource?: string,
 	): Promise<Message | undefined> {
@@ -5896,11 +5880,11 @@ ${handlers.length} left`,
 			this.serial?.ignoreAckHighNibbleOnce();
 		}
 
-		const machine = createSerialAPICommandMachine2(msg);
+		const machine = createSerialAPICommandMachine(msg);
 		this.abortSerialAPICommand = createDeferredPromise();
 		const abortController = new AbortController();
 
-		let nextInput: SerialAPICommandMachine2Input | undefined = {
+		let nextInput: SerialAPICommandMachineInput | undefined = {
 			value: "start",
 		};
 
@@ -6080,136 +6064,6 @@ ${handlers.length} left`,
 		} finally {
 			this.abortSerialAPICommand = undefined;
 		}
-	}
-
-	/**
-	 * Executes a Serial API command and returns or throws the result.
-	 * This method should not be called outside of {@link drainSerialAPIQueue}.
-	 */
-	private async executeSerialAPICommand(
-		msg: Message,
-		transactionSource?: string,
-	): Promise<Message | undefined> {
-		// Give the command a callback ID if it needs one
-		if (msg.needsCallbackId() && !msg.hasCallbackId()) {
-			msg.callbackId = this.getNextCallbackId();
-		}
-
-		const machine = createSerialAPICommandMachine(
-			msg,
-			await msg.serializeAsync(this.getEncodingContext()),
-			{
-				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(),
-				notifyUnsolicited: (msg) => {
-					void this.handleUnsolicitedMessage(msg);
-				},
-				notifyRetry: (
-					lastError,
-					message,
-					attempts,
-					maxAttempts,
-					delay,
-				) => {
-					// Translate the error into a better one
-					let errorReason: string;
-					switch (lastError) {
-						case "response timeout":
-							errorReason = "No response from controller";
-							this._controller?.incrementStatistics(
-								"timeoutResponse",
-							);
-							break;
-						case "callback timeout":
-							errorReason = "No callback from controller";
-							this._controller?.incrementStatistics(
-								"timeoutCallback",
-							);
-							break;
-						case "response NOK":
-							errorReason =
-								"The controller response indicated failure";
-							break;
-						case "callback NOK":
-							errorReason =
-								"The controller callback indicated failure";
-							break;
-						case "ACK timeout":
-							this._controller?.incrementStatistics("timeoutACK");
-						// fall through
-						case "CAN":
-						case "NAK":
-						default:
-							errorReason =
-								"Failed to execute controller command";
-							break;
-					}
-					this.controllerLog.print(
-						`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				},
-				timestamp: highResTimestamp,
-				logOutgoingMessage: (msg: Message) => {
-					this.driverLog.logMessage(msg, {
-						direction: "outbound",
-					});
-				},
-			},
-			pick(this._options, ["timeouts", "attempts"]),
-		);
-
-		const result = createDeferredPromise<Message | undefined>();
-
-		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
-		// This was broken in 7.19, not fixed so far
-		if (
-			msg.functionType === FunctionType.SoftReset
-			&& this.controller.sdkVersionGte("7.19.0")
-		) {
-			this.serial?.ignoreAckHighNibbleOnce();
-		}
-
-		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
-			this.serialAPIInterpreter?.stop();
-			this.serialAPIInterpreter = undefined;
-
-			const cmdResult = evt.data as SerialAPICommandDoneData;
-			if (cmdResult.type === "success") {
-				result.resolve(cmdResult.result);
-			} else if (
-				cmdResult.reason === "callback NOK"
-				&& (isSendData(msg) || isTransmitReport(cmdResult.result))
-			) {
-				// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
-				// ... so we treat it as a result
-				result.resolve(cmdResult.result);
-			} else {
-				// Convert to a Z-Wave error
-				result.reject(
-					serialAPICommandErrorToZWaveError(
-						cmdResult.reason,
-						msg,
-						cmdResult.result,
-						transactionSource,
-					),
-				);
-			}
-		});
-
-		// Uncomment this for debugging state machine transitions
-		// this.serialAPIInterpreter.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.driverLog.print(
-		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
-		// 		);
-		// 	}
-		// });
-
-		this.serialAPIInterpreter.start();
-
-		this._currentSerialAPICommandPromise = result;
-		return result;
 	}
 
 	private getQueueForTransaction(t: Transaction): TransactionQueue {
