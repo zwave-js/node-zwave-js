@@ -3,7 +3,6 @@ import {
 	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
-	isZWaveError,
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import {
@@ -23,23 +22,16 @@ import {
 	isSendDataTransmitReport,
 } from "@zwave-js/serial/serialapi";
 import { getEnumMemberName } from "@zwave-js/shared";
-import {
-	type AnyStateMachine,
-	Interpreter,
-	type InterpreterFrom,
-	type InterpreterOptions,
-} from "xstate";
-import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine.js";
+import { type SerialAPICommandMachineFailure } from "./SerialAPICommandMachine.js";
 import type { Transaction } from "./Transaction.js";
 
 export function serialAPICommandErrorToZWaveError(
-	reason: (SerialAPICommandDoneData & { type: "failure" })["reason"],
+	reason: SerialAPICommandMachineFailure["reason"],
 	sentMessage: Message,
 	receivedMessage: Message | undefined,
 	transactionSource: string | undefined,
 ): ZWaveError {
 	switch (reason) {
-		case "send failure":
 		case "CAN":
 		case "NAK":
 			return new ZWaveError(
@@ -167,87 +159,6 @@ export function createMessageDroppedUnexpectedError(
 	return ret;
 }
 
-/** Tests whether the given error is one that was caused by the serial API execution */
-export function isSerialCommandError(error: unknown): boolean {
-	if (!isZWaveError(error)) return false;
-	switch (error.code) {
-		case ZWaveErrorCodes.Controller_Timeout:
-		case ZWaveErrorCodes.Controller_ResponseNOK:
-		case ZWaveErrorCodes.Controller_CallbackNOK:
-		case ZWaveErrorCodes.Controller_MessageDropped:
-			return true;
-	}
-	return false;
-}
-
-export type ExtendedInterpreterFrom<
-	TMachine extends AnyStateMachine | ((...args: any[]) => AnyStateMachine),
-> = Extended<InterpreterFrom<TMachine>>;
-
-export type Extended<
-	TInterpreter extends Interpreter<any, any, any, any, any>,
-> = TInterpreter & {
-	restart(): TInterpreter;
-};
-
-/** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
-export function interpretEx<TMachine extends AnyStateMachine>(
-	machine: TMachine,
-	options?: Partial<InterpreterOptions>,
-): ExtendedInterpreterFrom<TMachine> {
-	const interpreter = new Interpreter(
-		machine,
-		options,
-	) as ExtendedInterpreterFrom<TMachine>;
-
-	return new Proxy(interpreter, {
-		get(target, key) {
-			if (key === "restart") {
-				return () => {
-					const listeners = [...(target["listeners"] as Set<any>)];
-					const contextListeners = [
-						...(target["contextListeners"] as Set<any>),
-					];
-					const stopListeners = [
-						...(target["stopListeners"] as Set<any>),
-					];
-					const doneListeners = [
-						...(target["doneListeners"] as Set<any>),
-					];
-					const eventListeners = [
-						...(target["eventListeners"] as Set<any>),
-					];
-					const sendListeners = [
-						...(target["sendListeners"] as Set<any>),
-					];
-					target.stop();
-					for (const listener of listeners) {
-						target.onTransition(listener);
-					}
-					for (const listener of contextListeners) {
-						target.onChange(listener);
-					}
-					for (const listener of stopListeners) {
-						target.onStop(listener);
-					}
-					for (const listener of doneListeners) {
-						target.onDone(listener);
-					}
-					for (const listener of eventListeners) {
-						target.onEvent(listener);
-					}
-					for (const listener of sendListeners) {
-						target.onSend(listener);
-					}
-					return target.start();
-				};
-			} else {
-				return (target as any)[key];
-			}
-		},
-	});
-}
-
 export type TransactionReducerResult =
 	| {
 		// Silently drop the transaction
@@ -282,3 +193,8 @@ export type TransactionReducer = (
 	transaction: Transaction,
 	source: "queue" | "active",
 ) => TransactionReducerResult;
+
+// TODO: Do we still need this?
+// function computeRetryDelay(attempts: number): number {
+// 	return 100 + 1000 * (attempts - 1);
+// }
