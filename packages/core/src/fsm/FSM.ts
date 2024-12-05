@@ -4,7 +4,6 @@ export interface StateMachineTransition<
 > {
 	effect?: Effect;
 	newState: State;
-	delayMs?: number;
 }
 
 export interface StateMachineState {
@@ -22,12 +21,14 @@ export type StateMachineTransitionMap<
 	Effect = undefined,
 > = (
 	state: State,
-) => (input: Input) => StateMachineTransition<State, Effect> | undefined;
+) => (
+	input: Input,
+) => StateMachineTransition<State, Effect | undefined> | undefined;
 
 export type InferStateMachineTransitions<
 	T extends StateMachine<any, any, any>,
 > = T extends StateMachine<infer S, infer I, infer E>
-	? StateMachineTransitionMap<S, I, E>
+	? StateMachineTransitionMap<S, I, E | undefined>
 	: never;
 
 export class StateMachine<
@@ -37,13 +38,21 @@ export class StateMachine<
 > {
 	public constructor(
 		initialState: State,
-		transitions: StateMachineTransitionMap<State, Input, Effect>,
+		transitions: StateMachineTransitionMap<
+			State,
+			Input,
+			Effect | undefined
+		>,
 	) {
 		this._initial = this._state = initialState;
 		this.transitions = transitions;
 	}
 
-	protected transitions: StateMachineTransitionMap<State, Input, Effect>;
+	protected transitions: StateMachineTransitionMap<
+		State,
+		Input,
+		Effect | undefined
+	>;
 
 	/** Restarts the machine from the initial state */
 	public restart(): void {
@@ -53,7 +62,7 @@ export class StateMachine<
 	/** Determines the next transition to take */
 	public next(
 		input: Input,
-	): StateMachineTransition<State, Effect> | undefined {
+	): StateMachineTransition<State, Effect | undefined> | undefined {
 		if (this._state.done) return;
 		return this.transitions(this._state)(input);
 	}
