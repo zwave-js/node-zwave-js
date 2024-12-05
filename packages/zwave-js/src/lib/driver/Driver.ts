@@ -5939,6 +5939,8 @@ ${handlers.length} left`,
 							direction: "outbound",
 						});
 
+						// Mark the message as sent immediately before actually sending
+						msg.markAsSent();
 						const data = await msg.serializeAsync(
 							this.getEncodingContext(),
 						);
