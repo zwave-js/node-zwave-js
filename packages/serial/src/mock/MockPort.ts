@@ -29,12 +29,15 @@ export class MockPort {
 				write: async (chunk, _controller) => {
 					// Remember the last written data
 					this.lastWrite = chunk;
-					// And write it to the sink
-					const writer = this.#sink.getWriter();
-					try {
-						await writer.write(chunk);
-					} finally {
-						writer.releaseLock();
+					// Only write to the sink if its readable side has a reader attached.
+					// Otherwise, we get backpressure on the writable side of the mock port
+					if (this.readable.locked) {
+						const writer = this.#sink.getWriter();
+						try {
+							await writer.write(chunk);
+						} finally {
+							writer.releaseLock();
+						}
 					}
 				},
 			};
