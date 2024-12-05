@@ -817,6 +817,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	private queuePaused = false;
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
+	/** Used to immediately abort ongoing Serial API commands */
+	private abortSerialAPICommand: DeferredPromise<Error> | undefined;
 
 	// Keep track of which queues are currently busy
 	private _queuesBusyFlags = 0;
@@ -4754,12 +4756,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				) {
 					this.serialAPIInterpreter.stop();
 				}
-				if (this._currentSerialAPICommandPromise) {
+				if (this.abortSerialAPICommand) {
 					this.controllerLog.print(
 						`Currently active command will be retried...`,
 						"warn",
 					);
-					this._currentSerialAPICommandPromise.reject(
+					this.abortSerialAPICommand.reject(
 						new ZWaveError(
 							"The Serial API restarted unexpectedly",
 							ZWaveErrorCodes.Controller_Reset,
@@ -5895,148 +5897,186 @@ ${handlers.length} left`,
 		}
 
 		const machine = createSerialAPICommandMachine2(msg);
+		this.abortSerialAPICommand = createDeferredPromise();
+		const abortController = new AbortController();
 
 		let nextInput: SerialAPICommandMachine2Input | undefined = {
 			value: "start",
 		};
 
-		while (!machine.done) {
-			if (nextInput == undefined) {
-				// We should not be in a situation where we have no input for the state machine
-				throw new Error(
-					"Serial API Command machine is in an invalid state: no input provided",
-				);
-			}
-			const transition = machine.next(nextInput);
-			if (transition == undefined) {
-				// We should not be in a situation where the state machine does not transition
-				throw new Error(
-					"Serial API Command machine is in an invalid state: no transition taken",
-				);
-			}
-
-			// The input was used
-			nextInput = undefined;
-
-			// Transition to the new state
-			machine.transition(transition.newState);
-
-			// Now check what needs to be done in the new state
-			switch (machine.state.value) {
-				case "initial":
-					// This should never happen
+		try {
+			while (!machine.done) {
+				if (nextInput == undefined) {
+					// We should not be in a situation where we have no input for the state machine
 					throw new Error(
-						"Serial API Command machine is in an invalid state: transitioned to initial state",
+						"Serial API Command machine is in an invalid state: no input provided",
 					);
-
-				case "sending": {
-					const data = await msg.serializeAsync(
-						this.getEncodingContext(),
+				}
+				const transition = machine.next(nextInput);
+				if (transition == undefined) {
+					// We should not be in a situation where the state machine does not transition
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no transition taken",
 					);
-					await this.writeSerial(data);
-					nextInput = { value: "message sent" };
-					break;
 				}
 
-				case "waitingForACK": {
-					const controlFlow = await this.waitForMessageHeader(
-						() => true,
-						this.options.timeouts.ack,
-					).catch(() => "timeout" as const);
+				// The input was used
+				nextInput = undefined;
 
-					if (controlFlow === "timeout") {
-						nextInput = { value: "timeout" };
-					} else if (controlFlow === MessageHeaders.ACK) {
-						nextInput = { value: "ACK" };
-					} else if (controlFlow === MessageHeaders.CAN) {
-						nextInput = { value: "CAN" };
-					} else if (controlFlow === MessageHeaders.NAK) {
-						nextInput = { value: "NAK" };
+				// Transition to the new state
+				machine.transition(transition.newState);
+
+				// Now check what needs to be done in the new state
+				switch (machine.state.value) {
+					case "initial":
+						// This should never happen
+						throw new Error(
+							"Serial API Command machine is in an invalid state: transitioned to initial state",
+						);
+
+					case "sending": {
+						this.driverLog.logMessage(msg, {
+							direction: "outbound",
+						});
+
+						const data = await msg.serializeAsync(
+							this.getEncodingContext(),
+						);
+						await this.writeSerial(data);
+						nextInput = { value: "message sent" };
+						break;
 					}
 
-					break;
-				}
+					case "waitingForACK": {
+						const controlFlow = await this.waitForMessageHeader(
+							() => true,
+							this.options.timeouts.ack,
+						).catch(() => "timeout" as const);
 
-				case "waitingForResponse": {
-					const response = await this.waitForMessage(
-						(resp) => msg.isExpectedResponse(resp),
-						msg.getResponseTimeout()
-							?? this.options.timeouts.response,
-					).catch(() => "timeout" as const);
-
-					if (response === "timeout") {
-						if (isSendData(msg)) {
-							// Timed out SendData commands must be aborted
-							void this.abortSendData();
+						if (controlFlow === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (controlFlow === MessageHeaders.ACK) {
+							nextInput = { value: "ACK" };
+						} else if (controlFlow === MessageHeaders.CAN) {
+							nextInput = { value: "CAN" };
+						} else if (controlFlow === MessageHeaders.NAK) {
+							nextInput = { value: "NAK" };
 						}
 
-						nextInput = { value: "timeout" };
-					} else if (
-						isSuccessIndicator(response) && !response.isOK()
-					) {
-						nextInput = { value: "response NOK", response };
-					} else {
-						nextInput = { value: "response", response };
+						break;
 					}
 
-					break;
-				}
+					case "waitingForResponse": {
+						const response = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedResponse(resp),
+								msg.getResponseTimeout()
+									?? this.options.timeouts.response,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
 
-				case "waitingForCallback": {
-					let sendDataAbortTimeout: NodeJS.Timeout | undefined;
-					if (isSendData(msg)) {
-						// We abort timed out SendData commands before the callback times out
-						sendDataAbortTimeout = setTimeout(() => {
-							void this.abortSendData();
-						}, this.options.timeouts.sendDataAbort).unref();
+						if (response instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw response;
+						}
+
+						if (response === "timeout") {
+							if (isSendData(msg)) {
+								// Timed out SendData commands must be aborted
+								void this.abortSendData();
+							}
+
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(response) && !response.isOK()
+						) {
+							nextInput = { value: "response NOK", response };
+						} else {
+							nextInput = { value: "response", response };
+						}
+
+						break;
 					}
 
-					const callback = await this.waitForMessage(
-						(resp) => msg.isExpectedCallback(resp),
-						msg.getCallbackTimeout()
-							?? this.options.timeouts.sendDataCallback,
-					).catch(() => "timeout" as const);
+					case "waitingForCallback": {
+						let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+						if (isSendData(msg)) {
+							// We abort timed out SendData commands before the callback times out
+							sendDataAbortTimeout = setTimeout(() => {
+								void this.abortSendData();
+							}, this.options.timeouts.sendDataAbort).unref();
+						}
 
-					if (sendDataAbortTimeout) {
-						clearTimeout(sendDataAbortTimeout);
+						const callback = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedCallback(resp),
+								msg.getCallbackTimeout()
+									?? this.options.timeouts.sendDataCallback,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (sendDataAbortTimeout) {
+							clearTimeout(sendDataAbortTimeout);
+						}
+
+						if (callback instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw callback;
+						}
+
+						if (callback === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(callback) && !callback.isOK()
+						) {
+							nextInput = { value: "callback NOK", callback };
+						} else {
+							nextInput = { value: "callback", callback };
+						}
+
+						break;
 					}
 
-					if (callback === "timeout") {
-						nextInput = { value: "timeout" };
-					} else if (
-						isSuccessIndicator(callback) && !callback.isOK()
-					) {
-						nextInput = { value: "callback NOK", callback };
-					} else {
-						nextInput = { value: "callback", callback };
+					case "success": {
+						return machine.state.result;
 					}
 
-					break;
-				}
-
-				case "success": {
-					return machine.state.result;
-				}
-
-				case "failure": {
-					const { reason, result } = machine.state;
-					if (
-						reason === "callback NOK"
-						&& (isSendData(msg) || isTransmitReport(result))
-					) {
-						// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
-						// ... so we treat it as a result
-						return result;
-					} else {
-						throw serialAPICommandErrorToZWaveError(
-							reason,
-							msg,
-							result,
-							transactionSource,
-						);
+					case "failure": {
+						const { reason, result } = machine.state;
+						if (
+							reason === "callback NOK"
+							&& (isSendData(msg) || isTransmitReport(result))
+						) {
+							// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+							// ... so we treat it as a result
+							return result;
+						} else {
+							throw serialAPICommandErrorToZWaveError(
+								reason,
+								msg,
+								result,
+								transactionSource,
+							);
+						}
 					}
 				}
 			}
+		} finally {
+			this.abortSerialAPICommand = undefined;
 		}
 	}
 
@@ -6701,6 +6741,7 @@ ${handlers.length} left`,
 		predicate: (msg: Message) => boolean,
 		timeout: number,
 		refreshPredicate?: (msg: Message) => boolean,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<Message>();
@@ -6731,6 +6772,10 @@ ${handlers.length} left`,
 				removeEntry();
 				resolve(cc as T);
 			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
+			});
 		});
 	}
 
@@ -6742,6 +6787,7 @@ ${handlers.length} left`,
 	public waitForCommand<T extends CCId>(
 		predicate: (cc: CCId) => boolean,
 		timeout: number,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<CCId>();
@@ -6770,6 +6816,10 @@ ${handlers.length} left`,
 			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
+			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
 			});
 		});
 	}
