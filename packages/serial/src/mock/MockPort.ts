@@ -21,6 +21,7 @@ export class MockPort {
 
 	// Public readable stream to allow handling the written data
 	#sink: WritableStream<Uint8Array>;
+	/** Exposes the data written by the host as a readable stream */
 	public readonly readable: ReadableStream<Uint8Array>;
 
 	public factory(): ZWaveSerialBindingFactory {

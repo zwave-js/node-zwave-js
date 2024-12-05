@@ -51,20 +51,7 @@ export class MockController {
 	public constructor(options: MockControllerOptions) {
 		this.mockPort = options.mockPort;
 		this.serial = options.serial;
-		// FIXME: Reinstate this
-		// // Pipe the serial data through a parser, so we get complete message buffers or headers out the other end
-		// this.serialParser = new SerialAPIParser();
-		// this.serial.on("write", async (data) => {
-		// 	// Execute hooks for inspecting the raw data first
-		// 	for (const behavior of this.behaviors) {
-		// 		if (await behavior.onHostData?.(this, data)) {
-		// 			return;
-		// 		}
-		// 	}
-		// 	// Then parse the data normally
-		// 	this.serialParser.write(data);
-		// });
-		// this.serialParser.on("data", (data) => this.serialOnData(data));
+
 		void this.handleSerialData();
 
 		this.ownNodeId = options.ownNodeId ?? 1;
@@ -158,9 +145,8 @@ export class MockController {
 	public encodingContext: MessageEncodingContext;
 	public parsingContext: MessageParsingContext;
 
-	private readonly mockPort: MockPort;
+	public readonly mockPort: MockPort;
 	public readonly serial: ZWaveSerialStream;
-	// private readonly serialParser: SerialAPIParser;
 
 	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
@@ -212,7 +198,14 @@ export class MockController {
 
 	private async handleSerialData(): Promise<void> {
 		try {
-			for await (const data of this.mockPort.readable) {
+			read: for await (const data of this.mockPort.readable) {
+				// Execute hooks for inspecting the raw data first
+				for (const behavior of this.behaviors) {
+					if (await behavior.onHostData?.(this, data)) {
+						continue read;
+					}
+				}
+
 				if (data.length === 1) {
 					const header = data[0];
 					switch (header) {

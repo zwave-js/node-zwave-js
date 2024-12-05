@@ -21,11 +21,11 @@ integrationTest(
 					// 	&& (ctrl[0] === MessageHeaders.NAK || ctrl[0] === 0x32)
 					// ) {
 					// I've seen logs with as few as 5 bytes in the first chunk
-					self.serial.emitData(
+					self.mockPort.emitData(
 						Bytes.from("\0\r\nGeck", "ascii"),
 					);
 					await wait(20);
-					self.serial.emitData(Bytes.from(
+					self.mockPort.emitData(Bytes.from(
 						`o Bootloader v2.05.01
 1. upload gbl
 2. run
