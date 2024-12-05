@@ -5,9 +5,8 @@ import type {
 	RFRegion,
 } from "@zwave-js/core";
 import type { ZWaveHostOptions } from "@zwave-js/host";
-import type { ZWaveSerialPortBase } from "@zwave-js/serial";
+import { type ZWaveSerialStream } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
-import type { SerialPort } from "serialport";
 import type {
 	InclusionUserCallbacks,
 	JoinNetworkUserCallbacks,
@@ -360,12 +359,11 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
-		serialPortBinding?: typeof SerialPort;
 		/**
 		 * A hook that allows accessing the serial port instance after opening
 		 * and before interacting with it.
 		 */
-		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+		onSerialPortOpen?: (port: ZWaveSerialStream) => Promise<void>;
 
 		/**
 		 * Set this to true to skip the controller identification sequence.

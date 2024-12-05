@@ -1,4 +1,5 @@
-import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { type ZWaveSerialStream } from "@zwave-js/serial";
+import type { MockPort } from "@zwave-js/serial/mock";
 import { copyFilesRecursive, noop } from "@zwave-js/shared";
 import {
 	type MockController,
@@ -68,7 +69,8 @@ function suite(
 	} = options;
 
 	let driver: Driver;
-	let mockPort: MockPortBinding;
+	let mockPort: MockPort;
+	let serial: ZWaveSerialStream;
 	let continueStartup: () => void;
 	let mockController: MockController;
 	let mockNodes: MockNode[];
@@ -93,13 +95,14 @@ function suite(
 			await copyFilesRecursive(provisioningDirectory, cacheDir);
 		}
 
-		({ driver, continueStartup, mockPort } = await prepareDriver(
+		({ driver, continueStartup, mockPort, serial } = await prepareDriver(
 			cacheDir,
 			debug,
 			additionalDriverOptions,
 		));
 		({ mockController, mockNodes } = prepareMocks(
 			mockPort,
+			serial,
 			{
 				capabilities: controllerCapabilities,
 			},

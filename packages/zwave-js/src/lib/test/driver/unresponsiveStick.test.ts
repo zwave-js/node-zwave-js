@@ -7,7 +7,7 @@ import {
 import { SoftResetRequest } from "@zwave-js/serial/serialapi";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
-import Sinon from "sinon";
+import { vi } from "vitest";
 import { integrationTest } from "../integrationTestSuite.js";
 
 let shouldRespond = true;
@@ -85,11 +85,13 @@ integrationTest(
 			shouldRespond = false;
 			mockController.autoAckHostMessages = false;
 
-			const serialPortCloseSpy = Sinon.stub().callsFake(() => {
-				shouldRespond = true;
-				mockController.autoAckHostMessages = true;
-			});
-			mockController.serial.on("close", serialPortCloseSpy);
+			const serialPortCloseSpy = vi.spyOn(mockController.serial, "close")
+				.mockImplementation(
+					async () => {
+						shouldRespond = true;
+						mockController.autoAckHostMessages = true;
+					},
+				);
 
 			await wait(1000);
 
@@ -108,7 +110,7 @@ integrationTest(
 
 			// The serial port should have been closed and reopened
 			await wait(100);
-			t.expect(serialPortCloseSpy.called).toBe(true);
+			t.expect(serialPortCloseSpy).toHaveBeenCalled();
 
 			// FIXME: When closing the serial port, we lose the connection between the mock port instance and the controller
 			// Fix it at some point, then enable the below test.

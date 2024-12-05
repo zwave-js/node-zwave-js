@@ -15,11 +15,11 @@ import {
 	MessageHeaders,
 	MessageOrigin,
 	type MessageParsingContext,
-	SerialAPIParser,
+	type ZWaveSerialStream,
 } from "@zwave-js/serial";
-import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { type MockPort } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
-import { TimedExpectation } from "@zwave-js/shared/safe";
+import { TimedExpectation, isAbortError, noop } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import {
 	type MockControllerCapabilities,
@@ -38,7 +38,9 @@ import {
 } from "./MockZWaveFrame.js";
 
 export interface MockControllerOptions {
-	serial: MockPortBinding;
+	mockPort: MockPort;
+	serial: ZWaveSerialStream;
+	// serial: MockPortBinding;
 	ownNodeId?: number;
 	homeId?: number;
 	capabilities?: Partial<MockControllerCapabilities>;
@@ -47,26 +49,10 @@ export interface MockControllerOptions {
 /** A mock Z-Wave controller which interacts with {@link MockNode}s and can be controlled via a {@link MockSerialPort} */
 export class MockController {
 	public constructor(options: MockControllerOptions) {
+		this.mockPort = options.mockPort;
 		this.serial = options.serial;
-		// Pipe the serial data through a parser, so we get complete message buffers or headers out the other end
-		this.serialParser = new SerialAPIParser();
-		this.serial.on("write", async (data) => {
-			// Execute hooks for inspecting the raw data first
-			for (const behavior of this.behaviors) {
-				if (await behavior.onHostData?.(this, data)) {
-					return;
-				}
-			}
-			// Then parse the data normally
-			this.serialParser.write(data);
-		});
-		this.serialParser.on("data", (data) => this.serialOnData(data));
 
-		// Set up the fake host
-		// const valuesStorage = new Map();
-		// const metadataStorage = new Map();
-		// const valueDBCache = new Map<number, ValueDB>();
-		// const supervisionSessionIDs = new Map<number, () => number>();
+		void this.handleSerialData();
 
 		this.ownNodeId = options.ownNodeId ?? 1;
 		this.homeId = options.homeId ?? 0x7e571000;
@@ -159,8 +145,8 @@ export class MockController {
 	public encodingContext: MessageEncodingContext;
 	public parsingContext: MessageParsingContext;
 
-	public readonly serial: MockPortBinding;
-	private readonly serialParser: SerialAPIParser;
+	public readonly mockPort: MockPort;
+	public readonly serial: ZWaveSerialStream;
 
 	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
@@ -209,6 +195,34 @@ export class MockController {
 	public autoAckNodeFrames: boolean = true;
 	/** Allows reproducing issues with the 7.19.x firmware where the high nibble of the ACK after soft-reset is corrupted */
 	public corruptACK: boolean = false;
+
+	private async handleSerialData(): Promise<void> {
+		try {
+			read: for await (const data of this.mockPort.readable) {
+				// Execute hooks for inspecting the raw data first
+				for (const behavior of this.behaviors) {
+					if (await behavior.onHostData?.(this, data)) {
+						continue read;
+					}
+				}
+
+				if (data.length === 1) {
+					const header = data[0];
+					switch (header) {
+						case MessageHeaders.ACK:
+						case MessageHeaders.NAK:
+						case MessageHeaders.CAN:
+							void this.serialOnData(header).catch(noop);
+							continue;
+					}
+				}
+				void this.serialOnData(data).catch(noop);
+			}
+		} catch (e) {
+			if (isAbortError(e)) return;
+			throw e;
+		}
+	}
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private async serialOnData(
@@ -385,7 +399,7 @@ export class MockController {
 
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
 	private sendHeaderToHost(data: MessageHeaders): void {
-		this.serial.emitData(Uint8Array.from([data]));
+		this.mockPort.emitData(Uint8Array.from([data]));
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
@@ -404,14 +418,14 @@ export class MockController {
 		} else {
 			data = await msg.serializeAsync(this.encodingContext);
 		}
-		this.serial.emitData(data);
+		this.mockPort.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
 	public async sendToHost(data: Uint8Array): Promise<void> {
-		this.serial.emitData(data);
+		this.mockPort.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
 	}
@@ -422,7 +436,7 @@ export class MockController {
 	public ackHostMessage(): void {
 		if (this.corruptACK) {
 			const highNibble = randomBytes(1)[0] & 0xf0;
-			this.serial.emitData(
+			this.mockPort.emitData(
 				Uint8Array.from([highNibble | MessageHeaders.ACK]),
 			);
 		} else {

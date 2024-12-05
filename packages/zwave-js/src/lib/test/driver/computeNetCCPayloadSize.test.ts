@@ -28,8 +28,11 @@ const test = baseTest.extend<LocalTestContext>({
 				securityKeys: {
 					S0_Legacy: new Uint8Array(16).fill(0xff),
 				},
-				beforeStartup(mockPort) {
-					const controller = new MockController({ serial: mockPort });
+				beforeStartup(mockPort, serial) {
+					const controller = new MockController({
+						mockPort,
+						serial,
+					});
 					controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),
 					);

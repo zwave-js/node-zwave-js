@@ -4,3 +4,7 @@ export function getErrorMessage(e: unknown, includeStack?: boolean): string {
 	}
 	return String(e);
 }
+
+export function isAbortError(e: unknown): boolean {
+	return e instanceof DOMException && e.name === "AbortError";
+}

@@ -126,15 +126,20 @@ import {
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
+	type ZWaveSerialBindingFactory,
+	ZWaveSerialFrameType,
 	ZWaveSerialMode,
-	ZWaveSerialPort,
-	ZWaveSerialPortBase,
 	type ZWaveSerialPortImplementation,
-	ZWaveSocket,
+	type ZWaveSerialStream,
+	ZWaveSerialStreamFactory,
+	createNodeSerialPortFactory,
+	createNodeSocketFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
+	isZWaveSerialBindingFactory,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
@@ -171,6 +176,7 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
+	isAbortError,
 	isUint8Array,
 	mergeDeep,
 	noop,
@@ -188,7 +194,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
 import { InterpreterStatus, interpret } from "xstate";
@@ -241,6 +246,10 @@ import {
 	type SerialAPICommandInterpreter,
 	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine.js";
+import {
+	type SerialAPICommandMachine2Input,
+	createSerialAPICommandMachine2,
+} from "./SerialAPICommandMachine2.js";
 import {
 	type TransactionReducer,
 	type TransactionReducerResult,
@@ -639,7 +648,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		PersistValuesContext
 {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
@@ -648,6 +661,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (
 			typeof port !== "string"
 			&& !isZWaveSerialPortImplementation(port)
+			&& !isZWaveSerialBindingFactory(port)
 		) {
 			throw new ZWaveError(
 				`The port must be a string or a valid custom serial port implementation!`,
@@ -753,8 +767,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._scheduler = new TaskScheduler();
 	}
 
+	private serialFactory: ZWaveSerialStreamFactory | undefined;
 	/** The serial port instance */
-	private serial: ZWaveSerialPortBase | undefined;
+	private serial: ZWaveSerialStream | undefined;
 
 	private messageEncodingContext: Omit<
 		MessageEncodingContext,
@@ -813,6 +828,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	private queuePaused = false;
 	/** The interpreter for the currently active Serial API command */
 	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
+	/** Used to immediately abort ongoing Serial API commands */
+	private abortSerialAPICommand: DeferredPromise<Error> | undefined;
 
 	// Keep track of which queues are currently busy
 	private _queuesBusyFlags = 0;
@@ -1302,52 +1319,41 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.driverLog.print("starting driver...");
 
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
 				const url = new URL(this.port);
 				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
-				);
+				binding = createNodeSocketFactory({
+					host: url.hostname,
+					port: parseInt(url.port),
+				});
 			} else {
 				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSerialPort(
+				binding = createNodeSerialPortFactory(
 					this.port,
-					this._logContainer,
-					this._options.testingHooks?.serialPortBinding,
+					// this._options.testingHooks?.serialPortBinding,
 				);
 			}
-		} else {
+		} else if (isZWaveSerialPortImplementation(this.port)) {
 			this.driverLog.print(
 				"opening serial port using the provided custom implementation",
 			);
-			this.serial = new ZWaveSerialPortBase(
-				this.port,
-				this._logContainer,
+			this.driverLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
 			);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.driverLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-			.on("error", (err) => {
-				if (this.isSoftResetting && !this.serial?.isOpen) {
-					// A disconnection while soft resetting is to be expected
-					return;
-				} else if (!this._isOpen) {
-					// tryOpenSerialport takes care of error handling
-					return;
-				}
-
-				void this.destroyWithMessage(
-					`Serial port errored: ${err.message}`,
-				);
-			});
-		// If the port is already open, close it first
-		if (this.serial.isOpen) await this.serial.close();
+		this.serialFactory = new ZWaveSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
@@ -1506,7 +1512,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			attempt++
 		) {
 			try {
-				await this.serial!.open();
+				this.serial = await this.serialFactory!.createStream();
+				// Start reading from the serial port
+				void this.handleSerialData(this.serial);
 				return;
 			} catch (e) {
 				lastError = e;
@@ -3418,7 +3426,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		}
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
+			// this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
@@ -3484,6 +3492,36 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._destroyPromise.resolve();
 	}
 
+	private async handleSerialData(serial: ZWaveSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				setImmediate(() => {
+					if (frame.type === ZWaveSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
+						void this.serialport_onBootloaderData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				// A disconnection while soft resetting is to be expected.
+				// The soft reset method will handle reopening
+				if (this.isSoftResetting) return;
+
+				void this.destroyWithMessage(e.message);
+				return;
+			}
+			throw e;
+		}
+	}
+
 	/**
 	 * Is called when the serial port has received a single-byte message or a complete message buffer
 	 */
@@ -3496,36 +3534,49 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	): Promise<void> {
 		if (typeof data === "number") {
 			switch (data) {
-				// single-byte messages - just forward them to the send thread
-				case MessageHeaders.ACK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("ACK");
-					}
-					return;
-				}
-				case MessageHeaders.NAK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("NAK");
-					}
-					this._controller?.incrementStatistics("NAK");
-					return;
-				}
+				case MessageHeaders.ACK:
+				case MessageHeaders.NAK:
 				case MessageHeaders.CAN: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("CAN");
+					// check if someone is waiting for this
+					for (const entry of this.awaitedMessageHeaders) {
+						if (entry.predicate(data)) {
+							entry.handler(data);
+							break;
+						}
 					}
-					this._controller?.incrementStatistics("CAN");
 					return;
 				}
+
+					// // single-byte messages - just forward them to the send thread
+					// case MessageHeaders.ACK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("ACK");
+					// 	}
+					// 	return;
+					// }
+					// case MessageHeaders.NAK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("NAK");
+					// 	}
+					// 	this._controller?.incrementStatistics("NAK");
+					// 	return;
+					// }
+					// case MessageHeaders.CAN: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("CAN");
+					// 	}
+					// 	this._controller?.incrementStatistics("CAN");
+					// 	return;
+					// }
 			}
 		}
 
@@ -3747,17 +3798,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				}
 			}
 
-			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
-			if (
-				this.serialAPIInterpreter?.status === InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send({
-					type: "message",
-					message: msg,
-				});
-			} else {
-				void this.handleUnsolicitedMessage(msg);
-			}
+			// // Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
+			// if (
+			// 	this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			// ) {
+			// 	this.serialAPIInterpreter.send({
+			// 		type: "message",
+			// 		message: msg,
+			// 	});
+			// } else {
+			void this.handleUnsolicitedMessage(msg);
+			// }
 		}
 	}
 
@@ -4683,26 +4734,26 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
-		if (msg.type === MessageType.Request) {
-			// This is a request we might have registered handlers for
-			try {
+		// FIXME: Rename this - msg might not be unsolicited
+		// This is a message we might have registered handlers for
+		try {
+			if (msg.type === MessageType.Request) {
 				await this.handleRequest(msg);
-			} catch (e) {
-				if (
-					isZWaveError(e)
-					&& e.code === ZWaveErrorCodes.Driver_NotReady
-				) {
-					this.driverLog.print(
-						`Cannot handle message because the driver is not ready to handle it yet.`,
-						"warn",
-					);
-				} else {
-					throw e;
-				}
+			} else {
+				await this.handleResponse(msg);
 			}
-		} else {
-			this.driverLog.transactionResponse(msg, undefined, "unexpected");
-			this.driverLog.print("unexpected response, discarding...", "warn");
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				this.driverLog.print(
+					`Cannot handle message because the driver is not ready to handle it yet.`,
+					"warn",
+				);
+			} else {
+				throw e;
+			}
 		}
 	}
 
@@ -4737,12 +4788,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				) {
 					this.serialAPIInterpreter.stop();
 				}
-				if (this._currentSerialAPICommandPromise) {
+				if (this.abortSerialAPICommand) {
 					this.controllerLog.print(
 						`Currently active command will be retried...`,
 						"warn",
 					);
-					this._currentSerialAPICommandPromise.reject(
+					this.abortSerialAPICommand.reject(
 						new ZWaveError(
 							"The Serial API restarted unexpectedly",
 							ZWaveErrorCodes.Controller_Reset,
@@ -5020,6 +5071,25 @@ ${handlers.length} left`,
 		}
 
 		return false;
+	}
+
+	/**
+	 * Is called when a Response-type message was received
+	 */
+	private handleResponse(msg: Message): Promise<void> {
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// We do
+				entry.handler(msg);
+				return Promise.resolve();
+			}
+		}
+
+		this.driverLog.transactionResponse(msg, undefined, "unexpected");
+		this.driverLog.print("unexpected response, discarding...", "warn");
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -5773,7 +5843,7 @@ ${handlers.length} left`,
 		for await (const item of this.serialAPIQueue) {
 			const { msg, transactionSource, result } = item;
 			try {
-				const ret = await this.executeSerialAPICommand(
+				const ret = await this.executeSerialAPICommand2(
 					msg,
 					transactionSource,
 				);
@@ -5834,6 +5904,214 @@ ${handlers.length} left`,
 		}
 
 		return attemptNumber < msg.maxSendAttempts;
+	}
+
+	/**
+	 * Executes a Serial API command and returns or throws the result.
+	 * This method should not be called outside of {@link drainSerialAPIQueue}.
+	 */
+	private async executeSerialAPICommand2(
+		msg: Message,
+		transactionSource?: string,
+	): Promise<Message | undefined> {
+		// Give the command a callback ID if it needs one
+		if (msg.needsCallbackId() && !msg.hasCallbackId()) {
+			msg.callbackId = this.getNextCallbackId();
+		}
+
+		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
+		// This was broken in 7.19, not fixed so far
+		if (
+			msg.functionType === FunctionType.SoftReset
+			&& this.controller.sdkVersionGte("7.19.0")
+		) {
+			this.serial?.ignoreAckHighNibbleOnce();
+		}
+
+		const machine = createSerialAPICommandMachine2(msg);
+		this.abortSerialAPICommand = createDeferredPromise();
+		const abortController = new AbortController();
+
+		let nextInput: SerialAPICommandMachine2Input | undefined = {
+			value: "start",
+		};
+
+		try {
+			while (!machine.done) {
+				if (nextInput == undefined) {
+					// We should not be in a situation where we have no input for the state machine
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no input provided",
+					);
+				}
+				const transition = machine.next(nextInput);
+				if (transition == undefined) {
+					// We should not be in a situation where the state machine does not transition
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no transition taken",
+					);
+				}
+
+				// The input was used
+				nextInput = undefined;
+
+				// Transition to the new state
+				machine.transition(transition.newState);
+
+				// Now check what needs to be done in the new state
+				switch (machine.state.value) {
+					case "initial":
+						// This should never happen
+						throw new Error(
+							"Serial API Command machine is in an invalid state: transitioned to initial state",
+						);
+
+					case "sending": {
+						this.driverLog.logMessage(msg, {
+							direction: "outbound",
+						});
+
+						// Mark the message as sent immediately before actually sending
+						msg.markAsSent();
+						const data = await msg.serializeAsync(
+							this.getEncodingContext(),
+						);
+						await this.writeSerial(data);
+						nextInput = { value: "message sent" };
+						break;
+					}
+
+					case "waitingForACK": {
+						const controlFlow = await this.waitForMessageHeader(
+							() => true,
+							this.options.timeouts.ack,
+						).catch(() => "timeout" as const);
+
+						if (controlFlow === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (controlFlow === MessageHeaders.ACK) {
+							nextInput = { value: "ACK" };
+						} else if (controlFlow === MessageHeaders.CAN) {
+							nextInput = { value: "CAN" };
+						} else if (controlFlow === MessageHeaders.NAK) {
+							nextInput = { value: "NAK" };
+						}
+
+						break;
+					}
+
+					case "waitingForResponse": {
+						const response = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedResponse(resp),
+								msg.getResponseTimeout()
+									?? this.options.timeouts.response,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (response instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw response;
+						}
+
+						if (response === "timeout") {
+							if (isSendData(msg)) {
+								// Timed out SendData commands must be aborted
+								void this.abortSendData();
+							}
+
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(response) && !response.isOK()
+						) {
+							nextInput = { value: "response NOK", response };
+						} else {
+							nextInput = { value: "response", response };
+						}
+
+						break;
+					}
+
+					case "waitingForCallback": {
+						let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+						if (isSendData(msg)) {
+							// We abort timed out SendData commands before the callback times out
+							sendDataAbortTimeout = setTimeout(() => {
+								void this.abortSendData();
+							}, this.options.timeouts.sendDataAbort).unref();
+						}
+
+						const callback = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedCallback(resp),
+								msg.getCallbackTimeout()
+									?? this.options.timeouts.sendDataCallback,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (sendDataAbortTimeout) {
+							clearTimeout(sendDataAbortTimeout);
+						}
+
+						if (callback instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw callback;
+						}
+
+						if (callback === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(callback) && !callback.isOK()
+						) {
+							nextInput = { value: "callback NOK", callback };
+						} else {
+							nextInput = { value: "callback", callback };
+						}
+
+						break;
+					}
+
+					case "success": {
+						return machine.state.result;
+					}
+
+					case "failure": {
+						const { reason, result } = machine.state;
+						if (
+							reason === "callback NOK"
+							&& (isSendData(msg) || isTransmitReport(result))
+						) {
+							// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+							// ... so we treat it as a result
+							return result;
+						} else {
+							throw serialAPICommandErrorToZWaveError(
+								reason,
+								msg,
+								result,
+								transactionSource,
+							);
+						}
+					}
+				}
+			}
+		} finally {
+			this.abortSerialAPICommand = undefined;
+		}
 	}
 
 	/**
@@ -5952,13 +6230,13 @@ ${handlers.length} left`,
 		});
 
 		// Uncomment this for debugging state machine transitions
-		// this.serialAPIInterpreter.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.driverLog.print(
-		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
-		// 		);
-		// 	}
-		// });
+		this.serialAPIInterpreter.onTransition((state) => {
+			if (state.changed) {
+				this.driverLog.print(
+					`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
+				);
+			}
+		});
 
 		this.serialAPIInterpreter.start();
 
@@ -6497,6 +6775,7 @@ ${handlers.length} left`,
 		predicate: (msg: Message) => boolean,
 		timeout: number,
 		refreshPredicate?: (msg: Message) => boolean,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<Message>();
@@ -6527,6 +6806,10 @@ ${handlers.length} left`,
 				removeEntry();
 				resolve(cc as T);
 			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
+			});
 		});
 	}
 
@@ -6538,6 +6821,7 @@ ${handlers.length} left`,
 	public waitForCommand<T extends CCId>(
 		predicate: (cc: CCId) => boolean,
 		timeout: number,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<CCId>();
@@ -6566,6 +6850,10 @@ ${handlers.length} left`,
 			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
+			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
 			});
 		});
 	}
