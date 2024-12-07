@@ -67,18 +67,25 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Motion Sensor Status",
-			"maxNodes": 16
-		},
-		"2": {
-			"label": "Tamper Alarm",
-			"maxNodes": 16,
-			"isLifeline": true
-		},
-		"3": {
-			"label": "Controller Updates",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"maxNodes": 5
+		},		
+		"3": {
+			"label": "Tamper",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Motion BC",
+			"maxNodes": 5,
+		},
+		"5": {
+			"label": "Tamper BC",
+			"maxNodes": 5,
 		}
 	},
 	"paramInformation": [
