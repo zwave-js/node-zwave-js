@@ -32,7 +32,7 @@ function getMessageLength(data: Uint8Array): number | undefined {
 	}
 }
 
-class ZnifferWebParserTransformer
+class ZnifferParserTransformer
 	implements Transformer<Uint8Array, ZnifferSerialFrame>
 {
 	constructor(
@@ -97,12 +97,12 @@ class ZnifferWebParserTransformer
 	}
 }
 
-export class ZnifferWebParser
+export class ZnifferParser
 	extends TransformStream<Uint8Array, ZnifferSerialFrame>
 {
 	constructor(
 		logger?: SerialLogger,
 	) {
-		super(new ZnifferWebParserTransformer(logger));
+		super(new ZnifferParserTransformer(logger));
 	}
 }

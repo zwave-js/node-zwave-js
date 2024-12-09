@@ -21,7 +21,7 @@ function getMessageLength(data: Uint8Array): number {
 	return remainingLength + 2;
 }
 
-type SerialAPIWebParserTransformerOutput = ZWaveSerialFrame & {
+type SerialAPIParserTransformerOutput = ZWaveSerialFrame & {
 	type:
 		| ZWaveSerialFrameType.SerialAPI
 		| ZWaveSerialFrameType.Discarded;
@@ -29,17 +29,17 @@ type SerialAPIWebParserTransformerOutput = ZWaveSerialFrame & {
 
 function wrapSerialAPIChunk(
 	chunk: SerialAPIChunk,
-): SerialAPIWebParserTransformerOutput {
+): SerialAPIParserTransformerOutput {
 	return {
 		type: ZWaveSerialFrameType.SerialAPI,
 		data: chunk,
 	};
 }
 
-class SerialAPIWebParserTransformer implements
+class SerialAPIParserTransformer implements
 	Transformer<
 		Uint8Array,
-		SerialAPIWebParserTransformerOutput
+		SerialAPIParserTransformerOutput
 	>
 {
 	constructor(private logger?: SerialLogger) {}
@@ -52,7 +52,7 @@ class SerialAPIWebParserTransformer implements
 	transform(
 		chunk: Uint8Array,
 		controller: TransformStreamDefaultController<
-			SerialAPIWebParserTransformerOutput
+			SerialAPIParserTransformerOutput
 		>,
 	) {
 		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
@@ -152,16 +152,16 @@ class SerialAPIWebParserTransformer implements
 		}
 	}
 }
-export class SerialAPIWebParser extends TransformStream {
+export class SerialAPIParser extends TransformStream {
 	constructor(
 		logger?: SerialLogger,
 	) {
-		const transformer = new SerialAPIWebParserTransformer(logger);
+		const transformer = new SerialAPIParserTransformer(logger);
 		super(transformer);
 		this.#transformer = transformer;
 	}
 
-	#transformer: SerialAPIWebParserTransformer;
+	#transformer: SerialAPIParserTransformer;
 
 	public get ignoreAckHighNibble(): boolean {
 		return this.#transformer.ignoreAckHighNibble;

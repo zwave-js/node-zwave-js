@@ -18,7 +18,7 @@ function isFlowControl(byte: number): boolean {
 	);
 }
 
-class BootloaderScreenWebParserTransformer
+class BootloaderScreenParserTransformer
 	implements Transformer<Uint8Array, number | string>
 {
 	constructor(private logger?: SerialLogger) {}
@@ -78,11 +78,11 @@ class BootloaderScreenWebParserTransformer
 }
 
 /** Parses the screen output from the bootloader, either waiting for a NUL char or a timeout */
-export class BootloaderScreenWebParser extends TransformStream {
+export class BootloaderScreenParser extends TransformStream {
 	constructor(
 		logger?: SerialLogger,
 	) {
-		super(new BootloaderScreenWebParserTransformer(logger));
+		super(new BootloaderScreenParserTransformer(logger));
 	}
 }
 
@@ -94,7 +94,7 @@ const menuSuffix = "BL >";
 const optionsRegex = /^(?<num>\d+)\. (?<option>.+)/gm;
 
 /** Transforms the bootloader screen output into meaningful chunks */
-export class BootloaderWebParser extends TransformStream<
+export class BootloaderParser extends TransformStream<
 	number | string,
 	ZWaveSerialFrame & { type: ZWaveSerialFrameType.Bootloader }
 > {

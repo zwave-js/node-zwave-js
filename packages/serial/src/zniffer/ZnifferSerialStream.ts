@@ -18,7 +18,7 @@ import {
 	type UnderlyingSource,
 } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
-import { ZnifferWebParser } from "../parsers/ZnifferParser.js";
+import { ZnifferParser } from "../parsers/ZnifferParser.js";
 import { type ZnifferSerialFrame } from "../parsers/ZnifferSerialFrame.js";
 import { type ZWaveSerialBindingFactory } from "../serialport/ZWaveSerialStream.js";
 
@@ -78,7 +78,7 @@ export class ZnifferSerialStream implements
 			ZnifferSerialFrame
 		>();
 		this.readable = readable;
-		const parser = new ZnifferWebParser(logger);
+		const parser = new ZnifferParser(logger);
 		const sourceStream = new ReadableStream(source);
 
 		void sourceStream

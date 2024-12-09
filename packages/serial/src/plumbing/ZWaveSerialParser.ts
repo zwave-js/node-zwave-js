@@ -1,10 +1,10 @@
 import { noop } from "@zwave-js/shared";
 import { type SerialLogger } from "../log/Logger.js";
 import {
-	BootloaderScreenWebParser,
-	BootloaderWebParser,
+	BootloaderParser,
+	BootloaderScreenParser,
 } from "../parsers/BootloaderParsers.js";
-import { SerialAPIWebParser } from "../parsers/SerialAPIParser.js";
+import { SerialAPIParser } from "../parsers/SerialAPIParser.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
 import { type ZWaveSerialMode } from "../serialport/definitions.js";
 import { mergeReadableStreams } from "./Merge.js";
@@ -15,15 +15,15 @@ export class ZWaveSerialParser {
 	public constructor(logger: SerialLogger, signal?: AbortSignal) {
 		// Prepare parsers for reading from the serial port
 		// -> Serial API mode
-		this.parser = new SerialAPIWebParser(logger);
+		this.parser = new SerialAPIParser(logger);
 
 		// -> Bootloader mode
 		// This one looks for NUL chars which terminate each bootloader output screen
-		const bootloaderScreenParser = new BootloaderScreenWebParser(
+		const bootloaderScreenParser = new BootloaderScreenParser(
 			logger,
 		);
 		// This one parses the bootloader output into a more usable format
-		const bootloaderParser = new BootloaderWebParser();
+		const bootloaderParser = new BootloaderParser();
 
 		// Mode switch
 		this.modeSwitch = new SerialModeSwitch();
@@ -54,7 +54,7 @@ export class ZWaveSerialParser {
 		return this.modeSwitch;
 	}
 
-	private parser: SerialAPIWebParser;
+	private parser: SerialAPIParser;
 
 	// Allow switching between modes
 	private modeSwitch: SerialModeSwitch;
