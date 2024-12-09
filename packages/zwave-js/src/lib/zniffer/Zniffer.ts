@@ -28,11 +28,13 @@ import {
 	ZnifferRegionLegacy,
 	getChipTypeAndVersion,
 	isLongRangeNodeId,
+	isZWaveError,
 	securityClassIsS2,
 } from "@zwave-js/core";
 import { sdkVersionGte } from "@zwave-js/core";
 import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
+	type ZWaveSerialBindingFactory,
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
 	ZnifferFrameType,
@@ -44,23 +46,27 @@ import {
 	ZnifferGetVersionResponse,
 	ZnifferMessage,
 	ZnifferMessageType,
-	ZnifferSerialPort,
-	ZnifferSerialPortBase,
+	ZnifferSerialFrameType,
+	type ZnifferSerialStream,
+	ZnifferSerialStreamFactory,
 	ZnifferSetBaudRateRequest,
 	ZnifferSetBaudRateResponse,
 	ZnifferSetFrequencyRequest,
 	ZnifferSetFrequencyResponse,
-	ZnifferSocket,
 	ZnifferStartRequest,
 	ZnifferStartResponse,
 	ZnifferStopRequest,
 	ZnifferStopResponse,
+	createNodeSerialPortFactory,
+	createNodeSocketFactory,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import {
 	Bytes,
 	TypedEventTarget,
 	getEnumMemberName,
+	isAbortError,
 	isEnumMember,
 	noop,
 	num2hex,
@@ -265,8 +271,10 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 
 	private _options: ZnifferOptions;
 
+	private serialFactory: ZnifferSerialStreamFactory | undefined;
 	/** The serial port instance */
-	private serial: ZnifferSerialPortBase | undefined;
+	private serial: ZnifferSerialStream | undefined;
+
 	private parsingContext: Omit<
 		CCParsingContext,
 		keyof HostIDs | "sourceNodeId" | "frameType" | keyof SecurityManagers
@@ -331,40 +339,44 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 		}
 
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
 				const url = new URL(this.port);
-				// this.znifferLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZnifferSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
-				);
+				this.znifferLog.print(`opening serial port ${this.port}`);
+				binding = createNodeSocketFactory({
+					host: url.hostname,
+					port: parseInt(url.port),
+				});
 			} else {
-				// this.znifferLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZnifferSerialPort(
+				this.znifferLog.print(`opening serial port ${this.port}`);
+				binding = createNodeSerialPortFactory(
 					this.port,
-					this._logContainer,
+					// this._options.testingHooks?.serialPortBinding,
 				);
 			}
-		} else {
-			// this.znifferLog.print(
-			// 	"opening serial port using the provided custom implementation",
-			// );
-			this.serial = new ZnifferSerialPortBase(
-				this.port,
-				this._logContainer,
+		} else if (isZWaveSerialPortImplementation(this.port)) {
+			this.znifferLog.print(
+				"opening serial port using the provided custom implementation",
 			);
+			this.znifferLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
+			);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.znifferLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("error", (err) => {
-				this.emit("error", err);
-			});
+		this.serialFactory = new ZnifferSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
-		await this.serial.open();
+		this.serial = await this.serialFactory.createStream();
+		void this.handleSerialData(this.serial);
 
 		this.znifferLog.print(logo, "info");
 
@@ -450,6 +462,30 @@ supported frequencies: ${
 		}
 
 		this.emit("ready");
+	}
+
+	private async handleSerialData(serial: ZnifferSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				setImmediate(() => {
+					if (frame.type === ZnifferSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				this.emit("error", e);
+				return this.destroy();
+			}
+			throw e;
+		}
 	}
 
 	/**
@@ -1004,7 +1040,6 @@ supported frequencies: ${
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}

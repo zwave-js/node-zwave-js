@@ -645,7 +645,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	public constructor(
 		private port:
 			| string
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			| ZWaveSerialPortImplementation
 			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
@@ -3417,7 +3416,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			// this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}

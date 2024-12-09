@@ -9,6 +9,7 @@ export * from "./message/ZnifferMessages.js";
 export * from "./parsers/BootloaderParsers.js";
 export * from "./parsers/SerialAPIParser.js";
 export * from "./parsers/ZWaveSerialFrame.js";
+export * from "./parsers/ZnifferSerialFrame.js";
 export * from "./plumbing/Faucet.js";
 export * from "./serialport/LegacyBindingWrapper.js";
 export * from "./serialport/NodeSerialPort.js";
@@ -17,8 +18,6 @@ export * from "./serialport/ZWaveSerialPortImplementation.js";
 export * from "./serialport/ZWaveSerialStream.js";
 export * from "./serialport/ZWaveSocketOptions.js";
 export * from "./serialport/definitions.js";
-export * from "./zniffer/ZnifferSerialPort.js";
-export * from "./zniffer/ZnifferSerialPortBase.js";
-export * from "./zniffer/ZnifferSocket.js";
+export * from "./zniffer/ZnifferSerialStream.js";
 
 export * from "./index_serialapi.js";
