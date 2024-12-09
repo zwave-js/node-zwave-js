@@ -12,11 +12,11 @@
 import { type ZWaveLogContainer } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
 import {
+	ReadableStream,
 	type ReadableWritablePair,
 	type UnderlyingSink,
 	type UnderlyingSource,
 } from "node:stream/web";
-import { ReadableStream } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
 import { ZnifferWebParser } from "../parsers/ZnifferParser.js";
 import { type ZnifferSerialFrame } from "../parsers/ZnifferSerialFrame.js";
