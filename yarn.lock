@@ -2533,27 +2533,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xstate/graph@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@xstate/graph@npm:1.4.1"
-  peerDependencies:
-    xstate: ^4.29.0
-  checksum: 10/67b5fc112d005adf709e227405bc6c23e5e31c826babe6b1a095c246acefbc9e353a9767ae700a800a572cc5cb7f3e934102bcfef8248a87fd5cfc5ef67e464f
-  languageName: node
-  linkType: hard
-
-"@xstate/test@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "@xstate/test@npm:0.5.1"
-  dependencies:
-    "@xstate/graph": "npm:^1.4.1"
-    chalk: "npm:^2.4.2"
-  peerDependencies:
-    xstate: ^4.29.0
-  checksum: 10/39fb8aa08ea67e0211a200fe1795651a9421ee51fb299b73f471c3b8cec4a922f21d82506ed5b9caff4995472d91dfea77735f19ebd521781caf1efdb9caa2d4
-  languageName: node
-  linkType: hard
-
 "@zwave-js/cc@workspace:*, @zwave-js/cc@workspace:packages/cc":
   version: 0.0.0-use.local
   resolution: "@zwave-js/cc@workspace:packages/cc"
@@ -9916,13 +9895,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xstate@npm:4.38.3":
-  version: 4.38.3
-  resolution: "xstate@npm:4.38.3"
-  checksum: 10/82f30ed1d049d6be6274e54e34f46cad93fe773e4e333753acf363b8010f3685d256f154a91e5c1d615df654e14164dfc630c768af090925442b2c877cb9f11c
-  languageName: node
-  linkType: hard
-
 "y18n@npm:^5.0.5":
   version: 5.0.8
   resolution: "y18n@npm:5.0.8"
@@ -10079,7 +10051,6 @@ __metadata:
     "@types/semver": "npm:^7.5.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/source-map-support": "npm:^0.5.10"
-    "@xstate/test": "npm:^0.5.1"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
@@ -10109,7 +10080,6 @@ __metadata:
     typescript: "npm:5.6.2"
     vitest: "npm:^2.1.4"
     winston: "npm:^3.15.0"
-    xstate: "npm:4.38.3"
   bin:
     mock-server: bin/mock-server.cjs
   languageName: unknown
