@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of current load - Caution",
+			"label": "threshold of current load - caution",
 			"valueSize": 2,
 			"unit": "0.01A 500*0.01A=5A",
 			"minValue": 10,
@@ -63,83 +63,75 @@
 		},
 		{
 			"#": "5",
-			"label": "Level Report mode",
+			"label": "Level Report Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1: Report destination in 5s interval",
+					"label": "Report destination in 5s interval",
 					"value": 1
 				},
 				{
-					"label": "1: 2: report every 10% level charge",
+					"label": "Report every 10% level charge",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Demo trip",
+			"label": "Demo Trip",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1:activate demo trip and calibration when first touch of the buttony",
+					"label": "Activate demo trip and calibration when first touch of the buttony",
 					"value": 1
 				},
                 {
-					"label": "do nothing",
+					"label": "Do nothing",
                     "value": 0
                 }
 			]
 		},
 		{
 			"#": "9",
-			"label": "Demo trip and calibration",
+			"label": "Demo Trip and Calibration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1:activate demo trip and calibration",
+					"label": "Activate demo trip and calibration",
 					"value": 1
 				},
                 {
-					"label": "do nothing",
+					"label": "Do nothing",
                     "value": 0
                 }
 			]
 		},
 		{
 			"#": "10",
-			"label": "A: Auto Calibratio",
+			"label": "Auto Calibration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1:activate calibration only",
+					"label": "Activate calibration only",
 					"value": 1
 				},
                 {
-					"label": "do nothing",
+					"label": "Do nothing",
                     "value": 0
                 }
 			]
 		},
 		{
 			"#": "11",
-			"label": "B: Min level of the shutter close",
+			"label": "Min Level of the shutter close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -147,7 +139,7 @@
 		},
 		{
 			"#": "12",
-			"label": "C: Max Level of shutter open",
+			"label": "Max Level of shutter open",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -155,10 +147,8 @@
 		},
 		{
 			"#": "13",
-			"label": "D: External switch type",
+			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -167,26 +157,24 @@
 					"value": 0
 				},
 				{
-					"label": "toggle (2-state switches), on position-shutter open, off position -shutter closewire 1 ex, momentary or toggle key to S1 only",
+					"label": "Toggle (2-state switches), on position-shutter open, off position -shutter closewire 1 ex, momentary or toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "toggle (2-state switches), on position-shutter close, off postion - shutter open",
+					"label": "Toggle (2-state switches), on position-shutter close, off postion - shutter open",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "E: External switch input",
+			"label": "External Switch Input",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no external switch",
+					"label": "No external switch",
 					"value": 0
 				},
 				{
@@ -211,13 +199,11 @@
 			"#": "255",
 			"label": "Factory Setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "85 restore factory setting",
+					"label": "restore factory setting",
 					"value": 85
 				},
                 {
