@@ -3,6 +3,7 @@ export * from "./crypto/index.node.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
+export * from "./fsm/FSM.js";
 export * from "./log/Controller.js";
 export * from "./log/shared.js";
 export * from "./log/shared_safe.js";

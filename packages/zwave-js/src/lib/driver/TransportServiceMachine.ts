@@ -1,188 +1,126 @@
 import {
-	type AssignAction,
-	type Interpreter,
-	Machine,
-	type StateMachine,
-	assign,
-} from "xstate";
+	type InferStateMachineTransitions,
+	StateMachine,
+	type StateMachineTransition,
+} from "@zwave-js/core";
 
-/*
-	This state machine handles the receipt of Transport Service encapsulated commands from a node
-*/
-
-export interface TransportServiceRXStateSchema {
-	states: {
-		waitingForSegment: object;
-		segmentTimeout: object;
-		waitingForRequestedSegment: object;
-		segmentsComplete: object;
-		success: object;
-		failure: object;
+export type TransportServiceRXState =
+	// We are passively listening for segments
+	| { value: "receive" }
+	// We have requested a missing segment
+	| { value: "requestMissing"; offset: number }
+	| {
+		value: "success" | "failure";
+		done: true;
 	};
-}
 
-export interface TransportServiceRXContext {
-	receivedBytes: boolean[];
-}
-
-export type TransportServiceRXEvent = {
-	type: "segment";
-	offset: number;
-	length: number;
-};
+export type TransportServiceRXMachineInput =
+	| {
+		value: "segment";
+		offset: number;
+		length: number;
+	}
+	| { value: "timeout" }
+	| { value: "abort" };
 
 export type TransportServiceRXMachine = StateMachine<
-	TransportServiceRXContext,
-	TransportServiceRXStateSchema,
-	TransportServiceRXEvent,
-	any,
-	any,
-	any,
-	any
->;
-export type TransportServiceRXInterpreter = Interpreter<
-	TransportServiceRXContext,
-	TransportServiceRXStateSchema,
-	TransportServiceRXEvent
+	TransportServiceRXState,
+	TransportServiceRXMachineInput
 >;
 
-export type TransportServiceRXMachineParams = {
-	datagramSize: number;
-	firstSegmentSize: number;
-	missingSegmentTimeout: number;
-};
-
-const receiveSegment: AssignAction<TransportServiceRXContext, any> = assign(
-	(ctx, evt: TransportServiceRXEvent) => {
-		for (let i = evt.offset; i < evt.offset + evt.length; i++) {
-			ctx.receivedBytes[i] = true;
-		}
-		return ctx;
-	},
-);
-
-export interface TransportServiceRXServiceImplementations {
-	requestMissingSegment(offset: number): Promise<void>;
-	sendSegmentsComplete(): Promise<void>;
+function to(
+	state: TransportServiceRXState,
+): StateMachineTransition<TransportServiceRXState> {
+	return { newState: state };
 }
 
 export function createTransportServiceRXMachine(
-	implementations: TransportServiceRXServiceImplementations,
-	params: TransportServiceRXMachineParams,
+	datagramSize: number,
+	firstSegmentSize: number,
 ): TransportServiceRXMachine {
-	return Machine<
-		TransportServiceRXContext,
-		TransportServiceRXStateSchema,
-		TransportServiceRXEvent
-	>(
-		{
-			id: "TransportServiceRX",
-			initial: "waitingForSegment",
-			context: {
-				receivedBytes: [
-					// When the machine is started, we've already received the first segment
-					...(new Array(params.firstSegmentSize).fill(
-						true,
-					) as boolean[]),
-					// The rest of the segments are still missing
-					...(new Array(
-						params.datagramSize - params.firstSegmentSize,
-					).fill(false) as boolean[]),
-				],
-			},
-			states: {
-				waitingForSegment: {
-					always: [
-						{
-							cond: "isComplete",
-							target: "segmentsComplete",
-						},
-						{
-							cond: "hasHole",
-							target: "segmentTimeout",
-						},
-					],
-					after: {
-						missingSegment: "segmentTimeout",
-					},
-					on: {
-						segment: {
-							actions: receiveSegment,
-							target: "waitingForSegment",
-							internal: false,
-						},
-					},
-				},
-				segmentTimeout: {
-					invoke: {
-						id: "requestMissing",
-						src: "requestMissingSegment",
-						onDone: {
-							target: "waitingForRequestedSegment",
-						},
-						onError: {
-							target: "failure",
-						},
-					},
-				},
-				waitingForRequestedSegment: {
-					after: {
-						missingSegment: "failure",
-					},
-					on: {
-						segment: {
-							actions: receiveSegment,
-							target: "waitingForSegment",
-							internal: false,
-						},
-					},
-				},
-				segmentsComplete: {
-					invoke: {
-						id: "segmentsComplete",
-						src: "sendSegmentsComplete",
-						onDone: {
-							target: "success",
-						},
-						onError: {
-							// If sending the command fails, the node will send us the segment again
-							target: "success",
-						},
-					},
-				},
-				success: {
-					type: "final",
-					on: {
-						segment: "segmentsComplete",
-					},
-				},
-				failure: {
-					type: "final",
-				},
-			},
-		},
-		{
-			services: {
-				requestMissingSegment: (ctx) => {
-					return implementations.requestMissingSegment(
-						ctx.receivedBytes.indexOf(false),
-					);
-				},
-				sendSegmentsComplete: () => {
-					return implementations.sendSegmentsComplete();
-				},
-			},
-			guards: {
-				isComplete: (ctx) => {
-					return ctx.receivedBytes.every(Boolean);
-				},
-				hasHole: (ctx) =>
-					ctx.receivedBytes.lastIndexOf(true)
-						> ctx.receivedBytes.indexOf(false),
-			},
-			delays: {
-				missingSegment: params.missingSegmentTimeout,
-			},
-		},
-	);
+	const initialState: TransportServiceRXState = {
+		value: "receive",
+	};
+
+	const receivedBytes: boolean[] = [
+		// When the machine is started, we've already received the first segment
+		...(new Array(firstSegmentSize).fill(true)),
+		// The rest of the segments are still missing
+		...(new Array(datagramSize - firstSegmentSize).fill(false)),
+	];
+
+	function markReceived(offset: number, length: number): void {
+		for (let i = offset; i < offset + length; i++) {
+			receivedBytes[i] = true;
+		}
+	}
+
+	function isComplete(): boolean {
+		return receivedBytes.every(Boolean);
+	}
+
+	function hasReceivedLastSegment(): boolean {
+		return receivedBytes.at(-1)!;
+	}
+
+	function hasHole(): boolean {
+		return receivedBytes.lastIndexOf(true)
+			> receivedBytes.indexOf(false);
+	}
+
+	const transitions: InferStateMachineTransitions<
+		TransportServiceRXMachine
+	> = (state) => (input) => {
+		if (input.value === "abort") {
+			if (state.value !== "success" && state.value !== "failure") {
+				return to({ value: "failure", done: true });
+			}
+			return;
+		}
+
+		switch (state.value) {
+			case "receive": {
+				if (input.value === "segment") {
+					markReceived(input.offset, input.length);
+					if (isComplete()) {
+						return to({ value: "success", done: true });
+					} else if (hasReceivedLastSegment() && hasHole()) {
+						return to({
+							value: "requestMissing",
+							offset: receivedBytes.indexOf(false),
+						});
+					} else {
+						return to({ value: "receive" });
+					}
+				} else if (input.value === "timeout") {
+					// One or more segments are missing, start requesting them
+					return to({
+						value: "requestMissing",
+						offset: receivedBytes.indexOf(false),
+					});
+				}
+				break;
+			}
+
+			case "requestMissing": {
+				if (input.value === "segment") {
+					markReceived(input.offset, input.length);
+					if (isComplete()) {
+						return to({ value: "success", done: true });
+					} else {
+						// still not complete, request the next missing segment
+						return to({
+							value: "requestMissing",
+							offset: receivedBytes.indexOf(false),
+						});
+					}
+				} else if (input.value === "timeout") {
+					// Give up
+					return to({ value: "failure", done: true });
+				}
+			}
+		}
+	};
+
+	return new StateMachine(initialState, transitions);
 }

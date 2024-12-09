@@ -90,7 +90,6 @@ import {
 	extractRawECDHPrivateKeySync,
 	generateECDHKeyPairSync,
 	getCCName,
-	highResTimestamp,
 	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
@@ -191,7 +190,6 @@ import path from "node:path";
 import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
-import { InterpreterStatus, interpret } from "xstate";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
 import { DriverLogger } from "../log/Driver.js";
@@ -237,8 +235,7 @@ import {
 } from "./NetworkCache.js";
 import { type SerialAPIQueueItem, TransactionQueue } from "./Queue.js";
 import {
-	type SerialAPICommandDoneData,
-	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineInput,
 	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine.js";
 import {
@@ -251,7 +248,8 @@ import { TaskScheduler } from "./Task.js";
 import { throttlePresets } from "./ThrottlePresets.js";
 import { Transaction } from "./Transaction.js";
 import {
-	type TransportServiceRXInterpreter,
+	type TransportServiceRXMachine,
+	type TransportServiceRXMachineInput,
 	createTransportServiceRXMachine,
 } from "./TransportServiceMachine.js";
 import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig.js";
@@ -562,7 +560,8 @@ export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
-	interpreter: TransportServiceRXInterpreter;
+	machine: TransportServiceRXMachine;
+	timeout?: NodeJS.Timeout;
 }
 
 interface Sessions {
@@ -811,8 +810,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	private queuePaused = false;
-	/** The interpreter for the currently active Serial API command */
-	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
+	/** Used to immediately abort ongoing Serial API commands */
+	private abortSerialAPICommand: DeferredPromise<Error> | undefined;
 
 	// Keep track of which queues are currently busy
 	private _queuesBusyFlags = 0;
@@ -3413,9 +3412,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		for (const queue of this.queues) {
 			queue.abort();
 		}
-		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
-			this.serialAPIInterpreter.stop();
-		}
+
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
 			this.serial.removeAllListeners();
@@ -3496,36 +3493,49 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	): Promise<void> {
 		if (typeof data === "number") {
 			switch (data) {
-				// single-byte messages - just forward them to the send thread
-				case MessageHeaders.ACK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("ACK");
-					}
-					return;
-				}
-				case MessageHeaders.NAK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("NAK");
-					}
-					this._controller?.incrementStatistics("NAK");
-					return;
-				}
+				case MessageHeaders.ACK:
+				case MessageHeaders.NAK:
 				case MessageHeaders.CAN: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("CAN");
+					// check if someone is waiting for this
+					for (const entry of this.awaitedMessageHeaders) {
+						if (entry.predicate(data)) {
+							entry.handler(data);
+							break;
+						}
 					}
-					this._controller?.incrementStatistics("CAN");
 					return;
 				}
+
+					// // single-byte messages - just forward them to the send thread
+					// case MessageHeaders.ACK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("ACK");
+					// 	}
+					// 	return;
+					// }
+					// case MessageHeaders.NAK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("NAK");
+					// 	}
+					// 	this._controller?.incrementStatistics("NAK");
+					// 	return;
+					// }
+					// case MessageHeaders.CAN: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("CAN");
+					// 	}
+					// 	this._controller?.incrementStatistics("CAN");
+					// 	return;
+					// }
 			}
 		}
 
@@ -3747,17 +3757,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				}
 			}
 
-			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
-			if (
-				this.serialAPIInterpreter?.status === InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send({
-					type: "message",
-					message: msg,
-				});
-			} else {
-				void this.handleUnsolicitedMessage(msg);
-			}
+			// // Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
+			// if (
+			// 	this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			// ) {
+			// 	this.serialAPIInterpreter.send({
+			// 		type: "message",
+			// 		message: msg,
+			// 	});
+			// } else {
+			void this.handleUnsolicitedMessage(msg);
+			// }
 		}
 	}
 
@@ -4571,18 +4581,103 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			| TransportServiceCCSubsequentSegment,
 	): Promise<void> {
 		const nodeSessions = this.ensureNodeSessions(command.nodeId);
-		// If this command belongs to an existing session, just forward it to the state machine
-		const transportSession = nodeSessions.transportService.get(
-			command.sessionId,
-		);
+
+		// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
+		const missingSegmentTimeout =
+			TransportServiceTimeouts.requestMissingSegmentR2;
+
+		const advanceTransportServiceSession = async (
+			session: TransportServiceSession,
+			input: TransportServiceRXMachineInput,
+		): Promise<void> => {
+			const machine = session.machine;
+
+			// Figure out what needs to be done for this input
+			const transition = machine.next(input);
+			if (transition) {
+				machine.transition(transition.newState);
+
+				if (machine.state.value === "receive") {
+					// We received a segment in the normal flow. Restart the timer
+					startMissingSegmentTimeout(session);
+				} else if (machine.state.value === "requestMissing") {
+					// A segment is missing. Request it and restart the timeout
+					this.controllerLog.logNode(command.nodeId, {
+						message:
+							`Transport Service RX session #${command.sessionId}: Segment with offset ${machine.state.offset} missing - requesting it...`,
+						level: "debug",
+						direction: "outbound",
+					});
+					const cc = new TransportServiceCCSegmentRequest({
+						nodeId: command.nodeId,
+						sessionId: command.sessionId,
+						datagramOffset: machine.state.offset,
+					});
+					await this.sendCommand(cc, {
+						maxSendAttempts: 1,
+						priority: MessagePriority.Immediate,
+					});
+
+					startMissingSegmentTimeout(session);
+				} else if (machine.state.value === "failure") {
+					this.controllerLog.logNode(command.nodeId, {
+						message:
+							`Transport Service RX session #${command.sessionId} failed`,
+						level: "error",
+						direction: "none",
+					});
+					// TODO: Update statistics
+					nodeSessions.transportService.delete(command.sessionId);
+					if (session.timeout) {
+						clearTimeout(session.timeout);
+					}
+				}
+			}
+
+			if (machine.state.value === "success") {
+				// This state may happen without a transition if we received the last segment before
+				// but the SegmentComplete message got lost
+				this.controllerLog.logNode(command.nodeId, {
+					message:
+						`Transport Service RX session #${command.sessionId} complete`,
+					level: "debug",
+					direction: "inbound",
+				});
+				if (session.timeout) {
+					clearTimeout(session.timeout);
+				}
+
+				const cc = new TransportServiceCCSegmentComplete({
+					nodeId: command.nodeId,
+					sessionId: command.sessionId,
+				});
+				await this.sendCommand(cc, {
+					maxSendAttempts: 1,
+					priority: MessagePriority.Immediate,
+				}).catch(noop);
+			}
+		};
+
+		function startMissingSegmentTimeout(
+			session: TransportServiceSession,
+		): void {
+			if (session.timeout) {
+				clearTimeout(session.timeout);
+			}
+
+			session.timeout = setTimeout(() => {
+				session.timeout = undefined;
+				void advanceTransportServiceSession(session, {
+					value: "timeout",
+				});
+			}, missingSegmentTimeout);
+		}
+
 		if (command instanceof TransportServiceCCFirstSegment) {
 			// This is the first message in a sequence. Create or re-initialize the session
 			// We don't delete finished sessions when the last message is received in order to be able to
 			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
 			// we do know that the previous one is finished.
-			if (transportSession) {
-				transportSession.interpreter.stop();
-			}
 			nodeSessions.transportService.clear();
 
 			this.controllerLog.logNode(command.nodeId, {
@@ -4592,75 +4687,27 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				direction: "inbound",
 			});
 
-			const RXStateMachine = createTransportServiceRXMachine(
-				{
-					requestMissingSegment: async (offset: number) => {
-						this.controllerLog.logNode(command.nodeId, {
-							message:
-								`Transport Service RX session #${command.sessionId}: Segment with offset ${offset} missing - requesting it...`,
-							level: "debug",
-							direction: "outbound",
-						});
-						const cc = new TransportServiceCCSegmentRequest({
-							nodeId: command.nodeId,
-							sessionId: command.sessionId,
-							datagramOffset: offset,
-						});
-						await this.sendCommand(cc, {
-							maxSendAttempts: 1,
-							priority: MessagePriority.Immediate,
-						});
-					},
-					sendSegmentsComplete: async () => {
-						this.controllerLog.logNode(command.nodeId, {
-							message:
-								`Transport Service RX session #${command.sessionId} complete`,
-							level: "debug",
-							direction: "outbound",
-						});
-						const cc = new TransportServiceCCSegmentComplete({
-							nodeId: command.nodeId,
-							sessionId: command.sessionId,
-						});
-						await this.sendCommand(cc, {
-							maxSendAttempts: 1,
-							priority: MessagePriority.Immediate,
-						});
-					},
-				},
-				{
-					// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
-					missingSegmentTimeout:
-						TransportServiceTimeouts.requestMissingSegmentR2,
-					datagramSize: command.datagramSize,
-					firstSegmentSize: command.partialDatagram.length,
-				},
+			const machine = createTransportServiceRXMachine(
+				command.datagramSize,
+				command.partialDatagram.length,
 			);
 
-			const interpreter = interpret(RXStateMachine).start();
-			nodeSessions.transportService.set(command.sessionId, {
+			const session: TransportServiceSession = {
 				fragmentSize: command.partialDatagram.length,
-				interpreter,
-			});
+				machine,
+			};
+			nodeSessions.transportService.set(command.sessionId, session);
 
-			interpreter.onTransition((state) => {
-				if (state.changed && state.value === "failure") {
-					this.controllerLog.logNode(command.nodeId, {
-						message:
-							`Transport Service RX session #${command.sessionId} failed`,
-						level: "error",
-						direction: "none",
-					});
-					// TODO: Update statistics
-					interpreter.stop();
-					nodeSessions.transportService.delete(command.sessionId);
-				}
-			});
+			// Time out waiting for subsequent segments
+			startMissingSegmentTimeout(session);
 		} else {
-			// This is a subsequent message in a sequence. Just forward it to the state machine if there is one
+			// This is a subsequent message in a sequence. Continue executing the state machine
+			const transportSession = nodeSessions.transportService.get(
+				command.sessionId,
+			);
 			if (transportSession) {
-				transportSession.interpreter.send({
-					type: "segment",
+				await advanceTransportServiceSession(transportSession, {
+					value: "segment",
 					offset: command.datagramOffset,
 					length: command.partialDatagram.length,
 				});
@@ -4683,26 +4730,26 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
-		if (msg.type === MessageType.Request) {
-			// This is a request we might have registered handlers for
-			try {
+		// FIXME: Rename this - msg might not be unsolicited
+		// This is a message we might have registered handlers for
+		try {
+			if (msg.type === MessageType.Request) {
 				await this.handleRequest(msg);
-			} catch (e) {
-				if (
-					isZWaveError(e)
-					&& e.code === ZWaveErrorCodes.Driver_NotReady
-				) {
-					this.driverLog.print(
-						`Cannot handle message because the driver is not ready to handle it yet.`,
-						"warn",
-					);
-				} else {
-					throw e;
-				}
+			} else {
+				await this.handleResponse(msg);
 			}
-		} else {
-			this.driverLog.transactionResponse(msg, undefined, "unexpected");
-			this.driverLog.print("unexpected response, discarding...", "warn");
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				this.driverLog.print(
+					`Cannot handle message because the driver is not ready to handle it yet.`,
+					"warn",
+				);
+			} else {
+				throw e;
+			}
 		}
 	}
 
@@ -4730,19 +4777,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				);
 
 				// In this situation, we may be executing a Serial API command, which will never complete.
-				// Bail out of it, without rejecting the actual transaction
-				if (
-					this.serialAPIInterpreter?.status
-						=== InterpreterStatus.Running
-				) {
-					this.serialAPIInterpreter.stop();
-				}
-				if (this._currentSerialAPICommandPromise) {
+				// Abort it, so it can be retried
+				if (this.abortSerialAPICommand) {
 					this.controllerLog.print(
 						`Currently active command will be retried...`,
 						"warn",
 					);
-					this._currentSerialAPICommandPromise.reject(
+					this.abortSerialAPICommand.reject(
 						new ZWaveError(
 							"The Serial API restarted unexpectedly",
 							ZWaveErrorCodes.Controller_Reset,
@@ -5020,6 +5061,25 @@ ${handlers.length} left`,
 		}
 
 		return false;
+	}
+
+	/**
+	 * Is called when a Response-type message was received
+	 */
+	private handleResponse(msg: Message): Promise<void> {
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// We do
+				entry.handler(msg);
+				return Promise.resolve();
+			}
+		}
+
+		this.driverLog.transactionResponse(msg, undefined, "unexpected");
+		this.driverLog.print("unexpected response, discarding...", "warn");
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -5849,72 +5909,6 @@ ${handlers.length} left`,
 			msg.callbackId = this.getNextCallbackId();
 		}
 
-		const machine = createSerialAPICommandMachine(
-			msg,
-			await msg.serializeAsync(this.getEncodingContext()),
-			{
-				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(),
-				notifyUnsolicited: (msg) => {
-					void this.handleUnsolicitedMessage(msg);
-				},
-				notifyRetry: (
-					lastError,
-					message,
-					attempts,
-					maxAttempts,
-					delay,
-				) => {
-					// Translate the error into a better one
-					let errorReason: string;
-					switch (lastError) {
-						case "response timeout":
-							errorReason = "No response from controller";
-							this._controller?.incrementStatistics(
-								"timeoutResponse",
-							);
-							break;
-						case "callback timeout":
-							errorReason = "No callback from controller";
-							this._controller?.incrementStatistics(
-								"timeoutCallback",
-							);
-							break;
-						case "response NOK":
-							errorReason =
-								"The controller response indicated failure";
-							break;
-						case "callback NOK":
-							errorReason =
-								"The controller callback indicated failure";
-							break;
-						case "ACK timeout":
-							this._controller?.incrementStatistics("timeoutACK");
-						// fall through
-						case "CAN":
-						case "NAK":
-						default:
-							errorReason =
-								"Failed to execute controller command";
-							break;
-					}
-					this.controllerLog.print(
-						`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				},
-				timestamp: highResTimestamp,
-				logOutgoingMessage: (msg: Message) => {
-					this.driverLog.logMessage(msg, {
-						direction: "outbound",
-					});
-				},
-			},
-			pick(this._options, ["timeouts", "attempts"]),
-		);
-
-		const result = createDeferredPromise<Message | undefined>();
-
 		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
 		// This was broken in 7.19, not fixed so far
 		if (
@@ -5924,46 +5918,190 @@ ${handlers.length} left`,
 			this.serial?.ignoreAckHighNibbleOnce();
 		}
 
-		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
-			this.serialAPIInterpreter?.stop();
-			this.serialAPIInterpreter = undefined;
+		const machine = createSerialAPICommandMachine(msg);
+		this.abortSerialAPICommand = createDeferredPromise();
+		const abortController = new AbortController();
 
-			const cmdResult = evt.data as SerialAPICommandDoneData;
-			if (cmdResult.type === "success") {
-				result.resolve(cmdResult.result);
-			} else if (
-				cmdResult.reason === "callback NOK"
-				&& (isSendData(msg) || isTransmitReport(cmdResult.result))
-			) {
-				// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
-				// ... so we treat it as a result
-				result.resolve(cmdResult.result);
-			} else {
-				// Convert to a Z-Wave error
-				result.reject(
-					serialAPICommandErrorToZWaveError(
-						cmdResult.reason,
-						msg,
-						cmdResult.result,
-						transactionSource,
-					),
-				);
+		let nextInput: SerialAPICommandMachineInput | undefined = {
+			value: "start",
+		};
+
+		try {
+			while (!machine.done) {
+				if (nextInput == undefined) {
+					// We should not be in a situation where we have no input for the state machine
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no input provided",
+					);
+				}
+				const transition = machine.next(nextInput);
+				if (transition == undefined) {
+					// We should not be in a situation where the state machine does not transition
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no transition taken",
+					);
+				}
+
+				// The input was used
+				nextInput = undefined;
+
+				// Transition to the new state
+				machine.transition(transition.newState);
+
+				// Now check what needs to be done in the new state
+				switch (machine.state.value) {
+					case "initial":
+						// This should never happen
+						throw new Error(
+							"Serial API Command machine is in an invalid state: transitioned to initial state",
+						);
+
+					case "sending": {
+						this.driverLog.logMessage(msg, {
+							direction: "outbound",
+						});
+
+						// Mark the message as sent immediately before actually sending
+						msg.markAsSent();
+						const data = await msg.serializeAsync(
+							this.getEncodingContext(),
+						);
+						await this.writeSerial(data);
+						nextInput = { value: "message sent" };
+						break;
+					}
+
+					case "waitingForACK": {
+						const controlFlow = await this.waitForMessageHeader(
+							() => true,
+							this.options.timeouts.ack,
+						).catch(() => "timeout" as const);
+
+						if (controlFlow === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (controlFlow === MessageHeaders.ACK) {
+							nextInput = { value: "ACK" };
+						} else if (controlFlow === MessageHeaders.CAN) {
+							nextInput = { value: "CAN" };
+						} else if (controlFlow === MessageHeaders.NAK) {
+							nextInput = { value: "NAK" };
+						}
+
+						break;
+					}
+
+					case "waitingForResponse": {
+						const response = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedResponse(resp),
+								msg.getResponseTimeout()
+									?? this.options.timeouts.response,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (response instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw response;
+						}
+
+						if (response === "timeout") {
+							if (isSendData(msg)) {
+								// Timed out SendData commands must be aborted
+								void this.abortSendData();
+							}
+
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(response) && !response.isOK()
+						) {
+							nextInput = { value: "response NOK", response };
+						} else {
+							nextInput = { value: "response", response };
+						}
+
+						break;
+					}
+
+					case "waitingForCallback": {
+						let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+						if (isSendData(msg)) {
+							// We abort timed out SendData commands before the callback times out
+							sendDataAbortTimeout = setTimeout(() => {
+								void this.abortSendData();
+							}, this.options.timeouts.sendDataAbort).unref();
+						}
+
+						const callback = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedCallback(resp),
+								msg.getCallbackTimeout()
+									?? this.options.timeouts.sendDataCallback,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (sendDataAbortTimeout) {
+							clearTimeout(sendDataAbortTimeout);
+						}
+
+						if (callback instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw callback;
+						}
+
+						if (callback === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(callback) && !callback.isOK()
+						) {
+							nextInput = { value: "callback NOK", callback };
+						} else {
+							nextInput = { value: "callback", callback };
+						}
+
+						break;
+					}
+
+					case "success": {
+						return machine.state.result;
+					}
+
+					case "failure": {
+						const { reason, result } = machine.state;
+						if (
+							reason === "callback NOK"
+							&& (isSendData(msg) || isTransmitReport(result))
+						) {
+							// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+							// ... so we treat it as a result
+							return result;
+						} else {
+							throw serialAPICommandErrorToZWaveError(
+								reason,
+								msg,
+								result,
+								transactionSource,
+							);
+						}
+					}
+				}
 			}
-		});
-
-		// Uncomment this for debugging state machine transitions
-		// this.serialAPIInterpreter.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.driverLog.print(
-		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
-		// 		);
-		// 	}
-		// });
-
-		this.serialAPIInterpreter.start();
-
-		this._currentSerialAPICommandPromise = result;
-		return result;
+		} finally {
+			this.abortSerialAPICommand = undefined;
+		}
 	}
 
 	private getQueueForTransaction(t: Transaction): TransactionQueue {
@@ -6497,6 +6635,7 @@ ${handlers.length} left`,
 		predicate: (msg: Message) => boolean,
 		timeout: number,
 		refreshPredicate?: (msg: Message) => boolean,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<Message>();
@@ -6527,6 +6666,10 @@ ${handlers.length} left`,
 				removeEntry();
 				resolve(cc as T);
 			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
+			});
 		});
 	}
 
@@ -6538,6 +6681,7 @@ ${handlers.length} left`,
 	public waitForCommand<T extends CCId>(
 		predicate: (cc: CCId) => boolean,
 		timeout: number,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<CCId>();
@@ -6566,6 +6710,10 @@ ${handlers.length} left`,
 			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
+			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
 			});
 		});
 	}
