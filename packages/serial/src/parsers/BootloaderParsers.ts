@@ -78,7 +78,9 @@ class BootloaderScreenParserTransformer
 }
 
 /** Parses the screen output from the bootloader, either waiting for a NUL char or a timeout */
-export class BootloaderScreenParser extends TransformStream {
+export class BootloaderScreenParser
+	extends TransformStream<Uint8Array, number | string>
+{
 	constructor(
 		logger?: SerialLogger,
 	) {
