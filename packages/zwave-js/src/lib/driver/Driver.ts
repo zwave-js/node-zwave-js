@@ -645,6 +645,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	public constructor(
 		private port:
 			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			| ZWaveSerialPortImplementation
 			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]

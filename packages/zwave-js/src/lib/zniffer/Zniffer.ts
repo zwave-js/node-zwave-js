@@ -192,7 +192,11 @@ export interface CapturedFrame {
 
 export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		options: ZnifferOptions = {},
 	) {
 		super();
