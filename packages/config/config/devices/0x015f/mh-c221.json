@@ -68,6 +68,7 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1: Report destination in 5s interval",
@@ -86,11 +87,16 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1:activate demo trip and calibration when first touch of the buttony",
 					"value": 1
-				}
+				},
+                {
+					"label": "do nothing",
+                    "value": 0
+                }
 			]
 		},
 		{
@@ -100,11 +106,16 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1:activate demo trip and calibration",
 					"value": 1
-				}
+				},
+                {
+					"label": "do nothing",
+                    "value": 0
+                }
 			]
 		},
 		{
@@ -114,11 +125,16 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1:activate calibration only",
 					"value": 1
-				}
+				},
+                {
+					"label": "do nothing",
+                    "value": 0
+                }
 			]
 		},
 		{
@@ -144,6 +160,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Button (momentary buttons)",
@@ -166,6 +183,7 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "no external switch",
@@ -196,11 +214,17 @@
 			"minValue": 0,
 			"maxValue": 85,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "85 restore factory setting",
 					"value": 85
-				}
+				},
+                {
+					"label": "do nothing",
+                    "value": 0
+                }
+
 			]
 		}
 	],
