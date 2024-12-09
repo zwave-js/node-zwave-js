@@ -1,7 +1,7 @@
 {
-	"manufacturer": "Vesternet",
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
 	"manufacturerId": "0x0330",
-	"label": "VES-ZW-DIM-001",
+	"label": "SR-ZV9040A",
 	"description": "2-Wire Capable Dimmer",
 	"devices": [
 		{
@@ -13,6 +13,13 @@
 	"firmwareVersion": {
 		"min": "1.21",
 		"max": "1.30"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
 	},
 	"paramInformation": [
 		{
@@ -27,20 +34,30 @@
 		},
 		{
 			"#": "4",
-			"label": "Dimming Speed",
+			"label": "Default Fade Time",
+			"description": "Default fade time (unit is second)",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instantly",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "5",
-			"label": "Minimum Dim Level",
+			"label": "Setting Minimum Brightness Value",
+			"description": "The bigger the value is, the higher the load’s minimum brightness is",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 15
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "6",
@@ -52,18 +69,26 @@
 		},
 		{
 			"#": "8",
-			"label": "Switch Type",
+			"label": "External Switch Type",
+			"description": "External switch type",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary",
+					"label": "Push button switch",
 					"value": 0
 				},
 				{
-					"label": "Toggle",
+					"label": "Normal on/off switch",
 					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
 				}
 			]
 		},
@@ -76,10 +101,12 @@
 		{
 			"#": "11",
 			"label": "Wiring Type",
+			"description": "Wiring type  note: this parameter is read only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -87,11 +114,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-Wire (No neutral)",
+					"label": "2 wire with no neutral",
 					"value": 1
 				},
 				{
-					"label": "3-Wire (With neutral)",
+					"label": "3 wire with neutral",
 					"value": 2
 				}
 			]
@@ -99,10 +126,12 @@
 		{
 			"#": "12",
 			"label": "Load Type",
+			"description": "Load type  note: this parameter is read only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -132,30 +161,36 @@
 		},
 		{
 			"#": "14",
-			"label": "Power Report: Change Threshold",
+			"label": "Power Automatic Report Absolute Threshold, Unit is W",
+			"description": "When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
-			"maxValue": 400,
-			"defaultValue": 10
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
 		},
 		{
 			"#": "15",
-			"label": "Power Report: Relative Change Threshold",
+			"label": "Power Automatic Report Percentage Threshold, Unit is %",
+			"description": "When power changes above the percentage threshold, immediately report current power value",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 20
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true
 		},
 		{
 			"#": "21",
-			"label": "Power Report Interval",
+			"label": "Power Metering Automatic Report Time Cycle, Unit is Second",
+			"description": "Power metering automatic report time cycle, unit is second",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 2678400,
+			"maxValue": 600,
 			"defaultValue": 600,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -165,12 +200,14 @@
 		},
 		{
 			"#": "22",
-			"label": "Energy Report Interval",
+			"label": "Energy Metering Automatic Report Time Cycle, Unit is Second",
+			"description": "Energy metering automatic report time cycle, unit is second",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 2678400,
+			"maxValue": 1800,
 			"defaultValue": 1800,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -180,12 +217,14 @@
 		},
 		{
 			"#": "23",
-			"label": "Voltage Report Interval",
+			"label": "Voltage Metering Automatic Report Time Cycle, Unit is Second",
+			"description": "Voltage metering automatic report time cycle, unit is second",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 2678400,
+			"maxValue": 3600,
 			"defaultValue": 3600,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -195,12 +234,14 @@
 		},
 		{
 			"#": "24",
-			"label": "Current Report Interval",
+			"label": "Current Metering Automatic Report Time Cycle, Unit is Second",
+			"description": "Current metering automatic report time cycle, unit is second",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 2678400,
+			"maxValue": 3600,
 			"defaultValue": 3600,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -231,12 +272,37 @@
 			"label": "Startup Brightness",
 			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",
 			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"label": "Enable/Disable to Detect Load After Re-power On",
+			"description": "Enable/disable to detect load after re-power on (detect load type, minimum brightness, maximum brightness)  note: when the device does not belong to any network, load detection will be enabled every time after re-power on. when the device has already been added to a network, load detection will be disabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable to detect every time after re-power on",
+					"value": 1
+				},
+				{
+					"label": "Enable to detect only after first re-power on",
+					"value": 2
+				}
+			]
 		}
 	],
 	"metadata": {
-		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
-		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
-		"reset": "Press and hold the action button for over 10 seconds. The connected light will be set to 50% brightness and flash slowly.",
-		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-DIM-001.pdf"
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer to your primary controller’s manual on how to turn your controller into inclusion).\n2. Power on the in-wall dimmer and set it into inclusion mode. There are two methods to set the in-wall dimmer into inclusion mode:\n1)Repower on the dimmer, it will be set into inclusion mode automatically, and waiting to be included.\n2)Triple press the action button on the dimmer, it will set the dimmer into inclusion mode.\nThe connected light will stay solid on for 3 seconds to indicate successful inclusion",
+		"exclusion": "There are two exclusion methods:\nMethod 1: Exclusion from the primary controller/gateway as follows:\n1. Set the primary controller/gateway into exclusion mode (Please refer to your primary controllers manual on how to set your controller into exclusion).\n2. Triple press the action button, the dimmer will be set to exclusion mode, and waiting to be excluded, then the dimmer will be excluded from the network.\nMethod 2: Factory reset the dimmer will force it to be excluded from a network. (please refer to the part “Factory Reset” of this manual)\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable",
+		"reset": "Press and hold down the action button for over 10 seconds, the dimmer will be reset to factory defaults.\n\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3331/SR-ZV9040A-A%20Micro%20Smart%20Dimmer.pdf"
 	}
 }
