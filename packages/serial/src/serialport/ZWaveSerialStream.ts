@@ -11,11 +11,10 @@
 
 import { type ZWaveLogContainer } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
-import {
-	ReadableStream,
-	type ReadableWritablePair,
-	type UnderlyingSink,
-	type UnderlyingSource,
+import type {
+	ReadableWritablePair,
+	UnderlyingSink,
+	UnderlyingSource,
 } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
