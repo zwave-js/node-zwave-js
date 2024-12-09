@@ -157,11 +157,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-state switches), on position-shutter open, off position -shutter closewire 1 ex, momentary or toggle key to S1 only",
+					"label": "Toggle (2-state switches); On position-shutter open; Off position -shutter closewire 1 ex; Momentary or toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "Toggle (2-state switches), on position-shutter close, off postion - shutter open",
+					"label": "Toggle (2-state switches); On position-shutter close; Off postion - shutter open",
 					"value": 2
 				}
 			]
@@ -174,23 +174,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No external switch",
+					"label": "Neo external switch",
 					"value": 0
 				},
 				{
-					"label": "wire 1 ex, momentary or toggle key to S1 only",
+					"label": "Wire 1 ex, momentary or toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "wire 1 ex, momentary or toggle key to S2 only",
+					"label": "Wire 1 ex, momentary or toggle key to S2 only",
 					"value": 2
 				},
 				{
-					"label": "wire 2 ex, momentary or toggle keys to S1 and S2, each key can control both directions",
+					"label": "Wire 2 ex, momentary or toggle keys to S1 and S2, each key can control both directions",
 					"value": 3
 				},
 				{
-					"label": "wire 2",
+					"label": "Wire 2",
 					"value": 4
 				}
 			]
@@ -203,11 +203,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "restore factory setting",
+					"label": "Restore factory settings",
 					"value": 85
 				},
                 {
-					"label": "do nothing",
+					"label": "Do nothing",
                     "value": 0
                 }
 
