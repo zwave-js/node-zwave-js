@@ -125,15 +125,20 @@ import {
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
+	type ZWaveSerialBindingFactory,
+	ZWaveSerialFrameType,
 	ZWaveSerialMode,
-	ZWaveSerialPort,
-	ZWaveSerialPortBase,
 	type ZWaveSerialPortImplementation,
-	ZWaveSocket,
+	type ZWaveSerialStream,
+	ZWaveSerialStreamFactory,
+	createNodeSerialPortFactory,
+	createNodeSocketFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
+	isZWaveSerialBindingFactory,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
@@ -170,6 +175,7 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
+	isAbortError,
 	isUint8Array,
 	mergeDeep,
 	noop,
@@ -187,7 +193,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
 import { ZWaveController } from "../controller/Controller.js";
@@ -638,7 +643,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		PersistValuesContext
 {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
@@ -647,6 +656,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (
 			typeof port !== "string"
 			&& !isZWaveSerialPortImplementation(port)
+			&& !isZWaveSerialBindingFactory(port)
 		) {
 			throw new ZWaveError(
 				`The port must be a string or a valid custom serial port implementation!`,
@@ -752,8 +762,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._scheduler = new TaskScheduler();
 	}
 
+	private serialFactory: ZWaveSerialStreamFactory | undefined;
 	/** The serial port instance */
-	private serial: ZWaveSerialPortBase | undefined;
+	private serial: ZWaveSerialStream | undefined;
 
 	private messageEncodingContext: Omit<
 		MessageEncodingContext,
@@ -1301,52 +1312,41 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.driverLog.print("starting driver...");
 
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
 				const url = new URL(this.port);
 				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
-				);
+				binding = createNodeSocketFactory({
+					host: url.hostname,
+					port: parseInt(url.port),
+				});
 			} else {
 				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSerialPort(
+				binding = createNodeSerialPortFactory(
 					this.port,
-					this._logContainer,
-					this._options.testingHooks?.serialPortBinding,
+					// this._options.testingHooks?.serialPortBinding,
 				);
 			}
-		} else {
+		} else if (isZWaveSerialPortImplementation(this.port)) {
 			this.driverLog.print(
 				"opening serial port using the provided custom implementation",
 			);
-			this.serial = new ZWaveSerialPortBase(
-				this.port,
-				this._logContainer,
+			this.driverLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
 			);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.driverLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-			.on("error", (err) => {
-				if (this.isSoftResetting && !this.serial?.isOpen) {
-					// A disconnection while soft resetting is to be expected
-					return;
-				} else if (!this._isOpen) {
-					// tryOpenSerialport takes care of error handling
-					return;
-				}
-
-				void this.destroyWithMessage(
-					`Serial port errored: ${err.message}`,
-				);
-			});
-		// If the port is already open, close it first
-		if (this.serial.isOpen) await this.serial.close();
+		this.serialFactory = new ZWaveSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
@@ -1505,7 +1505,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			attempt++
 		) {
 			try {
-				await this.serial!.open();
+				this.serial = await this.serialFactory!.createStream();
+				// Start reading from the serial port
+				void this.handleSerialData(this.serial);
 				return;
 			} catch (e) {
 				lastError = e;
@@ -3415,7 +3417,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
@@ -3479,6 +3480,36 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._logContainer.destroy();
 
 		this._destroyPromise.resolve();
+	}
+
+	private async handleSerialData(serial: ZWaveSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				setImmediate(() => {
+					if (frame.type === ZWaveSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
+						void this.serialport_onBootloaderData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				// A disconnection while soft resetting is to be expected.
+				// The soft reset method will handle reopening
+				if (this.isSoftResetting) return;
+
+				void this.destroyWithMessage(e.message);
+				return;
+			}
+			throw e;
+		}
 	}
 
 	/**

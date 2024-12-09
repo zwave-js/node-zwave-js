@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import { isObject } from "alcalzone-shared/typeguards";
 import { type EventEmitter } from "node:events";
 import { type Duplex } from "node:stream";
@@ -13,6 +14,7 @@ export function isZWaveSerialPortImplementation(
 	);
 }
 
+/** @deprecated Use {@link ZWaveSerialBindingFactory} instead */
 export interface ZWaveSerialPortImplementation {
 	create(): Duplex & EventEmitter;
 	open(

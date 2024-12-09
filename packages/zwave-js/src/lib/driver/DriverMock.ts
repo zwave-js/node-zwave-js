@@ -1,25 +1,22 @@
-import type { ZWaveSerialPortBase } from "@zwave-js/serial";
-import {
-	MockBinding,
-	type MockPortBinding,
-	SerialPortMock,
-} from "@zwave-js/serial/mock";
+import { type ZWaveSerialStream } from "@zwave-js/serial";
+import { MockPort } from "@zwave-js/serial/mock";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { SerialPort } from "serialport";
 import { Driver } from "./Driver.js";
 import type { PartialZWaveOptions, ZWaveOptions } from "./ZWaveOptions.js";
 
 export interface CreateAndStartDriverWithMockPortResult {
 	driver: Driver;
 	continueStartup: () => void;
-	mockPort: MockPortBinding;
+	mockPort: MockPort;
+	serial: ZWaveSerialStream;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CreateAndStartDriverWithMockPortOptions {
-	portAddress: string;
+	// portAddress: string;
 }
 
 /** Creates a real driver instance with a mocked serial port to enable end to end tests */
@@ -28,25 +25,27 @@ export function createAndStartDriverWithMockPort(
 		& Partial<CreateAndStartDriverWithMockPortOptions>
 		& PartialZWaveOptions = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
-	const { portAddress = "/tty/FAKE", ...driverOptions } = options;
-	return new Promise(async (resolve, reject) => {
+	const { ...driverOptions } = options;
+	return new Promise(async (resolve, _reject) => {
 		// eslint-disable-next-line prefer-const
 		let driver: Driver;
-		let mockPort: MockPortBinding;
+		const mockPort = new MockPort();
+		const bindingFactory = mockPort.factory();
+		// let mockPort: MockPortBinding;
 
-		MockBinding.reset();
-		MockBinding.createPort(portAddress, {
-			record: true,
-			readyData: new Uint8Array(),
-		});
+		// MockBinding.reset();
+		// MockBinding.createPort(portAddress, {
+		// 	record: true,
+		// 	readyData: new Uint8Array(),
+		// });
 
 		// This will be called when the driver has opened the serial port
 		const onSerialPortOpen = (
-			_port: ZWaveSerialPortBase,
+			serial: ZWaveSerialStream,
 		): Promise<void> => {
-			// Extract the mock serial port
-			mockPort = MockBinding.getInstance(portAddress)!;
-			if (!mockPort) reject(new Error("Mock serial port is not open!"));
+			// // Extract the mock serial port
+			// mockPort = MockBinding.getInstance(portAddress)!;
+			// if (!mockPort) reject(new Error("Mock serial port is not open!"));
 
 			// And return the info to the calling code, giving it control over
 			// continuing the driver startup.
@@ -54,6 +53,7 @@ export function createAndStartDriverWithMockPort(
 			resolve({
 				driver,
 				mockPort,
+				serial,
 				continueStartup: () => continuePromise.resolve(),
 			});
 
@@ -69,12 +69,10 @@ export function createAndStartDriverWithMockPort(
 
 		const testingHooks: ZWaveOptions["testingHooks"] = {
 			...driverOptions.testingHooks,
-			// instruct the driver to use SerialPortMock as the serialport implementation
-			serialPortBinding: SerialPortMock as unknown as typeof SerialPort,
 			onSerialPortOpen,
 		};
 
-		driver = new Driver(portAddress, {
+		driver = new Driver(bindingFactory, {
 			...driverOptions,
 			testingHooks,
 		});
@@ -88,7 +86,10 @@ export type CreateAndStartTestingDriverResult = Omit<
 >;
 
 export interface CreateAndStartTestingDriverOptions {
-	beforeStartup: (mockPort: MockPortBinding) => void | Promise<void>;
+	beforeStartup: (
+		mockPort: MockPort,
+		serial: ZWaveSerialStream,
+	) => void | Promise<void>;
 	/**
 	 * Whether the controller identification should be skipped (default: false).
 	 * If not, a Mock controller must be available on the serial port.
@@ -131,7 +132,7 @@ export async function createAndStartTestingDriver(
 	const testId = Math.round(Math.random() * 0xffffffff)
 		.toString(16)
 		.padStart(8, "0");
-	internalOptions.portAddress ??= `/tty/FAKE${testId}`;
+	// internalOptions.portAddress ??= `/tty/FAKE${testId}`;
 
 	if (skipControllerIdentification) {
 		internalOptions.testingHooks ??= {};
@@ -156,11 +157,11 @@ export async function createAndStartTestingDriver(
 	internalOptions.storage ??= {};
 	internalOptions.storage.cacheDir = cacheDir;
 
-	const { driver, continueStartup, mockPort } =
+	const { driver, continueStartup, mockPort, serial } =
 		await createAndStartDriverWithMockPort(internalOptions);
 
 	if (typeof beforeStartup === "function") {
-		await beforeStartup(mockPort);
+		await beforeStartup(mockPort, serial);
 	}
 
 	// Make sure the mock FS gets restored when the driver is destroyed
@@ -172,7 +173,7 @@ export async function createAndStartTestingDriver(
 
 	return new Promise((resolve) => {
 		driver.once("driver ready", () => {
-			resolve({ driver, mockPort });
+			resolve({ driver, mockPort, serial });
 		});
 		continueStartup();
 	});
