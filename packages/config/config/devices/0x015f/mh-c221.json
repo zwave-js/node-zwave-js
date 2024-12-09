@@ -180,7 +180,7 @@
 			"#": "14",
 			"label": "E: External switch input",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
