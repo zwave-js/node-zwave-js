@@ -153,15 +153,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button (momentary buttons)",
+					"label": "Button (Momentary buttons)",
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-state switches); On position-shutter open; Off position -shutter closewire 1 ex; Momentary or toggle key to S1 only",
+					"label": "Toggle 2-State Switches; On position-shutter open; Off position-shutter closewire 1 ex; Momentary or Toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "Toggle (2-state switches); On position-shutter close; Off postion - shutter open",
+					"label": "Toggle 2-State Switches; On position-shutter close; Off postion-shutter open",
 					"value": 2
 				}
 			]
