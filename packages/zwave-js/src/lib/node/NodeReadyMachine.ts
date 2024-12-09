@@ -1,88 +1,66 @@
 import {
-	type InterpreterFrom,
-	Machine,
-	type StateMachine,
-	assign,
-} from "xstate";
+	type InferStateMachineTransitions,
+	StateMachine,
+	type StateMachineTransition,
+} from "@zwave-js/core";
 
-export interface NodeReadyStateSchema {
-	states: {
-		notReady: object;
-		readyIfNotDead: object;
-		ready: object;
-	};
-}
+export type NodeReadyState = {
+	value: "notReady";
+	maybeDead: boolean;
+} | {
+	value: "readyIfNotDead";
+} | {
+	value: "ready";
+	done: true;
+};
 
-export interface NodeReadyContext {
-	isMaybeDead: boolean;
-}
-
-export type NodeReadyEvent =
-	| { type: "NOT_DEAD" }
-	| { type: "MAYBE_DEAD" }
-	| { type: "RESTART_FROM_CACHE" }
-	| { type: "INTERVIEW_DONE" };
+export type NodeReadyMachineInput = {
+	value: "NOT_DEAD" | "MAYBE_DEAD" | "RESTART_FROM_CACHE" | "INTERVIEW_DONE";
+};
 
 export type NodeReadyMachine = StateMachine<
-	NodeReadyContext,
-	NodeReadyStateSchema,
-	NodeReadyEvent,
-	any,
-	any,
-	any,
-	any
+	NodeReadyState,
+	NodeReadyMachineInput
 >;
-export type NodeReadyInterpreter = InterpreterFrom<NodeReadyMachine>;
 
-export function createNodeReadyMachine(
-	initialContext: Partial<NodeReadyContext> = {},
-): NodeReadyMachine {
-	return Machine<NodeReadyContext, NodeReadyStateSchema, NodeReadyEvent>(
-		{
-			id: "nodeReady",
-			initial: "notReady",
-			context: {
-				isMaybeDead: true,
-				...initialContext,
-			},
-			on: {
-				MAYBE_DEAD: {
-					actions: assign({ isMaybeDead: true }) as any,
-				},
-				NOT_DEAD: {
-					actions: assign({ isMaybeDead: false }) as any,
-				},
-				INTERVIEW_DONE: {
-					target: "ready",
-					actions: assign({ isMaybeDead: false }) as any,
-				},
-			},
-			states: {
-				notReady: {
-					entry: assign({ isMaybeDead: true }) as any,
-					on: {
-						RESTART_FROM_CACHE: [{ target: "readyIfNotDead" }],
-					},
-				},
-				readyIfNotDead: {
-					always: [{ cond: "isDefinitelyNotDead", target: "ready" }],
-					on: {
-						NOT_DEAD: {
-							target: "ready",
-							actions: assign({ isMaybeDead: false }) as any,
-						},
-					},
-				},
-				ready: {
-					// If this is final, we will get warnings in the log
-					// So don't :)
-				},
-			},
-		},
-		{
-			guards: {
-				isDefinitelyNotDead: (ctx) => !ctx.isMaybeDead,
-			},
-		},
-	);
+function to(state: NodeReadyState): StateMachineTransition<NodeReadyState> {
+	return { newState: state };
+}
+
+export function createNodeReadyMachine(): NodeReadyMachine {
+	const initialState: NodeReadyState = {
+		value: "notReady",
+		maybeDead: true,
+	};
+
+	const READY: NodeReadyState = { value: "ready", done: true };
+
+	const transitions: InferStateMachineTransitions<NodeReadyMachine> =
+		(state) => (input) => {
+			switch (state.value) {
+				case "notReady": {
+					switch (input.value) {
+						case "NOT_DEAD":
+							return to({ ...state, maybeDead: false });
+						case "MAYBE_DEAD":
+							return to({ ...state, maybeDead: true });
+						case "RESTART_FROM_CACHE":
+							if (state.maybeDead) {
+								return to({ value: "readyIfNotDead" });
+							} else {
+								return to(READY);
+							}
+						case "INTERVIEW_DONE":
+							return to(READY);
+					}
+					break;
+				}
+				case "readyIfNotDead": {
+					if (input.value === "NOT_DEAD") return to(READY);
+					break;
+				}
+			}
+		};
+
+	return new StateMachine(initialState, transitions);
 }
