@@ -208,83 +208,8 @@
 			]
 		},
 		{
-			"#": "9",
-			"label": "LED Strip Timeout",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Stay off",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "10",
-			"label": "Active Power Reports",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10
-		},
-		{
-			"#": "11",
-			"label": "Periodic Power & Energy Reports",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 3600
-		},
-		{
-			"#": "12",
-			"label": "Energy Reports",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10
-		},
-		{
-			"#": "13",
-			"$if": "firmwareVersion >= 1.17",
-			"label": "Load Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Automatically detect load type",
-					"value": 0
-				},
-				{
-					"label": "Manually set for special load type",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "51",
-			"$if": "firmwareVersion >= 1.19",
-			"label": "Instant On",
-			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"#": "8",
+			"$import": "templates/inovelli_templates.json#bulk_set_led_effect"
 		},
 		{
 			"#": "8[0xff]",
@@ -419,6 +344,85 @@
 				{
 					"label": "Pulse",
 					"value": 4
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "LED Strip Timeout",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Stay off",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Active Power Reports",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "11",
+			"label": "Periodic Power & Energy Reports",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600
+		},
+		{
+			"#": "12",
+			"label": "Energy Reports",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 1.17",
+			"label": "Load Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatically detect load type",
+					"value": 0
+				},
+				{
+					"label": "Manually set for special load type",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "51",
+			"$if": "firmwareVersion >= 1.19",
+			"label": "Instant On",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
 				}
 			]
 		}
