@@ -34,6 +34,15 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
+		},
+				{
+			"#": "2",
+			"label": "KHW meter report period",
+			"valueSize": 2,
+			"unit": "10min,6*10min=1h",
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6
 		}
 	],
 	"compat": {
