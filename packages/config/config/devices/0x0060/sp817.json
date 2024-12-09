@@ -57,5 +57,15 @@
 			"maxValue": 3600,
 			"defaultValue": 15
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// Supervised commands always result in a status of "Fail"
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }
