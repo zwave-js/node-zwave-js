@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "KHW meter report period",
+			"label": "KHW Meter Report Period",
 			"valueSize": 2,
 			"unit": "10min,6*10min=1h",
 			"minValue": 1,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "3",
-			"label": "threshold of current load - caution",
+			"label": "Threshold of Current Load - Caution",
 			"valueSize": 2,
 			"unit": "0.01A 500*0.01A=5A",
 			"minValue": 10,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Watt meter report period",
+			"label": "Watt Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
@@ -131,7 +131,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Min Level of the shutter close",
+			"label": "Min Level of the Shutter Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -139,7 +139,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Max Level of shutter open",
+			"label": "Max Level of Shutter Open",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
