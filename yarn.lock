@@ -2637,7 +2637,7 @@ __metadata:
     "@typescript-eslint/utils": "npm:^8.8.1"
     "@zwave-js/core": "workspace:*"
     eslint: "npm:^9.12.0"
-    eslint-compat-utils: "npm:^0.5.1"
+    eslint-compat-utils: "npm:^0.6.4"
     eslint-plugin-jsonc: "npm:^2.16.0"
     typescript: "npm:5.6.2"
   languageName: unknown
@@ -4790,7 +4790,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-compat-utils@npm:^0.5.0, eslint-compat-utils@npm:^0.5.1":
+"eslint-compat-utils@npm:^0.5.0":
   version: 0.5.1
   resolution: "eslint-compat-utils@npm:0.5.1"
   dependencies:
@@ -4798,6 +4798,17 @@ __metadata:
   peerDependencies:
     eslint: ">=6.0.0"
   checksum: 10/ac65ac1c6107cf19f63f5fc17cea361c9cb1336be7356f23dbb0fac10979974b4622e13e950be43cbf431801f2c07f7dab448573181ccf6edc0b86d5b5304511
+  languageName: node
+  linkType: hard
+
+"eslint-compat-utils@npm:^0.6.4":
+  version: 0.6.4
+  resolution: "eslint-compat-utils@npm:0.6.4"
+  dependencies:
+    semver: "npm:^7.5.4"
+  peerDependencies:
+    eslint: ">=6.0.0"
+  checksum: 10/97f08f4aa8d9a1bc1087aaeceab46a5fa65a6d70703c1a2f2cd533562381208fdd0a293ce0f63ad607f1e697ddb348ef1076b02f5afa83c70f4a07ca0dcec90e
   languageName: node
   linkType: hard
 
