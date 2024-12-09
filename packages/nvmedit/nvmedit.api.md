@@ -15,6 +15,207 @@ import { NodeIDType } from '@zwave-js/core/safe';
 import { NodeProtocolInfo } from '@zwave-js/core/safe';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RouteProtocolDataRate } from '@zwave-js/core/safe';
+import { TypedClassDecorator } from '@zwave-js/shared';
+
+// Warning: (ae-missing-release-tag) "ApplicationCCsFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationCCsFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ApplicationCCsFileOptions);
+    // (undocumented)
+    includedInsecurely: CommandClasses[];
+    // (undocumented)
+    includedSecurelyInsecureCCs: CommandClasses[];
+    // (undocumented)
+    includedSecurelySecureCCs: CommandClasses[];
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "included insecurely": string;
+        "included securely (insecure)": string;
+        "included securely (secure)": string;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationCCsFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationCCsFileID = 103;
+
+// Warning: (ae-missing-release-tag) "ApplicationCCsFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationCCsFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    includedInsecurely: CommandClasses[];
+    // (undocumented)
+    includedSecurelyInsecureCCs: CommandClasses[];
+    // (undocumented)
+    includedSecurelySecureCCs: CommandClasses[];
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationDataFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationDataFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ApplicationDataFileOptions);
+    // (undocumented)
+    get applicationData(): Bytes_2;
+    set applicationData(value: Bytes_2);
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationDataFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationDataFileID = 200;
+
+// Warning: (ae-missing-release-tag) "ApplicationDataFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationDataFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    applicationData: Bytes_2;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationNameFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationNameFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ApplicationNameFileOptions);
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationNameFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationNameFileID = 266252;
+
+// Warning: (ae-missing-release-tag) "ApplicationNameFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationNameFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    name: string;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationRFConfigFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationRFConfigFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ApplicationRFConfigFileOptions);
+    // (undocumented)
+    enablePTI?: number;
+    // (undocumented)
+    maxTXPower?: number;
+    // (undocumented)
+    measured0dBm: number;
+    // (undocumented)
+    nodeIdType?: NodeIDType;
+    // (undocumented)
+    rfRegion: RFRegion;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): Record<string, any>;
+    // (undocumented)
+    txPower: number;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationRFConfigFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationRFConfigFileID = 104;
+
+// Warning: (ae-missing-release-tag) "ApplicationRFConfigFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ApplicationRFConfigFileOptions = NVMFileCreationOptions & {
+    rfRegion: RFRegion;
+    txPower: number;
+    measured0dBm: number;
+} & AllOrNone<{
+    enablePTI?: number;
+    maxTXPower?: number;
+}> & {
+    nodeIdType?: number;
+};
+
+// Warning: (ae-missing-release-tag) "ApplicationTypeFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationTypeFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ApplicationTypeFileOptions);
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isListening: boolean;
+    // (undocumented)
+    optionalFunctionality: boolean;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    toJSON(): {
+        listening: boolean;
+        "opt. functionality": boolean;
+        genericDeviceClass: number;
+        specificDeviceClass: number;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationTypeFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationTypeFileID = 102;
+
+// Warning: (ae-missing-release-tag) "ApplicationTypeFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ApplicationTypeFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isListening: boolean;
+    // (undocumented)
+    optionalFunctionality: boolean;
+    // (undocumented)
+    specificDeviceClass: number;
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationVersionFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationVersionFile extends VersionFile {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationVersionFile800" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ApplicationVersionFile800 extends VersionFile {
+}
+
+// Warning: (ae-missing-release-tag) "ApplicationVersionFile800ID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationVersionFile800ID = 266240;
+
+// Warning: (ae-missing-release-tag) "ApplicationVersionFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ApplicationVersionFileID = 331776;
 
 // Warning: (ae-missing-release-tag) "BufferedNVMReader" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -47,8 +248,6 @@ export class BufferedNVMReader implements NVMIO {
 //
 // @public (undocumented)
 export class ControllerInfoFile extends NVMFile {
-    // Warning: (ae-forgotten-export) The symbol "NVMFileDeserializationOptions" needs to be exported by the entry point index.d.ts
-    // Warning: (ae-forgotten-export) The symbol "ControllerInfoFileOptions" needs to be exported by the entry point index.d.ts
     constructor(options: NVMFileDeserializationOptions | ControllerInfoFileOptions);
     // (undocumented)
     controllerConfiguration: number;
@@ -93,6 +292,29 @@ export class ControllerInfoFile extends NVMFile {
 // @public (undocumented)
 export const ControllerInfoFileID = 327684;
 
+// Warning: (ae-missing-release-tag) "ControllerInfoFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ControllerInfoFileOptions = NVMFileCreationOptions & {
+    homeId: Uint8Array;
+    nodeId: number;
+    lastNodeId: number;
+    staticControllerNodeId: number;
+    sucLastIndex: number;
+    controllerConfiguration: number;
+    maxNodeId: number;
+    reservedId: number;
+    systemState: number;
+} & ({
+    sucAwarenessPushNeeded: number;
+} | {
+    lastNodeIdLR: number;
+    maxNodeIdLR: number;
+    reservedIdLR: number;
+    primaryLongRangeChannelId: number;
+    dcdcConfig: number;
+});
+
 // Warning: (ae-missing-release-tag) "ControllerNVMProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -121,6 +343,41 @@ export enum FragmentType {
     None = 0
 }
 
+// Warning: (ae-missing-release-tag) "getNVMFileConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNVMFileConstructor(id: number): NVMFileConstructor<NVMFile> | undefined;
+
+// Warning: (ae-missing-release-tag) "getNVMFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNVMFileID<T extends NVMFile>(id: T): number | ((id: number) => boolean);
+
+// Warning: (ae-missing-release-tag) "getNVMFileIDStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNVMFileIDStatic<T extends NVMFileConstructor<NVMFile>>(classConstructor: T): number | ((id: number) => boolean);
+
+// Warning: (ae-missing-release-tag) "getNVMSection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const getNVMSection: (target: NVMFile) => NVMSection | undefined;
+
+// Warning: (ae-missing-release-tag) "getNVMSectionByFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNVMSectionByFileID(fileId: number): NVMSection;
+
+// Warning: (ae-missing-release-tag) "getNVMSectionStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const getNVMSectionStatic: (constr: typeof NVMFile) => NVMSection | undefined;
+
+// Warning: (ae-missing-release-tag) "gotDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function gotDeserializationOptions(options: NVMFileOptions): options is NVMFileDeserializationOptions;
+
 // Warning: (ae-missing-release-tag) "json500To700" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -141,6 +398,53 @@ export function jsonToNVM(json: NVMJSON, targetSDKVersion: string): Promise<Uint
 // @public
 export function jsonToNVM500(json: Required<NVM500JSON>, protocolVersion: string): Promise<Uint8Array>;
 
+// Warning: (ae-missing-release-tag) "LR_NODEINFOS_PER_FILE_V5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const LR_NODEINFOS_PER_FILE_V5 = 50;
+
+// Warning: (ae-missing-release-tag) "LRNodeInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LRNodeInfo extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    specificDeviceClass?: number | null;
+}
+
+// Warning: (ae-missing-release-tag) "LRNodeInfoFileV5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class LRNodeInfoFileV5 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | LRNodeInfoFileV5Options);
+    // (undocumented)
+    nodeInfos: LRNodeInfo[];
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "node infos": LRNodeInfo[];
+    };
+}
+
+// Warning: (ae-missing-release-tag) "LRNodeInfoFileV5IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const LRNodeInfoFileV5IDBase = 329728;
+
+// Warning: (ae-missing-release-tag) "LRNodeInfoFileV5Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LRNodeInfoFileV5Options extends NVMFileCreationOptions {
+    // (undocumented)
+    nodeInfos: LRNodeInfo[];
+}
+
 // Warning: (ae-missing-release-tag) "LRNodeNVMProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -159,6 +463,112 @@ export type LRNodeNVMPropertyToDataType<P extends LRNodeNVMProperty> = P["type"]
 //
 // @public
 export function migrateNVM(sourceNVM: Uint8Array, targetNVM: Uint8Array): Promise<Uint8Array>;
+
+// Warning: (ae-missing-release-tag) "nodeIdToLRNodeInfoFileIDV5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nodeIdToLRNodeInfoFileIDV5(nodeId: number): number;
+
+// Warning: (ae-missing-release-tag) "nodeIdToNodeInfoFileIDV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nodeIdToNodeInfoFileIDV0(nodeId: number): number;
+
+// Warning: (ae-missing-release-tag) "nodeIdToNodeInfoFileIDV1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nodeIdToNodeInfoFileIDV1(nodeId: number): number;
+
+// Warning: (ae-missing-release-tag) "nodeIdToRouteCacheFileIDV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nodeIdToRouteCacheFileIDV0(nodeId: number): number;
+
+// Warning: (ae-missing-release-tag) "nodeIdToRouteCacheFileIDV1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function nodeIdToRouteCacheFileIDV1(nodeId: number): number;
+
+// Warning: (ae-missing-release-tag) "NodeInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeInfo extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    neighbors: number[];
+    // (undocumented)
+    nodeId: number;
+    // (undocumented)
+    specificDeviceClass?: number | null;
+    // (undocumented)
+    sucUpdateIndex: number;
+}
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NodeInfoFileV0 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | NodeInfoFileV0Options);
+    // (undocumented)
+    nodeInfo: NodeInfo;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        nodeInfo: NodeInfo;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV0IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const NodeInfoFileV0IDBase = 327936;
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV0Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeInfoFileV0Options extends NVMFileCreationOptions {
+    // (undocumented)
+    nodeInfo: NodeInfo;
+}
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class NodeInfoFileV1 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | NodeInfoFileV1Options);
+    // (undocumented)
+    nodeInfos: NodeInfo[];
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "node infos": NodeInfo[];
+    };
+}
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV1IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const NodeInfoFileV1IDBase = 328192;
+
+// Warning: (ae-missing-release-tag) "NodeInfoFileV1Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeInfoFileV1Options extends NVMFileCreationOptions {
+    // (undocumented)
+    nodeInfos: NodeInfo[];
+}
+
+// Warning: (ae-missing-release-tag) "NODEINFOS_PER_FILE_V1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const NODEINFOS_PER_FILE_V1 = 4;
 
 // Warning: (ae-missing-release-tag) "NodeNVMProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -428,7 +838,7 @@ export interface NVM500JSONController {
     // (undocumented)
     sucUpdateEntries: SUCUpdateEntry[];
     // (undocumented)
-    systemState: number;
+    systemState?: number | null;
     // (undocumented)
     watchdogStarted: number;
 }
@@ -438,15 +848,15 @@ export interface NVM500JSONController {
 // @public (undocumented)
 export interface NVM500JSONControllerRFConfig {
     // (undocumented)
-    powerLevelLow: number[];
+    powerLevelLow?: number[];
     // (undocumented)
-    powerLevelNormal: number[];
+    powerLevelNormal?: number[];
     // (undocumented)
-    powerMode: number;
+    powerMode?: number | null;
     // (undocumented)
-    powerModeExtintEnable: number;
+    powerModeExtintEnable?: number | null;
     // (undocumented)
-    powerModeWutTimeout: number;
+    powerModeWutTimeout?: number | null;
 }
 
 // Warning: (ae-missing-release-tag) "NVM500JSONNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -539,7 +949,6 @@ export interface NVMAdapter {
 //
 // @public (undocumented)
 export class NVMFile {
-    // Warning: (ae-forgotten-export) The symbol "NVMFileOptions" needs to be exported by the entry point index.d.ts
     constructor(options: NVMFileOptions);
     // (undocumented)
     fileId: number;
@@ -554,6 +963,44 @@ export class NVMFile {
     // (undocumented)
     toJSON(): Record<string, any>;
 }
+
+// Warning: (ae-missing-release-tag) "NVMFileBaseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMFileBaseOptions {
+    // (undocumented)
+    fileId?: number;
+    // (undocumented)
+    fileVersion: string;
+}
+
+// Warning: (ae-missing-release-tag) "NVMFileConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NVMFileConstructor<T extends NVMFile> = typeof NVMFile & {
+    new (options: any): T;
+};
+
+// Warning: (ae-missing-release-tag) "NVMFileCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMFileCreationOptions extends NVMFileBaseOptions {
+}
+
+// Warning: (ae-missing-release-tag) "NVMFileDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
+    // (undocumented)
+    data: Bytes;
+    // (undocumented)
+    fileId: number;
+}
+
+// Warning: (ae-missing-release-tag) "nvmFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function nvmFileID<Class extends typeof NVMFile>(id: number | ((id: number) => boolean)): TypedClassDecorator<Class>;
 
 // Warning: (ae-missing-release-tag) "NVMFileIO" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -581,6 +1028,11 @@ export class NVMFileIO implements NVMIO {
         endOfFile: boolean;
     }>;
 }
+
+// Warning: (ae-missing-release-tag) "NVMFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NVMFileOptions = NVMFileCreationOptions | NVMFileDeserializationOptions;
 
 // Warning: (ae-missing-release-tag) "NVMIO" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -754,6 +1206,16 @@ export type NVMProperty = ControllerNVMProperty | NodeNVMProperty | LRNodeNVMPro
 // @public (undocumented)
 export type NVMPropertyToDataType<P extends NVMProperty> = P extends ControllerNVMProperty ? ControllerNVMPropertyToDataType<P> : P extends NodeNVMProperty ? NodeNVMPropertyToDataType<P> : P extends LRNodeNVMProperty ? LRNodeNVMPropertyToDataType<P> : never;
 
+// Warning: (ae-missing-release-tag) "NVMSection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NVMSection = "application" | "protocol";
+
+// Warning: (ae-missing-release-tag) "nvmSection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const nvmSection: <TTarget extends typeof NVMFile>(section: NVMSection) => TypedClassDecorator<TTarget>;
+
 // Warning: (ae-forgotten-export) The symbol "NVMJSONWithMeta" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "nvmToJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -798,6 +1260,330 @@ export enum PageWriteSize {
     WRITE_SIZE_16 = 1,// Only single writes are allowed
     // (undocumented)
     WRITE_SIZE_32 = 0
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolAppRouteLockNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolAppRouteLockNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolAppRouteLockNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolAppRouteLockNodeMaskFileID = 327686;
+
+// Warning: (ae-missing-release-tag) "ProtocolLRNodeListFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolLRNodeListFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ProtocolNodeMaskFileOptions);
+    // (undocumented)
+    get nodeIds(): number[];
+    set nodeIds(value: number[]);
+    // (undocumented)
+    nodeIdSet: Set<number>;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "node IDs": string;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolLRNodeListFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolLRNodeListFileID = 327692;
+
+// Warning: (ae-missing-release-tag) "ProtocolNodeListFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolNodeListFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolNodeListFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolNodeListFileID = 327685;
+
+// Warning: (ae-missing-release-tag) "ProtocolNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolNodeMaskFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | ProtocolNodeMaskFileOptions);
+    // (undocumented)
+    get nodeIds(): number[];
+    set nodeIds(value: number[]);
+    // (undocumented)
+    nodeIdSet: Set<number>;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "node IDs": string;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolNodeMaskFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtocolNodeMaskFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    nodeIds: number[];
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolPendingDiscoveryNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolPendingDiscoveryNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolPendingDiscoveryNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolPendingDiscoveryNodeMaskFileID = 327690;
+
+// Warning: (ae-missing-release-tag) "ProtocolPreferredRepeatersFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolPreferredRepeatersFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolPreferredRepeatersFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolPreferredRepeatersFileID = 327682;
+
+// Warning: (ae-missing-release-tag) "ProtocolRouteCacheExistsNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolRouteCacheExistsNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolRouteCacheExistsNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolRouteCacheExistsNodeMaskFileID = 327691;
+
+// Warning: (ae-missing-release-tag) "ProtocolRouteSlaveSUCNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolRouteSlaveSUCNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolRouteSlaveSUCNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolRouteSlaveSUCNodeMaskFileID = 327687;
+
+// Warning: (ae-missing-release-tag) "ProtocolSUCPendingUpdateNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolSUCPendingUpdateNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolSUCPendingUpdateNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolSUCPendingUpdateNodeMaskFileID = 327688;
+
+// Warning: (ae-missing-release-tag) "ProtocolVersionFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolVersionFile extends VersionFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolVersionFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolVersionFileID = 327680;
+
+// Warning: (ae-missing-release-tag) "ProtocolVirtualNodeMaskFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ProtocolVirtualNodeMaskFile extends ProtocolNodeMaskFile {
+}
+
+// Warning: (ae-missing-release-tag) "ProtocolVirtualNodeMaskFileID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ProtocolVirtualNodeMaskFileID = 327689;
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RouteCacheFileV0 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | RouteCacheFileV0Options);
+    // Warning: (ae-forgotten-export) The symbol "RouteCache" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    routeCache: RouteCache;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        routeCache: RouteCache;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV0IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const RouteCacheFileV0IDBase = 328704;
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV0Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RouteCacheFileV0Options extends NVMFileCreationOptions {
+    // (undocumented)
+    routeCache: RouteCache;
+}
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class RouteCacheFileV1 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | RouteCacheFileV1Options);
+    // (undocumented)
+    routeCaches: RouteCache[];
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "route caches": RouteCache[];
+    };
+}
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV1IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const RouteCacheFileV1IDBase = 332800;
+
+// Warning: (ae-missing-release-tag) "RouteCacheFileV1Options" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface RouteCacheFileV1Options extends NVMFileCreationOptions {
+    // (undocumented)
+    routeCaches: RouteCache[];
+}
+
+// Warning: (ae-missing-release-tag) "ROUTECACHES_PER_FILE_V1" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const ROUTECACHES_PER_FILE_V1 = 8;
+
+// Warning: (ae-missing-release-tag) "SUC_UPDATES_PER_FILE_V5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const SUC_UPDATES_PER_FILE_V5 = 8;
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileIDV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const SUCUpdateEntriesFileIDV0 = 327683;
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SUCUpdateEntriesFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    updateEntries: SUCUpdateEntry[];
+}
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileV0" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SUCUpdateEntriesFileV0 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | SUCUpdateEntriesFileOptions);
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "SUC update entries": SUCUpdateEntry[];
+    };
+    // (undocumented)
+    updateEntries: SUCUpdateEntry[];
+}
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileV5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SUCUpdateEntriesFileV5 extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | SUCUpdateEntriesFileOptions);
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes_2;
+    };
+    // (undocumented)
+    toJSON(): {
+        "SUC update entries": SUCUpdateEntry[];
+    };
+    // (undocumented)
+    updateEntries: SUCUpdateEntry[];
+}
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileV5IDBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const SUCUpdateEntriesFileV5IDBase = 344064;
+
+// Warning: (ae-missing-release-tag) "SUCUpdateEntriesFileV5IDMax" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const SUCUpdateEntriesFileV5IDMax: number;
+
+// Warning: (ae-missing-release-tag) "sucUpdateIndexToSUCUpdateEntriesFileIDV5" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function sucUpdateIndexToSUCUpdateEntriesFileIDV5(index: number): number;
+
+// Warning: (ae-missing-release-tag) "VersionFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class VersionFile extends NVMFile {
+    constructor(options: NVMFileDeserializationOptions | VersionFileOptions);
+    // (undocumented)
+    format: number;
+    // (undocumented)
+    major: number;
+    // (undocumented)
+    minor: number;
+    // (undocumented)
+    patch: number;
+    // (undocumented)
+    serialize(): NVM3Object & {
+        data: Bytes;
+    };
+    // (undocumented)
+    toJSON(): {
+        format: number;
+        version: string;
+    };
+}
+
+// Warning: (ae-missing-release-tag) "VersionFileOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionFileOptions extends NVMFileCreationOptions {
+    // (undocumented)
+    format: number;
+    // (undocumented)
+    major: number;
+    // (undocumented)
+    minor: number;
+    // (undocumented)
+    patch: number;
 }
 
 // Warnings were encountered during analysis:

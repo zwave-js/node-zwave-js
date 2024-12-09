@@ -348,6 +348,11 @@ export function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStati
 // @public (undocumented)
 export type EventHandler = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
 
+// Warning: (ae-missing-release-tag) "EventListener" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type EventListener = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
+
 // Warning: (ae-missing-release-tag) "Expand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -396,6 +401,11 @@ export function getErrorMessage(e: unknown, includeStack?: boolean): string;
 //
 // @public
 export function hexToUint8Array(hexString: string): Uint8Array;
+
+// Warning: (ae-missing-release-tag) "isAbortError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isAbortError(e: unknown): boolean;
 
 // Warning: (ae-missing-release-tag) "IsAny" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -633,6 +643,24 @@ export interface TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHa
 
 // @public (undocumented)
 export class TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandler>> {
+}
+
+// Warning: (ae-missing-release-tag) "TypedEventTarget" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class TypedEventTarget<TEvents extends Record<keyof TEvents, EventListener>> {
+    // (undocumented)
+    emit<TEvent extends keyof TEvents>(event: TEvent, ...args: Parameters<TEvents[TEvent]>): boolean;
+    // (undocumented)
+    off<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    on<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    once<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    removeAllListeners<TEvent extends keyof TEvents>(event?: TEvent): this;
+    // (undocumented)
+    removeListener<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
 }
 
 // Warning: (ae-missing-release-tag) "TypedPropertyDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

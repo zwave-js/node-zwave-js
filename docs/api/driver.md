@@ -415,9 +415,7 @@ interface FileSystem {
 		file: string,
 		data: string | Uint8Array,
 		options?:
-			| {
-				encoding: BufferEncoding;
-			}
+			| { encoding: BufferEncoding }
 			| BufferEncoding,
 	): Promise<void>;
 	readFile(file: string, encoding: BufferEncoding): Promise<string>;
@@ -1036,12 +1034,11 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
-		serialPortBinding?: typeof SerialPort;
 		/**
 		 * A hook that allows accessing the serial port instance after opening
 		 * and before interacting with it.
 		 */
-		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+		onSerialPortOpen?: (port: ZWaveSerialStream) => Promise<void>;
 
 		/**
 		 * Set this to true to skip the controller identification sequence.
