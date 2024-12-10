@@ -595,48 +595,53 @@
 			]
 		},
 		{
-			"#": "24[0x7f000000]",
-			"label": "Light LED Effect Type",
-			"valueSize": 4,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Solid",
-					"value": 1
-				},
-				{
-					"label": "Chase",
-					"value": 2
-				},
-				{
-					"label": "Fast blink",
-					"value": 3
-				},
-				{
-					"label": "Slow blink",
-					"value": 4
-				},
-				{
-					"label": "Pulse",
-					"value": 5
-				}
-			]
+			"#": "24",
+			"$import": "templates/inovelli_templates.json#bulk_set_led_effect",
+			"label": "Bulk Set Light LED Effect"
 		},
 		{
-			"#": "24[0xff0000]",
-			"label": "Light LED Effect Duration",
-			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"#": "24[0xff]",
+			"label": "Light LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]
 		},
 		{
 			"#": "24[0xff00]",
@@ -693,52 +698,18 @@
 			]
 		},
 		{
-			"#": "24[0xff]",
-			"label": "Light LED Effect Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"#": "24[0xff0000]",
+			"label": "Light LED Effect Duration",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Red",
-					"value": 0
-				},
-				{
-					"label": "Orange",
-					"value": 21
-				},
-				{
-					"label": "Yellow",
-					"value": 42
-				},
-				{
-					"label": "Green",
-					"value": 85
-				},
-				{
-					"label": "Cyan",
-					"value": 127
-				},
-				{
-					"label": "Blue",
-					"value": 170
-				},
-				{
-					"label": "Violet",
-					"value": 212
-				},
-				{
-					"label": "Pink",
-					"value": 234
-				}
-			]
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
-			"#": "25[0x7f000000]",
-			"label": "Fan LED Effect Type",
+			"#": "24[0x7f000000]",
+			"label": "Light LED Effect Type",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -771,112 +742,29 @@
 			]
 		},
 		{
-			"#": "25[0xff0000]",
-			"label": "Fan LED Effect Duration",
-			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
-		},
-		{
-			"#": "25[0xff00]",
-			"label": "Fan LED Effect Brightness",
-			"valueSize": 4,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "10%",
-					"value": 1
-				},
-				{
-					"label": "20%",
-					"value": 2
-				},
-				{
-					"label": "30%",
-					"value": 3
-				},
-				{
-					"label": "40%",
-					"value": 4
-				},
-				{
-					"label": "50%",
-					"value": 5
-				},
-				{
-					"label": "60%",
-					"value": 6
-				},
-				{
-					"label": "70%",
-					"value": 7
-				},
-				{
-					"label": "80%",
-					"value": 8
-				},
-				{
-					"label": "90%",
-					"value": 9
-				},
-				{
-					"label": "100%",
-					"value": 10
-				}
-			]
+			"#": "25",
+			"$import": "templates/inovelli_templates.json#bulk_set_led_effect",
+			"label": "Bulk Set Fan LED Effect"
 		},
 		{
 			"#": "25[0xff]",
-			"label": "Fan LED Effect Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Red",
-					"value": 0
-				},
-				{
-					"label": "Orange",
-					"value": 21
-				},
-				{
-					"label": "Yellow",
-					"value": 42
-				},
-				{
-					"label": "Green",
-					"value": 85
-				},
-				{
-					"label": "Cyan",
-					"value": 127
-				},
-				{
-					"label": "Blue",
-					"value": 170
-				},
-				{
-					"label": "Violet",
-					"value": 212
-				},
-				{
-					"label": "Pink",
-					"value": 234
-				}
-			]
+			"$import": "#paramInformation/24[0xff]",
+			"label": "Fan LED Effect Color"
+		},
+		{
+			"#": "25[0xff00]",
+			"$import": "#paramInformation/24[0xff00]",
+			"label": "Fan LED Effect Brightness"
+		},
+		{
+			"#": "25[0xff0000]",
+			"$import": "#paramInformation/24[0xff0000]",
+			"label": "Fan LED Effect Duration"
+		},
+		{
+			"#": "25[0x7f000000]",
+			"$import": "#paramInformation/24[0x7f000000]",
+			"label": "Fan LED Effect Type"
 		},
 		{
 			"#": "26",

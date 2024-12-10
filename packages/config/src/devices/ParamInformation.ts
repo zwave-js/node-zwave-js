@@ -165,6 +165,21 @@ Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			?? (this.readOnly ? false : true);
 
 		if (
+			definition.lintSkip != undefined
+			&& (!isArray(definition.lintSkip)
+				|| !definition.lintSkip.every((rule: unknown) =>
+					typeof rule === "string"
+				))
+		) {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} has an invalid lintSkip property. It must be an array of strings.`,
+			);
+		}
+		this.lintSkip = definition.lintSkip ?? [];
+
+		if (
 			isArray(definition.options)
 			&& !definition.options.every(
 				(opt: unknown) =>
@@ -200,6 +215,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly readOnly?: true;
 	public readonly writeOnly?: true;
 	public readonly allowManualEntry: boolean;
+	public readonly lintSkip?: string[];
 	public readonly options: readonly ConditionalConfigOption[];
 
 	public readonly condition?: string;
@@ -224,6 +240,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 				"readOnly",
 				"writeOnly",
 				"allowManualEntry",
+				"lintSkip",
 			]),
 			options: evaluateDeep(this.options, deviceId, true),
 		};
