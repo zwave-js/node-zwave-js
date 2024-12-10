@@ -123,7 +123,7 @@
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.3",
     "triple-beam": "*",
-    "winston": "^3.15.0",
+    "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
     "winston-transport": "^4.8.0"
   },
