@@ -18,11 +18,11 @@ import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
 export async function checkForConfigUpdates(
 	currentVersion: string,
 ): Promise<string | undefined> {
-	const { got } = await import("got");
+	const { default: ky } = await import("ky");
 	let registry: Record<string, unknown>;
 
 	try {
-		registry = await got
+		registry = await ky
 			.get("https://registry.npmjs.org/@zwave-js/config")
 			.json();
 	} catch {
@@ -66,11 +66,11 @@ export async function installConfigUpdate(
 		cacheDir: string;
 	},
 ): Promise<void> {
-	const { got } = await import("got");
+	const { default: ky } = await import("ky");
 
 	let registryInfo: any;
 	try {
-		registryInfo = await got
+		registryInfo = await ky
 			.get(`https://registry.npmjs.org/@zwave-js/config/${newVersion}`)
 			.json();
 	} catch {
@@ -137,16 +137,17 @@ export async function installConfigUpdate(
 
 	// Download the package tarball into the temporary directory
 	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
+	let fileHandle: fs.FileHandle | undefined;
 	try {
-		const handle = await fs.open(tarFilename, "w");
-		const fstream = handle.createWriteStream({ autoClose: true });
-		const response = got.stream.get(url);
-		response.pipe(fstream);
-
-		await new Promise((resolve, reject) => {
-			response.on("error", reject);
-			response.on("end", resolve);
+		fileHandle = await fs.open(tarFilename, "w");
+		const writable = new WritableStream({
+			async write(chunk) {
+				await fileHandle!.write(chunk);
+			},
 		});
+
+		const response = await ky.get(url);
+		await response.body?.pipeTo(writable);
 	} catch (e) {
 		await freeLock();
 		throw new ZWaveError(
@@ -157,6 +158,8 @@ export async function installConfigUpdate(
 			}`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
+	} finally {
+		await fileHandle?.close();
 	}
 
 	// This should not be necessary in Docker. Leaving it here anyways in case
