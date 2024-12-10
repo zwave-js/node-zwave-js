@@ -1461,7 +1461,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
 				if (this._options.storage.driver) {
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
 					await this._options.storage.driver.ensureDir(this.cacheDir);
 				} else {
 					await this.bindings.fs.ensureDir(this.cacheDir);
@@ -1657,8 +1659,10 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
 					this._options.storage.driver
 						? wrapLegacyFSDriverForCacheMigrationOnly(
+							// eslint-disable-next-line @typescript-eslint/no-deprecated
 							this._options.storage.driver,
 						)
 						: this.bindings.fs,
@@ -7417,6 +7421,8 @@ ${handlers.length} left`,
 		}
 	}
 
+	private _installConfigUpdatePromise: Promise<boolean> | undefined;
+
 	/**
 	 * Installs an update for the embedded configuration DB if there is a compatible one.
 	 * Returns `true` when an update was installed, `false` otherwise.
@@ -7426,6 +7432,19 @@ ${handlers.length} left`,
 	public async installConfigUpdate(): Promise<boolean> {
 		this.ensureReady();
 
+		if (this._installConfigUpdatePromise) {
+			return this._installConfigUpdatePromise;
+		}
+		this._installConfigUpdatePromise = this.installConfigUpdateInternal();
+
+		try {
+			return await this._installConfigUpdatePromise;
+		} finally {
+			this._installConfigUpdatePromise = undefined;
+		}
+	}
+
+	private async installConfigUpdateInternal(): Promise<boolean> {
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 

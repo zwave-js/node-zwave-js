@@ -16,7 +16,6 @@ import execa from "execa";
 import fsp from "node:fs/promises";
 import os from "node:os";
 import path from "pathe";
-import * as lockfile from "proper-lockfile";
 import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
 import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
@@ -100,35 +99,6 @@ export async function installConfigUpdate(
 		);
 	}
 
-	const lockfilePath = external.cacheDir;
-	const lockfileOptions: lockfile.LockOptions = {
-		lockfilePath: path.join(external.cacheDir, "config-update.lock"),
-	};
-
-	try {
-		await lockfile.lock(lockfilePath, {
-			...lockfileOptions,
-			onCompromised: () => {
-				// do nothing
-			},
-		});
-	} catch {
-		throw new ZWaveError(
-			`Config update failed: Another installation is already in progress!`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	}
-
-	const freeLock = async () => {
-		try {
-			if (await lockfile.check(lockfilePath, lockfileOptions)) {
-				await lockfile.unlock(lockfilePath, lockfileOptions);
-			}
-		} catch {
-			// whatever - just don't crash
-		}
-	};
-
 	// Download tarball to a temporary directory
 	let tmpDir: string;
 	try {
@@ -136,7 +106,6 @@ export async function installConfigUpdate(
 			path.join(os.tmpdir(), "zjs-config-update-"),
 		);
 	} catch (e) {
-		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not create temporary directory. Reason: ${
 				getErrorMessage(
@@ -161,7 +130,6 @@ export async function installConfigUpdate(
 		const response = await ky.get(url);
 		await response.body?.pipeTo(writable);
 	} catch (e) {
-		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not download tarball. Reason: ${
 				getErrorMessage(
@@ -211,7 +179,6 @@ export async function installConfigUpdate(
 		);
 		await writeTextFile(fs, externalVersionFilename, newVersion);
 	} catch {
-		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not extract tarball`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
@@ -220,7 +187,4 @@ export async function installConfigUpdate(
 
 	// Clean up the temp dir and ignore errors
 	await fs.deleteDir(tmpDir).catch(noop);
-
-	// Free the lock
-	await freeLock();
 }
