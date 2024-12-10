@@ -76,22 +76,6 @@ export function createTestingHost(options?: Partial<CreateTestingHostOptions>): 
 export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {
 }
 
-// Warning: (ae-missing-release-tag) "FileSystem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface FileSystem {
-    // (undocumented)
-    ensureDir(path: string): Promise<void>;
-    // (undocumented)
-    pathExists(path: string): Promise<boolean>;
-    // (undocumented)
-    readFile(file: string, encoding: BufferEncoding): Promise<string>;
-    // (undocumented)
-    writeFile(file: string, data: string | Uint8Array, options?: {
-        encoding: BufferEncoding;
-    } | BufferEncoding): Promise<void>;
-}
-
 // Warning: (ae-missing-release-tag) "GetAllNodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public

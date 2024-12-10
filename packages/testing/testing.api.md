@@ -18,7 +18,7 @@ import type { MaybeUnknown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import { MessageEncodingContext } from '@zwave-js/serial';
 import { MessageParsingContext } from '@zwave-js/serial';
-import type { MockPortBinding } from '@zwave-js/serial/mock';
+import { MockPort } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
 import { SecurityManagers } from '@zwave-js/core';
 import type { SwitchType } from '@zwave-js/cc';
@@ -28,6 +28,7 @@ import type { UserIDStatus } from '@zwave-js/cc';
 import type { WindowCoveringParameter } from '@zwave-js/cc';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
+import { ZWaveSerialStream } from '@zwave-js/serial';
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -115,7 +116,7 @@ export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame
 // Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function createMockZWaveRequestFrame(payload: CommandClass | (() => CommandClass), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
+export function createMockZWaveRequestFrame(payload: CommandClass | (() => Promise<CommandClass>), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -175,7 +176,7 @@ export type LazyMockZWaveFrame = LazyMockZWaveRequestFrame | MockZWaveAckFrame;
 // @public (undocumented)
 export interface LazyMockZWaveRequestFrame {
     ackRequested: boolean;
-    payload: CommandClass | (() => CommandClass);
+    payload: CommandClass | (() => Promise<CommandClass>);
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
@@ -252,6 +253,8 @@ export class MockController {
     // (undocumented)
     homeId: number;
     // (undocumented)
+    readonly mockPort: MockPort;
+    // (undocumented)
     get nodes(): ReadonlyMap<number, MockNode>;
     onNodeFrame(node: MockNode, frame: MockZWaveFrame): Promise<void>;
     // (undocumented)
@@ -268,7 +271,7 @@ export class MockController {
     sendToHost(data: Uint8Array): Promise<void>;
     sendToNode(node: MockNode, frame: LazyMockZWaveFrame): Promise<MockZWaveAckFrame | undefined>;
     // (undocumented)
-    readonly serial: MockPortBinding;
+    readonly serial: ZWaveSerialStream;
     readonly state: Map<string, unknown>;
 }
 
@@ -337,9 +340,11 @@ export interface MockControllerOptions {
     // (undocumented)
     homeId?: number;
     // (undocumented)
+    mockPort: MockPort;
+    // (undocumented)
     ownNodeId?: number;
     // (undocumented)
-    serial: MockPortBinding;
+    serial: ZWaveSerialStream;
 }
 
 // Warning: (ae-missing-release-tag) "MockEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -614,7 +619,7 @@ export interface ThermostatSetpointCCCapabilities {
 // Warning: (ae-missing-release-tag) "unlazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function unlazyMockZWaveFrame(frame: LazyMockZWaveFrame): MockZWaveFrame;
+export function unlazyMockZWaveFrame(frame: LazyMockZWaveFrame): Promise<MockZWaveFrame>;
 
 // Warning: (ae-missing-release-tag) "UserCodeCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -649,23 +654,20 @@ export interface WindowCoveringCCCapabilities {
 // /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:481:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1282:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1289:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1413:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:466:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1663:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1666:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1816:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/mock/MockSerialPort.ts:18:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
-//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/serialport/ZWaveSerialPortBase.ts:78:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
-//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/zniffer/ZnifferSerialPortBase.ts:59:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
-//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:758:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:766:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1915:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1918:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2201:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2204:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2358:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2427:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 

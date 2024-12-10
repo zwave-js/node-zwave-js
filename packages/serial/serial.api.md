@@ -46,11 +46,11 @@ import { NodeIDType } from '@zwave-js/core';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core';
 import { NodeUpdatePayload } from '@zwave-js/core';
-import { PassThrough } from 'node:stream';
 import { Powerlevel } from '@zwave-js/cc';
 import { Protocols } from '@zwave-js/core';
 import type { ProtocolType } from '@zwave-js/core';
 import { ProtocolVersion } from '@zwave-js/core';
+import type { ReadableWritablePair } from 'node:stream/web';
 import { RFRegion } from '@zwave-js/core';
 import { RouteKind } from '@zwave-js/core';
 import { RSSI } from '@zwave-js/core';
@@ -63,13 +63,13 @@ import { SerializableTXReport as SerializableTXReport_2 } from '@zwave-js/core/s
 import { SerialPort } from 'serialport';
 import { SinglecastCC } from '@zwave-js/core';
 import { SuccessIndicator as SuccessIndicator_2 } from '@zwave-js/serial';
-import { Transform } from 'node:stream';
-import { TransformCallback } from 'node:stream';
 import { TransmitOptions } from '@zwave-js/core';
 import { TransmitStatus } from '@zwave-js/core';
 import { TXReport } from '@zwave-js/core';
 import { TXReport as TXReport_2 } from '@zwave-js/core/safe';
 import { TypedClassDecorator } from '@zwave-js/shared/safe';
+import type { UnderlyingSink } from 'node:stream/web';
+import type { UnderlyingSource } from 'node:stream/web';
 import { UnknownZWaveChipType } from '@zwave-js/core';
 import { ZnifferProtocolDataRate } from '@zwave-js/core';
 import { ZWaveApiVersion } from '@zwave-js/core';
@@ -260,10 +260,18 @@ export class ApplicationCommandRequest extends Message_2 implements MessageWithC
     readonly isForeignFrame: boolean;
     // (undocumented)
     readonly routedBusy: boolean;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -853,19 +861,17 @@ export const bootloaderMenuPreamble = "Gecko Boo";
 // Warning: (ae-missing-release-tag) "BootloaderParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export class BootloaderParser extends Transform {
+export class BootloaderParser extends TransformStream<number | string, ZWaveSerialFrame & {
+    type: ZWaveSerialFrameType.Bootloader;
+}> {
     constructor();
-    // (undocumented)
-    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
 
 // Warning: (ae-missing-release-tag) "BootloaderScreenParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export class BootloaderScreenParser extends Transform {
-    constructor(logger?: SerialLogger | undefined);
-    // (undocumented)
-    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+export class BootloaderScreenParser extends TransformStream<Uint8Array, number | string> {
+    constructor(logger?: SerialLogger);
 }
 
 // Warning: (ae-missing-release-tag) "BridgeApplicationCommandRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -893,10 +899,18 @@ export class BridgeApplicationCommandRequest extends Message_2 implements Messag
     readonly routedBusy: boolean;
     // (undocumented)
     readonly rssi?: RSSI;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -959,6 +973,16 @@ export interface ContainsSerializedCC {
 //
 // @public (undocumented)
 export function containsSerializedCC<T extends object>(container: T | undefined): container is T & ContainsSerializedCC;
+
+// Warning: (ae-missing-release-tag) "createNodeSerialPortFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function createNodeSerialPortFactory(port: string, Binding?: typeof SerialPort): ZWaveSerialBindingFactory;
+
+// Warning: (ae-missing-release-tag) "createNodeSocketFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function createNodeSocketFactory(socketOptions: ZWaveSocketOptions): ZWaveSerialBindingFactory;
 
 // Warning: (ae-missing-release-tag) "DeleteReturnRouteRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1476,6 +1500,16 @@ export class ExtNVMWriteLongByteResponse extends Message_2 {
 export interface ExtNVMWriteLongByteResponseOptions {
     // (undocumented)
     success: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "Faucet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class Faucet<T> {
+    constructor(readable: ReadableStream<T>, writable?: WritableStream<T>);
+    close(): void;
+    connect(writable: WritableStream<T>): void;
+    disconnect(): void;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateNVM_GetNewImageRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2822,6 +2856,11 @@ export function isSuccessIndicator<T extends Message>(msg: T): msg is T & Succes
 // @public (undocumented)
 export function isTransmitReport(msg: unknown): msg is TransmitReport;
 
+// Warning: (ae-missing-release-tag) "isZWaveSerialBindingFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function isZWaveSerialBindingFactory(obj: unknown): obj is ZWaveSerialBindingFactory;
+
 // Warning: (ae-missing-release-tag) "isZWaveSerialPortImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2920,7 +2959,11 @@ export class Message {
     payload: Bytes;
     prematureNodeUpdate: Message | undefined;
     get rtt(): number | undefined;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated
     serialize(ctx: MessageEncodingContext): Bytes;
+    serializeAsync(ctx: MessageEncodingContext): Promise<Bytes>;
     toJSON(): JSONObject;
     toLogEntry(): MessageOrCCLogEntry;
     get transmissionTimestamp(): number | undefined;
@@ -3702,10 +3745,18 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass> e
     set maxSendAttempts(value: number);
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     sourceNodeId: number;
@@ -3809,10 +3860,18 @@ export class SendDataMulticastBridgeRequest<CCType extends CommandClass = Comman
     nodeIds: MulticastDestination;
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     sourceNodeId: number;
@@ -3905,10 +3964,18 @@ export class SendDataMulticastRequest<CCType extends CommandClass = CommandClass
     nodeIds: MulticastDestination;
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -4005,10 +4072,18 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
     set maxSendAttempts(value: number);
     // (undocumented)
     prepareRetransmission(): void;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeAsync"
+    //
+    // @deprecated (undocumented)
     serialize(ctx: MessageEncodingContext_2): Bytes_2;
     // (undocumented)
+    serializeAsync(ctx: MessageEncodingContext_2): Promise<Bytes_2>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/serial" does not have an export "serializeCCAsync"
+    //
+    // @deprecated (undocumented)
     serializeCC(ctx: CCEncodingContext): Uint8Array;
+    // (undocumented)
+    serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array>;
     // (undocumented)
     serializedCC: Uint8Array | undefined;
     // (undocumented)
@@ -4175,15 +4250,19 @@ export interface SendTestFrameTransmitReportOptions {
     transmitStatus: TransmitStatus;
 }
 
+// Warning: (ae-missing-release-tag) "SerialAPIChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SerialAPIChunk = Bytes_2 | MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN;
+
 // Warning: (ae-missing-release-tag) "SerialAPIParser" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export class SerialAPIParser extends Transform {
-    constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Uint8Array) => void) | undefined);
+export class SerialAPIParser extends TransformStream {
+    constructor(logger?: SerialLogger);
     // (undocumented)
-    ignoreAckHighNibble: boolean;
-    // (undocumented)
-    _transform(chunk: any, encoding: string, callback: TransformCallback): void;
+    get ignoreAckHighNibble(): boolean;
+    set ignoreAckHighNibble(value: boolean);
 }
 
 // Warning: (ae-missing-release-tag) "SerialAPISetup_CommandUnsupportedResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5446,6 +5525,11 @@ export function tryParseRSSI(payload: Uint8Array, offset?: number): RSSI_2 | und
 // @public (undocumented)
 export function txReportToMessageRecord(report: TXReport_2): MessageRecord;
 
+// Warning: (ae-missing-release-tag) "wrapLegacySerialBinding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function wrapLegacySerialBinding(legacy: ZWaveSerialPortImplementation): ZWaveSerialBindingFactory;
+
 // Warning: (ae-missing-release-tag) "XModemMessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5748,41 +5832,32 @@ export enum ZnifferMessageType {
     Data = 33
 }
 
-// Warning: (ae-missing-release-tag) "ZnifferSerialPort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZnifferSerialFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZnifferSerialFrame = {
+    type: ZnifferSerialFrameType.SerialAPI;
+    data: Bytes_2;
+} | {
+    type: ZnifferSerialFrameType.Discarded;
+    data: Uint8Array;
+};
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialFrameType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferSerialFrameType {
+    // (undocumented)
+    Discarded = 255,
+    // (undocumented)
+    SerialAPI = 0
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialStream" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export class ZnifferSerialPort extends ZnifferSerialPortBase {
-    constructor(port: string, loggers: ZWaveLogContainer, Binding?: typeof SerialPort);
-    // (undocumented)
-    get isOpen(): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "ZnifferSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZnifferSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZnifferSerialPortBase {
-    // (undocumented)
-    addListener<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    emit<TEvent extends ZnifferSerialPortEvents>(event: TEvent, ...args: Parameters<ZnifferSerialPortEventCallbacks[TEvent]>): boolean;
-    // (undocumented)
-    off<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    on<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    once<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    removeAllListeners(event?: ZnifferSerialPortEvents): this;
-    // (undocumented)
-    removeListener<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
-}
-
-// @public (undocumented)
-export class ZnifferSerialPortBase extends PassThrough {
-    // (undocumented)
-    [Symbol.asyncIterator]: () => AsyncIterableIterator<Uint8Array>;
-    constructor(implementation: ZWaveSerialPortImplementation, loggers: ZWaveLogContainer);
+export class ZnifferSerialStream implements ReadableWritablePair<ZnifferSerialFrame, Uint8Array> {
+    constructor(source: UnderlyingSource<Uint8Array>, sink: UnderlyingSink<Uint8Array>, logger: SerialLogger);
     // (undocumented)
     close(): Promise<void>;
     // (undocumented)
@@ -5790,29 +5865,23 @@ export class ZnifferSerialPortBase extends PassThrough {
     // (undocumented)
     protected logger: SerialLogger;
     // (undocumented)
-    open(): Promise<void>;
+    readonly readable: ReadableStream<ZnifferSerialFrame>;
     // (undocumented)
-    protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
+    readonly writable: WritableStream<Uint8Array>;
     // (undocumented)
     writeAsync(data: Uint8Array): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "ZnifferSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZnifferSerialStreamFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
-export interface ZnifferSerialPortEventCallbacks {
+// @public
+export class ZnifferSerialStreamFactory {
+    constructor(binding: ZWaveSerialBindingFactory, loggers: ZWaveLogContainer);
     // (undocumented)
-    data: (data: Uint8Array) => void;
+    createStream(): Promise<ZnifferSerialStream>;
     // (undocumented)
-    discardedData: (data: Uint8Array) => void;
-    // (undocumented)
-    error: (e: Error) => void;
+    protected logger: SerialLogger;
 }
-
-// Warning: (ae-missing-release-tag) "ZnifferSerialPortEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type ZnifferSerialPortEvents = Extract<keyof ZnifferSerialPortEventCallbacks, string>;
 
 // Warning: (ae-missing-release-tag) "ZnifferSetBaudRateRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -5864,13 +5933,6 @@ export interface ZnifferSetFrequencyRequestOptions {
 export class ZnifferSetFrequencyResponse extends ZnifferMessage {
 }
 
-// Warning: (ae-missing-release-tag) "ZnifferSocket" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export class ZnifferSocket extends ZnifferSerialPortBase {
-    constructor(socketOptions: ZWaveSocketOptions, loggers: ZWaveLogContainer);
-}
-
 // Warning: (ae-missing-release-tag) "ZnifferStartRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -5897,10 +5959,51 @@ export class ZnifferStopRequest extends ZnifferMessage {
 export class ZnifferStopResponse extends ZnifferMessage {
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveSerialBinding" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ZWaveSerialBinding {
+    // (undocumented)
+    sink: UnderlyingSink<Uint8Array>;
+    // (undocumented)
+    source: UnderlyingSource<Uint8Array>;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialBindingFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZWaveSerialBindingFactory = () => Promise<ZWaveSerialBinding>;
+
 // Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type ZWaveSerialChunk = MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Uint8Array;
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZWaveSerialFrame = {
+    type: ZWaveSerialFrameType.SerialAPI;
+    data: SerialAPIChunk;
+} | {
+    type: ZWaveSerialFrameType.Bootloader;
+    data: BootloaderChunk;
+} | {
+    type: ZWaveSerialFrameType.Discarded;
+    data: Uint8Array;
+};
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialFrameType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZWaveSerialFrameType {
+    // (undocumented)
+    Bootloader = 1,
+    // (undocumented)
+    Discarded = 255,
+    // (undocumented)
+    SerialAPI = 0
+}
 
 // Warning: (ae-missing-release-tag) "ZWaveSerialMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -5912,81 +6015,9 @@ export enum ZWaveSerialMode {
     SerialAPI = 0
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSerialPort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export class ZWaveSerialPort extends ZWaveSerialPortBase {
-    constructor(port: string, loggers: ZWaveLogContainer, Binding?: typeof SerialPort);
-    // (undocumented)
-    get isOpen(): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveSerialPortBase {
-    // (undocumented)
-    addListener<TEvent extends ZWaveSerialPortEvents>(event: TEvent, callback: ZWaveSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    emit<TEvent extends ZWaveSerialPortEvents>(event: TEvent, ...args: Parameters<ZWaveSerialPortEventCallbacks[TEvent]>): boolean;
-    // (undocumented)
-    off<TEvent extends ZWaveSerialPortEvents>(event: TEvent, callback: ZWaveSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    on<TEvent extends ZWaveSerialPortEvents>(event: TEvent, callback: ZWaveSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    once<TEvent extends ZWaveSerialPortEvents>(event: TEvent, callback: ZWaveSerialPortEventCallbacks[TEvent]): this;
-    // (undocumented)
-    removeAllListeners(event?: ZWaveSerialPortEvents): this;
-    // (undocumented)
-    removeListener<TEvent extends ZWaveSerialPortEvents>(event: TEvent, callback: ZWaveSerialPortEventCallbacks[TEvent]): this;
-}
-
-// @public (undocumented)
-export class ZWaveSerialPortBase extends PassThrough {
-    // (undocumented)
-    [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
-    constructor(implementation: ZWaveSerialPortImplementation, loggers: ZWaveLogContainer);
-    // (undocumented)
-    close(): Promise<void>;
-    // (undocumented)
-    ignoreAckHighNibbleOnce(): void;
-    // (undocumented)
-    get isOpen(): boolean;
-    // (undocumented)
-    protected logger: SerialLogger;
-    // (undocumented)
-    mode: ZWaveSerialMode | undefined;
-    // (undocumented)
-    open(): Promise<void>;
-    // (undocumented)
-    protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
-    // (undocumented)
-    writeAsync(data: Uint8Array): Promise<void>;
-}
-
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveSerialPortEventCallbacks {
-    // (undocumented)
-    bootloaderData: (data: BootloaderChunk) => void;
-    // (undocumented)
-    data: (data: ZWaveSerialChunk) => void;
-    // (undocumented)
-    discardedData: (data: Uint8Array) => void;
-    // (undocumented)
-    error: (e: Error) => void;
-}
-
-// Warning: (ae-missing-release-tag) "ZWaveSerialPortEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type ZWaveSerialPortEvents = Extract<keyof ZWaveSerialPortEventCallbacks, string>;
-
 // Warning: (ae-missing-release-tag) "ZWaveSerialPortImplementation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export interface ZWaveSerialPortImplementation {
     // (undocumented)
     close(port: ReturnType<ZWaveSerialPortImplementation["create"]>): Promise<void>;
@@ -5996,11 +6027,39 @@ export interface ZWaveSerialPortImplementation {
     open(port: ReturnType<ZWaveSerialPortImplementation["create"]>): Promise<void>;
 }
 
-// Warning: (ae-missing-release-tag) "ZWaveSocket" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZWaveSerialStream" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export class ZWaveSocket extends ZWaveSerialPortBase {
-    constructor(socketOptions: ZWaveSocketOptions, loggers: ZWaveLogContainer);
+export class ZWaveSerialStream implements ReadableWritablePair<ZWaveSerialFrame, Uint8Array> {
+    constructor(source: UnderlyingSource<Uint8Array>, sink: UnderlyingSink<Uint8Array>, logger: SerialLogger);
+    // (undocumented)
+    close(): Promise<void>;
+    // (undocumented)
+    ignoreAckHighNibbleOnce(): void;
+    // (undocumented)
+    get isOpen(): boolean;
+    // (undocumented)
+    protected logger: SerialLogger;
+    // (undocumented)
+    get mode(): ZWaveSerialMode | undefined;
+    set mode(mode: ZWaveSerialMode | undefined);
+    // (undocumented)
+    readonly readable: ReadableStream<ZWaveSerialFrame>;
+    // (undocumented)
+    readonly writable: WritableStream<Uint8Array>;
+    // (undocumented)
+    writeAsync(data: Uint8Array): Promise<void>;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveSerialStreamFactory" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class ZWaveSerialStreamFactory {
+    constructor(binding: ZWaveSerialBindingFactory, loggers: ZWaveLogContainer);
+    // (undocumented)
+    createStream(): Promise<ZWaveSerialStream>;
+    // (undocumented)
+    protected logger: SerialLogger;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveSocketOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6013,21 +6072,20 @@ export type ZWaveSocketOptions = Omit<net.TcpSocketConnectOpts, "onread"> | Omit
 // /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:481:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1284:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1282:36 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1291:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1289:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1415:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1413:35 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:458:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:466:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1663:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1666:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1816:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// src/serialport/ZWaveSerialPortBase.ts:78:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
-//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
-// src/zniffer/ZnifferSerialPortBase.ts:59:2 - (TS1238) Unable to resolve signature of class decorator when called as an expression.
-//   The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:758:24 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:766:24 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1915:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1918:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2201:20 - (TS2339) Property 'groupId' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2204:34 - (TS2339) Property 'innerMPANState' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2358:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:2427:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 
