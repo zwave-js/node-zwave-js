@@ -1225,6 +1225,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		const symlinkedPorts: string[] = [];
 		const localPorts: string[] = [];
 		const remotePorts: string[] = [];
+		// FIXME: Move this into the serial bindings
 		if (local) {
 			// Put symlinks to the serial ports first if possible
 			if (os.platform() === "linux") {

@@ -7,7 +7,9 @@ import {
 } from "@zwave-js/shared";
 import {
 	type CopyFile,
+	type FileHandle,
 	type ManageDirectory,
+	type OpenFile,
 	type ReadFileSystemInfo,
 	type WriteFile,
 } from "@zwave-js/shared/bindings";
@@ -70,7 +72,7 @@ export async function checkForConfigUpdates(
  * This only works if an external configuation directory is used.
  */
 export async function installConfigUpdate(
-	fs: ManageDirectory & ReadFileSystemInfo & WriteFile & CopyFile,
+	fs: ManageDirectory & ReadFileSystemInfo & WriteFile & CopyFile & OpenFile,
 	newVersion: string,
 	external: {
 		configDir: string;
@@ -118,17 +120,17 @@ export async function installConfigUpdate(
 
 	// Download the package tarball into the temporary directory
 	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
-	let fileHandle: fsp.FileHandle | undefined;
+	let fileHandle: FileHandle | undefined;
 	try {
-		fileHandle = await fsp.open(tarFilename, "w");
-		const writable = new WritableStream({
-			async write(chunk) {
-				await fileHandle!.write(chunk);
-			},
+		fileHandle = await fs.open(tarFilename, {
+			read: false,
+			write: true,
+			create: true,
+			truncate: true,
 		});
 
 		const response = await ky.get(url);
-		await response.body?.pipeTo(writable);
+		await response.body?.pipeTo(fileHandle.writable);
 	} catch (e) {
 		throw new ZWaveError(
 			`Config update failed: Could not download tarball. Reason: ${

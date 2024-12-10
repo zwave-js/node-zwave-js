@@ -1,7 +1,9 @@
+import { type ReadableWritablePair } from "node:stream/web";
 import path from "pathe";
 import { Bytes } from "./Bytes.js";
 import {
 	type CopyFile,
+	type FileHandle,
 	type ManageDirectory,
 	type ReadFile,
 	type ReadFileSystemInfo,
@@ -89,4 +91,37 @@ export async function pathExists(
 	} catch {
 		return false;
 	}
+}
+
+export function fileHandleToWritableStream(
+	handle: Omit<FileHandle, "readable" | "writable">,
+): WritableStream<Uint8Array> {
+	return new WritableStream<Uint8Array>({
+		async write(chunk) {
+			while (chunk.length > 0) {
+				const { bytesWritten } = await handle.write(chunk);
+				chunk = chunk.subarray(bytesWritten);
+			}
+		},
+	});
+}
+
+export function fileHandleToReadableStream(
+	handle: Omit<FileHandle, "readable" | "writable">,
+): ReadableStream<Uint8Array> {
+	return new ReadableStream<Uint8Array>({
+		async pull(controller) {
+			const { data } = await handle.read(null, 16 * 1024);
+			controller.enqueue(data);
+		},
+	});
+}
+
+export function fileHandleToStreams(
+	handle: Omit<FileHandle, "readable" | "writable">,
+): ReadableWritablePair<Uint8Array, Uint8Array> {
+	return {
+		readable: fileHandleToReadableStream(handle),
+		writable: fileHandleToWritableStream(handle),
+	};
 }

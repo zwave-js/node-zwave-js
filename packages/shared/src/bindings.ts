@@ -1,6 +1,8 @@
 // Definitions for runtime-agnostic low level bindings like cryptography,
 // file system access, etc.
 
+import { type ReadableWritablePair } from "node:stream/web";
+
 export interface CryptoPrimitives {
 	randomBytes(length: number): Uint8Array;
 	/** Encrypts a payload using AES-128-ECB */
@@ -61,7 +63,9 @@ export interface FSStats {
 	size: number;
 }
 
-export interface FileHandle {
+export interface FileHandle
+	extends ReadableWritablePair<Uint8Array, Uint8Array>
+{
 	close(): Promise<void>;
 	read(
 		position?: number | null,

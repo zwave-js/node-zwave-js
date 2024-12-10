@@ -1,3 +1,7 @@
+import {
+	fileHandleToReadableStream,
+	fileHandleToWritableStream,
+} from "@zwave-js/shared";
 import type {
 	FSStats,
 	FileHandle,
@@ -56,18 +60,52 @@ export const fs: FileSystem = {
 			mode = flags.read ? "w+" : "w";
 		}
 
-		return new NodeFileHandle(await fsp.open(path, mode));
+		return new NodeFileHandle(
+			await fsp.open(path, mode),
+			{
+				read: flags.read,
+				write: flags.write,
+			},
+		);
 	},
 };
 
 export class NodeFileHandle implements FileHandle {
-	public constructor(handle: fsp.FileHandle) {
+	public constructor(
+		handle: fsp.FileHandle,
+		flags: { read: boolean; write: boolean },
+	) {
 		this.open = true;
 		this.handle = handle;
+		this.flags = flags;
 	}
 
 	private open: boolean;
 	private handle: fsp.FileHandle;
+	private flags: { read: boolean; write: boolean };
+
+	private _readable?: ReadableStream<Uint8Array>;
+	private _writable?: WritableStream<Uint8Array>;
+
+	public get readable(): ReadableStream<Uint8Array> {
+		if (!this.flags.read) {
+			throw new Error("File is not readable");
+		}
+		if (!this._readable) {
+			this._readable = fileHandleToReadableStream(this);
+		}
+		return this._readable;
+	}
+
+	public get writable(): WritableStream<Uint8Array> {
+		if (!this.flags.write) {
+			throw new Error("File is not writable");
+		}
+		if (!this._writable) {
+			this._writable = fileHandleToWritableStream(this);
+		}
+		return this._writable;
+	}
 
 	async close(): Promise<void> {
 		if (!this.open) return;
