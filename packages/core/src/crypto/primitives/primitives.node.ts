@@ -1,7 +1,7 @@
+import { type CryptoPrimitives } from "@zwave-js/shared/bindings";
 import { Bytes } from "@zwave-js/shared/safe";
 import crypto from "node:crypto";
 import { BLOCK_SIZE, zeroPad } from "../shared.js";
-import { type CryptoPrimitives } from "./primitives.js";
 
 // For Node.js, we use the built-in crypto module since it has better support
 // for some algorithms Z-Wave needs than the Web Crypto API, so we can implement

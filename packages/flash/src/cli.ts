@@ -1,7 +1,7 @@
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { ZWaveErrorCodes, isZWaveError } from "@zwave-js/core/safe";
 import { wait } from "alcalzone-shared/async";
-import fs from "node:fs/promises";
-import path from "node:path";
+import path from "pathe";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import {

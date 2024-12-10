@@ -3,10 +3,11 @@
  */
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import c from "ansi-colors";
 import esMain from "es-main";
-import fs from "node:fs/promises";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
@@ -282,7 +283,7 @@ export async function processDocFile(
 	docFile: string,
 ): Promise<boolean> {
 	console.log(`processing ${docFile}...`);
-	let fileContent = await fs.readFile(docFile, "utf8");
+	let fileContent = await fsp.readFile(docFile, "utf8");
 	const ranges = findImportRanges(fileContent);
 	let hasErrors = false;
 	// Replace from back to start so we can reuse the indizes
@@ -314,7 +315,7 @@ ${source}
 	fileContent = fileContent.replaceAll("\r\n", "\n");
 	fileContent = formatWithDprint(docFile, fileContent);
 	if (!hasErrors) {
-		await fs.writeFile(docFile, fileContent, "utf8");
+		await fsp.writeFile(docFile, fileContent, "utf8");
 	}
 	return hasErrors;
 }
@@ -322,6 +323,7 @@ ${source}
 /** Processes all imports, returns true if there was an error */
 async function processImports(piscina: Piscina): Promise<boolean> {
 	const files = await enumFilesRecursive(
+		fs,
 		path.join(projectRoot, "docs"),
 		(f) =>
 			!f.includes("/CCs/") && !f.includes("\\CCs\\") && f.endsWith(".md"),
@@ -657,7 +659,7 @@ ${formatValueType(idType)}
 	text = text.replaceAll("\r\n", "\n");
 	text = formatWithDprint(filename, text);
 
-	await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
+	await fsp.writeFile(path.join(ccDocsDir, filename), text, "utf8");
 
 	return { generatedIndex, generatedSidebar };
 }
@@ -671,7 +673,7 @@ async function generateCCDocs(
 
 	// Load the index file before it gets deleted
 	const indexFilename = path.join(ccDocsDir, "index.md");
-	let indexFileContent = await fs.readFile(indexFilename, "utf8");
+	let indexFileContent = await fsp.readFile(indexFilename, "utf8");
 	const indexAutoGenToken = "<!-- AUTO-GENERATE: CC List -->";
 	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
 	if (indexAutoGenStart === -1) {
@@ -681,8 +683,8 @@ async function generateCCDocs(
 		return false;
 	}
 
-	await fs.rm(ccDocsDir, { recursive: true, force: true });
-	await fs.mkdir(ccDocsDir, { recursive: true });
+	await fsp.rm(ccDocsDir, { recursive: true, force: true });
+	await fsp.mkdir(ccDocsDir, { recursive: true });
 
 	// Find CC APIs
 	const ccFiles = program.getSourceFiles("packages/cc/src/cc/**/*CC.ts");
@@ -712,10 +714,10 @@ async function generateCCDocs(
 		indexAutoGenStart + indexAutoGenToken.length,
 	) + generatedIndex;
 	indexFileContent = formatWithDprint("index.md", indexFileContent);
-	await fs.writeFile(indexFilename, indexFileContent, "utf8");
+	await fsp.writeFile(indexFilename, indexFileContent, "utf8");
 
 	const sidebarInputFilename = path.join(docsDir, "_sidebar.md");
-	let sidebarFileContent = await fs.readFile(sidebarInputFilename, "utf8");
+	let sidebarFileContent = await fsp.readFile(sidebarInputFilename, "utf8");
 	const sidebarAutoGenToken = "<!-- AUTO-GENERATE: CC Links -->";
 	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
 	if (sidebarAutoGenStart === -1) {
@@ -730,7 +732,7 @@ async function generateCCDocs(
 			sidebarAutoGenStart + sidebarAutoGenToken.length,
 		);
 	sidebarFileContent = formatWithDprint("_sidebar.md", sidebarFileContent);
-	await fs.writeFile(
+	await fsp.writeFile(
 		path.join(ccDocsDir, "_sidebar.md"),
 		sidebarFileContent,
 		"utf8",
