@@ -1,0 +1,39 @@
+{
+	"manufacturer": "Lockly",
+	"manufacturerId": "0x043d",
+	"label": "PGD728F ZPU",
+	"description": "Smart Lock - Secure Plus",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": [
+				4689,
+				4712
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/lockly_template.json#secure_plus_lock_fp_sensor",
+			"label": "Activated or Deactivated Fp Module"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Bring the DoorLock within direct range of your controller.\n2. Carefully remove the battery compartment cover. \n3. Put your Z-Wave controller into inclusion mode. \n4. Simply press the Program button to enter programming mode.\n5. Select “2HB” to enter hub action menu.\n6. Select “AD” and wait doorlock to finish the inclusion",
+		"exclusion": "1. Make sure the DoorLock is powered on and located within direct\n range of your Z-Wave gateway controller .\n2. Put your Z-Wave controller into exclusion mode .\n3. Simply press the Program button to enter programming mode.\n4. Select “2HB” to enter hub action menu.\n5. Select “DE” and wait doorlock to finish the exclusion",
+		"reset": "When your network’s primary controller is missing or otherwise \ninoperable, you may need to reset the device to factory settings \nmanually. Tocomplete \nthe process, make sure your doorlock has not been synced tothe \nsmart phone, then press and hold the reset button at least 3 sec to \nreset the doorlock and Z-Wave module. Also, you can restore the \nlock to factory default settings while the lock is synching with the \nsmartphone.\nWhen executing factory reset, Z-Wave module will issue the following \ninstructions to smart home controller.\nGroup：\"LIFELINE\" group\nInstruction: DEVICE_RESET_LOCALLY_NOTIFICATION"
+	}
+}
