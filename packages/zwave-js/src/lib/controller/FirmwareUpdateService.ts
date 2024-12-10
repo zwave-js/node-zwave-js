@@ -75,7 +75,7 @@ async function cachedRequest<T>(url: string, config: KyOptions): Promise<T> {
 	}
 
 	const { default: ky } = await import("ky");
-	const response = await ky.get(url, config);
+	const response = await ky(url, config);
 	const responseJson = await response.json<T>();
 
 	// Check if we can cache the response
