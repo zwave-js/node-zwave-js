@@ -52,10 +52,10 @@ export async function compileStatistics(
 export async function sendStatistics(
 	statistics: Record<string, any>,
 ): Promise<boolean | number> {
-	const { got } = await import("got");
+	const { default: ky } = await import("ky");
 
 	try {
-		const data = await got
+		const data = await ky
 			.post(statisticsUrl, {
 				json: { data: [statistics] },
 				headers: { "x-api-token": apiToken },
