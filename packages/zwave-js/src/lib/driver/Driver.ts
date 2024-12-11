@@ -116,6 +116,7 @@ import {
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
+	type EnumeratedPort,
 	FunctionType,
 	type HasNodeId,
 	Message,
@@ -131,8 +132,6 @@ import {
 	type ZWaveSerialPortImplementation,
 	type ZWaveSerialStream,
 	ZWaveSerialStreamFactory,
-	createNodeSerialPortFactory,
-	createNodeSocketFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
@@ -166,6 +165,17 @@ import {
 	isTransmitReport,
 } from "@zwave-js/serial/serialapi";
 import {
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	type CommandRequest,
+	type ContainsCC,
+	containsCC,
+	containsSerializedCC,
+	isCommandRequest,
+} from "@zwave-js/serial/serialapi";
+import {
 	AsyncQueue,
 	Bytes,
 	type ThrowingMap,
@@ -182,6 +192,10 @@ import {
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+} from "@zwave-js/shared/bindings";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -189,11 +203,9 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import fs from "node:fs/promises";
-import os from "node:os";
 import * as util from "node:util";
 import path from "pathe";
-import { SerialPort } from "serialport";
+import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
 import { DriverLogger } from "../log/Driver.js";
@@ -206,23 +218,6 @@ import {
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
 } from "../node/_Types.js";
-
-import {
-	SendTestFrameRequest,
-	SendTestFrameTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	type CommandRequest,
-	type ContainsCC,
-	containsCC,
-	containsSerializedCC,
-	isCommandRequest,
-} from "@zwave-js/serial/serialapi";
-import {
-	type ReadFile,
-	type ReadFileSystemInfo,
-} from "@zwave-js/shared/bindings";
-import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { type ZWaveNodeBase } from "../node/mixins/00_Base.js";
 import { type NodeWakeup } from "../node/mixins/30_Wakeup.js";
 import { type NodeValues } from "../node/mixins/40_Values.js";
@@ -1226,44 +1221,38 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		local?: boolean;
 		remote?: boolean;
 	} = {}): Promise<string[]> {
-		const symlinkedPorts: string[] = [];
-		const localPorts: string[] = [];
-		const remotePorts: string[] = [];
-		// FIXME: Move this into the serial bindings
-		if (local) {
-			// Put symlinks to the serial ports first if possible
-			if (os.platform() === "linux") {
-				const dir = "/dev/serial/by-id";
-				const symlinks = await fs.readdir(dir).catch(() => []);
+		const ret: (EnumeratedPort & { path: string })[] = [];
 
-				for (const l of symlinks) {
-					try {
-						const fullPath = path.join(dir, l);
-						const target = path.join(
-							dir,
-							await fs.readlink(fullPath),
-						);
-						if (!target.startsWith("/dev/tty")) continue;
+		// Ideally we'd use the host bindings used by the driver, but we can't access them in a static method
 
-						symlinkedPorts.push(fullPath);
-					} catch {
-						// Ignore. The target might not exist or we might not have access.
-					}
-				}
+		const bindings =
+			(await import("@zwave-js/serial/bindings/node")).serial;
+		if (local && typeof bindings.list === "function") {
+			for (const port of await bindings.list()) {
+				if (port.type === "custom") continue;
+				ret.push(port);
 			}
-
-			// Then the actual serial ports
-			const ports = await SerialPort.list();
-			localPorts.push(...ports.map((port) => port.path));
 		}
 		if (remote) {
 			const ports = await discoverRemoteSerialPorts();
 			if (ports) {
-				remotePorts.push(...ports.map((p) => p.port));
+				ret.push(...ports.map((p) => ({
+					type: "socket" as const,
+					path: p.port,
+				})));
 			}
 		}
 
-		return distinct([...symlinkedPorts, ...remotePorts, ...localPorts]);
+		const portOrder: EnumeratedPort["type"][] = ["link", "socket", "tty"];
+
+		ret.sort((a, b) => {
+			const typeA = portOrder.indexOf(a.type);
+			const typeB = portOrder.indexOf(b.type);
+			if (typeA !== typeB) return typeA - typeB;
+			return a.path.localeCompare(b.path);
+		});
+
+		return distinct(ret.map((p) => p.path));
 	}
 
 	/** Updates a subset of the driver options on the fly */
@@ -1341,6 +1330,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.bindings = {
 			fs: this._options.host?.fs
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
 		};
 
 		const spOpenPromise = createDeferredPromise();
@@ -1355,19 +1346,22 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Open the serial port
 		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
 				this.driverLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSocketFactory({
-					host: url.hostname,
-					port: parseInt(url.port),
-				});
-			} else {
-				this.driverLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSerialPortFactory(
+				binding = await this.bindings.serial.createFactoryByPath(
 					this.port,
-					// this._options.testingHooks?.serialPortBinding,
 				);
+			} else {
+				spOpenPromise.reject(
+					new ZWaveError(
+						"This platform does not support creating a serial connection by path",
+						ZWaveErrorCodes.Driver_Failed,
+					),
+				);
+				void this.destroy();
+				return;
 			}
 		} else if (isZWaveSerialPortImplementation(this.port)) {
 			this.driverLog.print(

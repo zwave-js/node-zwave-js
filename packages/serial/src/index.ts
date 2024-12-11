@@ -11,6 +11,7 @@ export * from "./parsers/SerialAPIParser.js";
 export * from "./parsers/ZWaveSerialFrame.js";
 export * from "./parsers/ZnifferSerialFrame.js";
 export * from "./plumbing/Faucet.js";
+export type * from "./serialport/Bindings.js";
 export * from "./serialport/LegacyBindingWrapper.js";
 export * from "./serialport/NodeSerialPort.js";
 export * from "./serialport/NodeSocket.js";

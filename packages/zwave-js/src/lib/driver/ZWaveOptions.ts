@@ -4,7 +4,7 @@ import type {
 	LongRangeChannel,
 	RFRegion,
 } from "@zwave-js/core";
-import { type ZWaveSerialStream } from "@zwave-js/serial";
+import { type Serial, type ZWaveSerialStream } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { FileSystem } from "@zwave-js/shared/bindings";
 import type {
@@ -132,6 +132,11 @@ export interface ZWaveOptions {
 		 * reading or writing the cache, or loading device configuration files.
 		 */
 		fs?: FileSystem;
+
+		/**
+		 * Specifies which bindings are used interact with serial ports.
+		 */
+		serial?: Serial;
 	};
 
 	storage: {

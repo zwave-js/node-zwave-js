@@ -58,8 +58,6 @@ import {
 	ZnifferStartResponse,
 	ZnifferStopRequest,
 	ZnifferStopResponse,
-	createNodeSerialPortFactory,
-	createNodeSocketFactory,
 	isZWaveSerialPortImplementation,
 	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
@@ -355,23 +353,24 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 		this.bindings = {
 			fs: this._options.host?.fs
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
 		};
 
 		// Open the serial port
 		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
 				this.znifferLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSocketFactory({
-					host: url.hostname,
-					port: parseInt(url.port),
-				});
-			} else {
-				this.znifferLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSerialPortFactory(
+				binding = await this.bindings.serial.createFactoryByPath(
 					this.port,
-					// this._options.testingHooks?.serialPortBinding,
+				);
+			} else {
+				throw new ZWaveError(
+					"This platform does not support creating a serial connection by path",
+					ZWaveErrorCodes.Driver_Failed,
 				);
 			}
 		} else if (isZWaveSerialPortImplementation(this.port)) {
