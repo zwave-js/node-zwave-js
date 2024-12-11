@@ -1,3 +1,4 @@
+import { type SchedulePoll } from "@zwave-js/cc";
 import {
 	type CompatOverrideQueries,
 	type GetDeviceConfig,
@@ -39,7 +40,6 @@ import type {
 	GetCommunicationTimeouts,
 	GetUserPreferences,
 	LogNode,
-	SchedulePoll,
 	SendCommand,
 } from "@zwave-js/host";
 import {
@@ -163,7 +163,7 @@ export function throwWrongValueType(
 	);
 }
 
-export interface SchedulePollOptions {
+export interface CCAPISchedulePollOptions {
 	duration?: Duration;
 	transition?: "fast" | "slow";
 }
@@ -365,7 +365,7 @@ export class CCAPI {
 	protected schedulePoll(
 		{ property, propertyKey }: ValueIDProperties,
 		expectedValue: unknown,
-		{ duration, transition = "slow" }: SchedulePollOptions = {},
+		{ duration, transition = "slow" }: CCAPISchedulePollOptions = {},
 	): boolean {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
 		// use/add the short delay. Otherwise, default to the long delay.
