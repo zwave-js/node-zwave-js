@@ -71,12 +71,6 @@ export interface GetValueDB {
 	tryGetValueDB(nodeId: number): ValueDB | undefined;
 }
 
-/** Allows looking up Z-Wave manufacturers by manufacturer ID */
-export interface LookupManufacturer {
-	/** Looks up the name of the manufacturer with the given ID in the configuration DB */
-	lookupManufacturer(manufacturerId: number): string | undefined;
-}
-
 /** Allows sending commands to one or more nodes */
 export interface SendCommand {
 	sendCommand<TResponse extends CCId | undefined = undefined>(

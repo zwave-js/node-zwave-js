@@ -1,4 +1,7 @@
-import { type GetDeviceConfig } from "@zwave-js/config";
+import {
+	type GetDeviceConfig,
+	type LookupManufacturer,
+} from "@zwave-js/config";
 import {
 	type BroadcastCC,
 	type CCAddress,
@@ -44,7 +47,6 @@ import type {
 	GetInterviewOptions,
 	GetValueDB,
 	LogNode,
-	LookupManufacturer,
 } from "@zwave-js/host";
 import {
 	Bytes,
