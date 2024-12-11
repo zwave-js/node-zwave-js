@@ -1,4 +1,4 @@
-import type { CommandClass } from "@zwave-js/cc";
+import type { CCEncodingContext, CommandClass } from "@zwave-js/cc";
 import {
 	type CommandClassInfo,
 	type CommandClasses,
@@ -8,7 +8,6 @@ import {
 	type SecurityManagers,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { CCEncodingContext } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities.js";

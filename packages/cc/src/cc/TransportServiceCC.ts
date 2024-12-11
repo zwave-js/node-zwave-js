@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CRC16_CCITT,
 	CommandClasses,
@@ -9,7 +10,6 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";

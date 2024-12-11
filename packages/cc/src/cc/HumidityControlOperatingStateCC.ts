@@ -1,3 +1,4 @@
+import { type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type GetValueDB,
@@ -9,7 +10,6 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCParsingContext } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,

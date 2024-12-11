@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	Duration,
@@ -22,7 +23,6 @@ import {
 	isTransmissionError,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API.js";

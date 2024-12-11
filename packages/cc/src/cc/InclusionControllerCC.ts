@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type GetValueDB,
@@ -6,7 +7,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import { Bytes, getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API.js";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";

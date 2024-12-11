@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import type {
 	GetValueDB,
 	MessageOrCCLogEntry,
@@ -12,7 +13,6 @@ import {
 	ValueMetadata,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {

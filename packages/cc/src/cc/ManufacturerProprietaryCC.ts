@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type WithAddress,
@@ -5,7 +6,6 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API.js";

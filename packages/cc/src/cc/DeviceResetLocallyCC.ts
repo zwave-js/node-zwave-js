@@ -1,10 +1,10 @@
+import { type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
 	TransmitOptions,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import { type CCParsingContext } from "@zwave-js/host";
 import { CCAPI } from "../lib/API.js";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {

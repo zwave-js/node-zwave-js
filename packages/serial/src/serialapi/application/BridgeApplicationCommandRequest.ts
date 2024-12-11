@@ -1,4 +1,4 @@
-import { type CommandClass } from "@zwave-js/cc";
+import { type CCEncodingContext, type CommandClass } from "@zwave-js/cc";
 import {
 	type FrameType,
 	type MessageOrCCLogEntry,
@@ -15,7 +15,6 @@ import {
 	parseNodeBitMask,
 	parseNodeID,
 } from "@zwave-js/core";
-import { type CCEncodingContext } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,

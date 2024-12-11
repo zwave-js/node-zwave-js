@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	type CommandClass,
 	MGRPExtension,
 	MPANExtension,
@@ -41,7 +42,6 @@ import {
 	ZWaveErrorCodes,
 	mergeSupervisionResults,
 } from "@zwave-js/core";
-import { type CCEncodingContext } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
 import {
 	type SendDataMessage,

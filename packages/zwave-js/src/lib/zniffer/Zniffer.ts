@@ -1,4 +1,5 @@
 import {
+	type CCParsingContext,
 	CommandClass,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
@@ -33,7 +34,6 @@ import {
 	securityClassIsS2,
 } from "@zwave-js/core";
 import { sdkVersionGte } from "@zwave-js/core";
-import { type CCParsingContext } from "@zwave-js/host";
 import {
 	type ZWaveSerialBindingFactory,
 	type ZWaveSerialPortImplementation,

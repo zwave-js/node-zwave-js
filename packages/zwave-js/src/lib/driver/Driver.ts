@@ -1,6 +1,8 @@
 import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
 	type CCAPIHost,
+	type CCEncodingContext,
+	type CCParsingContext,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	CommandClass,
@@ -111,7 +113,6 @@ import {
 	timespan,
 	wasControllerReset,
 } from "@zwave-js/core";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,

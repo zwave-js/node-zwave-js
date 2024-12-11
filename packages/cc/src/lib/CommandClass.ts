@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	type GetDeviceConfig,
 	type LookupManufacturer,
@@ -42,11 +43,7 @@ import {
 	parseCCId,
 	valueIdToString,
 } from "@zwave-js/core";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	LogNode,
-} from "@zwave-js/host";
+import type { LogNode } from "@zwave-js/host";
 import {
 	Bytes,
 	type JSONObject,

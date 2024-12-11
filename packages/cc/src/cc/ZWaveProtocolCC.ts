@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	type BasicDeviceClass,
 	CommandClasses,
@@ -21,7 +22,6 @@ import {
 	parseNodeProtocolInfoAndDeviceClass,
 	validatePayload,
 } from "@zwave-js/core";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {

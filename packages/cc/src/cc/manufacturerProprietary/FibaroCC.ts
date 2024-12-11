@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
@@ -13,7 +14,6 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";

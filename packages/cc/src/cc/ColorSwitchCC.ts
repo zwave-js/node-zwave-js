@@ -1,3 +1,4 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	Duration,
@@ -18,7 +19,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
-import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import {
 	getEnumMemberName,
