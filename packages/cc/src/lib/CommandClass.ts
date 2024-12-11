@@ -20,6 +20,7 @@ import {
 	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
+	type LogNode,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type ModifyCCs,
@@ -43,7 +44,6 @@ import {
 	parseCCId,
 	valueIdToString,
 } from "@zwave-js/core";
-import type { LogNode } from "@zwave-js/host";
 import {
 	Bytes,
 	type JSONObject,

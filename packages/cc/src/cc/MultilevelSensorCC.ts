@@ -4,6 +4,7 @@ import {
 	type GetNode,
 	type GetSupportedCCVersion,
 	type GetValueDB,
+	type LogNode,
 	type WithAddress,
 	encodeBitMask,
 	getSensor,
@@ -35,7 +36,6 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { LogNode } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { type AllOrNone, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";

@@ -10,6 +10,7 @@ import {
 	type HostIDs,
 	type IsCCSecure,
 	type ListenBehavior,
+	type LogNode,
 	type NodeId,
 	type QuerySecurityClasses,
 	type SetSecurityClass,
@@ -19,7 +20,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
-import type { LogNode } from "./ZWaveHost.js";
 
 export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {}
 

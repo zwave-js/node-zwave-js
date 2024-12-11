@@ -15,6 +15,7 @@ import {
 	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
+	type LogNode,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
@@ -36,7 +37,6 @@ import {
 	getCCName,
 	stripUndefined,
 } from "@zwave-js/core";
-import type { LogNode } from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,
