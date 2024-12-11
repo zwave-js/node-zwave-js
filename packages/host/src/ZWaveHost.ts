@@ -11,7 +11,6 @@ import type {
 	SendCommandOptions,
 	SendCommandReturnType,
 } from "@zwave-js/core";
-import type { ZWaveHostOptions } from "./ZWaveHostOptions.js";
 
 /** Additional context needed for deserializing CCs */
 export interface CCParsingContext
@@ -66,21 +65,6 @@ export interface SendCommand {
 		command: CCId,
 		options?: SendCommandOptions,
 	): Promise<SendCommandReturnType<TResponse>>;
-}
-
-/** Allows reading options to use for interviewing devices */
-export interface GetInterviewOptions {
-	getInterviewOptions(): ZWaveHostOptions["interview"];
-}
-
-/** Allows reading user preferences */
-export interface GetUserPreferences {
-	getUserPreferences(): ZWaveHostOptions["preferences"];
-}
-
-/** Allows reading user preferences */
-export interface GetCommunicationTimeouts {
-	getCommunicationTimeouts(): ZWaveHostOptions["timeouts"];
 }
 
 export type LogNode = Pick<ControllerLogger, "logNode">;

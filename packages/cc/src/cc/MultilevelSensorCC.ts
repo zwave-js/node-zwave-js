@@ -37,7 +37,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetUserPreferences,
 	LogNode,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
@@ -74,6 +73,7 @@ import {
 	MultilevelSensorCommand,
 	type MultilevelSensorValue,
 } from "../lib/_Types.js";
+import { type GetUserPreferences } from "../lib/traits.js";
 
 export const MultilevelSensorCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {

@@ -45,7 +45,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetInterviewOptions,
 	LogNode,
 } from "@zwave-js/host";
 import {
@@ -80,6 +79,7 @@ import {
 	type StaticCCValue,
 	defaultCCValueOptions,
 } from "./Values.js";
+import { type GetInterviewOptions } from "./traits.js";
 
 export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID

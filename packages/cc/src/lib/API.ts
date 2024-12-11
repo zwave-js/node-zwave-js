@@ -1,4 +1,3 @@
-import { type SchedulePoll } from "@zwave-js/cc";
 import {
 	type CompatOverrideQueries,
 	type GetDeviceConfig,
@@ -36,12 +35,7 @@ import {
 	getCCName,
 	stripUndefined,
 } from "@zwave-js/core";
-import type {
-	GetCommunicationTimeouts,
-	GetUserPreferences,
-	LogNode,
-	SendCommand,
-} from "@zwave-js/host";
+import type { LogNode, SendCommand } from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,
@@ -57,6 +51,11 @@ import {
 	getImplementedVersion,
 } from "./CommandClassDecorators.js";
 import { type CCValue, type StaticCCValue } from "./Values.js";
+import {
+	type GetRefreshValueTimeouts,
+	type GetUserPreferences,
+	type SchedulePoll,
+} from "./traits.js";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -178,7 +177,7 @@ export type CCAPIHost<TNode extends CCAPINode = CCAPINode> =
 	& SecurityManagers
 	& GetDeviceConfig
 	& SendCommand
-	& GetCommunicationTimeouts
+	& GetRefreshValueTimeouts
 	& GetUserPreferences
 	& SchedulePoll
 	& LogNode;
@@ -370,7 +369,7 @@ export class CCAPI {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
 		// use/add the short delay. Otherwise, default to the long delay.
 		const durationMs = duration?.toMilliseconds() ?? 0;
-		const timeouts = this.host.getCommunicationTimeouts();
+		const timeouts = this.host.getRefreshValueTimeouts();
 		const additionalDelay = !!durationMs || transition === "fast"
 			? timeouts.refreshValueAfterTransition
 			: timeouts.refreshValue;

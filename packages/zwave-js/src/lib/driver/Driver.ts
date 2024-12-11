@@ -6,12 +6,14 @@ import {
 	CommandClass,
 	type FirmwareUpdateResult,
 	type InterviewContext,
+	type InterviewOptions,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
 	NoOperationCC,
 	type PersistValuesContext,
 	type Powerlevel,
+	type RefreshValueTimeouts,
 	type RefreshValuesContext,
 	type SchedulePollOptions,
 	Security2CC,
@@ -36,6 +38,7 @@ import {
 	TransportServiceCCSegmentWait,
 	type TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type UserPreferences,
 	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
@@ -108,11 +111,7 @@ import {
 	timespan,
 	wasControllerReset,
 } from "@zwave-js/core";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	ZWaveHostOptions,
-} from "@zwave-js/host";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
@@ -1188,7 +1187,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getUserPreferences(): ZWaveHostOptions["preferences"] {
+	public getUserPreferences(): UserPreferences {
 		return this._options.preferences;
 	}
 
@@ -1197,7 +1196,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getInterviewOptions(): ZWaveHostOptions["interview"] {
+	public getInterviewOptions(): InterviewOptions {
 		return this._options.interview;
 	}
 
@@ -1206,8 +1205,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getCommunicationTimeouts(): ZWaveHostOptions["timeouts"] {
-		return this._options.timeouts;
+	public getRefreshValueTimeouts(): RefreshValueTimeouts {
+		return {
+			refreshValue: this._options.timeouts.refreshValue,
+			refreshValueAfterTransition:
+				this._options.timeouts.refreshValueAfterTransition,
+		};
 	}
 
 	/**
