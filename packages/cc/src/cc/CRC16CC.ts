@@ -2,16 +2,13 @@ import {
 	CRC16_CCITT,
 	CommandClasses,
 	EncapsulationFlags,
+	type GetValueDB,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetValueDB,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API.js";
 import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {

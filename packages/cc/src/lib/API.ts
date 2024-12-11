@@ -11,6 +11,7 @@ import {
 	type GetNode,
 	type GetSafeCCVersion,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
 	type MaybeNotKnown,
@@ -37,7 +38,6 @@ import {
 import type {
 	GetCommunicationTimeouts,
 	GetUserPreferences,
-	GetValueDB,
 	LogNode,
 	SchedulePoll,
 	SendCommand,

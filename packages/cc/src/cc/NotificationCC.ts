@@ -2,6 +2,7 @@ import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	type GetNode,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type Notification,
 	type NotificationState,
 	type NotificationValue,
@@ -42,7 +43,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
 import { Bytes, isUint8Array } from "@zwave-js/shared/safe";

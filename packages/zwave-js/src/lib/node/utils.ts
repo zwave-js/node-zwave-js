@@ -8,6 +8,7 @@ import {
 	type GetEndpoint,
 	type GetNode,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type HostIDs,
 	type MaybeNotKnown,
 	type NodeId,
@@ -21,7 +22,6 @@ import {
 	applicationCCs,
 	getCCName,
 } from "@zwave-js/core";
-import type { GetValueDB } from "@zwave-js/host";
 
 function getValue<T>(
 	ctx: GetValueDB,

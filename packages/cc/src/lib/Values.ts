@@ -2,10 +2,10 @@ import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	type CommandClasses,
 	type EndpointId,
+	type GetValueDB,
 	type ValueID,
 	ValueMetadata,
 } from "@zwave-js/core/safe";
-import type { GetValueDB } from "@zwave-js/host";
 import {
 	type FnOrStatic,
 	type ReturnTypeOrStatic,

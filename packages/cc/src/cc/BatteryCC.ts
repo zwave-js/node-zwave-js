@@ -2,6 +2,7 @@ import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	type GetNode,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type WithAddress,
 	timespan,
 } from "@zwave-js/core";
@@ -24,11 +25,7 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetValueDB,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {

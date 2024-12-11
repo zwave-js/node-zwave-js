@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	type GetValueDB,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
@@ -9,11 +10,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetValueDB,
-} from "@zwave-js/host";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import { Bytes, getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {

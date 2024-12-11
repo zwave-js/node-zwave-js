@@ -16,6 +16,7 @@ import {
 	type GetEndpoint,
 	type GetNode,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
 	type MessageOrCCLogEntry,
@@ -45,7 +46,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetInterviewOptions,
-	GetValueDB,
 	LogNode,
 } from "@zwave-js/host";
 import {

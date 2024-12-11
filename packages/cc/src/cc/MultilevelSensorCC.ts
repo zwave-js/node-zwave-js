@@ -2,6 +2,7 @@ import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	type GetNode,
 	type GetSupportedCCVersion,
+	type GetValueDB,
 	type WithAddress,
 	encodeBitMask,
 	getSensor,
@@ -37,7 +38,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetUserPreferences,
-	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

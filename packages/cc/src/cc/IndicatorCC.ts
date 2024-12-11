@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	type EndpointId,
+	type GetValueDB,
 	Indicator,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -16,11 +17,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetValueDB,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
