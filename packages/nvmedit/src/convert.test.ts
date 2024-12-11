@@ -1,6 +1,6 @@
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { readJSON } from "@zwave-js/shared";
 import { cloneDeep } from "@zwave-js/shared/safe";
-import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,7 +31,7 @@ function bufferEquals(
 	const suite = "700-series, binary to JSON";
 
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
@@ -46,11 +46,12 @@ function bufferEquals(
 	const suite = "700 series, JSON to NVM to JSON round-trip";
 
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_json");
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const jsonInput: NVMJSON = await readJSON(
+				fs,
 				path.join(fixturesDir, file),
 			);
 			const nvm = await jsonToNVM(
@@ -73,7 +74,7 @@ function bufferEquals(
 		__dirname,
 		"../test/fixtures/nvm_700_invariants",
 	);
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
@@ -92,7 +93,7 @@ function bufferEquals(
 	const suite = "500-series, binary to JSON";
 
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_500_binary");
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
@@ -110,7 +111,7 @@ function bufferEquals(
 		__dirname,
 		"../test/fixtures/nvm_500_invariants",
 	);
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	// For debugging purposes
 	// function toHex(buffer: Buffer): string {
@@ -148,11 +149,12 @@ function bufferEquals(
 	const suite = "500 to 700 series JSON conversion";
 
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_500_json");
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const json500: NVM500JSON = await readJSON(
+				fs,
 				path.join(fixturesDir, file),
 			);
 			const json700 = json500To700(json500, true);
@@ -165,11 +167,12 @@ function bufferEquals(
 	const suite = "500 to 700 to 500 series JSON round-trip";
 
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_500_json");
-	const files = fs.readdirSync(fixturesDir);
+	const files = await fsp.readdir(fixturesDir);
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const json500: NVM500JSON = await readJSON(
+				fs,
 				path.join(fixturesDir, file),
 			);
 			const json700 = json500To700(json500, true);

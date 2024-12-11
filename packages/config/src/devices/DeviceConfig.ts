@@ -9,12 +9,18 @@ import {
 	padVersion,
 	pathExists,
 	pick,
+	readTextFile,
 	stringify,
+	writeTextFile,
 } from "@zwave-js/shared";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import JSON5 from "json5";
-import fs from "node:fs/promises";
-import path from "node:path";
+import path from "pathe";
 import semverGt from "semver/functions/gt.js";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate.js";
 import type { ConfigLogger } from "../Logger.js";
@@ -85,13 +91,14 @@ export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
+	fs: ReadFileSystemInfo,
 	devicesRoot: string,
 	dir: string,
 	lastChange: Date,
 ): Promise<boolean> {
 	// Check if there are any files BUT index.json that were changed
 	// or directories that were modified
-	const filesAndDirs = await fs.readdir(dir);
+	const filesAndDirs = await fs.readDir(dir);
 	for (const f of filesAndDirs) {
 		const fullPath = path.join(dir, f);
 
@@ -105,7 +112,12 @@ async function hasChangedDeviceFiles(
 		} else if (stat.isDirectory()) {
 			// we need to go deeper!
 			if (
-				await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange)
+				await hasChangedDeviceFiles(
+					fs,
+					devicesRoot,
+					fullPath,
+					lastChange,
+				)
 			) {
 				return true;
 			}
@@ -119,6 +131,7 @@ async function hasChangedDeviceFiles(
  * Does not update the index itself.
  */
 async function generateIndex<T extends Record<string, unknown>>(
+	fs: ReadFileSystemInfo & ReadFile,
 	devicesDir: string,
 	isEmbedded: boolean,
 	extractIndexEntries: (config: DeviceConfig) => T[],
@@ -128,6 +141,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 
 	clearTemplateCache();
 	const configFiles = await enumFilesRecursive(
+		fs,
 		devicesDir,
 		(file) =>
 			file.endsWith(".json")
@@ -147,11 +161,16 @@ async function generateIndex<T extends Record<string, unknown>>(
 			.replaceAll("\\", "/");
 		// Try parsing the file
 		try {
-			const config = await DeviceConfig.from(file, isEmbedded, {
-				rootDir: devicesDir,
-				fallbackDirs,
-				relative: true,
-			});
+			const config = await DeviceConfig.from(
+				fs,
+				file,
+				isEmbedded,
+				{
+					rootDir: devicesDir,
+					fallbackDirs,
+					relative: true,
+				},
+			);
 			// Add the file to the index
 			index.push(
 				...extractIndexEntries(config).map((entry) => {
@@ -184,19 +203,20 @@ async function generateIndex<T extends Record<string, unknown>>(
 }
 
 async function loadDeviceIndexShared<T extends Record<string, unknown>>(
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	devicesDir: string,
 	indexPath: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
 ): Promise<(T & { filename: string })[]> {
 	// The index file needs to be regenerated if it does not exist
-	let needsUpdate = !(await pathExists(indexPath));
+	let needsUpdate = !(await pathExists(fs, indexPath));
 	let index: (T & { filename: string })[] | undefined;
 	let mtimeIndex: Date | undefined;
 	// ...or if cannot be parsed
 	if (!needsUpdate) {
 		try {
-			const fileContents = await fs.readFile(indexPath, "utf8");
+			const fileContents = await readTextFile(fs, indexPath, "utf8");
 			index = JSON5.parse(fileContents);
 			mtimeIndex = (await fs.stat(indexPath)).mtime;
 		} catch {
@@ -219,6 +239,7 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
 		needsUpdate = await hasChangedDeviceFiles(
+			fs,
 			devicesDir,
 			devicesDir,
 			mtimeIndex!,
@@ -234,6 +255,7 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 	if (needsUpdate) {
 		// Read all files from disk and generate an index
 		index = await generateIndex(
+			fs,
 			devicesDir,
 			true,
 			extractIndexEntries,
@@ -241,7 +263,8 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 		);
 		// Save the index to disk
 		try {
-			await fs.writeFile(
+			await writeTextFile(
+				fs,
 				path.join(indexPath),
 				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
 ${stringify(index, "\t")}
@@ -268,11 +291,13 @@ ${stringify(index, "\t")}
  * Transparently handles updating the index if necessary
  */
 export async function generatePriorityDeviceIndex(
+	fs: ReadFileSystemInfo & ReadFile,
 	deviceConfigPriorityDir: string,
 	logger?: ConfigLogger,
 ): Promise<DeviceConfigIndex> {
 	return (
 		await generateIndex(
+			fs,
 			deviceConfigPriorityDir,
 			false,
 			(config) =>
@@ -304,6 +329,7 @@ export async function generatePriorityDeviceIndex(
  * Transparently handles updating the index if necessary
  */
 export async function loadDeviceIndexInternal(
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	logger?: ConfigLogger,
 	externalConfigDir?: string,
 ): Promise<DeviceConfigIndex> {
@@ -312,6 +338,7 @@ export async function loadDeviceIndexInternal(
 	);
 
 	return loadDeviceIndexShared(
+		fs,
 		devicesDir,
 		indexPath,
 		(config) =>
@@ -334,10 +361,12 @@ export async function loadDeviceIndexInternal(
  * Transparently handles updating the index if necessary
  */
 export async function loadFulltextDeviceIndexInternal(
+	fs: ReadFileSystemInfo & ReadFile & WriteFile,
 	logger?: ConfigLogger,
 ): Promise<FulltextDeviceConfigIndex> {
 	// This method is not meant to operate with the external device index!
 	return loadDeviceIndexShared(
+		fs,
 		embeddedDevicesDir,
 		fulltextIndexPath,
 		(config) =>
@@ -375,6 +404,7 @@ function isFirmwareVersion(val: any): val is string {
 /** This class represents a device config entry whose conditional settings have not been evaluated yet */
 export class ConditionalDeviceConfig {
 	public static async from(
+		fs: ReadFileSystemInfo & ReadFile,
 		filename: string,
 		isEmbedded: boolean,
 		options: {
@@ -388,10 +418,14 @@ export class ConditionalDeviceConfig {
 		const relativePath = relative
 			? path.relative(rootDir, filename).replaceAll("\\", "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename, [
-			options.rootDir,
-			...(options.fallbackDirs ?? []),
-		]);
+		const json = await readJsonWithTemplate(
+			fs,
+			filename,
+			[
+				options.rootDir,
+				...(options.fallbackDirs ?? []),
+			],
+		);
 		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
@@ -663,6 +697,7 @@ metadata is not an object`,
 
 export class DeviceConfig {
 	public static async from(
+		fs: ReadFileSystemInfo & ReadFile,
 		filename: string,
 		isEmbedded: boolean,
 		options: {
@@ -673,6 +708,7 @@ export class DeviceConfig {
 		},
 	): Promise<DeviceConfig> {
 		const ret = await ConditionalDeviceConfig.from(
+			fs,
 			filename,
 			isEmbedded,
 			options,

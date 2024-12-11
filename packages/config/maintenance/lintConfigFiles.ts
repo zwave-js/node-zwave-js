@@ -4,6 +4,7 @@ import {
 	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
 } from "@zwave-js/core";
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { reportProblem } from "@zwave-js/maintenance";
 import {
 	enumFilesRecursive,
@@ -262,6 +263,7 @@ async function lintDevices(): Promise<void> {
 	const rootDir = path.join(configDir, "devices");
 
 	const forbiddenFiles = await enumFilesRecursive(
+		fs,
 		rootDir,
 		(filename) => !filename.endsWith(".json"),
 	);
@@ -286,6 +288,7 @@ async function lintDevices(): Promise<void> {
 		let conditionalConfig: ConditionalDeviceConfig;
 		try {
 			conditionalConfig = await ConditionalDeviceConfig.from(
+				fs,
 				filePath,
 				true,
 				{

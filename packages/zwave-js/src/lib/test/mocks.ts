@@ -4,6 +4,8 @@ import {
 	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
+	type GetNode,
+	type GetValueDB,
 	type InterviewStage,
 	type MaybeNotKnown,
 	MessagePriority,
@@ -14,12 +16,7 @@ import {
 	ZWaveErrorCodes,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type {
-	BaseTestEndpoint,
-	BaseTestNode,
-	GetNode,
-	GetValueDB,
-} from "@zwave-js/host";
+import type { BaseTestEndpoint, BaseTestNode } from "@zwave-js/host";
 import {
 	type FunctionType,
 	Message,

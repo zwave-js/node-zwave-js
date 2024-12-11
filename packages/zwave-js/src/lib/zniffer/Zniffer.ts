@@ -1,4 +1,5 @@
 import {
+	type CCParsingContext,
 	CommandClass,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
@@ -9,6 +10,7 @@ import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type FrameType,
+	type HostIDs,
 	type LogConfig,
 	MPDUHeaderType,
 	type MaybeNotKnown,
@@ -32,7 +34,6 @@ import {
 	securityClassIsS2,
 } from "@zwave-js/core";
 import { sdkVersionGte } from "@zwave-js/core";
-import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
 	type ZWaveSerialBindingFactory,
 	type ZWaveSerialPortImplementation,
@@ -57,8 +58,6 @@ import {
 	ZnifferStartResponse,
 	ZnifferStopRequest,
 	ZnifferStopResponse,
-	createNodeSerialPortFactory,
-	createNodeSocketFactory,
 	isZWaveSerialPortImplementation,
 	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
@@ -76,7 +75,6 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
 import { ZnifferLogger } from "../log/Zniffer.js";
 import {
@@ -125,6 +123,8 @@ export interface ZnifferOptions {
 	securityKeys?: ZWaveOptions["securityKeys"];
 	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+
+	host?: ZWaveOptions["host"];
 
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
@@ -275,6 +275,12 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 
 	private _options: ZnifferOptions;
 
+	/**
+	 * The host bindings used to access file system etc.
+	 */
+	// This is set during `init()` and should not be accessed before
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
+
 	private serialFactory: ZnifferSerialStreamFactory | undefined;
 	/** The serial port instance */
 	private serial: ZnifferSerialStream | undefined;
@@ -342,21 +348,29 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 			);
 		}
 
+		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
+		// on Node.js internals
+		this.bindings = {
+			fs: this._options.host?.fs
+				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
+		};
+
 		// Open the serial port
 		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
 				this.znifferLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSocketFactory({
-					host: url.hostname,
-					port: parseInt(url.port),
-				});
-			} else {
-				this.znifferLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSerialPortFactory(
+				binding = await this.bindings.serial.createFactoryByPath(
 					this.port,
-					// this._options.testingHooks?.serialPortBinding,
+				);
+			} else {
+				throw new ZWaveError(
+					"This platform does not support creating a serial connection by path",
+					ZWaveErrorCodes.Driver_Failed,
 				);
 			}
 		} else if (isZWaveSerialPortImplementation(this.port)) {
@@ -1024,7 +1038,10 @@ supported frequencies: ${
 		filePath: string,
 		frameFilter?: (frame: CapturedFrame) => boolean,
 	): Promise<void> {
-		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer(frameFilter));
+		await this.bindings.fs.writeFile(
+			filePath,
+			this.getCaptureAsZLFBuffer(frameFilter),
+		);
 	}
 
 	/**

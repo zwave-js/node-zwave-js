@@ -1,6 +1,6 @@
+import { type CryptoPrimitives } from "@zwave-js/shared/bindings";
 import { Bytes } from "@zwave-js/shared/safe";
 import { BLOCK_SIZE, xor, zeroPad } from "../shared.js";
-import { type CryptoPrimitives } from "./primitives.js";
 
 const webcrypto = typeof process !== "undefined"
 		&& (globalThis as any).crypto === undefined

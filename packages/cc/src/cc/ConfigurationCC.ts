@@ -1,4 +1,5 @@
-import type { ParamInfoMap } from "@zwave-js/config";
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
+import type { GetDeviceConfig, ParamInfoMap } from "@zwave-js/config";
 import {
 	CommandClasses,
 	ConfigValueFormat,
@@ -6,6 +7,9 @@ import {
 	type ControlsCC,
 	type EndpointId,
 	type GetEndpoint,
+	type GetNode,
+	type GetSupportedCCVersion,
+	type GetValueDB,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -30,14 +34,6 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetDeviceConfig,
-	GetNode,
-	GetSupportedCCVersion,
-	GetValueDB,
-} from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";

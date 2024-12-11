@@ -1,18 +1,23 @@
 import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
 	type CCAPIHost,
+	type CCEncodingContext,
+	type CCParsingContext,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	CommandClass,
 	type FirmwareUpdateResult,
 	type InterviewContext,
+	type InterviewOptions,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
 	NoOperationCC,
 	type PersistValuesContext,
 	type Powerlevel,
+	type RefreshValueTimeouts,
 	type RefreshValuesContext,
+	type SchedulePollOptions,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -35,6 +40,7 @@ import {
 	TransportServiceCCSegmentWait,
 	type TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type UserPreferences,
 	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
@@ -53,6 +59,7 @@ import {
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
+	type HostIDs,
 	type KeyPair,
 	type LogConfig,
 	type LogNodeOptions,
@@ -106,16 +113,10 @@ import {
 	timespan,
 	wasControllerReset,
 } from "@zwave-js/core";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	HostIDs,
-	NodeSchedulePollOptions,
-	ZWaveHostOptions,
-} from "@zwave-js/host";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
+	type EnumeratedPort,
 	FunctionType,
 	type HasNodeId,
 	Message,
@@ -131,8 +132,6 @@ import {
 	type ZWaveSerialPortImplementation,
 	type ZWaveSerialStream,
 	ZWaveSerialStreamFactory,
-	createNodeSerialPortFactory,
-	createNodeSocketFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
@@ -166,6 +165,17 @@ import {
 	isTransmitReport,
 } from "@zwave-js/serial/serialapi";
 import {
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	type CommandRequest,
+	type ContainsCC,
+	containsCC,
+	containsSerializedCC,
+	isCommandRequest,
+} from "@zwave-js/serial/serialapi";
+import {
 	AsyncQueue,
 	Bytes,
 	type ThrowingMap,
@@ -180,9 +190,12 @@ import {
 	mergeDeep,
 	noop,
 	num2hex,
-	pathExists,
 	pick,
 } from "@zwave-js/shared";
+import {
+	type ReadFile,
+	type ReadFileSystemInfo,
+} from "@zwave-js/shared/bindings";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -190,11 +203,9 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
 import * as util from "node:util";
-import { SerialPort } from "serialport";
+import path from "pathe";
+import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
 import { DriverLogger } from "../log/Driver.js";
@@ -207,23 +218,10 @@ import {
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
 } from "../node/_Types.js";
-
-import {
-	SendTestFrameRequest,
-	SendTestFrameTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	type CommandRequest,
-	type ContainsCC,
-	containsCC,
-	containsSerializedCC,
-	isCommandRequest,
-} from "@zwave-js/serial/serialapi";
-import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { type ZWaveNodeBase } from "../node/mixins/00_Base.js";
 import { type NodeWakeup } from "../node/mixins/30_Wakeup.js";
 import { type NodeValues } from "../node/mixins/40_Values.js";
-import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll.js";
+import { type NodeSchedulePoll } from "../node/mixins/60_ScheduledPoll.js";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig.js";
 import {
 	type AppInfo,
@@ -317,20 +315,6 @@ const defaultOptions: ZWaveOptions = {
 		queryAllUserCodes: false,
 	},
 	storage: {
-		driver: {
-			async ensureDir(path) {
-				await fs.mkdir(path, { recursive: true });
-			},
-			pathExists(path) {
-				return pathExists(path);
-			},
-			readFile(file, encoding) {
-				return fs.readFile(file, { encoding });
-			},
-			writeFile(file, data, options) {
-				return fs.writeFile(file, data, options);
-			},
-		},
 		cacheDir: path.join(process.cwd(), "cache"),
 		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
 		throttle: "normal",
@@ -617,6 +601,40 @@ function assertValidCCs(container: ContainsCC): void {
 	} else if (containsCC(container.command)) {
 		assertValidCCs(container.command);
 	}
+}
+
+function wrapLegacyFSDriverForCacheMigrationOnly(
+	legacy: import("@zwave-js/core/traits").FileSystem,
+): ReadFileSystemInfo & ReadFile {
+	// This usage only needs readFile and checking if a file exists
+	// Every other usage will throw!
+	return {
+		async readFile(path) {
+			const text = await legacy.readFile(path, "utf8");
+			return Bytes.from(text, "utf8");
+		},
+		async stat(path) {
+			if (await legacy.pathExists(path)) {
+				return {
+					isDirectory() {
+						return false;
+					},
+					isFile() {
+						return true;
+					},
+					mtime: new Date(),
+					size: 0,
+				};
+			} else {
+				throw new Error("File not found");
+			}
+		},
+		readDir(_path) {
+			return Promise.reject(
+				new Error("Not implemented for the legacy FS driver"),
+			);
+		},
+	};
 }
 
 // Strongly type the event emitter events
@@ -1165,7 +1183,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getUserPreferences(): ZWaveHostOptions["preferences"] {
+	public getUserPreferences(): UserPreferences {
 		return this._options.preferences;
 	}
 
@@ -1174,7 +1192,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getInterviewOptions(): ZWaveHostOptions["interview"] {
+	public getInterviewOptions(): InterviewOptions {
 		return this._options.interview;
 	}
 
@@ -1183,8 +1201,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getCommunicationTimeouts(): ZWaveHostOptions["timeouts"] {
-		return this._options.timeouts;
+	public getRefreshValueTimeouts(): RefreshValueTimeouts {
+		return {
+			refreshValue: this._options.timeouts.refreshValue,
+			refreshValueAfterTransition:
+				this._options.timeouts.refreshValueAfterTransition,
+		};
 	}
 
 	/**
@@ -1199,43 +1221,38 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		local?: boolean;
 		remote?: boolean;
 	} = {}): Promise<string[]> {
-		const symlinkedPorts: string[] = [];
-		const localPorts: string[] = [];
-		const remotePorts: string[] = [];
-		if (local) {
-			// Put symlinks to the serial ports first if possible
-			if (os.platform() === "linux") {
-				const dir = "/dev/serial/by-id";
-				const symlinks = await fs.readdir(dir).catch(() => []);
+		const ret: (EnumeratedPort & { path: string })[] = [];
 
-				for (const l of symlinks) {
-					try {
-						const fullPath = path.join(dir, l);
-						const target = path.join(
-							dir,
-							await fs.readlink(fullPath),
-						);
-						if (!target.startsWith("/dev/tty")) continue;
+		// Ideally we'd use the host bindings used by the driver, but we can't access them in a static method
 
-						symlinkedPorts.push(fullPath);
-					} catch {
-						// Ignore. The target might not exist or we might not have access.
-					}
-				}
+		const bindings =
+			(await import("@zwave-js/serial/bindings/node")).serial;
+		if (local && typeof bindings.list === "function") {
+			for (const port of await bindings.list()) {
+				if (port.type === "custom") continue;
+				ret.push(port);
 			}
-
-			// Then the actual serial ports
-			const ports = await SerialPort.list();
-			localPorts.push(...ports.map((port) => port.path));
 		}
 		if (remote) {
 			const ports = await discoverRemoteSerialPorts();
 			if (ports) {
-				remotePorts.push(...ports.map((p) => p.port));
+				ret.push(...ports.map((p) => ({
+					type: "socket" as const,
+					path: p.port,
+				})));
 			}
 		}
 
-		return distinct([...symlinkedPorts, ...remotePorts, ...localPorts]);
+		const portOrder: EnumeratedPort["type"][] = ["link", "socket", "tty"];
+
+		ret.sort((a, b) => {
+			const typeA = portOrder.indexOf(a.type);
+			const typeB = portOrder.indexOf(b.type);
+			if (typeA !== typeB) return typeA - typeB;
+			return a.path.localeCompare(b.path);
+		});
+
+		return distinct(ret.map((p) => p.path));
 	}
 
 	/** Updates a subset of the driver options on the fly */
@@ -1287,6 +1304,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return this._options;
 	}
 
+	/**
+	 * The host bindings used to access file system etc.
+	 */
+	// This is set during `start()` and should not be accessed before
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
+
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
 
@@ -1302,6 +1325,15 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
+		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
+		// on Node.js internals
+		this.bindings = {
+			fs: this._options.host?.fs
+				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
+		};
+
 		const spOpenPromise = createDeferredPromise();
 
 		// Log which version is running
@@ -1314,19 +1346,22 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Open the serial port
 		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
 				this.driverLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSocketFactory({
-					host: url.hostname,
-					port: parseInt(url.port),
-				});
-			} else {
-				this.driverLog.print(`opening serial port ${this.port}`);
-				binding = createNodeSerialPortFactory(
+				binding = await this.bindings.serial.createFactoryByPath(
 					this.port,
-					// this._options.testingHooks?.serialPortBinding,
 				);
+			} else {
+				spOpenPromise.reject(
+					new ZWaveError(
+						"This platform does not support creating a serial connection by path",
+						ZWaveErrorCodes.Driver_Failed,
+					),
+				);
+				void this.destroy();
+				return;
 			}
 		} else if (isZWaveSerialPortImplementation(this.port)) {
 			this.driverLog.print(
@@ -1425,7 +1460,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
-				await this._options.storage.driver.ensureDir(this.cacheDir);
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
+				if (this._options.storage.driver) {
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
+					await this._options.storage.driver.ensureDir(this.cacheDir);
+				} else {
+					await this.bindings.fs.ensureDir(this.cacheDir);
+				}
 			} catch (e) {
 				let message: string;
 				if (
@@ -1576,8 +1617,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._valueDB = new JsonlDB(valueDBFile, {
 			...options,
 			enableTimestamps: true,
-			reviver: (key, value) => deserializeCacheValue(value),
-			serializer: (key, value) => serializeCacheValue(value),
+			reviver: (_key, value) => deserializeCacheValue(value),
+			serializer: (_key, value) => serializeCacheValue(value),
 		});
 		await this._valueDB.open();
 
@@ -1617,7 +1658,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
-					this._options.storage.driver,
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
+					this._options.storage.driver
+						? wrapLegacyFSDriverForCacheMigrationOnly(
+							// eslint-disable-next-line @typescript-eslint/no-deprecated
+							this._options.storage.driver,
+						)
+						: this.bindings.fs,
 					this.cacheDir,
 				);
 
@@ -2821,7 +2868,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	};
 
 	/** Checks if there are any pending messages for the given node */
-	private hasPendingMessages(node: ZWaveNodeBase & SchedulePoll): boolean {
+	private hasPendingMessages(
+		node: ZWaveNodeBase & NodeSchedulePoll,
+	): boolean {
 		// First check if there are messages in the queue
 		if (
 			this.hasPendingTransactions(
@@ -2977,7 +3026,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	public schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
-		options: NodeSchedulePollOptions,
+		options: SchedulePollOptions,
 	): boolean {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.schedulePoll(valueId, options);
@@ -7176,7 +7225,7 @@ ${handlers.length} left`,
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
 	public debounceSendNodeToSleep(
-		node: ZWaveNodeBase & SchedulePoll & NodeValues & NodeWakeup,
+		node: ZWaveNodeBase & NodeSchedulePoll & NodeValues & NodeWakeup,
 	): void {
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
@@ -7186,7 +7235,7 @@ ${handlers.length} left`,
 
 		// Sends a node to sleep if it has no more messages.
 		const sendNodeToSleep = (
-			node: ZWaveNodeBase & SchedulePoll & NodeWakeup,
+			node: ZWaveNodeBase & NodeSchedulePoll & NodeWakeup,
 		): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
@@ -7373,6 +7422,8 @@ ${handlers.length} left`,
 		}
 	}
 
+	private _installConfigUpdatePromise: Promise<boolean> | undefined;
+
 	/**
 	 * Installs an update for the embedded configuration DB if there is a compatible one.
 	 * Returns `true` when an update was installed, `false` otherwise.
@@ -7382,6 +7433,19 @@ ${handlers.length} left`,
 	public async installConfigUpdate(): Promise<boolean> {
 		this.ensureReady();
 
+		if (this._installConfigUpdatePromise) {
+			return this._installConfigUpdatePromise;
+		}
+		this._installConfigUpdatePromise = this.installConfigUpdateInternal();
+
+		try {
+			return await this._installConfigUpdatePromise;
+		} finally {
+			this._installConfigUpdatePromise = undefined;
+		}
+	}
+
+	private async installConfigUpdateInternal(): Promise<boolean> {
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
@@ -7398,10 +7462,11 @@ ${handlers.length} left`,
 			`Installing version ${newVersion} of configuration DB...`,
 		);
 		try {
-			await installConfigUpdate(newVersion, {
-				cacheDir: this.cacheDir,
-				configDir: extConfigDir,
-			});
+			await installConfigUpdate(
+				this.bindings.fs,
+				newVersion,
+				{ configDir: extConfigDir },
+			);
 		} catch (e) {
 			this.driverLog.print(getErrorMessage(e), "error");
 			return false;
@@ -7416,10 +7481,7 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				if (node.ready) {
-					await node["loadDeviceConfig"]();
-					// TODO: If the device config did change, expose this information
-				}
+				if (node.ready) await node["loadDeviceConfig"]();
 			}
 		}
 

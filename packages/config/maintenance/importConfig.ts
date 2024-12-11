@@ -9,6 +9,7 @@ process.on("unhandledRejection", (r) => {
 });
 
 import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
+import { fs as nodeFS } from "@zwave-js/core/bindings/fs/node";
 import {
 	enumFilesRecursive,
 	formatId,
@@ -852,6 +853,7 @@ async function parseZWAFiles(): Promise<void> {
 	let jsonData = [];
 
 	const configFiles = await enumFilesRecursive(
+		nodeFS,
 		zwaTempDir,
 		(file) => file.endsWith(".json"),
 	);
@@ -1602,8 +1604,9 @@ async function maintenanceParse(): Promise<void> {
 	const zwaData = [];
 
 	// Load the zwa files
-	await fs.mkdir(zwaTempDir, { recursive: true });
+	await nodeFS.ensureDir(zwaTempDir);
 	const zwaFiles = await enumFilesRecursive(
+		nodeFS,
 		zwaTempDir,
 		(file) => file.endsWith(".json"),
 	);
@@ -1611,7 +1614,7 @@ async function maintenanceParse(): Promise<void> {
 		// zWave Alliance numbering isn't always continuous and an html page is
 		// returned when a device number doesn't. Test for and delete such files.
 		try {
-			zwaData.push(await readJSON(file));
+			zwaData.push(await readJSON(nodeFS, file));
 		} catch {
 			await fs.unlink(file);
 		}
@@ -1619,6 +1622,7 @@ async function maintenanceParse(): Promise<void> {
 
 	// Build the list of device files
 	const configFiles = await enumFilesRecursive(
+		nodeFS,
 		processedDir,
 		(file) => file.endsWith(".json"),
 	);
@@ -2033,7 +2037,7 @@ async function importConfigFilesOH(): Promise<void> {
 			}
 		}
 		outFilename += ".json";
-		await fs.ensureDir(path.dirname(outFilename));
+		await nodeFS.ensureDir(path.dirname(outFilename));
 
 		const output = stringify(parsed, "\t") + "\n";
 		await fs.writeFile(outFilename, output, "utf8");
@@ -2305,6 +2309,7 @@ function getLatestConfigVersion(
 /** Changes the manufacturer names in all device config files to match manufacturers.json */
 async function updateManufacturerNames(): Promise<void> {
 	const configFiles = await enumFilesRecursive(
+		nodeFS,
 		processedDir,
 		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 	);

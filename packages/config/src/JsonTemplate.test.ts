@@ -1,5 +1,6 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
-import fs from "node:fs/promises";
+import { fs } from "@zwave-js/core/bindings/fs/node";
+import fsp from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import { afterEach, beforeAll, test } from "vitest";
@@ -8,17 +9,17 @@ import { readJsonWithTemplate } from "./JsonTemplate.js";
 const mockDir = path.join(tmpdir(), `zwave-js-template-test`);
 
 async function mockFs(files: Record<string, string>): Promise<void> {
-	await fs.mkdir(mockDir, { recursive: true });
+	await fsp.mkdir(mockDir, { recursive: true });
 	for (const [name, content] of Object.entries(files)) {
 		const relative = name.replace(/^\//, "./");
 		const filename = path.join(mockDir, relative);
 		const dirname = path.join(mockDir, path.dirname(relative));
-		await fs.mkdir(dirname, { recursive: true });
-		await fs.writeFile(filename, content);
+		await fsp.mkdir(dirname, { recursive: true });
+		await fsp.writeFile(filename, content);
 	}
 }
 mockFs.restore = async (): Promise<void> => {
-	await fs.rm(mockDir, { recursive: true, force: true });
+	await fsp.rm(mockDir, { recursive: true, force: true });
 };
 
 beforeAll(() => mockFs.restore());
@@ -36,6 +37,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(file);
@@ -58,6 +60,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(template);
@@ -81,6 +84,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(template);
@@ -106,6 +110,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -127,7 +132,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_Invalid,
 			},
@@ -157,7 +162,7 @@ test.sequential(
 
 			await assertZWaveError(
 				t.expect,
-				() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+				() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 				{
 					errorCode: ZWaveErrorCodes.Config_Invalid,
 					messageMatches: "Import specifier",
@@ -184,7 +189,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_Invalid,
 			},
@@ -219,6 +224,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -266,6 +272,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -289,7 +296,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
 			},
@@ -318,7 +325,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
 			},
@@ -360,7 +367,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
 			},
@@ -384,6 +391,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "foo/bar/test.json"),
 		);
 		t.expect(content).toStrictEqual(template);
@@ -406,6 +414,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "foo/bar/test.json"),
 			path.join(mockDir, "foo"),
 		);
@@ -425,7 +434,11 @@ test.sequential(
 		});
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "foo/bar/test.json")),
+			() =>
+				readJsonWithTemplate(
+					fs,
+					path.join(mockDir, "foo/bar/test.json"),
+				),
 			{
 				messageMatches: "import specifier cannot start with ~/",
 				errorCode: ZWaveErrorCodes.Config_Invalid,
@@ -454,6 +467,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -487,6 +501,7 @@ test.sequential(
 		});
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -524,7 +539,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
 			},
@@ -545,7 +560,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{},
 		);
 	},
@@ -569,7 +584,7 @@ test.sequential(
 
 		await assertZWaveError(
 			t.expect,
-			() => readJsonWithTemplate(path.join(mockDir, "test.json")),
+			() => readJsonWithTemplate(fs, path.join(mockDir, "test.json")),
 			{
 				errorCode: ZWaveErrorCodes.Config_CircularImport,
 			},
@@ -616,6 +631,7 @@ test.sequential(
 		};
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -661,6 +677,7 @@ test.sequential(
 		};
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -699,6 +716,7 @@ test.sequential(
 		};
 
 		const content = await readJsonWithTemplate(
+			fs,
 			path.join(mockDir, "test.json"),
 		);
 		t.expect(content).toStrictEqual(expected);
@@ -721,6 +739,7 @@ test.sequential(
 			t.expect,
 			() =>
 				readJsonWithTemplate(
+					fs,
 					path.join(mockDir, rootDir, "test.json"),
 					path.join(mockDir, rootDir),
 				),

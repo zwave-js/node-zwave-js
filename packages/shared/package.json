@@ -19,6 +19,11 @@
       "import": "./build/esm/index_safe.js",
       "require": "./build/cjs/index_safe.js"
     },
+    "./bindings": {
+      "@@dev": "./src/bindings.ts",
+      "import": "./build/esm/bindings.js",
+      "require": "./build/cjs/bindings.js"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
@@ -46,7 +51,8 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "alcalzone-shared": "^5.0.0"
+    "alcalzone-shared": "^5.0.0",
+    "pathe": "^1.1.2"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",

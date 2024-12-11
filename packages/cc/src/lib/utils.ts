@@ -1,10 +1,13 @@
-import type { AssociationConfig } from "@zwave-js/config";
+import type { AssociationConfig, GetDeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type ControlsCC,
 	type EndpointId,
 	type GetAllEndpoints,
 	type GetEndpoint,
+	type GetNode,
+	type GetValueDB,
+	type HostIDs,
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	type NodeId,
@@ -19,12 +22,6 @@ import {
 	isLongRangeNodeId,
 	isSensorCC,
 } from "@zwave-js/core/safe";
-import {
-	type GetDeviceConfig,
-	type GetNode,
-	type GetValueDB,
-	type HostIDs,
-} from "@zwave-js/host";
 import {
 	ObjectKeyMap,
 	type ReadonlyObjectKeyMap,

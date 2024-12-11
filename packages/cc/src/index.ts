@@ -26,3 +26,4 @@ export type {
 } from "./lib/Values.js";
 export * from "./lib/_Types.js";
 export { utils };
+export type * from "./lib/traits.js";
