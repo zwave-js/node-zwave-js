@@ -1,3 +1,4 @@
+import { type SendCommand } from "@zwave-js/cc";
 import {
 	type CompatOverrideQueries,
 	type GetDeviceConfig,
@@ -35,7 +36,7 @@ import {
 	getCCName,
 	stripUndefined,
 } from "@zwave-js/core";
-import type { LogNode, SendCommand } from "@zwave-js/host";
+import type { LogNode } from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,

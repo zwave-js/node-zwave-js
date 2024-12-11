@@ -1,11 +1,14 @@
 import { type GetDeviceConfig } from "@zwave-js/config";
 import {
+	type CCId,
 	type FrameType,
 	type GetSupportedCCVersion,
 	type HostIDs,
 	type MaybeNotKnown,
 	type SecurityClass,
 	type SecurityManagers,
+	type SendCommandOptions,
+	type SendCommandReturnType,
 	type ValueID,
 } from "@zwave-js/core";
 
@@ -138,4 +141,12 @@ export interface CCEncodingContext
 		securityClass: SecurityClass,
 		granted: boolean,
 	): void;
+}
+
+/** Allows sending commands to one or more nodes */
+export interface SendCommand {
+	sendCommand<TResponse extends CCId | undefined = undefined>(
+		command: CCId,
+		options?: SendCommandOptions,
+	): Promise<SendCommandReturnType<TResponse>>;
 }
