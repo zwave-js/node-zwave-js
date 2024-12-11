@@ -53,6 +53,7 @@ import {
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
+	type HostIDs,
 	type KeyPair,
 	type LogConfig,
 	type LogNodeOptions,
@@ -109,7 +110,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	HostIDs,
 	NodeSchedulePollOptions,
 	ZWaveHostOptions,
 } from "@zwave-js/host";

@@ -6,6 +6,7 @@ import {
 	type GetAllEndpoints,
 	type GetEndpoint,
 	type GetNode,
+	type HostIDs,
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	type NodeId,
@@ -20,7 +21,7 @@ import {
 	isLongRangeNodeId,
 	isSensorCC,
 } from "@zwave-js/core/safe";
-import { type GetValueDB, type HostIDs } from "@zwave-js/host";
+import { type GetValueDB } from "@zwave-js/host";
 import {
 	ObjectKeyMap,
 	type ReadonlyObjectKeyMap,

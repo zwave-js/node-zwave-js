@@ -6,6 +6,7 @@ import {
 	type GetEndpoint,
 	type GetNode,
 	type GetSupportedCCVersion,
+	type HostIDs,
 	type IsCCSecure,
 	type ListenBehavior,
 	type NodeId,
@@ -17,7 +18,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
-import type { GetValueDB, HostIDs, LogNode } from "./ZWaveHost.js";
+import type { GetValueDB, LogNode } from "./ZWaveHost.js";
 
 export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {}
 

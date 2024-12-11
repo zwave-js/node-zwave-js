@@ -9,6 +9,7 @@ import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type FrameType,
+	type HostIDs,
 	type LogConfig,
 	MPDUHeaderType,
 	type MaybeNotKnown,
@@ -32,7 +33,7 @@ import {
 	securityClassIsS2,
 } from "@zwave-js/core";
 import { sdkVersionGte } from "@zwave-js/core";
-import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
+import { type CCParsingContext } from "@zwave-js/host";
 import {
 	type ZWaveSerialBindingFactory,
 	type ZWaveSerialPortImplementation,
