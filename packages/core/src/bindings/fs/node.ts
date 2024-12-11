@@ -8,6 +8,8 @@ import type {
 	FileSystem,
 } from "@zwave-js/shared/bindings";
 import fsp from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 
 /** An implementation of the FileSystem bindings for Node.js */
 export const fs: FileSystem = {
@@ -67,6 +69,9 @@ export const fs: FileSystem = {
 				write: flags.write,
 			},
 		);
+	},
+	async makeTempDir(prefix: string): Promise<string> {
+		return fsp.mkdtemp(path.join(os.tmpdir(), prefix));
 	},
 };
 

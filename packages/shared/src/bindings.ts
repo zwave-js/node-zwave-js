@@ -107,6 +107,11 @@ export interface ManageDirectory {
 	deleteDir(path: string): Promise<void>;
 }
 
+export interface MakeTempDirectory {
+	/** Create a temporary directory with the given prefix in a suitable location and return its path */
+	makeTempDir(prefix: string): Promise<string>;
+}
+
 export interface OpenFile {
 	/** Opens a file handle */
 	open(path: string, flags: {
@@ -125,5 +130,6 @@ export interface FileSystem
 		CopyFile,
 		OpenFile,
 		ReadFileSystemInfo,
-		ManageDirectory
+		ManageDirectory,
+		MakeTempDirectory
 {}

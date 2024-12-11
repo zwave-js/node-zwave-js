@@ -8,6 +8,7 @@ import {
 import {
 	type CopyFile,
 	type FileHandle,
+	type MakeTempDirectory,
 	type ManageDirectory,
 	type OpenFile,
 	type ReadFileSystemInfo,
@@ -15,8 +16,6 @@ import {
 } from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
-import fsp from "node:fs/promises";
-import os from "node:os";
 import path from "pathe";
 import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
@@ -72,11 +71,16 @@ export async function checkForConfigUpdates(
  * This only works if an external configuation directory is used.
  */
 export async function installConfigUpdate(
-	fs: ManageDirectory & ReadFileSystemInfo & WriteFile & CopyFile & OpenFile,
+	fs:
+		& ManageDirectory
+		& ReadFileSystemInfo
+		& WriteFile
+		& CopyFile
+		& OpenFile
+		& MakeTempDirectory,
 	newVersion: string,
 	external: {
 		configDir: string;
-		cacheDir: string;
 	},
 ): Promise<void> {
 	const { default: ky } = await import("ky");
@@ -104,9 +108,7 @@ export async function installConfigUpdate(
 	// Download tarball to a temporary directory
 	let tmpDir: string;
 	try {
-		tmpDir = await fsp.mkdtemp(
-			path.join(os.tmpdir(), "zjs-config-update-"),
-		);
+		tmpDir = await fs.makeTempDir("zjs-config-update-");
 	} catch (e) {
 		throw new ZWaveError(
 			`Config update failed: Could not create temporary directory. Reason: ${

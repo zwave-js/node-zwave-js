@@ -7465,10 +7465,7 @@ ${handlers.length} left`,
 			await installConfigUpdate(
 				this.bindings.fs,
 				newVersion,
-				{
-					cacheDir: this.cacheDir,
-					configDir: extConfigDir,
-				},
+				{ configDir: extConfigDir },
 			);
 		} catch (e) {
 			this.driverLog.print(getErrorMessage(e), "error");
@@ -7484,10 +7481,7 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				if (node.ready) {
-					await node["loadDeviceConfig"]();
-					// TODO: If the device config did change, expose this information
-				}
+				if (node.ready) await node["loadDeviceConfig"]();
 			}
 		}
 
