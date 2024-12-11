@@ -1,4 +1,4 @@
-import type { DeviceConfig } from "@zwave-js/config";
+import { type GetDeviceConfig } from "@zwave-js/config";
 import type {
 	CCId,
 	ControllerLogger,
@@ -20,11 +20,6 @@ export interface HostIDs {
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
-}
-
-/** Allows querying device configuration for a node */
-export interface GetDeviceConfig {
-	getDeviceConfig(nodeId: number): DeviceConfig | undefined;
 }
 
 /** Additional context needed for deserializing CCs */

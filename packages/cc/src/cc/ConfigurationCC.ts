@@ -1,4 +1,4 @@
-import type { ParamInfoMap } from "@zwave-js/config";
+import type { GetDeviceConfig, ParamInfoMap } from "@zwave-js/config";
 import {
 	CommandClasses,
 	ConfigValueFormat,
@@ -35,7 +35,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

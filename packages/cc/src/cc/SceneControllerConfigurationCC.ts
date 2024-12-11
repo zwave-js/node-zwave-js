@@ -1,3 +1,4 @@
+import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	Duration,
@@ -16,7 +17,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

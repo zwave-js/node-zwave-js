@@ -1,3 +1,4 @@
+import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	type BroadcastCC,
 	type CCAddress,
@@ -39,7 +40,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetDeviceConfig,
 	GetInterviewOptions,
 	GetValueDB,
 	HostIDs,

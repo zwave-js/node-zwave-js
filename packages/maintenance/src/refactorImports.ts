@@ -1,6 +1,39 @@
 import fs from "node:fs/promises";
 import { Project, SyntaxKind } from "ts-morph";
 
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+
+const yargsInstance = yargs(hideBin(process.argv));
+
+const args = yargsInstance
+	.strict()
+	.usage("Import refactor script\n\nUsage: $0 [options]")
+	.alias("h", "help")
+	.alias("v", "version")
+	.wrap(Math.min(100, yargsInstance.terminalWidth()))
+	.options({
+		import: {
+			alias: "i",
+			describe: "The import to move",
+			type: "string",
+			demandOption: true,
+		},
+		module: {
+			alias: "m",
+			describe: "The module specifier to move the import to",
+			type: "string",
+			demandOption: true,
+		},
+		typeOnly: {
+			alias: "t",
+			describe: "Whether the import should be type-only",
+			type: "boolean",
+			default: true,
+		},
+	})
+	.parseSync();
+
 async function main() {
 	const project = new Project({
 		tsConfigFilePath: "packages/zwave-js/tsconfig.json",
@@ -13,59 +46,38 @@ async function main() {
 	for (const file of sourceFiles) {
 		// const filePath = path.relative(process.cwd(), file.getFilePath());
 
-		// Move imports to the correct statements
-		const getSupportedCCVersionImport = file.getImportDeclarations().map(
+		// Move import to the correct statements
+		const importToMove = file.getImportDeclarations().map(
 			(decl) =>
 				decl.getNamedImports().find((imp) =>
-					imp.getName() === "GetSupportedCCVersion"
-				),
-		).find((imp) => !!imp);
-		const getSafeCCVersionImport = file.getImportDeclarations().map(
-			(decl) =>
-				decl.getNamedImports().find((imp) =>
-					imp.getName() === "GetSafeCCVersion"
+					imp.getName() === args.import
 				),
 		).find((imp) => !!imp);
 
-		if (!getSupportedCCVersionImport && !getSafeCCVersionImport) {
+		if (!importToMove) {
 			continue;
 		}
 
 		let targetImport = file.getImportDeclaration((decl) =>
-			decl.getModuleSpecifierValue().startsWith("@zwave-js/core")
+			decl.getModuleSpecifierValue().startsWith(args.module)
 		);
 		if (!targetImport) {
 			targetImport = file.addImportDeclaration({
-				moduleSpecifier: "@zwave-js/core",
+				moduleSpecifier: args.module,
 				namedImports: [],
 			});
 		}
 
-		if (getSupportedCCVersionImport) {
+		if (importToMove) {
 			targetImport.addNamedImport({
-				name: "GetSupportedCCVersion",
-				isTypeOnly: true,
+				name: importToMove.getName(),
+				isTypeOnly: args.typeOnly,
 			});
 
-			const parent = getSupportedCCVersionImport.getFirstAncestorByKind(
+			const parent = importToMove.getFirstAncestorByKind(
 				SyntaxKind.ImportDeclaration,
 			);
-			getSupportedCCVersionImport.remove();
-
-			if (parent?.getNamedImports().length === 0) {
-				parent.remove();
-			}
-		}
-		if (getSafeCCVersionImport) {
-			targetImport.addNamedImport({
-				name: "GetSafeCCVersion",
-				isTypeOnly: true,
-			});
-
-			const parent = getSafeCCVersionImport.getFirstAncestorByKind(
-				SyntaxKind.ImportDeclaration,
-			);
-			getSafeCCVersionImport.remove();
+			importToMove.remove();
 
 			if (parent?.getNamedImports().length === 0) {
 				parent.remove();

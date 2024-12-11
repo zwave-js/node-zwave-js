@@ -1,5 +1,6 @@
 import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
+import { type GetDeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type ControlsCC,
@@ -19,7 +20,7 @@ import {
 	applicationCCs,
 	getCCName,
 } from "@zwave-js/core";
-import type { GetDeviceConfig, GetValueDB, HostIDs } from "@zwave-js/host";
+import type { GetValueDB, HostIDs } from "@zwave-js/host";
 
 function getValue<T>(
 	ctx: GetValueDB,

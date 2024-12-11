@@ -1,4 +1,7 @@
-import { type CompatOverrideQueries } from "@zwave-js/config";
+import {
+	type CompatOverrideQueries,
+	type GetDeviceConfig,
+} from "@zwave-js/config";
 import {
 	CommandClasses,
 	type ControlsCC,
@@ -32,7 +35,6 @@ import {
 } from "@zwave-js/core";
 import type {
 	GetCommunicationTimeouts,
-	GetDeviceConfig,
 	GetUserPreferences,
 	GetValueDB,
 	HostIDs,
