@@ -1316,10 +1316,10 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	/**
-	 * The bindings used to access file system etc.
+	 * The host bindings used to access file system etc.
 	 */
 	// This is set during `start()` and should not be accessed before
-	private bindings!: Required<NonNullable<ZWaveOptions["bindings"]>>;
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -1339,7 +1339,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
 		// on Node.js internals
 		this.bindings = {
-			fs: this._options.bindings?.fs
+			fs: this._options.host?.fs
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
 		};
 

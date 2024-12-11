@@ -126,7 +126,7 @@ export interface ZnifferOptions {
 	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
 
-	bindings?: ZWaveOptions["bindings"];
+	host?: ZWaveOptions["host"];
 
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
@@ -278,10 +278,10 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 	private _options: ZnifferOptions;
 
 	/**
-	 * The bindings used to access file system etc.
+	 * The host bindings used to access file system etc.
 	 */
 	// This is set during `init()` and should not be accessed before
-	private bindings!: Required<NonNullable<ZWaveOptions["bindings"]>>;
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
 
 	private serialFactory: ZnifferSerialStreamFactory | undefined;
 	/** The serial port instance */
@@ -353,7 +353,7 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
 		// on Node.js internals
 		this.bindings = {
-			fs: this._options.bindings?.fs
+			fs: this._options.host?.fs
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
 		};
 
