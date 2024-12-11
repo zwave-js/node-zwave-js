@@ -1,4 +1,5 @@
 import {
+	type GetNode,
 	type GetSupportedCCVersion,
 	type Notification,
 	type NotificationState,
@@ -41,7 +42,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetDeviceConfig,
-	GetNode,
 	GetValueDB,
 	LogNode,
 } from "@zwave-js/host/safe";

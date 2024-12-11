@@ -14,16 +14,15 @@ export interface VirtualNodeId extends VirtualEndpointId {
 	readonly id: number | undefined;
 }
 
-/** Allows accessing a specific endpoint */
-export interface GetEndpoint<T extends EndpointId | VirtualEndpointId> {
-	getEndpoint(index: 0): T;
-	getEndpoint(index: number): T | undefined;
-	getEndpointOrThrow(index: number): T;
+/** Allows accessing a specific node */
+export interface GetNode<T extends NodeId> {
+	getNode(nodeId: number): T | undefined;
+	getNodeOrThrow(nodeId: number): T;
 }
 
-/** Allows accessing all endpoints */
-export interface GetAllEndpoints<T extends EndpointId | VirtualEndpointId> {
-	getAllEndpoints(): T[];
+/** Allows accessing all nodes */
+export interface GetAllNodes<T extends NodeId> {
+	getAllNodes(): T[];
 }
 
 /** Allows querying whether a node is a listening, FLiRS or sleeping device */

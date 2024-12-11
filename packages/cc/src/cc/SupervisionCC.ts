@@ -4,6 +4,7 @@ import {
 	EncapsulationFlags,
 	type EndpointId,
 	type GetEndpoint,
+	type GetNode,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -23,7 +24,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetNode,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

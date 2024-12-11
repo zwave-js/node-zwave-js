@@ -5,6 +5,7 @@ import {
 	type EndpointId,
 	type GetAllEndpoints,
 	type GetEndpoint,
+	type GetNode,
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	type NodeId,
@@ -21,7 +22,6 @@ import {
 } from "@zwave-js/core/safe";
 import {
 	type GetDeviceConfig,
-	type GetNode,
 	type GetValueDB,
 	type HostIDs,
 } from "@zwave-js/host";

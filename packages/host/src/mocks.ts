@@ -1,7 +1,9 @@
 import {
 	type ControlsCC,
 	type EndpointId,
+	type GetAllNodes,
 	type GetEndpoint,
+	type GetNode,
 	type GetSupportedCCVersion,
 	type IsCCSecure,
 	type ListenBehavior,
@@ -15,9 +17,7 @@ import {
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
 import type {
-	GetAllNodes,
 	GetDeviceConfig,
-	GetNode,
 	GetValueDB,
 	HostIDs,
 	LogNode,

@@ -1,6 +1,7 @@
 import {
 	type BasicDeviceClass,
 	type CommandClasses,
+	type GetAllNodes,
 	type ListenBehavior,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -14,7 +15,6 @@ import {
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { GetAllNodes } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	MessageParsingContext,

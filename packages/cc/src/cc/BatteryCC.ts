@@ -1,4 +1,5 @@
 import {
+	type GetNode,
 	type GetSupportedCCVersion,
 	type WithAddress,
 	timespan,
@@ -26,7 +27,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetDeviceConfig,
-	GetNode,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

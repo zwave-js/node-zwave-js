@@ -5,7 +5,6 @@ import type {
 	FrameType,
 	GetSupportedCCVersion,
 	MaybeNotKnown,
-	NodeId,
 	SecurityClass,
 	SecurityManagers,
 	SendCommandOptions,
@@ -82,17 +81,6 @@ export interface GetValueDB {
 
 	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
 	tryGetValueDB(nodeId: number): ValueDB | undefined;
-}
-
-/** Allows accessing a specific node */
-export interface GetNode<T extends NodeId> {
-	getNode(nodeId: number): T | undefined;
-	getNodeOrThrow(nodeId: number): T;
-}
-
-/** Allows accessing all nodes */
-export interface GetAllNodes<T extends NodeId> {
-	getAllNodes(): T[];
 }
 
 /** Allows looking up Z-Wave manufacturers by manufacturer ID */

@@ -1,4 +1,5 @@
 import {
+	type GetNode,
 	type GetSupportedCCVersion,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -13,7 +14,7 @@ import {
 	highResTimestamp,
 } from "@zwave-js/core";
 import { createReflectionDecorator } from "@zwave-js/core/reflection";
-import type { GetDeviceConfig, GetNode, HostIDs } from "@zwave-js/host";
+import type { GetDeviceConfig, HostIDs } from "@zwave-js/host";
 import {
 	Bytes,
 	type JSONObject,

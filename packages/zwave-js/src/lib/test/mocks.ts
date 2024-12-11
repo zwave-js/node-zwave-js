@@ -4,6 +4,7 @@ import {
 	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
+	type GetNode,
 	type InterviewStage,
 	type MaybeNotKnown,
 	MessagePriority,
@@ -17,7 +18,6 @@ import {
 import type {
 	BaseTestEndpoint,
 	BaseTestNode,
-	GetNode,
 	GetValueDB,
 } from "@zwave-js/host";
 import {

@@ -5,6 +5,7 @@ import {
 	type Duration,
 	type EndpointId,
 	type GetEndpoint,
+	type GetNode,
 	type GetSafeCCVersion,
 	type GetSupportedCCVersion,
 	type ListenBehavior,
@@ -32,7 +33,6 @@ import {
 import type {
 	GetCommunicationTimeouts,
 	GetDeviceConfig,
-	GetNode,
 	GetUserPreferences,
 	GetValueDB,
 	HostIDs,

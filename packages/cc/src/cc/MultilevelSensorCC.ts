@@ -1,4 +1,5 @@
 import {
+	type GetNode,
 	type GetSupportedCCVersion,
 	type WithAddress,
 	encodeBitMask,
@@ -35,7 +36,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetDeviceConfig,
-	GetNode,
 	GetUserPreferences,
 	GetValueDB,
 	LogNode,
