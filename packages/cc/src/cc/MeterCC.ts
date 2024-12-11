@@ -1,5 +1,6 @@
 import {
 	type FloatParameters,
+	type GetSupportedCCVersion,
 	type MaybeUnknown,
 	type WithAddress,
 	encodeBitMask,
@@ -35,7 +36,6 @@ import type {
 	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
-	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

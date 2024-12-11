@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	type EndpointId,
+	type GetSupportedCCVersion,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -19,7 +20,6 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
-	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes, isUint8Array, uint8ArrayToString } from "@zwave-js/shared/safe";

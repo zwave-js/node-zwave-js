@@ -5,6 +5,7 @@ import {
 	type ControlsCC,
 	type EndpointId,
 	type GetEndpoint,
+	type GetSupportedCCVersion,
 	type MaybeNotKnown,
 	type NodeId,
 	type SetValueOptions,
@@ -20,7 +21,6 @@ import {
 import type {
 	GetDeviceConfig,
 	GetNode,
-	GetSupportedCCVersion,
 	GetValueDB,
 	HostIDs,
 } from "@zwave-js/host";

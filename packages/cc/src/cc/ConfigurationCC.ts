@@ -6,6 +6,7 @@ import {
 	type ControlsCC,
 	type EndpointId,
 	type GetEndpoint,
+	type GetSupportedCCVersion,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -35,7 +36,6 @@ import type {
 	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
-	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

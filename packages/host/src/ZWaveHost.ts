@@ -1,9 +1,9 @@
 import type { DeviceConfig } from "@zwave-js/config";
 import type {
 	CCId,
-	CommandClasses,
 	ControllerLogger,
 	FrameType,
+	GetSupportedCCVersion,
 	MaybeNotKnown,
 	NodeId,
 	SecurityClass,
@@ -26,31 +26,6 @@ export interface HostIDs {
 /** Allows querying device configuration for a node */
 export interface GetDeviceConfig {
 	getDeviceConfig(nodeId: number): DeviceConfig | undefined;
-}
-
-export interface GetSupportedCCVersion {
-	/**
-	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
-	 * Returns 0 when the CC is not supported or that information is not known yet.
-	 */
-	getSupportedCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number;
-}
-
-export interface GetSafeCCVersion {
-	/**
-	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
-	 * Returns `undefined` for CCs that are not implemented in this library yet.
-	 */
-	getSafeCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number | undefined;
 }
 
 /** Additional context needed for deserializing CCs */

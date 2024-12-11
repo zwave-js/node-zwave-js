@@ -11,10 +11,11 @@ import {
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	type GetSupportedCCVersion,
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
+import { createTestingHost } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import { test } from "vitest";
 import * as nodeUtils from "../../node/utils.js";

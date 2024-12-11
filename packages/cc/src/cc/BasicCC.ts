@@ -4,6 +4,7 @@ import {
 	Duration,
 	type EndpointId,
 	type GetEndpoint,
+	type GetSupportedCCVersion,
 	type MaybeNotKnown,
 	type MaybeUnknown,
 	type MessageOrCCLogEntry,
@@ -24,7 +25,6 @@ import type {
 	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
-	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";

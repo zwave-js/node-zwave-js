@@ -133,3 +133,11 @@ export interface FileSystem
 		ManageDirectory,
 		MakeTempDirectory
 {}
+
+export type Platform = "linux" | "darwin" | "win32" | "browser" | "other";
+
+/** Abstractions for a host system Z-Wave JS is running on */
+export interface Host {
+	fs: FileSystem;
+	platform: Platform;
+}

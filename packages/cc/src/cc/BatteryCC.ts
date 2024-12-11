@@ -1,4 +1,8 @@
-import { type WithAddress, timespan } from "@zwave-js/core";
+import {
+	type GetSupportedCCVersion,
+	type WithAddress,
+	timespan,
+} from "@zwave-js/core";
 import type {
 	ControlsCC,
 	EndpointId,
@@ -23,7 +27,6 @@ import type {
 	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
-	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
