@@ -1,7 +1,7 @@
 import { CommandClasses, type ValueID } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
 import { test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../../Testing.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 import { ZWaveNode } from "../../node/Node.js";

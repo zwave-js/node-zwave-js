@@ -8,7 +8,7 @@ import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { ApplicationCommandRequest } from "@zwave-js/serial/serialapi";
 import { MockController, MockNode } from "@zwave-js/testing";
 import { test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../../Testing.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
