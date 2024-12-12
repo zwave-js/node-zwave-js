@@ -9,8 +9,9 @@ env:
 
 tasks:
   - init: |
-      yarn install
-      yarn build
+      corepack enable
+      yarn
+      yarn bootstrap
     command: |
       bash .gitpod/setup-git.sh
       gp sync-done prepare
