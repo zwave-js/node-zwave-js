@@ -1,5 +1,5 @@
-import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { TypedEventTarget } from "@zwave-js/shared";
+import { type Database } from "@zwave-js/shared/bindings";
 import type { CommandClasses } from "../definitions/CommandClasses.js";
 import {
 	ZWaveError,
@@ -106,8 +106,8 @@ export class ValueDB extends TypedEventTarget<ValueDBEventCallbacks> {
 	 */
 	public constructor(
 		nodeId: number,
-		valueDB: JsonlDB,
-		metadataDB: JsonlDB<ValueMetadata>,
+		valueDB: Database<unknown>,
+		metadataDB: Database<ValueMetadata>,
 		ownKeys?: Set<string>,
 	) {
 		super();
@@ -119,8 +119,8 @@ export class ValueDB extends TypedEventTarget<ValueDBEventCallbacks> {
 	}
 
 	private nodeId: number;
-	private _db: JsonlDB<unknown>;
-	private _metadata: JsonlDB<ValueMetadata>;
+	private _db: Database<unknown>;
+	private _metadata: Database<ValueMetadata>;
 	private _index: Set<string>;
 
 	private buildIndex(): Set<string> {
@@ -603,7 +603,9 @@ function compareDBKeyFast(
 }
 
 /** Extracts an index for each node from one or more JSONL DBs */
-export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
+export function indexDBsByNode(
+	databases: Database<unknown>[],
+): Map<number, Set<string>> {
 	const indexes = new Map<number, Set<string>>();
 	for (const db of databases) {
 		for (const key of db.keys()) {
