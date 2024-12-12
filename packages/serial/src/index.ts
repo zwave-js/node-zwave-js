@@ -13,8 +13,6 @@ export * from "./parsers/ZnifferSerialFrame.js";
 export * from "./plumbing/Faucet.js";
 export type * from "./serialport/Bindings.js";
 export * from "./serialport/LegacyBindingWrapper.js";
-export * from "./serialport/NodeSerialPort.js";
-export * from "./serialport/NodeSocket.js";
 export * from "./serialport/ZWaveSerialPortImplementation.js";
 export * from "./serialport/ZWaveSerialStream.js";
 export * from "./serialport/ZWaveSocketOptions.js";
