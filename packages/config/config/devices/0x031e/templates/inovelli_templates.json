@@ -390,5 +390,15 @@
 				"value": 255
 			}
 		]
+	},
+	"bulk_set_led_effect": {
+		"label": "Bulk Set LED Effect",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 4294967295,
+		"defaultValue": 0,
+		"description": "Set the LED Effect using the sum of each individual effect parameter (color + (brightness * 256) + (duration * 65536) + (effect * 16777216))",
+		"unsigned": true,
+		"lintSkip": ["duplicatedPartials"]
 	}
 }
