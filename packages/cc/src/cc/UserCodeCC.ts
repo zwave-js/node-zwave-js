@@ -1,6 +1,9 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type EndpointId,
+	type GetSupportedCCVersion,
+	type GetValueDB,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -16,12 +19,6 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetSupportedCCVersion,
-	GetValueDB,
-} from "@zwave-js/host/safe";
 import { Bytes, isUint8Array, uint8ArrayToString } from "@zwave-js/shared/safe";
 import {
 	getEnumMemberName,

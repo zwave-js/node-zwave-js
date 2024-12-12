@@ -1,18 +1,23 @@
-import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
+import { type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
 	type CCAPIHost,
+	type CCEncodingContext,
+	type CCParsingContext,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	CommandClass,
 	type FirmwareUpdateResult,
 	type InterviewContext,
+	type InterviewOptions,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
 	NoOperationCC,
 	type PersistValuesContext,
 	type Powerlevel,
+	type RefreshValueTimeouts,
 	type RefreshValuesContext,
+	type SchedulePollOptions,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -35,6 +40,7 @@ import {
 	TransportServiceCCSegmentWait,
 	type TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	type UserPreferences,
 	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
@@ -53,6 +59,7 @@ import {
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
+	type HostIDs,
 	type KeyPair,
 	type LogConfig,
 	type LogNodeOptions,
@@ -90,7 +97,6 @@ import {
 	extractRawECDHPrivateKeySync,
 	generateECDHKeyPairSync,
 	getCCName,
-	highResTimestamp,
 	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
@@ -107,16 +113,10 @@ import {
 	timespan,
 	wasControllerReset,
 } from "@zwave-js/core";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	HostIDs,
-	NodeSchedulePollOptions,
-	ZWaveHostOptions,
-} from "@zwave-js/host";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
+	type EnumeratedPort,
 	FunctionType,
 	type HasNodeId,
 	Message,
@@ -126,15 +126,18 @@ import {
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
+	type ZWaveSerialBindingFactory,
+	ZWaveSerialFrameType,
 	ZWaveSerialMode,
-	ZWaveSerialPort,
-	ZWaveSerialPortBase,
 	type ZWaveSerialPortImplementation,
-	ZWaveSocket,
+	type ZWaveSerialStream,
+	ZWaveSerialStreamFactory,
 	getDefaultPriority,
 	hasNodeId,
 	isSuccessIndicator,
+	isZWaveSerialBindingFactory,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
@@ -162,6 +165,17 @@ import {
 	isTransmitReport,
 } from "@zwave-js/serial/serialapi";
 import {
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+} from "@zwave-js/serial/serialapi";
+import {
+	type CommandRequest,
+	type ContainsCC,
+	containsCC,
+	containsSerializedCC,
+	isCommandRequest,
+} from "@zwave-js/serial/serialapi";
+import {
 	AsyncQueue,
 	Bytes,
 	type ThrowingMap,
@@ -171,13 +185,18 @@ import {
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
+	isAbortError,
 	isUint8Array,
 	mergeDeep,
 	noop,
 	num2hex,
-	pathExists,
 	pick,
 } from "@zwave-js/shared";
+import {
+	type Database,
+	type ReadFile,
+	type ReadFileSystemInfo,
+} from "@zwave-js/shared/bindings";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -185,13 +204,9 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
-import { URL } from "node:url";
 import * as util from "node:util";
-import { SerialPort } from "serialport";
-import { InterpreterStatus, interpret } from "xstate";
+import path from "pathe";
+import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
 import { DriverLogger } from "../log/Driver.js";
@@ -204,23 +219,10 @@ import {
 	type ZWaveNotificationCallback,
 	zWaveNodeEvents,
 } from "../node/_Types.js";
-
-import {
-	SendTestFrameRequest,
-	SendTestFrameTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	type CommandRequest,
-	type ContainsCC,
-	containsCC,
-	containsSerializedCC,
-	isCommandRequest,
-} from "@zwave-js/serial/serialapi";
-import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { type ZWaveNodeBase } from "../node/mixins/00_Base.js";
 import { type NodeWakeup } from "../node/mixins/30_Wakeup.js";
 import { type NodeValues } from "../node/mixins/40_Values.js";
-import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll.js";
+import { type NodeSchedulePoll } from "../node/mixins/60_ScheduledPoll.js";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig.js";
 import {
 	type AppInfo,
@@ -237,8 +239,7 @@ import {
 } from "./NetworkCache.js";
 import { type SerialAPIQueueItem, TransactionQueue } from "./Queue.js";
 import {
-	type SerialAPICommandDoneData,
-	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineInput,
 	createSerialAPICommandMachine,
 } from "./SerialAPICommandMachine.js";
 import {
@@ -251,7 +252,8 @@ import { TaskScheduler } from "./Task.js";
 import { throttlePresets } from "./ThrottlePresets.js";
 import { Transaction } from "./Transaction.js";
 import {
-	type TransportServiceRXInterpreter,
+	type TransportServiceRXMachine,
+	type TransportServiceRXMachineInput,
 	createTransportServiceRXMachine,
 } from "./TransportServiceMachine.js";
 import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig.js";
@@ -314,20 +316,6 @@ const defaultOptions: ZWaveOptions = {
 		queryAllUserCodes: false,
 	},
 	storage: {
-		driver: {
-			async ensureDir(path) {
-				await fs.mkdir(path, { recursive: true });
-			},
-			pathExists(path) {
-				return pathExists(path);
-			},
-			readFile(file, encoding) {
-				return fs.readFile(file, { encoding });
-			},
-			writeFile(file, data, options) {
-				return fs.writeFile(file, data, options);
-			},
-		},
 		cacheDir: path.join(process.cwd(), "cache"),
 		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
 		throttle: "normal",
@@ -562,7 +550,8 @@ export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
 	fragmentSize: number;
-	interpreter: TransportServiceRXInterpreter;
+	machine: TransportServiceRXMachine;
+	timeout?: NodeJS.Timeout;
 }
 
 interface Sessions {
@@ -615,6 +604,40 @@ function assertValidCCs(container: ContainsCC): void {
 	}
 }
 
+function wrapLegacyFSDriverForCacheMigrationOnly(
+	legacy: import("@zwave-js/core/traits").FileSystem,
+): ReadFileSystemInfo & ReadFile {
+	// This usage only needs readFile and checking if a file exists
+	// Every other usage will throw!
+	return {
+		async readFile(path) {
+			const text = await legacy.readFile(path, "utf8");
+			return Bytes.from(text, "utf8");
+		},
+		async stat(path) {
+			if (await legacy.pathExists(path)) {
+				return {
+					isDirectory() {
+						return false;
+					},
+					isFile() {
+						return true;
+					},
+					mtime: new Date(),
+					size: 0,
+				};
+			} else {
+				throw new Error("File not found");
+			}
+		},
+		readDir(_path) {
+			return Promise.reject(
+				new Error("Not implemented for the legacy FS driver"),
+			);
+		},
+	};
+}
+
 // Strongly type the event emitter events
 export interface DriverEventCallbacks extends PrefixedNodeEvents {
 	"driver ready": () => void;
@@ -639,7 +662,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		PersistValuesContext
 {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
@@ -648,6 +675,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (
 			typeof port !== "string"
 			&& !isZWaveSerialPortImplementation(port)
+			&& !isZWaveSerialBindingFactory(port)
 		) {
 			throw new ZWaveError(
 				`The port must be a string or a valid custom serial port implementation!`,
@@ -753,8 +781,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._scheduler = new TaskScheduler();
 	}
 
+	private serialFactory: ZWaveSerialStreamFactory | undefined;
 	/** The serial port instance */
-	private serial: ZWaveSerialPortBase | undefined;
+	private serial: ZWaveSerialStream | undefined;
 
 	private messageEncodingContext: Omit<
 		MessageEncodingContext,
@@ -811,8 +840,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	private queuePaused = false;
-	/** The interpreter for the currently active Serial API command */
-	private serialAPIInterpreter: SerialAPICommandInterpreter | undefined;
+	/** Used to immediately abort ongoing Serial API commands */
+	private abortSerialAPICommand: DeferredPromise<Error> | undefined;
 
 	// Keep track of which queues are currently busy
 	private _queuesBusyFlags = 0;
@@ -866,19 +895,19 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 	public readonly cacheDir: string;
 
-	private _valueDB: JsonlDB | undefined;
+	private _valueDB: Database<unknown> | undefined;
 	/** @internal */
-	public get valueDB(): JsonlDB | undefined {
+	public get valueDB(): Database<unknown> | undefined {
 		return this._valueDB;
 	}
-	private _metadataDB: JsonlDB<ValueMetadata> | undefined;
+	private _metadataDB: Database<ValueMetadata> | undefined;
 	/** @internal */
-	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
+	public get metadataDB(): Database<ValueMetadata> | undefined {
 		return this._metadataDB;
 	}
-	private _networkCache: JsonlDB<any> | undefined;
+	private _networkCache: Database<any> | undefined;
 	/** @internal */
-	public get networkCache(): JsonlDB<any> {
+	public get networkCache(): Database<any> {
 		if (this._networkCache == undefined) {
 			throw new ZWaveError(
 				"The network cache was not yet initialized!",
@@ -1155,7 +1184,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getUserPreferences(): ZWaveHostOptions["preferences"] {
+	public getUserPreferences(): UserPreferences {
 		return this._options.preferences;
 	}
 
@@ -1164,7 +1193,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getInterviewOptions(): ZWaveHostOptions["interview"] {
+	public getInterviewOptions(): InterviewOptions {
 		return this._options.interview;
 	}
 
@@ -1173,8 +1202,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 *
 	 * Not intended to be used by applications
 	 */
-	public getCommunicationTimeouts(): ZWaveHostOptions["timeouts"] {
-		return this._options.timeouts;
+	public getRefreshValueTimeouts(): RefreshValueTimeouts {
+		return {
+			refreshValue: this._options.timeouts.refreshValue,
+			refreshValueAfterTransition:
+				this._options.timeouts.refreshValueAfterTransition,
+		};
 	}
 
 	/**
@@ -1189,43 +1222,38 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		local?: boolean;
 		remote?: boolean;
 	} = {}): Promise<string[]> {
-		const symlinkedPorts: string[] = [];
-		const localPorts: string[] = [];
-		const remotePorts: string[] = [];
-		if (local) {
-			// Put symlinks to the serial ports first if possible
-			if (os.platform() === "linux") {
-				const dir = "/dev/serial/by-id";
-				const symlinks = await fs.readdir(dir).catch(() => []);
+		const ret: (EnumeratedPort & { path: string })[] = [];
 
-				for (const l of symlinks) {
-					try {
-						const fullPath = path.join(dir, l);
-						const target = path.join(
-							dir,
-							await fs.readlink(fullPath),
-						);
-						if (!target.startsWith("/dev/tty")) continue;
+		// Ideally we'd use the host bindings used by the driver, but we can't access them in a static method
 
-						symlinkedPorts.push(fullPath);
-					} catch {
-						// Ignore. The target might not exist or we might not have access.
-					}
-				}
+		const bindings =
+			(await import("@zwave-js/serial/bindings/node")).serial;
+		if (local && typeof bindings.list === "function") {
+			for (const port of await bindings.list()) {
+				if (port.type === "custom") continue;
+				ret.push(port);
 			}
-
-			// Then the actual serial ports
-			const ports = await SerialPort.list();
-			localPorts.push(...ports.map((port) => port.path));
 		}
 		if (remote) {
 			const ports = await discoverRemoteSerialPorts();
 			if (ports) {
-				remotePorts.push(...ports.map((p) => p.port));
+				ret.push(...ports.map((p) => ({
+					type: "socket" as const,
+					path: p.port,
+				})));
 			}
 		}
 
-		return distinct([...symlinkedPorts, ...remotePorts, ...localPorts]);
+		const portOrder: EnumeratedPort["type"][] = ["link", "socket", "tty"];
+
+		ret.sort((a, b) => {
+			const typeA = portOrder.indexOf(a.type);
+			const typeB = portOrder.indexOf(b.type);
+			if (typeA !== typeB) return typeA - typeB;
+			return a.path.localeCompare(b.path);
+		});
+
+		return distinct(ret.map((p) => p.path));
 	}
 
 	/** Updates a subset of the driver options on the fly */
@@ -1277,6 +1305,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return this._options;
 	}
 
+	/**
+	 * The host bindings used to access file system etc.
+	 */
+	// This is set during `start()` and should not be accessed before
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
+
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
 
@@ -1292,6 +1326,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
+		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
+		// on Node.js internals
+		this.bindings = {
+			fs: this._options.host?.fs
+				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
+			db: this._options.host?.db
+				?? (await import("@zwave-js/core/bindings/db/jsonl")).db,
+		};
+
 		const spOpenPromise = createDeferredPromise();
 
 		// Log which version is running
@@ -1302,52 +1347,44 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.driverLog.print("starting driver...");
 
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
 				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
+				binding = await this.bindings.serial.createFactoryByPath(
+					this.port,
 				);
 			} else {
-				this.driverLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZWaveSerialPort(
-					this.port,
-					this._logContainer,
-					this._options.testingHooks?.serialPortBinding,
+				spOpenPromise.reject(
+					new ZWaveError(
+						"This platform does not support creating a serial connection by path",
+						ZWaveErrorCodes.Driver_Failed,
+					),
 				);
+				void this.destroy();
+				return;
 			}
-		} else {
+		} else if (isZWaveSerialPortImplementation(this.port)) {
 			this.driverLog.print(
 				"opening serial port using the provided custom implementation",
 			);
-			this.serial = new ZWaveSerialPortBase(
-				this.port,
-				this._logContainer,
+			this.driverLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
 			);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.driverLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("bootloaderData", this.serialport_onBootloaderData.bind(this))
-			.on("error", (err) => {
-				if (this.isSoftResetting && !this.serial?.isOpen) {
-					// A disconnection while soft resetting is to be expected
-					return;
-				} else if (!this._isOpen) {
-					// tryOpenSerialport takes care of error handling
-					return;
-				}
-
-				void this.destroyWithMessage(
-					`Serial port errored: ${err.message}`,
-				);
-			});
-		// If the port is already open, close it first
-		if (this.serial.isOpen) await this.serial.close();
+		this.serialFactory = new ZWaveSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (including opening the serial port) must happen in the setImmediate callback
@@ -1426,7 +1463,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
-				await this._options.storage.driver.ensureDir(this.cacheDir);
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
+				if (this._options.storage.driver) {
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
+					await this._options.storage.driver.ensureDir(this.cacheDir);
+				} else {
+					await this.bindings.fs.ensureDir(this.cacheDir);
+				}
 			} catch (e) {
 				let message: string;
 				if (
@@ -1506,7 +1549,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			attempt++
 		) {
 			try {
-				await this.serial!.open();
+				this.serial = await this.serialFactory!.createStream();
+				// Start reading from the serial port
+				void this.handleSerialData(this.serial);
 				return;
 			} catch (e) {
 				lastError = e;
@@ -1551,7 +1596,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.jsonl`,
 		);
-		this._networkCache = new JsonlDB(networkCacheFile, {
+		this._networkCache = this.bindings.db.createInstance(networkCacheFile, {
 			...options,
 			serializer: serializeNetworkCacheValue,
 			reviver: deserializeNetworkCacheValue,
@@ -1572,11 +1617,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.values.jsonl`,
 		);
-		this._valueDB = new JsonlDB(valueDBFile, {
+		this._valueDB = this.bindings.db.createInstance(valueDBFile, {
 			...options,
 			enableTimestamps: true,
-			reviver: (key, value) => deserializeCacheValue(value),
-			serializer: (key, value) => serializeCacheValue(value),
+			reviver: (_key, value) => deserializeCacheValue(value),
+			serializer: (_key, value) => serializeCacheValue(value),
 		});
 		await this._valueDB.open();
 
@@ -1584,7 +1629,10 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.metadata.jsonl`,
 		);
-		this._metadataDB = new JsonlDB(metadataDBFile, options);
+		this._metadataDB = this.bindings.db.createInstance(
+			metadataDBFile,
+			options,
+		);
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {
@@ -1616,7 +1664,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
-					this._options.storage.driver,
+					// eslint-disable-next-line @typescript-eslint/no-deprecated
+					this._options.storage.driver
+						? wrapLegacyFSDriverForCacheMigrationOnly(
+							// eslint-disable-next-line @typescript-eslint/no-deprecated
+							this._options.storage.driver,
+						)
+						: this.bindings.fs,
 					this.cacheDir,
 				);
 
@@ -2820,7 +2874,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	};
 
 	/** Checks if there are any pending messages for the given node */
-	private hasPendingMessages(node: ZWaveNodeBase & SchedulePoll): boolean {
+	private hasPendingMessages(
+		node: ZWaveNodeBase & NodeSchedulePoll,
+	): boolean {
 		// First check if there are messages in the queue
 		if (
 			this.hasPendingTransactions(
@@ -2976,7 +3032,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	public schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
-		options: NodeSchedulePollOptions,
+		options: SchedulePollOptions,
 	): boolean {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.schedulePoll(valueId, options);
@@ -3413,12 +3469,9 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		for (const queue of this.queues) {
 			queue.abort();
 		}
-		if (this.serialAPIInterpreter?.status === InterpreterStatus.Running) {
-			this.serialAPIInterpreter.stop();
-		}
+
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
@@ -3484,6 +3537,36 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this._destroyPromise.resolve();
 	}
 
+	private async handleSerialData(serial: ZWaveSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				setImmediate(() => {
+					if (frame.type === ZWaveSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
+						void this.serialport_onBootloaderData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				// A disconnection while soft resetting is to be expected.
+				// The soft reset method will handle reopening
+				if (this.isSoftResetting) return;
+
+				void this.destroyWithMessage(e.message);
+				return;
+			}
+			throw e;
+		}
+	}
+
 	/**
 	 * Is called when the serial port has received a single-byte message or a complete message buffer
 	 */
@@ -3496,36 +3579,49 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	): Promise<void> {
 		if (typeof data === "number") {
 			switch (data) {
-				// single-byte messages - just forward them to the send thread
-				case MessageHeaders.ACK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("ACK");
-					}
-					return;
-				}
-				case MessageHeaders.NAK: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("NAK");
-					}
-					this._controller?.incrementStatistics("NAK");
-					return;
-				}
+				case MessageHeaders.ACK:
+				case MessageHeaders.NAK:
 				case MessageHeaders.CAN: {
-					if (
-						this.serialAPIInterpreter?.status
-							=== InterpreterStatus.Running
-					) {
-						this.serialAPIInterpreter.send("CAN");
+					// check if someone is waiting for this
+					for (const entry of this.awaitedMessageHeaders) {
+						if (entry.predicate(data)) {
+							entry.handler(data);
+							break;
+						}
 					}
-					this._controller?.incrementStatistics("CAN");
 					return;
 				}
+
+					// // single-byte messages - just forward them to the send thread
+					// case MessageHeaders.ACK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("ACK");
+					// 	}
+					// 	return;
+					// }
+					// case MessageHeaders.NAK: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("NAK");
+					// 	}
+					// 	this._controller?.incrementStatistics("NAK");
+					// 	return;
+					// }
+					// case MessageHeaders.CAN: {
+					// 	if (
+					// 		this.serialAPIInterpreter?.status
+					// 			=== InterpreterStatus.Running
+					// 	) {
+					// 		this.serialAPIInterpreter.send("CAN");
+					// 	}
+					// 	this._controller?.incrementStatistics("CAN");
+					// 	return;
+					// }
 			}
 		}
 
@@ -3747,17 +3843,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				}
 			}
 
-			// Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
-			if (
-				this.serialAPIInterpreter?.status === InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send({
-					type: "message",
-					message: msg,
-				});
-			} else {
-				void this.handleUnsolicitedMessage(msg);
-			}
+			// // Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
+			// if (
+			// 	this.serialAPIInterpreter?.status === InterpreterStatus.Running
+			// ) {
+			// 	this.serialAPIInterpreter.send({
+			// 		type: "message",
+			// 		message: msg,
+			// 	});
+			// } else {
+			void this.handleUnsolicitedMessage(msg);
+			// }
 		}
 	}
 
@@ -4571,18 +4667,103 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			| TransportServiceCCSubsequentSegment,
 	): Promise<void> {
 		const nodeSessions = this.ensureNodeSessions(command.nodeId);
-		// If this command belongs to an existing session, just forward it to the state machine
-		const transportSession = nodeSessions.transportService.get(
-			command.sessionId,
-		);
+
+		// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
+		const missingSegmentTimeout =
+			TransportServiceTimeouts.requestMissingSegmentR2;
+
+		const advanceTransportServiceSession = async (
+			session: TransportServiceSession,
+			input: TransportServiceRXMachineInput,
+		): Promise<void> => {
+			const machine = session.machine;
+
+			// Figure out what needs to be done for this input
+			const transition = machine.next(input);
+			if (transition) {
+				machine.transition(transition.newState);
+
+				if (machine.state.value === "receive") {
+					// We received a segment in the normal flow. Restart the timer
+					startMissingSegmentTimeout(session);
+				} else if (machine.state.value === "requestMissing") {
+					// A segment is missing. Request it and restart the timeout
+					this.controllerLog.logNode(command.nodeId, {
+						message:
+							`Transport Service RX session #${command.sessionId}: Segment with offset ${machine.state.offset} missing - requesting it...`,
+						level: "debug",
+						direction: "outbound",
+					});
+					const cc = new TransportServiceCCSegmentRequest({
+						nodeId: command.nodeId,
+						sessionId: command.sessionId,
+						datagramOffset: machine.state.offset,
+					});
+					await this.sendCommand(cc, {
+						maxSendAttempts: 1,
+						priority: MessagePriority.Immediate,
+					});
+
+					startMissingSegmentTimeout(session);
+				} else if (machine.state.value === "failure") {
+					this.controllerLog.logNode(command.nodeId, {
+						message:
+							`Transport Service RX session #${command.sessionId} failed`,
+						level: "error",
+						direction: "none",
+					});
+					// TODO: Update statistics
+					nodeSessions.transportService.delete(command.sessionId);
+					if (session.timeout) {
+						clearTimeout(session.timeout);
+					}
+				}
+			}
+
+			if (machine.state.value === "success") {
+				// This state may happen without a transition if we received the last segment before
+				// but the SegmentComplete message got lost
+				this.controllerLog.logNode(command.nodeId, {
+					message:
+						`Transport Service RX session #${command.sessionId} complete`,
+					level: "debug",
+					direction: "inbound",
+				});
+				if (session.timeout) {
+					clearTimeout(session.timeout);
+				}
+
+				const cc = new TransportServiceCCSegmentComplete({
+					nodeId: command.nodeId,
+					sessionId: command.sessionId,
+				});
+				await this.sendCommand(cc, {
+					maxSendAttempts: 1,
+					priority: MessagePriority.Immediate,
+				}).catch(noop);
+			}
+		};
+
+		function startMissingSegmentTimeout(
+			session: TransportServiceSession,
+		): void {
+			if (session.timeout) {
+				clearTimeout(session.timeout);
+			}
+
+			session.timeout = setTimeout(() => {
+				session.timeout = undefined;
+				void advanceTransportServiceSession(session, {
+					value: "timeout",
+				});
+			}, missingSegmentTimeout);
+		}
+
 		if (command instanceof TransportServiceCCFirstSegment) {
 			// This is the first message in a sequence. Create or re-initialize the session
 			// We don't delete finished sessions when the last message is received in order to be able to
 			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
 			// we do know that the previous one is finished.
-			if (transportSession) {
-				transportSession.interpreter.stop();
-			}
 			nodeSessions.transportService.clear();
 
 			this.controllerLog.logNode(command.nodeId, {
@@ -4592,75 +4773,27 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				direction: "inbound",
 			});
 
-			const RXStateMachine = createTransportServiceRXMachine(
-				{
-					requestMissingSegment: async (offset: number) => {
-						this.controllerLog.logNode(command.nodeId, {
-							message:
-								`Transport Service RX session #${command.sessionId}: Segment with offset ${offset} missing - requesting it...`,
-							level: "debug",
-							direction: "outbound",
-						});
-						const cc = new TransportServiceCCSegmentRequest({
-							nodeId: command.nodeId,
-							sessionId: command.sessionId,
-							datagramOffset: offset,
-						});
-						await this.sendCommand(cc, {
-							maxSendAttempts: 1,
-							priority: MessagePriority.Immediate,
-						});
-					},
-					sendSegmentsComplete: async () => {
-						this.controllerLog.logNode(command.nodeId, {
-							message:
-								`Transport Service RX session #${command.sessionId} complete`,
-							level: "debug",
-							direction: "outbound",
-						});
-						const cc = new TransportServiceCCSegmentComplete({
-							nodeId: command.nodeId,
-							sessionId: command.sessionId,
-						});
-						await this.sendCommand(cc, {
-							maxSendAttempts: 1,
-							priority: MessagePriority.Immediate,
-						});
-					},
-				},
-				{
-					// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
-					missingSegmentTimeout:
-						TransportServiceTimeouts.requestMissingSegmentR2,
-					datagramSize: command.datagramSize,
-					firstSegmentSize: command.partialDatagram.length,
-				},
+			const machine = createTransportServiceRXMachine(
+				command.datagramSize,
+				command.partialDatagram.length,
 			);
 
-			const interpreter = interpret(RXStateMachine).start();
-			nodeSessions.transportService.set(command.sessionId, {
+			const session: TransportServiceSession = {
 				fragmentSize: command.partialDatagram.length,
-				interpreter,
-			});
+				machine,
+			};
+			nodeSessions.transportService.set(command.sessionId, session);
 
-			interpreter.onTransition((state) => {
-				if (state.changed && state.value === "failure") {
-					this.controllerLog.logNode(command.nodeId, {
-						message:
-							`Transport Service RX session #${command.sessionId} failed`,
-						level: "error",
-						direction: "none",
-					});
-					// TODO: Update statistics
-					interpreter.stop();
-					nodeSessions.transportService.delete(command.sessionId);
-				}
-			});
+			// Time out waiting for subsequent segments
+			startMissingSegmentTimeout(session);
 		} else {
-			// This is a subsequent message in a sequence. Just forward it to the state machine if there is one
+			// This is a subsequent message in a sequence. Continue executing the state machine
+			const transportSession = nodeSessions.transportService.get(
+				command.sessionId,
+			);
 			if (transportSession) {
-				transportSession.interpreter.send({
-					type: "segment",
+				await advanceTransportServiceSession(transportSession, {
+					value: "segment",
 					offset: command.datagramOffset,
 					length: command.partialDatagram.length,
 				});
@@ -4683,26 +4816,26 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
-		if (msg.type === MessageType.Request) {
-			// This is a request we might have registered handlers for
-			try {
+		// FIXME: Rename this - msg might not be unsolicited
+		// This is a message we might have registered handlers for
+		try {
+			if (msg.type === MessageType.Request) {
 				await this.handleRequest(msg);
-			} catch (e) {
-				if (
-					isZWaveError(e)
-					&& e.code === ZWaveErrorCodes.Driver_NotReady
-				) {
-					this.driverLog.print(
-						`Cannot handle message because the driver is not ready to handle it yet.`,
-						"warn",
-					);
-				} else {
-					throw e;
-				}
+			} else {
+				await this.handleResponse(msg);
 			}
-		} else {
-			this.driverLog.transactionResponse(msg, undefined, "unexpected");
-			this.driverLog.print("unexpected response, discarding...", "warn");
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				this.driverLog.print(
+					`Cannot handle message because the driver is not ready to handle it yet.`,
+					"warn",
+				);
+			} else {
+				throw e;
+			}
 		}
 	}
 
@@ -4730,19 +4863,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				);
 
 				// In this situation, we may be executing a Serial API command, which will never complete.
-				// Bail out of it, without rejecting the actual transaction
-				if (
-					this.serialAPIInterpreter?.status
-						=== InterpreterStatus.Running
-				) {
-					this.serialAPIInterpreter.stop();
-				}
-				if (this._currentSerialAPICommandPromise) {
+				// Abort it, so it can be retried
+				if (this.abortSerialAPICommand) {
 					this.controllerLog.print(
 						`Currently active command will be retried...`,
 						"warn",
 					);
-					this._currentSerialAPICommandPromise.reject(
+					this.abortSerialAPICommand.reject(
 						new ZWaveError(
 							"The Serial API restarted unexpectedly",
 							ZWaveErrorCodes.Controller_Reset,
@@ -5020,6 +5147,25 @@ ${handlers.length} left`,
 		}
 
 		return false;
+	}
+
+	/**
+	 * Is called when a Response-type message was received
+	 */
+	private handleResponse(msg: Message): Promise<void> {
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// We do
+				entry.handler(msg);
+				return Promise.resolve();
+			}
+		}
+
+		this.driverLog.transactionResponse(msg, undefined, "unexpected");
+		this.driverLog.print("unexpected response, discarding...", "warn");
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -5849,72 +5995,6 @@ ${handlers.length} left`,
 			msg.callbackId = this.getNextCallbackId();
 		}
 
-		const machine = createSerialAPICommandMachine(
-			msg,
-			await msg.serializeAsync(this.getEncodingContext()),
-			{
-				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(),
-				notifyUnsolicited: (msg) => {
-					void this.handleUnsolicitedMessage(msg);
-				},
-				notifyRetry: (
-					lastError,
-					message,
-					attempts,
-					maxAttempts,
-					delay,
-				) => {
-					// Translate the error into a better one
-					let errorReason: string;
-					switch (lastError) {
-						case "response timeout":
-							errorReason = "No response from controller";
-							this._controller?.incrementStatistics(
-								"timeoutResponse",
-							);
-							break;
-						case "callback timeout":
-							errorReason = "No callback from controller";
-							this._controller?.incrementStatistics(
-								"timeoutCallback",
-							);
-							break;
-						case "response NOK":
-							errorReason =
-								"The controller response indicated failure";
-							break;
-						case "callback NOK":
-							errorReason =
-								"The controller callback indicated failure";
-							break;
-						case "ACK timeout":
-							this._controller?.incrementStatistics("timeoutACK");
-						// fall through
-						case "CAN":
-						case "NAK":
-						default:
-							errorReason =
-								"Failed to execute controller command";
-							break;
-					}
-					this.controllerLog.print(
-						`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				},
-				timestamp: highResTimestamp,
-				logOutgoingMessage: (msg: Message) => {
-					this.driverLog.logMessage(msg, {
-						direction: "outbound",
-					});
-				},
-			},
-			pick(this._options, ["timeouts", "attempts"]),
-		);
-
-		const result = createDeferredPromise<Message | undefined>();
-
 		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
 		// This was broken in 7.19, not fixed so far
 		if (
@@ -5924,46 +6004,190 @@ ${handlers.length} left`,
 			this.serial?.ignoreAckHighNibbleOnce();
 		}
 
-		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
-			this.serialAPIInterpreter?.stop();
-			this.serialAPIInterpreter = undefined;
+		const machine = createSerialAPICommandMachine(msg);
+		this.abortSerialAPICommand = createDeferredPromise();
+		const abortController = new AbortController();
 
-			const cmdResult = evt.data as SerialAPICommandDoneData;
-			if (cmdResult.type === "success") {
-				result.resolve(cmdResult.result);
-			} else if (
-				cmdResult.reason === "callback NOK"
-				&& (isSendData(msg) || isTransmitReport(cmdResult.result))
-			) {
-				// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
-				// ... so we treat it as a result
-				result.resolve(cmdResult.result);
-			} else {
-				// Convert to a Z-Wave error
-				result.reject(
-					serialAPICommandErrorToZWaveError(
-						cmdResult.reason,
-						msg,
-						cmdResult.result,
-						transactionSource,
-					),
-				);
+		let nextInput: SerialAPICommandMachineInput | undefined = {
+			value: "start",
+		};
+
+		try {
+			while (!machine.done) {
+				if (nextInput == undefined) {
+					// We should not be in a situation where we have no input for the state machine
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no input provided",
+					);
+				}
+				const transition = machine.next(nextInput);
+				if (transition == undefined) {
+					// We should not be in a situation where the state machine does not transition
+					throw new Error(
+						"Serial API Command machine is in an invalid state: no transition taken",
+					);
+				}
+
+				// The input was used
+				nextInput = undefined;
+
+				// Transition to the new state
+				machine.transition(transition.newState);
+
+				// Now check what needs to be done in the new state
+				switch (machine.state.value) {
+					case "initial":
+						// This should never happen
+						throw new Error(
+							"Serial API Command machine is in an invalid state: transitioned to initial state",
+						);
+
+					case "sending": {
+						this.driverLog.logMessage(msg, {
+							direction: "outbound",
+						});
+
+						// Mark the message as sent immediately before actually sending
+						msg.markAsSent();
+						const data = await msg.serializeAsync(
+							this.getEncodingContext(),
+						);
+						await this.writeSerial(data);
+						nextInput = { value: "message sent" };
+						break;
+					}
+
+					case "waitingForACK": {
+						const controlFlow = await this.waitForMessageHeader(
+							() => true,
+							this.options.timeouts.ack,
+						).catch(() => "timeout" as const);
+
+						if (controlFlow === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (controlFlow === MessageHeaders.ACK) {
+							nextInput = { value: "ACK" };
+						} else if (controlFlow === MessageHeaders.CAN) {
+							nextInput = { value: "CAN" };
+						} else if (controlFlow === MessageHeaders.NAK) {
+							nextInput = { value: "NAK" };
+						}
+
+						break;
+					}
+
+					case "waitingForResponse": {
+						const response = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedResponse(resp),
+								msg.getResponseTimeout()
+									?? this.options.timeouts.response,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (response instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw response;
+						}
+
+						if (response === "timeout") {
+							if (isSendData(msg)) {
+								// Timed out SendData commands must be aborted
+								void this.abortSendData();
+							}
+
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(response) && !response.isOK()
+						) {
+							nextInput = { value: "response NOK", response };
+						} else {
+							nextInput = { value: "response", response };
+						}
+
+						break;
+					}
+
+					case "waitingForCallback": {
+						let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+						if (isSendData(msg)) {
+							// We abort timed out SendData commands before the callback times out
+							sendDataAbortTimeout = setTimeout(() => {
+								void this.abortSendData();
+							}, this.options.timeouts.sendDataAbort).unref();
+						}
+
+						const callback = await Promise.race([
+							this.abortSerialAPICommand?.catch((e) =>
+								e as Error
+							),
+							this.waitForMessage(
+								(resp) => msg.isExpectedCallback(resp),
+								msg.getCallbackTimeout()
+									?? this.options.timeouts.sendDataCallback,
+								undefined,
+								abortController.signal,
+							).catch(() => "timeout" as const),
+						]);
+
+						if (sendDataAbortTimeout) {
+							clearTimeout(sendDataAbortTimeout);
+						}
+
+						if (callback instanceof Error) {
+							// The command was aborted from the outside
+							// Remove the pending wait entry
+							abortController.abort();
+							throw callback;
+						}
+
+						if (callback === "timeout") {
+							nextInput = { value: "timeout" };
+						} else if (
+							isSuccessIndicator(callback) && !callback.isOK()
+						) {
+							nextInput = { value: "callback NOK", callback };
+						} else {
+							nextInput = { value: "callback", callback };
+						}
+
+						break;
+					}
+
+					case "success": {
+						return machine.state.result;
+					}
+
+					case "failure": {
+						const { reason, result } = machine.state;
+						if (
+							reason === "callback NOK"
+							&& (isSendData(msg) || isTransmitReport(result))
+						) {
+							// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
+							// ... so we treat it as a result
+							return result;
+						} else {
+							throw serialAPICommandErrorToZWaveError(
+								reason,
+								msg,
+								result,
+								transactionSource,
+							);
+						}
+					}
+				}
 			}
-		});
-
-		// Uncomment this for debugging state machine transitions
-		// this.serialAPIInterpreter.onTransition((state) => {
-		// 	if (state.changed) {
-		// 		this.driverLog.print(
-		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
-		// 		);
-		// 	}
-		// });
-
-		this.serialAPIInterpreter.start();
-
-		this._currentSerialAPICommandPromise = result;
-		return result;
+		} finally {
+			this.abortSerialAPICommand = undefined;
+		}
 	}
 
 	private getQueueForTransaction(t: Transaction): TransactionQueue {
@@ -6497,6 +6721,7 @@ ${handlers.length} left`,
 		predicate: (msg: Message) => boolean,
 		timeout: number,
 		refreshPredicate?: (msg: Message) => boolean,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<Message>();
@@ -6527,6 +6752,10 @@ ${handlers.length} left`,
 				removeEntry();
 				resolve(cc as T);
 			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
+			});
 		});
 	}
 
@@ -6538,6 +6767,7 @@ ${handlers.length} left`,
 	public waitForCommand<T extends CCId>(
 		predicate: (cc: CCId) => boolean,
 		timeout: number,
+		abortSignal?: AbortSignal,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const promise = createDeferredPromise<CCId>();
@@ -6566,6 +6796,10 @@ ${handlers.length} left`,
 			void promise.then((cc) => {
 				removeEntry();
 				resolve(cc as T);
+			});
+			// When the abort signal is used, silently remove the wait entry
+			abortSignal?.addEventListener("abort", () => {
+				removeEntry();
 			});
 		});
 	}
@@ -6997,7 +7231,7 @@ ${handlers.length} left`,
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
 	public debounceSendNodeToSleep(
-		node: ZWaveNodeBase & SchedulePoll & NodeValues & NodeWakeup,
+		node: ZWaveNodeBase & NodeSchedulePoll & NodeValues & NodeWakeup,
 	): void {
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
@@ -7007,7 +7241,7 @@ ${handlers.length} left`,
 
 		// Sends a node to sleep if it has no more messages.
 		const sendNodeToSleep = (
-			node: ZWaveNodeBase & SchedulePoll & NodeWakeup,
+			node: ZWaveNodeBase & NodeSchedulePoll & NodeWakeup,
 		): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
@@ -7194,6 +7428,8 @@ ${handlers.length} left`,
 		}
 	}
 
+	private _installConfigUpdatePromise: Promise<boolean> | undefined;
+
 	/**
 	 * Installs an update for the embedded configuration DB if there is a compatible one.
 	 * Returns `true` when an update was installed, `false` otherwise.
@@ -7203,6 +7439,19 @@ ${handlers.length} left`,
 	public async installConfigUpdate(): Promise<boolean> {
 		this.ensureReady();
 
+		if (this._installConfigUpdatePromise) {
+			return this._installConfigUpdatePromise;
+		}
+		this._installConfigUpdatePromise = this.installConfigUpdateInternal();
+
+		try {
+			return await this._installConfigUpdatePromise;
+		} finally {
+			this._installConfigUpdatePromise = undefined;
+		}
+	}
+
+	private async installConfigUpdateInternal(): Promise<boolean> {
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
@@ -7219,10 +7468,11 @@ ${handlers.length} left`,
 			`Installing version ${newVersion} of configuration DB...`,
 		);
 		try {
-			await installConfigUpdate(newVersion, {
-				cacheDir: this.cacheDir,
-				configDir: extConfigDir,
-			});
+			await installConfigUpdate(
+				this.bindings.fs,
+				newVersion,
+				{ configDir: extConfigDir },
+			);
 		} catch (e) {
 			this.driverLog.print(getErrorMessage(e), "error");
 			return false;
@@ -7237,10 +7487,7 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				if (node.ready) {
-					await node["loadDeviceConfig"]();
-					// TODO: If the device config did change, expose this information
-				}
+				if (node.ready) await node["loadDeviceConfig"]();
 			}
 		}
 

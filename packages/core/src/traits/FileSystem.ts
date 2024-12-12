@@ -1,3 +1,5 @@
+// FIXME: Get rid of this once the legacy FS bindings are removed
+
 /** Defines which methods must be supported by a replacement filesystem */
 export interface FileSystem {
 	ensureDir(path: string): Promise<void>;

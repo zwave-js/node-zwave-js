@@ -14,10 +14,10 @@ import {
 import {
 	CommandClasses,
 	Duration,
+	type GetSupportedCCVersion,
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { type GetSupportedCCVersion } from "@zwave-js/host";
 import { Bytes } from "@zwave-js/shared/safe";
 import { test } from "vitest";
 

@@ -9,8 +9,11 @@ import {
 	MultilevelSwitchCCSupportedGet,
 	MultilevelSwitchCommand,
 } from "@zwave-js/cc";
-import { CommandClasses, Duration } from "@zwave-js/core";
-import { type GetSupportedCCVersion } from "@zwave-js/host";
+import {
+	CommandClasses,
+	Duration,
+	type GetSupportedCCVersion,
+} from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared/safe";
 import { test } from "vitest";
 

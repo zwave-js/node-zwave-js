@@ -1,4 +1,9 @@
-import type { MessageOrCCLogEntry, WithAddress } from "@zwave-js/core/safe";
+import { type CCParsingContext } from "@zwave-js/cc";
+import type {
+	GetValueDB,
+	MessageOrCCLogEntry,
+	WithAddress,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -7,7 +12,6 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,

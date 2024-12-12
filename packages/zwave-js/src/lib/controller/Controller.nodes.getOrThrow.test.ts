@@ -2,7 +2,7 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../Testing.js";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartTestingDriver } from "../driver/DriverMock.js";
 import { ZWaveNode } from "../node/Node.js";
@@ -23,9 +23,10 @@ const test = baseTest.extend<LocalTestContext>({
 			const { driver } = await createAndStartTestingDriver({
 				loadConfiguration: false,
 				skipNodeInterview: true,
-				beforeStartup(mockPort) {
+				beforeStartup(mockPort, serial) {
 					context.controller = new MockController({
-						serial: mockPort,
+						mockPort,
+						serial,
 					});
 					context.controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),

@@ -5,7 +5,7 @@ import { EncapsulationFlags, TransmitOptions } from "@zwave-js/core";
 import { SendDataRequest } from "@zwave-js/serial/serialapi";
 import { MockController } from "@zwave-js/testing";
 import { test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../../Testing.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 
@@ -28,8 +28,11 @@ const test = baseTest.extend<LocalTestContext>({
 				securityKeys: {
 					S0_Legacy: new Uint8Array(16).fill(0xff),
 				},
-				beforeStartup(mockPort) {
-					const controller = new MockController({ serial: mockPort });
+				beforeStartup(mockPort, serial) {
+					const controller = new MockController({
+						mockPort,
+						serial,
+					});
 					controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),
 					);

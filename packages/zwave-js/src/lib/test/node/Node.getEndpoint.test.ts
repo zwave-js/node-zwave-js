@@ -6,7 +6,7 @@ import {
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { afterEach, beforeEach, test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../../Testing.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 import { DeviceClass } from "../../node/DeviceClass.js";
@@ -29,8 +29,11 @@ const test = baseTest.extend<LocalTestContext>({
 			const { driver } = await createAndStartTestingDriver({
 				skipNodeInterview: true,
 				loadConfiguration: false,
-				beforeStartup(mockPort) {
-					const controller = new MockController({ serial: mockPort });
+				beforeStartup(mockPort, serial) {
+					const controller = new MockController({
+						mockPort,
+						serial,
+					});
 					controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),
 					);

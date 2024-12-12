@@ -2,6 +2,7 @@ import type { TransformableInfo } from "logform";
 import type { Logger } from "winston";
 import type Transport from "winston-transport";
 import type { ValueID } from "../values/_Types.js";
+import { type ControllerLogger } from "./Controller.js";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
 export const timestampPaddingShort = " ".repeat(
@@ -114,3 +115,5 @@ export function stringToNodeList(nodes?: string): number[] | undefined {
 		.map((n) => parseInt(n))
 		.filter((n) => !Number.isNaN(n));
 }
+
+export type LogNode = Pick<ControllerLogger, "logNode">;

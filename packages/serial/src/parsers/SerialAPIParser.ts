@@ -1,7 +1,12 @@
 import { Bytes, num2hex } from "@zwave-js/shared";
-import { Transform, type TransformCallback } from "node:stream";
+import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
+import {
+	type SerialAPIChunk,
+	type ZWaveSerialFrame,
+	ZWaveSerialFrameType,
+} from "./ZWaveSerialFrame.js";
 
 /**
  * Checks if there's enough data in the buffer to deserialize a complete message
@@ -16,25 +21,40 @@ function getMessageLength(data: Uint8Array): number {
 	return remainingLength + 2;
 }
 
-export class SerialAPIParser extends Transform {
-	constructor(
-		private logger?: SerialLogger,
-		private onDiscarded?: (data: Uint8Array) => void,
-	) {
-		// We read byte streams but emit messages
-		super({ readableObjectMode: true });
-	}
+type SerialAPIParserTransformerOutput = ZWaveSerialFrame & {
+	type:
+		| ZWaveSerialFrameType.SerialAPI
+		| ZWaveSerialFrameType.Discarded;
+};
+
+function wrapSerialAPIChunk(
+	chunk: SerialAPIChunk,
+): SerialAPIParserTransformerOutput {
+	return {
+		type: ZWaveSerialFrameType.SerialAPI,
+		data: chunk,
+	};
+}
+
+class SerialAPIParserTransformer implements
+	Transformer<
+		Uint8Array,
+		SerialAPIParserTransformerOutput
+	>
+{
+	constructor(private logger?: SerialLogger) {}
 
 	private receiveBuffer = new Bytes();
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibble: boolean = false;
 
-	_transform(
-		chunk: any,
-		encoding: string,
-		callback: TransformCallback,
-	): void {
+	transform(
+		chunk: Uint8Array,
+		controller: TransformStreamDefaultController<
+			SerialAPIParserTransformerOutput
+		>,
+	) {
 		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
 		while (this.receiveBuffer.length > 0) {
@@ -45,18 +65,24 @@ export class SerialAPIParser extends Transform {
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
 						this.logger?.ACK("inbound");
-						this.push(MessageHeaders.ACK);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.ACK),
+						);
 						this.ignoreAckHighNibble = false;
 						break;
 					}
 					case MessageHeaders.NAK: {
 						this.logger?.NAK("inbound");
-						this.push(MessageHeaders.NAK);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.NAK),
+						);
 						break;
 					}
 					case MessageHeaders.CAN: {
 						this.logger?.CAN("inbound");
-						this.push(MessageHeaders.CAN);
+						controller.enqueue(
+							wrapSerialAPIChunk(MessageHeaders.CAN),
+						);
 						break;
 					}
 					default: {
@@ -76,7 +102,9 @@ export class SerialAPIParser extends Transform {
 								}`,
 							);
 							this.logger?.ACK("inbound");
-							this.push(MessageHeaders.ACK);
+							controller.enqueue(
+								wrapSerialAPIChunk(MessageHeaders.ACK),
+							);
 							this.ignoreAckHighNibble = false;
 							break;
 						}
@@ -97,7 +125,10 @@ export class SerialAPIParser extends Transform {
 						}
 						const discarded = this.receiveBuffer.subarray(0, skip);
 						this.logger?.discarded(discarded);
-						this.onDiscarded?.(discarded);
+						controller.enqueue({
+							type: ZWaveSerialFrameType.Discarded,
+							data: discarded,
+						});
 					}
 				}
 				// Continue with the next valid byte
@@ -116,9 +147,26 @@ export class SerialAPIParser extends Transform {
 				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
 
 				this.logger?.data("inbound", msg);
-				this.push(msg);
+				controller.enqueue(wrapSerialAPIChunk(msg));
 			}
 		}
-		callback();
+	}
+}
+export class SerialAPIParser extends TransformStream {
+	constructor(
+		logger?: SerialLogger,
+	) {
+		const transformer = new SerialAPIParserTransformer(logger);
+		super(transformer);
+		this.#transformer = transformer;
+	}
+
+	#transformer: SerialAPIParserTransformer;
+
+	public get ignoreAckHighNibble(): boolean {
+		return this.#transformer.ignoreAckHighNibble;
+	}
+	public set ignoreAckHighNibble(value: boolean) {
+		this.#transformer.ignoreAckHighNibble = value;
 	}
 }

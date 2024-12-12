@@ -18,8 +18,6 @@ updates:
       # so only apply patch and minor updates automatically
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
-      # xstate usually requires manual intervention
-      - dependency-name: 'xstate'
 
   - package-ecosystem: github-actions
     directory: '/'

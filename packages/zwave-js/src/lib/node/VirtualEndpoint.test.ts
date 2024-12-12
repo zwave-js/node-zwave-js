@@ -10,8 +10,9 @@ import {
 	FunctionType,
 	SendDataMulticastRequest,
 	SendDataRequest,
+	type ZWaveSerialStream,
 } from "@zwave-js/serial";
-import type { MockPortBinding } from "@zwave-js/serial/mock";
+import type { MockPort } from "@zwave-js/serial/mock";
 import { type ThrowingMap, noop } from "@zwave-js/shared";
 import {
 	MockController,
@@ -24,7 +25,7 @@ import { test as baseTest } from "vitest";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "../../Utils.js";
+} from "../../Testing.js";
 import type { Driver } from "../driver/Driver.js";
 import { createAndStartTestingDriver } from "../driver/DriverMock.js";
 import { ZWaveNode } from "./Node.js";
@@ -33,7 +34,8 @@ interface LocalTestContext {
 	context: {
 		driver: Driver;
 		controller: MockController;
-		serialport: MockPortBinding;
+		mockPort: MockPort;
+		serial: ZWaveSerialStream;
 		makePhysicalNode(nodeId: number): ZWaveNode;
 	};
 }
@@ -44,42 +46,43 @@ const test = baseTest.extend<LocalTestContext>({
 			// Setup
 			const context = {} as LocalTestContext["context"];
 
-			const { driver, mockPort } = await createAndStartTestingDriver({
-				loadConfiguration: false,
-				skipNodeInterview: true,
-				beforeStartup(mockPort) {
-					context.controller = new MockController({
-						serial: mockPort,
-						capabilities: {
-							supportedFunctionTypes:
-								getDefaultSupportedFunctionTypes().filter(
-									(ft) =>
-										ft !== FunctionType.SendDataBridge
-										&& ft
-											!== FunctionType
-												.SendDataMulticastBridge,
-								),
-						},
-					});
-					context.controller.defineBehavior(
-						...createDefaultMockControllerBehaviors(),
-					);
+			const { driver, mockPort, serial } =
+				await createAndStartTestingDriver({
+					loadConfiguration: false,
+					skipNodeInterview: true,
+					beforeStartup(mockPort, serial) {
+						context.controller = new MockController({
+							mockPort,
+							serial,
+							capabilities: {
+								supportedFunctionTypes:
+									getDefaultSupportedFunctionTypes().filter(
+										(ft) =>
+											ft !== FunctionType.SendDataBridge
+											&& ft
+												!== FunctionType
+													.SendDataMulticastBridge,
+									),
+							},
+						});
+						context.controller.defineBehavior(
+							...createDefaultMockControllerBehaviors(),
+						);
 
-					const ignoreBroadcast: MockControllerBehavior = {
-						onHostMessage(controller, msg) {
-							if (
-								msg instanceof SendDataRequest
-								&& msg.getNodeId() === 255
-							) {
-								return true;
-							}
-						},
-					};
-					context.controller.defineBehavior(ignoreBroadcast);
-				},
-			});
-			context.driver = driver;
-			context.serialport = mockPort;
+						const ignoreBroadcast: MockControllerBehavior = {
+							onHostMessage(controller, msg) {
+								if (
+									msg instanceof SendDataRequest
+									&& msg.getNodeId() === 255
+								) {
+									return true;
+								}
+							},
+						};
+						context.controller.defineBehavior(ignoreBroadcast);
+					},
+				});
+			Object.assign(context, { driver, mockPort, serial });
 
 			context.makePhysicalNode = (nodeId: number) => {
 				// Make the driver know about the node
@@ -324,7 +327,7 @@ test.sequential(
 test.sequential(
 	"broadcast uses the correct commands behind the scenes",
 	async ({ context, expect }) => {
-		const { driver, serialport, controller, makePhysicalNode } = context;
+		const { driver, controller, makePhysicalNode } = context;
 		makePhysicalNode(2);
 		makePhysicalNode(3);
 		const broadcast = driver.controller.getBroadcastNode();
@@ -346,7 +349,7 @@ test.sequential(
 test.sequential(
 	"multicast uses the correct commands behind the scenes",
 	async ({ context, expect }) => {
-		const { driver, serialport, controller, makePhysicalNode } = context;
+		const { driver, controller, makePhysicalNode } = context;
 		makePhysicalNode(2);
 		makePhysicalNode(3);
 		const multicast = driver.controller.getMulticastGroup([2, 3]);

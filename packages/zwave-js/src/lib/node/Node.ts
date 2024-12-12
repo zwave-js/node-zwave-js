@@ -233,7 +233,7 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import path from "node:path";
+import path from "pathe";
 import semverParse from "semver/functions/parse.js";
 import { RemoveNodeReason } from "../controller/Inclusion.js";
 import { determineNIF } from "../controller/NodeInformationFrame.js";
@@ -313,10 +313,6 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	 * Cleans up all resources used by this node
 	 */
 	public destroy(): void {
-		// Stop all state machines
-		this.statusMachine.stop();
-		this.readyMachine.stop();
-
 		// Remove all timeouts
 		for (
 			const timeout of [
@@ -989,8 +985,8 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		super.reset();
 
 		// Restart all state machines
-		this.readyMachine.restart();
-		this.statusMachine.restart();
+		this.restartReadyMachine();
+		this.restartStatusMachine();
 
 		// Remove queued polls that would interfere with the interview
 		this.cancelAllScheduledPolls();
@@ -1115,7 +1111,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 		this.cachedDeviceConfigHash = await this._deviceConfig?.getHash();
 
 		this.setInterviewStage(InterviewStage.Complete);
-		this.readyMachine.send("INTERVIEW_DONE");
+		this.updateReadyMachine({ value: "INTERVIEW_DONE" });
 
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
@@ -4924,7 +4920,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Mark already-interviewed nodes as potentially ready
 		if (this.interviewStage === InterviewStage.Complete) {
-			this.readyMachine.send("RESTART_FROM_CACHE");
+			this.updateReadyMachine({ value: "RESTART_FROM_CACHE" });
 		}
 	}
 

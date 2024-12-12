@@ -1,6 +1,7 @@
 import { ZWaveLogContainer } from "@zwave-js/core";
+import { fs } from "@zwave-js/core/bindings/fs/node";
 import { pathExists } from "@zwave-js/shared";
-import fs from "node:fs/promises";
+import fsp from "node:fs/promises";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import semverInc from "semver/functions/inc.js";
@@ -25,7 +26,7 @@ const test = baseTest.extend<LocalTestContext>({
 		async ({}, use) => {
 			// Setup
 			const tempDir = path.join(tmpdir(), "zwavejs_test");
-			await fs.mkdir(tempDir, { recursive: true });
+			await fsp.mkdir(tempDir, { recursive: true });
 
 			const logContainer = new ZWaveLogContainer({ enabled: false });
 			const logger = new ConfigLogger(logContainer);
@@ -34,15 +35,15 @@ const test = baseTest.extend<LocalTestContext>({
 			await use({ tempDir, logContainer, logger });
 
 			// Teardown
-			await fs.rm(tempDir, { recursive: true, force: true });
+			await fsp.rm(tempDir, { recursive: true, force: true });
 		},
 		{ auto: true },
 	],
 });
 
 beforeEach<LocalTestContext>(async ({ context, expect }) => {
-	await fs.rm(context.tempDir, { recursive: true, force: true });
-	await fs.mkdir(context.tempDir, { recursive: true });
+	await fsp.rm(context.tempDir, { recursive: true, force: true });
+	await fsp.mkdir(context.tempDir, { recursive: true });
 });
 
 test.sequential(
@@ -51,11 +52,11 @@ test.sequential(
 		const { tempDir, logger } = context;
 
 		const configDir = path.join(tempDir, "extconfig");
-		await syncExternalConfigDir(configDir, logger);
+		await syncExternalConfigDir(fs, configDir, logger);
 
-		expect(await pathExists(configDir)).toBe(true);
+		expect(await pathExists(fs, configDir)).toBe(true);
 		expect(
-			await fs.readFile(path.join(configDir, "version"), "utf8"),
+			await fsp.readFile(path.join(configDir, "version"), "utf8"),
 		).toBe(ownVersion);
 	},
 	60000,
@@ -69,19 +70,19 @@ test.sequential(
 		const configDir = path.join(tempDir, "extconfig");
 		const otherVersion = semverInc(ownVersion, "major");
 
-		await fs.mkdir(configDir, { recursive: true });
-		await fs.writeFile(
+		await fsp.mkdir(configDir, { recursive: true });
+		await fsp.writeFile(
 			path.join(configDir, "version"),
 			otherVersion!,
 			"utf8",
 		);
 
-		await syncExternalConfigDir(configDir, logger);
+		await syncExternalConfigDir(fs, configDir, logger);
 
-		expect(await pathExists(configDir)).toBe(true);
+		expect(await pathExists(fs, configDir)).toBe(true);
 
 		expect(
-			await fs.readFile(path.join(configDir, "version"), "utf8"),
+			await fsp.readFile(path.join(configDir, "version"), "utf8"),
 		).toBe(ownVersion);
 	},
 	60000,
@@ -95,19 +96,19 @@ test.sequential(
 		const configDir = path.join(tempDir, "extconfig");
 		const otherVersion = semverInc(ownVersion, "prerelease")!;
 
-		await fs.mkdir(configDir, { recursive: true });
-		await fs.writeFile(
+		await fsp.mkdir(configDir, { recursive: true });
+		await fsp.writeFile(
 			path.join(configDir, "version"),
 			otherVersion,
 			"utf8",
 		);
 
-		await syncExternalConfigDir(configDir, logger);
+		await syncExternalConfigDir(fs, configDir, logger);
 
-		expect(await pathExists(configDir)).toBe(true);
+		expect(await pathExists(fs, configDir)).toBe(true);
 
 		expect(
-			await fs.readFile(path.join(configDir, "version"), "utf8"),
+			await fsp.readFile(path.join(configDir, "version"), "utf8"),
 		).toBe(otherVersion);
 	},
 	60000,
@@ -140,7 +141,7 @@ test.sequential(
 
 		const cm = new ConfigManager({ logContainer });
 		await cm.loadAll();
-		expect(await pathExists(configDir)).toBe(true);
+		expect(await pathExists(fs, configDir)).toBe(true);
 
 		// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
 		const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
@@ -167,7 +168,7 @@ async function testDeviceConfigPriorityDir(
 
 	// Set up a dummy structure in the priority dir
 	const priorityDir = path.join(tempDir, "priority");
-	await fs.mkdir(path.join(priorityDir, "templates"), { recursive: true });
+	await fsp.mkdir(path.join(priorityDir, "templates"), { recursive: true });
 	let json: any = {
 		manufacturer: "AEON Labs",
 		manufacturerId: "0x0086",
@@ -190,7 +191,7 @@ async function testDeviceConfigPriorityDir(
 			},
 		],
 	};
-	await fs.writeFile(
+	await fsp.writeFile(
 		path.join(priorityDir, "aeotec.json"),
 		JSON.stringify(json, null, 4),
 	);
@@ -204,7 +205,7 @@ async function testDeviceConfigPriorityDir(
 			unsigned: true,
 		},
 	};
-	await fs.writeFile(
+	await fsp.writeFile(
 		path.join(priorityDir, "templates/template.json"),
 		JSON.stringify(json, null, 4),
 	);
@@ -217,7 +218,7 @@ async function testDeviceConfigPriorityDir(
 	await cm.loadAll();
 
 	if (useExternalConfig) {
-		expect(await pathExists(externalConfigDir!)).toBe(true);
+		expect(await pathExists(fs, externalConfigDir!)).toBe(true);
 	}
 
 	// Load the dummy device

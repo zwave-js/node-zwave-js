@@ -13,11 +13,6 @@
       "import": "./build/esm/index.js",
       "require": "./build/cjs/index.js"
     },
-    "./safe": {
-      "@@dev": "./src/index_safe.ts",
-      "import": "./build/esm/index_safe.js",
-      "require": "./build/cjs/index_safe.js"
-    },
     "./package.json": "./package.json"
   },
   "files": [

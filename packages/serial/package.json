@@ -27,6 +27,11 @@
       "import": "./build/esm/index_mock.js",
       "require": "./build/cjs/index_mock.js"
     },
+    "./bindings/*": {
+      "@@dev": "./src/bindings/*.ts",
+      "import": "./build/esm/bindings/*.js",
+      "require": "./build/cjs/bindings/*.js"
+    },
     "./package.json": "./package.json"
   },
   "keywords": [],

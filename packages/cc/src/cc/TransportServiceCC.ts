@@ -1,6 +1,8 @@
+import { type CCEncodingContext, type CCParsingContext } from "@zwave-js/cc";
 import {
 	CRC16_CCITT,
 	CommandClasses,
+	type GetValueDB,
 	type MessageOrCCLogEntry,
 	type SinglecastCC,
 	type WithAddress,
@@ -8,22 +10,12 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	CCParsingContext,
-	GetValueDB,
-} from "@zwave-js/host/safe";
 import { Bytes } from "@zwave-js/shared/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
-import {
-	type CCRaw,
-	type CCResponseRole,
-	CommandClass,
-} from "../lib/CommandClass.js";
+import { type CCRaw, CommandClass } from "../lib/CommandClass.js";
 import {
 	CCCommand,
 	commandClass,
-	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators.js";
 import { TransportServiceCommand } from "../lib/_Types.js";
@@ -81,7 +73,7 @@ export function isTransportServiceEncapsulation(
 }
 
 @CCCommand(TransportServiceCommand.FirstSegment)
-// @expectedCCResponse(TransportServiceCCReport)
+// Handling expected responses is done by the RX state machine
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public constructor(
 		options: WithAddress<TransportServiceCCFirstSegmentOptions>,
@@ -227,7 +219,7 @@ export interface TransportServiceCCSubsequentSegmentOptions
 }
 
 @CCCommand(TransportServiceCommand.SubsequentSegment)
-// @expectedCCResponse(TransportServiceCCReport)
+// Handling expected responses is done by the RX state machine
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public constructor(
 		options: WithAddress<TransportServiceCCSubsequentSegmentOptions>,
@@ -465,23 +457,8 @@ export interface TransportServiceCCSegmentRequestOptions {
 	datagramOffset: number;
 }
 
-function testResponseForSegmentRequest(
-	sent: TransportServiceCCSegmentRequest,
-	received: TransportServiceCC,
-): CCResponseRole {
-	return (
-		(sent.datagramOffset === 0
-			&& received instanceof TransportServiceCCFirstSegment
-			&& received.sessionId === sent.sessionId)
-		|| (sent.datagramOffset > 0
-			&& received instanceof TransportServiceCCSubsequentSegment
-			&& sent.datagramOffset === received.datagramOffset
-			&& received.sessionId === sent.sessionId)
-	);
-}
-
 @CCCommand(TransportServiceCommand.SegmentRequest)
-@expectedCCResponse(TransportServiceCC, testResponseForSegmentRequest)
+// Handling expected responses is done by the RX state machine
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public constructor(
 		options: WithAddress<TransportServiceCCSegmentRequestOptions>,

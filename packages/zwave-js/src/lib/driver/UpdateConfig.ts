@@ -1,11 +1,17 @@
+import { untar } from "@andrewbranch/untar.js";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { copyFilesRecursive, getErrorMessage } from "@zwave-js/shared";
+import { gunzipSync } from "@zwave-js/core";
+import { getErrorMessage, writeTextFile } from "@zwave-js/shared";
+import {
+	type CopyFile,
+	type MakeTempDirectory,
+	type ManageDirectory,
+	type OpenFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
-import execa from "execa";
-import fs from "node:fs/promises";
-import os from "node:os";
-import * as path from "node:path";
-import * as lockfile from "proper-lockfile";
+import path from "pathe";
 import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
 import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
@@ -18,11 +24,11 @@ import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
 export async function checkForConfigUpdates(
 	currentVersion: string,
 ): Promise<string | undefined> {
-	const { got } = await import("got");
+	const { default: ky } = await import("ky");
 	let registry: Record<string, unknown>;
 
 	try {
-		registry = await got
+		registry = await ky
 			.get("https://registry.npmjs.org/@zwave-js/config")
 			.json();
 	} catch {
@@ -60,17 +66,23 @@ export async function checkForConfigUpdates(
  * This only works if an external configuation directory is used.
  */
 export async function installConfigUpdate(
+	fs:
+		& ManageDirectory
+		& ReadFileSystemInfo
+		& WriteFile
+		& CopyFile
+		& OpenFile
+		& MakeTempDirectory,
 	newVersion: string,
 	external: {
 		configDir: string;
-		cacheDir: string;
 	},
 ): Promise<void> {
-	const { got } = await import("got");
+	const { default: ky } = await import("ky");
 
 	let registryInfo: any;
 	try {
-		registryInfo = await got
+		registryInfo = await ky
 			.get(`https://registry.npmjs.org/@zwave-js/config/${newVersion}`)
 			.json();
 	} catch {
@@ -88,67 +100,12 @@ export async function installConfigUpdate(
 		);
 	}
 
-	const lockfilePath = external.cacheDir;
-	const lockfileOptions: lockfile.LockOptions = {
-		lockfilePath: path.join(external.cacheDir, "config-update.lock"),
-	};
-
+	let tarballData: Uint8Array;
 	try {
-		await lockfile.lock(lockfilePath, {
-			...lockfileOptions,
-			onCompromised: () => {
-				// do nothing
-			},
-		});
-	} catch {
-		throw new ZWaveError(
-			`Config update failed: Another installation is already in progress!`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	}
-
-	const freeLock = async () => {
-		try {
-			if (await lockfile.check(lockfilePath, lockfileOptions)) {
-				await lockfile.unlock(lockfilePath, lockfileOptions);
-			}
-		} catch {
-			// whatever - just don't crash
-		}
-	};
-
-	// Download tarball to a temporary directory
-	let tmpDir: string;
-	try {
-		tmpDir = await fs.mkdtemp(
-			path.join(os.tmpdir(), "zjs-config-update-"),
+		tarballData = new Uint8Array(
+			await ky.get(url).arrayBuffer(),
 		);
 	} catch (e) {
-		await freeLock();
-		throw new ZWaveError(
-			`Config update failed: Could not create temporary directory. Reason: ${
-				getErrorMessage(
-					e,
-				)
-			}`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	}
-
-	// Download the package tarball into the temporary directory
-	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
-	try {
-		const handle = await fs.open(tarFilename, "w");
-		const fstream = handle.createWriteStream({ autoClose: true });
-		const response = got.stream.get(url);
-		response.pipe(fstream);
-
-		await new Promise((resolve, reject) => {
-			response.on("error", reject);
-			response.on("end", resolve);
-		});
-	} catch (e) {
-		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not download tarball. Reason: ${
 				getErrorMessage(
@@ -159,54 +116,38 @@ export async function installConfigUpdate(
 		);
 	}
 
-	// This should not be necessary in Docker. Leaving it here anyways in case
-	// we want to use this method on Windows at some point
-	function normalizeToUnixStyle(path: string): string {
-		path = path.replaceAll(":", "");
-		path = path.replaceAll("\\", "/");
-		if (!path.startsWith("/")) path = `/${path}`;
-		return path;
-	}
-
-	const extractedDir = path.join(tmpDir, "extracted");
 	try {
-		// Extract the tarball in the temporary folder
-		await fs.rm(extractedDir, { recursive: true, force: true });
-		await fs.mkdir(extractedDir, { recursive: true });
-		await execa("tar", [
-			"--strip-components=1",
-			"-xzf",
-			normalizeToUnixStyle(tarFilename),
-			"-C",
-			normalizeToUnixStyle(extractedDir),
-		]);
+		// Extract json files from the tarball's config directory
+		// and overwrite the external config directory with them
+		const tarFiles = untar(gunzipSync(tarballData));
+		await fs.deleteDir(external.configDir);
+		await fs.ensureDir(external.configDir);
 
-		// then overwrite the files in the external config directory
-		await fs.rm(external.configDir, { recursive: true, force: true });
-		await fs.mkdir(external.configDir, { recursive: true });
-		await copyFilesRecursive(
-			path.join(extractedDir, "config"),
-			external.configDir,
-			(src) => src.endsWith(".json"),
-		);
+		const prefix = "package/config/";
+		for (const file of tarFiles) {
+			if (
+				!file.filename.startsWith(prefix)
+				|| !file.filename.endsWith(".json")
+			) {
+				continue;
+			}
+			const filename = file.filename.slice(prefix.length);
+			const targetFileName = path.join(external.configDir, filename);
+			const targetDirName = path.dirname(targetFileName);
+
+			await fs.ensureDir(targetDirName);
+			await fs.writeFile(targetFileName, file.fileData);
+		}
+
 		const externalVersionFilename = path.join(
 			external.configDir,
 			"version",
 		);
-		await fs.writeFile(externalVersionFilename, newVersion, "utf8");
+		await writeTextFile(fs, externalVersionFilename, newVersion);
 	} catch {
-		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not extract tarball`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}
-
-	// Clean up the temp dir and ignore errors
-	void fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {
-		// ignore
-	});
-
-	// Free the lock
-	await freeLock();
 }

@@ -1,4 +1,4 @@
-import { type CCAPI } from "@zwave-js/cc";
+import { type CCAPI, type SchedulePollOptions } from "@zwave-js/cc";
 import { type ValueDB, normalizeValueID } from "@zwave-js/core";
 import {
 	type CommandClasses,
@@ -7,7 +7,6 @@ import {
 	type ValueRemovedArgs,
 	type ValueUpdatedArgs,
 } from "@zwave-js/core/safe";
-import { type NodeSchedulePollOptions } from "@zwave-js/host";
 import { ObjectKeyMap } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import { type Driver } from "../../driver/Driver.js";
@@ -20,7 +19,7 @@ export interface ScheduledPoll {
 }
 
 /** Defines functionality of Z-Wave nodes for scheduling polls for a later time and canceling scheduled polls */
-export interface SchedulePoll {
+export interface NodeSchedulePoll {
 	/**
 	 * @internal
 	 * Returns whether a poll is currently scheduled for this node
@@ -34,7 +33,7 @@ export interface SchedulePoll {
 	 */
 	schedulePoll(
 		valueId: ValueID,
-		options: NodeSchedulePollOptions,
+		options: SchedulePollOptions,
 	): boolean;
 
 	/**
@@ -57,7 +56,7 @@ export interface SchedulePoll {
 }
 
 export abstract class SchedulePollMixin extends EndpointsMixin
-	implements SchedulePoll
+	implements NodeSchedulePoll
 {
 	public constructor(
 		nodeId: number,
@@ -112,7 +111,7 @@ export abstract class SchedulePollMixin extends EndpointsMixin
 
 	public schedulePoll(
 		valueId: ValueID,
-		options: NodeSchedulePollOptions = {},
+		options: SchedulePollOptions = {},
 	): boolean {
 		const {
 			timeoutMs = this.driver.options.timeouts.refreshValue,

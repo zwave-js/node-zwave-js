@@ -18,9 +18,14 @@ import {
 	type ValueMetadata,
 	type ValueMetadataNumeric,
 } from "@zwave-js/core";
-import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
-	type MockPortBinding,
+	Faucet,
+	type ZWaveSerialFrame,
+	ZWaveSerialFrameType,
+	type ZWaveSerialStream,
+} from "@zwave-js/serial";
+import {
+	type MockPort,
 	createAndOpenMockedZWaveSerialPort,
 } from "@zwave-js/serial/mock";
 import { getErrorMessage } from "@zwave-js/shared";
@@ -43,10 +48,10 @@ import {
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { type AddressInfo, type Server, createServer } from "node:net";
 import {
-	ProtocolVersion,
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "./Utils.js";
+} from "./Testing.js";
+import { ProtocolVersion } from "./Utils.js";
 import { type CommandClassDump, type NodeDump } from "./lib/node/Dump.js";
 
 export type MockServerControllerOptions =
@@ -85,8 +90,8 @@ export interface MockServerOptions {
 export class MockServer {
 	public constructor(private options: MockServerOptions = {}) {}
 
-	private serialport: ZWaveSerialPort | undefined;
-	private binding: MockPortBinding | undefined;
+	private serialport: ZWaveSerialStream | undefined;
+	private binding: MockPort | undefined;
 	private server: Server | undefined;
 	private responder: MdnsResponder | undefined;
 	private service: CiaoService | undefined;
@@ -94,18 +99,19 @@ export class MockServer {
 	private mockNodes: MockNode[] | undefined;
 
 	public async start(): Promise<void> {
-		const { port: serialport, binding } =
-			await createAndOpenMockedZWaveSerialPort("/tty/FAKE");
+		const { serial, port: mockPort } =
+			await createAndOpenMockedZWaveSerialPort();
 
-		this.serialport = serialport;
-		this.binding = binding;
+		this.serialport = serial;
+		this.binding = mockPort;
 
 		console.log("Mock serial port opened");
 
 		// Hook up a fake controller and nodes
 		({ mockController: this.mockController, mockNodes: this.mockNodes } =
 			prepareMocks(
-				binding,
+				mockPort,
+				serial,
 				this.options.config?.controller,
 				this.options.config?.nodes,
 			));
@@ -114,6 +120,9 @@ export class MockServer {
 		if (typeof this.options.config?.onInit === "function") {
 			this.options.config.onInit(this.mockController, this.mockNodes);
 		}
+
+		// Forward data from the serialport to the socket while one is connected
+		const faucet = new Faucet(serial.readable);
 
 		// Start a TCP server, listen for connections, and forward them to the serial port
 		this.server = createServer((socket) => {
@@ -125,21 +134,32 @@ export class MockServer {
 
 			console.log("Client connected");
 
-			socket.pipe(this.serialport);
-			this.serialport.on("data", (chunk) => {
-				if (typeof chunk === "number") {
-					socket.write(Uint8Array.from([chunk]));
-				} else {
-					socket.write(chunk);
-				}
+			// Wrap the socket in a writable stream
+			const writable = new WritableStream({
+				write: (chunk: ZWaveSerialFrame) => {
+					if (chunk.type !== ZWaveSerialFrameType.SerialAPI) return;
+					if (typeof chunk.data === "number") {
+						socket.write(Uint8Array.from([chunk.data]));
+					} else {
+						socket.write(chunk.data);
+					}
+				},
 			});
 
-			// when the connection is closed, unpipe the streams
-			socket.on("close", () => {
-				console.log("Client disconnected");
+			// And forward data from the serial port
+			faucet.connect(writable);
 
-				socket.unpipe(this.serialport);
-				this.serialport?.removeAllListeners("data");
+			socket.on("close", () => {
+				faucet.disconnect();
+				void writable.close();
+				console.log("Client disconnected");
+			});
+
+			// Forward data from the socket to the serial port
+			socket.on("data", async (chunk) => {
+				await this.serialport?.writeAsync(chunk).catch((e) => {
+					console.error(`Error writing to serialport`, e);
+				});
 			});
 		});
 
@@ -203,13 +223,14 @@ export class MockServer {
 		this.mockController?.destroy();
 		this.server?.close();
 		await this.serialport?.close();
-		if (this.binding?.isOpen) await this.binding?.close();
+		this.binding?.destroy();
 		console.log("Mock server shut down");
 	}
 }
 
 function prepareMocks(
-	mockPort: MockPortBinding,
+	mockPort: MockPort,
+	serial: ZWaveSerialStream,
 	controller: MockServerControllerOptions = {},
 	nodes: MockServerNodeOptions[] = [],
 ): { mockController: MockController; mockNodes: MockNode[] } {
@@ -217,7 +238,8 @@ function prepareMocks(
 		homeId: 0x7e570001,
 		ownNodeId: 1,
 		...controller,
-		serial: mockPort,
+		mockPort,
+		serial,
 	});
 	// Apply default behaviors that are required for interacting with the driver correctly
 	mockController.defineBehavior(...createDefaultMockControllerBehaviors());
