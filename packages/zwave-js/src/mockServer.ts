@@ -48,10 +48,10 @@ import {
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { type AddressInfo, type Server, createServer } from "node:net";
 import {
-	ProtocolVersion,
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "./Utils.js";
+} from "./Testing.js";
+import { ProtocolVersion } from "./Utils.js";
 import { type CommandClassDump, type NodeDump } from "./lib/node/Dump.js";
 
 export type MockServerControllerOptions =

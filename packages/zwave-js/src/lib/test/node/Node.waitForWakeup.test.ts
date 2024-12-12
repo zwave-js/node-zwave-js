@@ -7,7 +7,7 @@ import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { test as baseTest } from "vitest";
-import { createDefaultMockControllerBehaviors } from "../../../Utils.js";
+import { createDefaultMockControllerBehaviors } from "../../../Testing.js";
 import type { Driver } from "../../driver/Driver.js";
 import { createAndStartTestingDriver } from "../../driver/DriverMock.js";
 import { ZWaveNode } from "../../node/Node.js";
