@@ -135,3 +135,42 @@ export interface FileSystem
 {}
 
 export type Platform = "linux" | "darwin" | "win32" | "browser" | "other";
+
+export type DatabaseOptions<V> = {
+	/**
+	 * An optional reviver function (similar to JSON.parse) to transform parsed values before they are accessible in the database.
+	 * If this function is defined, it must always return a value.
+	 */
+	reviver?: (key: string, value: any) => V;
+	/**
+	 * An optional serializer function (similar to JSON.serialize) to transform values before they are written to the database file.
+	 * If this function is defined, it must always return a value.
+	 */
+	serializer?: (key: string, value: V) => any;
+	/** Whether timestamps should be recorded when setting values. Default: false */
+	enableTimestamps?: boolean;
+};
+
+export interface DatabaseFactory {
+	createInstance<V>(
+		filename: string,
+		options?: DatabaseOptions<V>,
+	): Database<V>;
+}
+
+export interface Database<V> {
+	open(): Promise<void>;
+	close(): Promise<void>;
+
+	has: Map<string, V>["has"];
+	get: Map<string, V>["get"];
+	set(key: string, value: V, updateTimestamp?: boolean): this;
+	delete(key: string): boolean;
+	clear(): void;
+
+	getTimestamp(key: string): number | undefined;
+	get size(): number;
+
+	keys: Map<string, V>["keys"];
+	entries: Map<string, V>["entries"];
+}

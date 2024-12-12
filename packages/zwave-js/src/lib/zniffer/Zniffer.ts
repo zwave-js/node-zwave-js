@@ -279,7 +279,12 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 	 * The host bindings used to access file system etc.
 	 */
 	// This is set during `init()` and should not be accessed before
-	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
+	private bindings!: Omit<
+		Required<
+			NonNullable<ZWaveOptions["host"]>
+		>,
+		"db"
+	>;
 
 	private serialFactory: ZnifferSerialStreamFactory | undefined;
 	/** The serial port instance */

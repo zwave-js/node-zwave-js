@@ -1,4 +1,4 @@
-import type { JsonlDB } from "@alcalzone/jsonl-db";
+import { type Database } from "@zwave-js/shared/bindings";
 
 export interface CacheBackedMapKeys<K extends string | number> {
 	/** The common prefix all keys start with */
@@ -12,7 +12,7 @@ export interface CacheBackedMapKeys<K extends string | number> {
 /** Wrapper class which allows storing a Map as a subset of a JsonlDB */
 export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
 	constructor(
-		private readonly cache: JsonlDB<any>,
+		private readonly cache: Database<any>,
 		private readonly cacheKeys: CacheBackedMapKeys<K>,
 	) {
 		this.map = new Map();
