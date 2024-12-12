@@ -1,7 +1,12 @@
 # Commands to start on workspace startup
-# For reference, these env variables are set in the project settings:
-# - YARN_CACHE_FOLDER=".yarn/cache"
-# - YARN_ENABLE_GLOBAL_CACHE="false"
+env:
+  # Avoids cross-link issues due to different filesystems between /home and /workspaces
+  YARN_GLOBAL_FOLDER: ".yarn/global"
+  YARN_CACHE_FOLDER: ".yarn/cache"
+  YARN_ENABLE_GLOBAL_CACHE: "false"
+  # Avoids interactive prompt causing container creation to hang
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+
 tasks:
   - init: |
       yarn install
