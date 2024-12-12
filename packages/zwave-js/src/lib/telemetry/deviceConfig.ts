@@ -31,9 +31,9 @@ export async function reportMissingDeviceConfig(
 	// // If we tried to report this file earlier, we can skip the report
 	// if (missingDeviceConfigCache.has(configFingerprint)) return;
 	// // Otherwise ask our device DB if it exists
-	// const { got } = await import("got");
+	// const { default: ky } = await import("ky");
 	// try {
-	// 	const data = await got
+	// 	const data = await ky
 	// 		.get(
 	// 			`https://devices.zwave-js.io/public_api/getdeviceinfo/${configFingerprint.replace(
 	// 				/:/g,

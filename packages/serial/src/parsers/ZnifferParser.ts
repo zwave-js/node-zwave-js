@@ -1,8 +1,12 @@
 import { Bytes } from "@zwave-js/shared";
-import { Transform, type TransformCallback } from "node:stream";
+import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { ZnifferFrameType } from "../message/Constants.js";
 import { ZnifferMessageHeaders } from "../message/MessageHeaders.js";
+import {
+	type ZnifferSerialFrame,
+	ZnifferSerialFrameType,
+} from "./ZnifferSerialFrame.js";
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
 function getMessageLength(data: Uint8Array): number | undefined {
@@ -28,25 +32,22 @@ function getMessageLength(data: Uint8Array): number | undefined {
 	}
 }
 
-export class ZnifferParser extends Transform {
+class ZnifferParserTransformer
+	implements Transformer<Uint8Array, ZnifferSerialFrame>
+{
 	constructor(
 		private logger?: SerialLogger,
-		private onDiscarded?: (data: Uint8Array) => void,
-	) {
-		// We read byte streams but emit messages
-		super({ readableObjectMode: true });
-	}
+	) {}
 
 	private receiveBuffer = new Bytes();
 
 	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
 	public ignoreAckHighNibble: boolean = false;
 
-	_transform(
-		chunk: any,
-		encoding: string,
-		callback: TransformCallback,
-	): void {
+	transform(
+		chunk: Uint8Array,
+		controller: TransformStreamDefaultController<ZnifferSerialFrame>,
+	) {
 		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
 		while (this.receiveBuffer.length > 0) {
@@ -63,7 +64,10 @@ export class ZnifferParser extends Transform {
 			if (skip > 0) {
 				const discarded = this.receiveBuffer.subarray(0, skip);
 				this.logger?.discarded(discarded);
-				this.onDiscarded?.(discarded);
+				controller.enqueue({
+					type: ZnifferSerialFrameType.Discarded,
+					data: discarded,
+				});
 
 				// Continue with the next valid byte
 				this.receiveBuffer = this.receiveBuffer.subarray(skip);
@@ -84,9 +88,21 @@ export class ZnifferParser extends Transform {
 				this.receiveBuffer = this.receiveBuffer.subarray(msgLength);
 
 				this.logger?.data("inbound", msg);
-				this.push(msg);
+				controller.enqueue({
+					type: ZnifferSerialFrameType.SerialAPI,
+					data: msg,
+				});
 			}
 		}
-		callback();
+	}
+}
+
+export class ZnifferParser
+	extends TransformStream<Uint8Array, ZnifferSerialFrame>
+{
+	constructor(
+		logger?: SerialLogger,
+	) {
+		super(new ZnifferParserTransformer(logger));
 	}
 }

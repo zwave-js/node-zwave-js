@@ -1,7 +1,19 @@
-import { copyFilesRecursive, formatId, padVersion } from "@zwave-js/shared";
-import fs from "node:fs/promises";
+import {
+	copyFilesRecursive,
+	formatId,
+	padVersion,
+	readTextFile,
+	writeTextFile,
+} from "@zwave-js/shared";
+import {
+	type CopyFile,
+	type ManageDirectory,
+	type ReadFile,
+	type ReadFileSystemInfo,
+	type WriteFile,
+} from "@zwave-js/shared/bindings";
 import { createRequire } from "node:module";
-import path from "node:path";
+import path from "pathe";
 import semverGte from "semver/functions/gte.js";
 import semverInc from "semver/functions/inc.js";
 import semverLte from "semver/functions/lte.js";
@@ -64,6 +76,7 @@ export type SyncExternalConfigDirResult =
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
 export async function syncExternalConfigDir(
+	fs: ManageDirectory & ReadFileSystemInfo & ReadFile & CopyFile & WriteFile,
 	extConfigDir: string,
 	logger: ConfigLogger,
 ): Promise<SyncExternalConfigDirResult> {
@@ -71,7 +84,7 @@ export async function syncExternalConfigDir(
 
 	// Make sure the config dir exists
 	try {
-		await fs.mkdir(extConfigDir, { recursive: true });
+		await fs.ensureDir(extConfigDir);
 	} catch {
 		logger.print(
 			`Synchronizing external config dir failed - directory could not be created`,
@@ -98,7 +111,11 @@ export async function syncExternalConfigDir(
 	let wipe = false;
 	let externalVersion: string | undefined;
 	try {
-		externalVersion = await fs.readFile(externalVersionFilename, "utf8");
+		externalVersion = await readTextFile(
+			fs,
+			externalVersionFilename,
+			"utf8",
+		);
 		if (!semverValid(externalVersion)) {
 			wipe = true;
 		} else if (
@@ -118,14 +135,20 @@ export async function syncExternalConfigDir(
 	// Wipe and override the external dir
 	try {
 		logger.print(`Synchronizing external config dir ${extConfigDir}...`);
-		await fs.rm(extConfigDir, { recursive: true, force: true });
-		await fs.mkdir(extConfigDir, { recursive: true });
+		await fs.deleteDir(extConfigDir);
+		await fs.ensureDir(extConfigDir);
 		await copyFilesRecursive(
+			fs,
 			configDir,
 			extConfigDir,
 			(src) => src.endsWith(".json"),
 		);
-		await fs.writeFile(externalVersionFilename, currentVersion, "utf8");
+		await writeTextFile(
+			fs,
+			externalVersionFilename,
+			currentVersion,
+			"utf8",
+		);
 		externalVersion = currentVersion;
 	} catch {
 		// Something went wrong

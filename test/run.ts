@@ -2,13 +2,14 @@ import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
 import "reflect-metadata";
 import { Bytes } from "@zwave-js/shared/safe";
-import os from "node:os";
+import _os from "node:os";
 import { fileURLToPath } from "node:url";
 import { Driver } from "zwave-js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const wait = _wait;
+const os = _os;
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
@@ -24,6 +25,7 @@ process.on("unhandledRejection", (_r) => {
 const port = os.platform() === "win32"
 	? "COM5"
 	: "/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
+// const port = "tcp://127.0.0.1:5555";
 
 const driver = new Driver(port, {
 	// logConfig: {

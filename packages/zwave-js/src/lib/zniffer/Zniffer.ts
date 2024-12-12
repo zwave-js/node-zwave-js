@@ -1,4 +1,5 @@
 import {
+	type CCParsingContext,
 	CommandClass,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
@@ -9,6 +10,7 @@ import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type FrameType,
+	type HostIDs,
 	type LogConfig,
 	MPDUHeaderType,
 	type MaybeNotKnown,
@@ -28,11 +30,12 @@ import {
 	ZnifferRegionLegacy,
 	getChipTypeAndVersion,
 	isLongRangeNodeId,
+	isZWaveError,
 	securityClassIsS2,
 } from "@zwave-js/core";
 import { sdkVersionGte } from "@zwave-js/core";
-import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
+	type ZWaveSerialBindingFactory,
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
 	ZnifferFrameType,
@@ -44,23 +47,25 @@ import {
 	ZnifferGetVersionResponse,
 	ZnifferMessage,
 	ZnifferMessageType,
-	ZnifferSerialPort,
-	ZnifferSerialPortBase,
+	ZnifferSerialFrameType,
+	type ZnifferSerialStream,
+	ZnifferSerialStreamFactory,
 	ZnifferSetBaudRateRequest,
 	ZnifferSetBaudRateResponse,
 	ZnifferSetFrequencyRequest,
 	ZnifferSetFrequencyResponse,
-	ZnifferSocket,
 	ZnifferStartRequest,
 	ZnifferStartResponse,
 	ZnifferStopRequest,
 	ZnifferStopResponse,
 	isZWaveSerialPortImplementation,
+	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
 import {
 	Bytes,
 	TypedEventTarget,
 	getEnumMemberName,
+	isAbortError,
 	isEnumMember,
 	noop,
 	num2hex,
@@ -70,7 +75,6 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
 import { ZnifferLogger } from "../log/Zniffer.js";
 import {
@@ -119,6 +123,8 @@ export interface ZnifferOptions {
 	securityKeys?: ZWaveOptions["securityKeys"];
 	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+
+	host?: ZWaveOptions["host"];
 
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
@@ -186,7 +192,11 @@ export interface CapturedFrame {
 
 export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 	public constructor(
-		private port: string | ZWaveSerialPortImplementation,
+		private port:
+			| string
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			| ZWaveSerialPortImplementation
+			| ZWaveSerialBindingFactory,
 		options: ZnifferOptions = {},
 	) {
 		super();
@@ -265,8 +275,16 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 
 	private _options: ZnifferOptions;
 
+	/**
+	 * The host bindings used to access file system etc.
+	 */
+	// This is set during `init()` and should not be accessed before
+	private bindings!: Required<NonNullable<ZWaveOptions["host"]>>;
+
+	private serialFactory: ZnifferSerialStreamFactory | undefined;
 	/** The serial port instance */
-	private serial: ZnifferSerialPortBase | undefined;
+	private serial: ZnifferSerialStream | undefined;
+
 	private parsingContext: Omit<
 		CCParsingContext,
 		keyof HostIDs | "sourceNodeId" | "frameType" | keyof SecurityManagers
@@ -330,41 +348,53 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 			);
 		}
 
+		// Populate default bindings. This has to happen asynchronously, so the driver does not have a hard dependency
+		// on Node.js internals
+		this.bindings = {
+			fs: this._options.host?.fs
+				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
+			serial: this._options.host?.serial
+				?? (await import("@zwave-js/serial/bindings/node")).serial,
+		};
+
 		// Open the serial port
+		let binding: ZWaveSerialBindingFactory;
 		if (typeof this.port === "string") {
-			if (this.port.startsWith("tcp://")) {
-				const url = new URL(this.port);
-				// this.znifferLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZnifferSocket(
-					{
-						host: url.hostname,
-						port: parseInt(url.port),
-					},
-					this._logContainer,
+			if (
+				typeof this.bindings.serial.createFactoryByPath === "function"
+			) {
+				this.znifferLog.print(`opening serial port ${this.port}`);
+				binding = await this.bindings.serial.createFactoryByPath(
+					this.port,
 				);
 			} else {
-				// this.znifferLog.print(`opening serial port ${this.port}`);
-				this.serial = new ZnifferSerialPort(
-					this.port,
-					this._logContainer,
+				throw new ZWaveError(
+					"This platform does not support creating a serial connection by path",
+					ZWaveErrorCodes.Driver_Failed,
 				);
 			}
-		} else {
-			// this.znifferLog.print(
-			// 	"opening serial port using the provided custom implementation",
-			// );
-			this.serial = new ZnifferSerialPortBase(
-				this.port,
-				this._logContainer,
+		} else if (isZWaveSerialPortImplementation(this.port)) {
+			this.znifferLog.print(
+				"opening serial port using the provided custom implementation",
 			);
+			this.znifferLog.print(
+				"This is deprecated! Switch to the factory pattern instead.",
+				"warn",
+			);
+			binding = wrapLegacySerialBinding(this.port);
+		} else {
+			this.znifferLog.print(
+				"opening serial port using the provided custom factory",
+			);
+			binding = this.port;
 		}
-		this.serial
-			.on("data", this.serialport_onData.bind(this))
-			.on("error", (err) => {
-				this.emit("error", err);
-			});
+		this.serialFactory = new ZnifferSerialStreamFactory(
+			binding,
+			this._logContainer,
+		);
 
-		await this.serial.open();
+		this.serial = await this.serialFactory.createStream();
+		void this.handleSerialData(this.serial);
 
 		this.znifferLog.print(logo, "info");
 
@@ -450,6 +480,30 @@ supported frequencies: ${
 		}
 
 		this.emit("ready");
+	}
+
+	private async handleSerialData(serial: ZnifferSerialStream): Promise<void> {
+		try {
+			for await (const frame of serial.readable) {
+				setImmediate(() => {
+					if (frame.type === ZnifferSerialFrameType.SerialAPI) {
+						void this.serialport_onData(frame.data);
+					} else {
+						// Handle discarded data?
+					}
+				});
+			}
+		} catch (e) {
+			if (isAbortError(e)) {
+				return;
+			} else if (
+				isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed
+			) {
+				this.emit("error", e);
+				return this.destroy();
+			}
+			throw e;
+		}
 	}
 
 	/**
@@ -984,7 +1038,10 @@ supported frequencies: ${
 		filePath: string,
 		frameFilter?: (frame: CapturedFrame) => boolean,
 	): Promise<void> {
-		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer(frameFilter));
+		await this.bindings.fs.writeFile(
+			filePath,
+			this.getCaptureAsZLFBuffer(frameFilter),
+		);
 	}
 
 	/**
@@ -1004,7 +1061,6 @@ supported frequencies: ${
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
-			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}

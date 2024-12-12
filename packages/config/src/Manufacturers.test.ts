@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { pathExists } from "@zwave-js/shared";
 import { readFile } from "node:fs/promises";
 import { test, vi } from "vitest";
@@ -54,7 +55,9 @@ const pathExistsStub = vi.mocked(pathExists);
 		pathExistsStub.mockClear();
 		readFileStub.mockClear();
 		pathExistsStub.mockResolvedValue(true);
-		readFileStub.mockResolvedValue(`{"0x000e": ` as any);
+		readFileStub.mockResolvedValue(
+			Buffer.from(`{"0x000e": `, "utf8"),
+		);
 
 		const configManager = new ConfigManager();
 		await configManager.loadManufacturers();
@@ -89,9 +92,12 @@ const pathExistsStub = vi.mocked(pathExists);
 		pathExistsStub.mockClear();
 		pathExistsStub.mockResolvedValue(true);
 		readFileStub.mockResolvedValue(
-			JSON.stringify({
-				"0x000e": "Test",
-			}) as any,
+			Buffer.from(
+				JSON.stringify({
+					"0x000e": "Test",
+				}),
+				"utf8",
+			),
 		);
 
 		const configManager = new ConfigManager();

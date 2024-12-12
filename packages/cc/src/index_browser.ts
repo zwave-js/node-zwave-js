@@ -10,3 +10,4 @@ export type {
 	PartialCCValuePredicate,
 } from "./lib/Values.js";
 export * from "./lib/_Types.js";
+export type * from "./lib/traits.js";

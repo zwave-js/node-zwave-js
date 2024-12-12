@@ -1,4 +1,6 @@
-import type { MockPortBinding } from "@zwave-js/serial/mock";
+import { fs } from "@zwave-js/core/bindings/fs/node";
+import { type ZWaveSerialStream } from "@zwave-js/serial";
+import type { MockPort } from "@zwave-js/serial/mock";
 import { copyFilesRecursive, noop } from "@zwave-js/shared";
 import {
 	type MockController,
@@ -8,7 +10,7 @@ import {
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import crypto from "node:crypto";
-import fs from "node:fs/promises";
+import fsp from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { type TestContext, test } from "vitest";
@@ -68,7 +70,8 @@ function suite(
 	} = options;
 
 	let driver: Driver;
-	let mockPort: MockPortBinding;
+	let mockPort: MockPort;
+	let serial: ZWaveSerialStream;
 	let continueStartup: () => void;
 	let mockController: MockController;
 	let mockNodes: MockNode[];
@@ -85,21 +88,22 @@ function suite(
 		}
 
 		// Make sure every test is starting fresh
-		await fs.rm(cacheDir, { recursive: true, force: true }).catch(noop);
-		await fs.mkdir(cacheDir, { recursive: true });
+		await fsp.rm(cacheDir, { recursive: true, force: true }).catch(noop);
+		await fsp.mkdir(cacheDir, { recursive: true });
 
 		// And potentially provision the cache
 		if (provisioningDirectory) {
-			await copyFilesRecursive(provisioningDirectory, cacheDir);
+			await copyFilesRecursive(fs, provisioningDirectory, cacheDir);
 		}
 
-		({ driver, continueStartup, mockPort } = await prepareDriver(
+		({ driver, continueStartup, mockPort, serial } = await prepareDriver(
 			cacheDir,
 			debug,
 			additionalDriverOptions,
 		));
 		({ mockController, mockNodes } = prepareMocks(
 			mockPort,
+			serial,
 			{
 				capabilities: controllerCapabilities,
 			},
@@ -170,7 +174,7 @@ function suite(
 
 			await driver.destroy();
 			if (!debug) {
-				await fs.rm(cacheDir, { recursive: true, force: true })
+				await fsp.rm(cacheDir, { recursive: true, force: true })
 					.catch(noop);
 			}
 		});

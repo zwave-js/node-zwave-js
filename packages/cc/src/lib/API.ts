@@ -1,11 +1,21 @@
-import { type CompatOverrideQueries } from "@zwave-js/config";
+import { type SendCommand } from "@zwave-js/cc";
+import {
+	type CompatOverrideQueries,
+	type GetDeviceConfig,
+} from "@zwave-js/config";
 import {
 	CommandClasses,
 	type ControlsCC,
 	type Duration,
 	type EndpointId,
 	type GetEndpoint,
+	type GetNode,
+	type GetSafeCCVersion,
+	type GetSupportedCCVersion,
+	type GetValueDB,
+	type HostIDs,
 	type ListenBehavior,
+	type LogNode,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
@@ -27,19 +37,6 @@ import {
 	getCCName,
 	stripUndefined,
 } from "@zwave-js/core";
-import type {
-	GetCommunicationTimeouts,
-	GetDeviceConfig,
-	GetNode,
-	GetSafeCCVersion,
-	GetSupportedCCVersion,
-	GetUserPreferences,
-	GetValueDB,
-	HostIDs,
-	LogNode,
-	SchedulePoll,
-	SendCommand,
-} from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,
@@ -55,6 +52,11 @@ import {
 	getImplementedVersion,
 } from "./CommandClassDecorators.js";
 import { type CCValue, type StaticCCValue } from "./Values.js";
+import {
+	type GetRefreshValueTimeouts,
+	type GetUserPreferences,
+	type SchedulePoll,
+} from "./traits.js";
 
 export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
 
@@ -161,7 +163,7 @@ export function throwWrongValueType(
 	);
 }
 
-export interface SchedulePollOptions {
+export interface CCAPISchedulePollOptions {
 	duration?: Duration;
 	transition?: "fast" | "slow";
 }
@@ -176,7 +178,7 @@ export type CCAPIHost<TNode extends CCAPINode = CCAPINode> =
 	& SecurityManagers
 	& GetDeviceConfig
 	& SendCommand
-	& GetCommunicationTimeouts
+	& GetRefreshValueTimeouts
 	& GetUserPreferences
 	& SchedulePoll
 	& LogNode;
@@ -363,12 +365,12 @@ export class CCAPI {
 	protected schedulePoll(
 		{ property, propertyKey }: ValueIDProperties,
 		expectedValue: unknown,
-		{ duration, transition = "slow" }: SchedulePollOptions = {},
+		{ duration, transition = "slow" }: CCAPISchedulePollOptions = {},
 	): boolean {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
 		// use/add the short delay. Otherwise, default to the long delay.
 		const durationMs = duration?.toMilliseconds() ?? 0;
-		const timeouts = this.host.getCommunicationTimeouts();
+		const timeouts = this.host.getRefreshValueTimeouts();
 		const additionalDelay = !!durationMs || transition === "fast"
 			? timeouts.refreshValueAfterTransition
 			: timeouts.refreshValue;

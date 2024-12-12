@@ -2,7 +2,6 @@ import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { type AssociationAddress } from "@zwave-js/cc";
 import {
 	type CommandClasses,
-	type FileSystem,
 	NodeType,
 	Protocols,
 	SecurityClass,
@@ -13,8 +12,9 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
+import type { ReadFile, ReadFileSystemInfo } from "@zwave-js/shared/bindings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import path from "node:path";
+import path from "pathe";
 import {
 	ProvisioningEntryStatus,
 	type SmartStartProvisioningEntry,
@@ -623,12 +623,20 @@ export async function migrateLegacyNetworkCache(
 	homeId: number,
 	networkCache: JsonlDB,
 	valueDB: JsonlDB,
-	storageDriver: FileSystem,
+	fs: ReadFileSystemInfo & ReadFile,
 	cacheDir: string,
 ): Promise<void> {
 	const cacheFile = path.join(cacheDir, `${homeId.toString(16)}.json`);
-	if (!(await storageDriver.pathExists(cacheFile))) return;
-	const legacy = JSON.parse(await storageDriver.readFile(cacheFile, "utf8"));
+	try {
+		const stat = await fs.stat(cacheFile);
+		if (!stat.isFile()) return;
+	} catch {
+		// The file does not exist
+		return;
+	}
+
+	const legacyContents = await fs.readFile(cacheFile);
+	const legacy = JSON.parse(Bytes.view(legacyContents).toString("utf8"));
 
 	const jsonl = networkCache;
 	function tryMigrate(
