@@ -1176,6 +1176,16 @@ interface GetFirmwareUpdatesOptions {
 	additionalUserAgentComponents?: Record<string, string>;
 	/** Whether the returned firmware upgrades should include prereleases from the `"beta"` channel. Default: `false`. */
 	includePrereleases?: boolean;
+	/**
+	 * Can be used to specify the RF region if the Z-Wave controller
+	 * does not support querying this information.
+	 *
+	 * **WARNING:** Specifying the wrong region may result in bricking the device!
+	 *
+	 * For this reason, the specified value is only used as a fallback
+	 * if the RF region of the controller is not already known.
+	 */
+	rfRegion?: RFRegion;
 }
 ```
 
