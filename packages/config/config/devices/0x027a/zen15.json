@@ -173,6 +173,7 @@
 			"#": "151",
 			"label": "Power Report Value Threshold",
 			"valueSize": 2,
+			"unit": "watts",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
