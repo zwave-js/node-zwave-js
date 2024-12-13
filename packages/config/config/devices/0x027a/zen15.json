@@ -100,6 +100,23 @@
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
+			"#": "35",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Delay Turn-On after power outage",
+			"description": "Delay turn on of the relay after a power outage occurs. (0 – Disabled [Default]; 1 – 600)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 600,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "24",
 			"label": "On/Off Status Change Notifications",
 			"valueSize": 1,
