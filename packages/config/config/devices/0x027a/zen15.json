@@ -207,9 +207,9 @@
 			"$if": "firmwareVersion >= 2.10",
 			"label": "Voltage Report Threshold",
 			"valueSize": 1,
+			"unit": "V",
 			"minValue": 0,
 			"maxValue": 255,
-			"unit": "V",
 			"defaultValue": 10
 		},
 		{
