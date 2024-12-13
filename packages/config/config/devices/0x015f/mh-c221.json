@@ -89,10 +89,10 @@
 					"label": "Activate demo trip and calibration when first touch of the buttony",
 					"value": 1
 				},
-                {
+				{
 					"label": "Do nothing",
-                    "value": 0
-                }
+					"value": 0
+				}
 			]
 		},
 		{
@@ -106,10 +106,10 @@
 					"label": "Activate demo trip and calibration",
 					"value": 1
 				},
-                {
+				{
 					"label": "Do nothing",
-                    "value": 0
-                }
+					"value": 0
+				}
 			]
 		},
 		{
@@ -123,10 +123,10 @@
 					"label": "Activate calibration only",
 					"value": 1
 				},
-                {
+				{
 					"label": "Do nothing",
-                    "value": 0
-                }
+					"value": 0
+				}
 			]
 		},
 		{
@@ -157,11 +157,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle 2 State Switches; On position shutter open; OFF position shutter close; Momentary or Toggle key to S1 only",
+					"label": "Toggle 2 state switches; On position shutter open; Off position shutter close; Momentary or toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "Toggle 2 State Switches; ON position shutter close; OFF postion shutter open",
+					"label": "Toggle 2 state switches; On position shutter close; Off position shutter open",
 					"value": 2
 				}
 			]
@@ -206,11 +206,10 @@
 					"label": "Restore factory setting",
 					"value": 85
 				},
-                {
+				{
 					"label": "Do nothing",
-                    "value": 0
-                }
-
+					"value": 0
+				}
 			]
 		}
 	],
