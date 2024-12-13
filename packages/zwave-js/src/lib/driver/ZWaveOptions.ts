@@ -6,7 +6,7 @@ import type {
 } from "@zwave-js/core";
 import { type Serial, type ZWaveSerialStream } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
-import type { FileSystem } from "@zwave-js/shared/bindings";
+import type { DatabaseFactory, FileSystem } from "@zwave-js/shared/bindings";
 import type {
 	InclusionUserCallbacks,
 	JoinNetworkUserCallbacks,
@@ -137,6 +137,11 @@ export interface ZWaveOptions {
 		 * Specifies which bindings are used interact with serial ports.
 		 */
 		serial?: Serial;
+
+		/**
+		 * Specifies which bindings are used to interact with the database used to store the cache.
+		 */
+		db?: DatabaseFactory;
 	};
 
 	storage: {

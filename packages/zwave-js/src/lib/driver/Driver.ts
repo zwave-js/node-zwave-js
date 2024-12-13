@@ -1,4 +1,4 @@
-import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
+import { type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
 	type CCAPIHost,
 	type CCEncodingContext,
@@ -193,6 +193,7 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import {
+	type Database,
 	type ReadFile,
 	type ReadFileSystemInfo,
 } from "@zwave-js/shared/bindings";
@@ -894,19 +895,19 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 	public readonly cacheDir: string;
 
-	private _valueDB: JsonlDB | undefined;
+	private _valueDB: Database<unknown> | undefined;
 	/** @internal */
-	public get valueDB(): JsonlDB | undefined {
+	public get valueDB(): Database<unknown> | undefined {
 		return this._valueDB;
 	}
-	private _metadataDB: JsonlDB<ValueMetadata> | undefined;
+	private _metadataDB: Database<ValueMetadata> | undefined;
 	/** @internal */
-	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
+	public get metadataDB(): Database<ValueMetadata> | undefined {
 		return this._metadataDB;
 	}
-	private _networkCache: JsonlDB<any> | undefined;
+	private _networkCache: Database<any> | undefined;
 	/** @internal */
-	public get networkCache(): JsonlDB<any> {
+	public get networkCache(): Database<any> {
 		if (this._networkCache == undefined) {
 			throw new ZWaveError(
 				"The network cache was not yet initialized!",
@@ -1332,6 +1333,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
 			serial: this._options.host?.serial
 				?? (await import("@zwave-js/serial/bindings/node")).serial,
+			db: this._options.host?.db
+				?? (await import("@zwave-js/core/bindings/db/jsonl")).db,
 		};
 
 		const spOpenPromise = createDeferredPromise();
@@ -1593,7 +1596,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.jsonl`,
 		);
-		this._networkCache = new JsonlDB(networkCacheFile, {
+		this._networkCache = this.bindings.db.createInstance(networkCacheFile, {
 			...options,
 			serializer: serializeNetworkCacheValue,
 			reviver: deserializeNetworkCacheValue,
@@ -1614,7 +1617,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.values.jsonl`,
 		);
-		this._valueDB = new JsonlDB(valueDBFile, {
+		this._valueDB = this.bindings.db.createInstance(valueDBFile, {
 			...options,
 			enableTimestamps: true,
 			reviver: (_key, value) => deserializeCacheValue(value),
@@ -1626,7 +1629,10 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.cacheDir,
 			`${homeId.toString(16)}.metadata.jsonl`,
 		);
-		this._metadataDB = new JsonlDB(metadataDBFile, options);
+		this._metadataDB = this.bindings.db.createInstance(
+			metadataDBFile,
+			options,
+		);
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {

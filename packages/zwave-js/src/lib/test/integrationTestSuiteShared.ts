@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import {
 	createDefaultMockControllerBehaviors,
 	createDefaultMockNodeBehaviors,
-} from "../../Utils.js";
+} from "../../Testing.js";
 import {
 	type CreateAndStartDriverWithMockPortResult,
 	createAndStartDriverWithMockPort,

@@ -1,13 +1,9 @@
+import { untar } from "@andrewbranch/untar.js";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import {
-	copyFilesRecursive,
-	getErrorMessage,
-	noop,
-	writeTextFile,
-} from "@zwave-js/shared";
+import { gunzipSync } from "@zwave-js/core";
+import { getErrorMessage, writeTextFile } from "@zwave-js/shared";
 import {
 	type CopyFile,
-	type FileHandle,
 	type MakeTempDirectory,
 	type ManageDirectory,
 	type OpenFile,
@@ -15,7 +11,6 @@ import {
 	type WriteFile,
 } from "@zwave-js/shared/bindings";
 import { isObject } from "alcalzone-shared/typeguards";
-import execa from "execa";
 import path from "pathe";
 import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
@@ -105,34 +100,11 @@ export async function installConfigUpdate(
 		);
 	}
 
-	// Download tarball to a temporary directory
-	let tmpDir: string;
+	let tarballData: Uint8Array;
 	try {
-		tmpDir = await fs.makeTempDir("zjs-config-update-");
-	} catch (e) {
-		throw new ZWaveError(
-			`Config update failed: Could not create temporary directory. Reason: ${
-				getErrorMessage(
-					e,
-				)
-			}`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
+		tarballData = new Uint8Array(
+			await ky.get(url).arrayBuffer(),
 		);
-	}
-
-	// Download the package tarball into the temporary directory
-	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
-	let fileHandle: FileHandle | undefined;
-	try {
-		fileHandle = await fs.open(tarFilename, {
-			read: false,
-			write: true,
-			create: true,
-			truncate: true,
-		});
-
-		const response = await ky.get(url);
-		await response.body?.pipeTo(fileHandle.writable);
 	} catch (e) {
 		throw new ZWaveError(
 			`Config update failed: Could not download tarball. Reason: ${
@@ -142,41 +114,31 @@ export async function installConfigUpdate(
 			}`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
-	} finally {
-		await fileHandle?.close();
 	}
 
-	// This should not be necessary in Docker. Leaving it here anyways in case
-	// we want to use this method on Windows at some point
-	function normalizeToUnixStyle(path: string): string {
-		path = path.replaceAll(":", "");
-		path = path.replaceAll("\\", "/");
-		if (!path.startsWith("/")) path = `/${path}`;
-		return path;
-	}
-
-	const extractedDir = path.join(tmpDir, "extracted");
 	try {
-		// Extract the tarball in the temporary folder
-		await fs.deleteDir(extractedDir);
-		await fs.ensureDir(extractedDir);
-		await execa("tar", [
-			"--strip-components=1",
-			"-xzf",
-			normalizeToUnixStyle(tarFilename),
-			"-C",
-			normalizeToUnixStyle(extractedDir),
-		]);
-
-		// then overwrite the files in the external config directory
+		// Extract json files from the tarball's config directory
+		// and overwrite the external config directory with them
+		const tarFiles = untar(gunzipSync(tarballData));
 		await fs.deleteDir(external.configDir);
 		await fs.ensureDir(external.configDir);
-		await copyFilesRecursive(
-			fs,
-			path.join(extractedDir, "config"),
-			external.configDir,
-			(src) => src.endsWith(".json"),
-		);
+
+		const prefix = "package/config/";
+		for (const file of tarFiles) {
+			if (
+				!file.filename.startsWith(prefix)
+				|| !file.filename.endsWith(".json")
+			) {
+				continue;
+			}
+			const filename = file.filename.slice(prefix.length);
+			const targetFileName = path.join(external.configDir, filename);
+			const targetDirName = path.dirname(targetFileName);
+
+			await fs.ensureDir(targetDirName);
+			await fs.writeFile(targetFileName, file.fileData);
+		}
+
 		const externalVersionFilename = path.join(
 			external.configDir,
 			"version",
@@ -188,7 +150,4 @@ export async function installConfigUpdate(
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}
-
-	// Clean up the temp dir and ignore errors
-	await fs.deleteDir(tmpDir).catch(noop);
 }

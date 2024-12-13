@@ -1,4 +1,3 @@
-import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { type AssociationAddress } from "@zwave-js/cc";
 import {
 	type CommandClasses,
@@ -12,7 +11,11 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import { Bytes, getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
-import type { ReadFile, ReadFileSystemInfo } from "@zwave-js/shared/bindings";
+import type {
+	Database,
+	ReadFile,
+	ReadFileSystemInfo,
+} from "@zwave-js/shared/bindings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "pathe";
 import {
@@ -621,8 +624,8 @@ const legacyPaths = {
 
 export async function migrateLegacyNetworkCache(
 	homeId: number,
-	networkCache: JsonlDB,
-	valueDB: JsonlDB,
+	networkCache: Database<any>,
+	valueDB: Database<unknown>,
 	fs: ReadFileSystemInfo & ReadFile,
 	cacheDir: string,
 ): Promise<void> {
