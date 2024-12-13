@@ -72,7 +72,7 @@
 			"#": "20",
 			"$if": "firmwareVersion >= 2.10",
 			"label": "Overload Protection",
-			"description": "Secunds power draw on the connected device can exceed 16.5A before shut off.",
+			"description": "Seconds power draw on the connected device can exceed 16.5A before shut off.",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 2,
