@@ -1,7 +1,13 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN15",
+	"label": [
+ 		{
+ 			"$if": "firmwareVersion >= 2.0",
+ 			"value": "ZEN15 800LR"
+ 		},
+ 		"ZEN15"
+ 	],
 	"description": "Power Switch",
 	"devices": [
 		{
