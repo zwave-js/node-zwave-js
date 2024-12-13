@@ -103,7 +103,7 @@
 		{
 			"#": "35",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Delay Turn-On after power outage",
+			"label": "Delay Turn-On After Power Outage",
 			"description": "Delay turn on of the relay after a power outage occurs. (0 – Disabled [Default]; 1 – 600)",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -174,7 +174,7 @@
 			"#": "151",
 			"label": "Power Wattage Report Value Threshold",
 			"valueSize": 2,
-			"unit": "watts",
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
@@ -207,9 +207,7 @@
 			"$if": "firmwareVersion >= 2.10",
 			"label": "Voltage Report Threshold",
 			"valueSize": 1,
-			"unit": "volts",
-			"minValue": 0,
-			"maxValue": 255,
+			"unit": "V",
 			"defaultValue": 10
 		},
 		{
@@ -295,15 +293,15 @@
 			"#": "31",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Z-Wave ON Control",
-			"defaultValue": 1,
-			"description": "Disables ON control from the hub"
+			"description": "Disables ON control from the hub",
+			"defaultValue": 1
 		},
 		{
 			"#": "32",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Z-Wave OFF Control",
-			"defaultValue": 1,
-			"description": "Disables OFF control from the hub"
+			"description": "Disables OFF control from the hub",
+			"defaultValue": 1
 		}
 	],
 	"metadata": {
