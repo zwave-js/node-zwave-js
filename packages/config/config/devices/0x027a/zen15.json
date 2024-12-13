@@ -80,6 +80,22 @@
 			"defaultValue": 2
 		},
 		{
+			"#": "36",
+			"$if": "firmwareVersion >= 2.10",
+			"label": "Overload Protection Turn On Delay",
+			"description": "Disable or set the delay for the automatic turn on after the unit has been turned off after the overload protection was triggered. (0 – Disabled [Default]; 10 – 65535 [seconds])",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
