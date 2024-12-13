@@ -288,6 +288,20 @@
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual Control",
 			"description": "Disables manual control from the device itself"
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave ON Control",
+			"defaultValue": 1,
+			"description": "Disables ON control from the hub"
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave OFF Control",
+			"defaultValue": 1,
+			"description": "Disables OFF control from the hub"
 		}
 	],
 	"metadata": {
