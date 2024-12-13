@@ -201,6 +201,28 @@
 			]
 		},
 		{
+			"#": "175",
+			"$if": "firmwareVersion >= 2.10",
+			"label": "Voltage Report Threshold",
+			"valueSize": 1,
+			"unit": "volts",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10
+		},
+		{
+			"#": "176",
+			"$if": "firmwareVersion >= 2.10",
+			"label": "Electrical Current Report Threshold",
+			"description": "Values: 0 – disabled; 1 – 65535",
+			"valueSize": 2,
+			"unit": "mA",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true
+		},
+		{
 			"#": "171",
 			"label": "Power Report Frequency",
 			"valueSize": 4,
