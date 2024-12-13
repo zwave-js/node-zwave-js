@@ -206,11 +206,13 @@
 			"#": "175",
 			"$if": "firmwareVersion >= 2.10",
 			"label": "Voltage Report Threshold",
+			"description": "Values: 0 – 255; 0 – disabled",
 			"valueSize": 1,
 			"unit": "V",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10
+			"unsigned": true,
 		},
 		{
 			"#": "176",
