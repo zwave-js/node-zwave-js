@@ -88,6 +88,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
