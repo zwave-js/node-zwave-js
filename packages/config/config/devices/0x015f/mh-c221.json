@@ -203,7 +203,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "85 restore factory setting",
+					"label": "Restore factory setting",
 					"value": 85
 				},
                 {
