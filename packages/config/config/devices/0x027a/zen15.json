@@ -171,7 +171,7 @@
 		},
 		{
 			"#": "151",
-			"label": "Power Report Value Threshold",
+			"label": "Power Wattage Report Value Threshold",
 			"valueSize": 2,
 			"unit": "watts",
 			"minValue": 0,
@@ -270,7 +270,7 @@
 		},
 		{
 			"#": "174",
-			"label": "Electricity Report Frequency",
+			"label": "Electrical Current Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
