@@ -157,11 +157,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle 2 State Switches, ON position shutter open, OFF position shutter close, Momentary or Toggle key to S1 only",
+					"label": "Toggle 2 State Switches; On position shutter open; Off position shutter close; Momentary or Toggle key to S1 only",
 					"value": 1
 				},
 				{
-					"label": "Toggle 2 State Switches, ON position shutter close, OFF postion shutter open",
+					"label": "Toggle 2 State Switches; On position shutter close; Off postion shutter open",
 					"value": 2
 				}
 			]
@@ -203,7 +203,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Restore factory settings",
+					"label": "85 restore factory setting",
 					"value": 85
 				},
                 {
