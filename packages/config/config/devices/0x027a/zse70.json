@@ -144,7 +144,6 @@
 			"#": "18",
 			"$import": "templates/zooz_template.json#lux_report_frequency"
 		}
-		
 	],
 	"metadata": {
 		"wakeup": "Press the Z-Wave button to wake the device up. The LED will start flashing.",
