@@ -1,0 +1,351 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA046",
+	"description": "Home Energy Meter 8",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x002e",
+			"zwaveAllianceId": 5070
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Turn your gateway/ main controller into adding mode.\n2. Press once the Action Button on the product",
+		"exclusion": "1. Turn your gateway/ main controller into removing mode.\n2. Press once the Action Button on the product",
+		"reset": "Press and hold the Action Button on product for 10s.\n\nNote: Please use this procedure only when the network’s primary controller is missing or otherwise inoperable."
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Threshold Check Enable/Disable",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Import Watt Threshold(total)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Import Watt Threshold(phase A)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Import Watt Threshold(phase B)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Import Watt Threshold(phase C)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Export Watt Threshold(total)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Export Watt Threshold(phase A)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Export Watt Threshold(phase B)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Export Watt Threshold(phase C)",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Import Watt Percentage Threshold(total)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Import Watt Percentage Threshold(phase A)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Import Watt Percentage Threshold(phase B)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Import Watt Percentage Threshold(phase C)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Export Watt Percentage Threshold(total)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Export Watt Percentage Threshold(phase A)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Export Watt Percentage Threshold(phase B)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Export Watt Percentage Threshold(phase C)",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "100",
+			"label": "Set 101-106 to Default",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "101",
+			"label": "Automatic Report List 1 (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 50529024,
+			"unsigned": true
+		},
+		{
+			"#": "102",
+			"label": "Automatic Report List 2 (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 202116096,
+			"unsigned": true
+		},
+		{
+			"#": "103",
+			"label": "Automatic Report List 3 (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 4042321920,
+			"unsigned": true
+		},
+		{
+			"#": "104",
+			"label": "Automatic Report List 2(export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 50529024,
+			"unsigned": true
+		},
+		{
+			"#": "105",
+			"label": "Automatic Report List 1 (export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 202116096,
+			"unsigned": true
+		},
+		{
+			"#": "106",
+			"label": "Automatic Report List 3 (export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 4042321920,
+			"unsigned": true
+		},
+		{
+			"#": "110",
+			"label": "Set 111-116 to Default",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "111",
+			"label": "Automatic List 1 Interval Time (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "112",
+			"label": "Automatic List 2 Interval Time (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 7200,
+			"unsigned": true
+		},
+		{
+			"#": "113",
+			"label": "Automatic List 3 Interval Time (import)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 7200,
+			"unsigned": true
+		},
+		{
+			"#": "114",
+			"label": "Automatic List 1 Interval Time (export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "115",
+			"label": "Automatic List 2 Interval Time (export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 7200,
+			"unsigned": true
+		},
+		{
+			"#": "116",
+			"label": "Automatic List 3 Interval Time (export)",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 4294967295,
+			"defaultValue": 7200,
+			"unsigned": true
+		},
+		{
+			"#": "252",
+			"label": "Enable/Disable Configuration Setting",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	]
+}
