@@ -69,8 +69,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1
-		}
-		,
+		},
 		{
 			"#": "6",
 			"label": "Mode of switch off function",
@@ -79,8 +78,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
-		}
-		,
+		},
 		{
 			"#": "7",
 			"label": "LED indication mode",
@@ -89,8 +87,7 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1
-		}
-		,
+		},
 		{
 			"#": "8",
 			"label": "Auto off timer (1s)",
@@ -99,8 +96,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
-		}
-		,
+		},
 		{
 			"#": "9",
 			"label": "	RF off command mode",
