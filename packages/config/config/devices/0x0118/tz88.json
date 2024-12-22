@@ -49,7 +49,7 @@
 			"label": "Threshold for Load Caution (10mA)",
 			"description": "Threshold (x0.01A) of current for Load Caution",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 10,
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
@@ -60,6 +60,55 @@
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
+		},
+		{
+			"#": "5",
+			"label": "Restore switch state mode",
+			"description": "0 = Switch off, 1 = Last switch state, 	2 = Switch on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1
+		}
+		,
+		{
+			"#": "6",
+			"label": "Mode of switch off function",
+			"description": "0 = Disable, 1 = Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+		}
+		,
+		{
+			"#": "7",
+			"label": "LED indication mode",
+			"description": "1 = Show switch state, 2 = Show night mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1
+		}
+		,
+		{
+			"#": "8",
+			"label": "Auto off timer (1s)",
+			"description": "0 = Disable auto off function",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0
+		}
+		,
+		{
+			"#": "9",
+			"label": "	RF off command mode",
+			"description": "0 = Switch off, 1 = Ignore, 2 = Switch toggle, 3 = Switch on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0
 		}
 	]
 }
