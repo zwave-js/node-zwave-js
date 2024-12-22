@@ -534,17 +534,49 @@
 		"$import": "#power_threshold",
 		"label": "Power Change Threshold (Clamp 1)"
 	},
+	"power_threshold_clamp1_import": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 1 Import)"
+	},
+	"power_threshold_clamp1_export": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 1 Export)"
+	},
 	"power_threshold_clamp2": {
 		"$import": "#power_threshold",
 		"label": "Power Change Threshold (Clamp 2)"
+	},
+	"power_threshold_clamp2_import": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 2 Import)"
+	},
+	"power_threshold_clamp2_export": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 2 Export)"
 	},
 	"power_threshold_clamp3": {
 		"$import": "#power_threshold",
 		"label": "Power Change Threshold (Clamp 3)"
 	},
+	"power_threshold_clamp3_import": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 3 Import)"
+	},
+	"power_threshold_clamp3_export": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 3 Export)"
+	},
 	"power_threshold_wholehem": {
 		"$import": "#power_threshold",
 		"label": "Power Change Threshold (Whole HEM)"
+	},
+	"power_threshold_wholehem_import": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Whole HEM Import)"
+	},
+	"power_threshold_wholehem_export": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Whole HEM Export)"
 	},
 	"percent_threshold": {
 		"label": "Power Percentage Change Threshold",
@@ -560,17 +592,57 @@
 		"$import": "#percent_threshold",
 		"label": "Power Percentage Threshold (Clamp 1)"
 	},
+	"percent_threshold_clamp1_import": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 1 Import)",
+		"defaultValue": 20
+	},
+	"percent_threshold_clamp1_export": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 1 Export)",
+		"defaultValue": 20
+	},
 	"percent_threshold_clamp2": {
 		"$import": "#percent_threshold",
 		"label": "Power Percentage Threshold (Clamp 2)"
+	},
+	"percent_threshold_clamp2_import": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 2 Import)",
+		"defaultValue": 20
+	},
+	"percent_threshold_clamp2_export": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 2 Export)",
+		"defaultValue": 20
 	},
 	"percent_threshold_clamp3": {
 		"$import": "#percent_threshold",
 		"label": "Power Percentage Threshold (Clamp 3)"
 	},
+	"percent_threshold_clamp3_import": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 3 Import)",
+		"defaultValue": 20
+	},
+	"percent_threshold_clamp3_export": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 3 Export)",
+		"defaultValue": 20
+	},
 	"percent_threshold_wholehem": {
 		"$import": "#percent_threshold",
 		"label": "Power Percentage Threshold (Whole HEM)"
+	},
+	"percent_threshold_wholehem_import": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Whole HEM Import)",
+		"defaultValue": 20
+	},
+	"percent_threshold_wholehem_export": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Whole HEM Export)",
+		"defaultValue": 20
 	},
 	"reset_parameters": {
 		"valueSize": 1,
@@ -946,13 +1018,55 @@
 		"$import": "#base_interval",
 		"label": "Automatic Reporting Interval: Group 1"
 	},
+	"auto_report_interval_group1_import": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 1 (Import)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 3600
+	},
+	"auto_report_interval_group1_export": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 1 (Export)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 3600
+	},
 	"auto_report_interval_group2": {
 		"$import": "#base_interval",
 		"label": "Automatic Reporting Interval: Group 2"
 	},
+	"auto_report_interval_group2_import": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 2 (Import)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 7200
+	},
+	"auto_report_interval_group2_export": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 2 (Export)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 7200
+	},
 	"auto_report_interval_group3": {
 		"$import": "#base_interval",
 		"label": "Automatic Reporting Interval: Group 3"
+	},
+	"auto_report_interval_group3_import": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 3 (Import)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 7200
+	},
+	"auto_report_interval_group3_export": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 3 (Export)",
+		"minValue": 10,
+		"maxValue": 4294967295,
+		"defaultValue": 7200
 	},
 	"auto_report_group1_battery": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -989,9 +1103,29 @@
 		"label": "Automatic Report: Group 1 - Voltage (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group1_v_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_v_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Voltage (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_v_clamp3": {
@@ -999,9 +1133,29 @@
 		"label": "Automatic Report: Group 1 - Voltage (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group1_v_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 3 Export",
+		"valueSize": 4
+	},
 	"auto_report_group1_v_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Voltage (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_v_channel1": {
@@ -1024,9 +1178,29 @@
 		"label": "Automatic Report: Group 1 - Current (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group1_amp_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_amp_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_clamp3": {
@@ -1034,9 +1208,29 @@
 		"label": "Automatic Report: Group 1 - Current (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group1_amp_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_amp_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Current (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_channel1": {
@@ -1064,20 +1258,68 @@
 		"label": "Automatic Report: Group 1 - Power (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group1_watt_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_watt_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group1_watt_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Power (Clamp 2)",
 		"valueSize": 4
+	},
+	"auto_report_group1_watt_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_watt_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group1_watt_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Power (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group1_watt_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_watt_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group1_watt_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Power (Whole HEM)",
 		"valueSize": 4
+	},
+	"auto_report_group1_watt_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_watt_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group1_watt_channel1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -1099,20 +1341,70 @@
 		"label": "Automatic Report: Group 1 - kWh (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group1_kwh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group1_kwh_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kWh (Clamp 2)",
-		"valueSize": 4
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group1_kwh_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kWh (Clamp 3)",
-		"valueSize": 4
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group1_kwh_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kWh (Whole HEM)",
 		"valueSize": 4
+	},
+	"auto_report_group1_kwh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group1_kwh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group1_kwh_channel1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -1124,19 +1416,19 @@
 		"label": "Automatic Report: Group 1 - kWh (Channel 2)",
 		"valueSize": 4
 	},
-	"auto_report_group1_kVarh_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - kVarh (Whole HEM)",
-		"valueSize": 4
-	},
-	"auto_report_group1_kVar_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - kVar (Whole HEM)",
-		"valueSize": 4
-	},
 	"auto_report_group1_kVarh_clamp1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kVarh (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 1 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_kVarh_clamp2": {
@@ -1144,9 +1436,44 @@
 		"label": "Automatic Report: Group 1 - kVarh (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group1_kVarh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 2 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_kVarh_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kVarh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVarh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVarh (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group1_kVar_clamp1": {
@@ -1154,14 +1481,219 @@
 		"label": "Automatic Report: Group 1 - kVar (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group1_kVar_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_kVar_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kVar (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group1_kVar_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 2 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group1_kVar_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - kVar (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVar_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVar (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kVAh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kVAh (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_pf_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power Factor (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 0 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 4 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 5 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 6 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_import_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 7 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 0 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 4 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 5 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 6 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group1_unused_export_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - N/A (Bit 7 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_battery": {
@@ -1199,20 +1731,68 @@
 		"label": "Automatic Report: Group 2 - Voltage (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group2_v_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_v_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group2_v_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Voltage (Clamp 2)",
 		"valueSize": 4
+	},
+	"auto_report_group2_v_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_v_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group2_v_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Voltage (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group2_v_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_v_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group2_v_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Voltage (Whole HEM)",
 		"valueSize": 4
+	},
+	"auto_report_group2_v_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_v_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group2_v_channel1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -1234,20 +1814,68 @@
 		"label": "Automatic Report: Group 2 - Current (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group2_amp_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_amp_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group2_amp_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Current (Clamp 2)",
 		"valueSize": 4
+	},
+	"auto_report_group2_amp_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_amp_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group2_amp_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Current (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group2_amp_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_amp_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group2_amp_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Current (Whole HEM)",
 		"valueSize": 4
+	},
+	"auto_report_group2_amp_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group2_amp_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group2_amp_channel1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -1274,9 +1902,29 @@
 		"label": "Automatic Report: Group 2 - Power (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group2_watt_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_watt_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Power (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_clamp3": {
@@ -1284,9 +1932,29 @@
 		"label": "Automatic Report: Group 2 - Power (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group2_watt_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_watt_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Power (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_channel1": {
@@ -1309,9 +1977,29 @@
 		"label": "Automatic Report: Group 2 - kWh (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group2_kwh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_kwh_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kWh (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_kwh_clamp3": {
@@ -1319,9 +2007,29 @@
 		"label": "Automatic Report: Group 2 - kWh (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group2_kwh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_kwh_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kWh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_kwh_channel1": {
@@ -1334,19 +2042,19 @@
 		"label": "Automatic Report: Group 2 - kWh (Channel 2)",
 		"valueSize": 4
 	},
-	"auto_report_group2_kVarh_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - kVarh (Whole HEM)",
-		"valueSize": 4
-	},
-	"auto_report_group2_kVar_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - kVar (Whole HEM)",
-		"valueSize": 4
-	},
 	"auto_report_group2_kVarh_clamp1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kVarh (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 1 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_kVarh_clamp2": {
@@ -1354,9 +2062,44 @@
 		"label": "Automatic Report: Group 2 - kVarh (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group2_kVarh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 2 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_kVarh_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kVarh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVarh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVarh (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group2_kVar_clamp1": {
@@ -1364,14 +2107,219 @@
 		"label": "Automatic Report: Group 2 - kVar (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group2_kVar_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_kVar_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kVar (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group2_kVar_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 2 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group2_kVar_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - kVar (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVar_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVar (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kVAh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kVAh (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Clamp 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_pf_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power Factor (Whole HEM Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 0 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 4 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 5 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 6 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_import_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 7 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 0 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 4 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 5 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 6 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group2_unused_export_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - N/A (Bit 7 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_battery": {
@@ -1409,9 +2357,29 @@
 		"label": "Automatic Report: Group 3 - Voltage (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group3_v_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_v_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Voltage (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_v_clamp3": {
@@ -1419,9 +2387,29 @@
 		"label": "Automatic Report: Group 3 - Voltage (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group3_v_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_v_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Voltage (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_v_channel1": {
@@ -1444,9 +2432,29 @@
 		"label": "Automatic Report: Group 3 - Current (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group3_amp_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_amp_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_clamp3": {
@@ -1454,9 +2462,29 @@
 		"label": "Automatic Report: Group 3 - Current (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group3_amp_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_amp_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Current (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_channel1": {
@@ -1484,9 +2512,29 @@
 		"label": "Automatic Report: Group 3 - Power (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group3_watt_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_watt_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Power (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_clamp3": {
@@ -1494,9 +2542,29 @@
 		"label": "Automatic Report: Group 3 - Power (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group3_watt_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_watt_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Power (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_channel1": {
@@ -1519,9 +2587,29 @@
 		"label": "Automatic Report: Group 3 - kWh (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group3_kwh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 1 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_kwh_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kWh (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 2 Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_kwh_clamp3": {
@@ -1529,9 +2617,29 @@
 		"label": "Automatic Report: Group 3 - kWh (Clamp 3)",
 		"valueSize": 4
 	},
+	"auto_report_group3_kwh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 3 Export)",
+		"valueSize": 4
+	},
 	"auto_report_group3_kwh_wholehem": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kWh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Whole HEM Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_kwh_channel1": {
@@ -1544,29 +2652,72 @@
 		"label": "Automatic Report: Group 3 - kWh (Channel 2)",
 		"valueSize": 4
 	},
-	"auto_report_group3_kVarh_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - kVarh (Whole HEM)",
-		"valueSize": 4
-	},
-	"auto_report_group3_kVar_wholehem": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - kVar (Whole HEM)",
-		"valueSize": 4
-	},
 	"auto_report_group3_kVarh_clamp1": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kVarh (Clamp 1)",
 		"valueSize": 4
+	},
+	"auto_report_group3_kVarh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
 	},
 	"auto_report_group3_kVarh_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kVarh (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group3_kVarh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group3_kVarh_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kVarh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kVarh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Whole HEM)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVarh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVarh (Whole HEM Export)",
 		"valueSize": 4
 	},
 	"auto_report_group3_kVar_clamp1": {
@@ -1574,14 +2725,243 @@
 		"label": "Automatic Report: Group 3 - kVar (Clamp 1)",
 		"valueSize": 4
 	},
+	"auto_report_group3_kVar_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVar_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group3_kVar_clamp2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kVar (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group3_kVar_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVar_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
 	"auto_report_group3_kVar_clamp3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - kVar (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kVar_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVar_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVar_wholehem": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kVar_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVar_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVar (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_kVAh_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kVAh (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp1_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 1 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp1_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 1 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp2_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 2 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp2_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 2 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp3_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 3 Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_clamp3_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Clamp 3 Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_wholehem_import": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Whole HEM Import)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_pf_wholehem_export": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power Factor (Whole HEM Export)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"auto_report_group3_unused_import_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 0 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 1 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 2 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 3 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 4 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 5 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 6 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_import_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 7 Import)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit0": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 0 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit1": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 1 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 2 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 3 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 4 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 5 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit6": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 6 Export)",
+		"valueSize": 4
+	},
+	"auto_report_group3_unused_export_bit7": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - N/A (Bit 7 Export)",
 		"valueSize": 4
 	},
 	"device_tag": {
