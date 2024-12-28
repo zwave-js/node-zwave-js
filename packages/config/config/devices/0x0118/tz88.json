@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Mode of Switch off Function",
+			"label": "Mode of Switch Off Function",
 			"description": "0 = Disable, 1 = Enable",
 			"valueSize": 1,
 			"minValue": 0,
