@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state mode",
+			"label": "Restore Switch State Modee",
 			"description": "0 = Switch off, 1 = Last switch state, 	2 = Switch on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Mode of switch off function",
+			"label": "Mode Of Switch Off Function",
 			"description": "0 = Disable, 1 = Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED indication mode",
+			"label": "Led Indication Mode",
 			"description": "1 = Show switch state, 2 = Show night mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -90,7 +90,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer (1s)",
+			"label": "Auto Off Timer (1s)",
 			"description": "0 = Disable auto off function",
 			"valueSize": 2,
 			"minValue": 0,
@@ -99,7 +99,7 @@
 		},
 		{
 			"#": "9",
-			"label": "	RF off command mode",
+			"label": "Rf Off Command Mode",
 			"description": "0 = Switch off, 1 = Ignore, 2 = Switch toggle, 3 = Switch on",
 			"valueSize": 1,
 			"minValue": 0,
