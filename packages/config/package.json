@@ -88,7 +88,7 @@
     "sinon": "^19.0.2",
     "ts-pegjs": "patch:ts-pegjs@npm%3A4.2.1#~/.yarn/patches/ts-pegjs-npm-4.2.1-0f567a1059.patch",
     "tsx": "^4.19.2",
-    "typescript": "5.6.2",
+    "typescript": "5.6.3",
     "vitest": "^2.1.4",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"
