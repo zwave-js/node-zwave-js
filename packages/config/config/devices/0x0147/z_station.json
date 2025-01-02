@@ -1,0 +1,20 @@
+{
+	"manufacturer": "Z-Wave.me",
+	"manufacturerId": "0x0147",
+	"label": "Z-Station",
+	"description": "USB Z-Wave & Zigbee Controller",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0301",
+			"zwaveAllianceId": 5038
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"manual": "https://z-wave.me/drive/?file=6dd7593b29fe246f28328f704082c8ea851d"
+	}
+}
