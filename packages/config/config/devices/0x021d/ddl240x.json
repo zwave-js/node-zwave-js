@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Shenzhen Kaadas Intelligent Technology Co., Ltd.",
+	"manufacturer": "Philips",
 	"manufacturerId": "0x021d",
 	"label": "DDL240X-15HZW",
-	"description": "Philips Home Access Keyed Touchscreen Deadbolt",
+	"description": "Home Access Keyed Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0903",
@@ -28,7 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Configure Volume Level",
+			"label": "Volume Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -50,37 +50,29 @@
 		},
 		{
 			"#": "2",
-			"label": "Configure LED",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator",
 			"description": "Enable/Disable the LED on the inside of the product.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On (Blink)",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
-			"label": "Timed Battery Report",
-			"description": "Enable/Disable timed battery reports and sets how often battery is reported in minutes.",
+			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 14400,
-			"defaultValue": 1440
+			"defaultValue": 1440,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "4",
-			"label": "Association Group 2 Settings",
-			"description": "Determine the Basic Set value to control other Z-Wave devices directly.",
+			"label": "Association Group 2: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -91,27 +83,27 @@
 					"value": 0
 				},
 				{
-					"label": "Unlocked status: 0xff; Locked status: 0x00",
+					"label": "Unlocked: 0xff; Locked: 0x00",
 					"value": 1
 				},
 				{
-					"label": "Unlocked status: 0x00; Locked status: 0xff",
+					"label": "Unlocked: 0x00; Locked: 0xff",
 					"value": 2
 				},
 				{
-					"label": "Unlocked status: 0xff; Locked status: No command",
+					"label": "Unlocked: 0xff; Locked: No command",
 					"value": 3
 				},
 				{
-					"label": "Unlocked status: No command; Locked status: 0x00",
+					"label": "Unlocked: No command; Locked: 0x00",
 					"value": 4
 				},
 				{
-					"label": "Unlocked status: 0x00; Locked status: No command",
+					"label": "Unlocked: 0x00; Locked: No command",
 					"value": 5
 				},
 				{
-					"label": "Unlocked status: No command; Locked status: 0xff",
+					"label": "Unlocked: No command; Locked: 0xff",
 					"value": 6
 				}
 			]
