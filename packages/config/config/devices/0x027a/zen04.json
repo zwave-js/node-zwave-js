@@ -76,12 +76,31 @@
 		},
 		{
 			"#": "5",
+			"$if": "firmwareVersion < 2.30",
 			"label": "Power (W) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report power consumption to your hub. The number entered as value corresponds to the number of Watts the appliance needs to go over for the change to be reported. So if 5 Watts are entered by default, the Smart Plug will report any change in power usage over 5 Watts (whether it’s at least 5 Watts more or 5 Watts less compared to the previous report).",
 			"valueSize": 1,
 			"unit": "W",
 			"minValue": 5,
 			"maxValue": 50,
 			"defaultValue": 5
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 2.30",
+			"label": "Power (W) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report power consumption to your hub. The number entered as value corresponds to the number of Watts the appliance needs to go over for the change to be reported. So if 5 Watts are entered by default, the Smart Plug will report any change in power usage over 5 Watts (whether it’s at least 5 Watts more or 5 Watts less compared to the previous report).",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "6",
@@ -101,12 +120,31 @@
 		},
 		{
 			"#": "7",
+			"$if": "firmwareVersion < 2.30",
 			"label": "Current (A) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report electrical current (Amps) to your hub. The number entered as value corresponds to the number of Amps the appliance needs to go over for the change to be reported. Value 1 equals 0.1 A and value 10 equals 1 A. So if 1 is entered by default, the Smart Plug will report any change in electrical current over 0.1 Amps (whether it’s at least 0.1 A more or 0.1 A less compared to the previous report).",
 			"valueSize": 1,
 			"unit": "0.1 A",
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 1
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 2.30",
+			"label": "Current (A) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report electrical current (Amps) to your hub. The number entered as value corresponds to the number of Amps the appliance needs to go over for the change to be reported. Value 1 equals 0.1 A and value 10 equals 1 A. So if 1 is entered by default, the Smart Plug will report any change in electrical current over 0.1 Amps (whether it’s at least 0.1 A more or 0.1 A less compared to the previous report).",
+			"valueSize": 1,
+			"unit": "0.1 A",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "12",
@@ -120,12 +158,32 @@
 		},
 		{
 			"#": "8",
+			"$if": "firmwareVersion < 2.30",
 			"label": "Energy (kWh) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report energy use (kWh) to your hub. The number entered as value corresponds to the number of kWh the appliance needs to go over for the change to be reported. Value 1 equals 0.01 kWh and value 100 equals 1 kWh. So if 1 is entered by default, the Smart Plug will report any change in energy use over 0.01 kWh (whether it’s at least 0.01 kWh more or 0.01 kWh less compared to the previous report).",
 			"valueSize": 1,
 			"unit": "0.01 kWh",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 1
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion >= 2.30",
+			"label": "Energy (kWh) Reporting Threshold",
+			"description": "Choose how you want your Smart Plug to report energy use (kWh) to your hub. The number entered as value corresponds to the number of kWh the appliance needs to go over for the change to be reported. Value 1 equals 0.01 kWh and value 100 equals 1 kWh. So if 1 is entered by default, the Smart Plug will report any change in energy use over 0.01 kWh (whether it’s at least 0.01 kWh more or 0.01 kWh less compared to the previous report).",
+			"valueSize": 1,
+			"unit": "0.01 kWh",
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "13",
@@ -140,6 +198,36 @@
 				{
 					"label": "Disabled",
 					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"$if": "firmwareVersion >= 2.30",
+			"label": "kWh Report Frequency",
+			"description": "The number entered as a value corresponds to the number of minutes. So if 60 is entered by default, the Plug will report energy consumption (kWh) every 60 minutes.",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60
+		},
+		{
+			"#": "15",
+			"$if": "firmwareVersion >= 2.30",
+			"label": "Disable kWh Reports",
+			"description": "Disable or enable kWh reports sent from the plug. No kWh reports from the device connected to the plug will be sent back to the hub if kWh monitoring is disabled. Use this option to minimize the amount of reports you want the receive from the smart plug",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "kWh reports enabled",
+					"value": 0
+				},
+				{
+					"label": "kWh reports disabled",
+					"value": 1
 				}
 			]
 		}
