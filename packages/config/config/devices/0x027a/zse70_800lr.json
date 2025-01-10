@@ -29,127 +29,234 @@
 		{
 			"#": "1",
 			"label": "Motion Sensitivity",
-			"description": "Adjust motion sensitivity where 8 is the most sensitive setting.",
+			"description": "1 = least sensitive, 8 = most sensitive",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 6
+			"defaultValue": 6,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "2",
-			"label": "Motion Untrigger Time",
-			"description": "Set motion clear time for the delay before the sensor reports no motion to the hub and associated devices are detecting the last motion activity.",
+			"label": "Motion Clear Delay",
+			"description": "How long to wait after the last motion detection before reporting no motion",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 3600,
 			"defaultValue": 30
 		},
 		{
 			"#": "3",
-			"label": "Motion Group Control",
+			"label": "Motion Reports: Basic Set Values",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 7
+			"defaultValue": 7,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Motion: 0xFF, no motion: 0x00",
+					"value": 1
+				},
+				{
+					"label": "Motion: 0x00, no motion: 0xFF",
+					"value": 2
+				},
+				{
+					"label": "Motion: 0xFF, no reports for no motion",
+					"value": 3
+				},
+				{
+					"label": "Motion: 0x00, no reports for no motion",
+					"value": 4
+				},
+				{
+					"label": "No motion: 0xFF, no reports for motion",
+					"value": 5
+				},
+				{
+					"label": "No motion: 0x00, no reports for motion",
+					"value": 6
+				},
+				{
+					"label": "Custom (Parameter 4)",
+					"value": 7
+				}
+			]
 		},
 		{
-			"#": "4",
-			"label": "Motion Group Value Setting",
+			"#": "4[0xff00]",
+			"label": "Motion Reports: Custom Value (Motion)",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 65280,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "4[0x00ff]",
+			"label": "Motion Reports: Custom Value (No Motion)",
+			"valueSize": 2,
+			"defaultValue": 0,
 			"unsigned": true
 		},
 		{
 			"#": "5",
-			"label": "Temperature Report Scale",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "LED Activity",
-			"description": "Enable or disable LED indicator for motion alerts.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "7",
 			"label": "Low Battery Threshold",
+			"description": "Below this level a low battery alert will be sent.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 10
 		},
 		{
 			"#": "8",
-			"label": "Battery Power Checking Interval",
+			"label": "Battery Check Interval",
+			"description": "How often to check the battery level for changes",
 			"valueSize": 2,
+			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 744,
-			"defaultValue": 4
-		},
-		{
-			"#": "9",
-			"label": "Temperature Threshold Check Time",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 600,
-			"defaultValue": 30
-		},
-		{
-			"#": "10",
-			"label": "Light Threshold Check Time",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 600,
-			"defaultValue": 10
+			"defaultValue": 4,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "11",
-			"label": "Battery Threshold",
+			"label": "Battery Change Report Threshold",
+			"description": "How much the battery level must change before sending a new report",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Temperature Check Interval",
+			"description": "How often to check the temperature for changes",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 600,
+			"defaultValue": 20,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "12",
-			"label": "Temperature Threshold",
-			"description": "Set the reporting threshold for temperature. The sensor will report new temperature value to the hub whenever temperature changes by the number of degrees entered as value.",
+			"label": "Temperature Change Report Threshold",
+			"description": "How much the temperature must change before sending a new report",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 144,
 			"defaultValue": 1,
-			"unsigned": true
-		},
-		{
-			"#": "13",
-			"label": "Light Threshold",
-			"description": "Set the reporting threshold for lux. The sensor will report new lux value to the hub whenever the brightness level changes by the number of lux entered as value.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 30000,
-			"defaultValue": 50
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "14",
-			"label": "Temperature Calibrate Offset",
+			"label": "Temperature Calibration",
+			"description": "Value is offset by 100: 0 = -10 °F, 50 = -5 °F, 100 = 0 °F, 150 = +5 °F, 200 = +10 °F",
 			"valueSize": 1,
+			"unit": "0.1 °F",
 			"minValue": 0,
 			"maxValue": 200,
 			"defaultValue": 100,
 			"unsigned": true
 		},
 		{
+			"#": "17",
+			"label": "Temperature Report Interval",
+			"description": "The minimum interval in which the sensor will send temperature updates, even if the change threshold is not met.",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Brightness Check Interval",
+			"description": "How often to check the brightness for changes",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 600,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Brightness Change Report Threshold",
+			"description": "How much the brightness must change before sending a new report",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "15",
-			"label": "Light Calibrate Offset",
+			"label": "Brightness Calibration",
+			"description": "Value is offset by 100: 0 = -100 lux, 50 = -50 lux, 100 = 0 lux, 150 = +50 lux, 200 = +100 lux",
 			"valueSize": 1,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 200,
 			"defaultValue": 100,
@@ -157,31 +264,35 @@
 		},
 		{
 			"#": "16",
-			"label": "Dusk to Dawn",
-			"description": "Program the dusk to dawn feature. The sensor will report motion to the hub only when the lux level goes below the value set in this parameter",
+			"label": "Brightness Threshold for Motion",
+			"description": "Motion reports will only be sent while the brightness is below this level",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 0
-		},
-		{
-			"#": "17",
-			"label": "Automatic Report Interval Time for Temp",
-			"description": "Set the reporting frequency for temperature. This is the minimum interval in which the sensor will send updates to the hub even if the reporting threshold isn’t met. The values entered correspond to the number of seconds.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 43200,
 			"defaultValue": 0,
-			"unsigned": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "18",
-			"label": "Automatic Report Interval Time for Light",
+			"label": "Brightness Report Interval",
+			"description": "The minimum interval in which the sensor will send brightness updates, even if the change threshold is not met.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	],
 	"metadata": {
