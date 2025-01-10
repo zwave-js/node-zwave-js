@@ -96,6 +96,8 @@
 			"#": "4[0xff00]",
 			"label": "Motion Reports: Custom Value (Motion)",
 			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true
 		},
@@ -103,6 +105,8 @@
 			"#": "4[0x00ff]",
 			"label": "Motion Reports: Custom Value (No Motion)",
 			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true
 		},
