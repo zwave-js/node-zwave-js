@@ -114,6 +114,7 @@
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator (Motion)",
 			"defaultValue": 1
 		},
 		{
