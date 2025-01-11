@@ -37,7 +37,8 @@ import {
 	manufacturerProprietaryAPI,
 } from "./Decorators.js";
 
-export const MANUFACTURERID_INTERMATIC = 0x0072;
+export const MANUFACTURERID_INTERMATIC_LEGACY = 0x0005;
+export const MANUFACTURERID_INTERMATIC_NEW = 0x0072;
 
 /** Returns the ValueID used to store the current water temperature */
 export function getIntermaticWaterTempValueId(): ValueID {
@@ -59,7 +60,7 @@ export function getIntermaticWaterTempMetadata(): ValueMetadata {
 	};
 }
 
-@manufacturerProprietaryAPI(MANUFACTURERID_INTERMATIC)
+@manufacturerProprietaryAPI([MANUFACTURERID_INTERMATIC_LEGACY, MANUFACTURERID_INTERMATIC_NEW])
 export class IntermaticPE653CCAPI extends ManufacturerProprietaryCCAPI {
 	public async getWaterTemperature(): Promise<number | undefined> {
 		const valueId = getIntermaticWaterTempValueId();
@@ -92,11 +93,12 @@ export class IntermaticPE653CCAPI extends ManufacturerProprietaryCCAPI {
 	}
 }
 
-@manufacturerId(MANUFACTURERID_INTERMATIC)
+@manufacturerId([MANUFACTURERID_INTERMATIC_LEGACY, MANUFACTURERID_INTERMATIC_NEW])
 export class IntermaticPE653CC extends ManufacturerProprietaryCC {
 	public constructor(options: CommandClassOptions) {
 		super(options);
-		this.manufacturerId = MANUFACTURERID_INTERMATIC;
+		// Use the legacy ID by default, it will be overridden if needed
+		this.manufacturerId = MANUFACTURERID_INTERMATIC_LEGACY;
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): IntermaticPE653CC {
@@ -140,7 +142,7 @@ export class IntermaticPE653CC extends ManufacturerProprietaryCC {
 
 	public serialize(ctx: CCEncodingContext): Bytes {
 		// The manufacturer ID is encoded in the first two bytes
-		const manufacturerId = this.manufacturerId ?? MANUFACTURERID_INTERMATIC;
+		const manufacturerId = this.manufacturerId ?? MANUFACTURERID_INTERMATIC_LEGACY;
 		(this.ccCommand as unknown as number) = (manufacturerId >>> 8) & 0xff;
 		this.payload = Bytes.from([manufacturerId & 0xff]);
 		return super.serialize(ctx);
