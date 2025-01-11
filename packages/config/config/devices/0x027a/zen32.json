@@ -276,6 +276,14 @@
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"defaultValue": 1
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 2.40 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "LED Blinking When Buttons Are Pressed",
+			"description": "Choose if you want the LED indicators to flash whenever a button is pressed on the device to confirm scene activation.",
+			"defaultValue": 0
 		}
 	],
 	"compat": {
