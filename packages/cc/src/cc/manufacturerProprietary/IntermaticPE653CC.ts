@@ -37,7 +37,7 @@ import {
 	manufacturerProprietaryAPI,
 } from "./Decorators.js";
 
-export const MANUFACTURERID_INTERMATIC = 0x0005;
+export const MANUFACTURERID_INTERMATIC = 0x0072;
 
 /** Returns the ValueID used to store the current water temperature */
 export function getIntermaticWaterTempValueId(): ValueID {
