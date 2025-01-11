@@ -1,12 +1,19 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN17",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 2.00",
+			"value": "ZEN17 800LR"
+		},
+		"ZEN17"
+	],
 	"description": "Universal Relay",
 	"devices": [
 		{
 			"productType": "0x7000",
-			"productId": "0xa00a"
+			"productId": "0xa00a",
+			"zwaveAllianceId": 5127
 		},
 		{
 			"productType": "0xbb00",
@@ -519,6 +526,25 @@
 					"value": 3
 				}
 			]
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 2.00",
+			"label": "Simultaneous On/Off Operation of R1/R2",
+			"description": "When Parameter 2 is set with values 0-3, S1/C input will trigger both relays R1/R2 at the same time for on/off; when either R1 or R2 are triggered via the hub interface, this will trigger both R1 and R2 on/off at the same time. With Parameter 28 enabled, the S2/C input is automatically separated from the output and can be used independently for monitoring purposes only (with Parameter 3 set to values 4-10 ONLY).",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		}
 	],
 	"compat": {
@@ -532,6 +558,12 @@
 		"inclusion": "INCLUSION\n1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP THE Z-WAVE BUTTON 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink to signal communication and remain on for 2 seconds to confirm inclusion.",
 		"exclusion": "1. Bring your Universal Relay close to the Z-Wave hub and power it\n2. Put the Z-Wave hub into exclusion mode\n3. Click the Z-Wave button 3 times quickly\n4. Your hub will confirm exclusion and the Universal Relay will disappear from your controller's device list",
 		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, click the Z-Wave button 4 times quickly, the LED indicator will light up,\nthen quickly click the Z-Wave button 4 times again. The LED indicator will flash 3 times to confirm successful reset and will then turn off",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4132/zooz-700-series-z-wave-plus-universal-relay-zen17-ver1.0-manual.pdf"
+		"manual": [
+			{
+				"$if": "firmwareVersion >= 2.00",
+				"value": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/1177/zooz-800-series-z-wave-long-range-universal-relay-zen17-800lr-full-manual_1.pdf"
+			},
+			"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4132/zooz-700-series-z-wave-plus-universal-relay-zen17-ver1.0-manual.pdf"
+		]
 	}
 }
