@@ -60,7 +60,7 @@ export function getIntermaticWaterTempMetadata(): ValueMetadata {
 	};
 }
 
-@manufacturerProprietaryAPI([MANUFACTURERID_INTERMATIC_LEGACY, MANUFACTURERID_INTERMATIC_NEW])
+@manufacturerProprietaryAPI(MANUFACTURERID_INTERMATIC_LEGACY)
 export class IntermaticPE653CCAPI extends ManufacturerProprietaryCCAPI {
 	public async getWaterTemperature(): Promise<number | undefined> {
 		const valueId = getIntermaticWaterTempValueId();
@@ -93,18 +93,29 @@ export class IntermaticPE653CCAPI extends ManufacturerProprietaryCCAPI {
 	}
 }
 
-@manufacturerId([MANUFACTURERID_INTERMATIC_LEGACY, MANUFACTURERID_INTERMATIC_NEW])
+@manufacturerId(MANUFACTURERID_INTERMATIC_LEGACY)
 export class IntermaticPE653CC extends ManufacturerProprietaryCC {
 	public constructor(options: CommandClassOptions) {
 		super(options);
-		// Use the legacy ID by default, it will be overridden if needed
 		this.manufacturerId = MANUFACTURERID_INTERMATIC_LEGACY;
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): IntermaticPE653CC {
+		// Check if the manufacturer ID matches either the legacy or new ID
+		const ccCommand = raw.ccCommand ?? 0;
+		const manufacturerId = (ccCommand << 8) | raw.payload[0];
+		if (manufacturerId !== MANUFACTURERID_INTERMATIC_LEGACY && 
+			manufacturerId !== MANUFACTURERID_INTERMATIC_NEW) {
+			throw new ZWaveError(
+				`Invalid manufacturer ID for Intermatic PE653: ${manufacturerId}`,
+				ZWaveErrorCodes.Argument_Invalid
+			);
+		}
+
 		const cc = new IntermaticPE653CC({
 			nodeId: ctx.sourceNodeId,
 		});
+		cc.manufacturerId = manufacturerId;
 
 		// Validate payload length for PE653 v3.1 water temperature frame
 		validatePayload(raw.payload.length >= 13, "PE653 frame too short");
