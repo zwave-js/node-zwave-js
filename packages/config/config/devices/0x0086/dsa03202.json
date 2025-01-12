@@ -87,6 +87,10 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
+				"Scene Activation": {
+					"isControlled": true,
+					"version": 1
+				},
 				"Wake Up": {
 					// To fix issue #1536
 					"isSupported": true,
