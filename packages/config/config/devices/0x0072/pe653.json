@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Intermatic 0x0072 WaterTemp5",
+	"manufacturer": "Intermatic 0x0072 WaterTemp",
 	"manufacturerId": "0x0072",
-	"label": "PE653 0x0072 WaterTemp5",
-	"description": "Pool Control 0x0072 WaterTemp5",
+	"label": "PE653 0x0072 WaterTemp",
+	"description": "Pool Control 0x0072 WaterTemp",
 	"devices": [
 		{
 			"productType": "0x0500",
