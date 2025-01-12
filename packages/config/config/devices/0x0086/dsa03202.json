@@ -98,5 +98,8 @@
 				}
 			}
 		}
+	},
+	"metadata": {
+		"wakeup": "Press and hold the Learn Button (or Join Button) for 3 seconds, then let go. This should keep the Minimote awake for 30 seconds."
 	}
 }
