@@ -80,7 +80,8 @@
 		{
 			"#": "250",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Mode (Secondary Controller)"
+			"label": "Scene Mode (Secondary Controller)",
+			"writeOnly": true
 		}
 	],
 	"compat": {
