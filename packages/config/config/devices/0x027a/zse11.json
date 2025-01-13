@@ -82,22 +82,9 @@
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 2.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Vibration Sensor",
-			"description": "Vibration sensor enable or disable.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable vibration sensor",
-					"value": 0
-				},
-				{
-					"label": "Enable vibration sensor",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "21",
