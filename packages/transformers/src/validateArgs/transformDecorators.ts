@@ -1,6 +1,7 @@
 import path from "node:path";
-import { type PluginConfig } from "ts-patch";
-import ts, { type TransformerExtras } from "typescript";
+import type { PluginConfig } from "ts-patch";
+import type { TransformerExtras } from "ts-patch";
+import ts from "typescript";
 
 /**
  * Transformer to replace @validateArgs() calls with the version
@@ -11,7 +12,7 @@ import ts, { type TransformerExtras } from "typescript";
 export default function transformer(
 	program: ts.Program,
 	pluginConfig: PluginConfig,
-	{ ts: t }: TransformerExtras,
+	{ ts: typescript }: TransformerExtras,
 ): ts.TransformerFactory<ts.SourceFile> {
 	const compilerOptions = program.getCompilerOptions();
 	// Only enable the transforms if the custom condition is not set
@@ -25,15 +26,11 @@ export default function transformer(
 
 		// Bail early if there is no import for "@zwave-js/transformers". In this case, there's nothing to transform
 		if (!file.getFullText().includes("@zwave-js/transformers")) {
-			// if (options?.verbose) {
-			// 	console.log(
-			// 		`@zwave-js/transformers not imported in ${file.fileName}, skipping`,
-			// 	);
-			// }
 			return file;
 		}
 
 		const f = context.factory;
+		const t = typescript;
 
 		let className: string | undefined;
 		let methodName: string | undefined;
@@ -48,7 +45,7 @@ export default function transformer(
 			}
 
 			if (className && t.isMethodDeclaration(node) && node.name) {
-				methodName = node.name.getText();
+				methodName = t.isIdentifier(node.name) ? node.name.text : node.name.getText();
 				const ret = t.visitEachChild(node, renameDecorators, context);
 				methodName = undefined;
 				return ret;
@@ -81,7 +78,7 @@ export default function transformer(
 
 		// Remove @zwave-js/transformers import
 		const selfImports = file.statements
-			.filter((s) => ts.isImportDeclaration(s))
+			.filter((s): s is ts.ImportDeclaration => t.isImportDeclaration(s))
 			.filter(
 				(i) =>
 					i.moduleSpecifier
@@ -132,14 +129,15 @@ export default function transformer(
 		);
 
 		if (selfImports.length > 0) {
+			const nonImportStatements = file.statements.filter((s) =>
+				!selfImports.includes(s as ts.ImportDeclaration)
+			);
 			file = context.factory.updateSourceFile(
 				file,
 				[
 					newImport,
 					destructure,
-					...file.statements.filter((s) =>
-						!selfImports.includes(s as any)
-					),
+					...nonImportStatements,
 				],
 				file.isDeclarationFile,
 				file.referencedFiles,

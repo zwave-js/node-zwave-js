@@ -1075,3 +1075,4 @@ export {
 	FibaroVenetianBlindCCReport,
 	FibaroVenetianBlindCCSet,
 } from "./manufacturerProprietary/FibaroCC.js";
+export { IntermaticPE653CC } from "./manufacturerProprietary/IntermaticPE653CC.js";
