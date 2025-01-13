@@ -17,6 +17,21 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"isLifeline": true,
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
