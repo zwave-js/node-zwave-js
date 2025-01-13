@@ -1,13 +1,7 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 4.10",
-			"value": "ZEN20 800LR"
-		},
-		"ZEN20"
-	],
+	"label": "ZEN20",
 	"description": "Z-Wave Plus Power Strip",
 	"devices": [
 		{
@@ -28,7 +22,6 @@
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Power Wattage Report Value Threshold",
-			"description": "Choose how you want your Power Strip to report power consumption to your hub. The number entered as value corresponds to the number of Watts the appliance needs to go over for the change to be reported. So if 5 Watts are entered by default, the Power Strip will report any change in power usage over 5 Watts for each outlet (whether it’s at least 5 Watts more or 5 Watts less compared to previous report).",
 			"unit": "W",
 			"defaultValue": 5,
 			"options": [
@@ -41,7 +34,6 @@
 		{
 			"#": "3",
 			"label": "Power Wattage Report Frequency",
-			"description": "Choose how often you want your Power Strip to report power consumption (W) to your controller and associated device. The number entered as value corresponds to the number of seconds. So if 30 is entered by default, the Strip will report power consumption (Wattage) every 30 seconds.",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 30,
@@ -51,7 +43,6 @@
 		{
 			"#": "4",
 			"label": "Energy Report Frequency",
-			"description": "Choose how often you want your Power Strip to report energy consumption (kWh) to your hub. The number entered as value corresponds to the number of seconds. So if 300 is entered by default, the power strip will report energy usage every 300 seconds (5 minutes).",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 5,
@@ -61,7 +52,6 @@
 		{
 			"#": "5",
 			"label": "Overload Protection",
-			"description": "Set the Watt level for overload protection to kick in. The number entered as the value corresponds to the total number of Watts the Strip needs to detect across all 5 outlets to turn off automatically and send a notification to the hub. We DO NOT recommend changing this parameter’s value as it may result in device damage and malfunction.",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -236,7 +226,6 @@
 			"#": "35",
 			"$if": "firmwareVersion >= 2.3",
 			"label": "Electrical Current (A) Report Frequency",
-			"description": "The number entered as value corresponds to the number of seconds. So if 30 is entered, the Strip will report electrical current values (Amperes) every 30 seconds.",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -253,7 +242,6 @@
 			"#": "36",
 			"$if": "firmwareVersion >= 2.3",
 			"label": "Voltage Report (V) Frequency",
-			"description": "The number entered as value corresponds to the number of seconds. So if 30 is entered, the Strip will report Voltage values (Volts) every 30 seconds.",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -270,7 +258,6 @@
 			"#": "37",
 			"$if": "firmwareVersion >= 4.10",
 			"label": "Electrical Current (A) Report Threshold",
-			"description": "The number entered as value corresponds to the number of Current the connected appliance needs to go over for the change to be reported. So if 0.5A are entered, the ZEN20 will report any change in power usage over 0.5A (whether it’s at least 0.5A more or 0.5A less compared to previous report).",
 			"valueSize": 1,
 			"unit": "0.1A",
 			"minValue": 0,
