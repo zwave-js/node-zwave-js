@@ -80,12 +80,17 @@
 		{
 			"#": "250",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Mode (Secondary Controller)"
+			"label": "Scene Mode (Secondary Controller)",
+			"writeOnly": true
 		}
 	],
 	"compat": {
 		"commandClasses": {
 			"add": {
+				"Scene Activation": {
+					"isControlled": true,
+					"version": 1
+				},
 				"Wake Up": {
 					// To fix issue #1536
 					"isSupported": true,
@@ -93,5 +98,8 @@
 				}
 			}
 		}
+	},
+	"metadata": {
+		"wakeup": "Press and hold the Learn Button (or Join Button) for 3 seconds, then let go. This should keep the Minimote awake for 30 seconds."
 	}
 }
