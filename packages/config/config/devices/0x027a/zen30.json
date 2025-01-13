@@ -309,7 +309,7 @@
 			"#": "34",
 			"$if": "firmwareVersion >= 4.20",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "LED Blinking When A Setting Is Changed",
+			"label": "LED Indication: Settings Changed",
 			"defaultValue": 0
 		}
 	],
