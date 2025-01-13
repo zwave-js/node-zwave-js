@@ -1,13 +1,7 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 2.00",
-			"value": "ZEN17 800LR"
-		},
-		"ZEN17"
-	],
+	"label": "ZEN17",
 	"description": "Universal Relay",
 	"devices": [
 		{
@@ -530,21 +524,9 @@
 		{
 			"#": "28",
 			"$if": "firmwareVersion >= 2.00",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Simultaneous On/Off Operation of R1/R2",
-			"description": "When Parameter 2 is set with values 0-3, S1/C input will trigger both relays R1/R2 at the same time for on/off; when either R1 or R2 are triggered via the hub interface, this will trigger both R1 and R2 on/off at the same time. With Parameter 28 enabled, the S2/C input is automatically separated from the output and can be used independently for monitoring purposes only (with Parameter 3 set to values 4-10 ONLY).",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	],
 	"compat": {
