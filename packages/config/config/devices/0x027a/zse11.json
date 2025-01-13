@@ -2,13 +2,7 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 2.0",
-			"value": "ZSE11 800LR"
-		},
-		"ZSE11"
-	],
+	"label": "ZSE11",
 	"description": "Q Sensor",
 	"devices": [
 		{
