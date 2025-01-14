@@ -31,7 +31,8 @@ export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 				// Figure out how the integration test methods are imported
 				if (
 					// node.importKind === "value"
-					integrationTestExportNames.has(node.imported.name)
+					node.imported.type === AST_NODE_TYPES.Identifier
+					&& integrationTestExportNames.has(node.imported.name)
 					&& node.parent.type === AST_NODE_TYPES.ImportDeclaration
 					&& integrationTestDefinitionFiles.has(path.join(
 						path.dirname(context.filename),

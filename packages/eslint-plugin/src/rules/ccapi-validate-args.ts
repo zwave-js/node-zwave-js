@@ -26,6 +26,7 @@ export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 						s.type
 							=== AST_NODE_TYPES.ImportSpecifier
 						&& s.importKind === "value"
+						&& s.imported.type === AST_NODE_TYPES.Identifier
 						&& s.imported.name === "validateArgs"
 					);
 					validateArgsImport = importSpecifier?.local.name;
