@@ -582,16 +582,18 @@ Unable to find import specifier for class ${param.typeName}.`,
 				& tsm.ModifierFlags.Ambient);
 
 		if (isAmbient) {
-			if (isInterface) {
-				if (symbolName === "Date") {
-					return `v.date(${ctx})`;
-				}
-				if (symbolName === "Uint8Array") {
-					return `v.uint8array(${ctx})`;
-				}
+			if (isInterface && symbolName === "Date") {
+				return `v.date(${ctx})`;
 			}
 
 			const structure = variableDeclaration?.getStructure();
+
+			if (
+				structure?.name === "Uint8Array"
+				&& structure.type === "Uint8ArrayConstructor"
+			) {
+				return `v.uint8array(${ctx})`;
+			}
 
 			if (
 				structure?.name === "Map"

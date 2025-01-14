@@ -1,6 +1,6 @@
 import path from "node:path";
-import { type PluginConfig } from "ts-patch";
-import ts, { type TransformerExtras } from "typescript";
+import { type PluginConfig, type TransformerExtras } from "ts-patch";
+import ts from "typescript";
 
 /**
  * Transformer to replace @validateArgs() calls with the version
