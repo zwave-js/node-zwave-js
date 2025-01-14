@@ -1,4 +1,4 @@
-import execa from "execa";
+import { type Options as ExecaOptions, execa } from "execa";
 
 const project = process.argv[2] ?? "all";
 const buildArgs = process.argv
@@ -29,7 +29,7 @@ const dependsOnZwaveJs = [
 	// And CLI in the future
 ];
 
-const execOptions: execa.Options<string> = {
+const execOptions: ExecaOptions = {
 	stdio: "inherit",
 };
 

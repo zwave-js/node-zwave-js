@@ -1,4 +1,4 @@
-import execa from "execa";
+import { execa } from "execa";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { beforeAll, test } from "vitest";

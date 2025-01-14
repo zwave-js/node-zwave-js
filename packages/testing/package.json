@@ -64,6 +64,6 @@
     "triple-beam": "*",
     "tsx": "^4.19.2",
     "typescript": "5.7.3",
-    "winston-transport": "^4.8.0"
+    "winston-transport": "^4.9.0"
   }
 }
