@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
-    "pathe": "^1.1.2",
+    "pathe": "^2.0.1",
     "yargs": "^17.7.2",
     "zwave-js": "workspace:*"
   },
