@@ -4,7 +4,7 @@
  */
 
 import esMain from "es-main";
-import execa from "execa";
+import { execa } from "execa";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";

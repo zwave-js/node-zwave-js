@@ -34,10 +34,10 @@ export const colorizer = format(
 		info: ZWaveLogInfo,
 		_opts: ColorizerOptions,
 	) => {
-		const textColor = (colors as any)[defaultColors[info.level] as string];
-		const bgColor = (colors as any)[
-			getBgColorName(defaultColors[info.level] as string)
-		];
+		const levelColorKey =
+			defaultColors[info.level as keyof typeof defaultColors] as string;
+		const textColor = (colors as any)[levelColorKey];
+		const bgColor = (colors as any)[getBgColorName(levelColorKey)];
 		// Colorize all segments separately
 		if (typeof info.message === "string") {
 			info.message = colorizeTextAndTags(
