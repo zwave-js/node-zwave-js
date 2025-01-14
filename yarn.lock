@@ -527,16 +527,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/darwin-arm64@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/darwin-arm64@npm:0.47.5"
+"@dprint/darwin-arm64@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/darwin-arm64@npm:0.48.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@dprint/darwin-x64@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/darwin-x64@npm:0.47.5"
+"@dprint/darwin-x64@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/darwin-x64@npm:0.48.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
@@ -555,30 +555,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/linux-arm64-glibc@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/linux-arm64-glibc@npm:0.47.5"
+"@dprint/linux-arm64-glibc@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/linux-arm64-glibc@npm:0.48.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@dprint/linux-arm64-musl@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/linux-arm64-musl@npm:0.47.5"
+"@dprint/linux-arm64-musl@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/linux-arm64-musl@npm:0.48.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@dprint/linux-x64-glibc@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/linux-x64-glibc@npm:0.47.5"
+"@dprint/linux-riscv64-glibc@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/linux-riscv64-glibc@npm:0.48.0"
+  conditions: os=linux & cpu=riscv64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@dprint/linux-x64-glibc@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/linux-x64-glibc@npm:0.48.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@dprint/linux-x64-musl@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/linux-x64-musl@npm:0.47.5"
+"@dprint/linux-x64-musl@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/linux-x64-musl@npm:0.48.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
@@ -590,23 +597,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/typescript@npm:^0.93.0":
-  version: 0.93.0
-  resolution: "@dprint/typescript@npm:0.93.0"
-  checksum: 10/dbe3282979638954cb91983044cd7cac47870aa1399f975f907f2620c36325f6f63feddb45a8e85abd4f830b5751cdd81b9682291793604ce89dccdc835fb5a6
+"@dprint/typescript@npm:^0.93.3":
+  version: 0.93.3
+  resolution: "@dprint/typescript@npm:0.93.3"
+  checksum: 10/99e26723cedbb5826ebf8acdc82084a73cff1a0244f620955fab0306eee49e2850af0f61d21104e710693ff14aba48902e242e2efd86ad89828b75f480ae8ca1
   languageName: node
   linkType: hard
 
-"@dprint/win32-arm64@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/win32-arm64@npm:0.47.5"
+"@dprint/win32-arm64@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/win32-arm64@npm:0.48.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@dprint/win32-x64@npm:0.47.5":
-  version: 0.47.5
-  resolution: "@dprint/win32-x64@npm:0.47.5"
+"@dprint/win32-x64@npm:0.48.0":
+  version: 0.48.0
+  resolution: "@dprint/win32-x64@npm:0.48.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -2036,14 +2043,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.25.0":
-  version: 0.25.0
-  resolution: "@ts-morph/common@npm:0.25.0"
+"@ts-morph/common@npm:~0.26.0":
+  version: 0.26.0
+  resolution: "@ts-morph/common@npm:0.26.0"
   dependencies:
+    fast-glob: "npm:^3.3.2"
     minimatch: "npm:^9.0.4"
     path-browserify: "npm:^1.0.1"
-    tinyglobby: "npm:^0.2.9"
-  checksum: 10/9b192dfebb7179e96267ea1720f6afe77964f9f89ecaca41d372da206cdfd838a77c1080026c73115a5d3a88752b1504ec7380907e26b6424e8fb7f7625c7461
+  checksum: 10/838458989ca048f3932d9bd01899262a6e4a4c19a593fdd625384b50fc39e810c90e985795fa319e59303259a58e240ac26f245a5885c53ffe1da17a3f05408f
   languageName: node
   linkType: hard
 
@@ -2508,7 +2515,7 @@ __metadata:
     es-main: "npm:^1.3.0"
     reflect-metadata: "npm:^0.2.2"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
   languageName: unknown
   linkType: soft
@@ -2544,7 +2551,7 @@ __metadata:
     sinon: "npm:^19.0.2"
     ts-pegjs: "patch:ts-pegjs@npm%3A4.2.1#~/.yarn/patches/ts-pegjs-npm-4.2.1-0f567a1059.patch"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
     winston: "npm:^3.15.0"
     xml2js: "npm:^0.6.2"
@@ -2577,7 +2584,7 @@ __metadata:
     sinon: "npm:^19.0.2"
     triple-beam: "npm:*"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
     winston: "npm:^3.15.0"
     winston-daily-rotate-file: "npm:^5.0.0"
@@ -2596,7 +2603,7 @@ __metadata:
     eslint: "npm:^9.12.0"
     eslint-compat-utils: "npm:^0.6.4"
     eslint-plugin-jsonc: "npm:^2.16.0"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
   languageName: unknown
   linkType: soft
 
@@ -2609,7 +2616,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     del-cli: "npm:^6.0.0"
     pathe: "npm:^1.1.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     yargs: "npm:^17.7.2"
     zwave-js: "workspace:*"
   bin:
@@ -2617,9 +2624,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/fmt@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@zwave-js/fmt@npm:1.0.2"
+"@zwave-js/fmt@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@zwave-js/fmt@npm:1.0.3"
   dependencies:
     json5: "npm:^2.2.3"
   peerDependencies:
@@ -2627,7 +2634,7 @@ __metadata:
     "@dprint/json": ^0.19.3
     "@dprint/markdown": ^0.17.8
     "@dprint/typescript": ^0.93.0
-  checksum: 10/024226eb41d7bf9759c22f7abad798082b0db4e43ad2ff530c273e84e14b77cdf5ea02b7e554ee8e3af365cf9ede5a9947b9e809b9289a56c6bbff24562c3204
+  checksum: 10/b478139f1becb669df84069e50feb46d985725ac144aa9bc2e412749fb865bb63fdebcfdcc4600c4c0d03d6ef7c1879364e925aa67e98525e2a28a2b208df015
   languageName: node
   linkType: hard
 
@@ -2643,7 +2650,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
   languageName: unknown
   linkType: soft
 
@@ -2655,26 +2662,26 @@ __metadata:
     "@dprint/formatter": "npm:^0.4.1"
     "@dprint/json": "npm:^0.19.4"
     "@dprint/markdown": "npm:^0.17.8"
-    "@dprint/typescript": "npm:^0.93.0"
+    "@dprint/typescript": "npm:^0.93.3"
     "@types/globrex": "npm:^0.1.4"
     "@types/node": "npm:^18.19.63"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
-    "@zwave-js/fmt": "npm:^1.0.2"
+    "@zwave-js/fmt": "npm:^1.0.3"
     "@zwave-js/shared": "workspace:*"
     ansi-colors: "npm:^4.1.3"
     cli-highlight: "npm:^2.1.11"
     del-cli: "npm:^6.0.0"
-    dprint: "npm:^0.47.5"
+    dprint: "npm:^0.48.0"
     es-main: "npm:^1.3.0"
     execa: "npm:^5.1.1"
     globrex: "npm:^0.1.2"
     json5: "npm:^2.2.3"
     piscina: "npm:^4.7.0"
     reflect-metadata: "npm:^0.2.2"
-    ts-morph: "npm:^24.0.0"
+    ts-morph: "npm:^25.0.0"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     yargs: "npm:^17.7.2"
   languageName: unknown
   linkType: soft
@@ -2695,7 +2702,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.6.3"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
     yargs: "npm:^17.7.2"
   bin:
@@ -2719,7 +2726,7 @@ __metadata:
     "@dprint/formatter": "npm:^0.4.1"
     "@dprint/json": "npm:^0.19.4"
     "@dprint/markdown": "npm:^0.17.8"
-    "@dprint/typescript": "npm:^0.93.0"
+    "@dprint/typescript": "npm:^0.93.3"
     "@microsoft/api-extractor": "npm:^7.48.0"
     "@monorepo-utils/workspaces-to-typescript-project-references": "npm:^2.10.4"
     "@tsconfig/node18": "npm:^18.2.4"
@@ -2732,7 +2739,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/eslint-plugin": "workspace:*"
     "@zwave-js/flash": "workspace:*"
-    "@zwave-js/fmt": "npm:^1.0.2"
+    "@zwave-js/fmt": "npm:^1.0.3"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
@@ -2746,7 +2753,7 @@ __metadata:
     commitizen: "npm:^4.3.1"
     cz-conventional-changelog: "npm:^3.3.0"
     del-cli: "npm:^6.0.0"
-    dprint: "npm:^0.47.5"
+    dprint: "npm:^0.48.0"
     eslint: "npm:^9.12.0"
     eslint-plugin-unicorn: "npm:^56.0.1"
     eslint-plugin-unused-imports: "patch:eslint-plugin-unused-imports@npm%3A4.1.4#~/.yarn/patches/eslint-plugin-unused-imports-npm-4.1.4-a7d7c7cdf3.patch"
@@ -2759,11 +2766,11 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.6.3"
     source-map-support: "npm:^0.5.21"
-    ts-morph: "npm:^24.0.0"
-    ts-patch: "npm:3.2.1"
+    ts-morph: "npm:^25.0.0"
+    ts-patch: "npm:3.3.0"
     tsx: "npm:^4.19.2"
     turbo: "npm:2.3.3"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     typescript-eslint: "npm:^8.19.0"
     vitest: "npm:^2.1.4"
     xml2js: "npm:^0.6.2"
@@ -2792,7 +2799,7 @@ __metadata:
     serialport: "npm:^12.0.0"
     sinon: "npm:^19.0.2"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
     winston: "npm:^3.15.0"
   languageName: unknown
@@ -2811,7 +2818,7 @@ __metadata:
     pathe: "npm:^1.1.2"
     sinon: "npm:^19.0.2"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
   languageName: unknown
   linkType: soft
@@ -2834,7 +2841,7 @@ __metadata:
     del-cli: "npm:^6.0.0"
     triple-beam: "npm:*"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     winston-transport: "npm:^4.8.0"
   languageName: unknown
   linkType: soft
@@ -2846,9 +2853,9 @@ __metadata:
     cpy-cli: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
     execa: "npm:^5.1.1"
-    ts-morph: "npm:^24.0.0"
+    ts-morph: "npm:^25.0.0"
     tsutils: "npm:^3.21.0"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
   languageName: unknown
   linkType: soft
@@ -4331,18 +4338,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dprint@npm:^0.47.5":
-  version: 0.47.5
-  resolution: "dprint@npm:0.47.5"
+"dprint@npm:^0.48.0":
+  version: 0.48.0
+  resolution: "dprint@npm:0.48.0"
   dependencies:
-    "@dprint/darwin-arm64": "npm:0.47.5"
-    "@dprint/darwin-x64": "npm:0.47.5"
-    "@dprint/linux-arm64-glibc": "npm:0.47.5"
-    "@dprint/linux-arm64-musl": "npm:0.47.5"
-    "@dprint/linux-x64-glibc": "npm:0.47.5"
-    "@dprint/linux-x64-musl": "npm:0.47.5"
-    "@dprint/win32-arm64": "npm:0.47.5"
-    "@dprint/win32-x64": "npm:0.47.5"
+    "@dprint/darwin-arm64": "npm:0.48.0"
+    "@dprint/darwin-x64": "npm:0.48.0"
+    "@dprint/linux-arm64-glibc": "npm:0.48.0"
+    "@dprint/linux-arm64-musl": "npm:0.48.0"
+    "@dprint/linux-riscv64-glibc": "npm:0.48.0"
+    "@dprint/linux-x64-glibc": "npm:0.48.0"
+    "@dprint/linux-x64-musl": "npm:0.48.0"
+    "@dprint/win32-arm64": "npm:0.48.0"
+    "@dprint/win32-x64": "npm:0.48.0"
   dependenciesMeta:
     "@dprint/darwin-arm64":
       optional: true
@@ -4351,6 +4359,8 @@ __metadata:
     "@dprint/linux-arm64-glibc":
       optional: true
     "@dprint/linux-arm64-musl":
+      optional: true
+    "@dprint/linux-riscv64-glibc":
       optional: true
     "@dprint/linux-x64-glibc":
       optional: true
@@ -4362,7 +4372,7 @@ __metadata:
       optional: true
   bin:
     dprint: bin.js
-  checksum: 10/90b76f525dcb98267446fabd66ffbbe6f0d136979f47d80d4d8246004582ff5e2c277443745247c003ac8d3cf12826157231cd02cbd93fd4b6b3c0370f8c4835
+  checksum: 10/ae8efe7a531d26f350660d3ecf28438ae3124695be8d7646f97c637545de90478cb61b5c5699746ab00060893c4631fd1c1623237b4d73b5fd98681ccbeb4203
   languageName: node
   linkType: hard
 
@@ -5171,18 +5181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fdir@npm:^6.4.0":
-  version: 6.4.0
-  resolution: "fdir@npm:6.4.0"
-  peerDependencies:
-    picomatch: ^3 || ^4
-  peerDependenciesMeta:
-    picomatch:
-      optional: true
-  checksum: 10/e45d7c5d349ef4a4835c788944dae7ac5de7aab159511bc3ce8bc62164d4a25cb915c6d2f400886a9ed6f9d9cf38de394b71cb73935408c90eeafa0a8f6cc377
-  languageName: node
-  linkType: hard
-
 "fecha@npm:^4.2.0":
   version: 4.2.1
   resolution: "fecha@npm:4.2.1"
@@ -5609,14 +5607,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"global-prefix@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "global-prefix@npm:3.0.0"
+"global-prefix@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "global-prefix@npm:4.0.0"
   dependencies:
-    ini: "npm:^1.3.5"
-    kind-of: "npm:^6.0.2"
-    which: "npm:^1.3.1"
-  checksum: 10/a405b9f83c7d88a49dc1c1e458d6585e258356810d3d0f41094265152a06a0f393b14d911f45616e35a4ce3894176a73be2984883575e778f55e90bf812d7337
+    ini: "npm:^4.1.3"
+    kind-of: "npm:^6.0.3"
+    which: "npm:^4.0.0"
+  checksum: 10/535489396c0e5828682f081f5227556a3b7a30ebecde9f5eb35aee4aea121fe5c5fb1b04e0fba85d1e34e6004687e51b306bdd446d391eca8449adbb4666dbe2
   languageName: node
   linkType: hard
 
@@ -5975,10 +5973,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ini@npm:^1.3.4, ini@npm:^1.3.5":
+"ini@npm:^1.3.4":
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
   checksum: 10/314ae176e8d4deb3def56106da8002b462221c174ddb7ce0c49ee72c8cd1f9044f7b10cc555a7d8850982c3b9ca96fc212122749f5234bc2b6fb05fb942ed566
+  languageName: node
+  linkType: hard
+
+"ini@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "ini@npm:4.1.3"
+  checksum: 10/f536b414d1442e5b233429e2b56efcdb354109b2d65ddd489e5939d8f0f5ad23c88aa2b19c92987249d0dd63ba8192e9aeb1a02b0459549c5a9ff31acd729a5d
   languageName: node
   linkType: hard
 
@@ -6254,6 +6259,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isexe@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "isexe@npm:3.1.1"
+  checksum: 10/7fe1931ee4e88eb5aa524cd3ceb8c882537bc3a81b02e438b240e47012eef49c86904d0f0e593ea7c3a9996d18d0f1f3be8d3eaa92333977b0c3a9d353d5563e
+  languageName: node
+  linkType: hard
+
 "jiti@npm:^1.19.1":
   version: 1.21.0
   resolution: "jiti@npm:1.21.0"
@@ -6431,7 +6443,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kind-of@npm:^6.0.2, kind-of@npm:^6.0.3":
+"kind-of@npm:^6.0.3":
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 10/5873d303fb36aad875b7538798867da2ae5c9e328d67194b0162a3659a627d22f742fc9c4ae95cd1704132a24b00cae5041fc00c0f6ef937dc17080dc4dbb962
@@ -7655,13 +7667,6 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 10/60c2595003b05e4535394d1da94850f5372c9427ca4413b71210f437f7b2ca091dbd611c45e8b37d10036fa8eade25c1b8951654f9d3973bfa66a2ff4d3b08bc
-  languageName: node
-  linkType: hard
-
-"picomatch@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "picomatch@npm:4.0.2"
-  checksum: 10/ce617b8da36797d09c0baacb96ca8a44460452c89362d7cb8f70ca46b4158ba8bc3606912de7c818eb4a939f7f9015cef3c766ec8a0c6bfc725fdc078e39c717
   languageName: node
   linkType: hard
 
@@ -8918,16 +8923,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.9":
-  version: 0.2.9
-  resolution: "tinyglobby@npm:0.2.9"
-  dependencies:
-    fdir: "npm:^6.4.0"
-    picomatch: "npm:^4.0.2"
-  checksum: 10/4570dacefa7f7371f49e52c8e4b7c4638d2cab9ee2903e1142c3eff4cfe71d1b8ab6cc55f65590a3232c27f8c0bcec794e4c2f02a4370fc79f3f4f026b5d84e7
-  languageName: node
-  linkType: hard
-
 "tinypool@npm:^1.0.1":
   version: 1.0.1
   resolution: "tinypool@npm:1.0.1"
@@ -9000,30 +8995,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^24.0.0":
-  version: 24.0.0
-  resolution: "ts-morph@npm:24.0.0"
+"ts-morph@npm:^25.0.0":
+  version: 25.0.0
+  resolution: "ts-morph@npm:25.0.0"
   dependencies:
-    "@ts-morph/common": "npm:~0.25.0"
+    "@ts-morph/common": "npm:~0.26.0"
     code-block-writer: "npm:^13.0.3"
-  checksum: 10/560f64eac91429f852277af7588d116b83f91ace2e6ba89c71893b364a42c1e9a658fb40ad2c8d1b48af14d744ba1d4ee7a7efeae033d14ad7a6b5f50b83ccca
+  checksum: 10/289302f287a17fe2b33acf1bf8f0454f8ce44578ae462449c1bb5c047a89cfdbc803c767531eb6140396fb7694870f22d6287ab2206470de4f7d0ec20dfa2d1e
   languageName: node
   linkType: hard
 
-"ts-patch@npm:3.2.1":
-  version: 3.2.1
-  resolution: "ts-patch@npm:3.2.1"
+"ts-patch@npm:3.3.0":
+  version: 3.3.0
+  resolution: "ts-patch@npm:3.3.0"
   dependencies:
     chalk: "npm:^4.1.2"
-    global-prefix: "npm:^3.0.0"
+    global-prefix: "npm:^4.0.0"
     minimist: "npm:^1.2.8"
     resolve: "npm:^1.22.2"
-    semver: "npm:^7.5.4"
+    semver: "npm:^7.6.3"
     strip-ansi: "npm:^6.0.1"
   bin:
     ts-patch: bin/ts-patch.js
     tspc: bin/tspc.js
-  checksum: 10/d15d6a8bdad0a39e56a8f346a6aa7174cf48176c0aa2e5a6d223c325e411592804b02cdf428c72807ed2c617cf1031cc362ef8a74dbac3eaaada47db91b6d1d2
+  checksum: 10/5b0a42cacdfef2136b18b785b4ca6579d470001560d42139057fccf6ed85a622a73e5efba1b20426b047bf9aaf2090a23a9afca4e72ab330b166344dd45b3386
   languageName: node
   linkType: hard
 
@@ -9263,13 +9258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.6.3":
-  version: 5.6.3
-  resolution: "typescript@npm:5.6.3"
+"typescript@npm:5.7.3":
+  version: 5.7.3
+  resolution: "typescript@npm:5.7.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c328e418e124b500908781d9f7b9b93cf08b66bf5936d94332b463822eea2f4e62973bfb3b8a745fdc038785cb66cf59d1092bac3ec2ac6a3e5854687f7833f1
+  checksum: 10/6a7e556de91db3d34dc51cd2600e8e91f4c312acd8e52792f243c7818dfadb27bae677175fad6947f9c81efb6c57eb6b2d0c736f196a6ee2f1f7d57b74fc92fa
   languageName: node
   linkType: hard
 
@@ -9283,13 +9278,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>":
-  version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
+"typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>":
+  version: 5.7.3
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/00504c01ee42d470c23495426af07512e25e6546bce7e24572e72a9ca2e6b2e9bea63de4286c3cfea644874da1467dcfca23f4f98f7caf20f8b03c0213bb6837
+  checksum: 10/3ac7b7e3e899273d2fbdce6e24b93d4d53a705ad7a7e4cc83b4c57bcb6d25948abcd2a21994f6b9c73ab03960f395aae95f0458de292a66ce0134233261714c3
   languageName: node
   linkType: hard
 
@@ -9518,7 +9513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"which@npm:^1.2.14, which@npm:^1.3.1":
+"which@npm:^1.2.14":
   version: 1.3.1
   resolution: "which@npm:1.3.1"
   dependencies:
@@ -9537,6 +9532,17 @@ __metadata:
   bin:
     node-which: ./bin/node-which
   checksum: 10/4782f8a1d6b8fc12c65e968fea49f59752bf6302dc43036c3bf87da718a80710f61a062516e9764c70008b487929a73546125570acea95c5b5dcc8ac3052c70f
+  languageName: node
+  linkType: hard
+
+"which@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "which@npm:4.0.0"
+  dependencies:
+    isexe: "npm:^3.1.1"
+  bin:
+    node-which: bin/which.js
+  checksum: 10/f17e84c042592c21e23c8195108cff18c64050b9efb8459589116999ea9da6dd1509e6a1bac3aeebefd137be00fabbb61b5c2bc0aa0f8526f32b58ee2f545651
   languageName: node
   linkType: hard
 
@@ -9848,7 +9854,7 @@ __metadata:
     sinon: "npm:^19.0.2"
     source-map-support: "npm:^0.5.21"
     tsx: "npm:^4.19.2"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.3"
     vitest: "npm:^2.1.4"
     winston: "npm:^3.15.0"
   bin:

@@ -134,7 +134,7 @@
     "mockdate": "^3.0.5",
     "sinon": "^19.0.2",
     "tsx": "^4.19.2",
-    "typescript": "5.6.3",
+    "typescript": "5.7.3",
     "vitest": "^2.1.4"
   }
 }
