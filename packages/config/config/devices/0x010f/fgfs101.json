@@ -391,5 +391,13 @@
 				}
 			]
 		}
+	],
+	"compat": [
+		{
+			"$if": "firmwareVersion == 25.25",
+			// The multilevel sensor is only exposed on endpoint 2, which
+			// is considered unnecessary.
+			"preserveEndpoints": "*"
+		}
 	]
 }
