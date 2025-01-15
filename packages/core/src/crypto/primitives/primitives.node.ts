@@ -193,7 +193,13 @@ function digest(
 	algorithm: "md5" | "sha-1" | "sha-256",
 	data: Uint8Array,
 ): Promise<Uint8Array> {
-	const hash = crypto.createHash(algorithm);
+	// Node.js uses slightly different algorithm names than WebCrypto
+	const nodeAlgorithm = algorithm === "sha-1"
+		? "sha1"
+		: algorithm === "sha-256"
+		? "sha256"
+		: algorithm;
+	const hash = crypto.createHash(nodeAlgorithm);
 	hash.update(data);
 	return Promise.resolve(hash.digest());
 }
