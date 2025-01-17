@@ -29,6 +29,8 @@ interface ZnifferOptions {
 	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
 
+	host?: ZWaveOptions["host"];
+
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
 	 * They can be converted to dBm, but the conversion is chip dependent and not documented for 700/800 series Zniffers.
