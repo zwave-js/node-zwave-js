@@ -377,12 +377,14 @@
 			"defaultValue": 1
 		},
 		{
+			"#": "16",
+			"$import": "templates/inovelli_templates.json#bulk_set_led_effect"
+		},
+		{
 			"#": "16[0xff]",
 			"$import": "#paramInformation/13",
 			"label": "LED Indicator: Effect Color",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
