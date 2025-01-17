@@ -1981,13 +1981,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/stream@npm:12.0.0, @serialport/stream@npm:^12.0.0":
+"@serialport/stream@npm:12.0.0":
   version: 12.0.0
   resolution: "@serialport/stream@npm:12.0.0"
   dependencies:
     "@serialport/bindings-interface": "npm:1.2.2"
     debug: "npm:4.3.4"
   checksum: 10/48757436a54b5e04ef3a76400779987c90798952709cf9656a7f5046be3e62e93bd3d5823e5123bfb6245684c9253c8141689426c49f13fcf457a9dc96019911
+  languageName: node
+  linkType: hard
+
+"@serialport/stream@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "@serialport/stream@npm:13.0.0"
+  dependencies:
+    "@serialport/bindings-interface": "npm:1.2.2"
+    debug: "npm:4.4.0"
+  checksum: 10/0636ca796fd348e43f86f836a9c729b683c72320faecc1a51cebce49b293b8b2cad807535977f8eb2f74d0115b0c2ee6f9dc78d4e353b8b7c86bc92d336586dd
   languageName: node
   linkType: hard
 
@@ -2743,7 +2753,7 @@ __metadata:
     "@microsoft/api-extractor": "npm:^7.48.0"
     "@serialport/binding-mock": "npm:^10.2.2"
     "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch"
-    "@serialport/stream": "npm:^12.0.0"
+    "@serialport/stream": "npm:^13.0.0"
     "@types/node": "npm:^18.19.63"
     "@types/sinon": "npm:^17.0.3"
     "@zwave-js/cc": "workspace:*"
@@ -4085,6 +4095,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debug@npm:4.4.0, debug@npm:~4.4.0":
+  version: 4.4.0
+  resolution: "debug@npm:4.4.0"
+  dependencies:
+    ms: "npm:^2.1.3"
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
+  languageName: node
+  linkType: hard
+
 "debug@npm:^4.3.3":
   version: 4.3.3
   resolution: "debug@npm:4.3.3"
@@ -4106,18 +4128,6 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10/71168908b9a78227ab29d5d25fe03c5867750e31ce24bf2c44a86efc5af041758bb56569b0a3d48a9b5344c00a24a777e6f4100ed6dfd9534a42c1dde285125a
-  languageName: node
-  linkType: hard
-
-"debug@npm:~4.4.0":
-  version: 4.4.0
-  resolution: "debug@npm:4.4.0"
-  dependencies:
-    ms: "npm:^2.1.3"
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
   languageName: node
   linkType: hard
 
