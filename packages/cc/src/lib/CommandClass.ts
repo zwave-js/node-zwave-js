@@ -43,7 +43,7 @@ import {
 	isZWaveError,
 	parseCCId,
 	valueIdToString,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import {
 	Bytes,
 	type JSONObject,
@@ -51,7 +51,7 @@ import {
 	getEnumMemberName,
 	num2hex,
 	staticExtends,
-} from "@zwave-js/shared";
+} from "@zwave-js/shared/safe";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { CCAPIHost, CCAPINode, ValueIDProperties } from "./API.js";
 import {

@@ -197,6 +197,15 @@ export default tseslint.config(
 			"@typescript-eslint/*": "off",
 		},
 	},
+	// Make sure that the browser barrel files are parsed with the correct conditions
+	{
+		files: ["packages/**/*.browser.ts", "packages/**/index_browser.ts"],
+		languageOptions: {
+			parserOptions: {
+				project: "tsconfig.browser.json",
+			},
+		},
+	},
 	// Enable rules from the local plugin for relevant files
 	{
 		files: ["packages/cc/src/**/*CC.ts"],

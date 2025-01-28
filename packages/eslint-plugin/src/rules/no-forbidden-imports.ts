@@ -6,8 +6,9 @@ import ts from "typescript";
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
 	"reflect-metadata",
-	// fflate is browser-compatible
+	// These are browser-compatible
 	"fflate",
+	"dayjs",
 	"alcalzone-shared/arrays",
 	"alcalzone-shared/async",
 	"alcalzone-shared/comparable",
@@ -17,9 +18,15 @@ const whitelistedImports = [
 	"alcalzone-shared/sorted-list",
 	"alcalzone-shared/typeguards",
 ];
+const whitelistedImportsRegex: RegExp[] = [];
+
+// FIXME: When looking at node modules, consider the imports of the implementation
+// files, not the declaration files. Those might import types from forbidden modules
+// even though they are not used in the implementation.
 
 // Whitelist some more imports that should be ignored in the checking
-const ignoredImports = ["@zwave-js/transformers"];
+const ignoredImports = ["@zwave-js/transformers", "pathe"];
+const ignoredImportsRegex: RegExp[] = [/^semver\/functions\/.+/];
 
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
@@ -277,7 +284,12 @@ export const noForbiddenImports = ESLintUtils.RuleCreator.withoutDocs({
 			imp: ResolvedImport,
 		): "ignored" | "forbidden" | "ok" {
 			const trimmedImport = imp.name.replaceAll("\"", "");
-			if (ignoredImports.includes(trimmedImport)) return "ignored";
+			if (
+				ignoredImports.includes(trimmedImport)
+				|| ignoredImportsRegex.some((regex) =>
+					regex.test(trimmedImport)
+				)
+			) return "ignored";
 
 			if (forbidden.includes("external")) {
 				// The special import name "external" forbids all external imports
@@ -286,6 +298,9 @@ export const noForbiddenImports = ESLintUtils.RuleCreator.withoutDocs({
 				if (
 					imp.sourceFile.fileName.includes("node_modules")
 					&& !whitelistedImports.includes(trimmedImport)
+					&& !whitelistedImportsRegex.some((regex) =>
+						regex.test(trimmedImport)
+					)
 				) {
 					return "forbidden";
 				}

@@ -1,4 +1,4 @@
-import { padVersion } from "@zwave-js/shared";
+import { padVersion } from "@zwave-js/shared/safe";
 import semverGt from "semver/functions/gt.js";
 import semverGte from "semver/functions/gte.js";
 import semverLt from "semver/functions/lt.js";

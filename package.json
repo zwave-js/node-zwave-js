@@ -104,6 +104,7 @@
     "clean": "yarn turbo run clean",
     "build": "yarn turbo run build:turbo --",
     "build:turbo": "yarn ts maintenance/build.ts",
+    "check:browser": "yarn workspace zwave-js exec tsc -p tsconfig.browser.json --pretty",
     "watch": "yarn w build",
     "test:ts": "vitest run",
     "test": "yarn ts maintenance/test.mts",

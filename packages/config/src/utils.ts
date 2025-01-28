@@ -26,6 +26,7 @@ import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig.js";
 const require = createRequire(import.meta.url);
 
 /** The absolute path of the embedded configuration directory */
+// FIXME: use import.meta.resolve after upgrading to node 20
 export const configDir = path.resolve(
 	path.dirname(require.resolve("@zwave-js/config/package.json")),
 	"config",
