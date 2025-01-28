@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.8 (2025-01-28)
 ### Bugfixes
 * Fixed an issue with restoring the network cache from disk on some systems (#7560)
 
