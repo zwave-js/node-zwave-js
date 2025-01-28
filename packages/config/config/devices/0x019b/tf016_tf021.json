@@ -249,7 +249,7 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
-		}
+		},
 		{
 			"#": "21",
 			"label": "Meter Report Data Delta",
