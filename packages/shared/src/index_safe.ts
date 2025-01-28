@@ -3,6 +3,7 @@
 
 export * from "./AsyncQueue.js";
 export { Bytes } from "./Bytes.js";
+export * from "./EventTarget.js";
 export { ObjectKeyMap } from "./ObjectKeyMap.js";
 export type { ReadonlyObjectKeyMap } from "./ObjectKeyMap.js";
 export * from "./ThrowingMap.js";

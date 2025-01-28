@@ -1,5 +1,5 @@
-import { TypedEventTarget } from "@zwave-js/shared";
 import { type Database } from "@zwave-js/shared/bindings";
+import { TypedEventTarget } from "@zwave-js/shared/safe";
 import type { CommandClasses } from "../definitions/CommandClasses.js";
 import {
 	ZWaveError,

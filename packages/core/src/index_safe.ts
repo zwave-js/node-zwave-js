@@ -26,4 +26,5 @@ export * from "./values/Duration.js";
 export * from "./values/Metadata.js";
 export * from "./values/Primitive.js";
 export * from "./values/Timeout.js";
+export * from "./values/ValueDB.js";
 export * from "./values/_Types.js";

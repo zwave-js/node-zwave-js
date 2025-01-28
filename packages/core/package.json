@@ -77,6 +77,7 @@
   ],
   "imports": {
     "#crypto_primitives": {
+      "browser": "./build/esm/crypto/primitives/primitives.browser.js",
       "@@dev": "./src/crypto/primitives/primitives.node.ts",
       "require": "./build/cjs/crypto/primitives/primitives.node.js",
       "node": "./build/esm/crypto/primitives/primitives.node.js",

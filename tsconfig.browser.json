@@ -1,0 +1,10 @@
+// Custom tsconfig that includes all `.browser.ts` files in the repo
+// and uses the correct compiler options for dependency resolution
+{
+	"extends": "./tsconfig.all.json",
+	"compilerOptions": {
+		"customConditions": ["browser"]
+	},
+	"include": ["packages/**/*.browser.ts", "packages/**/index_browser.ts"],
+	"exclude": ["**/build/**", "**/node_modules/**"]
+}

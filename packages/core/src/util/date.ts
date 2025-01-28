@@ -104,8 +104,14 @@ export function getDSTInfo(now: Date = new Date()): DSTInfo {
 
 /** Returns a timestamp with nano-second precision */
 export function highResTimestamp(): number {
-	const [s, ns] = process.hrtime();
-	return s * 1e9 + ns;
+	if (process != undefined) {
+		const [s, ns] = process.hrtime();
+		return s * 1e9 + ns;
+	} else if (performance != undefined) {
+		return performance.now() * 1e6;
+	} else {
+		throw new Error("No high-resolution timer available");
+	}
 }
 
 export const timespan = Object.freeze({
