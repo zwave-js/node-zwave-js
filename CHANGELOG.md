@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 14.3.8 (2025-01-28)
+### Bugfixes
+* Fixed an issue with restoring the network cache from disk on some systems (#7560)
+
+### Config file changes
+* Preserve all endpoints for Fibaro FGFS101, FW 26.26 (#7561)
+* Preserve all endpoints for Fibaro FGFS101, FW 25.25 (#7558)
+* Updates to AEON Labs Minimote (#7544)
+* Auto-assign Lifeline for Trane XL624 (#7547)
+* Disable Supervision for Everspring SP817 Motion Sensor (#7475)
+* Add wakeup instructions for ZSE43 (#7454)
+* Add wakeup instructions for ZSE42 (#7489)
+* Add wakeup instructions for ZSE41 (#7488)
+* Add Zooz ZSE70 800LR (#7496)
+* Add new device config for Philips DDL240X-15HZW lock (#7498)
+* Add Z-Wave.me Z-Station (#7521)
+
 ## 14.3.7 (2024-12-02)
 ### Bugfixes
 * Fixed: Firmware updates fail to start on some devices with error "invalid hardware version" (#7452)
