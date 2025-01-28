@@ -6,11 +6,15 @@
 
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClassInfo } from '@zwave-js/core/safe';
+import { FileSystem } from '@zwave-js/shared/bindings';
 import { JSONObject } from '@zwave-js/shared';
 import { JSONObject as JSONObject_2 } from '@zwave-js/shared/safe';
 import type { LogContext } from '@zwave-js/core/safe';
+import { ReadFile } from '@zwave-js/shared/bindings';
+import { ReadFileSystemInfo } from '@zwave-js/shared/bindings';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
 import { ValueID } from '@zwave-js/core/safe';
+import { WriteFile } from '@zwave-js/shared/bindings';
 import { ZWaveLogContainer } from '@zwave-js/core';
 
 // Warning: (ae-missing-release-tag) "AssociationConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -248,7 +252,7 @@ export class ConditionalDeviceConfig {
     // (undocumented)
     readonly firmwareVersion: FirmwareVersionRange;
     // (undocumented)
-    static from(filename: string, isEmbedded: boolean, options: {
+    static from(fs: ReadFileSystemInfo & ReadFile, filename: string, isEmbedded: boolean, options: {
         rootDir: string;
         fallbackDirs?: string[];
         relative?: boolean;
@@ -416,6 +420,8 @@ export class ConfigManager {
 // @public (undocumented)
 export interface ConfigManagerOptions {
     // (undocumented)
+    bindings?: FileSystem;
+    // (undocumented)
     deviceConfigExternalDir?: string;
     // (undocumented)
     deviceConfigPriorityDir?: string;
@@ -468,14 +474,14 @@ export class DeviceConfig {
     // (undocumented)
     readonly firmwareVersion: FirmwareVersionRange;
     // (undocumented)
-    static from(filename: string, isEmbedded: boolean, options: {
+    static from(fs: ReadFileSystemInfo & ReadFile, filename: string, isEmbedded: boolean, options: {
         rootDir: string;
         fallbackDirs?: string[];
         relative?: boolean;
         deviceId?: DeviceID;
     }): Promise<DeviceConfig>;
     getAssociationConfigForEndpoint(endpointIndex: number, group: number): AssociationConfig | undefined;
-    getHash(): Uint8Array;
+    getHash(algorithm?: "md5" | "sha-256"): Promise<Uint8Array>;
     readonly isEmbedded: boolean;
     // (undocumented)
     readonly label: string;
@@ -601,6 +607,14 @@ export interface FulltextDeviceConfigIndexEntry {
     rootDir?: string;
 }
 
+// Warning: (ae-missing-release-tag) "GetDeviceConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface GetDeviceConfig {
+    // (undocumented)
+    getDeviceConfig(nodeId: number): DeviceConfig | undefined;
+}
+
 // Warning: (ae-missing-release-tag) "getDevicesPaths" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -608,6 +622,13 @@ export function getDevicesPaths(configDir: string): {
     devicesDir: string;
     indexPath: string;
 };
+
+// Warning: (ae-missing-release-tag) "LookupManufacturer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface LookupManufacturer {
+    lookupManufacturer(manufacturerId: number): string | undefined;
+}
 
 // Warning: (ae-missing-release-tag) "ManufacturersMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -617,7 +638,7 @@ export type ManufacturersMap = Map<number, string>;
 // Warning: (ae-missing-release-tag) "PACKAGE_VERSION" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export const PACKAGE_VERSION = "14.0.0";
+export const PACKAGE_VERSION = "14.3.7";
 
 // Warning: (ae-missing-release-tag) "ParamInfoMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -644,7 +665,7 @@ export function parseConditionalParamInformationMap(definition: JSONObject_2, pa
 // Warning: (ae-missing-release-tag) "saveManufacturersInternal" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function saveManufacturersInternal(manufacturers: ManufacturersMap): Promise<void>;
+export function saveManufacturersInternal(fs: WriteFile, manufacturers: ManufacturersMap): Promise<void>;
 
 // (No @packageDocumentation comment for this package)
 
