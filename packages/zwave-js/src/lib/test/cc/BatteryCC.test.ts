@@ -17,7 +17,7 @@ test("the Get command should serialize correctly", async (t) => {
 		CommandClasses.Battery, // CC
 		BatteryCommand.Get, // CC Command
 	]);
-	await t.expect(batterycc.serialize({} as any)).resolves.toStrictEqual(
+	await t.expect(batteryCC.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

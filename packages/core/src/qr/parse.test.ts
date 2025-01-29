@@ -29,15 +29,15 @@ const cases = [
 ];
 
 for (const { code, reason } of cases) {
-	test(`QR code parsing -> throws when the QR code ${reason}`, (t) => {
-		assertZWaveError(t.expect, () => parseQRCodeString(code), {
+	test(`QR code parsing -> throws when the QR code ${reason}`, async (t) => {
+		await assertZWaveError(t.expect, () => parseQRCodeString(code), {
 			errorCode: ZWaveErrorCodes.Security2CC_InvalidQRCode,
 		});
 	});
 }
 
-test("QR code parsing -> Example case: Acme Light Dimmer", (t) => {
-	const result = parseQRCodeString(
+test("QR code parsing -> Example case: Acme Light Dimmer", async (t) => {
+	const result = await parseQRCodeString(
 		"900132782003515253545541424344453132333435212223242500100435301537022065520001000000300578",
 	);
 	t.expect(result).toStrictEqual({
@@ -61,8 +61,8 @@ test("QR code parsing -> Example case: Acme Light Dimmer", (t) => {
 	});
 });
 
-test("QR code parsing -> Example case: Oscorp Door Lock w. UUID", (t) => {
-	const result = parseQRCodeString(
+test("QR code parsing -> Example case: Oscorp Door Lock w. UUID", async (t) => {
+	const result = await parseQRCodeString(
 		"9001346230075152535455414243444531323334352122232425001016387007680220655210100000017002880642002122232425414243444511121314153132333435",
 	);
 	t.expect(result).toStrictEqual({
@@ -89,8 +89,8 @@ test("QR code parsing -> Example case: Oscorp Door Lock w. UUID", (t) => {
 	});
 });
 
-test("QR code parsing -> Example case: Acme Light Dimmer w/o SmartStart", (t) => {
-	const result = parseQRCodeString(
+test("QR code parsing -> Example case: Acme Light Dimmer w/o SmartStart", async (t) => {
+	const result = await parseQRCodeString(
 		"900032782003515253545541424344453132333435212223242500100435301537022065520001000000300578",
 	);
 	t.expect(result).toStrictEqual({
@@ -114,8 +114,8 @@ test("QR code parsing -> Example case: Acme Light Dimmer w/o SmartStart", (t) =>
 	});
 });
 
-test("QR code parsing -> ignore surrounding whitespace", (t) => {
-	const result = parseQRCodeString(
+test("QR code parsing -> ignore surrounding whitespace", async (t) => {
+	const result = await parseQRCodeString(
 		"	900032782003515253545541424344453132333435212223242500100435301537022065520001000000300578  ",
 	);
 	t.expect(result).toStrictEqual({
