@@ -207,7 +207,7 @@ integrationTest(
 						if (
 							receivedCC instanceof SecurityCCCommandEncapsulation
 						) {
-							await receivedCC.mergePartialCCsAsync([], {
+							await receivedCC.mergePartialCCs([], {
 								sourceNodeId: controller.ownNodeId,
 								__internalIsMockNode: true,
 								frameType: "singlecast",

@@ -52,9 +52,8 @@ export class GetLongRangeNodesRequest extends Message {
 
 	public segmentNumber: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.segmentNumber]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -112,7 +111,7 @@ export class GetLongRangeNodesResponse extends Message {
 	public segmentNumber: number;
 	public nodeIds: readonly number[];
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(
 			3 + NUM_LR_NODEMASK_SEGMENT_BYTES,
 		);
@@ -127,7 +126,6 @@ export class GetLongRangeNodesResponse extends Message {
 		);
 		this.payload.set(nodeBitMask, 3);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

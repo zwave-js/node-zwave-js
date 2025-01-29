@@ -55,14 +55,13 @@ export class GetControllerIdResponse extends Message {
 	public homeId: number;
 	public ownNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		const nodeId = encodeNodeID(this.ownNodeId, ctx.nodeIdType);
 		const homeId = new Bytes(4);
 		homeId.writeUInt32BE(this.homeId, 0);
 
 		this.payload = Bytes.concat([homeId, nodeId]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

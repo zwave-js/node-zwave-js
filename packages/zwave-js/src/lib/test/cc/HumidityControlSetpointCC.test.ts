@@ -40,7 +40,7 @@ test("the Get command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Humidifier, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -61,7 +61,7 @@ test("the Set command should serialize correctly", async (t) => {
 			encodeFloatWithScale(57, 1),
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -76,7 +76,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -102,7 +102,7 @@ test("the Report command should set the correct value", async (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -133,7 +133,7 @@ test("the Report command should set the correct metadata", async (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCReport;
@@ -161,7 +161,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -174,7 +174,7 @@ test("the SupportedReport command should be deserialized correctly", async (t) =
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCSupportedReport;
@@ -194,7 +194,7 @@ test("the SupportedReport command should set the correct value", async (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCSupportedReport;
@@ -221,7 +221,7 @@ test("the ScaleSupportedGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -233,7 +233,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", async 
 			0b11, // percent + absolute
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCScaleSupportedReport;
@@ -264,7 +264,7 @@ test("the CapabilitiesGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -280,7 +280,7 @@ test("the CapabilitiesReport command should be deserialized correctly", async (t
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCCapabilitiesReport;
@@ -304,7 +304,7 @@ test("the CapabilitiesReport command should set the correct metadata", async (t)
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlSetpointCCCapabilitiesReport;

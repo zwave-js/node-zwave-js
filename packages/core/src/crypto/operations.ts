@@ -13,17 +13,23 @@ const {
 	decryptAES256CBC,
 	randomBytes,
 	digest,
+	generateECDHKeyPair,
+	deriveSharedECDHSecret,
+	keyPairFromRawECDHPrivateKey,
 } = primitives;
 
 export {
 	decryptAES128CCM,
 	decryptAES128OFB,
 	decryptAES256CBC,
+	deriveSharedECDHSecret,
 	digest,
 	encryptAES128CBC,
 	encryptAES128CCM,
 	encryptAES128ECB,
 	encryptAES128OFB,
+	generateECDHKeyPair,
+	keyPairFromRawECDHPrivateKey,
 	randomBytes,
 };
 

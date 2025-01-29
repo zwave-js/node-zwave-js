@@ -2,7 +2,7 @@ import {
 	type S2SecurityClass,
 	type SecurityClass,
 } from "../definitions/SecurityClass.js";
-import { type CtrDRBG } from "./ctr_drbg.wrapper.js";
+import { type CtrDRBG } from "./ctr_drbg.js";
 
 export interface NetworkKeys {
 	pnk: Uint8Array;

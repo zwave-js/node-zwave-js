@@ -949,7 +949,7 @@ export class IndicatorCCSet extends IndicatorCC {
 	public indicator0Value: number | undefined;
 	public values: IndicatorObject[] | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Bytes.alloc(2 + 3 * this.values.length, 0);
@@ -971,7 +971,6 @@ export class IndicatorCCSet extends IndicatorCC {
 			// V1
 			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1171,7 +1170,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		this.setValue(ctx, valueV2, value.value);
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Bytes.alloc(2 + 3 * this.values.length, 0);
@@ -1193,7 +1192,6 @@ export class IndicatorCCReport extends IndicatorCC {
 			// V1
 			this.payload = Bytes.from([this.indicator0Value ?? 0]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1251,11 +1249,10 @@ export class IndicatorCCGet extends IndicatorCC {
 
 	public indicatorId: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (this.indicatorId != undefined) {
 			this.payload = Bytes.from([this.indicatorId]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1335,7 +1332,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const bitmask = this.supportedProperties.length > 0
 			? encodeBitMask(this.supportedProperties, undefined, 0)
 			: new Bytes();
@@ -1348,7 +1345,6 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			bitmask,
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1412,9 +1408,8 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.indicatorId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1481,13 +1476,12 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const description = Bytes.from(this.description, "utf8");
 		this.payload = Bytes.concat([
 			Bytes.from([this.indicatorId, description.length]),
 			description,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1542,9 +1536,8 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.indicatorId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

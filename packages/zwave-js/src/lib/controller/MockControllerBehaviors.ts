@@ -112,7 +112,7 @@ function createLazySendDataPayload(
 ): () => Promise<CommandClass> {
 	return async () => {
 		try {
-			const cmd = await CommandClass.parseAsync(msg.serializedCC!, {
+			const cmd = await CommandClass.parse(msg.serializedCC!, {
 				sourceNodeId: controller.ownNodeId,
 				__internalIsMockNode: true,
 				...node.encodingContext,

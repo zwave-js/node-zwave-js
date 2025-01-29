@@ -60,7 +60,6 @@ import {
 	Duration,
 	EncapsulationFlags,
 	type HostIDs,
-	type KeyPair,
 	type LogConfig,
 	type LogNodeOptions,
 	MAX_SUPERVISION_SESSION_ID,
@@ -94,8 +93,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	deserializeCacheValue,
-	extractRawECDHPrivateKeySync,
-	generateECDHKeyPairSync,
+	generateECDHKeyPair,
 	getCCName,
 	isEncapsulationCC,
 	isLongRangeNodeId,
@@ -103,7 +101,7 @@ import {
 	isMissingControllerCallback,
 	isMissingControllerResponse,
 	isZWaveError,
-	keyPairFromRawECDHPrivateKeySync,
+	keyPairFromRawECDHPrivateKey,
 	messageRecordToLines,
 	randomBytes,
 	securityClassIsS2,
@@ -194,6 +192,7 @@ import {
 } from "@zwave-js/shared";
 import {
 	type Database,
+	type KeyPair,
 	type ReadFile,
 	type ReadFileSystemInfo,
 } from "@zwave-js/shared/bindings";
@@ -1025,7 +1024,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 	private _learnModeAuthenticatedKeyPair: KeyPair | undefined;
 	/** @internal */
-	public getLearnModeAuthenticatedKeyPair(): KeyPair {
+	public async getLearnModeAuthenticatedKeyPair(): Promise<KeyPair> {
 		if (this._learnModeAuthenticatedKeyPair == undefined) {
 			// Try restoring from cache
 			const privateKey = this.cacheGet<Uint8Array>(
@@ -1033,15 +1032,14 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			);
 			if (privateKey) {
 				this._learnModeAuthenticatedKeyPair =
-					keyPairFromRawECDHPrivateKeySync(privateKey);
+					await keyPairFromRawECDHPrivateKey(privateKey);
 			} else {
 				// Not found in cache, create a new one and cache it
-				this._learnModeAuthenticatedKeyPair = generateECDHKeyPairSync();
+				this._learnModeAuthenticatedKeyPair =
+					await generateECDHKeyPair();
 				this.cacheSet(
 					cacheKeys.controller.privateKey,
-					extractRawECDHPrivateKeySync(
-						this._learnModeAuthenticatedKeyPair.privateKey,
-					),
+					this._learnModeAuthenticatedKeyPair.privateKey,
 				);
 			}
 		}
@@ -1834,7 +1832,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				) {
 					const key = this._options.securityKeys[secClass];
 					if (key) {
-						await this._securityManager2.setKeyAsync(
+						await this._securityManager2.setKey(
 							SecurityClass[secClass],
 							key,
 						);
@@ -1856,13 +1854,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				);
 				this._securityManagerLR = await SecurityManager2.create();
 				if (this._options.securityKeysLongRange?.S2_AccessControl) {
-					await this._securityManagerLR.setKeyAsync(
+					await this._securityManagerLR.setKey(
 						SecurityClass.S2_AccessControl,
 						this._options.securityKeysLongRange.S2_AccessControl,
 					);
 				}
 				if (this._options.securityKeysLongRange?.S2_Authenticated) {
-					await this._securityManagerLR.setKeyAsync(
+					await this._securityManagerLR.setKey(
 						SecurityClass.S2_Authenticated,
 						this._options.securityKeysLongRange.S2_Authenticated,
 					);
@@ -1897,7 +1895,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					);
 					this._securityManagerLR = await SecurityManager2.create();
 					for (const [sc, key] of securityKeysLongRange) {
-						await this._securityManagerLR.setKeyAsync(sc, key);
+						await this._securityManagerLR.setKey(sc, key);
 					}
 				} else if (
 					this._options.securityKeysLongRange?.S2_AccessControl
@@ -1908,14 +1906,14 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					);
 					this._securityManagerLR = await SecurityManager2.create();
 					if (this._options.securityKeysLongRange?.S2_AccessControl) {
-						await this._securityManagerLR.setKeyAsync(
+						await this._securityManagerLR.setKey(
 							SecurityClass.S2_AccessControl,
 							this._options.securityKeysLongRange
 								.S2_AccessControl,
 						);
 					}
 					if (this._options.securityKeysLongRange?.S2_Authenticated) {
-						await this._securityManagerLR.setKeyAsync(
+						await this._securityManagerLR.setKey(
 							SecurityClass.S2_Authenticated,
 							this._options.securityKeysLongRange
 								.S2_Authenticated,
@@ -1971,7 +1969,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					);
 					this._securityManager2 = await SecurityManager2.create();
 					for (const [sc, key] of securityKeys) {
-						await this._securityManager2.setKeyAsync(sc, key);
+						await this._securityManager2.setKey(sc, key);
 					}
 				} else if (
 					this._options.securityKeys
@@ -1997,7 +1995,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					) {
 						const key = this._options.securityKeys[secClass];
 						if (key) {
-							await this._securityManager2.setKeyAsync(
+							await this._securityManager2.setKey(
 								SecurityClass[secClass],
 								key,
 							);
@@ -3636,7 +3634,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 			// Parse embedded CCs
 			if (isCommandRequest(msg) && containsSerializedCC(msg)) {
-				msg.command = await CommandClass.parseAsync(
+				msg.command = await CommandClass.parse(
 					msg.serializedCC,
 					{
 						...this.getCCParsingContext(),
@@ -4604,7 +4602,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						await command.mergePartialCCsAsync(session, {
+						await command.mergePartialCCs(session, {
 							...this.getCCParsingContext(),
 							sourceNodeId: msg.command.nodeId as number,
 							frameType: msg.frameType,
@@ -6049,7 +6047,7 @@ ${handlers.length} left`,
 
 						// Mark the message as sent immediately before actually sending
 						msg.markAsSent();
-						const data = await msg.serializeAsync(
+						const data = await msg.serialize(
 							this.getEncodingContext(),
 						);
 						await this.writeSerial(data);
@@ -6640,7 +6638,7 @@ ${handlers.length} left`,
 		try {
 			const abort = new SendDataAbort();
 			await this.writeSerial(
-				await abort.serializeAsync(this.getEncodingContext()),
+				await abort.serialize(this.getEncodingContext()),
 			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
@@ -7346,7 +7344,7 @@ ${handlers.length} left`,
 	public async exceedsMaxPayloadLength(
 		msg: SendDataMessage,
 	): Promise<boolean> {
-		const serializedCC = await msg.serializeCCAsync(
+		const serializedCC = await msg.serializeCC(
 			this.getEncodingContext(),
 		);
 		return serializedCC.length > this.getMaxPayloadLength(msg);

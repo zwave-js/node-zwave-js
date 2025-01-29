@@ -91,12 +91,11 @@ export class ApplicationUpdateRequest extends Message {
 
 	public readonly updateType: ApplicationUpdateTypes;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.updateType]),
 			this.payload,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -136,12 +135,11 @@ export class ApplicationUpdateRequestWithNodeInfo
 	public nodeId: number;
 	public nodeInformation: NodeUpdatePayload;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = encodeNodeUpdatePayload(
 			this.nodeInformation,
 			ctx.nodeIdType,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

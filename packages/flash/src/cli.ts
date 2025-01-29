@@ -7,7 +7,7 @@ import { hideBin } from "yargs/helpers";
 import {
 	ControllerFirmwareUpdateStatus,
 	Driver,
-	extractFirmwareAsync,
+	extractFirmware,
 	getEnumMemberName,
 	guessFirmwareFileFormat,
 } from "zwave-js";
@@ -113,7 +113,7 @@ async function main() {
 
 	try {
 		const format = guessFirmwareFileFormat(filename, rawFile);
-		firmware = (await extractFirmwareAsync(rawFile, format)).data;
+		firmware = (await extractFirmware(rawFile, format)).data;
 	} catch (e: any) {
 		console.error("Could not parse firmware file:", e.message);
 		process.exit(1);

@@ -42,7 +42,7 @@ export class GetRoutingInfoRequest extends Message {
 	public removeNonRepeaters: boolean;
 	public removeBadLinks: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		const nodeId = encodeNodeID(this.sourceNodeId, ctx.nodeIdType);
 		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
 			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
@@ -53,7 +53,6 @@ export class GetRoutingInfoRequest extends Message {
 				0, // callbackId - this must be 0 as per the docs
 			]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
