@@ -33,7 +33,7 @@ test("the Get command should serialize correctly", async (t) => {
 			BasicCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(basiccc.serialize({} as any)).resolves.toStrictEqual(
+	await t.expect(basicCC.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -63,7 +63,7 @@ test("the Set command should serialize correctly", async (t) => {
 			55, // target value
 		]),
 	);
-	await t.expect(basiccc.serialize({} as any)).resolves.toStrictEqual(
+	await t.expect(basicCC.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
