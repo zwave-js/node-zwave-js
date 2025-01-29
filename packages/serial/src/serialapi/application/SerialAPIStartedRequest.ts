@@ -118,7 +118,7 @@ export class SerialAPIStartedRequest extends Message {
 	public controlledCCs: CommandClasses[];
 	public supportsLongRange: boolean = false;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const numCCBytes = ccList.length;
 
@@ -132,7 +132,6 @@ export class SerialAPIStartedRequest extends Message {
 		this.payload.set(ccList, 6);
 		this.payload[6 + numCCBytes] = this.supportsLongRange ? 0b1 : 0;
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

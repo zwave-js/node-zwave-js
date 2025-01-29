@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", async (t) => {
 			ThermostatFanModeCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -43,7 +43,7 @@ test("the Set command should serialize correctly (off = false)", async (t) => {
 			0x04, // target value
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -60,7 +60,7 @@ test("the Set command should serialize correctly (off = true)", async (t) => {
 			0b1000_0100, // target value
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -72,7 +72,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as ThermostatFanModeCCReport;

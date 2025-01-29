@@ -720,7 +720,7 @@ export class VersionCCReport extends VersionCC {
 
 	public readonly hardwareVersion: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.libraryType,
 			...this.protocolVersion
@@ -749,7 +749,6 @@ export class VersionCCReport extends VersionCC {
 			this.payload = Bytes.concat([this.payload, firmwaresBuffer]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -810,9 +809,8 @@ export class VersionCCCommandClassReport extends VersionCC {
 	public ccVersion: number;
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.requestedCC, this.ccVersion]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -868,9 +866,8 @@ export class VersionCCCommandClassGet extends VersionCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.requestedCC]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -917,11 +914,10 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 
 	public supportsZWaveSoftwareGet: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

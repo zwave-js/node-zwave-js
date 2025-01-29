@@ -17,7 +17,7 @@ test("the Get command should serialize correctly", async (t) => {
 		CommandClasses.Battery, // CC
 		BatteryCommand.Get, // CC Command
 	]);
-	await t.expect(batteryCC.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(batteryCC.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -28,7 +28,7 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 		BatteryCommand.Report, // CC Command
 		55, // current value
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;
@@ -44,7 +44,7 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 		BatteryCommand.Report, // CC Command
 		0xff, // current value
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;
@@ -62,7 +62,7 @@ test("the Report command (v2) should be deserialized correctly: all flags set", 
 		0b00_1111_00,
 		1, // disconnected
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;
@@ -83,7 +83,7 @@ test("the Report command (v2) should be deserialized correctly: charging status"
 		0b10_000000, // Maintaining
 		0,
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;
@@ -100,7 +100,7 @@ test("the Report command (v2) should be deserialized correctly: recharge or repl
 		0b11, // Maintaining
 		0,
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;
@@ -114,7 +114,7 @@ test("deserializing an unsupported command should return an unspecified version 
 		CommandClasses.Battery, // CC
 		255, // not a valid command
 	]);
-	const batteryCC = await CommandClass.parseAsync(
+	const batteryCC = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 7 } as any,
 	) as BatteryCCReport;

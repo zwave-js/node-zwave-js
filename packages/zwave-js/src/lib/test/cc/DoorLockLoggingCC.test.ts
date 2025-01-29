@@ -29,7 +29,7 @@ test("the RecordsCountGet command should serialize correctly", async (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -41,7 +41,7 @@ test("the RecordsCountReport command should be deserialized correctly", async (t
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordsSupportedReport;
@@ -61,7 +61,7 @@ test("the RecordGet command should serialize correctly", async (t) => {
 			1, // Record Number
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -85,7 +85,7 @@ test("the RecordReport command should be deserialized correctly", async (t) => {
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordReport;

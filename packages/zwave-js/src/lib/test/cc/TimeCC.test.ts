@@ -27,7 +27,7 @@ test("the TimeGet command should serialize correctly", async (t) => {
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -41,7 +41,7 @@ test("the TimeReport command should be deserialized correctly", async (t) => {
 			59,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCCTimeReport;
@@ -59,7 +59,7 @@ test("the DateGet command should serialize correctly", async (t) => {
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -74,7 +74,7 @@ test("the DateReport command should be deserialized correctly", async (t) => {
 			17,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCCDateReport;
@@ -89,7 +89,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 8 } as any,
 	) as TimeCC;

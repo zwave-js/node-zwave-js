@@ -40,7 +40,7 @@ test("should deserialize and serialize correctly", async (t) => {
 	];
 	for (const original of okayMessages) {
 		const parsed = Message.parse(original, {} as any);
-		await t.expect(parsed.serializeAsync({} as any)).resolves.toStrictEqual(
+		await t.expect(parsed.serialize({} as any)).resolves.toStrictEqual(
 			original,
 		);
 	}
@@ -53,7 +53,7 @@ test("should serialize correctly when the payload is null", async (t) => {
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	await t.expect(message.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(message.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

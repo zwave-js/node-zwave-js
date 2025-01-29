@@ -1669,7 +1669,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public rainSensorPolarity?: IrrigationSensorPolarity;
 	public moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		let polarity = 0;
 		if (this.rainSensorPolarity != undefined) polarity |= 0b1;
 		if (this.moistureSensorPolarity != undefined) polarity |= 0b10;
@@ -1686,7 +1686,6 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			encodeFloatWithScale(this.lowPressureThreshold, 0 /* kPa */),
 			Bytes.from([polarity]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2061,12 +2060,11 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 
 	public valveId: ValveId;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2133,7 +2131,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([
 				this.valveId === "master" ? 1 : 0,
@@ -2149,7 +2147,6 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 				| (this.useMoistureSensor ? 0b10 : 0),
 			]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2386,12 +2383,11 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 
 	public valveId: ValveId;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2440,7 +2436,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 	public valveId: ValveId;
 	public duration: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.valveId === "master" ? 1 : 0,
 			this.valveId === "master" ? 1 : this.valveId || 1,
@@ -2448,7 +2444,6 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.duration, 2);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2503,7 +2498,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 	public tableId: number;
 	public entries: ValveTableEntry[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(1 + this.entries.length * 3);
 		this.payload[0] = this.tableId;
 		for (let i = 0; i < this.entries.length; i++) {
@@ -2512,7 +2507,6 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			this.payload[offset] = entry.valveId;
 			this.payload.writeUInt16BE(entry.duration, offset + 1);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2640,9 +2634,8 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 
 	public tableId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.tableId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2694,9 +2687,8 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 
 	public tableIDs: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from(this.tableIDs);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2748,9 +2740,8 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 
 	public duration?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.duration ?? 255]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

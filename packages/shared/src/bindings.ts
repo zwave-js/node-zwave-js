@@ -54,6 +54,18 @@ export interface CryptoPrimitives {
 		algorithm: "md5" | "sha-1" | "sha-256",
 		data: Uint8Array,
 	): Promise<Uint8Array>;
+
+	/** Generates an x25519 / ECDH key pair */
+	generateECDHKeyPair(): Promise<KeyPair>;
+	/** Expand an x25519 / ECDH private key into the full key pair */
+	keyPairFromRawECDHPrivateKey(privateKey: Uint8Array): Promise<KeyPair>;
+	/** Derives the shared ECDH secret from an x25519 / ECDH key pair */
+	deriveSharedECDHSecret(keyPair: KeyPair): Promise<Uint8Array>;
+}
+
+export interface KeyPair {
+	publicKey: Uint8Array;
+	privateKey: Uint8Array;
 }
 
 export interface FSStats {

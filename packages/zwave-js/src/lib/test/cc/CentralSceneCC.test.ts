@@ -32,7 +32,7 @@ test("the ConfigurationGet command should serialize correctly", async (t) => {
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -48,7 +48,7 @@ test("the ConfigurationSet command should serialize correctly (flags set)", asyn
 			0b1000_0000,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -64,7 +64,7 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 			0,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -76,7 +76,7 @@ test("the ConfigurationReport command should be deserialized correctly", async (
 			0b1000_0000,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCConfigurationReport;
@@ -94,7 +94,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -111,7 +111,7 @@ test("the SupportedReport command should be deserialized correctly", async (t) =
 			0,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCSupportedReport;
@@ -134,7 +134,7 @@ test("the Notification command should be deserialized correctly", async (t) => {
 			8, // scene number
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
@@ -156,7 +156,7 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 			8, // scene number
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCCNotification;
@@ -172,7 +172,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as CentralSceneCC;

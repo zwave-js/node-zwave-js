@@ -81,15 +81,14 @@ import {
 	ZWaveLibraryTypes,
 	authHomeIdFromDSK,
 	averageRSSI,
-	computePRKAsync,
-	deriveTempKeysAsync,
+	computePRK,
+	deriveSharedECDHSecret,
+	deriveTempKeys,
 	dskFromString,
 	dskToString,
-	extractRawECDHPublicKeySync,
-	generateECDHKeyPairSync,
+	generateECDHKeyPair,
 	getChipTypeAndVersion,
 	getHighestSecurityClass,
-	importRawECDHPublicKeySync,
 	indexDBsByNode,
 	isEmptyRoute,
 	isLongRangeNodeId,
@@ -378,7 +377,6 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
-import crypto from "node:crypto";
 import type { Driver } from "../driver/Driver.js";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache.js";
 import type { StatisticsEventCallbacks } from "../driver/Statistics.js";
@@ -566,10 +564,10 @@ export class ZWaveController
 	/**
 	 * The device specific key (DSK) of the controller in binary format.
 	 */
-	public get dsk(): Uint8Array {
+	public async getDSK(): Promise<Uint8Array> {
 		if (this._dsk == undefined) {
-			const keyPair = this.driver.getLearnModeAuthenticatedKeyPair();
-			const publicKey = extractRawECDHPublicKeySync(keyPair.publicKey);
+			const { publicKey } = await this.driver
+				.getLearnModeAuthenticatedKeyPair();
 			this._dsk = publicKey.subarray(0, 16);
 		}
 		return this._dsk;
@@ -3625,9 +3623,8 @@ export class ZWaveController
 
 			// Generate ECDH key pair. We need to immediately send the other node our public key,
 			// so it won't abort bootstrapping
-			const keyPair = generateECDHKeyPairSync();
-			const publicKey = extractRawECDHPublicKeySync(keyPair.publicKey);
-			await api.sendPublicKey(publicKey);
+			const keyPair = await generateECDHKeyPair();
+			await api.sendPublicKey(keyPair.publicKey);
 			// After this, the node will start sending us a KEX SET every 10 seconds.
 			// We won't be able to decode it until the DSK was verified
 
@@ -3679,15 +3676,18 @@ export class ZWaveController
 			}
 
 			// After the user has verified the DSK, we can derive the shared secret
-			// Z-Wave works with the "raw" keys, so this is a tad complicated
-			const sharedSecret = crypto.diffieHellman({
-				publicKey: importRawECDHPublicKeySync(nodePublicKey),
+			const sharedSecret = await deriveSharedECDHSecret({
+				publicKey: nodePublicKey,
 				privateKey: keyPair.privateKey,
 			});
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
-			const tempKeys = await deriveTempKeysAsync(
-				await computePRKAsync(sharedSecret, publicKey, nodePublicKey),
+			const tempKeys = await deriveTempKeys(
+				await computePRK(
+					sharedSecret,
+					keyPair.publicKey,
+					nodePublicKey,
+				),
 			);
 			securityManager.deleteNonce(node.id);
 			securityManager.tempKeys.set(node.id, {
@@ -9397,16 +9397,15 @@ export class ZWaveController
 			// If authentication is required, use the (static) authenticated ECDH key pair,
 			// otherwise generate a new one
 			const keyPair = requiresAuthentication
-				? this.driver.getLearnModeAuthenticatedKeyPair()
-				: generateECDHKeyPairSync();
-			const publicKey = extractRawECDHPublicKeySync(keyPair.publicKey);
-			const transmittedPublicKey = Bytes.from(publicKey);
+				? await this.driver.getLearnModeAuthenticatedKeyPair()
+				: await generateECDHKeyPair();
+			const transmittedPublicKey = Bytes.from(keyPair.publicKey);
 			if (requiresAuthentication) {
 				// Authentication requires obfuscating the public key
 				transmittedPublicKey.writeUInt16BE(0x0000, 0);
 
 				// Show the DSK to the user
-				const dsk = dskToString(publicKey.subarray(0, 16));
+				const dsk = dskToString(keyPair.publicKey.subarray(0, 16));
 				try {
 					userCallbacks?.showDSK(dsk);
 				} catch {
@@ -9431,17 +9430,17 @@ export class ZWaveController
 			}
 
 			const includingNodePubKey = pubKeyReport.publicKey;
-			const sharedSecret = crypto.diffieHellman({
-				publicKey: importRawECDHPublicKeySync(includingNodePubKey),
+			const sharedSecret = await deriveSharedECDHSecret({
+				publicKey: includingNodePubKey,
 				privateKey: keyPair.privateKey,
 			});
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
-			const tempKeys = await deriveTempKeysAsync(
-				await computePRKAsync(
+			const tempKeys = await deriveTempKeys(
+				await computePRK(
 					sharedSecret,
 					includingNodePubKey,
-					publicKey,
+					keyPair.publicKey,
 				),
 			);
 			securityManager.deleteNonce(bootstrappingNode.id);
@@ -9610,7 +9609,7 @@ export class ZWaveController
 
 				// Store the network key
 				receivedKeys.set(securityClass, keyReport.networkKey);
-				await securityManager.setKeyAsync(
+				await securityManager.setKey(
 					securityClass,
 					keyReport.networkKey,
 				);

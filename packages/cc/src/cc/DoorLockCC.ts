@@ -856,9 +856,8 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 
 	public mode: DoorLockMode;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.mode]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1342,7 +1341,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public twistAssist?: boolean;
 	public blockToBlock?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const insideHandles = isArray(
 				this.insideHandlesCanOpenDoorConfiguration,
 			)
@@ -1392,7 +1391,6 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			6,
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -714,13 +714,12 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = encodeBitMask(
 			this.supportedColorComponents,
 			15, // fixed 2 bytes
 			ColorComponent["Warm White"],
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -863,7 +862,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.colorComponent,
 			this.currentValue,
@@ -877,7 +876,6 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				]),
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -948,9 +946,8 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		this._colorComponent = value;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this._colorComponent]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1030,7 +1027,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public colorTable: ColorTable;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const populatedColorCount = Object.keys(this.colorTable).length;
 		this.payload = new Bytes(
 			1 + populatedColorCount * 2 + 1,
@@ -1057,7 +1054,6 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1146,7 +1142,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public colorComponent: ColorComponent;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
 		this.payload = Bytes.from([
@@ -1166,7 +1162,6 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1221,9 +1216,8 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 
 	public readonly colorComponent: ColorComponent;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.colorComponent]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

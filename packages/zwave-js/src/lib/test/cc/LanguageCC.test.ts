@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", async (t) => {
 			LanguageCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -45,7 +45,7 @@ test("the Set command should serialize correctly (w/o country code)", async (t) 
 			0x75,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -68,7 +68,7 @@ test("the Set command should serialize correctly (w/ country code)", async (t) =
 			0x45,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -83,7 +83,7 @@ test("the Report command should be deserialized correctly (w/o country code)", a
 			0x75,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCCReport;
@@ -106,7 +106,7 @@ test("the Report command should be deserialized correctly (w/ country code)", as
 			0x45,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCCReport;
@@ -120,7 +120,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 4 } as any,
 	) as LanguageCC;
