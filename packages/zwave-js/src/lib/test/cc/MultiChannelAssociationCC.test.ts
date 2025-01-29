@@ -30,7 +30,7 @@ test("the SupportedGroupingsGet command should serialize correctly", async (t) =
 			MultiChannelAssociationCommand.SupportedGroupingsGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -69,7 +69,7 @@ test("the Set command should serialize correctly (node IDs only)", async (t) => 
 			5,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -102,7 +102,7 @@ test("the Set command should serialize correctly (endpoint addresses only)", asy
 			0b11010111,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -140,7 +140,7 @@ test("the Set command should serialize correctly (both options)", async (t) => {
 			0b11010111,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -156,7 +156,7 @@ test("the Get command should serialize correctly", async (t) => {
 			9, // group ID
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -276,7 +276,7 @@ test("the Remove command should serialize correctly (node IDs only)", async (t) 
 			5,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -309,7 +309,7 @@ test("the Remove command should serialize correctly (endpoint addresses only)", 
 			0b11010111,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -347,7 +347,7 @@ test("the Remove command should serialize correctly (both options)", async (t) =
 			0b11010111,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -363,7 +363,7 @@ test("the Remove command should serialize correctly (both empty)", async (t) => 
 			5, // group id
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

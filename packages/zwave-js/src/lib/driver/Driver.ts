@@ -6047,7 +6047,7 @@ ${handlers.length} left`,
 
 						// Mark the message as sent immediately before actually sending
 						msg.markAsSent();
-						const data = await msg.serializeAsync(
+						const data = await msg.serialize(
 							this.getEncodingContext(),
 						);
 						await this.writeSerial(data);
@@ -6638,7 +6638,7 @@ ${handlers.length} left`,
 		try {
 			const abort = new SendDataAbort();
 			await this.writeSerial(
-				await abort.serializeAsync(this.getEncodingContext()),
+				await abort.serialize(this.getEncodingContext()),
 			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",

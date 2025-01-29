@@ -48,7 +48,7 @@ test("the OperationGet command should serialize correctly", async (t) => {
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -64,7 +64,7 @@ test("the OperationSet command should serialize correctly", async (t) => {
 			0x20, // target value
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -161,7 +161,7 @@ test("the ConfigurationGet command should serialize correctly", async (t) => {
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -313,7 +313,7 @@ test("the ConfigurationSet command (v4) should serialize correctly", async (t) =
 			0b1,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -325,7 +325,7 @@ test("the CapabilitiesGet command should serialize correctly", async (t) => {
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

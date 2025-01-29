@@ -142,8 +142,8 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 
 	public encapsulated: CommandClass;
 
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		const commandBuffer = await this.encapsulated.serializeAsync(ctx);
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		const commandBuffer = await this.encapsulated.serialize(ctx);
 		// Reserve 2 bytes for the CRC
 		this.payload = Bytes.concat([commandBuffer, new Bytes(2)]);
 
@@ -153,7 +153,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		crc = CRC16_CCITT(commandBuffer, crc);
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

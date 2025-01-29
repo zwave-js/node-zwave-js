@@ -167,7 +167,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -178,7 +178,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(
 			this.command?.nodeId ?? this._nodeId,
@@ -192,7 +192,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -270,7 +270,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	public transmitStatus: TransmitStatus;
 	public txReport: TXReport | undefined;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([
 			this.callbackId,
@@ -283,7 +283,6 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 			]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -335,9 +334,8 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 
 	public wasSent: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.wasSent ? 1 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -489,7 +487,7 @@ export class SendDataMulticastRequest<
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -500,7 +498,7 @@ export class SendDataMulticastRequest<
 		this.callbackId = undefined;
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const serializedCC = await this.serializeCC(ctx);
 		const destinationNodeIDs = (this.command?.nodeId ?? this.nodeIds)
@@ -515,7 +513,7 @@ export class SendDataMulticastRequest<
 			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -566,10 +564,9 @@ export class SendDataMulticastRequestTransmitReport
 
 	public transmitStatus: TransmitStatus;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -619,9 +616,8 @@ export class SendDataMulticastResponse extends Message
 
 	public wasSent: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.wasSent ? 1 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

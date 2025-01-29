@@ -219,7 +219,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 
 	public userIcon: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.zwavePlusVersion,
 			this.roleType,
@@ -232,7 +232,6 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		]);
 		this.payload.writeUInt16BE(this.installerIcon, 3);
 		this.payload.writeUInt16BE(this.userIcon, 5);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

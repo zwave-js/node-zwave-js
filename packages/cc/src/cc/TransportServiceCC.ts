@@ -143,7 +143,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public partialDatagram: Uint8Array;
 	public encapsulated!: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -174,7 +174,6 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -357,7 +356,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		this._encapsulated.encapsulatingCC = this as any;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -391,7 +390,6 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -457,13 +455,12 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public sessionId: number;
 	public datagramOffset: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			((this.sessionId & 0b1111) << 4)
 			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -507,9 +504,8 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 
 	public sessionId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([(this.sessionId & 0b1111) << 4]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -550,9 +546,8 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 
 	public pendingSegments: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.pendingSegments]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

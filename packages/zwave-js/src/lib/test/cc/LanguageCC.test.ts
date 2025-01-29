@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", async (t) => {
 			LanguageCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -45,7 +45,7 @@ test("the Set command should serialize correctly (w/o country code)", async (t) 
 			0x75,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -68,7 +68,7 @@ test("the Set command should serialize correctly (w/ country code)", async (t) =
 			0x45,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

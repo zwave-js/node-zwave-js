@@ -65,7 +65,7 @@ test("the ConfigurationGet command should serialize correctly", async (t) => {
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -83,7 +83,7 @@ test("the ConfigurationSet command should serialize correctly", async (t) => {
 			0x2,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -116,7 +116,7 @@ test("the EventSupportedGet command should serialize correctly", async (t) => {
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -167,7 +167,7 @@ test("the KeySupportedGet command should serialize correctly", async (t) => {
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

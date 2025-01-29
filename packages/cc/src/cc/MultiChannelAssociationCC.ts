@@ -665,7 +665,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public nodeIds: number[];
 	public endpoints: EndpointAddress[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.groupId]),
 			serializeMultiChannelAssociationDestination(
@@ -673,7 +673,6 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 				this.endpoints,
 			),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -737,7 +736,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public nodeIds?: number[];
 	public endpoints?: EndpointAddress[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.groupId || 0]),
 			serializeMultiChannelAssociationDestination(
@@ -745,7 +744,6 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				this.endpoints || [],
 			),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -862,7 +860,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return Promise.resolve();
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const destinations = serializeMultiChannelAssociationDestination(
 			this.nodeIds,
 			this.endpoints,
@@ -875,7 +873,6 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			]),
 			destinations,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -928,9 +925,8 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.groupId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -977,9 +973,8 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 
 	public readonly groupCount: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.groupCount]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -162,12 +162,12 @@ export class ApplicationCommandRequest extends Message
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		const statusByte = (this.frameType === "broadcast"
 			? ApplicationCommandStatusFlags.TypeBroad
 			: this.frameType === "multicast"
@@ -187,7 +187,7 @@ export class ApplicationCommandRequest extends Message
 			serializedCC,
 		]);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

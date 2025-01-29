@@ -40,7 +40,7 @@ test("the Get command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Humidifier, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -61,7 +61,7 @@ test("the Set command should serialize correctly", async (t) => {
 			encodeFloatWithScale(57, 1),
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -161,7 +161,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -221,7 +221,7 @@ test("the ScaleSupportedGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -264,7 +264,7 @@ test("the CapabilitiesGet command should serialize correctly", async (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

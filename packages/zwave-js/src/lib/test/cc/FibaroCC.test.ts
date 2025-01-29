@@ -36,7 +36,7 @@ test("the Set Tilt command should serialize correctly", async (t) => {
 			0x63, // Tilt
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

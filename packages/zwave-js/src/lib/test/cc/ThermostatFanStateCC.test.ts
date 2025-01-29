@@ -26,7 +26,7 @@ test("the Get command should serialize correctly", async (t) => {
 			ThermostatFanStateCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

@@ -35,7 +35,7 @@ test("the Get command should serialize correctly", async (t) => {
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -51,7 +51,7 @@ test("the Set command should serialize correctly", async (t) => {
 			0x03, // target value
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -124,7 +124,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

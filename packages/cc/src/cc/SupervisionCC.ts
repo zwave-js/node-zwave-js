@@ -336,7 +336,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([
 				(this.moreUpdatesFollow ? 0b1_0_000000 : 0)
@@ -352,7 +352,6 @@ export class SupervisionCCReport extends SupervisionCC {
 				Bytes.from([this.duration.serializeReport()]),
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -438,8 +437,8 @@ export class SupervisionCCGet extends SupervisionCC {
 	public sessionId: number;
 	public encapsulated: CommandClass;
 
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		const encapCC = await this.encapsulated.serializeAsync(ctx);
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		const encapCC = await this.encapsulated.serialize(ctx);
 		this.payload = Bytes.concat([
 			Bytes.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0)
@@ -448,7 +447,7 @@ export class SupervisionCCGet extends SupervisionCC {
 			]),
 			encapCC,
 		]);
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

@@ -143,16 +143,16 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const buffers: Bytes[] = [];
 		buffers.push(Bytes.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
-			const cmdBuffer = await cmd.serializeAsync(ctx);
+			const cmdBuffer = await cmd.serialize(ctx);
 			buffers.push(Bytes.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
 		this.payload = Bytes.concat(buffers);
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

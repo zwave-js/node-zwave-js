@@ -175,7 +175,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -186,7 +186,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
@@ -206,7 +206,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			Bytes.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -291,7 +291,7 @@ export class SendDataBridgeRequestTransmitReport
 		return this.transmitStatus === TransmitStatus.OK;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
 		if (this.txReport) {
@@ -301,7 +301,6 @@ export class SendDataBridgeRequestTransmitReport
 			]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -513,7 +512,7 @@ export class SendDataMulticastBridgeRequest<
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -524,7 +523,7 @@ export class SendDataMulticastBridgeRequest<
 		this.callbackId = undefined;
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const serializedCC = await this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
@@ -545,7 +544,7 @@ export class SendDataMulticastBridgeRequest<
 			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

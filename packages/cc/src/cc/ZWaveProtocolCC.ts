@@ -121,9 +121,8 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC
 	public supportsBeaming: boolean;
 	public supportedCCs: CommandClasses[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = encodeNodeInformationFrame(this);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -168,11 +167,10 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
 	public assignedNodeId: number;
 	public homeId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(5);
 		this.payload[0] = this.assignedNodeId;
 		this.payload.writeUInt32BE(this.homeId, 1);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -242,7 +240,7 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 	public wakeUpTime: WakeUpTime;
 	public dataRate: ZWaveDataRate;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const nodesBitmask = encodeBitMask(this.candidateNodeIds, MAX_NODES);
 		const speedAndLength = 0b1000_0000 | nodesBitmask.length;
 		this.payload = Bytes.concat([
@@ -250,7 +248,6 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 			nodesBitmask,
 			Bytes.from([this.wakeUpTime, this.dataRate]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -300,7 +297,7 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 	public neighborNodeIds: number[];
 	public wakeUpTime?: WakeUpTime;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const nodesBitmask = encodeBitMask(this.neighborNodeIds, MAX_NODES);
 		this.payload = Bytes.concat([
 			Bytes.from([nodesBitmask.length]),
@@ -309,7 +306,6 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 				? Bytes.from([this.wakeUpTime])
 				: new Bytes(),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -347,9 +343,8 @@ export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
 
 	public sequenceNumber: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.sequenceNumber]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -400,13 +395,12 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 	public includeNode: boolean;
 	public excludeNode: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			(this.supportsNWI ? 0b0001 : 0)
 			| (this.excludeNode ? 0b0010 : 0)
 			| (this.includeNode ? 0b0100 : 0),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -480,12 +474,11 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 	public supportsSecurity: boolean;
 	public supportsBeaming: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.sequenceNumber, this.sourceNodeId]),
 			encodeNodeProtocolInfoAndDeviceClass(this),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -534,7 +527,7 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 	public testedNodeId: number;
 	public neighborNodeIds: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const nodesBitmask = encodeBitMask(this.neighborNodeIds, MAX_NODES);
 		this.payload = Bytes.concat([
 			Bytes.from([
@@ -544,7 +537,6 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 			]),
 			nodesBitmask,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -578,9 +570,8 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 
 	public status: NetworkTransferStatus;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.status]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -645,7 +636,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 	public destinationWakeUp: WakeUpTime;
 	public destinationSpeed: ZWaveDataRate;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const routeByte = (this.routeIndex << 4) | this.repeaters.length;
 		const speedMask = dataRate2Bitmask(this.destinationSpeed);
 		const speedByte = (speedMask << 3) | (this.destinationWakeUp << 1);
@@ -655,7 +646,6 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 			...this.repeaters,
 			speedByte,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -723,12 +713,11 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 	public supportsBeaming: boolean;
 	public supportedCCs: CommandClasses[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.newNodeId]),
 			encodeNodeInformationFrame(this),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -770,13 +759,12 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 	public testedNodeId: number;
 	public neighborNodeIds: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const nodesBitmask = encodeBitMask(this.neighborNodeIds, MAX_NODES);
 		this.payload = Bytes.concat([
 			Bytes.from([this.testedNodeId, nodesBitmask.length]),
 			nodesBitmask,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -814,9 +802,8 @@ export class ZWaveProtocolCCTransferNewPrimaryControllerComplete
 
 	public genericDeviceClass: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.genericDeviceClass]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -861,9 +848,8 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
 	public sucNodeId: number;
 	public isSIS: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.sucNodeId, this.isSIS ? 0b1 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -899,9 +885,8 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 
 	public enableSIS: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([0x01, this.enableSIS ? 0b1 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -941,12 +926,11 @@ export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
 	public accepted: boolean;
 	public isSIS: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.accepted ? 0x01 : 0x00,
 			this.isSIS ? 0b1 : 0,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -993,12 +977,11 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 
 	public nodeIds: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.alloc(5, 0);
 		for (let i = 0; i < this.nodeIds.length && i < 5; i++) {
 			this.payload[i] = this.nodeIds[i];
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1029,9 +1012,8 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
 
 	public lostNodeId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.lostNodeId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1068,9 +1050,8 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
 
 	public accepted: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.accepted ? 0x05 : 0x04]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1136,9 +1117,8 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 	// Power dampening in (negative) dBm. A value of 2 means -2 dBm.
 	public powerDampening: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([0, this.powerDampening]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1176,12 +1156,11 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 
 	public reservedNodeIDs: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.reservedNodeIDs.length,
 			...this.reservedNodeIDs,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1216,9 +1195,8 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
 
 	public numNodeIDs: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.numNodeIDs]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1257,12 +1235,11 @@ export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
 	public nodeMaskType: number;
 	public nodeListUpdated: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.nodeMaskType,
 			this.nodeListUpdated ? 0x01 : 0x00,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1314,13 +1291,12 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 	public nodeMaskType: number;
 	public nodeIDs: number[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.nodeMaskType,
 			this.nodeIDs.length,
 			...this.nodeIDs,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1359,12 +1335,11 @@ export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
 	public enabled: boolean;
 	public timeoutMinutes?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.enabled ? 0x01 : 0x00,
 			this.timeoutMinutes ?? 0x00,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1408,9 +1383,8 @@ export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
 	public targetNodeId: number;
 	public routeNumber: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.targetNodeId, this.routeNumber]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -1459,9 +1433,8 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 
 	public nwiHomeId: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from(this.nwiHomeId);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

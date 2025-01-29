@@ -27,7 +27,7 @@ test("the TimeGet command should serialize correctly", async (t) => {
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -59,7 +59,7 @@ test("the DateGet command should serialize correctly", async (t) => {
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

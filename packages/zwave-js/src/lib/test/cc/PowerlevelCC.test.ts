@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", async (t) => {
 			PowerlevelCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -44,7 +44,7 @@ test("the Set NormalPower command should serialize correctly", async (t) => {
 			0, // timeout (ignored)
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -62,7 +62,7 @@ test("the Set NormalPower command with timeout should serialize correctly", asyn
 			0x00, // timeout ignored
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -80,7 +80,7 @@ test("the Set Custom power command should serialize correctly", async (t) => {
 			50, // timeout
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

@@ -59,7 +59,7 @@ test.sequential(
 			}),
 		});
 		mockPort.emitData(
-			await req.serializeAsync(driver["getEncodingContext"]()),
+			await req.serialize(driver["getEncodingContext"]()),
 		);
 		await controller.expectHostACK(1000);
 	},

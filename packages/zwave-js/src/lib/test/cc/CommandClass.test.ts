@@ -38,7 +38,7 @@ test(`creating and serializing should work for unspecified commands`, async (t) 
 		callbackId: 0xfe,
 	});
 	await t.expect(
-		msg.serializeAsync({} as any),
+		msg.serialize({} as any),
 	).resolves.toStrictEqual(Bytes.from("010c001302055d0201020325fe63", "hex"));
 });
 

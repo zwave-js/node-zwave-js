@@ -29,7 +29,7 @@ test("the Get command should serialize correctly (no sensor type)", async (t) =>
 			BinarySensorType.Any, // sensor type
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -42,7 +42,7 @@ test("the Get command should serialize correctly", async (t) => {
 	const expected = buildCCBuffer(
 		Uint8Array.from([BinarySensorCommand.Get, BinarySensorType.CO]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -88,7 +88,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			BinarySensorCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

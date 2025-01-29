@@ -30,7 +30,7 @@ test("the Get command should serialize correctly", async (t) => {
 			BinarySwitchCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -53,7 +53,7 @@ test("the Set command should serialize correctly (no duration)", async (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
+	await t.expect(cc.serialize(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly", async (t) => {
@@ -76,7 +76,7 @@ test("the Set command should serialize correctly", async (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
+	await t.expect(cc.serialize(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", async (t) => {

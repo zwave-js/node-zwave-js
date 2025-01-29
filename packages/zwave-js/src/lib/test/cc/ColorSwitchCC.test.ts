@@ -39,7 +39,7 @@ test("the SupportedGet command should serialize correctly", async (t) => {
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -84,7 +84,7 @@ test("the Get command should serialize correctly", async (t) => {
 			2, // Color Component
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -158,7 +158,7 @@ test("the Set command should serialize correctly (without duration)", async (t) 
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
+	await t.expect(cc.serialize(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the Set command should serialize correctly (version 2)", async (t) => {
@@ -187,7 +187,7 @@ test("the Set command should serialize correctly (version 2)", async (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
+	await t.expect(cc.serialize(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the StartLevelChange command should serialize correctly", async (t) => {
@@ -214,7 +214,7 @@ test("the StartLevelChange command should serialize correctly", async (t) => {
 		},
 	} satisfies GetSupportedCCVersion as any;
 
-	await t.expect(cc.serializeAsync(ctx)).resolves.toStrictEqual(expected);
+	await t.expect(cc.serialize(ctx)).resolves.toStrictEqual(expected);
 });
 
 test("the StopLevelChange command should serialize correctly", async (t) => {
@@ -229,7 +229,7 @@ test("the StopLevelChange command should serialize correctly", async (t) => {
 			0b0000_0010, // color: red
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

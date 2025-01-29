@@ -33,12 +33,11 @@ export class SetSerialApiTimeoutsRequest extends Message {
 	public ackTimeout: number;
 	public byteTimeout: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			Math.round(this.ackTimeout / 10),
 			Math.round(this.byteTimeout / 10),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

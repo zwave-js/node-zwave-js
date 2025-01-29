@@ -717,7 +717,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 
 	public readonly supportedParameters: readonly WindowCoveringParameter[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const bitmask = encodeBitMask(
 			this.supportedParameters,
 			undefined,
@@ -730,7 +730,6 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 			bitmask.subarray(0, numBitmaskBytes),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -873,9 +872,8 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.parameter]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -948,7 +946,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	}[];
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const numEntries = this.targetValues.length & 0b11111;
 		this.payload = new Bytes(2 + numEntries * 2);
 
@@ -963,7 +961,6 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			this.duration ?? Duration.default()
 		).serializeSet();
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1029,13 +1026,12 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.direction === "down" ? 0b0100_0000 : 0b0000_0000,
 			this.parameter,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1087,9 +1083,8 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.parameter]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

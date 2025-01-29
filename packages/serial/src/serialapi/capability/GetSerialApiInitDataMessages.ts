@@ -132,7 +132,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	public zwaveChipType?: string | UnknownZWaveChipType;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		let chipType: UnknownZWaveChipType | undefined;
 		if (typeof this.zwaveChipType === "string") {
 			chipType = getChipTypeAndVersion(this.zwaveChipType);
@@ -167,7 +167,6 @@ export class GetSerialApiInitDataResponse extends Message {
 			this.payload[3 + NUM_NODEMASK_BYTES + 1] = chipType.version;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

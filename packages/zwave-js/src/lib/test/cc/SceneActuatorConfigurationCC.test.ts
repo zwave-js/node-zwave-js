@@ -30,7 +30,7 @@ test("the Get command should serialize correctly", async (t) => {
 			1,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -51,7 +51,7 @@ test("the Set command should serialize correctly with level", async (t) => {
 			0x00, // level
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -72,7 +72,7 @@ test("the Set command should serialize correctly with undefined level", async (t
 			0xff, // level
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

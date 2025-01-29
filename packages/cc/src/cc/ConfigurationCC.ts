@@ -1748,7 +1748,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.parameter, this.valueSize & 0b111]),
 			new Bytes(this.valueSize),
@@ -1761,7 +1761,6 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this.value,
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1822,9 +1821,8 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	public parameter: number;
 	public allowUnexpectedResponse: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.parameter]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1903,7 +1901,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	public valueFormat: ConfigValueFormat | undefined;
 	public value: ConfigValue | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const valueSize = this.resetToDefault ? 1 : this.valueSize!;
 		const payloadLength = 2 + valueSize;
 		this.payload = Bytes.alloc(payloadLength, 0);
@@ -1943,7 +1941,6 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				);
 			}
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2067,7 +2064,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return this._handshake;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const valueSize = this._resetToDefault ? 1 : this.valueSize;
 		const payloadLength = 4 + valueSize * this.parameters.length;
 		this.payload = Bytes.alloc(payloadLength, 0);
@@ -2111,7 +2108,6 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				}
 			}
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2319,11 +2315,10 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return this._parameters;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(3);
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2417,14 +2412,13 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const nameBuffer = Bytes.from(this.name, "utf8");
 		this.payload = new Bytes(3 + nameBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
 		this.payload.set(nameBuffer, 3);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2485,10 +2479,9 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2595,14 +2588,13 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const infoBuffer = Bytes.from(this.info, "utf8");
 		this.payload = new Bytes(3 + infoBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
 		this.payload.set(infoBuffer, 3);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2663,10 +2655,9 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -2912,7 +2903,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public isAdvanced: MaybeNotKnown<boolean>;
 	public noBulkSupport: MaybeNotKnown<boolean>;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(
 			3 // preamble
 				+ 3 * this.valueSize // min, max, default value
@@ -2960,7 +2951,6 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			| (this.noBulkSupport ? 0b10 : 0);
 		this.payload[offset] = options2;
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -3027,10 +3017,9 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

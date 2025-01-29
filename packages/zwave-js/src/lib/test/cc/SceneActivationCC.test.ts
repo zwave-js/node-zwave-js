@@ -29,7 +29,7 @@ test("the Set command (without Duration) should serialize correctly", async (t) 
 			0xff, // default duration
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -47,7 +47,7 @@ test("the Set command (with Duration) should serialize correctly", async (t) => 
 			0x80, // 1 minute
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

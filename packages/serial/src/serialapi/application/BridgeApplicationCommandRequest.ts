@@ -176,7 +176,7 @@ export class BridgeApplicationCommandRequest extends Message
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -192,7 +192,7 @@ export class BridgeApplicationCommandRequest extends Message
 		return this._nodeId ?? super.getNodeId();
 	}
 
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		let rxStatus = 0;
 		if (this.routedBusy) {
 			rxStatus |= ApplicationCommandStatusFlags.RoutedBusy;
@@ -243,7 +243,7 @@ export class BridgeApplicationCommandRequest extends Message
 			this.payload.writeInt8(this.rssi, this.payload.length - 1);
 		}
 
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
