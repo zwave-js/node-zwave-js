@@ -109,9 +109,8 @@ export class SetLongRangeChannelRequest extends Message {
 
 	public channel: LongRangeChannel;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.channel]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

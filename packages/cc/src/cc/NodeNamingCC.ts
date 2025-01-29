@@ -300,7 +300,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 
 	public name: string;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const encoding = isASCII(this.name) ? "ascii" : "utf16le";
 		this.payload = new Bytes(
 			1 + this.name.length * (encoding === "ascii" ? 1 : 2),
@@ -317,7 +317,6 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 			nameBuffer.subarray(0, Math.min(16, nameBuffer.length)),
 			0,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -413,7 +412,7 @@ export class NodeNamingAndLocationCCLocationSet
 
 	public location: string;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const encoding = isASCII(this.location) ? "ascii" : "utf16le";
 		this.payload = new Bytes(
 			1 + this.location.length * (encoding === "ascii" ? 1 : 2),
@@ -430,7 +429,6 @@ export class NodeNamingAndLocationCCLocationSet
 			locationBuffer.subarray(0, Math.min(16, locationBuffer.length)),
 			0,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

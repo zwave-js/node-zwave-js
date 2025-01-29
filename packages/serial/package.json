@@ -56,7 +56,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
@@ -83,7 +83,7 @@
     "@microsoft/api-extractor": "^7.48.0",
     "@serialport/binding-mock": "^10.2.2",
     "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch",
-    "@types/node": "^18.19.63",
+    "@types/node": "^20.17.16",
     "@types/sinon": "^17.0.3",
     "ansi-colors": "^4.1.3",
     "del-cli": "^6.0.0",

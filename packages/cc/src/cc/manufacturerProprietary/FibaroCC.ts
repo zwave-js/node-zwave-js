@@ -234,7 +234,6 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			fibaroCCCommand,
 		);
 		if (FibaroConstructor) {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
 			return FibaroConstructor.from(
 				raw.withPayload(raw.payload.subarray(2)),
 				ctx,
@@ -281,7 +280,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		}
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (this.fibaroCCId == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Fibaro CC without a Fibaro CC ID",
@@ -297,7 +296,6 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			Bytes.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -397,7 +395,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public position: number | undefined;
 	public tilt: number | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const controlByte = (this.position != undefined ? 0b10 : 0)
 			| (this.tilt != undefined ? 0b01 : 0);
 		this.payload = Bytes.from([
@@ -405,7 +403,6 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			this.position ?? 0,
 			this.tilt ?? 0,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -77,11 +77,10 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	/** The node that should be removed */
 	public failedNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
 		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

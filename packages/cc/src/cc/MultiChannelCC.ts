@@ -868,14 +868,13 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 
 	public aggregatedCount: MaybeNotKnown<number>;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			(this.countIsDynamic ? 0b10000000 : 0)
 			| (this.identicalCapabilities ? 0b01000000 : 0),
 			this.individualCount & 0b01111111,
 			this.aggregatedCount ?? 0,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -985,7 +984,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	public readonly isDynamic: boolean;
 	public readonly wasRemoved: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([
 				(this.endpointIndex & 0b01111111)
@@ -993,7 +992,6 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			]),
 			encodeApplicationNodeInformation(this),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1058,9 +1056,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.requestedEndpoint & 0b01111111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1122,7 +1119,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public foundEndpoints: number[];
 	public reportsToFollow: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([
 				this.reportsToFollow,
@@ -1131,7 +1128,6 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			]),
 			Bytes.from(this.foundEndpoints.map((e) => e & 0b01111111)),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1147,18 +1143,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return this.reportsToFollow > 0;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
-		partials: MultiChannelCCEndPointFindReport[],
-		_ctx: CCParsingContext,
-	): void {
-		// Concat the list of end points
-		this.foundEndpoints = [...partials, this]
-			.map((report) => report.foundEndpoints)
-			.reduce((prev, cur) => prev.concat(...cur), []);
-	}
-
-	public mergePartialCCsAsync(
 		partials: MultiChannelCCEndPointFindReport[],
 		_ctx: CCParsingContext,
 	): Promise<void> {
@@ -1222,9 +1207,8 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public genericClass: number;
 	public specificClass: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.genericClass, this.specificClass]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1331,9 +1315,8 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.requestedEndpoint & 0b0111_1111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1420,46 +1403,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		this.destination = options.destination;
 	}
 
-	/** @deprecated Use {@link fromAsync} instead */
-	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
-	): MultiChannelCCCommandEncapsulation {
-		validatePayload(raw.payload.length >= 2);
-
-		let endpointIndex: number;
-		let destination: MultiChannelCCDestination;
-
-		if (
-			ctx.getDeviceConfig?.(ctx.sourceNodeId)
-				?.compat?.treatDestinationEndpointAsSource
-		) {
-			// This device incorrectly uses the destination field to indicate the source endpoint
-			endpointIndex = raw.payload[1] & 0b0111_1111;
-			destination = 0;
-		} else {
-			// Parse normally
-			endpointIndex = raw.payload[0] & 0b0111_1111;
-			const isBitMask = !!(raw.payload[1] & 0b1000_0000);
-			destination = raw.payload[1] & 0b0111_1111;
-			if (isBitMask) {
-				destination = parseBitMask(
-					Bytes.from([destination]),
-				) as any;
-			}
-		}
-		// No need to validate further, each CC does it for itself
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
-		return new this({
-			nodeId: ctx.sourceNodeId,
-			endpointIndex,
-			destination,
-			encapsulated,
-		});
-	}
-
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<MultiChannelCCCommandEncapsulation> {
@@ -1487,7 +1431,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			}
 		}
 		// No need to validate further, each CC does it for itself
-		const encapsulated = await CommandClass.parseAsync(
+		const encapsulated = await CommandClass.parse(
 			raw.payload.subarray(2),
 			ctx,
 		);
@@ -1503,8 +1447,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: MultiChannelCCDestination;
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (
 			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
 				?.treatDestinationEndpointAsSource
@@ -1522,34 +1465,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Bytes.concat([
 			Bytes.from([this.endpointIndex & 0b0111_1111, destination]),
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.encapsulated.serialize(ctx),
+			await this.encapsulated.serialize(ctx),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		if (
-			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
-				?.treatDestinationEndpointAsSource
-		) {
-			// This device incorrectly responds from the endpoint we've passed as our source endpoint
-			if (typeof this.destination === "number") {
-				this.endpointIndex = this.destination;
-			}
-		}
-
-		const destination = typeof this.destination === "number"
-			// The destination is a single number
-			? this.destination & 0b0111_1111
-			// The destination is a bit mask
-			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
-		this.payload = Bytes.concat([
-			Bytes.from([this.endpointIndex & 0b0111_1111, destination]),
-			await this.encapsulated.serializeAsync(ctx),
-		]);
-		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -1657,9 +1575,8 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.requestedCC]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1709,34 +1626,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		this.endpointIndex = this.encapsulated.endpointIndex;
 	}
 
-	/** @deprecated Use {@link fromAsync} instead */
-	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
-	): MultiChannelCCV1CommandEncapsulation {
-		validatePayload(raw.payload.length >= 1);
-		const endpointIndex = raw.payload[0];
-
-		// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
-		// This would be a NoOp CC, but it makes no sense to encapsulate that.
-		const isV2withV1Header = raw.payload.length >= 2
-			&& raw.payload[1] === 0x00;
-
-		// No need to validate further, each CC does it for itself
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const encapsulated = CommandClass.parse(
-			raw.payload.subarray(isV2withV1Header ? 2 : 1),
-			ctx,
-		);
-
-		return new this({
-			nodeId: ctx.sourceNodeId,
-			endpointIndex,
-			encapsulated,
-		});
-	}
-
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<MultiChannelCCV1CommandEncapsulation> {
@@ -1749,7 +1639,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			&& raw.payload[1] === 0x00;
 
 		// No need to validate further, each CC does it for itself
-		const encapsulated = await CommandClass.parseAsync(
+		const encapsulated = await CommandClass.parse(
 			raw.payload.subarray(isV2withV1Header ? 2 : 1),
 			ctx,
 		);
@@ -1763,23 +1653,12 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 	public encapsulated!: CommandClass;
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.endpointIndex]),
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.encapsulated.serialize(ctx),
+			await this.encapsulated.serialize(ctx),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		this.payload = Bytes.concat([
-			Bytes.from([this.endpointIndex]),
-			await this.encapsulated.serializeAsync(ctx),
-		]);
-		return super.serializeAsync(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

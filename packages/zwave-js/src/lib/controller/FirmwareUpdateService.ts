@@ -4,7 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	digest,
-	extractFirmwareAsync,
+	extractFirmware,
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
 import { Bytes, formatId } from "@zwave-js/shared";
@@ -281,7 +281,7 @@ export async function downloadFirmwareUpdate(
 
 	// Extract the raw data
 	const format = guessFirmwareFileFormat(filename, rawData);
-	const firmware = await extractFirmwareAsync(rawData, format);
+	const firmware = await extractFirmware(rawData, format);
 
 	// Ensure the hash matches
 	const actualHash = Bytes.view(

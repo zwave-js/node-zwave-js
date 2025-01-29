@@ -569,9 +569,8 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 
 	public targetState: BarrierState.Open | BarrierState.Closed;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.targetState]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -759,9 +758,8 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public subsystemType: SubsystemType;
 	public subsystemState: SubsystemState;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.subsystemType, this.subsystemState]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -880,9 +878,8 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 
 	public subsystemType: SubsystemType;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.subsystemType]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

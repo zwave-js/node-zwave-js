@@ -1,7 +1,13 @@
-import { type CryptoPrimitives } from "@zwave-js/shared/bindings";
+import { type CryptoPrimitives, type KeyPair } from "@zwave-js/shared/bindings";
 import { Bytes } from "@zwave-js/shared/safe";
 import crypto from "node:crypto";
-import { BLOCK_SIZE, zeroPad } from "../shared.js";
+import {
+	BLOCK_SIZE,
+	decodeX25519KeyDER,
+	encodeX25519KeyDERPKCS8,
+	encodeX25519KeyDERSPKI,
+	zeroPad,
+} from "../shared.js";
 
 // For Node.js, we use the built-in crypto module since it has better support
 // for some algorithms Z-Wave needs than the Web Crypto API, so we can implement
@@ -204,6 +210,82 @@ function digest(
 	return Promise.resolve(hash.digest());
 }
 
+/** Takes an ECDH public KeyObject and returns the raw key as a buffer */
+function extractRawECDHPublicKey(
+	publicKey: crypto.KeyObject,
+): Uint8Array {
+	return decodeX25519KeyDER(
+		publicKey.export({
+			type: "spki",
+			format: "der",
+		}),
+	);
+}
+
+/** Converts a raw public key to an ECDH KeyObject */
+function importRawECDHPublicKey(
+	publicKey: Uint8Array,
+): crypto.KeyObject {
+	return crypto.createPublicKey({
+		// eslint-disable-next-line no-restricted-globals -- crypto API requires Buffer instances
+		key: Buffer.from(encodeX25519KeyDERSPKI(publicKey).buffer),
+		format: "der",
+		type: "spki",
+	});
+}
+
+/** Takes an ECDH private KeyObject and returns the raw key as a buffer */
+function extractRawECDHPrivateKey(
+	privateKey: crypto.KeyObject,
+): Uint8Array {
+	return decodeX25519KeyDER(
+		privateKey.export({
+			type: "pkcs8",
+			format: "der",
+		}),
+	);
+}
+
+/** Converts a raw private key to an ECDH KeyObject */
+function importRawECDHPrivateKey(
+	privateKey: Uint8Array,
+): crypto.KeyObject {
+	return crypto.createPrivateKey({
+		// eslint-disable-next-line no-restricted-globals -- crypto API requires Buffer instances
+		key: Buffer.from(encodeX25519KeyDERPKCS8(privateKey).buffer),
+		format: "der",
+		type: "pkcs8",
+	});
+}
+
+/** Generates an x25519 / ECDH key pair */
+function generateECDHKeyPair(): Promise<KeyPair> {
+	const pair = crypto.generateKeyPairSync("x25519");
+	const publicKey = extractRawECDHPublicKey(pair.publicKey);
+	const privateKey = extractRawECDHPrivateKey(pair.privateKey);
+
+	return Promise.resolve({ publicKey, privateKey });
+}
+
+function keyPairFromRawECDHPrivateKey(
+	privateKey: Uint8Array,
+): Promise<KeyPair> {
+	const privateKeyObject = importRawECDHPrivateKey(privateKey);
+	const publicKeyObject = crypto.createPublicKey(privateKeyObject);
+	const publicKey = extractRawECDHPublicKey(publicKeyObject);
+	return Promise.resolve({
+		privateKey,
+		publicKey,
+	});
+}
+
+function deriveSharedECDHSecret(keyPair: KeyPair): Promise<Uint8Array> {
+	const publicKey = importRawECDHPublicKey(keyPair.publicKey);
+	const privateKey = importRawECDHPrivateKey(keyPair.privateKey);
+	const ret = crypto.diffieHellman({ publicKey, privateKey });
+	return Promise.resolve(ret);
+}
+
 export const primitives = {
 	randomBytes,
 	encryptAES128ECB,
@@ -214,4 +296,7 @@ export const primitives = {
 	decryptAES128CCM,
 	decryptAES256CBC,
 	digest,
+	generateECDHKeyPair,
+	keyPairFromRawECDHPrivateKey,
+	deriveSharedECDHSecret,
 } satisfies CryptoPrimitives;

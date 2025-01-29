@@ -58,9 +58,8 @@ export class GetNodeProtocolInfoRequest extends Message {
 	// but this is a message to the controller
 	public requestedNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = encodeNodeID(this.requestedNodeId, ctx.nodeIdType);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -168,7 +167,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		const protocolInfo = encodeNodeProtocolInfo({
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
@@ -190,7 +189,6 @@ export class GetNodeProtocolInfoResponse extends Message {
 			]),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
