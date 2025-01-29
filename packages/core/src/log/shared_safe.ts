@@ -1,4 +1,3 @@
-import { flatMap } from "@zwave-js/shared";
 import type { TransformableInfo } from "logform";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
@@ -134,12 +133,13 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 	if (!entries.length) return [];
 
 	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
-	return flatMap(entries, ([key, value]) =>
+	return entries.flatMap(([key, value]) =>
 		`${key}:${
 			" ".repeat(
 				Math.max(maxKeyLength - key.length + 1, 1),
 			)
 		}${value}`
 			.split("\n")
-			.map((line) => line.trimEnd()));
+			.map((line) => line.trimEnd())
+	);
 }
