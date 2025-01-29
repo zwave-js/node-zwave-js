@@ -155,7 +155,7 @@ test("the Report command (V1) should be deserialized correctly", async (t) => {
 			55, // value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -180,7 +180,7 @@ test("the Report command (V2) should be deserialized correctly (no time delta)",
 			0,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -206,7 +206,7 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 			54, // previous value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -232,7 +232,7 @@ test("the Report command (V3) should be deserialized correctly", async (t) => {
 			54, // previous value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -254,7 +254,7 @@ test("the Report command (V4) should be deserialized correctly", async (t) => {
 			0b01, // Scale2
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -277,7 +277,7 @@ test("the Report command should validate that a known meter type is given", asyn
 		]),
 	);
 
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -303,7 +303,7 @@ test("the Report command should validate that a known meter scale is given", asy
 		]),
 	);
 
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
@@ -335,7 +335,7 @@ test("the SupportedReport command (V2/V3) should be deserialized correctly", asy
 			0b01101110, // supported scales
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCSupportedReport;
@@ -358,7 +358,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", asy
 			1,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCSupportedReport;
@@ -396,7 +396,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCC;

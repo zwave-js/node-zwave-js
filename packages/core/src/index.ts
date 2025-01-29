@@ -13,7 +13,7 @@ export * from "./registries/index.js";
 export * from "./security/Manager.js";
 export * from "./security/Manager2.js";
 export * from "./security/Manager2Types.js";
-export * from "./security/ctr_drbg.wrapper.js";
+export * from "./security/ctr_drbg.js";
 export * from "./test/assertZWaveError.js";
 export type * from "./traits/index.js";
 export * from "./util/_Types.js";

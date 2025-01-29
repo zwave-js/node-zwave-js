@@ -44,7 +44,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
@@ -67,7 +67,7 @@
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.1",
     "@microsoft/api-extractor": "^7.48.0",
-    "@types/node": "^18.19.63",
+    "@types/node": "^20.17.16",
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.33",
     "del-cli": "^6.0.0",

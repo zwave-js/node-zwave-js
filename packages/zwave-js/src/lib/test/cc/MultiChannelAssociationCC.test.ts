@@ -42,7 +42,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", as
 			7, // # of groups
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCSupportedGroupingsReport;
@@ -174,7 +174,7 @@ test("the Report command should be deserialized correctly (node IDs only)", asyn
 			5,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;
@@ -203,7 +203,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 			0b11010111,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;
@@ -241,7 +241,7 @@ test("the Report command should be deserialized correctly (both options)", async
 			0b11010111,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 4 } as any,
 	) as MultiChannelAssociationCCReport;

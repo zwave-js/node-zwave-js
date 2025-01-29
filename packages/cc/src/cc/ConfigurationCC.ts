@@ -2437,18 +2437,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this.reportsToFollow > 0;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
-		partials: ConfigurationCCNameReport[],
-		_ctx: CCParsingContext,
-	): void {
-		// Concat the name
-		this.name = [...partials, this]
-			.map((report) => report.name)
-			.reduce((prev, cur) => prev + cur, "");
-	}
-
-	public mergePartialCCsAsync(
 		partials: ConfigurationCCNameReport[],
 		_ctx: CCParsingContext,
 	): Promise<void> {
@@ -2626,18 +2615,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this.reportsToFollow > 0;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
-		partials: ConfigurationCCInfoReport[],
-		_ctx: CCParsingContext,
-	): void {
-		// Concat the info
-		this.info = [...partials, this]
-			.map((report) => report.info)
-			.reduce((prev, cur) => prev + cur, "");
-	}
-
-	public mergePartialCCsAsync(
 		partials: ConfigurationCCInfoReport[],
 		_ctx: CCParsingContext,
 	): Promise<void> {

@@ -362,3 +362,74 @@ for (
 		t.expect(actual.authOK).toBe(expectedAuthOK);
 	});
 }
+
+test("ECDH key pairs have the same size in all implementations", async (t) => {
+	const {
+		generateECDHKeyPair: generateECDHKeyPairBrowser,
+	}: CryptoPrimitives = (await import("./primitives.browser.js")).primitives;
+
+	const {
+		generateECDHKeyPair: generateECDHKeyPairNode,
+	}: CryptoPrimitives = (await import("./primitives.node.js")).primitives;
+
+	const keyPairBrowser = await generateECDHKeyPairBrowser();
+	const keyPairNode = await generateECDHKeyPairNode();
+
+	t.expect(keyPairBrowser.publicKey.length).toBe(32);
+	t.expect(keyPairNode.publicKey.length).toBe(32);
+	t.expect(keyPairBrowser.privateKey.length).toBe(32);
+	t.expect(keyPairNode.privateKey.length).toBe(32);
+});
+
+test("./primitives.browser.js -> keyPairFromRawECDHPrivateKey", async (t) => {
+	const {
+		generateECDHKeyPair,
+		keyPairFromRawECDHPrivateKey,
+	}: CryptoPrimitives = (await import("./primitives.browser.js")).primitives;
+
+	const keyPair = await generateECDHKeyPair();
+	const keyPairFromPrivateKey = await keyPairFromRawECDHPrivateKey(
+		keyPair.privateKey,
+	);
+	t.expect(keyPairFromPrivateKey).toStrictEqual(keyPair);
+});
+
+test("./primitives.node.js -> keyPairFromRawECDHPrivateKey", async (t) => {
+	const {
+		generateECDHKeyPair,
+		keyPairFromRawECDHPrivateKey,
+	}: CryptoPrimitives = (await import("./primitives.node.js")).primitives;
+
+	const keyPair = await generateECDHKeyPair();
+	const keyPairFromPrivateKey = await keyPairFromRawECDHPrivateKey(
+		keyPair.privateKey,
+	);
+	t.expect(keyPairFromPrivateKey).toStrictEqual(keyPair);
+});
+
+test("deriveSharedECDHSecret is compatible between all implementations", async (t) => {
+	const {
+		deriveSharedECDHSecret: deriveSharedECDHSecretBrowser,
+		generateECDHKeyPair: generateECDHKeyPairBrowser,
+	}: CryptoPrimitives = (await import("./primitives.browser.js")).primitives;
+
+	const {
+		deriveSharedECDHSecret: deriveSharedECDHSecretNode,
+		generateECDHKeyPair: generateECDHKeyPairNode,
+	}: CryptoPrimitives = (await import("./primitives.node.js")).primitives;
+
+	const keyPairBrowser = await generateECDHKeyPairBrowser();
+	const keyPairNode = await generateECDHKeyPairNode();
+
+	const secretBrowser = await deriveSharedECDHSecretBrowser({
+		privateKey: keyPairBrowser.privateKey,
+		publicKey: keyPairNode.publicKey,
+	});
+
+	const secretNode = await deriveSharedECDHSecretNode({
+		privateKey: keyPairNode.privateKey,
+		publicKey: keyPairBrowser.publicKey,
+	});
+
+	t.expect(secretBrowser).toStrictEqual(new Uint8Array(secretNode));
+});

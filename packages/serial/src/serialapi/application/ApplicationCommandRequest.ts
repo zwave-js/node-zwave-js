@@ -154,22 +154,7 @@ export class ApplicationCommandRequest extends Message
 	}
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -182,32 +167,6 @@ export class ApplicationCommandRequest extends Message
 		return this.serializedCC;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
-		const statusByte = (this.frameType === "broadcast"
-			? ApplicationCommandStatusFlags.TypeBroad
-			: this.frameType === "multicast"
-			? ApplicationCommandStatusFlags.TypeMulti
-			: 0)
-			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
-
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
-		const nodeId = encodeNodeID(
-			this.getNodeId() ?? ctx.ownNodeId,
-			ctx.nodeIdType,
-		);
-		this.payload = Bytes.concat([
-			[statusByte],
-			nodeId,
-			[serializedCC.length],
-			serializedCC,
-		]);
-
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return super.serialize(ctx);
-	}
-
 	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
 		const statusByte = (this.frameType === "broadcast"
 			? ApplicationCommandStatusFlags.TypeBroad
@@ -216,7 +175,7 @@ export class ApplicationCommandRequest extends Message
 			: 0)
 			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
-		const serializedCC = await this.serializeCCAsync(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 		const nodeId = encodeNodeID(
 			this.getNodeId() ?? ctx.ownNodeId,
 			ctx.nodeIdType,

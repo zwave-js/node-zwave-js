@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-deprecated */
 import { test } from "vitest";
 import { SecurityClass } from "../definitions/SecurityClass.js";
 import { ZWaveErrorCodes } from "../error/ZWaveError.js";

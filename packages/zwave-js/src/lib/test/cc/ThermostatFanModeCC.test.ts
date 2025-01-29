@@ -72,7 +72,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as ThermostatFanModeCCReport;

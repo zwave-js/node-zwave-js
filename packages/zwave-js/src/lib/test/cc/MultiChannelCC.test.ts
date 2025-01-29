@@ -161,7 +161,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as MultiChannelCC;

@@ -41,7 +41,7 @@ test("the RecordsCountReport command should be deserialized correctly", async (t
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordsSupportedReport;
@@ -85,7 +85,7 @@ test("the RecordReport command should be deserialized correctly", async (t) => {
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as DoorLockLoggingCCRecordReport;

@@ -55,7 +55,7 @@ test("the NameReport command should be deserialized correctly", async (t) => {
 			0x72,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCNameReport;
@@ -148,7 +148,7 @@ test("the Info Report command should be deserialized correctly", async (t) => {
 			0,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCInfoReport;
@@ -197,7 +197,7 @@ test("the CommandListReport command should be deserialized correctly", async (t)
 			0x05,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCCCommandListReport;
@@ -217,7 +217,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationGroupInfoCC;

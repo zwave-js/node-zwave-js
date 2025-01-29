@@ -93,7 +93,7 @@ test("the Report command should be deserialized correctly (NormalPower)", async 
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
@@ -111,7 +111,7 @@ test("the Report command should be deserialized correctly (custom power)", async
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
@@ -125,7 +125,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as PowerlevelCC;

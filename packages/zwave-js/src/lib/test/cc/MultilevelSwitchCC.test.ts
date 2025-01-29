@@ -88,7 +88,7 @@ test("the Report command (V1) should be deserialized correctly", async (t) => {
 			55, // current value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCCReport;
@@ -108,7 +108,7 @@ test("the Report command (v4) should be deserialized correctly", async (t) => {
 			1, // duration
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCCReport;
@@ -177,7 +177,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 2 } as any,
 	) as MultilevelSwitchCC;

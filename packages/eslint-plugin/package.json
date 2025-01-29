@@ -28,7 +28,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",

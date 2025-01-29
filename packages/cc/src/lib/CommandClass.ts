@@ -212,67 +212,7 @@ export class CommandClass implements CCId {
 		this.payload = Bytes.view(payload);
 	}
 
-	/** @deprecated Use {@link parseAsync} instead */
-	public static parse(
-		data: Uint8Array,
-		ctx: CCParsingContext,
-	): CommandClass {
-		const raw = CCRaw.parse(data);
-
-		// Find the correct subclass constructor to invoke
-		const CCConstructor = getCCConstructor(raw.ccId);
-		if (!CCConstructor) {
-			// None -> fall back to the default constructor
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return CommandClass.from(raw, ctx);
-		}
-
-		let CommandConstructor: CCConstructor<CommandClass> | undefined;
-		if (raw.ccCommand != undefined) {
-			CommandConstructor = getCCCommandConstructor(
-				raw.ccId,
-				raw.ccCommand,
-			);
-		}
-		// Not every CC has a constructor for its commands. In that case,
-		// call the CC constructor directly
-		try {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return (CommandConstructor ?? CCConstructor).from(raw, ctx);
-		} catch (e) {
-			// Indicate invalid payloads with a special CC type
-			if (
-				isZWaveError(e)
-				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
-			) {
-				const ccName = CommandConstructor?.name
-					?? `${getCCName(raw.ccId)} CC`;
-
-				// Preserve why the command was invalid
-				let reason: string | ZWaveErrorCodes | undefined;
-				if (
-					typeof e.context === "string"
-					|| (typeof e.context === "number"
-						&& ZWaveErrorCodes[e.context] != undefined)
-				) {
-					reason = e.context;
-				}
-
-				const ret = new InvalidCC({
-					nodeId: ctx.sourceNodeId,
-					ccId: raw.ccId,
-					ccCommand: raw.ccCommand,
-					ccName,
-					reason,
-				});
-
-				return ret;
-			}
-			throw e;
-		}
-	}
-
-	public static async parseAsync(
+	public static async parse(
 		data: Uint8Array,
 		ctx: CCParsingContext,
 	): Promise<CommandClass> {
@@ -1059,20 +999,8 @@ export class CommandClass implements CCId {
 		return false; // By default, all CCs are monolithic
 	}
 
-	/**
-	 * Include previously received partial responses into a final CC
-	 * @deprecated Use {@link mergePartialCCsAsync} instead
-	 */
-	public mergePartialCCs(
-		_partials: CommandClass[],
-		_ctx: CCParsingContext,
-	): void {
-		// This is highly CC dependent
-		// Overwrite this in derived classes, by default do nothing
-	}
-
 	/** Include previously received partial responses into a final CC */
-	public async mergePartialCCsAsync(
+	public async mergePartialCCs(
 		_partials: CommandClass[],
 		_ctx: CCParsingContext,
 	): Promise<void> {

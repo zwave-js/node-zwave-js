@@ -52,7 +52,7 @@ test("the SupportedReport command should deserialize correctly", async (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCSupportedReport;
@@ -97,7 +97,7 @@ test("the Report command should deserialize correctly (version 1)", async (t) =>
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;
@@ -119,7 +119,7 @@ test("the Report command should deserialize correctly (version 3)", async (t) =>
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as ColorSwitchCCReport;

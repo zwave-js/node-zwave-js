@@ -847,22 +847,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return this.reportsToFollow > 0;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
-		partials: MultiChannelAssociationCCReport[],
-		_ctx: CCParsingContext,
-	): void {
-		// Concat the list of nodes
-		this.nodeIds = [...partials, this]
-			.map((report) => [...report.nodeIds])
-			.reduce((prev, cur) => prev.concat(...cur), []);
-		// Concat the list of endpoints
-		this.endpoints = [...partials, this]
-			.map((report) => [...report.endpoints])
-			.reduce((prev, cur) => prev.concat(...cur), []);
-	}
-
-	public mergePartialCCsAsync(
 		partials: MultiChannelAssociationCCReport[],
 		_ctx: CCParsingContext,
 	): Promise<void> {

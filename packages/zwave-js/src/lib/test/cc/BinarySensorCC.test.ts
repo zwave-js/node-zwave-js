@@ -54,7 +54,7 @@ test("the Report command (v1) should be deserialized correctly", async (t) => {
 			0xff, // current value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as BinarySensorCCReport;
@@ -71,7 +71,7 @@ test("the Report command (v2) should be deserialized correctly", async (t) => {
 			BinarySensorType.CO2,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as BinarySensorCCReport;
@@ -101,7 +101,7 @@ test("the SupportedReport command should be deserialized correctly", async (t) =
 			0b10,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as BinarySensorCCSupportedReport;
@@ -120,7 +120,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as BinarySensorCC;

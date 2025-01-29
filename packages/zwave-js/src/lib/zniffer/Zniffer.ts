@@ -636,7 +636,7 @@ supported frequencies: ${
 						? "broadcast"
 						: "singlecast";
 				try {
-					cc = await CommandClass.parseAsync(
+					cc = await CommandClass.parse(
 						mpdu.payload,
 						{
 							homeId: mpdu.homeId,
@@ -946,7 +946,7 @@ supported frequencies: ${
 			) {
 				const key = this._options.securityKeys[secClass];
 				if (key) {
-					await securityManager2.setKeyAsync(
+					await securityManager2.setKey(
 						SecurityClass[secClass],
 						key,
 					);
@@ -973,13 +973,13 @@ supported frequencies: ${
 
 			// Set up all keys
 			if (this._options.securityKeysLongRange?.S2_AccessControl) {
-				await securityManagerLR.setKeyAsync(
+				await securityManagerLR.setKey(
 					SecurityClass.S2_AccessControl,
 					this._options.securityKeysLongRange.S2_AccessControl,
 				);
 			}
 			if (this._options.securityKeysLongRange?.S2_Authenticated) {
-				await securityManagerLR.setKeyAsync(
+				await securityManagerLR.setKey(
 					SecurityClass.S2_Authenticated,
 					this._options.securityKeysLongRange.S2_Authenticated,
 				);

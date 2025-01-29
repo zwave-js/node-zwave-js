@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared/safe";
-import { digest } from "../crypto/operations.async.js";
+import { digest } from "../crypto/operations.js";
 import { SecurityClass } from "../definitions/SecurityClass.js";
 import { dskToString } from "../dsk/index.js";
 import { parseBitMask } from "../values/Primitive.js";
@@ -13,7 +13,7 @@ import {
 import { fail, parseTLV, readLevel, readUInt16, readUInt8 } from "./utils.js";
 
 /** Parses a string that has been decoded from a Z-Wave (S2 or SmartStart) QR code */
-export async function parseQRCodeStringAsync(
+export async function parseQRCodeString(
 	qr: string,
 ): Promise<QRProvisioningInformation> {
 	// Trim off whitespace that might have been copied by accident

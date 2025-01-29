@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "vitest";
-import { CtrDrbgAsync } from "./ctr_drbg.async.js";
+import { CtrDRBG } from "./ctr_drbg.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -48,11 +48,11 @@ for (const id of ["AES-128"]) {
 
 	for (const [i, vector] of vectors.entries()) {
 		test(
-			`CtrDrbgAsync -> should pass ${name} NIST vector #${
+			`CtrDRBG -> should pass ${name} NIST vector #${
 				i + 1
 			} (ctr,df=false)`,
 			async (t) => {
-				const drbg = new CtrDrbgAsync();
+				const drbg = new CtrDRBG();
 
 				await drbg.init(
 					vector.EntropyInput,

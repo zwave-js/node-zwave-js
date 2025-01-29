@@ -167,22 +167,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -201,32 +186,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
-		this.assertCallbackId();
-		const sourceNodeId = encodeNodeID(
-			this.sourceNodeId,
-			ctx.nodeIdType,
-		);
-		const destinationNodeId = encodeNodeID(
-			this.command?.nodeId ?? this._nodeId,
-			ctx.nodeIdType,
-		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
-
-		this.payload = Bytes.concat([
-			sourceNodeId,
-			destinationNodeId,
-			Bytes.from([serializedCC.length]),
-			serializedCC,
-			Bytes.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
-		]);
-
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return super.serialize(ctx);
-	}
-
 	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const sourceNodeId = encodeNodeID(
@@ -237,7 +196,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			this.command?.nodeId ?? this._nodeId,
 			ctx.nodeIdType,
 		);
-		const serializedCC = await this.serializeCCAsync(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 
 		this.payload = Bytes.concat([
 			sourceNodeId,
@@ -546,22 +505,7 @@ export class SendDataMulticastBridgeRequest<
 	}
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -580,36 +524,9 @@ export class SendDataMulticastBridgeRequest<
 		this.callbackId = undefined;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
-		this.assertCallbackId();
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
-		const sourceNodeId = encodeNodeID(
-			this.sourceNodeId,
-			ctx.nodeIdType,
-		);
-		const destinationNodeIDs = (this.command?.nodeId ?? this.nodeIds)
-			.map((id) => encodeNodeID(id, ctx.nodeIdType));
-
-		this.payload = Bytes.concat([
-			sourceNodeId,
-			// # of target nodes, not # of bytes
-			Bytes.from([destinationNodeIDs.length]),
-			...destinationNodeIDs,
-			Bytes.from([serializedCC.length]),
-			// payload
-			serializedCC,
-			Bytes.from([this.transmitOptions, this.callbackId]),
-		]);
-
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return super.serialize(ctx);
-	}
-
 	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
-		const serializedCC = await this.serializeCCAsync(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
 			ctx.nodeIdType,

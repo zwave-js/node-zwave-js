@@ -3,7 +3,7 @@
 
 // The used crypto primitives are async, so the methods in this implementation are async as well
 
-import { encryptAES128ECB as encryptAES128ECBAsync } from "../crypto/operations.async.js";
+import { encryptAES128ECB } from "../crypto/operations.js";
 import { increment, xor } from "../crypto/shared.js";
 
 // Warning: This code expects ctr_len to equal BLOCK_LEN.
@@ -13,7 +13,7 @@ const KEY_LEN = 16;
 const BLOCK_LEN = 16;
 const SEED_LEN = KEY_LEN + BLOCK_LEN;
 
-export class CtrDrbgAsync {
+export class CtrDRBG {
 	private key = new Uint8Array(KEY_LEN);
 	private v = new Uint8Array(BLOCK_LEN);
 	// Reseed counter is not used
@@ -56,7 +56,7 @@ export class CtrDrbgAsync {
 		let tempOffset = 0;
 		while (tempOffset < SEED_LEN) {
 			increment(this.v);
-			const encrypted = await encryptAES128ECBAsync(this.v, this.key);
+			const encrypted = await encryptAES128ECB(this.v, this.key);
 			// We know that we're only dealing with full blocks here, otherwise
 			// the following line may throw when trying to set a too long last block
 			temp.set(encrypted, tempOffset);
@@ -77,7 +77,7 @@ export class CtrDrbgAsync {
 		let tempOffset = 0;
 		while (tempOffset < len) {
 			increment(this.v);
-			const encrypted = await encryptAES128ECBAsync(this.v, this.key);
+			const encrypted = await encryptAES128ECB(this.v, this.key);
 			// The size of temp is a multiple of the block size, so this is safe to do:
 			temp.set(encrypted, tempOffset);
 			tempOffset += BLOCK_LEN;

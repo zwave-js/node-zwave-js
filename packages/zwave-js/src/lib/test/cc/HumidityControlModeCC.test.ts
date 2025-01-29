@@ -63,7 +63,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -79,7 +79,7 @@ test("the Report command should set the correct value", async (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const report = await CommandClass.parseAsync(
+	const report = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -99,7 +99,7 @@ test("the Report command should set the correct metadata", async (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCReport;
@@ -136,7 +136,7 @@ test("the SupportedReport command should be deserialized correctly", async (t) =
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCSupportedReport;
@@ -155,7 +155,7 @@ test("the SupportedReport command should set the correct metadata", async (t) =>
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: nodeId } as any,
 	) as HumidityControlModeCCSupportedReport;

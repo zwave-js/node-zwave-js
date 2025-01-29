@@ -251,7 +251,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation<
 	}
 
 	// Send the command split into multiple segments
-	const payload = await msg.serializeCCAsync(ctx);
+	const payload = await msg.serializeCC(ctx);
 	const numSegments = Math.ceil(payload.length / MAX_SEGMENT_SIZE);
 	const segmentDelay = numSegments > RELAXED_TIMING_THRESHOLD
 		? TransportServiceTimeouts.relaxedTimingDelayR2

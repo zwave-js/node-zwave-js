@@ -44,7 +44,7 @@ test("the Notification command should deserialize correctly", async (t) => {
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCNotification;
@@ -97,7 +97,7 @@ test("the ConfigurationReport command should be deserialize correctly", async (t
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCConfigurationReport;
@@ -139,7 +139,7 @@ test("the EventSupportedReport command should be deserialize correctly", async (
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCEventSupportedReport;
@@ -181,7 +181,7 @@ test("the KeySupportedReport command should be deserialize correctly", async (t)
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCKeySupportedReport;

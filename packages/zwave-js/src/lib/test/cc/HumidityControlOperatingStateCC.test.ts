@@ -39,7 +39,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			HumidityControlOperatingState.Humidifying, // state
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as HumidityControlOperatingStateCCReport;

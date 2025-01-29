@@ -113,7 +113,7 @@ test.sequential(
 			new Uint8Array(12).fill(0xff),
 		]);
 
-		const command = await CommandClass.parseAsync(
+		const command = await CommandClass.parse(
 			buf,
 			{ sourceNodeId: node.id } as any,
 		) as EntryControlCCNotification;

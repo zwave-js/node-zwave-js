@@ -41,7 +41,7 @@ test("the Report command (v1) should be deserialized correctly", async (t) => {
 			0x06,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as ManufacturerSpecificCCReport;

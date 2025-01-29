@@ -44,7 +44,7 @@ test(`creating and serializing should work for unspecified commands`, async (t) 
 
 test("parse() returns an un-specialized instance when receiving a non-implemented CC", async (t) => {
 	// This is a Node Provisioning CC. Change it when that CC is implemented
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		Bytes.from("78030100", "hex"),
 		{ sourceNodeId: 5 } as any,
 	);
@@ -58,7 +58,7 @@ test("parse() returns an un-specialized instance when receiving a non-implemente
 test("parse() does not throw when the CC is implemented", (t) => {
 	t.expect(async () =>
 		// CRC-16 with BasicCC
-		await CommandClass.parseAsync(
+		await CommandClass.parse(
 			Bytes.from("560120024d26", "hex"),
 			{ sourceNodeId: 5 } as any,
 		)

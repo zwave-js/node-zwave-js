@@ -42,7 +42,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", as
 			7, // # of groups
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 2 } as any,
 	) as AssociationCCSupportedGroupingsReport;
@@ -100,7 +100,7 @@ test("the Report command should be deserialized correctly", async (t) => {
 			5,
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as AssociationCCReport;
