@@ -518,12 +518,11 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.groupId, this.name.length]),
 			Bytes.from(this.name, "utf8"),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -568,9 +567,8 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.groupId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -663,7 +661,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.alloc(1 + this.groups.length * 7, 0);
 
 		this.payload[0] = (this.isListMode ? 0b1000_0000 : 0)
@@ -677,7 +675,6 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			// The remaining bytes are zero
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -755,7 +752,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public listMode?: boolean;
 	public groupId?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const isListMode = this.listMode === true;
 		const optionByte = (this.refreshCache ? 0b1000_0000 : 0)
 			| (isListMode ? 0b0100_0000 : 0);
@@ -763,7 +760,6 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			optionByte,
 			isListMode ? 0 : this.groupId!,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -838,7 +834,7 @@ export class AssociationGroupInfoCCCommandListReport
 
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// To make it easier to encode possible extended CCs, we first
 		// allocate as much space as we may need, then trim it again
 		this.payload = new Bytes(2 + this.commands.size * 3);
@@ -853,7 +849,6 @@ export class AssociationGroupInfoCCCommandListReport
 		}
 		this.payload[1] = offset - 2; // list length
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -915,12 +910,11 @@ export class AssociationGroupInfoCCCommandListGet
 	public allowCache: boolean;
 	public groupId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.allowCache ? 0b1000_0000 : 0,
 			this.groupId,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

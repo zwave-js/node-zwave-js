@@ -82,7 +82,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "scripts": {
     "ts": "tsx --conditions=@@dev",
@@ -124,7 +124,7 @@
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.1",
     "@microsoft/api-extractor": "^7.48.0",
-    "@types/node": "^18.19.63",
+    "@types/node": "^20.17.16",
     "@types/semver": "^7.5.8",
     "@types/sinon": "^17.0.3",
     "@types/source-map-support": "^0.5.10",

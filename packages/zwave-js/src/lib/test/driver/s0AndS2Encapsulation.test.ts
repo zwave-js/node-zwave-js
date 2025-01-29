@@ -37,15 +37,15 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		// Create a security manager for the node
 		const sm2Node = await SecurityManager2.create();
 		// Copy keys from the driver
-		await sm2Node.setKeyAsync(
+		await sm2Node.setKey(
 			SecurityClass.S2_AccessControl,
 			driver.options.securityKeys!.S2_AccessControl!,
 		);
-		await sm2Node.setKeyAsync(
+		await sm2Node.setKey(
 			SecurityClass.S2_Authenticated,
 			driver.options.securityKeys!.S2_Authenticated!,
 		);
-		await sm2Node.setKeyAsync(
+		await sm2Node.setKey(
 			SecurityClass.S2_Unauthenticated,
 			driver.options.securityKeys!.S2_Unauthenticated!,
 		);
@@ -63,15 +63,15 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		// Create a security manager for the controller
 		const smCtrlr = await SecurityManager2.create();
 		// Copy keys from the driver
-		await smCtrlr.setKeyAsync(
+		await smCtrlr.setKey(
 			SecurityClass.S2_AccessControl,
 			driver.options.securityKeys!.S2_AccessControl!,
 		);
-		await smCtrlr.setKeyAsync(
+		await smCtrlr.setKey(
 			SecurityClass.S2_Authenticated,
 			driver.options.securityKeys!.S2_Authenticated!,
 		);
-		await smCtrlr.setKeyAsync(
+		await smCtrlr.setKey(
 			SecurityClass.S2_Unauthenticated,
 			driver.options.securityKeys!.S2_Unauthenticated!,
 		);
@@ -109,7 +109,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			async handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					await receivedCC.mergePartialCCsAsync([], {
+					await receivedCC.mergePartialCCs([], {
 						sourceNodeId: controller.ownNodeId,
 						__internalIsMockNode: true,
 						frameType: "singlecast",
@@ -127,7 +127,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 		const respondToS2NonceGet: MockNodeBehavior = {
 			async handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof Security2CCNonceGet) {
-					const nonce = await sm2Node.generateNonceAsync(
+					const nonce = await sm2Node.generateNonce(
 						controller.ownNodeId,
 					);
 					const cc = new Security2CCNonceReport({
@@ -152,7 +152,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						|| receivedCC.reason
 							=== ZWaveErrorCodes.Security2CC_NoSPAN
 					) {
-						const nonce = await sm2Node.generateNonceAsync(
+						const nonce = await sm2Node.generateNonce(
 							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport({

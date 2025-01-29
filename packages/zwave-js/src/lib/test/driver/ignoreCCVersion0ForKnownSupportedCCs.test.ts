@@ -50,7 +50,7 @@ integrationTest(
 			// Create a security manager for the node
 			const smNode = await SecurityManager2.create();
 			// Copy keys from the driver
-			await smNode.setKeyAsync(
+			await smNode.setKey(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -61,7 +61,7 @@ integrationTest(
 			// Create a security manager for the controller
 			const smCtrlr = await SecurityManager2.create();
 			// Copy keys from the driver
-			await smCtrlr.setKeyAsync(
+			await smCtrlr.setKey(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
@@ -73,7 +73,7 @@ integrationTest(
 			const respondToNonceGet: MockNodeBehavior = {
 				async handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
-						const nonce = await smNode.generateNonceAsync(
+						const nonce = await smNode.generateNonce(
 							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport({
@@ -98,7 +98,7 @@ integrationTest(
 							|| receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
-							const nonce = await smNode.generateNonceAsync(
+							const nonce = await smNode.generateNonce(
 								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport({
@@ -344,7 +344,7 @@ integrationTest(
 				async handleCC(controller, self, receivedCC) {
 					// We don't support sequenced commands here
 					if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-						await receivedCC.mergePartialCCsAsync([], {
+						await receivedCC.mergePartialCCs([], {
 							sourceNodeId: controller.ownNodeId,
 							__internalIsMockNode: true,
 							frameType: "singlecast",

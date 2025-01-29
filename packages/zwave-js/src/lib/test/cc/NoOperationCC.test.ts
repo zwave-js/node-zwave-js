@@ -17,7 +17,7 @@ test("the CC should serialize correctly", async (t) => {
 	const expected = buildCCBuffer(
 		Uint8Array.from([]), // No command!
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });

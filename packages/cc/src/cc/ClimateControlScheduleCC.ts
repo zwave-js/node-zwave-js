@@ -244,7 +244,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public switchPoints: Switchpoint[];
 	public weekday: Weekday;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Make sure we have exactly 9 entries
 		const allSwitchPoints = this.switchPoints.slice(0, 9); // maximum 9
 		while (allSwitchPoints.length < 9) {
@@ -258,7 +258,6 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 			Bytes.from([this.weekday & 0b111]),
 			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -390,9 +389,8 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 
 	public weekday: Weekday;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.weekday & 0b111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -550,12 +548,11 @@ export class ClimateControlScheduleCCOverrideSet
 	public overrideType: ScheduleOverrideType;
 	public overrideState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			[this.overrideType & 0b11],
 			encodeSetbackState(this.overrideState),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

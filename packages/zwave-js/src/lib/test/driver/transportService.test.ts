@@ -24,7 +24,7 @@ integrationTest("Receiving Transport Service commands works (happy path)", {
 			info:
 				"Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text",
 		});
-		const ccBuffer = await cc.serializeAsync(mockNode.encodingContext);
+		const ccBuffer = await cc.serialize(mockNode.encodingContext);
 		const part1 = ccBuffer.slice(0, 39);
 		const part2 = ccBuffer.slice(39, 78);
 		const part3 = ccBuffer.slice(78);
@@ -91,7 +91,7 @@ integrationTest(
 				info:
 					"Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text",
 			});
-			const ccBuffer = await cc.serializeAsync(mockNode.encodingContext);
+			const ccBuffer = await cc.serialize(mockNode.encodingContext);
 			const part1 = ccBuffer.slice(0, 39);
 			const part2 = ccBuffer.slice(39, 78);
 			const part3 = ccBuffer.slice(78);
@@ -157,7 +157,7 @@ integrationTest(
 				info:
 					"Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text",
 			});
-			const ccBuffer = await cc.serializeAsync(mockNode.encodingContext);
+			const ccBuffer = await cc.serialize(mockNode.encodingContext);
 			const part1 = ccBuffer.slice(0, 39);
 			const part2 = ccBuffer.slice(39, 78);
 			const part3 = ccBuffer.slice(78);
@@ -244,7 +244,7 @@ integrationTest(
 				info:
 					"Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text",
 			});
-			const ccBuffer = await cc.serializeAsync(mockNode.encodingContext);
+			const ccBuffer = await cc.serialize(mockNode.encodingContext);
 			const part1 = ccBuffer.slice(0, 39);
 			const part2 = ccBuffer.slice(39, 78);
 			const part3 = ccBuffer.slice(78);
@@ -329,7 +329,7 @@ integrationTest(
 				info:
 					"Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text",
 			});
-			const ccBuffer = await cc.serializeAsync(mockNode.encodingContext);
+			const ccBuffer = await cc.serialize(mockNode.encodingContext);
 			const part1 = ccBuffer.slice(0, 39);
 			const part2 = ccBuffer.slice(39, 78);
 			const part3 = ccBuffer.slice(78);

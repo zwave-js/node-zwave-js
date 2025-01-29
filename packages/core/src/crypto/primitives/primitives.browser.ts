@@ -1,21 +1,17 @@
-import { type CryptoPrimitives } from "@zwave-js/shared/bindings";
+import { type CryptoPrimitives, type KeyPair } from "@zwave-js/shared/bindings";
 import { Bytes } from "@zwave-js/shared/safe";
-import { BLOCK_SIZE, xor, zeroPad } from "../shared.js";
-
-const webcrypto = typeof process !== "undefined"
-		&& (globalThis as any).crypto === undefined
-		&& typeof require === "function"
-	// Node.js <= 18
-	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	? require("node:crypto").webcrypto
-	// @ts-expect-error Node.js 18 is missing the types for this
-	: globalThis.crypto as typeof import("node:crypto").webcrypto;
-
-const { subtle } = webcrypto;
+import type { webcrypto } from "node:crypto";
+import {
+	BLOCK_SIZE,
+	decodeX25519KeyDER,
+	encodeX25519KeyDERPKCS8,
+	xor,
+	zeroPad,
+} from "../shared.js";
 
 function randomBytes(length: number): Uint8Array {
 	const buffer = new Uint8Array(length);
-	return webcrypto.getRandomValues(buffer);
+	return crypto.getRandomValues(buffer);
 }
 
 /** Encrypts a payload using AES-128-ECB */
@@ -34,14 +30,14 @@ async function encryptAES128CBC(
 	key: Uint8Array,
 	iv: Uint8Array,
 ): Promise<Uint8Array> {
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CBC" },
 		true,
 		["encrypt"],
 	);
-	const ciphertext = await subtle.encrypt(
+	const ciphertext = await crypto.subtle.encrypt(
 		{
 			name: "AES-CBC",
 			iv,
@@ -62,7 +58,7 @@ async function decryptAES256CBC(
 	key: Uint8Array,
 	iv: Uint8Array,
 ): Promise<Uint8Array> {
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CBC" },
@@ -70,7 +66,7 @@ async function decryptAES256CBC(
 		["decrypt"],
 	);
 
-	const plaintext = await subtle.decrypt(
+	const plaintext = await crypto.subtle.decrypt(
 		{
 			name: "AES-CBC",
 			iv,
@@ -94,7 +90,7 @@ async function encryptAES128OFB(
 	// when encrypting block 1, and ciphertext N-1 XOR plaintext N-1 as the counter
 	// when encrypting block N.
 
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CTR" },
@@ -110,7 +106,7 @@ async function encryptAES128OFB(
 
 	for (let offset = 0; offset < plaintext.length - 1; offset += BLOCK_SIZE) {
 		const input = plaintext.slice(offset, offset + BLOCK_SIZE);
-		const ciphertextBuffer = await subtle.encrypt(
+		const ciphertextBuffer = await crypto.subtle.encrypt(
 			{
 				name: "AES-CTR",
 				counter,
@@ -143,7 +139,7 @@ async function decryptAES128OFB(
 	// when encrypting block 1, and ciphertext N-1 XOR plaintext N-1 as the counter
 	// when encrypting block N.
 
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CTR" },
@@ -159,7 +155,7 @@ async function decryptAES128OFB(
 
 	for (let offset = 0; offset < ciphertext.length - 1; offset += BLOCK_SIZE) {
 		const input = ciphertext.slice(offset, offset + BLOCK_SIZE);
-		const plaintextBuffer = await subtle.decrypt(
+		const plaintextBuffer = await crypto.subtle.decrypt(
 			{
 				name: "AES-CTR",
 				counter,
@@ -214,7 +210,7 @@ async function encryptAES128CCM(
 	A0.set(iv, 1);
 	// remaining bytes are initially 0
 
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CTR" },
@@ -223,7 +219,7 @@ async function encryptAES128CCM(
 	);
 
 	const encryptionInput = Bytes.concat([X, plaintextBlocks]);
-	const encryptionOutput = await subtle.encrypt(
+	const encryptionOutput = await crypto.subtle.encrypt(
 		{
 			name: "AES-CTR",
 			counter: A0,
@@ -329,7 +325,7 @@ async function decryptAES128CCM(
 	A0.set(iv, 1);
 	// remaining bytes are initially 0
 
-	const cryptoKey = await subtle.importKey(
+	const cryptoKey = await crypto.subtle.importKey(
 		"raw",
 		key,
 		{ name: "AES-CTR" },
@@ -342,7 +338,7 @@ async function decryptAES128CCM(
 	const paddedAuthTag = new Bytes(BLOCK_SIZE);
 	paddedAuthTag.set(authTag, 0);
 	const decryptionInput = Bytes.concat([paddedAuthTag, ciphertext]);
-	const decryptionOutput = await subtle.decrypt(
+	const decryptionOutput = await crypto.subtle.decrypt(
 		{
 			name: "AES-CTR",
 			counter: A0,
@@ -386,7 +382,7 @@ async function decryptAES128CCM(
 	}
 }
 
-function digest(
+async function digest(
 	algorithm: "md5" | "sha-1" | "sha-256",
 	data: Uint8Array,
 ): Promise<Uint8Array> {
@@ -396,7 +392,87 @@ function digest(
 	if (algorithm === "md5") {
 		algorithm = "sha-256";
 	}
-	return subtle.digest(algorithm, data);
+	const output = await crypto.subtle.digest(algorithm, data);
+	return new Uint8Array(output);
+}
+
+async function generateECDHKeyPair(): Promise<KeyPair> {
+	const pair = await crypto.subtle.generateKey(
+		"X25519",
+		true,
+		["deriveKey"],
+	) as webcrypto.CryptoKeyPair;
+
+	const publicKey = new Uint8Array(
+		await crypto.subtle.exportKey("raw", pair.publicKey),
+	);
+	const privateKey = decodeX25519KeyDER(
+		new Uint8Array(
+			await crypto.subtle.exportKey("pkcs8", pair.privateKey),
+		),
+	);
+
+	return { publicKey, privateKey };
+}
+
+async function keyPairFromRawECDHPrivateKey(
+	privateKey: Uint8Array,
+): Promise<KeyPair> {
+	const privateKeyObject = await crypto.subtle.importKey(
+		"pkcs8",
+		encodeX25519KeyDERPKCS8(privateKey),
+		"X25519",
+		true,
+		["deriveKey"],
+	);
+
+	// Turn the private key into a public key by removing the private key portion
+	// in the JWK representation
+	// https://stackoverflow.com/a/72153942
+	const jwk = await crypto.subtle.exportKey("jwk", privateKeyObject);
+	delete jwk.d;
+	const publicKeyObject = await crypto.subtle.importKey(
+		"jwk",
+		jwk,
+		"X25519",
+		true,
+		[],
+	);
+
+	const publicKey = new Uint8Array(
+		await crypto.subtle.exportKey("raw", publicKeyObject),
+	);
+
+	return { publicKey, privateKey };
+}
+
+async function deriveSharedECDHSecret(keyPair: KeyPair): Promise<Uint8Array> {
+	const publicKey = await crypto.subtle.importKey(
+		"raw",
+		keyPair.publicKey,
+		"X25519",
+		true,
+		[],
+	);
+
+	const privateKey = await crypto.subtle.importKey(
+		"pkcs8",
+		encodeX25519KeyDERPKCS8(keyPair.privateKey),
+		"X25519",
+		true,
+		["deriveBits"],
+	);
+
+	const secret = await crypto.subtle.deriveBits(
+		{
+			name: "X25519",
+			public: publicKey,
+		},
+		privateKey,
+		null,
+	);
+
+	return new Uint8Array(secret);
 }
 
 export const primitives = {
@@ -409,4 +485,7 @@ export const primitives = {
 	decryptAES128CCM,
 	decryptAES256CBC,
 	digest,
+	generateECDHKeyPair,
+	keyPairFromRawECDHPrivateKey,
+	deriveSharedECDHSecret,
 } satisfies CryptoPrimitives;

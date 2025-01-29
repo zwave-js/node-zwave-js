@@ -168,8 +168,7 @@ export class BridgeApplicationCommandRequest extends Message
 	public readonly ownNodeId: number;
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -177,21 +176,7 @@ export class BridgeApplicationCommandRequest extends Message
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -207,8 +192,7 @@ export class BridgeApplicationCommandRequest extends Message
 		return this._nodeId ?? super.getNodeId();
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		let rxStatus = 0;
 		if (this.routedBusy) {
 			rxStatus |= ApplicationCommandStatusFlags.RoutedBusy;
@@ -240,8 +224,7 @@ export class BridgeApplicationCommandRequest extends Message
 			this.getNodeId() ?? 0,
 			ctx.nodeIdType,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 		const multicastNodeMask = typeof this.targetNodeId === "number"
 			? Uint8Array.from([0])
 			: Uint8Array.from([this.targetNodeId.length, ...this.targetNodeId]);
@@ -260,62 +243,7 @@ export class BridgeApplicationCommandRequest extends Message
 			this.payload.writeInt8(this.rssi, this.payload.length - 1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
-		let rxStatus = 0;
-		if (this.routedBusy) {
-			rxStatus |= ApplicationCommandStatusFlags.RoutedBusy;
-		}
-		switch (this.frameType) {
-			case "multicast":
-				rxStatus |= ApplicationCommandStatusFlags.TypeMulti;
-				break;
-			case "broadcast":
-				rxStatus |= ApplicationCommandStatusFlags.TypeBroad;
-				break;
-			default:
-				rxStatus |= ApplicationCommandStatusFlags.TypeSingle;
-		}
-		if (this.isExploreFrame) {
-			rxStatus |= ApplicationCommandStatusFlags.Explore;
-		}
-		if (this.isForeignFrame) {
-			rxStatus |= ApplicationCommandStatusFlags.ForeignFrame;
-		}
-		if (this.fromForeignHomeId) {
-			rxStatus |= ApplicationCommandStatusFlags.ForeignHomeId;
-		}
-		const destinationNodeId = encodeNodeID(
-			typeof this.targetNodeId === "number" ? this.targetNodeId : 0,
-			ctx.nodeIdType,
-		);
-		const sourceNodeId = encodeNodeID(
-			this.getNodeId() ?? 0,
-			ctx.nodeIdType,
-		);
-		const serializedCC = await this.serializeCCAsync(ctx);
-		const multicastNodeMask = typeof this.targetNodeId === "number"
-			? Uint8Array.from([0])
-			: Uint8Array.from([this.targetNodeId.length, ...this.targetNodeId]);
-
-		this.payload = Bytes.concat([
-			[rxStatus],
-			destinationNodeId,
-			sourceNodeId,
-			[serializedCC.length],
-			serializedCC,
-			multicastNodeMask,
-			[RssiError.NotAvailable],
-		]);
-
-		if (this.rssi != undefined) {
-			this.payload.writeInt8(this.rssi, this.payload.length - 1);
-		}
-
-		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

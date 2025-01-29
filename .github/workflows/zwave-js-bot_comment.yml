@@ -15,7 +15,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - uses: actions/github-script@v7
@@ -87,7 +87,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -193,7 +193,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -290,7 +290,7 @@ jobs:
   #   runs-on: [ubuntu-latest]
   #   strategy:
   #     matrix:
-  #       node-version: [18] # This should be LTS
+  #       node-version: [22] # This should be LTS
 
   #   steps:
   #   - name: Checkout master branch
@@ -380,7 +380,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -484,7 +484,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout master branch
@@ -600,7 +600,7 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout master branch

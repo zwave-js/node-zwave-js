@@ -64,7 +64,7 @@ integrationTest(
 				async handleCC(controller, self, receivedCC) {
 					// We don't support sequenced commands here
 					if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-						await receivedCC.mergePartialCCsAsync([], {
+						await receivedCC.mergePartialCCs([], {
 							sourceNodeId: controller.ownNodeId,
 							__internalIsMockNode: true,
 							frameType: "singlecast",
