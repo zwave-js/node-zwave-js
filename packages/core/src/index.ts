@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-exports */
-export * from "./crypto/index.node.js";
+export * from "./crypto/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";

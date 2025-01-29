@@ -1,6 +1,6 @@
 import { Bytes, getErrorMessage, isUint8Array } from "@zwave-js/shared/safe";
 import { unzipSync } from "fflate";
-import { decryptAES256CBC } from "../crypto/operations.js";
+import { decryptAES256CBC } from "../crypto/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import type { Firmware, FirmwareFileFormat } from "./_Types.js";
 import { CRC16_CCITT } from "./crc.js";

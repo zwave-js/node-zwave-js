@@ -3,7 +3,7 @@
 
 // The used crypto primitives are async, so the methods in this implementation are async as well
 
-import { encryptAES128ECB } from "../crypto/operations.js";
+import { encryptAES128ECB } from "../crypto/index.js";
 import { increment, xor } from "../crypto/shared.js";
 
 // Warning: This code expects ctr_len to equal BLOCK_LEN.

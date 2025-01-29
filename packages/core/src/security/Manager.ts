@@ -1,6 +1,6 @@
 /** Management class and utils for Security S0 */
 
-import { encryptAES128ECB, randomBytes } from "../crypto/operations.js";
+import { encryptAES128ECB, randomBytes } from "../crypto/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 const authKeyBase = new Uint8Array(16).fill(0x55);

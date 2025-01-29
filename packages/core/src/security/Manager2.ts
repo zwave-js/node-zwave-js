@@ -5,12 +5,13 @@ import {
 	createWrappingCounter,
 	getEnumMemberName,
 } from "@zwave-js/shared/safe";
-import { randomBytes } from "../crypto/index.node.js";
 import {
 	computeNoncePRK,
 	deriveMEI,
 	deriveNetworkKeys,
-} from "../crypto/operations.js";
+	encryptAES128ECB,
+	randomBytes,
+} from "../crypto/index.js";
 import { increment } from "../crypto/shared.js";
 import {
 	type S2SecurityClass,
@@ -18,7 +19,6 @@ import {
 } from "../definitions/SecurityClass.js";
 import { MAX_NODES_LR } from "../definitions/consts.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
-import { encryptAES128ECB } from "../index_browser.js";
 import { deflateSync } from "../util/compression.js";
 import { highResTimestamp } from "../util/date.js";
 import { encodeBitMask } from "../values/Primitive.js";

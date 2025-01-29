@@ -1,6 +1,6 @@
 /* @forbiddenImports external */
 
-export * from "./crypto/index.browser.js";
+export * from "./crypto/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
@@ -13,6 +13,8 @@ export * from "./registries/Meters.js";
 export * from "./registries/Notifications.js";
 export * from "./registries/Scales.js";
 export * from "./registries/Sensors.js";
+export * from "./security/Manager.js";
+export * from "./security/Manager2.js";
 export * from "./security/Manager2Types.js";
 export type * from "./traits/index.js";
 export type * from "./util/_Types.js";
@@ -21,6 +23,7 @@ export { deflateSync, gunzipSync } from "./util/compression.js";
 export * from "./util/config.js";
 export * from "./util/crc.js";
 export * from "./util/date.js";
+export * from "./util/firmware.js";
 export * from "./util/graph.js";
 export * from "./util/misc.js";
 export * from "./values/Cache.js";
