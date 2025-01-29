@@ -644,7 +644,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.alternativeNetworkKey = options.alternativeNetworkKey;
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<SecurityCCCommandEncapsulation> {

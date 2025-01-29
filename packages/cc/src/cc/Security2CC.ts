@@ -1450,7 +1450,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<Security2CCMessageEncapsulation> {

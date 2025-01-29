@@ -69,6 +69,7 @@ import {
 	ccValues,
 	commandClass,
 	expectedCCResponse,
+	getCCCommandConstructor,
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators.js";
@@ -1313,10 +1314,29 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
-					// FIXME: We do not really want to parse asynchronously here. Once parseAsync becomes the standard,
-					// we should add sync methods to only those CCs that will be parsed here - or make the entire call chain async.
-					// eslint-disable-next-line @typescript-eslint/no-deprecated
-					const cc = CommandClass.parse(this.eventParameters, {
+
+					// We do not want to parse asynchronously here, but the `CommandClass.parse` method is async.
+					// However, we only deal with simple CCs that can be parsed synchronously. We can do this
+					// by replicating what `CommandClass.parse` does: determine the correct CC class and call its
+					// `from` method. If that returns a CC instance, we're good to continue.
+
+					const raw = CCRaw.parse(this.eventParameters);
+					if (raw.ccCommand == undefined) {
+						validatePayload.fail(
+							"event parameters contain an invalid CC",
+						);
+					}
+					const CommandConstructor = getCCCommandConstructor(
+						raw.ccId,
+						raw.ccCommand,
+					);
+					if (!CommandConstructor) {
+						validatePayload.fail(
+							"event parameters contain an invalid CC",
+						);
+					}
+
+					const cc = CommandConstructor.from(raw, {
 						...ctx,
 						frameType: "singlecast",
 						sourceNodeId: this.nodeId as number,
@@ -1329,6 +1349,11 @@ export class NotificationCCReport extends NotificationCC {
 						securityManager2: undefined,
 						securityManagerLR: undefined,
 					});
+					if (cc instanceof Promise) {
+						validatePayload.fail(
+							"Cannot asynchronously parse CC from event parameters",
+						);
+					}
 					validatePayload(!(cc instanceof InvalidCC));
 					cc.encapsulatingCC = this as any;
 

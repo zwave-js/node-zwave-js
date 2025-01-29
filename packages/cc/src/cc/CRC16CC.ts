@@ -117,7 +117,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<CRC16CCCommandEncapsulation> {

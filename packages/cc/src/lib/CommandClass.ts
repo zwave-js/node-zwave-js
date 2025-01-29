@@ -222,7 +222,7 @@ export class CommandClass implements CCId {
 		const CCConstructor = getCCConstructor(raw.ccId);
 		if (!CCConstructor) {
 			// None -> fall back to the default constructor
-			return CommandClass.fromAsync(raw, ctx);
+			return await CommandClass.from(raw, ctx);
 		}
 
 		let CommandConstructor: CCConstructor<CommandClass> | undefined;
@@ -235,10 +235,7 @@ export class CommandClass implements CCId {
 		// Not every CC has a constructor for its commands. In that case,
 		// call the CC constructor directly
 		try {
-			return await (CommandConstructor ?? CCConstructor).fromAsync(
-				raw,
-				ctx,
-			);
+			return await (CommandConstructor ?? CCConstructor).from(raw, ctx);
 		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
@@ -272,29 +269,16 @@ export class CommandClass implements CCId {
 		}
 	}
 
-	/** @deprecated Use {@link fromAsync} instead */
-	public static from(raw: CCRaw, ctx: CCParsingContext): CommandClass {
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): CommandClass | Promise<CommandClass> {
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			ccId: raw.ccId,
 			ccCommand: raw.ccCommand,
 			payload: raw.payload,
 		});
-	}
-
-	// eslint-disable-next-line @typescript-eslint/require-await
-	public static async fromAsync(
-		raw: CCRaw,
-		ctx: CCParsingContext,
-	): Promise<CommandClass> {
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return this.from(raw, ctx);
-
-		// TODO: Plan for next major release:
-		// - CommandClass ONLY exposes `public static async from` (renamed!)
-		// - CommandClass internally implements `protected static fromSync` and `protected static async fromAsync`
-		// - The default implementation of `fromAsync` just calls `fromSync`
-		// - Sub-classes override either `fromSync` OR `fromAsync` as needed
 	}
 
 	/** This CC's identifier */

@@ -111,7 +111,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		}
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<MultiCommandCCCommandEncapsulation> {

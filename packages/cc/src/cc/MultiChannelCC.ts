@@ -1409,7 +1409,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		this.destination = options.destination;
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<MultiChannelCCCommandEncapsulation> {
@@ -1633,7 +1633,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		this.endpointIndex = this.encapsulated.endpointIndex;
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<MultiChannelCCV1CommandEncapsulation> {

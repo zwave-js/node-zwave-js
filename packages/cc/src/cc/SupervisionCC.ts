@@ -414,7 +414,7 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<SupervisionCCGet> {
