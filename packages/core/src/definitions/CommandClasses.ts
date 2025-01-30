@@ -364,3 +364,15 @@ export interface CommandClassInfo {
 	/** The maximum version of the CC that is supported or controlled */
 	version: number;
 }
+
+export function isCCInfoEqual(
+	a: CommandClassInfo,
+	b: CommandClassInfo,
+): boolean {
+	return (
+		a.isSupported === b.isSupported
+		&& a.isControlled === b.isControlled
+		&& a.secure === b.secure
+		&& a.version === b.version
+	);
+}
