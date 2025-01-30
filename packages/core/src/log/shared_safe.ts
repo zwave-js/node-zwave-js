@@ -1,8 +1,4 @@
 import type { TransformableInfo } from "logform";
-import type { Logger } from "winston";
-import type Transport from "winston-transport";
-import type { ValueID } from "../values/_Types.js";
-import { type ControllerLogger } from "./Controller.js";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
 export const timestampPaddingShort = " ".repeat(
@@ -58,12 +54,6 @@ export interface LogContext<T extends string = string> {
 	type?: string;
 }
 
-export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
-export type ValueLogContext =
-	& LogContext
-	& ValueID
-	& { nodeId: number; type: "value" };
-
 export type MessageRecord = Record<string, string | number | boolean>;
 
 export interface MessageOrCCLogEntry {
@@ -76,37 +66,6 @@ export function getNodeTag(nodeId: number): string {
 	return "Node " + nodeId.toString().padStart(3, "0");
 }
 
-export type ZWaveLogger<TContext extends LogContext = LogContext> =
-	& Omit<
-		Logger,
-		"log"
-	>
-	& {
-		log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
-	};
-
-export interface LogConfig {
-	enabled: boolean;
-	level: string | number;
-	transports: Transport[];
-	logToFile: boolean;
-	maxFiles: number;
-	nodeFilter?: number[];
-	filename: string;
-	forceConsole: boolean;
-}
-
-/** @internal */
-export const nonUndefinedLogConfigKeys = [
-	"enabled",
-	"level",
-	"transports",
-	"logToFile",
-	"maxFiles",
-	"filename",
-	"forceConsole",
-] as const;
-
 /** @internal */
 export function stringToNodeList(nodes?: string): number[] | undefined {
 	if (!nodes) return undefined;
@@ -116,4 +75,71 @@ export function stringToNodeList(nodes?: string): number[] | undefined {
 		.filter((n) => !Number.isNaN(n));
 }
 
-export type LogNode = Pick<ControllerLogger, "logNode">;
+/** Wraps an array of strings in square brackets and joins them with spaces */
+export function tagify(tags: string[]): string {
+	return tags.map((pfx) => `[${pfx}]`).join(" ");
+}
+
+/**
+ * Calculates the length the first line of a log message would occupy if it is not split
+ * @param info The message and information to log
+ * @param firstMessageLineLength The length of the first line of the actual message text, not including pre- and postfixes.
+ */
+export function calculateFirstLineLength(
+	info: ZWaveLogInfo,
+	firstMessageLineLength: number,
+): number {
+	return (
+		[
+			CONTROL_CHAR_WIDTH - 1,
+			firstMessageLineLength,
+			(info.primaryTags || "").length,
+			(info.secondaryTags || "").length,
+		]
+			// filter out empty parts
+			.filter((len) => len > 0)
+			// simulate adding spaces between parts
+			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
+	);
+}
+
+/**
+ * Tests if a given message fits into a single log line
+ * @param info The message that should be logged
+ * @param messageLength The length that should be assumed for the actual message without pre and postfixes.
+ * Can be set to 0 to exclude the message from the calculation
+ */
+export function messageFitsIntoOneLine(
+	info: ZWaveLogInfo,
+	messageLength: number,
+): boolean {
+	const totalLength = calculateFirstLineLength(info, messageLength);
+	return totalLength <= LOG_WIDTH;
+}
+
+export function messageToLines(message: string | string[]): string[] {
+	if (typeof message === "string") {
+		return message.split("\n");
+	} else if (message.length > 0) {
+		return message;
+	} else {
+		return [""];
+	}
+}
+
+/** Splits a message record into multiple lines and auto-aligns key-value pairs */
+export function messageRecordToLines(message: MessageRecord): string[] {
+	const entries = Object.entries(message);
+	if (!entries.length) return [];
+
+	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
+	return entries.flatMap(([key, value]) =>
+		`${key}:${
+			" ".repeat(
+				Math.max(maxKeyLength - key.length + 1, 1),
+			)
+		}${value}`
+			.split("\n")
+			.map((line) => line.trimEnd())
+	);
+}
