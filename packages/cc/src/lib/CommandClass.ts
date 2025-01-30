@@ -3,6 +3,7 @@ import {
 	type GetDeviceConfig,
 	type LookupManufacturer,
 } from "@zwave-js/config";
+import { type LogNode } from "@zwave-js/core";
 import {
 	type BroadcastCC,
 	type CCAddress,
@@ -20,7 +21,6 @@ import {
 	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
-	type LogNode,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type ModifyCCs,

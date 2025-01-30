@@ -1,8 +1,7 @@
-import { flatMap } from "@zwave-js/shared";
 import type { Format, TransformFunction } from "logform";
 import path from "pathe";
 import { MESSAGE, configs } from "triple-beam";
-import winston from "winston";
+import winston, { type Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
@@ -10,14 +9,13 @@ import { colorizer } from "./Colorizer.js";
 import {
 	CONTROL_CHAR_WIDTH,
 	LOG_WIDTH,
-	type LogConfig,
 	type LogContext,
-	type MessageRecord,
 	type ZWaveLogInfo,
-	type ZWaveLogger,
+	calculateFirstLineLength,
 	channelPadding,
 	directionPrefixPadding,
-	nonUndefinedLogConfigKeys,
+	messageFitsIntoOneLine,
+	messageToLines,
 	stringToNodeList,
 	timestampFormatShort,
 	timestampPadding,
@@ -29,6 +27,28 @@ const { combine, timestamp, label } = winston.format;
 const loglevels = configs.npm.levels;
 const isTTY = process.stdout.isTTY;
 const isUnitTest = process.env.NODE_ENV === "test";
+
+export interface LogConfig {
+	enabled: boolean;
+	level: string | number;
+	transports: Transport[];
+	logToFile: boolean;
+	maxFiles: number;
+	nodeFilter?: number[];
+	filename: string;
+	forceConsole: boolean;
+}
+/** @internal */
+
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
 
 export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
 	constructor(loggers: ZWaveLogContainer, logLabel: string) {
@@ -416,74 +436,6 @@ export function createDefaultTransportFormat(
 	return combine(...formats);
 }
 
-/**
- * Calculates the length the first line of a log message would occupy if it is not split
- * @param info The message and information to log
- * @param firstMessageLineLength The length of the first line of the actual message text, not including pre- and postfixes.
- */
-function calculateFirstLineLength(
-	info: ZWaveLogInfo,
-	firstMessageLineLength: number,
-): number {
-	return (
-		[
-			CONTROL_CHAR_WIDTH - 1,
-			firstMessageLineLength,
-			(info.primaryTags || "").length,
-			(info.secondaryTags || "").length,
-		]
-			// filter out empty parts
-			.filter((len) => len > 0)
-			// simulate adding spaces between parts
-			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
-	);
-}
-
-/**
- * Tests if a given message fits into a single log line
- * @param info The message that should be logged
- * @param messageLength The length that should be assumed for the actual message without pre and postfixes.
- * Can be set to 0 to exclude the message from the calculation
- */
-export function messageFitsIntoOneLine(
-	info: ZWaveLogInfo,
-	messageLength: number,
-): boolean {
-	const totalLength = calculateFirstLineLength(info, messageLength);
-	return totalLength <= LOG_WIDTH;
-}
-
-export function messageToLines(message: string | string[]): string[] {
-	if (typeof message === "string") {
-		return message.split("\n");
-	} else if (message.length > 0) {
-		return message;
-	} else {
-		return [""];
-	}
-}
-
-/** Splits a message record into multiple lines and auto-aligns key-value pairs */
-export function messageRecordToLines(message: MessageRecord): string[] {
-	const entries = Object.entries(message);
-	if (!entries.length) return [];
-
-	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
-	return flatMap(entries, ([key, value]) =>
-		`${key}:${
-			" ".repeat(
-				Math.max(maxKeyLength - key.length + 1, 1),
-			)
-		}${value}`
-			.split("\n")
-			.map((line) => line.trimEnd()));
-}
-
-/** Wraps an array of strings in square brackets and joins them with spaces */
-export function tagify(tags: string[]): string {
-	return tags.map((pfx) => `[${pfx}]`).join(" ");
-}
-
 /** Unsilences the console transport of a logger and returns the original value */
 export function unsilence(logger: winston.Logger): boolean {
 	const consoleTransport = logger.transports.find(
@@ -509,3 +461,8 @@ export function restoreSilence(
 		consoleTransport.silent = original;
 	}
 }
+export type ZWaveLogger<TContext extends LogContext = LogContext> =
+	& Omit<Logger, "log">
+	& {
+		log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
+	};
