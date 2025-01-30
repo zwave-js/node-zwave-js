@@ -8,6 +8,7 @@ import { getErrorMessage, pathExists } from "@zwave-js/shared";
 import { type FileSystem } from "@zwave-js/shared/bindings";
 import path from "pathe";
 import { ConfigLogger } from "./Logger.js";
+import { type ConfigLogContext } from "./Logger_safe.js";
 import {
 	type ManufacturersMap,
 	loadManufacturersInternal,
@@ -34,7 +35,7 @@ import {
 
 export interface ConfigManagerOptions {
 	bindings?: FileSystem;
-	logContainer?: ZWaveLogContainer;
+	logContainer?: ZWaveLogContainer<ConfigLogContext>;
 	deviceConfigPriorityDir?: string;
 	deviceConfigExternalDir?: string;
 }

@@ -31,7 +31,10 @@ export interface DriverLogContext extends LogContext<"driver"> {
 }
 
 export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
-	constructor(private readonly driver: Driver, loggers: ZWaveLogContainer) {
+	constructor(
+		private readonly driver: Driver,
+		loggers: ZWaveLogContainer<DriverLogContext>,
+	) {
 		super(loggers, DRIVER_LABEL);
 	}
 
@@ -118,7 +121,9 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 	): void {
 		if (!this.isDriverLogVisible()) return;
 		if (nodeId == undefined) nodeId = message.getNodeId();
-		if (nodeId != undefined && !this.container.shouldLogNode(nodeId)) {
+		if (
+			nodeId != undefined && !this.container.isNodeLoggingVisible(nodeId)
+		) {
 			return;
 		}
 

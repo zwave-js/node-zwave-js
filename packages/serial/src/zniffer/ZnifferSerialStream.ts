@@ -17,6 +17,7 @@ import type {
 	UnderlyingSource,
 } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
+import { type SerialLogContext } from "../log/Logger_safe.js";
 import { ZnifferParser } from "../parsers/ZnifferParser.js";
 import { type ZnifferSerialFrame } from "../parsers/ZnifferSerialFrame.js";
 import { type ZWaveSerialBindingFactory } from "../serialport/ZWaveSerialStream.js";
@@ -25,7 +26,7 @@ import { type ZWaveSerialBindingFactory } from "../serialport/ZWaveSerialStream.
 export class ZnifferSerialStreamFactory {
 	constructor(
 		binding: ZWaveSerialBindingFactory,
-		loggers: ZWaveLogContainer,
+		loggers: ZWaveLogContainer<SerialLogContext>,
 	) {
 		this.binding = binding;
 		this.logger = new SerialLogger(loggers);

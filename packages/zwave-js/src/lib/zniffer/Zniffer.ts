@@ -76,7 +76,7 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { type ZWaveOptions } from "../driver/ZWaveOptions.js";
-import { ZnifferLogger } from "../log/Zniffer.js";
+import { type ZnifferLogContext, ZnifferLogger } from "../log/Zniffer.js";
 import {
 	type CorruptedFrame,
 	type Frame,
@@ -314,7 +314,7 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 		return this._supportedFrequencies;
 	}
 
-	private _logContainer: ZWaveLogContainer;
+	private _logContainer: ZWaveLogContainer<ZnifferLogContext>;
 	private znifferLog: ZnifferLogger;
 
 	/** The security managers for each node */

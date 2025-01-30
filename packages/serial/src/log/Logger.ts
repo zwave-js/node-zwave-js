@@ -13,7 +13,7 @@ import {
 } from "./Logger_safe.js";
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
-	constructor(loggers: ZWaveLogContainer) {
+	constructor(loggers: ZWaveLogContainer<SerialLogContext>) {
 		super(loggers, SERIAL_LABEL);
 	}
 

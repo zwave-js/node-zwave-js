@@ -1,7 +1,7 @@
 import type { Format, TransformFunction } from "logform";
 import path from "pathe";
 import { MESSAGE, configs } from "triple-beam";
-import winston, { type Logger } from "winston";
+import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
@@ -21,6 +21,8 @@ import {
 	timestampPadding,
 	timestampPaddingShort,
 } from "./shared_safe.js";
+import { type LogContainer } from "./traits.js";
+import { type ZWaveLogger } from "./traits.js";
 
 const { combine, timestamp, label } = winston.format;
 
@@ -50,17 +52,10 @@ export const nonUndefinedLogConfigKeys = [
 	"forceConsole",
 ] as const;
 
-export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
-	constructor(loggers: ZWaveLogContainer, logLabel: string) {
-		this.container = loggers;
-		this.logger = this.container.getLogger(logLabel);
-	}
-
-	public logger: ZWaveLogger<TContext>;
-	public container: ZWaveLogContainer;
-}
-
-export class ZWaveLogContainer extends winston.Container {
+export class ZWaveLogContainer<TContext extends LogContext>
+	extends winston.Container
+	implements LogContainer<TContext>
+{
 	private fileTransport: DailyRotateFile | undefined;
 	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
@@ -81,7 +76,7 @@ export class ZWaveLogContainer extends winston.Container {
 		this.updateConfiguration(config);
 	}
 
-	public getLogger(label: string): ZWaveLogger {
+	public getLogger(label: string): ZWaveLogger<TContext> {
 		if (!this.has(label)) {
 			this.add(label, {
 				transports: this.getAllTransports(),
@@ -92,7 +87,7 @@ export class ZWaveLogContainer extends winston.Container {
 			});
 		}
 
-		return this.get(label) as unknown as ZWaveLogger;
+		return this.get(label) as unknown as ZWaveLogger<TContext>;
 	}
 
 	public updateConfiguration(config: Partial<LogConfig>): void {
@@ -294,7 +289,7 @@ export class ZWaveLogContainer extends winston.Container {
 	/**
 	 * Checks the log configuration whether logs should be written for a given node id
 	 */
-	public shouldLogNode(nodeId: number): boolean {
+	public isNodeLoggingVisible(nodeId: number): boolean {
 		// If no filters are set, every node gets logged
 		if (!this.logConfig.nodeFilter) return true;
 		return this.logConfig.nodeFilter.includes(nodeId);
@@ -461,8 +456,3 @@ export function restoreSilence(
 		consoleTransport.silent = original;
 	}
 }
-export type ZWaveLogger<TContext extends LogContext = LogContext> =
-	& Omit<Logger, "log">
-	& {
-		log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
-	};

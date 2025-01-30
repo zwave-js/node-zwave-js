@@ -208,7 +208,7 @@ import path from "pathe";
 import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
-import { DriverLogger } from "../log/Driver.js";
+import { type DriverLogContext, DriverLogger } from "../log/Driver.js";
 import type { Endpoint } from "../node/Endpoint.js";
 import type { ZWaveNode } from "../node/Node.js";
 import {
@@ -927,7 +927,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		);
 	}
 
-	private _logContainer: ZWaveLogContainer;
+	private _logContainer: ZWaveLogContainer<DriverLogContext>;
 	private _driverLog: DriverLogger;
 	/** @internal */
 	public get driverLog(): DriverLogger {

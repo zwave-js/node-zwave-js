@@ -35,7 +35,10 @@ export interface ZnifferLogContext extends LogContext<"zniffer"> {
 }
 
 export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
-	constructor(private readonly zniffer: Zniffer, loggers: ZWaveLogContainer) {
+	constructor(
+		private readonly zniffer: Zniffer,
+		loggers: ZWaveLogContainer<ZnifferLogContext>,
+	) {
 		super(loggers, ZNIFFER_LABEL);
 	}
 

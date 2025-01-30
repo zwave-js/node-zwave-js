@@ -10,7 +10,7 @@ import {
 } from "./Logger_safe.js";
 
 export class ConfigLogger extends ZWaveLoggerBase<ConfigLogContext> {
-	constructor(loggers: ZWaveLogContainer) {
+	constructor(loggers: ZWaveLogContainer<ConfigLogContext>) {
 		super(loggers, CONFIG_LABEL);
 	}
 
