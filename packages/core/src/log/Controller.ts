@@ -8,58 +8,25 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "../values/_Types.js";
-import { type ZWaveLogContainer, ZWaveLoggerBase, tagify } from "./shared.js";
 import {
-	type DataDirection,
-	type LogContext,
-	type NodeLogContext,
-	type ValueLogContext,
-	getDirectionPrefix,
-	getNodeTag,
-} from "./shared_safe.js";
+	CONTROLLER_LABEL,
+	CONTROLLER_LOGLEVEL,
+	type ControllerLogContext,
+	type ControllerNodeLogContext,
+	type ControllerValueLogContext,
+	type Interviewable,
+	type LogNode,
+	type LogNodeOptions,
+	type LogValueArgs,
+	VALUE_LOGLEVEL,
+} from "./Controller.definitions.js";
+import { type ZWaveLogContainer, ZWaveLoggerBase } from "./shared.js";
+import { tagify } from "./shared_safe.js";
+import { getDirectionPrefix, getNodeTag } from "./shared_safe.js";
 
-export const CONTROLLER_LABEL = "CNTRLR";
-const CONTROLLER_LOGLEVEL = "info";
-const VALUE_LOGLEVEL = "debug";
-
-export interface LogNodeOptions {
-	message: string;
-	level?: "silly" | "debug" | "verbose" | "warn" | "error";
-	direction?: DataDirection;
-	endpoint?: number;
-}
-
-export interface Interviewable {
-	id: number;
-	interviewStage: InterviewStage;
-}
-
-export type ControllerNodeLogContext =
-	& LogContext<"controller">
-	& NodeLogContext
-	& { endpoint?: number; direction: string };
-
-export type ControllerValueLogContext =
-	& LogContext<"controller">
-	& ValueLogContext
-	& {
-		direction?: string;
-		change?: "added" | "updated" | "removed" | "notification";
-		internal?: boolean;
-	};
-
-export type ControllerSelfLogContext = LogContext<"controller"> & {
-	type: "controller";
-};
-
-export type ControllerLogContext =
-	| ControllerSelfLogContext
-	| ControllerNodeLogContext
-	| ControllerValueLogContext;
-
-export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
-
-export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
+export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext>
+	implements LogNode
+{
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}

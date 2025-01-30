@@ -5,6 +5,7 @@ export * from "./definitions/index.js";
 export * from "./dsk/index.js";
 export * from "./error/ZWaveError.js";
 export * from "./fsm/FSM.js";
+export * from "./log/Controller.definitions.js";
 export * from "./log/shared_safe.js";
 export * from "./qr/index.js";
 export * from "./registries/DeviceClasses.js";

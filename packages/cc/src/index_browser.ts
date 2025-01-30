@@ -1,4 +1,5 @@
 /* @forbiddenImports external */
+import * as utils from "./lib/utils.js";
 
 export * from "./cc/index.js";
 export * from "./lib/API.js";
@@ -25,3 +26,4 @@ export type {
 } from "./lib/Values.js";
 export * from "./lib/_Types.js";
 export type * from "./lib/traits.js";
+export { utils };
