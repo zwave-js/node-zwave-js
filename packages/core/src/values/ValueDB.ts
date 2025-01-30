@@ -1,5 +1,10 @@
 import { type Database } from "@zwave-js/shared/bindings";
-import { TypedEventTarget } from "@zwave-js/shared/safe";
+import {
+	TypedEventTarget,
+	areUint8ArraysEqual,
+	isUint8Array,
+} from "@zwave-js/shared/safe";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import type { CommandClasses } from "../definitions/CommandClasses.js";
 import {
 	ZWaveError,
@@ -90,6 +95,49 @@ export function normalizeValueID(valueID: ValueID): ValueID {
 
 export function valueIdToString(valueID: ValueID): string {
 	return JSON.stringify(normalizeValueID(valueID));
+}
+
+/**
+ * Compares two values and checks if they are equal.
+ * This is a portable, but weak version of isDeepStrictEqual, limited to the types of values
+ * that can be stored in the Value DB.
+ */
+export function valueEquals(a: unknown, b: unknown): boolean {
+	switch (typeof a) {
+		case "bigint":
+		case "boolean":
+		case "number":
+		case "string":
+		case "undefined":
+			return a === b;
+
+		case "function":
+		case "symbol":
+			// These cannot be stored in the value DB
+			return false;
+	}
+
+	if (a === null) return b === null;
+
+	if (isUint8Array(a)) {
+		return isUint8Array(b) && areUint8ArraysEqual(a, b);
+	}
+
+	if (isArray(a)) {
+		return isArray(b)
+			&& a.length === b.length
+			&& a.every((v, i) => valueEquals(v, b[i]));
+	}
+
+	if (isObject(a)) {
+		if (!isObject(b)) return false;
+		const allKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+		return [...allKeys].every((k) =>
+			valueEquals((a as any)[k], (b as any)[k])
+		);
+	}
+
+	return false;
 }
 
 /**
