@@ -1,5 +1,5 @@
 import { type CCAPI, type SchedulePollOptions } from "@zwave-js/cc";
-import { type ValueDB, normalizeValueID } from "@zwave-js/core";
+import { type ValueDB, normalizeValueID, valueEquals } from "@zwave-js/core";
 import {
 	type CommandClasses,
 	MessagePriority,
@@ -8,7 +8,6 @@ import {
 	type ValueUpdatedArgs,
 } from "@zwave-js/core/safe";
 import { ObjectKeyMap } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "node:util";
 import { type Driver } from "../../driver/Driver.js";
 import { type DeviceClass } from "../DeviceClass.js";
 import { EndpointsMixin } from "./50_Endpoints.js";
@@ -168,7 +167,7 @@ export abstract class SchedulePollMixin extends EndpointsMixin
 		if (
 			actualValue !== undefined
 			&& poll.expectedValue !== undefined
-			&& !isDeepStrictEqual(poll.expectedValue, actualValue)
+			&& !valueEquals(poll.expectedValue, actualValue)
 		) {
 			return false;
 		}
