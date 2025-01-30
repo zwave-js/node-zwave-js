@@ -362,7 +362,6 @@ import {
 	areUint8ArraysEqual,
 	cloneDeep,
 	createThrowingMap,
-	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
 	noop,
@@ -5074,13 +5073,11 @@ export class ZWaveController
 				let associatedNodes: number[] = [];
 				try {
 					associatedNodes = distinct(
-						flatMap<number, AssociationAddress[]>(
-							[
-								...(self.getAssociations({ nodeId: node.id })
-									.values() as any),
-							],
-							(assocs: AssociationAddress[]) =>
-								assocs.map((a) => a.nodeId),
+						[
+							...(self.getAssociations({ nodeId: node.id })
+								.values() as any),
+						].flatMap((assocs: AssociationAddress[]) =>
+							assocs.map((a) => a.nodeId)
 						),
 					)
 						// ...except the controller itself, which was handled by step 2
