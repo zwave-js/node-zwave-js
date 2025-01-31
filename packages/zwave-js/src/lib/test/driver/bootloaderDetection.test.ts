@@ -10,7 +10,7 @@ integrationTest(
 		// debug: true,
 
 		additionalDriverOptions: {
-			allowBootloaderOnly: true,
+			bootloaderMode: "allow",
 		},
 
 		async customSetup(driver, mockController, mockNode) {
