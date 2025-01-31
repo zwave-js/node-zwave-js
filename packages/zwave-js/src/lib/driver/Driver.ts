@@ -1341,6 +1341,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Initialize config manager
 		this._configManager = new ConfigManager({
+			bindings: this.bindings.fs,
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir:
 				this._options.storage.deviceConfigPriorityDir,
