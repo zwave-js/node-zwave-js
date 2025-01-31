@@ -7,7 +7,8 @@ import {
 	extractFirmware,
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
-import { Bytes, formatId } from "@zwave-js/shared";
+import { Bytes, type Timer, formatId, getenv } from "@zwave-js/shared";
+import { setTimer } from "@zwave-js/shared";
 import type { Options as KyOptions } from "ky";
 import type PQueue from "p-queue";
 import type {
@@ -18,7 +19,7 @@ import type {
 } from "./_Types.js";
 
 function serviceURL(): string {
-	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
+	return getenv("ZWAVEJS_FW_SERVICE_URL") || "https://firmware.zwave-js.io";
 }
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
@@ -35,12 +36,10 @@ interface CachedRequest<T> {
 // Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
 let requestQueue: PQueue | undefined;
 
-let cleanCacheTimeout: NodeJS.Timeout | undefined;
+let cleanCacheTimeout: Timer | undefined;
 function cleanCache() {
-	if (cleanCacheTimeout) {
-		clearTimeout(cleanCacheTimeout);
-		cleanCacheTimeout = undefined;
-	}
+	cleanCacheTimeout?.clear();
+	cleanCacheTimeout = undefined;
 
 	const now = Date.now();
 	for (const [key, cached] of requestCache) {
@@ -50,7 +49,7 @@ function cleanCache() {
 	}
 
 	if (requestCache.size > 0) {
-		cleanCacheTimeout = setTimeout(
+		cleanCacheTimeout = setTimer(
 			cleanCache,
 			CLEAN_CACHE_INTERVAL_MS,
 		).unref();
@@ -115,7 +114,7 @@ async function cachedRequest<T>(url: string, config: KyOptions): Promise<T> {
 
 	// Regularly clean the cache
 	if (!cleanCacheTimeout) {
-		cleanCacheTimeout = setTimeout(
+		cleanCacheTimeout = setTimer(
 			cleanCache,
 			CLEAN_CACHE_INTERVAL_MS,
 		).unref();

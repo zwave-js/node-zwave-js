@@ -176,20 +176,25 @@ import {
 import {
 	AsyncQueue,
 	Bytes,
+	type Interval,
 	type ThrowingMap,
+	type Timer,
 	TypedEventTarget,
 	areUint8ArraysEqual,
 	buffer2hex,
 	cloneDeep,
 	createWrappingCounter,
 	getErrorMessage,
+	getenv,
 	isAbortError,
 	isUint8Array,
 	mergeDeep,
 	noop,
 	num2hex,
 	pick,
+	setTimer,
 } from "@zwave-js/shared";
+import { setInterval } from "@zwave-js/shared";
 import {
 	type Database,
 	type KeyPair,
@@ -203,7 +208,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import * as util from "node:util";
 import path from "pathe";
 import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
@@ -304,19 +308,22 @@ const defaultOptions: ZWaveOptions = {
 	disableOptimisticValueUpdate: false,
 	features: {
 		// By default enable soft reset unless the env variable is set
-		softReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+		softReset: !getenv("ZWAVEJS_DISABLE_SOFT_RESET"),
 		// By default enable the unresponsive controller recovery unless the env variable is set
-		unresponsiveControllerRecovery: !process.env
-			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+		unresponsiveControllerRecovery: !getenv(
+			"ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY",
+		),
 		// By default enable the watchdog, unless the env variable is set
-		watchdog: !process.env.ZWAVEJS_DISABLE_WATCHDOG,
+		watchdog: !getenv("ZWAVEJS_DISABLE_WATCHDOG"),
 	},
 	interview: {
 		queryAllUserCodes: false,
 	},
 	storage: {
-		cacheDir: path.join(process.cwd(), "cache"),
-		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
+		cacheDir: typeof process !== "undefined"
+			? path.join(process.cwd(), "cache")
+			: "/cache",
+		lockDir: getenv("ZWAVEJS_LOCK_DIRECTORY"),
 		throttle: "normal",
 	},
 	preferences: {
@@ -537,7 +544,7 @@ interface RequestHandlerEntry<T extends Message = Message> {
 
 interface AwaitedThing<T> {
 	handler: (thing: T) => void;
-	timeout?: NodeJS.Timeout;
+	timeout?: Timer;
 	predicate: (msg: T) => boolean;
 	refreshPredicate?: (msg: T) => boolean;
 }
@@ -1338,6 +1345,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Initialize config manager
 		this._configManager = new ConfigManager({
+			bindings: this.bindings.fs,
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir:
 				this._options.storage.deviceConfigPriorityDir,
@@ -1611,7 +1619,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		});
 		await this._networkCache.open();
 
-		if (process.env.NO_CACHE === "true") {
+		if (getenv("NO_CACHE") === "true") {
 			// Since the network cache is append-only, we need to
 			// clear it if the cache should be ignored
 			this._networkCache.clear();
@@ -1643,7 +1651,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		);
 		await this._metadataDB.open();
 
-		if (process.env.NO_CACHE === "true") {
+		if (getenv("NO_CACHE") === "true") {
 			// Since value/metadata DBs are append-only, we need to
 			// clear them if the cache should be ignored
 			this._valueDB.clear();
@@ -1778,7 +1786,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				lrNodeIds ?? [],
 				async () => {
 					// Try to restore the network information from the cache
-					if (process.env.NO_CACHE !== "true") {
+					if (getenv("NO_CACHE") !== "true") {
 						await this.restoreNetworkStructureFromCache();
 					}
 				},
@@ -2152,9 +2160,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		this.handleQueueIdleChange(this.queueIdle);
 	}
 
-	private autoRefreshNodeValueTimers = new Map<number, NodeJS.Timeout>();
-
-	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
+	private autoRefreshNodeValueTimers = new Map<number, Interval>();
+	private retryNodeInterviewTimeouts = new Map<number, Timer>();
 	/**
 	 * @internal
 	 * Starts or resumes the interview of a Z-Wave node. It is advised to NOT
@@ -2170,7 +2177,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Avoid having multiple restart timeouts active
 		if (this.retryNodeInterviewTimeouts.has(node.id)) {
-			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id));
+			this.retryNodeInterviewTimeouts.get(node.id)?.clear();
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
@@ -2220,7 +2227,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					// Schedule the retry and remember the timeout instance
 					this.retryNodeInterviewTimeouts.set(
 						node.id,
-						setTimeout(() => {
+						setTimer(() => {
 							this.retryNodeInterviewTimeouts.delete(node.id);
 							void this.interviewNodeInternal(node);
 						}, retryTimeout).unref(),
@@ -2381,7 +2388,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Regularly check if values of non-sleeping nodes need to be refreshed per the specs
 		// For sleeping nodes this is done on wakeup
 		if (this.autoRefreshNodeValueTimers.has(node.id)) {
-			clearInterval(this.autoRefreshNodeValueTimers.get(node.id));
+			this.autoRefreshNodeValueTimers.get(node.id)?.clear();
 			this.autoRefreshNodeValueTimers.delete(node.id);
 		}
 		if (!node.canSleep) {
@@ -2543,10 +2550,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	public disableStatistics(): void {
 		this._statisticsEnabled = false;
 		this.statisticsAppInfo = undefined;
-		if (this.statisticsTimeout) {
-			clearTimeout(this.statisticsTimeout);
-			this.statisticsTimeout = undefined;
-		}
+		this.statisticsTimeout?.clear();
+		this.statisticsTimeout = undefined;
 	}
 
 	/** @internal */
@@ -2563,15 +2568,13 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return ret;
 	}
 
-	private statisticsTimeout: NodeJS.Timeout | undefined;
+	private statisticsTimeout: Timer | undefined;
 	private async compileAndSendStatistics(): Promise<void> {
 		// Don't send anything if statistics are not enabled
 		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
 
-		if (this.statisticsTimeout) {
-			clearTimeout(this.statisticsTimeout);
-			this.statisticsTimeout = undefined;
-		}
+		this.statisticsTimeout?.clear();
+		this.statisticsTimeout = undefined;
 
 		let success: number | boolean = false;
 		try {
@@ -2597,7 +2600,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					timespan.minutes(1),
 					Math.min(success * 1000, timespan.hours(6)),
 				);
-				this.statisticsTimeout = setTimeout(() => {
+				this.statisticsTimeout = setTimer(() => {
 					void this.compileAndSendStatistics();
 				}, retryMs).unref();
 			} else {
@@ -2607,7 +2610,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 						: `Failed to send usage statistics - next transmission scheduled in 6 hours.`,
 					"verbose",
 				);
-				this.statisticsTimeout = setTimeout(() => {
+				this.statisticsTimeout = setTimer(() => {
 					void this.compileAndSendStatistics();
 				}, timespan.hours(success ? 23 : 6)).unref();
 			}
@@ -2637,15 +2640,15 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
 		if (this.sendNodeToSleepTimers.has(node.id)) {
-			clearTimeout(this.sendNodeToSleepTimers.get(node.id));
+			this.sendNodeToSleepTimers.get(node.id)?.clear();
 			this.sendNodeToSleepTimers.delete(node.id);
 		}
 		if (this.retryNodeInterviewTimeouts.has(node.id)) {
-			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id));
+			this.retryNodeInterviewTimeouts.get(node.id)?.clear();
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 		if (this.autoRefreshNodeValueTimers.has(node.id)) {
-			clearTimeout(this.autoRefreshNodeValueTimers.get(node.id));
+			this.autoRefreshNodeValueTimers.get(node.id)?.clear();
 			this.autoRefreshNodeValueTimers.delete(node.id);
 		}
 
@@ -2793,7 +2796,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 			this.retryNodeInterviewTimeouts.set(
 				node.id,
-				setTimeout(() => {
+				setTimer(() => {
 					this.retryNodeInterviewTimeouts.delete(node.id);
 					void node.refreshInfo({
 						// After a firmware update, we need to refresh the node info
@@ -3355,20 +3358,21 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
-		this.sendNodeToSleepTimers.forEach((timeout) => clearTimeout(timeout));
+		this.sendNodeToSleepTimers.forEach((timeout) => timeout.clear());
 		this.sendNodeToSleepTimers.clear();
-		this.retryNodeInterviewTimeouts.forEach((timeout) =>
-			clearTimeout(timeout)
-		);
-		this.retryNodeInterviewTimeouts.clear();
-		this.autoRefreshNodeValueTimers.forEach((timeout) =>
-			clearTimeout(timeout)
-		);
-		this.autoRefreshNodeValueTimers.clear();
-		if (this.pollBackgroundRSSITimer) {
-			clearTimeout(this.pollBackgroundRSSITimer);
-			this.pollBackgroundRSSITimer = undefined;
+
+		for (const timer of this.retryNodeInterviewTimeouts.values()) {
+			timer.clear();
 		}
+		this.retryNodeInterviewTimeouts.clear();
+
+		for (const timer of this.autoRefreshNodeValueTimers.values()) {
+			timer.clear();
+		}
+		this.autoRefreshNodeValueTimers.clear();
+
+		this.pollBackgroundRSSITimer?.clear();
+		this.pollBackgroundRSSITimer = undefined;
 
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
@@ -3513,19 +3517,25 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// Remove all timeouts
 		for (
 			const timeout of [
-				...this.sendNodeToSleepTimers.values(),
-				...this.retryNodeInterviewTimeouts.values(),
-				...this.autoRefreshNodeValueTimers.values(),
-				this.statisticsTimeout,
-				this.pollBackgroundRSSITimer,
-				...this.awaitedCommands.map((c) => c.timeout),
-				...this.awaitedMessages.map((m) => m.timeout),
-				...this.awaitedMessageHeaders.map((h) => h.timeout),
-				...this.awaitedBootloaderChunks.map((b) => b.timeout),
 				this._powerlevelTestNodeContext?.timeout,
 			]
 		) {
 			if (timeout) clearTimeout(timeout);
+		}
+		for (
+			const timeout of [
+				...this.retryNodeInterviewTimeouts.values(),
+				...this.autoRefreshNodeValueTimers.values(),
+				this.statisticsTimeout,
+				this.pollBackgroundRSSITimer,
+				...this.sendNodeToSleepTimers.values(),
+				...this.awaitedCommands.map((c) => c.timeout),
+				...this.awaitedMessages.map((m) => m.timeout),
+				...this.awaitedMessageHeaders.map((h) => h.timeout),
+				...this.awaitedBootloaderChunks.map((b) => b.timeout),
+			]
+		) {
+			timeout?.clear();
 		}
 
 		// Destroy all nodes and the controller
@@ -6124,10 +6134,10 @@ ${handlers.length} left`,
 					}
 
 					case "waitingForCallback": {
-						let sendDataAbortTimeout: NodeJS.Timeout | undefined;
+						let sendDataAbortTimeout: Timer | undefined;
 						if (isSendData(msg)) {
 							// We abort timed out SendData commands before the callback times out
-							sendDataAbortTimeout = setTimeout(() => {
+							sendDataAbortTimeout = setTimer(() => {
 								void this.abortSendData();
 							}, this.options.timeouts.sendDataAbort).unref();
 						}
@@ -6145,9 +6155,7 @@ ${handlers.length} left`,
 							).catch(() => "timeout" as const),
 						]);
 
-						if (sendDataAbortTimeout) {
-							clearTimeout(sendDataAbortTimeout);
-						}
+						sendDataAbortTimeout?.clear();
 
 						if (callback instanceof Error) {
 							// The command was aborted from the outside
@@ -6312,9 +6320,9 @@ ${handlers.length} left`,
 		transaction.setProgress({ state: TransactionState.Queued });
 
 		// If the transaction should expire, start the timeout
-		let expirationTimeout: NodeJS.Timeout | undefined;
+		let expirationTimeout: Timer | undefined;
 		if (options.expire) {
-			expirationTimeout = setTimeout(() => {
+			expirationTimeout = setTimer(() => {
 				this.reduceQueues((t, _source) => {
 					if (t === transaction) {
 						return {
@@ -6395,7 +6403,7 @@ ${handlers.length} left`,
 			throw e;
 		} finally {
 			// The transaction was handled, so it can no longer expire
-			if (expirationTimeout) clearTimeout(expirationTimeout);
+			expirationTimeout?.clear();
 		}
 	}
 
@@ -6695,12 +6703,12 @@ ${handlers.length} left`,
 			};
 			this.awaitedMessageHeaders.push(entry);
 			const removeEntry = () => {
-				if (entry.timeout) clearTimeout(entry.timeout);
+				entry.timeout?.clear();
 				const index = this.awaitedMessageHeaders.indexOf(entry);
 				if (index !== -1) this.awaitedMessageHeaders.splice(index, 1);
 			};
 			// When the timeout elapses, remove the wait entry and reject the returned Promise
-			entry.timeout = setTimeout(() => {
+			entry.timeout = setTimer(() => {
 				removeEntry();
 				reject(
 					new ZWaveError(
@@ -6741,12 +6749,12 @@ ${handlers.length} left`,
 			};
 			this.awaitedMessages.push(entry);
 			const removeEntry = () => {
-				if (entry.timeout) clearTimeout(entry.timeout);
+				entry.timeout?.clear();
 				const index = this.awaitedMessages.indexOf(entry);
 				if (index !== -1) this.awaitedMessages.splice(index, 1);
 			};
 			// When the timeout elapses, remove the wait entry and reject the returned Promise
-			entry.timeout = setTimeout(() => {
+			entry.timeout = setTimer(() => {
 				removeEntry();
 				reject(
 					new ZWaveError(
@@ -6786,12 +6794,12 @@ ${handlers.length} left`,
 			};
 			this.awaitedCommands.push(entry);
 			const removeEntry = () => {
-				if (entry.timeout) clearTimeout(entry.timeout);
+				entry.timeout?.clear();
 				const index = this.awaitedCommands.indexOf(entry);
 				if (index !== -1) this.awaitedCommands.splice(index, 1);
 			};
 			// When the timeout elapses, remove the wait entry and reject the returned Promise
-			entry.timeout = setTimeout(() => {
+			entry.timeout = setTimer(() => {
 				removeEntry();
 				reject(
 					new ZWaveError(
@@ -6829,7 +6837,7 @@ ${handlers.length} left`,
 		};
 		this.awaitedCommands.push(entry);
 		const removeEntry = () => {
-			if (entry.timeout) clearTimeout(entry.timeout);
+			entry.timeout?.clear();
 			const index = this.awaitedCommands.indexOf(entry);
 			if (index !== -1) this.awaitedCommands.splice(index, 1);
 		};
@@ -7233,7 +7241,7 @@ ${handlers.length} left`,
 		}
 	}
 
-	private sendNodeToSleepTimers = new Map<number, NodeJS.Timeout>();
+	private sendNodeToSleepTimers = new Map<number, Timer>();
 	/**
 	 * @internal
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
@@ -7244,7 +7252,7 @@ ${handlers.length} left`,
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
-			clearTimeout(this.sendNodeToSleepTimers.get(node.id));
+			this.sendNodeToSleepTimers.get(node.id)?.clear();
 		}
 
 		// Sends a node to sleep if it has no more messages.
@@ -7273,7 +7281,7 @@ ${handlers.length} left`,
 			if (wakeUpInterval !== 0) {
 				this.sendNodeToSleepTimers.set(
 					node.id,
-					setTimeout(
+					setTimer(
 						() => sendNodeToSleep(node),
 						this.options.timeouts.sendToSleep,
 					).unref(),
@@ -7396,11 +7404,6 @@ ${handlers.length} left`,
 			)
 			? SendDataMulticastBridgeRequest
 			: SendDataMulticastRequest;
-	}
-
-	// This does not all need to be printed to the console
-	public [util.inspect.custom](): string {
-		return "[Driver]";
 	}
 
 	/**
@@ -7665,12 +7668,12 @@ ${handlers.length} left`,
 			};
 			this.awaitedBootloaderChunks.push(entry);
 			const removeEntry = () => {
-				if (entry.timeout) clearTimeout(entry.timeout);
+				entry.timeout?.clear();
 				const index = this.awaitedBootloaderChunks.indexOf(entry);
 				if (index !== -1) this.awaitedBootloaderChunks.splice(index, 1);
 			};
 			// When the timeout elapses, remove the wait entry and reject the returned Promise
-			entry.timeout = setTimeout(() => {
+			entry.timeout = setTimer(() => {
 				removeEntry();
 				reject(
 					new ZWaveError(
@@ -7687,7 +7690,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private pollBackgroundRSSITimer: NodeJS.Timeout | undefined;
+	private pollBackgroundRSSITimer: Timer | undefined;
 	private lastBackgroundRSSITimestamp = 0;
 
 	private handleQueueIdleChange(idle: boolean): void {
@@ -7703,7 +7706,7 @@ ${handlers.length} left`,
 					// and up to 30s if we recently queried the RSSI
 					30_000 - (Date.now() - this.lastBackgroundRSSITimestamp),
 				);
-				this.pollBackgroundRSSITimer = setTimeout(async () => {
+				this.pollBackgroundRSSITimer = setTimer(async () => {
 					// Due to the timeout, the driver might have been destroyed in the meantime
 					if (!this.ready) return;
 
@@ -7715,7 +7718,7 @@ ${handlers.length} left`,
 					}
 				}, timeout).unref();
 			} else {
-				clearTimeout(this.pollBackgroundRSSITimer);
+				this.pollBackgroundRSSITimer?.clear();
 				this.pollBackgroundRSSITimer = undefined;
 			}
 		}
