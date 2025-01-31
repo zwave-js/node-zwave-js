@@ -1,4 +1,4 @@
-import { type LogContainer, type LogFactory } from "@zwave-js/core";
+import { log as createLogContainer } from "@zwave-js/core/bindings/log/browser";
 import { Bytes } from "@zwave-js/shared";
 import {
 	type Database,
@@ -288,43 +288,6 @@ class IndexedDBBackedCache<V> implements Database<V> {
 	}
 }
 
-const logContainer: LogContainer = {
-	updateConfiguration: (config) => {
-		// noop
-	},
-	getConfiguration: () => {
-		return {
-			enabled: true,
-			level: "debug",
-			transports: [],
-			logToFile: false,
-			filename: "zwavejs.log",
-			forceConsole: false,
-			maxFiles: 0,
-		};
-	},
-	destroy: () => {
-		// noop
-	},
-	getLogger: (label) => {
-		return {
-			log(info) {
-				if (info.level === "error") {
-					console.error(info.message);
-				} else {
-					console.log(`[${label}]`, info);
-				}
-			},
-		};
-	},
-	isLoglevelVisible: (loglevel) => {
-		return loglevel !== "silly";
-	},
-	isNodeLoggingVisible: (nodeId) => {
-		return true;
-	},
-};
-
 async function init() {
 	let port: SerialPort;
 	try {
@@ -379,13 +342,11 @@ async function init() {
 		},
 	};
 
-	const logFactory: LogFactory = (config) => logContainer;
-
 	const d = new Driver(serialBinding, {
 		host: {
 			fs: webFS,
 			db: dbFactory,
-			log: logFactory,
+			log: createLogContainer,
 			serial: {
 				// no listing, no creating by path!
 			},
