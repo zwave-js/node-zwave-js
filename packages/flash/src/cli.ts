@@ -39,8 +39,7 @@ const driver = new Driver(port, {
 		cacheDir: path.join(process.cwd(), "cache"),
 		lockDir: path.join(process.cwd(), "cache/locks"),
 	},
-	forceBootloaderOnly: true,
-	// allowBootloaderOnly: true,
+	bootloaderMode: "stay",
 })
 	.on("error", (e) => {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_Failed) {

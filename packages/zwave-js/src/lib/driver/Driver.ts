@@ -1436,7 +1436,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				typeof this._options.testingHooks?.onSerialPortOpen
 					=== "function"
 			) {
-				await this._options.testingHooks.onSerialPortOpen(this.serial);
+				await this._options.testingHooks.onSerialPortOpen(this.serial!);
 			}
 
 			// Perform initialization sequence
