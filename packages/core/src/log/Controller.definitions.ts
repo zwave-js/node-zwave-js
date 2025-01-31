@@ -1,5 +1,5 @@
 import { type InterviewStage, type ValueID } from "../index_browser.js";
-import type { DataDirection, LogContext } from "./shared_safe.js";
+import type { DataDirection, LogContext } from "./shared.js";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 export const CONTROLLER_LOGLEVEL = "info";
