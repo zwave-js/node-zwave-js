@@ -10,6 +10,7 @@ const whitelistedImports = [
 	"fflate",
 	"dayjs",
 	"nrf-intel-hex",
+	"triple-beam",
 	"alcalzone-shared/arrays",
 	"alcalzone-shared/async",
 	"alcalzone-shared/comparable",

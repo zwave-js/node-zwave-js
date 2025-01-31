@@ -5,10 +5,10 @@ import {
 } from "@zwave-js/cc";
 import {
 	type DataDirection,
+	type LogContainer,
 	type LogContext,
 	type MessageOrCCLogEntry,
 	type RSSI,
-	type ZWaveLogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
 	messageRecordToLines,
@@ -35,7 +35,10 @@ export interface ZnifferLogContext extends LogContext<"zniffer"> {
 }
 
 export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
-	constructor(private readonly zniffer: Zniffer, loggers: ZWaveLogContainer) {
+	constructor(
+		private readonly zniffer: Zniffer,
+		loggers: LogContainer,
+	) {
 		super(loggers, ZNIFFER_LABEL);
 	}
 

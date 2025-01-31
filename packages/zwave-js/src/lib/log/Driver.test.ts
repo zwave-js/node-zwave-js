@@ -1,9 +1,9 @@
 import {
 	MessagePriority,
-	ZWaveLogContainer,
 	createDefaultTransportFormat,
 	getDirectionPrefix,
 } from "@zwave-js/core";
+import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
 import {
 	SpyTransport,
 	assertLogInfo,
@@ -43,7 +43,7 @@ const test = baseTest.extend<LocalTestContext>({
 			spyTransport.format = createDefaultTransportFormat(true, true);
 			const driverLogger = new DriverLogger(
 				driver,
-				new ZWaveLogContainer({
+				createZWaveLogContainer({
 					transports: [spyTransport],
 				}),
 			);

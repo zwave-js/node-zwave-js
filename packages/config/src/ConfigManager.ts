@@ -1,9 +1,10 @@
 import {
+	type LogContainer,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveLogContainer,
 	isZWaveError,
 } from "@zwave-js/core";
+import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
 import { getErrorMessage, pathExists } from "@zwave-js/shared";
 import { type FileSystem } from "@zwave-js/shared/bindings";
 import path from "pathe";
@@ -34,7 +35,7 @@ import {
 
 export interface ConfigManagerOptions {
 	bindings?: FileSystem;
-	logContainer?: ZWaveLogContainer;
+	logContainer?: LogContainer;
 	deviceConfigPriorityDir?: string;
 	deviceConfigExternalDir?: string;
 }
@@ -43,7 +44,7 @@ export class ConfigManager {
 	public constructor(options: ConfigManagerOptions = {}) {
 		this._fs = options.bindings;
 		this.logger = new ConfigLogger(
-			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
+			options.logContainer ?? createZWaveLogContainer({ enabled: false }),
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
 		this.deviceConfigExternalDir = options.deviceConfigExternalDir;
