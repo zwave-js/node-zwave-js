@@ -26,8 +26,8 @@ import { ZWaveSerialMode } from "./definitions.js";
  * The `sink` is guaranteed to be opened first, so possible setup should be done in
  * the `start` method there. */
 export interface ZWaveSerialBinding {
-	sink: UnderlyingSink<Uint8Array>;
-	source: UnderlyingSource<Uint8Array>;
+	sink: UnderlyingSink<Uint8Array> | WritableStream<Uint8Array>;
+	source: UnderlyingSource<Uint8Array> | ReadableStream<Uint8Array>;
 }
 
 export type ZWaveSerialBindingFactory = () => Promise<ZWaveSerialBinding>;
@@ -69,8 +69,8 @@ export class ZWaveSerialStream implements
 	>
 {
 	constructor(
-		source: UnderlyingSource<Uint8Array>,
-		sink: UnderlyingSink<Uint8Array>,
+		source: UnderlyingSource<Uint8Array> | ReadableStream<Uint8Array>,
+		sink: UnderlyingSink<Uint8Array> | WritableStream<Uint8Array>,
 		logger: SerialLogger,
 	) {
 		this.logger = logger;

@@ -1,7 +1,8 @@
-// tsconfig for IntelliSense - active in all files in the current package
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {},
-	"include": ["src/**/*.ts"],
-	"exclude": ["build/**", "node_modules/**"]
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"lib": ["DOM", "ESNext"],
+		"customConditions": ["browser"]
+	}
 }

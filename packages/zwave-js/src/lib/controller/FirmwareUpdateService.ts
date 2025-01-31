@@ -7,7 +7,7 @@ import {
 	extractFirmware,
 	guessFirmwareFileFormat,
 } from "@zwave-js/core";
-import { Bytes, formatId } from "@zwave-js/shared";
+import { Bytes, formatId, getenv } from "@zwave-js/shared";
 import type { Options as KyOptions } from "ky";
 import type PQueue from "p-queue";
 import type {
@@ -18,7 +18,7 @@ import type {
 } from "./_Types.js";
 
 function serviceURL(): string {
-	return process.env.ZWAVEJS_FW_SERVICE_URL || "https://firmware.zwave-js.io";
+	return getenv("ZWAVEJS_FW_SERVICE_URL") || "https://firmware.zwave-js.io";
 }
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
