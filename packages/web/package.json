@@ -25,9 +25,14 @@
     "node": ">= 20"
   },
   "scripts": {
-    "test": "node .build.mjs"
+    "test": "node .build.mjs",
+    "serve": "node .dev.mjs"
   },
   "devDependencies": {
+    "@types/w3c-web-serial": "^1.0.7",
+    "@types/w3c-web-usb": "^1.0.10",
+    "@zwave-js/core": "workspace:*",
+    "@zwave-js/shared": "workspace:*",
     "esbuild": "^0.25.0",
     "esbuild-plugins-node-modules-polyfill": "^1.6.8",
     "zwave-js": "workspace:*"
