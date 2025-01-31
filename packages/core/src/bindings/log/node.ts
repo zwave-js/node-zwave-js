@@ -1,21 +1,27 @@
 import { getenv } from "@zwave-js/shared";
+import { type Format } from "logform";
 import path from "pathe";
 import { configs } from "triple-beam";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
+import { colorizer } from "../../log/Colorizer.js";
 import {
-	createDefaultTransportFormat,
-	createLoggerFormat,
-} from "../../log/shared.js";
+	combine,
+	formatLogMessage,
+	label,
+	printLogMessage,
+	timestamp,
+} from "../../log/format.js";
 import {
 	type LogConfig,
 	type LogContext,
 	type LogFactory,
 	nonUndefinedLogConfigKeys,
 	stringToNodeList,
-} from "../../log/shared_safe.js";
+	timestampFormatShort,
+} from "../../log/shared.js";
 import { type LogContainer, type ZWaveLogger } from "../../log/traits.js";
 
 const isTTY = process.stdout.isTTY;
@@ -36,9 +42,60 @@ function loglevelFromNumber(numLevel: number | undefined): string | undefined {
 	}
 }
 
-class ZWaveLogContainer<TContext extends LogContext> extends winston.Container
-	implements LogContainer
-{
+/** Creates the common logger format for all loggers under a given channel */
+export function createLoggerFormat(channel: string): Format {
+	return combine(
+		// add the channel as a label
+		label(channel),
+		// default to short timestamps
+		timestamp(),
+	) as unknown as Format;
+}
+
+/** The common logger format for built-in transports */
+export function createDefaultTransportFormat(
+	colorize: boolean,
+	shortTimestamps: boolean,
+): Format {
+	const formats = [
+		// overwrite the default timestamp format if necessary
+		shortTimestamps
+			? timestamp(timestampFormatShort)
+			: undefined,
+		formatLogMessage,
+		colorize ? colorizer() : undefined,
+		printLogMessage(shortTimestamps),
+	].filter((f) => f != undefined);
+	return combine(...formats) as unknown as Format;
+}
+
+/** Unsilences the console transport of a logger and returns the original value */
+export function unsilence(logger: winston.Logger): boolean {
+	const consoleTransport = logger.transports.find(
+		(t) => (t as any).name === "console",
+	);
+	if (consoleTransport) {
+		const ret = !!consoleTransport.silent;
+		consoleTransport.silent = false;
+		return ret;
+	}
+	return false;
+}
+
+/** Restores the console transport of a logger to its original silence state */
+export function restoreSilence(
+	logger: winston.Logger,
+	original: boolean,
+): void {
+	const consoleTransport = logger.transports.find(
+		(t) => (t as any).name === "console",
+	);
+	if (consoleTransport) {
+		consoleTransport.silent = original;
+	}
+}
+
+class ZWaveLogContainer extends winston.Container implements LogContainer {
 	private fileTransport: DailyRotateFile | undefined;
 	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
@@ -59,7 +116,9 @@ class ZWaveLogContainer<TContext extends LogContext> extends winston.Container
 		this.updateConfiguration(config);
 	}
 
-	public getLogger(label: string): ZWaveLogger<TContext> {
+	public getLogger<TContext extends LogContext>(
+		label: string,
+	): ZWaveLogger<TContext> {
 		if (!this.has(label)) {
 			this.add(label, {
 				transports: this.getAllTransports(),

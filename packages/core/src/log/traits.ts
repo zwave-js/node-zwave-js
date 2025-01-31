@@ -2,7 +2,7 @@ import {
 	type LogConfig,
 	type LogContext,
 	type ZWaveLogInfo,
-} from "./shared_safe.js";
+} from "./shared.js";
 
 export interface LogVisibility {
 	isLoglevelVisible(loglevel: string): boolean;
