@@ -8,7 +8,7 @@ export * from "./fsm/FSM.js";
 export * from "./log/Controller.definitions.js";
 export * from "./log/Controller.js";
 export * from "./log/ZWaveLoggerBase.js";
-export * from "./log/shared_safe.js";
+export * from "./log/shared.js";
 export type * from "./log/traits.js";
 export * from "./qr/index.js";
 export * from "./reflection/decorators.js";

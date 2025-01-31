@@ -1,4 +1,4 @@
-import { type LogContext } from "./shared_safe.js";
+import { type LogContext } from "./shared.js";
 import type { LogContainer, ZWaveLogger } from "./traits.js";
 
 export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {

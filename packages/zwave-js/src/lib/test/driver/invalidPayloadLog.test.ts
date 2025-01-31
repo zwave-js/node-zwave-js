@@ -1,4 +1,4 @@
-import { createDefaultTransportFormat } from "@zwave-js/core";
+import { createDefaultTransportFormat } from "@zwave-js/core/bindings/log/node";
 import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { FunctionType } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared";
