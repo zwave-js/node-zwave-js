@@ -1,168 +1,170 @@
-import type { Format, TransformFunction } from "logform";
-import { MESSAGE } from "triple-beam";
-import winston from "winston";
-import { colorizer } from "./Colorizer.js";
-import {
-	CONTROL_CHAR_WIDTH,
-	LOG_WIDTH,
-	type ZWaveLogInfo,
-	calculateFirstLineLength,
-	channelPadding,
-	directionPrefixPadding,
-	messageFitsIntoOneLine,
-	messageToLines,
-	timestampFormatShort,
-	timestampPadding,
-	timestampPaddingShort,
-} from "./shared_safe.js";
+import type { TransformableInfo } from "logform";
+import type Transport from "winston-transport";
+import { type LogContainer } from "./traits.js";
 
-const { combine, timestamp, label } = winston.format;
+export const timestampFormatShort = "HH:mm:ss.SSS";
+export const timestampPaddingShort = " ".repeat(
+	timestampFormatShort.length + 1,
+);
+export const timestampPadding = " ".repeat(new Date().toISOString().length + 1);
+/** @internal */
+export const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
-/** Creates the common logger format for all loggers under a given channel */
-export function createLoggerFormat(channel: string): Format {
-	return combine(
-		// add the channel as a label
-		label({ label: channel }),
-		// default to short timestamps
-		timestamp(),
+export type DataDirection = "inbound" | "outbound" | "none";
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getDirectionPrefix(direction: DataDirection) {
+	return direction === "inbound"
+		? "« "
+		: direction === "outbound"
+		? "» "
+		: "  ";
+}
+/** The space the directional arrows, grouping brackets and padding occupies */
+export const CONTROL_CHAR_WIDTH = 2;
+export const directionPrefixPadding = " ".repeat(CONTROL_CHAR_WIDTH);
+
+/**
+ * The width of a log line in (visible) characters, excluding the timestamp and
+ * label, but including the direction prefix
+ */
+export const LOG_WIDTH = 80;
+/** The width of the columns containing the timestamp and channel */
+export const LOG_PREFIX_WIDTH = 20;
+
+export interface ZWaveLogInfo<TContext extends LogContext = LogContext>
+	extends Omit<TransformableInfo, "message">
+{
+	direction: string;
+	/** Primary tags are printed before the message and must fit into the first line.
+	 * They don't have to be enclosed in square brackets */
+	primaryTags?: string;
+	/** Secondary tags are right-aligned in the first line and printed in a dim color */
+	secondaryTags?: string;
+	secondaryTagPadding?: number;
+	multiline?: boolean;
+	timestamp?: string;
+	label?: string;
+	message: string | string[];
+	context: TContext;
+}
+
+export interface LogContext<T extends string = string> {
+	/** Which logger this log came from */
+	source: T;
+	/** An optional identifier to distinguish different log types from the same logger */
+	type?: string;
+}
+
+export type MessageRecord = Record<string, string | number | boolean>;
+
+export interface MessageOrCCLogEntry {
+	tags: string[];
+	message?: MessageRecord;
+}
+
+/** Returns the tag used to log node related messages */
+export function getNodeTag(nodeId: number): string {
+	return "Node " + nodeId.toString().padStart(3, "0");
+}
+
+/** @internal */
+export function stringToNodeList(nodes?: string): number[] | undefined {
+	if (!nodes) return undefined;
+	return nodes
+		.split(",")
+		.map((n) => parseInt(n))
+		.filter((n) => !Number.isNaN(n));
+}
+
+/** Wraps an array of strings in square brackets and joins them with spaces */
+export function tagify(tags: string[]): string {
+	return tags.map((pfx) => `[${pfx}]`).join(" ");
+}
+
+/**
+ * Calculates the length the first line of a log message would occupy if it is not split
+ * @param info The message and information to log
+ * @param firstMessageLineLength The length of the first line of the actual message text, not including pre- and postfixes.
+ */
+export function calculateFirstLineLength(
+	info: ZWaveLogInfo,
+	firstMessageLineLength: number,
+): number {
+	return (
+		[
+			CONTROL_CHAR_WIDTH - 1,
+			firstMessageLineLength,
+			(info.primaryTags || "").length,
+			(info.secondaryTags || "").length,
+		]
+			// filter out empty parts
+			.filter((len) => len > 0)
+			// simulate adding spaces between parts
+			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
 	);
 }
 
-/** Prints a formatted and colorized log message */
-export function createLogMessagePrinter(shortTimestamps: boolean): Format {
-	return {
-		transform: ((info: ZWaveLogInfo) => {
-			// The formatter has already split the message into multiple lines
-			const messageLines = messageToLines(info.message);
-			// Also this can only happen if the user forgot to call the formatter first
-			if (info.secondaryTagPadding == undefined) {
-				info.secondaryTagPadding = -1;
-			}
-			// Format the first message line
-			let firstLine = [
-				info.primaryTags,
-				messageLines[0],
-				info.secondaryTagPadding < 0
-					? undefined
-					: " ".repeat(info.secondaryTagPadding),
-				// If the secondary tag padding is zero, the previous segment gets
-				// filtered out and we have one less space than necessary
-				info.secondaryTagPadding === 0 && info.secondaryTags
-					? " " + info.secondaryTags
-					: info.secondaryTags,
-			]
-				.filter((item) => !!item)
-				.join(" ");
-			// The directional arrows and the optional grouping lines must be prepended
-			// without adding spaces
-			firstLine =
-				`${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
-			const lines = [firstLine];
-			if (info.multiline) {
-				// Format all message lines but the first
-				lines.push(
-					...messageLines.slice(1).map(
-						(line) =>
-							// Skip the columns for the timestamp and the channel name
-							(shortTimestamps
-								? timestampPaddingShort
-								: timestampPadding)
-							+ channelPadding
-							// Skip the columns for directional arrows
-							+ directionPrefixPadding
-							+ line,
-					),
-				);
-			}
-			info[MESSAGE as any] = lines.join("\n");
-			return info;
-		}) as unknown as TransformFunction,
-	};
+/**
+ * Tests if a given message fits into a single log line
+ * @param info The message that should be logged
+ * @param messageLength The length that should be assumed for the actual message without pre and postfixes.
+ * Can be set to 0 to exclude the message from the calculation
+ */
+export function messageFitsIntoOneLine(
+	info: ZWaveLogInfo,
+	messageLength: number,
+): boolean {
+	const totalLength = calculateFirstLineLength(info, messageLength);
+	return totalLength <= LOG_WIDTH;
 }
 
-/** Formats the log message and calculates the necessary paddings */
-export const logMessageFormatter: Format = {
-	transform: ((info: ZWaveLogInfo) => {
-		const messageLines = messageToLines(info.message);
-		const firstMessageLineLength = messageLines[0].length;
-		info.multiline = messageLines.length > 1
-			|| !messageFitsIntoOneLine(info, info.message.length);
-		// Align postfixes to the right
-		if (info.secondaryTags) {
-			// Calculate how many spaces are needed to right-align the postfix
-			// Subtract 1 because the parts are joined by spaces
-			info.secondaryTagPadding = Math.max(
-				// -1 has the special meaning that we don't print any padding,
-				// because the message takes all the available space
-				-1,
-				LOG_WIDTH
-					- 1
-					- calculateFirstLineLength(info, firstMessageLineLength),
-			);
-		}
-
-		if (info.multiline) {
-			// Break long messages into multiple lines
-			const lines: string[] = [];
-			let isFirstLine = true;
-			for (let message of messageLines) {
-				while (message.length) {
-					const cut = Math.min(
-						message.length,
-						isFirstLine
-							? LOG_WIDTH - calculateFirstLineLength(info, 0) - 1
-							: LOG_WIDTH - CONTROL_CHAR_WIDTH,
-					);
-					isFirstLine = false;
-					lines.push(message.slice(0, cut));
-					message = message.slice(cut);
-				}
-			}
-			info.message = lines.join("\n");
-		}
-		return info;
-	}) as unknown as TransformFunction,
-};
-
-/** The common logger format for built-in transports */
-export function createDefaultTransportFormat(
-	colorize: boolean,
-	shortTimestamps: boolean,
-): Format {
-	const formats: Format[] = [
-		// overwrite the default timestamp format if necessary
-		shortTimestamps
-			? timestamp({ format: timestampFormatShort })
-			: undefined,
-		logMessageFormatter,
-		colorize ? colorizer() : undefined,
-		createLogMessagePrinter(shortTimestamps),
-	].filter((f): f is Format => !!f);
-	return combine(...formats);
-}
-
-/** Unsilences the console transport of a logger and returns the original value */
-export function unsilence(logger: winston.Logger): boolean {
-	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
-	);
-	if (consoleTransport) {
-		const ret = !!consoleTransport.silent;
-		consoleTransport.silent = false;
-		return ret;
-	}
-	return false;
-}
-
-/** Restores the console transport of a logger to its original silence state */
-export function restoreSilence(
-	logger: winston.Logger,
-	original: boolean,
-): void {
-	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
-	);
-	if (consoleTransport) {
-		consoleTransport.silent = original;
+export function messageToLines(message: string | string[]): string[] {
+	if (typeof message === "string") {
+		return message.split("\n");
+	} else if (message.length > 0) {
+		return message;
+	} else {
+		return [""];
 	}
 }
+
+/** Splits a message record into multiple lines and auto-aligns key-value pairs */
+export function messageRecordToLines(message: MessageRecord): string[] {
+	const entries = Object.entries(message);
+	if (!entries.length) return [];
+
+	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
+	return entries.flatMap(([key, value]) =>
+		`${key}:${
+			" ".repeat(
+				Math.max(maxKeyLength - key.length + 1, 1),
+			)
+		}${value}`
+			.split("\n")
+			.map((line) => line.trimEnd())
+	);
+}
+export interface LogConfig {
+	enabled: boolean;
+	level: string | number;
+	transports: Transport[];
+	logToFile: boolean;
+	maxFiles: number;
+	nodeFilter?: number[];
+	filename: string;
+	forceConsole: boolean;
+}
+
+/** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
+
+export type LogFactory = (config?: Partial<LogConfig>) => LogContainer;
