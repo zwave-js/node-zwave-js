@@ -8,6 +8,9 @@ import {
 } from "@zwave-js/shared/bindings";
 import { Driver } from "zwave-js";
 
+const OBJECT_STORE_FILES = "files";
+const OBJECT_STORE_CACHE = "cache";
+
 // IndexedDB-Datenbank öffnen oder erstellen
 function openDatabase(): Promise<IDBDatabase> {
 	return new Promise((resolve, reject) => {
@@ -15,8 +18,13 @@ function openDatabase(): Promise<IDBDatabase> {
 
 		request.onupgradeneeded = (event) => {
 			const db = (event.target as IDBOpenDBRequest).result;
-			if (!db.objectStoreNames.contains("files")) {
-				db.createObjectStore("files", { keyPath: "path" });
+			if (!db.objectStoreNames.contains(OBJECT_STORE_FILES)) {
+				db.createObjectStore(OBJECT_STORE_FILES, { keyPath: "path" });
+			}
+			if (!db.objectStoreNames.contains(OBJECT_STORE_CACHE)) {
+				db.createObjectStore(OBJECT_STORE_CACHE, {
+					keyPath: ["filename", "valueid"],
+				});
 			}
 		};
 
@@ -30,11 +38,12 @@ function openDatabase(): Promise<IDBDatabase> {
 	});
 }
 
+const db = await openDatabase();
+
 // Datei erstellen oder schreiben
 async function writeFile(path: string, data: Uint8Array): Promise<void> {
-	const db = await openDatabase();
-	const transaction = db.transaction("files", "readwrite");
-	const store = transaction.objectStore("files");
+	const transaction = db.transaction(OBJECT_STORE_FILES, "readwrite");
+	const store = transaction.objectStore(OBJECT_STORE_FILES);
 
 	const request = store.put({ path, data });
 
@@ -46,9 +55,8 @@ async function writeFile(path: string, data: Uint8Array): Promise<void> {
 
 // Datei lesen
 async function readFile(path: string): Promise<Uint8Array> {
-	const db = await openDatabase();
-	const transaction = db.transaction("files", "readonly");
-	const store = transaction.objectStore("files");
+	const transaction = db.transaction(OBJECT_STORE_FILES, "readonly");
+	const store = transaction.objectStore(OBJECT_STORE_FILES);
 
 	const request = store.get(path);
 
@@ -66,9 +74,8 @@ async function readFile(path: string): Promise<Uint8Array> {
 }
 
 async function listKeysWithPrefix(prefix: string): Promise<string[]> {
-	const db = await openDatabase();
-	const transaction = db.transaction("files", "readonly");
-	const store = transaction.objectStore("files");
+	const transaction = db.transaction(OBJECT_STORE_FILES, "readonly");
+	const store = transaction.objectStore(OBJECT_STORE_FILES);
 
 	return new Promise((resolve, reject) => {
 		const keys: string[] = [];
@@ -95,9 +102,8 @@ async function listKeysWithPrefix(prefix: string): Promise<string[]> {
 }
 
 async function deleteKeysWithPrefix(prefix: string): Promise<void> {
-	const db = await openDatabase();
-	const transaction = db.transaction("files", "readwrite");
-	const store = transaction.objectStore("files");
+	const transaction = db.transaction(OBJECT_STORE_FILES, "readwrite");
+	const store = transaction.objectStore(OBJECT_STORE_FILES);
 
 	return new Promise((resolve, reject) => {
 		const request = store.openCursor();
@@ -161,43 +167,125 @@ const webFS: FileSystem = {
 	},
 };
 
-const webDB: Database<any> = {
-	open: function(): Promise<void> {
-		throw new Error("Function not implemented.");
-	},
-	close: function(): Promise<void> {
-		throw new Error("Function not implemented.");
-	},
-	has: function(key: string): boolean {
-		throw new Error("Function not implemented.");
-	},
-	get: function(key: string) {
-		throw new Error("Function not implemented.");
-	},
-	set: function(
-		key: string,
-		value: any,
-		updateTimestamp?: boolean,
-	): Database<any> {
-		throw new Error("Function not implemented.");
-	},
-	delete: function(key: string): boolean {
-		throw new Error("Function not implemented.");
-	},
-	clear: function(): void {
-		throw new Error("Function not implemented.");
-	},
-	getTimestamp: function(key: string): number | undefined {
-		throw new Error("Function not implemented.");
-	},
-	size: 0,
-	keys: function(): MapIterator<string> {
-		throw new Error("Function not implemented.");
-	},
-	entries: function(): MapIterator<[string, any]> {
-		throw new Error("Function not implemented.");
-	},
-};
+class IndexedDBBackedCache<V> implements Database<V> {
+	private filename: string;
+	private cache: Map<string, { value: V; timestamp?: number }> = new Map();
+
+	constructor(filename: string) {
+		this.filename = filename;
+	}
+
+	async open(): Promise<void> {
+		const transaction = db.transaction(OBJECT_STORE_CACHE, "readonly");
+		const store = transaction.objectStore(OBJECT_STORE_CACHE);
+		const request = store.openCursor();
+
+		return new Promise((resolve, reject) => {
+			request.onsuccess = (event) => {
+				const cursor =
+					(event.target as IDBRequest<IDBCursorWithValue>).result;
+				if (cursor) {
+					if (cursor.value.filename === this.filename) {
+						this.cache.set(cursor.value.valueid, {
+							value: cursor.value.value,
+							timestamp: cursor.value.timestamp,
+						});
+					}
+					cursor.continue();
+				} else {
+					resolve();
+				}
+			};
+			request.onerror = () => reject(request.error);
+		});
+	}
+
+	close(): Promise<void> {
+		this.cache.clear();
+		return Promise.resolve();
+	}
+
+	has(key: string): boolean {
+		return this.cache.has(key);
+	}
+
+	get(key: string): V | undefined {
+		return this.cache.get(key)?.value;
+	}
+
+	set(key: string, value: V, updateTimestamp: boolean = true): this {
+		const entry = {
+			value,
+			timestamp: updateTimestamp
+				? Date.now()
+				: this.cache.get(key)?.timestamp,
+		};
+		this.cache.set(key, entry);
+
+		// Update IndexedDB in the background
+		const transaction = db.transaction(OBJECT_STORE_CACHE, "readwrite");
+		const store = transaction.objectStore(OBJECT_STORE_CACHE);
+		store.put({
+			filename: this.filename,
+			valueid: key,
+			value,
+			timestamp: entry.timestamp,
+		});
+
+		return this;
+	}
+
+	delete(key: string): boolean {
+		const result = this.cache.delete(key);
+
+		// Update IndexedDB in the background
+		const transaction = db.transaction(OBJECT_STORE_CACHE, "readwrite");
+		const store = transaction.objectStore(OBJECT_STORE_CACHE);
+		store.delete([this.filename, key]);
+
+		return result;
+	}
+
+	clear(): void {
+		this.cache.clear();
+
+		// Update IndexedDB in the background
+		const transaction = db.transaction(OBJECT_STORE_CACHE, "readwrite");
+		const store = transaction.objectStore(OBJECT_STORE_CACHE);
+		const request = store.openCursor();
+
+		request.onsuccess = (event) => {
+			const cursor =
+				(event.target as IDBRequest<IDBCursorWithValue>).result;
+			if (cursor) {
+				if (cursor.value.filename === this.filename) {
+					cursor.delete();
+				}
+				cursor.continue();
+			}
+		};
+	}
+
+	getTimestamp(key: string): number | undefined {
+		return this.cache.get(key)?.timestamp;
+	}
+
+	get size(): number {
+		return this.cache.size;
+	}
+
+	keys() {
+		return this.cache.keys();
+	}
+
+	*entries() {
+		return function*() {
+			for (const [key, { value }] of this.cache.entries()) {
+				yield [key, value];
+			}
+		};
+	}
+}
 
 const logContainer: LogContainer = {
 	updateConfiguration: (config) => {
@@ -286,7 +374,7 @@ async function init() {
 
 	const dbFactory: DatabaseFactory = {
 		createInstance(filename, options) {
-			return webDB;
+			return new IndexedDBBackedCache(filename);
 		},
 	};
 
