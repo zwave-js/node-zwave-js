@@ -1,3 +1,4 @@
+import { getenv } from "@zwave-js/shared";
 import path from "pathe";
 import { configs } from "triple-beam";
 import winston from "winston";
@@ -23,7 +24,8 @@ const isUnitTest = process.env.NODE_ENV === "test";
 const loglevels = configs.npm.levels;
 
 function getTransportLoglevel(): string {
-	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+	const loglevel = getenv("LOGLEVEL")!;
+	return loglevel in loglevels ? loglevel : "debug";
 }
 
 /** Performs a reverse lookup of the numeric loglevel */
@@ -44,9 +46,9 @@ class ZWaveLogContainer<TContext extends LogContext> extends winston.Container
 	private logConfig: LogConfig & { level: string } = {
 		enabled: true,
 		level: getTransportLoglevel(),
-		logToFile: !!process.env.LOGTOFILE,
+		logToFile: !!getenv("LOGTOFILE"),
 		maxFiles: 7,
-		nodeFilter: stringToNodeList(process.env.LOG_NODES),
+		nodeFilter: stringToNodeList(getenv("LOG_NODES")),
 		transports: undefined as any,
 		filename: path.join(process.cwd(), `zwavejs_%DATE%.log`),
 		forceConsole: false,
