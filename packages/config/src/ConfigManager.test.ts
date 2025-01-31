@@ -1,5 +1,6 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
+import { type LogContainer } from "@zwave-js/core";
 import { fs } from "@zwave-js/core/bindings/fs/node";
+import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
 import { pathExists } from "@zwave-js/shared";
 import fsp from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -13,7 +14,7 @@ import { syncExternalConfigDir } from "./utils.js";
 interface LocalTestContext {
 	context: {
 		tempDir: string;
-		logContainer: ZWaveLogContainer;
+		logContainer: LogContainer;
 		logger: ConfigLogger;
 	};
 }
@@ -28,7 +29,7 @@ const test = baseTest.extend<LocalTestContext>({
 			const tempDir = path.join(tmpdir(), "zwavejs_test");
 			await fsp.mkdir(tempDir, { recursive: true });
 
-			const logContainer = new ZWaveLogContainer({ enabled: false });
+			const logContainer = createZWaveLogContainer({ enabled: false });
 			const logger = new ConfigLogger(logContainer);
 
 			// Run tests
@@ -213,7 +214,7 @@ async function testDeviceConfigPriorityDir(
 	// And load the file
 	const cm = new ConfigManager({
 		deviceConfigPriorityDir: priorityDir,
-		logContainer: new ZWaveLogContainer({ enabled: false }),
+		logContainer: createZWaveLogContainer({ enabled: false }),
 	});
 	await cm.loadAll();
 
