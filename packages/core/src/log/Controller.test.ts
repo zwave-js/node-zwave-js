@@ -1,4 +1,5 @@
 import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
+import { createDefaultTransportFormat } from "@zwave-js/core/bindings/log/node";
 import { beforeEach, test as baseTest } from "vitest";
 import { CommandClasses } from "../definitions/CommandClasses.js";
 import { InterviewStage } from "../definitions/InterviewStage.js";
@@ -8,7 +9,6 @@ import {
 	assertMessage,
 } from "../test/SpyTransport.js";
 import { ControllerLogger } from "./Controller.js";
-import { createDefaultTransportFormat } from "./shared.js";
 
 // Extend the test conte
 
