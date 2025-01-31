@@ -1,6 +1,7 @@
 import {
 	copyFilesRecursive,
 	formatId,
+	getenv,
 	padVersion,
 	readTextFile,
 	writeTextFile,
@@ -12,7 +13,7 @@ import {
 	type ReadFileSystemInfo,
 	type WriteFile,
 } from "@zwave-js/shared/bindings";
-import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 import path from "pathe";
 import semverGte from "semver/functions/gte.js";
 import semverInc from "semver/functions/inc.js";
@@ -23,18 +24,20 @@ import type { ConfigLogger } from "./Logger.js";
 import { PACKAGE_VERSION } from "./_version.js";
 import type { DeviceConfigIndexEntry } from "./devices/DeviceConfig.js";
 
-const require = createRequire(import.meta.url);
-
 /** The absolute path of the embedded configuration directory */
-// FIXME: use import.meta.resolve after upgrading to node 20
-export const configDir = path.resolve(
-	path.dirname(require.resolve("@zwave-js/config/package.json")),
-	"config",
-);
+export const configDir = import.meta.url.startsWith("file:")
+	? path.join(
+		path.dirname(fileURLToPath(import.meta.url)),
+		import.meta.url.endsWith("src/utils.ts")
+			? ".."
+			: "../..",
+		"config",
+	)
+	: import.meta.resolve("/config");
 
 /** The (optional) absolute path of an external configuration directory */
 export function getExternalConfigDirEnvVariable(): string | undefined {
-	return process.env.ZWAVEJS_EXTERNAL_CONFIG;
+	return getenv("ZWAVEJS_EXTERNAL_CONFIG");
 }
 
 export function getDeviceEntryPredicate(

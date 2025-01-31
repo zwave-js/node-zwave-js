@@ -7,13 +7,13 @@ import {
 	type ValueRemovedArgs,
 	type ValueUpdatedArgs,
 } from "@zwave-js/core/safe";
-import { ObjectKeyMap } from "@zwave-js/shared";
+import { ObjectKeyMap, type Timer, setTimer } from "@zwave-js/shared";
 import { type Driver } from "../../driver/Driver.js";
 import { type DeviceClass } from "../DeviceClass.js";
 import { EndpointsMixin } from "./50_Endpoints.js";
 
 export interface ScheduledPoll {
-	timeout: NodeJS.Timeout;
+	timeout: Timer;
 	expectedValue?: unknown;
 }
 
@@ -140,7 +140,7 @@ export abstract class SchedulePollMixin extends EndpointsMixin
 
 		// make sure there is only one timeout instance per poll
 		this.cancelScheduledPoll(valueId);
-		const timeout = setTimeout(async () => {
+		const timeout = setTimer(async () => {
 			// clean up after the timeout
 			this.cancelScheduledPoll(valueId);
 			try {
@@ -172,7 +172,7 @@ export abstract class SchedulePollMixin extends EndpointsMixin
 			return false;
 		}
 
-		clearTimeout(poll.timeout);
+		poll.timeout.clear();
 		this._scheduledPolls.delete(valueId);
 
 		return true;

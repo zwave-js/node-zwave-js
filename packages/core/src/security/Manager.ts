@@ -1,5 +1,6 @@
 /** Management class and utils for Security S0 */
 
+import { type Timer, setTimer } from "@zwave-js/shared";
 import { encryptAES128ECB, randomBytes } from "../crypto/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
@@ -86,7 +87,7 @@ export class SecurityManager {
 
 	private _nonceStore = new Map<string, NonceEntry>();
 	private _freeNonceIDs = new Set<string>();
-	private _nonceTimers = new Map<string, NodeJS.Timeout>();
+	private _nonceTimers = new Map<string, Timer>();
 
 	private normalizeId(id: number | NonceKey): string {
 		let ret: NonceKey;
@@ -127,14 +128,12 @@ export class SecurityManager {
 		{ free = true }: SetNonceOptions = {},
 	): void {
 		const key = this.normalizeId(id);
-		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key));
-		}
+		this._nonceTimers.get(key)?.clear();
 		this._nonceStore.set(key, entry);
 		if (free) this._freeNonceIDs.add(key);
 		this._nonceTimers.set(
 			key,
-			setTimeout(() => {
+			setTimer(() => {
 				this.expireNonce(key);
 			}, this.nonceTimeout).unref(),
 		);
@@ -161,9 +160,7 @@ export class SecurityManager {
 	}
 
 	private deleteNonceInternal(key: string) {
-		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key));
-		}
+		this._nonceTimers.get(key)?.clear();
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);
 		this._freeNonceIDs.delete(key);

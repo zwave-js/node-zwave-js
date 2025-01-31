@@ -1,4 +1,3 @@
-import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
 import type { UnderlyingSink, UnderlyingSource } from "node:stream/web";
 import {
 	type ZWaveSerialBindingFactory,
@@ -74,7 +73,9 @@ export async function createAndOpenMockedZWaveSerialPort(): Promise<{
 	const port = new MockPort();
 	const factory = new ZWaveSerialStreamFactory(
 		port.factory(),
-		createZWaveLogContainer({ enabled: false }),
+		(await import("@zwave-js/core/bindings/log/node")).log({
+			enabled: false,
+		}),
 	);
 	const serial = await factory.createStream();
 	return { port, serial };
