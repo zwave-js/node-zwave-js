@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./crypto/index.js";
 export * from "./definitions/index.js";
 export * from "./dsk/index.js";
@@ -19,7 +18,7 @@ export * from "./security/Manager2Types.js";
 export * from "./security/ctr_drbg.js";
 export * from "./test/assertZWaveError.js";
 export type * from "./traits/index.js";
-export * from "./util/_Types.js";
+export type * from "./util/_Types.js";
 export * from "./util/compareVersions.js";
 export { deflateSync, gunzipSync } from "./util/compression.js";
 export * from "./util/config.js";
@@ -35,4 +34,4 @@ export * from "./values/Metadata.js";
 export * from "./values/Primitive.js";
 export * from "./values/Timeout.js";
 export * from "./values/ValueDB.js";
-export * from "./values/_Types.js";
+export type * from "./values/_Types.js";

@@ -9,7 +9,7 @@
 // 0 -->               -->     Parsers     --> read
 // 1 └─────────────────┘ └─────────────────┘ └──
 
-import { type ZWaveLogContainer } from "@zwave-js/core";
+import { type LogContainer } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
 import type {
 	ReadableWritablePair,
@@ -17,7 +17,6 @@ import type {
 	UnderlyingSource,
 } from "node:stream/web";
 import { SerialLogger } from "../log/Logger.js";
-import { type SerialLogContext } from "../log/Logger_safe.js";
 import { MessageHeaders } from "../message/MessageHeaders.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
 import { ZWaveSerialParser } from "../plumbing/ZWaveSerialParser.js";
@@ -44,7 +43,7 @@ export function isZWaveSerialBindingFactory(
 export class ZWaveSerialStreamFactory {
 	constructor(
 		binding: ZWaveSerialBindingFactory,
-		loggers: ZWaveLogContainer<SerialLogContext>,
+		loggers: LogContainer,
 	) {
 		this.binding = binding;
 		this.logger = new SerialLogger(loggers);

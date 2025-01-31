@@ -1,6 +1,6 @@
 import {
 	type DataDirection,
-	type ZWaveLogContainer,
+	type LogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
 } from "@zwave-js/core";
@@ -13,7 +13,7 @@ import {
 } from "./Logger_safe.js";
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
-	constructor(loggers: ZWaveLogContainer<SerialLogContext>) {
+	constructor(loggers: LogContainer) {
 		super(loggers, SERIAL_LABEL);
 	}
 

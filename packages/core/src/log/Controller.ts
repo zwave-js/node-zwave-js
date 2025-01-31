@@ -21,14 +21,14 @@ import {
 	VALUE_LOGLEVEL,
 } from "./Controller.definitions.js";
 import { ZWaveLoggerBase } from "./ZWaveLoggerBase.js";
-import { type ZWaveLogContainer } from "./shared.js";
 import { tagify } from "./shared_safe.js";
 import { getDirectionPrefix, getNodeTag } from "./shared_safe.js";
+import { type LogContainer } from "./traits.js";
 
 export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext>
 	implements LogNode
 {
-	constructor(loggers: ZWaveLogContainer<ControllerLogContext>) {
+	constructor(loggers: LogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
 

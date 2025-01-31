@@ -61,6 +61,7 @@ import {
 	EncapsulationFlags,
 	type HostIDs,
 	type LogConfig,
+	type LogContainer,
 	type LogNodeOptions,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
@@ -91,7 +92,6 @@ import {
 	type ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveLogContainer,
 	deserializeCacheValue,
 	generateECDHKeyPair,
 	getCCName,
@@ -208,7 +208,7 @@ import path from "pathe";
 import { PACKAGE_NAME, PACKAGE_VERSION } from "../_version.js";
 import { ZWaveController } from "../controller/Controller.js";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion.js";
-import { type DriverLogContext, DriverLogger } from "../log/Driver.js";
+import { DriverLogger } from "../log/Driver.js";
 import type { Endpoint } from "../node/Endpoint.js";
 import type { ZWaveNode } from "../node/Node.js";
 import {
@@ -709,22 +709,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			this.updateUserAgent(this._options.userAgent);
 		}
 
-		// Initialize logging
-		this._logContainer = new ZWaveLogContainer(this._options.logConfig);
-		this._driverLog = new DriverLogger(this, this._logContainer);
-		this._controllerLog = new ControllerLogger(this._logContainer);
-
 		// Initialize the cache
 		this.cacheDir = this._options.storage.cacheDir;
-
-		// Initialize config manager
-		this.configManager = new ConfigManager({
-			logContainer: this._logContainer,
-			deviceConfigPriorityDir:
-				this._options.storage.deviceConfigPriorityDir,
-			deviceConfigExternalDir:
-				this._options.storage.deviceConfigExternalDir,
-		});
 
 		const self = this;
 		this.messageEncodingContext = {
@@ -916,7 +902,12 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return this._networkCache;
 	}
 
-	public readonly configManager: ConfigManager;
+	// This is set during `start()` and should not be accessed before
+	private _configManager!: ConfigManager;
+	public get configManager(): ConfigManager {
+		return this._configManager;
+	}
+
 	public get configVersion(): string {
 		return (
 			this.configManager?.configVersion
@@ -927,14 +918,17 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		);
 	}
 
-	private _logContainer: ZWaveLogContainer<DriverLogContext>;
-	private _driverLog: DriverLogger;
+	// This is set during `start()` and should not be accessed before
+	private _logContainer!: LogContainer;
+	// This is set during `start()` and should not be accessed before
+	private _driverLog!: DriverLogger;
 	/** @internal */
 	public get driverLog(): DriverLogger {
 		return this._driverLog;
 	}
 
-	private _controllerLog: ControllerLogger;
+	// This is set during `start()` and should not be accessed before
+	private _controllerLog!: ControllerLogger;
 	/** @internal */
 	public get controllerLog(): ControllerLogger {
 		return this._controllerLog;
@@ -1333,7 +1327,23 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				?? (await import("@zwave-js/serial/bindings/node")).serial,
 			db: this._options.host?.db
 				?? (await import("@zwave-js/core/bindings/db/jsonl")).db,
+			log: this._options.host?.log
+				?? (await import("@zwave-js/core/bindings/log/node")).log,
 		};
+
+		// Initialize logging
+		this._logContainer = this.bindings.log(this._options.logConfig);
+		this._driverLog = new DriverLogger(this, this._logContainer);
+		this._controllerLog = new ControllerLogger(this._logContainer);
+
+		// Initialize config manager
+		this._configManager = new ConfigManager({
+			logContainer: this._logContainer,
+			deviceConfigPriorityDir:
+				this._options.storage.deviceConfigPriorityDir,
+			deviceConfigExternalDir:
+				this._options.storage.deviceConfigExternalDir,
+		});
 
 		const spOpenPromise = createDeferredPromise();
 
