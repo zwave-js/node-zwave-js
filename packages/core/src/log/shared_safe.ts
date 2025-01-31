@@ -1,4 +1,6 @@
 import type { TransformableInfo } from "logform";
+import type Transport from "winston-transport";
+import { type LogContainer } from "./traits.js";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
 export const timestampPaddingShort = " ".repeat(
@@ -143,3 +145,26 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 			.map((line) => line.trimEnd())
 	);
 }
+export interface LogConfig {
+	enabled: boolean;
+	level: string | number;
+	transports: Transport[];
+	logToFile: boolean;
+	maxFiles: number;
+	nodeFilter?: number[];
+	filename: string;
+	forceConsole: boolean;
+}
+
+/** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
+
+export type LogFactory = (config?: Partial<LogConfig>) => LogContainer;

@@ -1,6 +1,7 @@
 import type {
 	FileSystem as LegacyFileSystemBindings,
 	LogConfig,
+	LogFactory,
 	LongRangeChannel,
 	RFRegion,
 } from "@zwave-js/core";
@@ -142,6 +143,11 @@ export interface ZWaveOptions {
 		 * Specifies which bindings are used to interact with the database used to store the cache.
 		 */
 		db?: DatabaseFactory;
+
+		/**
+		 * Specifies the logging implementation to be used
+		 */
+		log?: LogFactory;
 	};
 
 	storage: {

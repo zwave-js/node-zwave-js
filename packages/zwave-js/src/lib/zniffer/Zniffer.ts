@@ -12,6 +12,7 @@ import {
 	type FrameType,
 	type HostIDs,
 	type LogConfig,
+	type LogContainer,
 	MPDUHeaderType,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
@@ -25,7 +26,6 @@ import {
 	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveLogContainer,
 	ZnifferRegion,
 	ZnifferRegionLegacy,
 	getChipTypeAndVersion,
@@ -212,10 +212,6 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 			);
 		}
 
-		// Initialize logging
-		this._logContainer = new ZWaveLogContainer(options.logConfig);
-		this.znifferLog = new ZnifferLogger(this, this._logContainer);
-
 		this._options = options;
 
 		this._active = false;
@@ -314,8 +310,10 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 		return this._supportedFrequencies;
 	}
 
-	private _logContainer: ZWaveLogContainer;
-	private znifferLog: ZnifferLogger;
+	// This is set during `start()` and should not be accessed before
+	private _logContainer!: LogContainer;
+	// This is set during `start()` and should not be accessed before
+	private znifferLog!: ZnifferLogger;
 
 	/** The security managers for each node */
 	private securityManagers: Map<number, {
@@ -360,7 +358,13 @@ export class Zniffer extends TypedEventTarget<ZnifferEventCallbacks> {
 				?? (await import("@zwave-js/core/bindings/fs/node")).fs,
 			serial: this._options.host?.serial
 				?? (await import("@zwave-js/serial/bindings/node")).serial,
+			log: this._options.host?.log
+				?? (await import("@zwave-js/core/bindings/log/node")).log,
 		};
+
+		// Initialize logging
+		this._logContainer = this.bindings.log(this._options.logConfig);
+		this.znifferLog = new ZnifferLogger(this, this._logContainer);
 
 		// Open the serial port
 		let binding: ZWaveSerialBindingFactory;
