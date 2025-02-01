@@ -133,7 +133,8 @@
 			"unit": "°F/C",
 			"minValue": 0,
 			"maxValue": 200,
-			"defaultValue": 200
+			"defaultValue": 200,
+			"unsigned": true
 		},
 		{
 			"#": "6",
