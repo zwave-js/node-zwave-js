@@ -1130,5 +1130,157 @@
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion. \nSCAN THE QR CODE / ENTER THE 5-DIGIT PIN if using the new SmartStart method. The SmartStart security PIN is located on the back of the relay, next to the Z-Wave Plus logo.\n3. The LED indicator will blink green to signal communication and turn green for 2 seconds if inclusion is successful or turn red for 2 seconds if the pairing attempt fails",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the relay if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Click the Z-Wave button on the relay 3 times quickly (the LED indicator will start blinking green)\n4. Your hub will confirm exclusion, the LED indicator on the relay will turn green for 2 seconds, and the device will disappear from your controller's device list",
 		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the relay, click the Z-Wave button twice and hold it for 15 seconds. The LED indicator will flash during the process and turn red for 3 seconds to confirm successful reset."
+	},
+	"battery_check_frequency": {
+		"label": "Battery Check Frequency",
+		"description": "Set how often you want the device to check battery power for changes (this is not a reporting frequency setting).",
+		"valueSize": 2,
+		"unit": "hours",
+		"minValue": 0,
+		"maxValue": 744,
+		"defaultValue": 4,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"temperature_check_frequency": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Temperature Check Frequency​​​​​​​",
+		"description": "Set how often you want the device to check ambient temperature for changes (this is not a reporting frequency setting).",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 600,
+		"defaultValue": 20,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"temperature_report_frequency": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Temperature Reporting Frequency​",
+		"description": "Set the reporting interval for temperature. Values 1-43200 will send a report regardless of the threshold value selected in parameter 12.",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 43200,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"temperature_report_threshold": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Temperature Reporting Threshold​",
+		"description": "Set when you want the device to send temperature reports. This setting specifies the amount of F degree change the sensor needs to record in order for the device to send a new temperature report to the hub.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 144,
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"temperature_offset": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Temperature Offset​​​​​​​",
+		"description": "Set the temperature reporting offset. Value 100 is zero offset; values 0-99 decrease the value (ex: 56 means deduct 4.4 degrees from the measured value); values 101-200 increase the value (ex: value 121 means add 2.1 degree to the reported value). NOTE: Device must be factory reset to restore this value to default.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 200,
+		"defaultValue": 100
+	},
+	"lux_check_frequency": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Lux Check Frequency",
+		"description": "Set how often you want the device to check lux level for changes (this is not a reporting frequency setting).",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 600,
+		"defaultValue": 10,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"lux_report_frequency": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Lux Reporting Frequency​",
+		"description": "Set the reporting interval for lux level. Values 1-43200 will send a report regardless of the threshold value selected in parameter 13.",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 43200,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"lux_report_threshold": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Lux Reporting Threshold​",
+		"description": "Set when you want the device to send lux level reports. This setting specifies the amount of lux change the sensor needs to record in order for the device to send a new lux level report to the hub.",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 30000,
+		"defaultValue": 50,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"lux_offset": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Lux Offset​​​​​​​",
+		"description": "Set the lux reporting offset. Value 100 is zero offset; values 0-99 decrease the value (ex: 75 means deduct 25 lux from the measured value); values 101-200 increase the value (ex: value 147 means add 47 lux to the measured value). NOTE: Device must be factory reset to restore this value to default.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 200,
+		"defaultValue": 100
+	},
+	"lux_level_trigger": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Lux Level Trigger​",
+		"description": "Set the lux level trigger. If brightness level is lower than the set lux value, the sensor will send a motion event notification to the hub.",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 30000,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			}
+		]
+	},
+	"motion_clear_delay": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Motion Clear Delay​​​​​​​",
+		"description": "The amount of time the device waits to send a motion clear notification after the last motion event is detected.",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 10,
+		"maxValue": 3600,
+		"defaultValue": 30
 	}
 }
