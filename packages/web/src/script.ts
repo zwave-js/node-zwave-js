@@ -1,5 +1,6 @@
 import { db } from "@zwave-js/bindings-browser/db";
 import { fs } from "@zwave-js/bindings-browser/fs";
+import { createWebSerialPortFactory } from "@zwave-js/bindings-browser/serial";
 import { log as createLogContainer } from "@zwave-js/core/bindings/log/browser";
 import { Bytes } from "@zwave-js/shared";
 import { Driver } from "zwave-js";
@@ -18,39 +19,7 @@ async function init() {
 		return;
 	}
 
-	const sink: UnderlyingSink<Uint8Array> = {
-		close() {
-			port.close();
-		},
-		async write(chunk) {
-			let writer: WritableStreamDefaultWriter<Uint8Array>;
-			try {
-				writer = port.writable.getWriter();
-				await writer.write(chunk);
-			} finally {
-				writer.releaseLock();
-			}
-		},
-	};
-
-	const source: UnderlyingDefaultSource<Uint8Array> = {
-		async start(controller) {
-			const reader = port.readable.getReader();
-			try {
-				while (true) {
-					const { value, done } = await reader.read();
-					if (done) {
-						break;
-					}
-					controller.enqueue(value);
-				}
-			} finally {
-				reader.releaseLock();
-			}
-		},
-	};
-
-	const serialBinding = () => Promise.resolve({ source, sink });
+	const serialBinding = createWebSerialPortFactory(port);
 
 	const d = new Driver(serialBinding, {
 		host: {

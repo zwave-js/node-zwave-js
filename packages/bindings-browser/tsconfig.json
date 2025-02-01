@@ -7,11 +7,15 @@
 		"moduleResolution": "bundler",
 		"target": "ESNext",
 		"lib": ["DOM", "ESNext"],
-		"customConditions": ["browser"]
+		"customConditions": ["browser"],
+		"types": ["w3c-web-serial"]
 	},
 	"references": [
 		{
 			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../serial/tsconfig.build.json"
 		}
 	],
 	"include": ["src/**/*.ts"]
