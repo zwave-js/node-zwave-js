@@ -39,19 +39,33 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$if": "firmwareVersion < 1.20",
+			"$if": "firmwareVersion < 2.0.0",
 			"$import": "templates/zooz_template.json#battery_report_threshold",
 			"label": "Battery Report Threshold",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20
+		},
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 2.0.0",
+			"$import": "templates/zooz_template.json#battery_report_threshold",
+			"label": "Battery Report Threshold",
+			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 5
 		},
 		{
 			"#": "2",
 			"$import": "templates/zooz_template.json#low_battery_alarm_threshold",
-			"label": "Low Battery Alarm Threshold"
+			"label": "Low Battery Alarm Threshold",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 10
 		},
 		{
 			"#": "3",
+			"$if": "firmwareVersion < 2.0.0",
 			"label": "Temperature Report Threshold",
 			"valueSize": 1,
 			"unit": "0.1 °F/C",
@@ -60,7 +74,24 @@
 			"defaultValue": 20
 		},
 		{
+			"#": "3",
+			"$if": "firmwareVersion >= 2.0.0",
+			"label": "Temperature Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °F/C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "4",
+			"$if": "firmwareVersion < 2.0.0",
 			"label": "Humidity Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -69,8 +100,24 @@
 			"defaultValue": 10
 		},
 		{
+			"#": "4",
+			"$if": "firmwareVersion >= 2.0.0",
+			"label": "Humidity Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "5",
-			"$if": "firmwareVersion < 1.20",
+			"$if": "firmwareVersion < 2.0.0",
 			"label": "High Temperature Alert Threshold",
 			"valueSize": 1,
 			"unit": "°F/C",
@@ -80,13 +127,13 @@
 		},
 		{
 			"#": "5",
-			"$if": "firmwareVersion >= 1.20",
+			"$if": "firmwareVersion >= 2.0.0",
 			"label": "High Temperature Alert Threshold",
 			"valueSize": 1,
 			"unit": "°F/C",
 			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 120
+			"maxValue": 200,
+			"defaultValue": 200
 		},
 		{
 			"#": "6",
@@ -131,7 +178,7 @@
 		},
 		{
 			"#": "7",
-			"$if": "firmwareVersion < 1.20",
+			"$if": "firmwareVersion < 2.0.0",
 			"label": "Low Temperature Alert Threshold",
 			"valueSize": 1,
 			"unit": "°F/C",
@@ -141,12 +188,12 @@
 		},
 		{
 			"#": "7",
-			"$if": "firmwareVersion >= 1.20",
+			"$if": "firmwareVersion >= 2.0.0",
 			"label": "Low Temperature Alert Threshold",
 			"valueSize": 1,
 			"unit": "°F/C",
 			"minValue": 0,
-			"maxValue": 90,
+			"maxValue": 100,
 			"defaultValue": 10
 		},
 		{
@@ -195,7 +242,13 @@
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "High Humidity Alert Threshold",
 			"unit": "%",
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "10",
@@ -243,7 +296,13 @@
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Low Humidity Alert Threshold",
 			"unit": "%",
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "12",
