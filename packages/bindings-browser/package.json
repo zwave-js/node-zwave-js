@@ -1,10 +1,26 @@
 {
-  "name": "@zwave-js/web",
-  "private": true,
+  "name": "@zwave-js/bindings-browser",
   "version": "14.3.7",
-  "description": "zwave-js: web stuff",
+  "description": "zwave-js: Host bindings for the browser",
   "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
+  "exports": {
+    "./db": {
+      "@@dev": "./src/db/browser.ts",
+      "default": "./build/db/browser.js"
+    },
+    "./fs": {
+      "@@dev": "./src/fs/browser.ts",
+      "default": "./build/fs/browser.js"
+    }
+  },
+  "files": [
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
+  ],
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
@@ -25,17 +41,13 @@
     "node": ">= 20"
   },
   "scripts": {
-    "test": "node .build.mjs",
-    "serve": "node .dev.mjs"
+    "build": "tsc -b tsconfig.json --pretty",
+    "clean": "del-cli build/ \"*.tsbuildinfo\""
   },
   "devDependencies": {
-    "@types/w3c-web-serial": "^1.0.7",
-    "@types/w3c-web-usb": "^1.0.10",
-    "@zwave-js/bindings-browser": "workspace:^",
-    "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "esbuild": "^0.24.0",
-    "esbuild-plugins-node-modules-polyfill": "^1.6.8",
+    "del-cli": "^6.0.0",
+    "typescript": "5.7.3",
     "zwave-js": "workspace:*"
   }
 }
