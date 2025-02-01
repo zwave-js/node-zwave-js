@@ -22,6 +22,7 @@ const context = await esbuild.context({
 	// logLevel: "verbose",
 	logLevel: "info",
 	logLimit: 0,
+	keepNames: true,
 	plugins: [
 		nodeModulesPolyfillPlugin({
 			// fallback: "error",

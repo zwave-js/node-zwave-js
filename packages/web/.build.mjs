@@ -38,6 +38,7 @@ try {
 		// logLevel: "verbose",
 		logLevel: "info",
 		logLimit: 0,
+		keepNames: true,
 		plugins: [
 			logImportsPlugin,
 			nodeModulesPolyfillPlugin({
