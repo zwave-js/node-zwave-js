@@ -447,9 +447,8 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 
 	public sensorType: AlarmSensorType;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.sensorType]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

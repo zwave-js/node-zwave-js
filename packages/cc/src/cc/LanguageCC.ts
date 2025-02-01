@@ -221,7 +221,7 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = value;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from(this._language, "ascii");
 		if (this._country) {
 			this.payload = Bytes.concat([
@@ -229,7 +229,6 @@ export class LanguageCCSet extends LanguageCC {
 				Bytes.from(this._country, "ascii"),
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

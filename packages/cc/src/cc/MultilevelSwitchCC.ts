@@ -655,7 +655,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public targetValue: number;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.targetValue,
 			(this.duration ?? Duration.default()).serializeSet(),
@@ -671,7 +671,6 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -743,13 +742,12 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 	public currentValue: MaybeUnknown<number> | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.currentValue ?? 0xfe,
 			this.targetValue ?? 0xfe,
 			(this.duration ?? Duration.default()).serializeReport(),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -834,7 +832,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public ignoreStartLevel: boolean;
 	public direction: keyof typeof LevelChangeDirection;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
 		this.payload = Bytes.from([
@@ -853,7 +851,6 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -917,9 +914,8 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.switchType & 0b11111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -269,13 +269,12 @@ export class TimeCCTimeReport extends TimeCC {
 	public minute: number;
 	public second: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.hour & 0b11111,
 			this.minute,
 			this.second,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -331,7 +330,7 @@ export class TimeCCDateReport extends TimeCC {
 	public month: number;
 	public day: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			// 2 bytes placeholder for year
 			0,
@@ -340,7 +339,6 @@ export class TimeCCDateReport extends TimeCC {
 			this.day,
 		]);
 		this.payload.writeUInt16BE(this.year, 0);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -401,7 +399,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
@@ -416,7 +414,6 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -491,7 +488,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	public dstStartDate: Date;
 	public dstEndDate: Date;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			encodeTimezone({
 				standardOffset: this.standardOffset,
@@ -506,7 +503,6 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 				this.dstEndDate.getUTCHours(),
 			]),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

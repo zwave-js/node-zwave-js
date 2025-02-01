@@ -1,5 +1,5 @@
 import {
-	type ZWaveLogContainer,
+	type LogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
 } from "@zwave-js/core";
@@ -10,7 +10,7 @@ import {
 } from "./Logger_safe.js";
 
 export class ConfigLogger extends ZWaveLoggerBase<ConfigLogContext> {
-	constructor(loggers: ZWaveLogContainer) {
+	constructor(loggers: LogContainer) {
 		super(loggers, CONFIG_LABEL);
 	}
 

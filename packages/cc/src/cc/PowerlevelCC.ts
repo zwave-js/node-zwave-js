@@ -257,9 +257,8 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public timeout?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -320,9 +319,8 @@ export class PowerlevelCCReport extends PowerlevelCC {
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.powerlevel, this.timeout ?? 0x00]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -384,10 +382,9 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public testFrameCount: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.testNodeId, this.powerlevel, 0, 0]);
 		this.payload.writeUInt16BE(this.testFrameCount, 2);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -443,7 +440,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public status: PowerlevelTestStatus;
 	public acknowledgedFrames: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.testNodeId,
 			this.status,
@@ -452,7 +449,6 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.acknowledgedFrames, 2);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

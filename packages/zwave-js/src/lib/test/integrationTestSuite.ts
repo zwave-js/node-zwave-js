@@ -149,7 +149,10 @@ function suite(
 				}
 			});
 
-			if (options.additionalDriverOptions?.allowBootloaderOnly) {
+			if (
+				options.additionalDriverOptions?.bootloaderMode === "stay"
+				|| options.additionalDriverOptions?.bootloaderMode === "allow"
+			) {
 				driver.once("bootloader ready", () => {
 					process.nextTick(resolve);
 				});

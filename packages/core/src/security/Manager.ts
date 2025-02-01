@@ -1,37 +1,22 @@
 /** Management class and utils for Security S0 */
 
-import {
-	encryptAES128ECB as encryptAES128ECBAsync,
-	randomBytes,
-} from "../crypto/operations.async.js";
-import { encryptAES128ECB as encryptAES128ECBSync } from "../crypto/operations.sync.js";
+import { type Timer, setTimer } from "@zwave-js/shared";
+import { encryptAES128ECB, randomBytes } from "../crypto/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 const authKeyBase = new Uint8Array(16).fill(0x55);
 const encryptionKeyBase = new Uint8Array(16).fill(0xaa);
 
-/** @deprecated Use {@link generateAuthKeyAsync} instead */
-export function generateAuthKeySync(networkKey: Uint8Array): Uint8Array {
-	// eslint-disable-next-line @typescript-eslint/no-deprecated
-	return encryptAES128ECBSync(authKeyBase, networkKey);
-}
-
-export function generateAuthKeyAsync(
+export function generateAuthKey(
 	networkKey: Uint8Array,
 ): Promise<Uint8Array> {
-	return encryptAES128ECBAsync(authKeyBase, networkKey);
+	return encryptAES128ECB(authKeyBase, networkKey);
 }
 
-/** @deprecated Use {@link generateEncryptionKeyAsync} instead */
-export function generateEncryptionKeySync(networkKey: Uint8Array): Uint8Array {
-	// eslint-disable-next-line @typescript-eslint/no-deprecated
-	return encryptAES128ECBSync(encryptionKeyBase, networkKey);
-}
-
-export function generateEncryptionKeyAsync(
+export function generateEncryptionKey(
 	networkKey: Uint8Array,
 ): Promise<Uint8Array> {
-	return encryptAES128ECBAsync(encryptionKeyBase, networkKey);
+	return encryptAES128ECB(encryptionKeyBase, networkKey);
 }
 
 interface NonceKey {
@@ -83,35 +68,17 @@ export class SecurityManager {
 	}
 
 	private _authKey: Uint8Array | undefined;
-	/** @deprecated Use {@link getAuthKey} instead */
-	public get authKey(): Uint8Array {
-		if (!this._authKey) {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this._authKey = generateAuthKeySync(this.networkKey);
-		}
-		return this._authKey;
-	}
-
 	public async getAuthKey(): Promise<Uint8Array> {
 		if (!this._authKey) {
-			this._authKey = await generateAuthKeyAsync(this.networkKey);
+			this._authKey = await generateAuthKey(this.networkKey);
 		}
 		return this._authKey;
 	}
 
 	private _encryptionKey: Uint8Array | undefined;
-	/** @deprecated Use {@link getEncryptionKey} instead */
-	public get encryptionKey(): Uint8Array {
-		if (!this._encryptionKey) {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this._encryptionKey = generateEncryptionKeySync(this.networkKey);
-		}
-		return this._encryptionKey;
-	}
-
 	public async getEncryptionKey(): Promise<Uint8Array> {
 		if (!this._encryptionKey) {
-			this._encryptionKey = await generateEncryptionKeyAsync(
+			this._encryptionKey = await generateEncryptionKey(
 				this.networkKey,
 			);
 		}
@@ -120,7 +87,7 @@ export class SecurityManager {
 
 	private _nonceStore = new Map<string, NonceEntry>();
 	private _freeNonceIDs = new Set<string>();
-	private _nonceTimers = new Map<string, NodeJS.Timeout>();
+	private _nonceTimers = new Map<string, Timer>();
 
 	private normalizeId(id: number | NonceKey): string {
 		let ret: NonceKey;
@@ -161,14 +128,12 @@ export class SecurityManager {
 		{ free = true }: SetNonceOptions = {},
 	): void {
 		const key = this.normalizeId(id);
-		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key));
-		}
+		this._nonceTimers.get(key)?.clear();
 		this._nonceStore.set(key, entry);
 		if (free) this._freeNonceIDs.add(key);
 		this._nonceTimers.set(
 			key,
-			setTimeout(() => {
+			setTimer(() => {
 				this.expireNonce(key);
 			}, this.nonceTimeout).unref(),
 		);
@@ -195,9 +160,7 @@ export class SecurityManager {
 	}
 
 	private deleteNonceInternal(key: string) {
-		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key));
-		}
+		this._nonceTimers.get(key)?.clear();
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);
 		this._freeNonceIDs.delete(key);

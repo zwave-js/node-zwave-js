@@ -1,8 +1,8 @@
-import { Bytes } from "@zwave-js/shared";
+import { Bytes, getenv } from "@zwave-js/shared";
 import { bootloaderMenuPreamble } from "../parsers/BootloaderParsers.js";
 import { ZWaveSerialMode } from "../serialport/definitions.js";
 
-const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
+const IS_TEST = process.env.NODE_ENV === "test" || !!getenv("CI");
 
 // A transform stream with two outputs, where only one of both is
 // active at the same time

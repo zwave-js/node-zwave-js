@@ -15,22 +15,22 @@ async function dummyInit(
 	} = {},
 ): Promise<void> {
 	if (options.keys !== false) {
-		await man.setKeyAsync(SecurityClass.S0_Legacy, crypto.randomBytes(16));
-		await man.setKeyAsync(
+		await man.setKey(SecurityClass.S0_Legacy, crypto.randomBytes(16));
+		await man.setKey(
 			SecurityClass.S2_AccessControl,
 			crypto.randomBytes(16),
 		);
-		await man.setKeyAsync(
+		await man.setKey(
 			SecurityClass.S2_Authenticated,
 			crypto.randomBytes(16),
 		);
-		await man.setKeyAsync(
+		await man.setKey(
 			SecurityClass.S2_Unauthenticated,
 			crypto.randomBytes(16),
 		);
 	}
 	if (options.nodeId) {
-		await man.initializeSPANAsync(
+		await man.initializeSPAN(
 			options.nodeId,
 			options.secClass ?? SecurityClass.S2_Authenticated,
 			crypto.randomBytes(16),
@@ -41,7 +41,7 @@ async function dummyInit(
 
 test("nextNonce() -> should throw if the PRNG for the given receiver node has not been initialized", async (t) => {
 	const man = await SecurityManager2.create();
-	assertZWaveError(t.expect, () => man.nextNonceAsync(2), {
+	assertZWaveError(t.expect, () => man.nextNonce(2), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "initialized",
 	});
@@ -54,7 +54,7 @@ test("nextNonce() -> should generate a 13-byte nonce otherwise", async (t) => {
 		secClass: SecurityClass.S2_AccessControl,
 	});
 
-	const ret = await man.nextNonceAsync(2);
+	const ret = await man.nextNonce(2);
 	t.expect(isUint8Array(ret)).toBe(true);
 	t.expect(ret.length).toBe(13);
 });
@@ -66,8 +66,8 @@ test("nextNonce() -> two nonces should be different", async (t) => {
 		secClass: SecurityClass.S2_AccessControl,
 	});
 
-	const nonce1 = await man.nextNonceAsync(2);
-	const nonce2 = await man.nextNonceAsync(2);
+	const nonce1 = await man.nextNonce(2);
+	const nonce2 = await man.nextNonce(2);
 	t.expect(nonce1).not.toStrictEqual(nonce2);
 });
 
@@ -77,7 +77,7 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 	assertZWaveError(
 		t.expect,
 		async () =>
-			await man.initializeSPANAsync(
+			await man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
 				new Uint8Array(15),
@@ -92,7 +92,7 @@ test("initializeSPAN() -> should throw if either entropy input does not have len
 	assertZWaveError(
 		t.expect,
 		async () =>
-			await man.initializeSPANAsync(
+			await man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
 				new Uint8Array(16),
@@ -111,7 +111,7 @@ test("initializeSPAN() -> should throw if the node has not been assigned a secur
 	assertZWaveError(
 		t.expect,
 		async () =>
-			await man.initializeSPANAsync(
+			await man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
 				new Uint8Array(16),
@@ -130,7 +130,7 @@ test("initializeSPAN() -> should throw if the keys for the node's security class
 	assertZWaveError(
 		t.expect,
 		async () =>
-			await man.initializeSPANAsync(
+			await man.initializeSPAN(
 				nodeId,
 				SecurityClass.S2_Authenticated,
 				new Uint8Array(16),
@@ -150,7 +150,7 @@ test("initializeSPAN() -> should not throw otherwise", async (t) => {
 		nodeId,
 		secClass: SecurityClass.S2_Authenticated,
 	});
-	await man.initializeSPANAsync(
+	await man.initializeSPAN(
 		nodeId,
 		SecurityClass.S2_Authenticated,
 		new Uint8Array(16),
@@ -163,7 +163,7 @@ test("setKeys() -> throws if the network key does not have length 16", async (t)
 	assertZWaveError(
 		t.expect,
 		async () =>
-			await man.setKeyAsync(
+			await man.setKey(
 				SecurityClass.S2_Authenticated,
 				new Uint8Array(15),
 			),
@@ -178,7 +178,7 @@ test("setKeys() -> throws if the security class is not valid", async (t) => {
 	const man = await SecurityManager2.create();
 	assertZWaveError(
 		t.expect,
-		async () => await man.setKeyAsync(-1 as any, new Uint8Array(16)),
+		async () => await man.setKey(-1 as any, new Uint8Array(16)),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
 			messageMatches: "security class",
@@ -250,7 +250,7 @@ test("createMulticastGroup() -> should return the same group ID for a previously
 
 test("getMulticastKeyAndIV() -> should throw if the MPAN state for the given multicast group has not been initialized", async (t) => {
 	const man = await SecurityManager2.create();
-	assertZWaveError(t.expect, () => man.getMulticastKeyAndIVAsync(1), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
@@ -258,7 +258,7 @@ test("getMulticastKeyAndIV() -> should throw if the MPAN state for the given mul
 
 test("getMulticastKeyAndIV() -> should throw if the multicast group has not been created", async (t) => {
 	const man = await SecurityManager2.create();
-	assertZWaveError(t.expect, () => man.getMulticastKeyAndIVAsync(1), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(1), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "does not exist",
 	});
@@ -270,7 +270,7 @@ test("getMulticastKeyAndIV() -> should throw if the keys for the group's securit
 		[2, 3, 4],
 		SecurityClass.S2_Authenticated,
 	);
-	assertZWaveError(t.expect, () => man.getMulticastKeyAndIVAsync(groupId), {
+	assertZWaveError(t.expect, () => man.getMulticastKeyAndIV(groupId), {
 		errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 		messageMatches: "network key",
 	});
@@ -284,7 +284,7 @@ test("getMulticastKeyAndIV() -> should generate a 13-byte IV otherwise", async (
 		SecurityClass.S2_Authenticated,
 	);
 
-	const { iv: ret } = await man.getMulticastKeyAndIVAsync(groupId);
+	const { iv: ret } = await man.getMulticastKeyAndIV(groupId);
 
 	t.expect(isUint8Array(ret)).toBe(true);
 	t.expect(ret.length).toBe(13);
@@ -298,8 +298,8 @@ test("getMulticastKeyAndIV() -> two nonces for the same group should be differen
 		SecurityClass.S2_Authenticated,
 	);
 
-	const { iv: nonce1 } = await man.getMulticastKeyAndIVAsync(groupId);
-	const { iv: nonce2 } = await man.getMulticastKeyAndIVAsync(groupId);
+	const { iv: nonce1 } = await man.getMulticastKeyAndIV(groupId);
+	const { iv: nonce2 } = await man.getMulticastKeyAndIV(groupId);
 
 	t.expect(nonce1).not.toStrictEqual(nonce2);
 });
@@ -316,8 +316,8 @@ test("getMulticastKeyAndIV() -> two nonces for different groups should be differ
 		SecurityClass.S2_Authenticated,
 	);
 
-	const { iv: nonce1 } = await man.getMulticastKeyAndIVAsync(group1);
-	const { iv: nonce2 } = await man.getMulticastKeyAndIVAsync(group2);
+	const { iv: nonce1 } = await man.getMulticastKeyAndIV(group1);
+	const { iv: nonce2 } = await man.getMulticastKeyAndIV(group2);
 
 	t.expect(nonce1).not.toStrictEqual(nonce2);
 });

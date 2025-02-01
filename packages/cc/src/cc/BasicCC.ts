@@ -394,9 +394,8 @@ export class BasicCCSet extends BasicCC {
 
 	public targetValue: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.targetValue]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -505,7 +504,7 @@ export class BasicCCReport extends BasicCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.currentValue ?? 0xfe,
 			this.targetValue ?? 0xfe,
@@ -522,7 +521,6 @@ export class BasicCCReport extends BasicCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

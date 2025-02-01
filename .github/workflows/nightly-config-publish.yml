@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18] # This should be LTS
+        node-version: [22] # This should be LTS
 
     steps:
     - name: Checkout code

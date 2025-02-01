@@ -167,8 +167,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -176,21 +175,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -201,8 +186,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
@@ -212,8 +196,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			this.command?.nodeId ?? this._nodeId,
 			ctx.nodeIdType,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 
 		this.payload = Bytes.concat([
 			sourceNodeId,
@@ -223,31 +206,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			Bytes.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
-		this.assertCallbackId();
-		const sourceNodeId = encodeNodeID(
-			this.sourceNodeId,
-			ctx.nodeIdType,
-		);
-		const destinationNodeId = encodeNodeID(
-			this.command?.nodeId ?? this._nodeId,
-			ctx.nodeIdType,
-		);
-		const serializedCC = await this.serializeCCAsync(ctx);
-
-		this.payload = Bytes.concat([
-			sourceNodeId,
-			destinationNodeId,
-			Bytes.from([serializedCC.length]),
-			serializedCC,
-			Bytes.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
-		]);
-
-		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -332,7 +291,7 @@ export class SendDataBridgeRequestTransmitReport
 		return this.transmitStatus === TransmitStatus.OK;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
 		if (this.txReport) {
@@ -342,7 +301,6 @@ export class SendDataBridgeRequestTransmitReport
 			]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -546,8 +504,7 @@ export class SendDataMulticastBridgeRequest<
 	}
 
 	public serializedCC: Uint8Array | undefined;
-	/** @deprecated Use {@link serializeCCAsync} instead */
-	public serializeCC(ctx: CCEncodingContext): Uint8Array {
+	public async serializeCC(ctx: CCEncodingContext): Promise<Uint8Array> {
 		if (!this.serializedCC) {
 			if (!this.command) {
 				throw new ZWaveError(
@@ -555,21 +512,7 @@ export class SendDataMulticastBridgeRequest<
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			this.serializedCC = this.command.serialize(ctx);
-		}
-		return this.serializedCC;
-	}
-
-	public async serializeCCAsync(ctx: CCEncodingContext): Promise<Uint8Array> {
-		if (!this.serializedCC) {
-			if (!this.command) {
-				throw new ZWaveError(
-					`Cannot serialize a ${this.constructor.name} without a command`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.serializedCC = await this.command.serializeAsync(ctx);
+			this.serializedCC = await this.command.serialize(ctx);
 		}
 		return this.serializedCC;
 	}
@@ -580,11 +523,9 @@ export class SendDataMulticastBridgeRequest<
 		this.callbackId = undefined;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public async serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.serializeCC(ctx);
+		const serializedCC = await this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
 			ctx.nodeIdType,
@@ -603,32 +544,7 @@ export class SendDataMulticastBridgeRequest<
 			Bytes.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: MessageEncodingContext): Promise<Bytes> {
-		this.assertCallbackId();
-		const serializedCC = await this.serializeCCAsync(ctx);
-		const sourceNodeId = encodeNodeID(
-			this.sourceNodeId,
-			ctx.nodeIdType,
-		);
-		const destinationNodeIDs = (this.command?.nodeId ?? this.nodeIds)
-			.map((id) => encodeNodeID(id, ctx.nodeIdType));
-
-		this.payload = Bytes.concat([
-			sourceNodeId,
-			// # of target nodes, not # of bytes
-			Bytes.from([destinationNodeIDs.length]),
-			...destinationNodeIDs,
-			Bytes.from([serializedCC.length]),
-			// payload
-			serializedCC,
-			Bytes.from([this.transmitOptions, this.callbackId]),
-		]);
-
-		return super.serializeAsync(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

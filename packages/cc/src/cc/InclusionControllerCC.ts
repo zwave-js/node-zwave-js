@@ -121,9 +121,8 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public step: InclusionControllerStep;
 	public status: InclusionControllerStatus;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.step, this.status]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -179,9 +178,8 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public includedNodeId: number;
 	public step: InclusionControllerStep;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.includedNodeId, this.step]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

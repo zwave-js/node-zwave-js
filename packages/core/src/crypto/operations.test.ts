@@ -1,6 +1,6 @@
 import { Bytes } from "@zwave-js/shared/safe";
 import { type ExpectStatic, test } from "vitest";
-import { computeCMAC, computeMAC } from "./operations.async.js";
+import { computeCMAC, computeMAC } from "./operations.js";
 
 function assertBufferEquals(
 	expect: ExpectStatic,

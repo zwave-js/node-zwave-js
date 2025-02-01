@@ -8,59 +8,27 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "../values/_Types.js";
-import { type ZWaveLogContainer, ZWaveLoggerBase, tagify } from "./shared.js";
 import {
-	type DataDirection,
-	type LogContext,
-	type NodeLogContext,
-	type ValueLogContext,
-	getDirectionPrefix,
-	getNodeTag,
-} from "./shared_safe.js";
+	CONTROLLER_LABEL,
+	CONTROLLER_LOGLEVEL,
+	type ControllerLogContext,
+	type ControllerNodeLogContext,
+	type ControllerValueLogContext,
+	type Interviewable,
+	type LogNode,
+	type LogNodeOptions,
+	type LogValueArgs,
+	VALUE_LOGLEVEL,
+} from "./Controller.definitions.js";
+import { ZWaveLoggerBase } from "./ZWaveLoggerBase.js";
+import { tagify } from "./shared.js";
+import { getDirectionPrefix, getNodeTag } from "./shared.js";
+import { type LogContainer } from "./traits.js";
 
-export const CONTROLLER_LABEL = "CNTRLR";
-const CONTROLLER_LOGLEVEL = "info";
-const VALUE_LOGLEVEL = "debug";
-
-export interface LogNodeOptions {
-	message: string;
-	level?: "silly" | "debug" | "verbose" | "warn" | "error";
-	direction?: DataDirection;
-	endpoint?: number;
-}
-
-export interface Interviewable {
-	id: number;
-	interviewStage: InterviewStage;
-}
-
-export type ControllerNodeLogContext =
-	& LogContext<"controller">
-	& NodeLogContext
-	& { endpoint?: number; direction: string };
-
-export type ControllerValueLogContext =
-	& LogContext<"controller">
-	& ValueLogContext
-	& {
-		direction?: string;
-		change?: "added" | "updated" | "removed" | "notification";
-		internal?: boolean;
-	};
-
-export type ControllerSelfLogContext = LogContext<"controller"> & {
-	type: "controller";
-};
-
-export type ControllerLogContext =
-	| ControllerSelfLogContext
-	| ControllerNodeLogContext
-	| ControllerValueLogContext;
-
-export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
-
-export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
-	constructor(loggers: ZWaveLogContainer) {
+export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext>
+	implements LogNode
+{
+	constructor(loggers: LogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
 
@@ -120,7 +88,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 		const { level, message, direction, endpoint } = messageOrOptions;
 		const actualLevel = level || CONTROLLER_LOGLEVEL;
 		if (!this.container.isLoglevelVisible(actualLevel)) return;
-		if (!this.container.shouldLogNode(nodeId)) return;
+		if (!this.container.isNodeLoggingVisible(nodeId)) return;
 
 		const context: ControllerNodeLogContext = {
 			nodeId,
@@ -168,7 +136,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 		args: LogValueArgs<ValueID>,
 	): void {
 		if (!this.isValueLogVisible()) return;
-		if (!this.container.shouldLogNode(args.nodeId)) return;
+		if (!this.container.isNodeLoggingVisible(args.nodeId)) return;
 		const context: ControllerValueLogContext = {
 			nodeId: args.nodeId,
 			change,
@@ -241,7 +209,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	/** Prints a log message for updated metadata of a value id */
 	public metadataUpdated(args: LogValueArgs<ValueID>): void {
 		if (!this.isValueLogVisible()) return;
-		if (!this.container.shouldLogNode(args.nodeId)) return;
+		if (!this.container.isNodeLoggingVisible(args.nodeId)) return;
 		const context: ControllerValueLogContext = {
 			nodeId: args.nodeId,
 			commandClass: args.commandClass,
@@ -281,7 +249,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	/** Logs the interview progress of a node */
 	public interviewStage(node: Interviewable): void {
 		if (!this.isControllerLogVisible()) return;
-		if (!this.container.shouldLogNode(node.id)) return;
+		if (!this.container.isNodeLoggingVisible(node.id)) return;
 
 		this.logger.log<ControllerNodeLogContext>({
 			level: CONTROLLER_LOGLEVEL,
@@ -304,7 +272,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	/** Logs the interview progress of a node */
 	public interviewStart(node: Interviewable): void {
 		if (!this.isControllerLogVisible()) return;
-		if (!this.container.shouldLogNode(node.id)) return;
+		if (!this.container.isNodeLoggingVisible(node.id)) return;
 
 		const message = `Beginning interview - last completed stage: ${
 			InterviewStage[node.interviewStage]
