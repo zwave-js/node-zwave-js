@@ -3,7 +3,7 @@ import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill
 
 // Create a context for incremental builds
 const context = await esbuild.context({
-	entryPoints: ["src/script.ts"],
+	entryPoints: ["src/flasher.ts"],
 	bundle: true,
 	sourcemap: true,
 	//   analyze: "verbose",

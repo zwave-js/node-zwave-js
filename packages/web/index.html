@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Z-Wave JS: In the browser?!</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="setimmediate.js"></script>
-  </head>
-  <body>
-    <h1>Z-Wave JS: In the browser?!</h1>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Z-Wave JS: In the browser?!</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="setimmediate.js"></script>
+	</head>
+	<body>
+		<h1>Z-Wave JS: In the browser?!</h1>
 
-    <button id="connect">Connect</button>
+		<div>
+			<button id="connect">Connect</button>
+		</div>
 
-    <script type="module" src="build/script.js"></script>
-  </body>
+		<div style="margin-top: 2em;">
+			<input type="file" id="file" accept=".bin,.hex,.gbl" disabled />
+			<button id="flash" disabled>Flash</button><br />
+			<progress id="progress" value="0" max="100" style="display: none;"></progress>
+		</div>
+
+		<script type="module" src="build/flasher.js"></script>
+	</body>
 </html>
