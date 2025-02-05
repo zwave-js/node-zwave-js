@@ -24,6 +24,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
+	// Ignore the browser bindings for now
+	{
+		ignores: ["packages/bindings-browser/**/*.ts"],
+	},
 	...tseslint.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
 	{

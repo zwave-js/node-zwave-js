@@ -7612,7 +7612,7 @@ ${handlers.length} left`,
 			await this.destroy();
 
 			// Let the async calling context finish before emitting the error
-			process.nextTick(() => {
+			setImmediate(() => {
 				this.emit(
 					"error",
 					new ZWaveError(
