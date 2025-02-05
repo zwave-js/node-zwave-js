@@ -2726,6 +2726,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zwave-js/bindings-browser@workspace:^, @zwave-js/bindings-browser@workspace:packages/bindings-browser":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/bindings-browser@workspace:packages/bindings-browser"
+  dependencies:
+    "@types/w3c-web-serial": "npm:^1.0.7"
+    "@zwave-js/serial": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
+    del-cli: "npm:^6.0.0"
+    typescript: "npm:5.7.3"
+    zwave-js: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/cc@workspace:*, @zwave-js/cc@workspace:packages/cc":
   version: 0.0.0-use.local
   resolution: "@zwave-js/cc@workspace:packages/cc"
@@ -3095,6 +3108,7 @@ __metadata:
   dependencies:
     "@types/w3c-web-serial": "npm:^1.0.7"
     "@types/w3c-web-usb": "npm:^1.0.10"
+    "@zwave-js/bindings-browser": "workspace:^"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     esbuild: "npm:^0.25.0"
