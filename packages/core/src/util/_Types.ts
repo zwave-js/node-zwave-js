@@ -10,4 +10,5 @@ export type FirmwareFileFormat =
 export interface Firmware {
 	data: Uint8Array;
 	firmwareTarget?: number;
+	firmwareId?: number;
 }

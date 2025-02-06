@@ -319,8 +319,16 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 				let sentBytesOfPreviousFiles = 0;
 
 				for (let i = 0; i < updatesWithChecksum.length; i++) {
-					const { firmwareTarget: target = 0, data, checksum } =
-						updatesWithChecksum[i];
+					const {
+						// If the firmware target is not given, update the Z-Wave chip
+						firmwareTarget: target = 0,
+						// If the firmware ID is not given, use the current one for the given chip
+						firmwareId = target === 0
+							? meta.firmwareId
+							: meta.additionalFirmwareIDs[target - 1],
+						data,
+						checksum,
+					} = updatesWithChecksum[i];
 
 					if (i < skipFinishedFiles) {
 						// If we are resuming, skip this file since it was already done before
@@ -351,8 +359,9 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 					const { resume, nonSecureTransfer } = yield* self
 						.beginFirmwareUpdateInternal(
 							data,
+							meta.manufacturerId,
 							target,
-							meta,
+							firmwareId,
 							fragmentSize,
 							checksum,
 							hardwareVersion,
@@ -645,8 +654,9 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 	/** Kicks off a firmware update of a single target. Returns whether the node accepted resuming and non-secure transfer */
 	private async *beginFirmwareUpdateInternal(
 		data: Uint8Array,
+		manufacturerId: number,
 		target: number,
-		meta: FirmwareUpdateMetaData,
+		firmwareId: number,
 		fragmentSize: number,
 		checksum: number,
 		hardwareVersion?: number,
@@ -665,11 +675,9 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 
 		// Request the node to start the upgrade
 		await api.requestUpdate({
-			// TODO: Should manufacturer id and firmware id be provided externally?
-			manufacturerId: meta.manufacturerId,
-			firmwareId: target == 0
-				? meta.firmwareId
-				: meta.additionalFirmwareIDs[target - 1],
+			// TODO: Should manufacturer id be provided externally?
+			manufacturerId,
+			firmwareId,
 			firmwareTarget: target,
 			fragmentSize,
 			checksum,
