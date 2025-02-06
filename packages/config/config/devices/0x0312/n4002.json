@@ -20,7 +20,7 @@
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
-			"#": "3",
+			"#": "4",
 			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
