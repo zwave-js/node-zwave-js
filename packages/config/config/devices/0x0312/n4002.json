@@ -16,10 +16,6 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1",
-			"$import": "~/templates/master_template.json#orientation_momentary"
-		},
-		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
@@ -28,8 +24,12 @@
 			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
-			"#": "5",
+			"#": "6",
 			"$import": "templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "7",
+			"$import": "templates/minoston_template.json#night_light_set"
 		},
 		{
 			"#": "8",
@@ -37,15 +37,22 @@
 		},
 		{
 			"#": "9",
-			"$import": "~/templates/master_template.json#dim_rate"
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
+			"label": "Ramp Rate",
+			"unit": "seconds",
+			"defaultValue": 2
 		},
 		{
 			"#": "10",
-			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
+			"label": "Dimming Rate",
+			"unit": "seconds",
+			"defaultValue": 4
 		},
 		{
 			"#": "11",
-			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
+			"$import": "~/templates/master_template.json#minimum_dim_level_0-99",
+			"defaultValue": 10,
 			"options": [
 				{
 					"label": "Disable",
@@ -55,53 +62,18 @@
 		},
 		{
 			"#": "12",
-			"$import": "templates/minoston_template.json#double_tap_function"
-		},
-		{
-			"#": "15",
-			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
-		},
-		{
-			"#": "21",
-			"$import": "templates/minoston_template.json#report_state_when_local_control_disabled"
-		},
-		{
-			"#": "16",
-			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
-		},
-		{
-			"#": "18",
-			"$import": "~/templates/master_template.json#default_dim_level_0-99"
-		},
-		{
-			"#": "19",
-			"$import": "templates/minoston_template.json#external_switch_type_four_options"
-		},
-		{
-			"#": "20",
-			"$import": "templates/minoston_template.json#association_reports_basic_multilevel"
-		},
-		{
-			"#": "22",
-			"$import": "templates/minoston_template.json#night_mode_brightness"
-		},
-		{
-			"#": "23",
-			"$import": "templates/minoston_template.json#led_indicator_color"
-		},
-		{
-			"#": "24",
-			"$import": "templates/minoston_template.json#led_indicator_brightness"
-		},
-		{
-			"#": "25",
-			"$import": "templates/minoston_template.json#single_tap_function"
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	],
 	"metadata": {
 		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
 		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
-		"reset": "Press click Z-Wave™ button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4294/N4002-manual-20210825.pdf"
+		"reset": "Press click Z-Wave™ button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)"
 	}
 }
