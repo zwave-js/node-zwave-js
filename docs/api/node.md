@@ -352,7 +352,8 @@ Performs an OTA firmware update process for this node, applying the provided fir
 This method an array of firmware updates, each of which contains the following properties:
 
 - `data` - A buffer containing the firmware image in a format supported by the device
-- `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
+- `firmwareTarget` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
+- `firmwareId` - _(optional)_ The ID of the new firmware that will be uploaded. This is only necessary if the device checks the firmware ID before starting the update. If not given, the current firmware ID will be reused.
 
 <!-- #import Firmware from "zwave-js" -->
 
@@ -360,6 +361,7 @@ This method an array of firmware updates, each of which contains the following p
 interface Firmware {
 	data: Uint8Array;
 	firmwareTarget?: number;
+	firmwareId?: number;
 }
 ```
 
