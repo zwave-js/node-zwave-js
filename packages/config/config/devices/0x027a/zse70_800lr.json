@@ -31,8 +31,9 @@
 			"label": "Motion Sensitivity",
 			"description": "1 = least sensitive, 8 = most sensitive",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
 			"defaultValue": 6,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
