@@ -176,6 +176,8 @@ export enum FunctionType {
 	SendTestFrame = 0xbe, // Sends a NOP Power frame to the given node
 	GetProtocolStatus = 0xbf, // Request the current status of the protocol running on the Z-Wave module
 
+	GetNLSNodes = 0xc0, // Get a list of all nodes for which network-level security is enabled
+
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xd0, // Set controller into promiscuous mode to listen to all messages
 	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xd1, // deprecated, replaced with a flag for the ApplicationCommandHandler
 
