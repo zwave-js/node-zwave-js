@@ -134,6 +134,7 @@ export enum FunctionType {
 	RequestProtocolCCEncryption = 0x68, // Used by the Z-Wave API module to request encryption of a Z-Wave protocol frame
 
 	EnableNodeNLS = 0x6a, // Enable network-level security for a node
+	GetNodeNLSState = 0x6b, // Get the state of network-level security for a node
 
 	UNKNOWN_FUNC_TIMER_START = 0x70, // ??
 	UNKNOWN_FUNC_TIMER_RESTART = 0x71, // ??
