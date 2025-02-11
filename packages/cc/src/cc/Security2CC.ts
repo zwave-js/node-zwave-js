@@ -13,7 +13,6 @@ import {
 	type SPANTableEntry,
 	SecurityClass,
 	type SecurityManager2,
-	type SupervisionResult,
 	TransmitOptions,
 	type WithAddress,
 	ZWaveError,
@@ -1082,7 +1081,7 @@ export class Security2CCAPI extends CCAPI {
 		}
 	}
 
-	public async enableNLS(): Promise<SupervisionResult | undefined> {
+	public async enableNLS(): Promise<void> {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.NLSStateSet,
@@ -1093,7 +1092,11 @@ export class Security2CCAPI extends CCAPI {
 			endpointIndex: this.endpoint.index,
 			enabled: true,
 		});
-		return this.host.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, {
+			...this.commandOptions,
+			// The specs expect a Set-Get-Response flow
+			useSupervision: false,
+		});
 	}
 }
 
