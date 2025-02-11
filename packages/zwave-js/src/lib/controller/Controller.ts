@@ -2716,6 +2716,11 @@ export class ZWaveController
 					inclCtrlr,
 				);
 
+				// Enable NLS if desired
+				if (bootstrapResult.success && bootstrapResult.enableNLS) {
+					await this.enableAndVerifyNLS(newNode);
+				}
+
 				// We're done adding this node, notify listeners
 				const result: InclusionResult =
 					bootstrapResult.success === false
@@ -3097,6 +3102,11 @@ export class ZWaveController
 				newNode,
 				inclCtrlr,
 			);
+
+			// Enable NLS if desired
+			if (bootstrapResult.success && bootstrapResult.enableNLS) {
+				await this.enableAndVerifyNLS(newNode);
+			}
 
 			// We're done adding this node, notify listeners
 			const result: InclusionResult = bootstrapResult.success === false
@@ -4097,6 +4107,32 @@ export class ZWaveController
 		}
 	}
 
+	private async enableAndVerifyNLS(node: ZWaveNode): Promise<boolean> {
+		try {
+			await node.commandClasses["Security 2"].enableNLS();
+			const result = await node.commandClasses["Security 2"]
+				.getNLSState();
+
+			if (result?.enabled) {
+				this.driver.controllerLog.logNode(
+					node.id,
+					`Network level security enabled`,
+				);
+				return true;
+			}
+		} catch {
+			// ignore
+		}
+
+		this.driver.controllerLog.logNode(
+			node.id,
+			`Network level security could not be enabled`,
+			"warn",
+		);
+
+		return false;
+	}
+
 	/**
 	 * Is called when an AddNode request is received from the controller.
 	 * Handles and controls the inclusion process.
@@ -4440,7 +4476,10 @@ export class ZWaveController
 					}
 				}
 
-				this.setInclusionState(InclusionState.Idle);
+				// Enable NLS if desired
+				if (bootstrapResult.success && bootstrapResult.enableNLS) {
+					await this.enableAndVerifyNLS(newNode);
+				}
 
 				// We're done adding this node, notify listeners
 				const result: InclusionResult =
@@ -4451,6 +4490,7 @@ export class ZWaveController
 						}
 						: { lowSecurity: false };
 
+				this.setInclusionState(InclusionState.Idle);
 				this.emit("node added", newNode, result);
 
 				return true; // Don't invoke any more handlers
@@ -4608,6 +4648,11 @@ export class ZWaveController
 						bootstrapResult = {
 							success: true,
 						};
+					}
+
+					// Enable NLS if desired
+					if (bootstrapResult.success && bootstrapResult.enableNLS) {
+						await this.enableAndVerifyNLS(newNode);
 					}
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
