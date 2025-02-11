@@ -1730,7 +1730,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		ret.iv = iv;
 		ret.authData = authData;
 		ret.authTag = authTag;
-		ret.plaintext = decryptedCCBytes;
+		ret._plaintext = decryptedCCBytes;
 
 		return ret;
 	}
@@ -1743,7 +1743,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	private authData?: Uint8Array;
 	private authTag?: Uint8Array;
 	private ciphertext?: Uint8Array;
-	private plaintext?: Uint8Array;
+	private _plaintext?: Uint8Array;
+	public get plaintext(): Uint8Array | undefined {
+		return this._plaintext;
+	}
 
 	public readonly verifyDelivery: boolean = true;
 
@@ -1995,8 +1998,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			}
 			if (this.ciphertext) {
 				message.ciphertext = buffer2hex(this.ciphertext);
-			} else if (this.plaintext) {
-				message.plaintext = buffer2hex(this.plaintext);
+			} else if (this._plaintext) {
+				message.plaintext = buffer2hex(this._plaintext);
 			}
 			if (this.authData) {
 				message["auth data"] = buffer2hex(this.authData);
