@@ -132,6 +132,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0x67 = 0x67, // ??
 
 	RequestProtocolCCEncryption = 0x68, // Used by the Z-Wave API module to request encryption of a Z-Wave protocol frame
+	TransferProtocolCC = 0x69, // Forward a decrypted protocol CC frame to the Z-Wave API module
 
 	EnableNodeNLS = 0x6a, // Enable network-level security for a node
 	GetNodeNLSState = 0x6b, // Get the state of network-level security for a node
