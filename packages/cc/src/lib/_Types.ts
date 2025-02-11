@@ -1328,6 +1328,16 @@ export enum Security2Command {
 	TransferEnd = 0x0c,
 	CommandsSupportedGet = 0x0d,
 	CommandsSupportedReport = 0x0e,
+	NLSNodeListGet = 0x0f,
+	NLSNodeListReport = 0x10,
+	NLSStateGet = 0x11,
+	NLSStateReport = 0x12,
+	NLSStateSet = 0x13,
+}
+
+export enum NLSNodeListRequestKind {
+	First = 0,
+	Next = 1,
 }
 
 export enum SecurityCommand {
