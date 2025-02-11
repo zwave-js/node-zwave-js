@@ -7,17 +7,20 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type MulticastDestination,
+	NodeIDType,
 	type S2SecurityClass,
 	SPANState,
 	type SPANTableEntry,
 	SecurityClass,
 	type SecurityManager2,
+	type SupervisionResult,
 	TransmitOptions,
 	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	decryptAES128CCM,
 	encodeBitMask,
+	encodeNodeID,
 	encryptAES128CCM,
 	getCCName,
 	highResTimestamp,
@@ -70,7 +73,10 @@ import {
 	KEXFailType,
 	KEXSchemes,
 } from "../lib/Security2/shared.js";
-import { Security2Command } from "../lib/_Types.js";
+import {
+	type NLSNodeListRequestKind,
+	Security2Command,
+} from "../lib/_Types.js";
 import { CRC16CC } from "./CRC16CC.js";
 import { MultiChannelCC } from "./MultiChannelCC.js";
 import { SecurityCC } from "./SecurityCC.js";
@@ -563,9 +569,32 @@ function getSenderEI(extensions: Security2Extension[]): Uint8Array | undefined {
 
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
-	public supportsCommand(_cmd: Security2Command): MaybeNotKnown<boolean> {
-		// All commands are mandatory
-		return true;
+	public supportsCommand(cmd: Security2Command): MaybeNotKnown<boolean> {
+		switch (cmd) {
+			case Security2Command.NonceGet:
+			case Security2Command.NonceReport:
+			case Security2Command.MessageEncapsulation:
+			case Security2Command.KEXGet:
+			case Security2Command.KEXReport:
+			case Security2Command.KEXSet:
+			case Security2Command.KEXFail:
+			case Security2Command.PublicKeyReport:
+			case Security2Command.NetworkKeyGet:
+			case Security2Command.NetworkKeyReport:
+			case Security2Command.NetworkKeyVerify:
+			case Security2Command.TransferEnd:
+			case Security2Command.CommandsSupportedGet:
+			case Security2Command.CommandsSupportedReport:
+				return true;
+
+			case Security2Command.NLSNodeListGet:
+			case Security2Command.NLSNodeListReport:
+			case Security2Command.NLSStateGet:
+			case Security2Command.NLSStateReport:
+			case Security2Command.NLSStateSet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
 	}
 
 	/**
@@ -991,6 +1020,80 @@ export class Security2CCAPI extends CCAPI {
 			keyRequestComplete: true,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
+	}
+
+	public async getNLSNodeList(
+		requestKind: NLSNodeListRequestKind,
+	): Promise<
+		{
+			lastNode: boolean;
+			nlsNodeId: number;
+			grantedKeys: SecurityClass[];
+			enabled: boolean;
+		} | undefined
+	> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NLSNodeListGet,
+		);
+
+		const cc = new Security2CCNLSNodeListGet({
+			nodeId: this.endpoint.nodeId,
+			endpointIndex: this.endpoint.index,
+			kind: requestKind,
+		});
+		const response = await this.host.sendCommand<
+			Security2CCNLSNodeListReport
+		>(
+			cc,
+			this.commandOptions,
+		);
+		if (response) {
+			return pick(response, [
+				"lastNode",
+				"nlsNodeId",
+				"grantedKeys",
+				"enabled",
+			]);
+		}
+	}
+
+	public async getNLSState(): Promise<
+		{
+			supported: boolean;
+			enabled: boolean;
+		} | undefined
+	> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NLSStateGet,
+		);
+
+		const cc = new Security2CCNLSStateGet({
+			nodeId: this.endpoint.nodeId,
+			endpointIndex: this.endpoint.index,
+		});
+		const response = await this.host.sendCommand<Security2CCNLSStateReport>(
+			cc,
+			this.commandOptions,
+		);
+		if (response) {
+			return pick(response, ["supported", "enabled"]);
+		}
+	}
+
+	public async enableNLS(): Promise<SupervisionResult | undefined> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NLSStateSet,
+		);
+
+		const cc = new Security2CCNLSStateSet({
+			nodeId: this.endpoint.nodeId,
+			endpointIndex: this.endpoint.index,
+			enabled: true,
+		});
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -2796,3 +2899,184 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 @CCCommand(Security2Command.CommandsSupportedGet)
 @expectedCCResponse(Security2CCCommandsSupportedReport)
 export class Security2CCCommandsSupportedGet extends Security2CC {}
+
+// @publicAPI
+export interface Security2CCNLSNodeListReportOptions {
+	lastNode: boolean;
+	nlsNodeId: number;
+	grantedKeys: SecurityClass[];
+	enabled: boolean;
+}
+
+@CCCommand(Security2Command.NLSNodeListReport)
+export class Security2CCNLSNodeListReport extends Security2CC {
+	public constructor(
+		options: WithAddress<Security2CCNLSNodeListReportOptions>,
+	) {
+		super(options);
+		this.lastNode = options.lastNode;
+		this.nlsNodeId = options.nlsNodeId;
+		this.grantedKeys = options.grantedKeys;
+		this.enabled = options.enabled;
+	}
+
+	public lastNode: boolean;
+	public nlsNodeId: number;
+	public grantedKeys: SecurityClass[];
+	public enabled: boolean;
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCNLSNodeListReport {
+		validatePayload(raw.payload.length >= 5);
+
+		const lastNode = !!(raw.payload[0] & 0b1);
+		const nlsNodeId = raw.payload.readUInt16BE(1);
+		const grantedKeys: SecurityClass[] = parseBitMask(
+			raw.payload.subarray(3, 4),
+			SecurityClass.S2_Unauthenticated,
+		);
+		const enabled = !!raw.payload[4];
+
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			lastNode,
+			nlsNodeId,
+			grantedKeys,
+			enabled,
+		});
+	}
+
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		this.payload = Bytes.concat([
+			[this.lastNode ? 0b1 : 0],
+			encodeNodeID(this.nlsNodeId, NodeIDType.Long),
+			encodeBitMask(
+				this.grantedKeys,
+				SecurityClass.S0_Legacy,
+				SecurityClass.S2_Unauthenticated,
+			),
+			[this.enabled ? 0b1 : 0],
+		]);
+
+		return super.serialize(ctx);
+	}
+}
+
+// @publicAPI
+export interface Security2CCNLSNodeListGetOptions {
+	kind: NLSNodeListRequestKind;
+}
+
+@CCCommand(Security2Command.NLSNodeListGet)
+@expectedCCResponse(Security2CCNLSNodeListReport)
+export class Security2CCNLSNodeListGet extends Security2CC {
+	public constructor(
+		options: WithAddress<Security2CCNLSNodeListGetOptions>,
+	) {
+		super(options);
+		this.kind = options.kind;
+	}
+
+	public kind: NLSNodeListRequestKind;
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCNLSNodeListGet {
+		validatePayload(raw.payload.length >= 1);
+
+		const kind: NLSNodeListRequestKind = raw.payload[0];
+
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			kind,
+		});
+	}
+
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		this.payload = Bytes.from([
+			this.kind,
+		]);
+		return super.serialize(ctx);
+	}
+}
+
+// @publicAPI
+export interface Security2CCNLSStateReportOptions {
+	supported: boolean;
+	enabled: boolean;
+}
+
+@CCCommand(Security2Command.NLSStateReport)
+export class Security2CCNLSStateReport extends Security2CC {
+	public constructor(
+		options: WithAddress<Security2CCNLSStateReportOptions>,
+	) {
+		super(options);
+		this.supported = options.supported;
+		this.enabled = options.enabled;
+	}
+
+	public supported: boolean;
+	public enabled: boolean;
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCNLSStateReport {
+		validatePayload(raw.payload.length >= 1);
+
+		const supported = !!(raw.payload[0] & 0b1);
+		const enabled = supported && !!(raw.payload[0] & 0b10);
+
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			supported,
+			enabled,
+		});
+	}
+}
+
+@CCCommand(Security2Command.NLSStateGet)
+@expectedCCResponse(Security2CCNLSStateReport)
+export class Security2CCNLSStateGet extends Security2CC {}
+
+// @publicAPI
+export interface Security2CCNLSStateSetOptions {
+	enabled: boolean;
+}
+
+@CCCommand(Security2Command.NLSStateSet)
+export class Security2CCNLSStateSet extends Security2CC {
+	public constructor(
+		options: WithAddress<Security2CCNLSStateSetOptions>,
+	) {
+		super(options);
+		this.enabled = options.enabled;
+	}
+
+	public enabled: boolean;
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCNLSStateSet {
+		validatePayload(raw.payload.length >= 1);
+
+		const enabled = raw.payload[0] === 0x01;
+
+		return new this({
+			nodeId: ctx.sourceNodeId,
+			enabled,
+		});
+	}
+
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		this.payload = Bytes.from([
+			this.enabled ? 0x01 : 0x00,
+		]);
+		return super.serialize(ctx);
+	}
+}
