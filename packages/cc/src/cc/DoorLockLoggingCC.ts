@@ -427,9 +427,8 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 
 	public recordNumber: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.recordNumber]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

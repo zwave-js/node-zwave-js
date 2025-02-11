@@ -47,7 +47,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 
 	public shadowNodeIds: number[];
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = encodeBitMask(
 			this.shadowNodeIds,
 			LONG_RANGE_SHADOW_NODE_IDS_START
@@ -56,7 +56,6 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 			LONG_RANGE_SHADOW_NODE_IDS_START,
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

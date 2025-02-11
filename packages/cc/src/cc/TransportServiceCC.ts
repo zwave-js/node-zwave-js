@@ -143,7 +143,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public partialDatagram: Uint8Array;
 	public encapsulated!: CommandClass;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -174,7 +174,6 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -329,37 +328,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		return { ccCommand: undefined, sessionId: this.sessionId };
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
-	public mergePartialCCs(
-		partials: [
-			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[],
-		],
-		ctx: CCParsingContext,
-	): void {
-		// Concat the CC buffers
-		const datagram = new Bytes(this.datagramSize);
-		for (const partial of [...partials, this]) {
-			// Ensure that we don't try to write out-of-bounds
-			const offset = partial instanceof TransportServiceCCFirstSegment
-				? 0
-				: partial.datagramOffset;
-			if (offset + partial.partialDatagram.length > datagram.length) {
-				throw new ZWaveError(
-					`The partial datagram offset and length in a segment are not compatible to the communicated datagram length`,
-					ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				);
-			}
-			datagram.set(partial.partialDatagram, offset);
-		}
-
-		// and deserialize the CC
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		this._encapsulated = CommandClass.parse(datagram, ctx);
-		this._encapsulated.encapsulatingCC = this as any;
-	}
-
-	public async mergePartialCCsAsync(
+	public async mergePartialCCs(
 		partials: [
 			TransportServiceCCFirstSegment,
 			...TransportServiceCCSubsequentSegment[],
@@ -383,11 +352,11 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		}
 
 		// and deserialize the CC
-		this._encapsulated = await CommandClass.parseAsync(datagram, ctx);
+		this._encapsulated = await CommandClass.parse(datagram, ctx);
 		this._encapsulated.encapsulatingCC = this as any;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -421,7 +390,6 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -487,13 +455,12 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public sessionId: number;
 	public datagramOffset: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			((this.sessionId & 0b1111) << 4)
 			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -537,9 +504,8 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 
 	public sessionId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([(this.sessionId & 0b1111) << 4]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -580,9 +546,8 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 
 	public pendingSegments: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.pendingSegments]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

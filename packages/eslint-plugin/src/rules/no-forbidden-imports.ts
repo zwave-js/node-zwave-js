@@ -9,6 +9,8 @@ const whitelistedImports = [
 	// These are browser-compatible
 	"fflate",
 	"dayjs",
+	"nrf-intel-hex",
+	"triple-beam",
 	"alcalzone-shared/arrays",
 	"alcalzone-shared/async",
 	"alcalzone-shared/comparable",

@@ -3,6 +3,7 @@ import {
 	type GetDeviceConfig,
 	type LookupManufacturer,
 } from "@zwave-js/config";
+import { type LogNode } from "@zwave-js/core";
 import {
 	type BroadcastCC,
 	type CCAddress,
@@ -20,7 +21,6 @@ import {
 	type GetValueDB,
 	type HostIDs,
 	type ListenBehavior,
-	type LogNode,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type ModifyCCs,
@@ -212,67 +212,7 @@ export class CommandClass implements CCId {
 		this.payload = Bytes.view(payload);
 	}
 
-	/** @deprecated Use {@link parseAsync} instead */
-	public static parse(
-		data: Uint8Array,
-		ctx: CCParsingContext,
-	): CommandClass {
-		const raw = CCRaw.parse(data);
-
-		// Find the correct subclass constructor to invoke
-		const CCConstructor = getCCConstructor(raw.ccId);
-		if (!CCConstructor) {
-			// None -> fall back to the default constructor
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return CommandClass.from(raw, ctx);
-		}
-
-		let CommandConstructor: CCConstructor<CommandClass> | undefined;
-		if (raw.ccCommand != undefined) {
-			CommandConstructor = getCCCommandConstructor(
-				raw.ccId,
-				raw.ccCommand,
-			);
-		}
-		// Not every CC has a constructor for its commands. In that case,
-		// call the CC constructor directly
-		try {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return (CommandConstructor ?? CCConstructor).from(raw, ctx);
-		} catch (e) {
-			// Indicate invalid payloads with a special CC type
-			if (
-				isZWaveError(e)
-				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
-			) {
-				const ccName = CommandConstructor?.name
-					?? `${getCCName(raw.ccId)} CC`;
-
-				// Preserve why the command was invalid
-				let reason: string | ZWaveErrorCodes | undefined;
-				if (
-					typeof e.context === "string"
-					|| (typeof e.context === "number"
-						&& ZWaveErrorCodes[e.context] != undefined)
-				) {
-					reason = e.context;
-				}
-
-				const ret = new InvalidCC({
-					nodeId: ctx.sourceNodeId,
-					ccId: raw.ccId,
-					ccCommand: raw.ccCommand,
-					ccName,
-					reason,
-				});
-
-				return ret;
-			}
-			throw e;
-		}
-	}
-
-	public static async parseAsync(
+	public static async parse(
 		data: Uint8Array,
 		ctx: CCParsingContext,
 	): Promise<CommandClass> {
@@ -282,7 +222,7 @@ export class CommandClass implements CCId {
 		const CCConstructor = getCCConstructor(raw.ccId);
 		if (!CCConstructor) {
 			// None -> fall back to the default constructor
-			return CommandClass.fromAsync(raw, ctx);
+			return await CommandClass.from(raw, ctx);
 		}
 
 		let CommandConstructor: CCConstructor<CommandClass> | undefined;
@@ -295,10 +235,7 @@ export class CommandClass implements CCId {
 		// Not every CC has a constructor for its commands. In that case,
 		// call the CC constructor directly
 		try {
-			return await (CommandConstructor ?? CCConstructor).fromAsync(
-				raw,
-				ctx,
-			);
+			return await (CommandConstructor ?? CCConstructor).from(raw, ctx);
 		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
@@ -332,29 +269,16 @@ export class CommandClass implements CCId {
 		}
 	}
 
-	/** @deprecated Use {@link fromAsync} instead */
-	public static from(raw: CCRaw, ctx: CCParsingContext): CommandClass {
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): CommandClass | Promise<CommandClass> {
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			ccId: raw.ccId,
 			ccCommand: raw.ccCommand,
 			payload: raw.payload,
 		});
-	}
-
-	// eslint-disable-next-line @typescript-eslint/require-await
-	public static async fromAsync(
-		raw: CCRaw,
-		ctx: CCParsingContext,
-	): Promise<CommandClass> {
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return this.from(raw, ctx);
-
-		// TODO: Plan for next major release:
-		// - CommandClass ONLY exposes `public static async from` (renamed!)
-		// - CommandClass internally implements `protected static fromSync` and `protected static async fromAsync`
-		// - The default implementation of `fromAsync` just calls `fromSync`
-		// - Sub-classes override either `fromSync` OR `fromAsync` as needed
 	}
 
 	/** This CC's identifier */
@@ -428,10 +352,9 @@ export class CommandClass implements CCId {
 
 	/**
 	 * Serializes this CommandClass to be embedded in a message payload or another CC
-	 * @deprecated Use {@link serializeAsync} instead
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public serialize(ctx: CCEncodingContext): Bytes {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/require-await
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"]) {
 			return Bytes.from([this.ccId]);
@@ -451,35 +374,6 @@ export class CommandClass implements CCId {
 			data.set(this.payload, 1 + ccIdLength);
 		}
 		return data;
-	}
-
-	/**
-	 * Serializes this CommandClass to be embedded in a message payload or another CC
-	 */
-	// eslint-disable-next-line @typescript-eslint/require-await
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		// This call is for backwards compatibility purposes. Not all
-		// CC subclasses implement serializeAsync, so those need to internally
-		// call serialize()
-		// For those that do, we MUST not call the subclass' serialize method
-		// directly, or the side effects may run twice.
-		if (this.serializeAsync !== CommandClass.prototype.serializeAsync) {
-			// Subclass implements serializeAsync, and we've reached the top
-			// of the inheritance chain. Call CommandClass.serialize to finish.
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return CommandClass.prototype.serialize.call(this, ctx);
-		} else {
-			// Subclass does not implement serializeAsync, call its
-			// serialize method instead
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return this.serialize(ctx);
-		}
-
-		// TODO: Plan for next major release:
-		// - CommandClass ONLY exposes `public async serialize` (renamed!)
-		// - CommandClass internally implements `protected serializeSync` and `protected async serializeAsync`
-		// - The default implementation of `serializeAsync` just calls `serializeSync`
-		// - Sub-classes override either `serializeSync` OR `serializeAsync` as needed
 	}
 
 	public prepareRetransmission(): void {
@@ -1059,20 +953,8 @@ export class CommandClass implements CCId {
 		return false; // By default, all CCs are monolithic
 	}
 
-	/**
-	 * Include previously received partial responses into a final CC
-	 * @deprecated Use {@link mergePartialCCsAsync} instead
-	 */
-	public mergePartialCCs(
-		_partials: CommandClass[],
-		_ctx: CCParsingContext,
-	): void {
-		// This is highly CC dependent
-		// Overwrite this in derived classes, by default do nothing
-	}
-
 	/** Include previously received partial responses into a final CC */
-	public async mergePartialCCsAsync(
+	public async mergePartialCCs(
 		_partials: CommandClass[],
 		_ctx: CCParsingContext,
 	): Promise<void> {

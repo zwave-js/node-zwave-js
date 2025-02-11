@@ -247,12 +247,11 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return true;
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.parameter]),
 			encodeFloatWithScale(this.value, this.scale.key),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -311,9 +310,8 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 
 	public parameter: EnergyProductionParameter;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.parameter]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

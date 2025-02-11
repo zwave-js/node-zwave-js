@@ -9,7 +9,7 @@
 // 0 -->               -->     Parsers     --> read
 // 1 └─────────────────┘ └─────────────────┘ └──
 
-import { type ZWaveLogContainer } from "@zwave-js/core";
+import { type LogContainer } from "@zwave-js/core";
 import { noop } from "@zwave-js/shared";
 import type {
 	ReadableWritablePair,
@@ -25,7 +25,7 @@ import { type ZWaveSerialBindingFactory } from "../serialport/ZWaveSerialStream.
 export class ZnifferSerialStreamFactory {
 	constructor(
 		binding: ZWaveSerialBindingFactory,
-		loggers: ZWaveLogContainer,
+		loggers: LogContainer,
 	) {
 		this.binding = binding;
 		this.logger = new SerialLogger(loggers);

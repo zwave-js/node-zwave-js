@@ -360,7 +360,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	public mode: ThermostatMode;
 	public manufacturerData?: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const manufacturerData =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
@@ -373,7 +373,6 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			]),
 			manufacturerData,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -486,7 +485,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 
 	public readonly manufacturerData: Uint8Array | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const manufacturerDataLength =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
@@ -500,7 +499,6 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				1,
 			);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -570,13 +568,12 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 
 	public readonly supportedModes: ThermostatMode[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = encodeBitMask(
 			this.supportedModes,
 			ThermostatMode["Manufacturer specific"],
 			ThermostatMode.Off,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

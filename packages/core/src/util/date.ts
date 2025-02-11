@@ -104,7 +104,7 @@ export function getDSTInfo(now: Date = new Date()): DSTInfo {
 
 /** Returns a timestamp with nano-second precision */
 export function highResTimestamp(): number {
-	if (process != undefined) {
+	if (typeof process !== "undefined") {
 		const [s, ns] = process.hrtime();
 		return s * 1e9 + ns;
 	} else if (performance != undefined) {

@@ -388,14 +388,13 @@ export class SceneActuatorConfigurationCCSet
 	public dimmingDuration: Duration;
 	public level?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 			this.level != undefined ? 0b1000_0000 : 0,
 			this.level ?? 0xff,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -555,9 +554,8 @@ export class SceneActuatorConfigurationCCGet
 
 	public sceneId: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.sceneId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

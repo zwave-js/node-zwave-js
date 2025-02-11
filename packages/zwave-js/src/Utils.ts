@@ -6,7 +6,6 @@ export {
 	QRCodeVersion,
 	RouteProtocolDataRate,
 	extractFirmware,
-	extractFirmwareAsync,
 	guessFirmwareFileFormat,
 	parseQRCodeString,
 	rssiToString,

@@ -56,9 +56,8 @@ export class RequestNodeInfoResponse extends Message
 		return this.wasSent;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.wasSent ? 0x01 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -119,9 +118,8 @@ export class RequestNodeInfoRequest extends Message {
 		return false;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = encodeNodeID(this.nodeId, ctx.nodeIdType);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

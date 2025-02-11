@@ -205,12 +205,11 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public setbackState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -269,12 +268,11 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public readonly setbackState: SetbackState;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			[this.setbackType & 0b11],
 			encodeSetbackState(this.setbackState),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

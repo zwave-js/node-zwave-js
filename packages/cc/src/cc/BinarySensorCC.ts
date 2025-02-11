@@ -397,9 +397,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public type: BinarySensorType;
 	public value: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.value ? 0xff : 0x00, this.type]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -458,9 +457,8 @@ export class BinarySensorCCGet extends BinarySensorCC {
 
 	public sensorType: BinarySensorType | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.sensorType ?? BinarySensorType.Any]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -519,13 +517,12 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 
 	public supportedSensorTypes: BinarySensorType[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = encodeBitMask(
 			this.supportedSensorTypes.filter((t) => t !== BinarySensorType.Any),
 			undefined,
 			0,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

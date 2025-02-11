@@ -167,12 +167,11 @@ export class SceneActivationCCSet extends SceneActivationCC {
 
 	public dimmingDuration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.sceneId,
 			this.dimmingDuration?.serializeSet() ?? 0xff,
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

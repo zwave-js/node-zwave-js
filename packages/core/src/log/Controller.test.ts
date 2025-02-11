@@ -1,3 +1,5 @@
+import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
+import { createDefaultTransportFormat } from "@zwave-js/core/bindings/log/node";
 import { beforeEach, test as baseTest } from "vitest";
 import { CommandClasses } from "../definitions/CommandClasses.js";
 import { InterviewStage } from "../definitions/InterviewStage.js";
@@ -7,7 +9,6 @@ import {
 	assertMessage,
 } from "../test/SpyTransport.js";
 import { ControllerLogger } from "./Controller.js";
-import { ZWaveLogContainer, createDefaultTransportFormat } from "./shared.js";
 
 // Extend the test conte
 
@@ -25,7 +26,7 @@ const test = baseTest.extend<LocalTestContext>({
 			const spyTransport = new SpyTransport();
 			spyTransport.format = createDefaultTransportFormat(true, true);
 			const controllerLogger = new ControllerLogger(
-				new ZWaveLogContainer({
+				createZWaveLogContainer({
 					transports: [spyTransport],
 				}),
 			);

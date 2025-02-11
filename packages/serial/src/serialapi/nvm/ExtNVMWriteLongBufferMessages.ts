@@ -62,12 +62,11 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 	public offset: number;
 	public buffer: Uint8Array;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(5 + this.buffer.length);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 		this.payload.set(this.buffer, 5);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

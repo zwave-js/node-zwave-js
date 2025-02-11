@@ -5,7 +5,7 @@ import { CommandClasses } from "../definitions/CommandClasses.js";
 import { ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { assertZWaveError } from "../test/assertZWaveError.js";
 import { ValueMetadata } from "./Metadata.js";
-import { ValueDB, dbKeyToValueIdFast } from "./ValueDB.js";
+import { ValueDB, dbKeyToValueIdFast, valueEquals } from "./ValueDB.js";
 import type { ValueID } from "./_Types.js";
 
 function setup(): {
@@ -991,4 +991,103 @@ test("keys that are invalid JSON should not cause a crash", (t) => {
 
 	t.expect(valueDB.getAllMetadata(44)).toStrictEqual([]);
 	t.expect(valueDB["_index"].size).toBe(0);
+});
+
+test("valueEquals() -> should return true for primitive types with equal values", (t) => {
+	t.expect(valueEquals(42, 42)).toBe(true);
+	t.expect(valueEquals("hello", "hello")).toBe(true);
+	t.expect(valueEquals(true, true)).toBe(true);
+	t.expect(valueEquals(undefined, undefined)).toBe(true);
+	t.expect(valueEquals(null, null)).toBe(true);
+});
+
+test("valueEquals() -> should return false for primitive types with different values", (t) => {
+	t.expect(valueEquals(42, 43)).toBe(false);
+	t.expect(valueEquals("hello", "world")).toBe(false);
+	t.expect(valueEquals(true, false)).toBe(false);
+	t.expect(valueEquals(undefined, null)).toBe(false);
+});
+
+test("valueEquals() -> should return true for equal Uint8Array values", (t) => {
+	const a = new Uint8Array([1, 2, 3]);
+	const b = new Uint8Array([1, 2, 3]);
+	t.expect(valueEquals(a, b)).toBe(true);
+});
+
+test("valueEquals() -> should return false for different Uint8Array values", (t) => {
+	const a = new Uint8Array([1, 2, 3]);
+	const b = new Uint8Array([4, 5, 6]);
+	t.expect(valueEquals(a, b)).toBe(false);
+});
+
+test("valueEquals() -> should return true for equal arrays", (t) => {
+	t.expect(valueEquals([1, 2, 3], [1, 2, 3])).toBe(true);
+	t.expect(valueEquals(["a", "b", "c"], ["a", "b", "c"])).toBe(true);
+});
+
+test("valueEquals() -> should return false for different arrays", (t) => {
+	t.expect(valueEquals([1, 2, 3], [4, 5, 6])).toBe(false);
+	t.expect(valueEquals(["a", "b", "c"], ["d", "e", "f"])).toBe(false);
+	t.expect(valueEquals([1, 2, 3], [1, 2])).toBe(false);
+});
+
+test("valueEquals() -> should return true for equal objects", (t) => {
+	t.expect(valueEquals({ a: 1, b: 2 }, { a: 1, b: 2 })).toBe(true);
+	t.expect(valueEquals({ foo: "bar" }, { foo: "bar" })).toBe(true);
+});
+
+test("valueEquals() -> should return false for different objects", (t) => {
+	t.expect(valueEquals({ a: 1, b: 2 }, { a: 1, b: 3 })).toBe(false);
+	t.expect(valueEquals({ foo: "bar" }, { foo: "baz" })).toBe(false);
+	t.expect(valueEquals({ a: 1, b: 2 }, { a: 1 })).toBe(false);
+});
+
+test("valueEquals() -> should return false for functions and symbols", (t) => {
+	t.expect(valueEquals(() => {}, () => {})).toBe(false);
+	t.expect(valueEquals(Symbol("a"), Symbol("a"))).toBe(false);
+});
+
+test("valueEquals() -> should return true for equal nested arrays", (t) => {
+	t.expect(valueEquals([1, [2, 3], [4, [5, 6]]], [1, [2, 3], [4, [5, 6]]]))
+		.toBe(true);
+});
+
+test("valueEquals() -> should return false for different nested arrays", (t) => {
+	t.expect(valueEquals([1, [2, 3], [4, [5, 6]]], [1, [2, 3], [4, [5, 7]]]))
+		.toBe(false);
+	t.expect(valueEquals([1, [2, 3]], [1, [2, 3, 4]])).toBe(false);
+});
+
+// Tests für verschachtelte Objekte
+test("valueEquals() -> should return true for equal nested objects", (t) => {
+	t.expect(
+		valueEquals({ a: 1, b: { c: 2, d: { e: 3 } } }, {
+			a: 1,
+			b: { c: 2, d: { e: 3 } },
+		}),
+	).toBe(true);
+});
+
+test("valueEquals() -> should return false for different nested objects", (t) => {
+	t.expect(
+		valueEquals(
+			{ a: 1, b: { c: 2, d: { e: 3 } } },
+			{ a: 1, b: { c: 2, d: { e: 4 } } },
+		),
+	).toBe(false);
+	t.expect(
+		valueEquals(
+			{ a: 1, b: { c: 2 } },
+			{ a: 1, b: { c: 2, d: 3 } },
+		),
+	).toBe(false);
+});
+
+// Tests für den Vergleich von Werten unterschiedlicher Typen
+test("valueEquals() -> should return false for values of different types", (t) => {
+	t.expect(valueEquals(42, "42")).toBe(false);
+	t.expect(valueEquals(true, 1)).toBe(false);
+	t.expect(valueEquals(null, undefined)).toBe(false);
+	t.expect(valueEquals({ a: 1 }, [1])).toBe(false);
+	t.expect(valueEquals(new Uint8Array([1, 2, 3]), [1, 2, 3])).toBe(false);
 });

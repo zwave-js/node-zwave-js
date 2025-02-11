@@ -29,9 +29,9 @@ import {
 	ZWaveErrorCodes,
 	actuatorCCs,
 	getCCName,
+	isCCInfoEqual,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver.js";
 import { cacheKeys } from "../driver/NetworkCache.js";
 import type { DeviceClass } from "./DeviceClass.js";
@@ -162,7 +162,7 @@ export class Endpoint
 			},
 			info,
 		);
-		if (!isDeepStrictEqual(original, updated)) {
+		if (original == undefined || !isCCInfoEqual(original, updated)) {
 			this._implementedCommandClasses.set(cc, updated);
 		}
 	}

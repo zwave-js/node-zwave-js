@@ -87,7 +87,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 
 	private _ownNodeId: number;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
 		this.payload = Bytes.concat([
@@ -100,7 +100,6 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 			]),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

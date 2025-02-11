@@ -77,7 +77,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	public productId: number;
 	public supportedFunctionTypes: FunctionType[];
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(8 + NUM_FUNCTION_BYTES);
 
 		const firmwareBytes = this.firmwareVersion
@@ -96,7 +96,6 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		);
 		this.payload.set(functionBitMask, 8);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }

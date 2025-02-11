@@ -215,6 +215,7 @@ import { containsCC } from "@zwave-js/serial/serialapi";
 import {
 	Bytes,
 	Mixin,
+	type Timer,
 	TypedEventTarget,
 	cloneDeep,
 	discreteLinearSearch,
@@ -224,6 +225,7 @@ import {
 	isUint8Array,
 	noop,
 	pick,
+	setTimer,
 	stringify,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -320,7 +322,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 				...this.notificationIdleTimeouts.values(),
 			]
 		) {
-			if (timeout) clearTimeout(timeout);
+			timeout?.clear();
 		}
 
 		// Remove all event handlers
@@ -2744,7 +2746,7 @@ protocol version:      ${this.protocolVersion}`;
 	/** Stores information about a currently held down key */
 	private centralSceneKeyHeldDownContext:
 		| {
-			timeout: NodeJS.Timeout;
+			timeout: Timer;
 			sceneNumber: number;
 		}
 		| undefined;
@@ -2799,7 +2801,7 @@ protocol version:      ${this.protocolVersion}`;
 				CentralSceneKeys.KeyReleased,
 			);
 			// clear old timer
-			clearTimeout(this.centralSceneKeyHeldDownContext!.timeout);
+			this.centralSceneKeyHeldDownContext?.timeout?.clear();
 			// clear the key down context
 			this.centralSceneKeyHeldDownContext = undefined;
 		};
@@ -2819,9 +2821,7 @@ protocol version:      ${this.protocolVersion}`;
 		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// Set or refresh timer to force a release of the key
 			this.centralSceneForcedKeyUp = false;
-			if (this.centralSceneKeyHeldDownContext) {
-				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
-			}
+			this.centralSceneKeyHeldDownContext?.timeout?.clear();
 			// If the node does not advertise support for the slow refresh capability, we might still be dealing with a
 			// slow refresh node. We use the stored value for fallback behavior
 			const slowRefresh = command.slowRefresh
@@ -2829,7 +2829,7 @@ protocol version:      ${this.protocolVersion}`;
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
 				// Unref'ing long running timers allows the process to exit mid-timeout
-				timeout: setTimeout(
+				timeout: setTimer(
 					forceKeyUp,
 					slowRefresh ? 60000 : 400,
 				).unref(),
@@ -2837,7 +2837,7 @@ protocol version:      ${this.protocolVersion}`;
 		} else if (command.keyAttribute === CentralSceneKeys.KeyReleased) {
 			// Stop the release timer
 			if (this.centralSceneKeyHeldDownContext) {
-				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
+				this.centralSceneKeyHeldDownContext.timeout.clear();
 				this.centralSceneKeyHeldDownContext = undefined;
 			} else if (this.centralSceneForcedKeyUp) {
 				// If we timed out and the controller subsequently receives a Key Released Notification,
@@ -4208,7 +4208,7 @@ protocol version:      ${this.protocolVersion}`;
 	/**
 	 * Allows automatically resetting notification values to idle if the node does not do it itself
 	 */
-	private notificationIdleTimeouts = new Map<string, NodeJS.Timeout>();
+	private notificationIdleTimeouts = new Map<string, Timer>();
 	/** Schedules a notification value to be reset */
 	private scheduleNotificationIdleReset(
 		valueId: ValueID,
@@ -4219,7 +4219,7 @@ protocol version:      ${this.protocolVersion}`;
 		this.notificationIdleTimeouts.set(
 			key,
 			// Unref'ing long running timeouts allows to quit the application before the timeout elapses
-			setTimeout(handler, 5 * 60 * 1000 /* 5 minutes */).unref(),
+			setTimer(handler, 5 * 60 * 1000 /* 5 minutes */).unref(),
 		);
 	}
 
@@ -4227,7 +4227,7 @@ protocol version:      ${this.protocolVersion}`;
 	private clearNotificationIdleReset(valueId: ValueID): void {
 		const key = valueIdToString(valueId);
 		if (this.notificationIdleTimeouts.has(key)) {
-			clearTimeout(this.notificationIdleTimeouts.get(key));
+			this.notificationIdleTimeouts.get(key)?.clear();
 			this.notificationIdleTimeouts.delete(key);
 		}
 	}

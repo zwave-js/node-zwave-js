@@ -104,7 +104,7 @@ import { CommandClass, containsCC } from "zwave-js";
 
 	// Parse embedded CCs
 	if (isCommandRequest(msg) && containsSerializedCC(msg)) {
-		msg.command = await CommandClass.parseAsync(
+		msg.command = await CommandClass.parse(
 			msg.serializedCC,
 			{
 				...ctx,
@@ -114,7 +114,7 @@ import { CommandClass, containsCC } from "zwave-js";
 		);
 	}
 	if (containsCC(msg)) {
-		await msg.command.mergePartialCCsAsync([], {} as any);
+		await msg.command.mergePartialCCs([], {} as any);
 	}
 	msg;
 	debugger;

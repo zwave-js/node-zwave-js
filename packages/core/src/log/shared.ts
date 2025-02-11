@@ -1,419 +1,85 @@
-import { flatMap } from "@zwave-js/shared";
-import type { Format, TransformFunction } from "logform";
-import path from "pathe";
-import { MESSAGE, configs } from "triple-beam";
-import winston from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
+import type { TransformableInfo } from "logform";
 import type Transport from "winston-transport";
-import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
-import { colorizer } from "./Colorizer.js";
-import {
-	CONTROL_CHAR_WIDTH,
-	LOG_WIDTH,
-	type LogConfig,
-	type LogContext,
-	type MessageRecord,
-	type ZWaveLogInfo,
-	type ZWaveLogger,
-	channelPadding,
-	directionPrefixPadding,
-	nonUndefinedLogConfigKeys,
-	stringToNodeList,
-	timestampFormatShort,
-	timestampPadding,
-	timestampPaddingShort,
-} from "./shared_safe.js";
+import { type LogContainer } from "./traits.js";
 
-const { combine, timestamp, label } = winston.format;
+export const timestampFormatShort = "HH:mm:ss.SSS";
+export const timestampPaddingShort = " ".repeat(
+	timestampFormatShort.length + 1,
+);
+export const timestampPadding = " ".repeat(new Date().toISOString().length + 1);
+/** @internal */
+export const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
-const loglevels = configs.npm.levels;
-const isTTY = process.stdout.isTTY;
-const isUnitTest = process.env.NODE_ENV === "test";
+export type DataDirection = "inbound" | "outbound" | "none";
 
-export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
-	constructor(loggers: ZWaveLogContainer, logLabel: string) {
-		this.container = loggers;
-		this.logger = this.container.getLogger(logLabel);
-	}
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getDirectionPrefix(direction: DataDirection) {
+	return direction === "inbound"
+		? "« "
+		: direction === "outbound"
+		? "» "
+		: "  ";
+}
+/** The space the directional arrows, grouping brackets and padding occupies */
+export const CONTROL_CHAR_WIDTH = 2;
+export const directionPrefixPadding = " ".repeat(CONTROL_CHAR_WIDTH);
 
-	public logger: ZWaveLogger<TContext>;
-	public container: ZWaveLogContainer;
+/**
+ * The width of a log line in (visible) characters, excluding the timestamp and
+ * label, but including the direction prefix
+ */
+export const LOG_WIDTH = 80;
+/** The width of the columns containing the timestamp and channel */
+export const LOG_PREFIX_WIDTH = 20;
+
+export interface ZWaveLogInfo<TContext extends LogContext = LogContext>
+	extends Omit<TransformableInfo, "message">
+{
+	direction: string;
+	/** Primary tags are printed before the message and must fit into the first line.
+	 * They don't have to be enclosed in square brackets */
+	primaryTags?: string;
+	/** Secondary tags are right-aligned in the first line and printed in a dim color */
+	secondaryTags?: string;
+	secondaryTagPadding?: number;
+	multiline?: boolean;
+	timestamp?: string;
+	label?: string;
+	message: string | string[];
+	context: TContext;
 }
 
-export class ZWaveLogContainer extends winston.Container {
-	private fileTransport: DailyRotateFile | undefined;
-	private consoleTransport: ConsoleTransportInstance | undefined;
-	private loglevelVisibleCache = new Map<string, boolean>();
-
-	private logConfig: LogConfig & { level: string } = {
-		enabled: true,
-		level: getTransportLoglevel(),
-		logToFile: !!process.env.LOGTOFILE,
-		maxFiles: 7,
-		nodeFilter: stringToNodeList(process.env.LOG_NODES),
-		transports: undefined as any,
-		filename: path.join(process.cwd(), `zwavejs_%DATE%.log`),
-		forceConsole: false,
-	};
-
-	constructor(config: Partial<LogConfig> = {}) {
-		super();
-		this.updateConfiguration(config);
-	}
-
-	public getLogger(label: string): ZWaveLogger {
-		if (!this.has(label)) {
-			this.add(label, {
-				transports: this.getAllTransports(),
-				format: createLoggerFormat(label),
-				// Accept all logs, no matter what. The individual loggers take care
-				// of filtering the wrong loglevels
-				level: "silly",
-			});
-		}
-
-		return this.get(label) as unknown as ZWaveLogger;
-	}
-
-	public updateConfiguration(config: Partial<LogConfig>): void {
-		// Avoid overwriting configuration settings with undefined if they shouldn't be
-		for (const key of nonUndefinedLogConfigKeys) {
-			if (key in config && config[key] === undefined) {
-				delete config[key];
-			}
-		}
-		const changedLoggingTarget = (config.logToFile != undefined
-			&& config.logToFile !== this.logConfig.logToFile)
-			|| (config.forceConsole != undefined
-				&& config.forceConsole !== this.logConfig.forceConsole);
-
-		if (typeof config.level === "number") {
-			config.level = loglevelFromNumber(config.level);
-		}
-		const changedLogLevel = config.level != undefined
-			&& config.level !== this.logConfig.level;
-
-		if (
-			config.filename != undefined
-			&& !config.filename.includes("%DATE%")
-		) {
-			config.filename += "_%DATE%.log";
-		}
-		const changedFilename = config.filename != undefined
-			&& config.filename !== this.logConfig.filename;
-
-		if (config.maxFiles != undefined) {
-			if (
-				typeof config.maxFiles !== "number"
-				|| config.maxFiles < 1
-				|| config.maxFiles > 365
-			) {
-				delete config.maxFiles;
-			}
-		}
-		const changedMaxFiles = config.maxFiles != undefined
-			&& config.maxFiles !== this.logConfig.maxFiles;
-
-		this.logConfig = Object.assign(this.logConfig, config);
-
-		// If the loglevel changed, our cached "is visible" info is out of date
-		if (changedLogLevel) {
-			this.loglevelVisibleCache.clear();
-		}
-
-		// When the log target (console, file, filename) was changed, recreate the internal transports
-		// because at least the filename does not update dynamically
-		// Also do this when configuring the logger for the first time
-		const recreateInternalTransports = (this.fileTransport == undefined
-			&& this.consoleTransport == undefined)
-			|| changedLoggingTarget
-			|| changedFilename
-			|| changedMaxFiles;
-
-		if (recreateInternalTransports) {
-			this.fileTransport?.destroy();
-			this.fileTransport = undefined;
-			this.consoleTransport?.destroy();
-			this.consoleTransport = undefined;
-		}
-
-		// When the internal transports or the custom transports were changed, we need to update the loggers
-		if (recreateInternalTransports || config.transports != undefined) {
-			this.loggers.forEach((logger) =>
-				logger.configure({ transports: this.getAllTransports() })
-			);
-		}
-	}
-
-	public getConfiguration(): LogConfig {
-		return this.logConfig;
-	}
-
-	/** Tests whether a log using the given loglevel will be logged */
-	public isLoglevelVisible(loglevel: string): boolean {
-		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
-		if (
-			!this.fileTransport
-			&& !this.consoleTransport
-			&& (!this.logConfig.transports
-				|| this.logConfig.transports.length === 0)
-		) {
-			return false;
-		}
-
-		if (!this.loglevelVisibleCache.has(loglevel)) {
-			this.loglevelVisibleCache.set(
-				loglevel,
-				loglevel in loglevels
-					&& loglevels[loglevel] <= loglevels[this.logConfig.level],
-			);
-		}
-		return this.loglevelVisibleCache.get(loglevel)!;
-	}
-
-	public destroy(): void {
-		for (const key in this.loggers) {
-			this.close(key);
-		}
-
-		this.fileTransport = undefined;
-		this.consoleTransport = undefined;
-		this.logConfig.transports = [];
-	}
-
-	private getAllTransports(): Transport[] {
-		return [
-			...this.getInternalTransports(),
-			...(this.logConfig.transports ?? []),
-		];
-	}
-
-	private getInternalTransports(): Transport[] {
-		const ret: Transport[] = [];
-
-		// If logging is disabled, don't log to any of the default transports
-		if (!this.logConfig.enabled) {
-			return ret;
-		}
-
-		// Log to file only when opted in
-		if (this.logConfig.logToFile) {
-			if (!this.fileTransport) {
-				this.fileTransport = this.createFileTransport();
-			}
-			ret.push(this.fileTransport);
-		}
-
-		// Console logs can be noise, so only log to console...
-		if (
-			// when in production
-			!isUnitTest
-			// and stdout is a TTY while we're not already logging to a file
-			&& ((isTTY && !this.logConfig.logToFile)
-				// except when the user explicitly wants to
-				|| this.logConfig.forceConsole)
-		) {
-			if (!this.consoleTransport) {
-				this.consoleTransport = this.createConsoleTransport();
-			}
-			ret.push(this.consoleTransport);
-		}
-
-		return ret;
-	}
-
-	private createConsoleTransport(): ConsoleTransportInstance {
-		return new winston.transports.Console({
-			format: createDefaultTransportFormat(
-				// Only colorize the output if logging to a TTY, otherwise we'll get
-				// ansi color codes in logfiles or redirected shells
-				isTTY || isUnitTest,
-				// Only use short timestamps if logging to a TTY
-				isTTY,
-			),
-			silent: this.isConsoleTransportSilent(),
-		});
-	}
-
-	private isConsoleTransportSilent(): boolean {
-		return process.env.NODE_ENV === "test" || !this.logConfig.enabled;
-	}
-
-	private isFileTransportSilent(): boolean {
-		return !this.logConfig.enabled;
-	}
-
-	private createFileTransport(): DailyRotateFile {
-		const ret = new DailyRotateFile({
-			filename: this.logConfig.filename,
-			auditFile: `${
-				this.logConfig.filename
-					.replace("_%DATE%", "_logrotate")
-					.replace(/\.log$/, "")
-			}.json`,
-			datePattern: "YYYY-MM-DD",
-			createSymlink: true,
-			symlinkName: path
-				.basename(this.logConfig.filename)
-				.replace(`_%DATE%`, "_current"),
-			zippedArchive: true,
-			maxFiles: `${this.logConfig.maxFiles}d`,
-			format: createDefaultTransportFormat(false, false),
-			silent: this.isFileTransportSilent(),
-		});
-		ret.on("new", (newFilename: string) => {
-			console.log(`Logging to file:
-	${newFilename}`);
-		});
-		ret.on("error", (err: Error) => {
-			console.error(`Error in file stream rotator: ${err.message}`);
-		});
-		return ret;
-	}
-
-	/**
-	 * Checks the log configuration whether logs should be written for a given node id
-	 */
-	public shouldLogNode(nodeId: number): boolean {
-		// If no filters are set, every node gets logged
-		if (!this.logConfig.nodeFilter) return true;
-		return this.logConfig.nodeFilter.includes(nodeId);
-	}
+export interface LogContext<T extends string = string> {
+	/** Which logger this log came from */
+	source: T;
+	/** An optional identifier to distinguish different log types from the same logger */
+	type?: string;
 }
 
-function getTransportLoglevel(): string {
-	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+export type MessageRecord = Record<string, string | number | boolean>;
+
+export interface MessageOrCCLogEntry {
+	tags: string[];
+	message?: MessageRecord;
 }
 
-/** Performs a reverse lookup of the numeric loglevel */
-function loglevelFromNumber(numLevel: number | undefined): string | undefined {
-	if (numLevel == undefined) return;
-	for (const [level, value] of Object.entries(loglevels)) {
-		if (value === numLevel) return level;
-	}
+/** Returns the tag used to log node related messages */
+export function getNodeTag(nodeId: number): string {
+	return "Node " + nodeId.toString().padStart(3, "0");
 }
 
-/** Creates the common logger format for all loggers under a given channel */
-export function createLoggerFormat(channel: string): Format {
-	return combine(
-		// add the channel as a label
-		label({ label: channel }),
-		// default to short timestamps
-		timestamp(),
-	);
+/** @internal */
+export function stringToNodeList(nodes?: string): number[] | undefined {
+	if (!nodes) return undefined;
+	return nodes
+		.split(",")
+		.map((n) => parseInt(n))
+		.filter((n) => !Number.isNaN(n));
 }
 
-/** Prints a formatted and colorized log message */
-export function createLogMessagePrinter(shortTimestamps: boolean): Format {
-	return {
-		transform: ((info: ZWaveLogInfo) => {
-			// The formatter has already split the message into multiple lines
-			const messageLines = messageToLines(info.message);
-			// Also this can only happen if the user forgot to call the formatter first
-			if (info.secondaryTagPadding == undefined) {
-				info.secondaryTagPadding = -1;
-			}
-			// Format the first message line
-			let firstLine = [
-				info.primaryTags,
-				messageLines[0],
-				info.secondaryTagPadding < 0
-					? undefined
-					: " ".repeat(info.secondaryTagPadding),
-				// If the secondary tag padding is zero, the previous segment gets
-				// filtered out and we have one less space than necessary
-				info.secondaryTagPadding === 0 && info.secondaryTags
-					? " " + info.secondaryTags
-					: info.secondaryTags,
-			]
-				.filter((item) => !!item)
-				.join(" ");
-			// The directional arrows and the optional grouping lines must be prepended
-			// without adding spaces
-			firstLine =
-				`${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
-			const lines = [firstLine];
-			if (info.multiline) {
-				// Format all message lines but the first
-				lines.push(
-					...messageLines.slice(1).map(
-						(line) =>
-							// Skip the columns for the timestamp and the channel name
-							(shortTimestamps
-								? timestampPaddingShort
-								: timestampPadding)
-							+ channelPadding
-							// Skip the columns for directional arrows
-							+ directionPrefixPadding
-							+ line,
-					),
-				);
-			}
-			info[MESSAGE as any] = lines.join("\n");
-			return info;
-		}) as unknown as TransformFunction,
-	};
-}
-
-/** Formats the log message and calculates the necessary paddings */
-export const logMessageFormatter: Format = {
-	transform: ((info: ZWaveLogInfo) => {
-		const messageLines = messageToLines(info.message);
-		const firstMessageLineLength = messageLines[0].length;
-		info.multiline = messageLines.length > 1
-			|| !messageFitsIntoOneLine(info, info.message.length);
-		// Align postfixes to the right
-		if (info.secondaryTags) {
-			// Calculate how many spaces are needed to right-align the postfix
-			// Subtract 1 because the parts are joined by spaces
-			info.secondaryTagPadding = Math.max(
-				// -1 has the special meaning that we don't print any padding,
-				// because the message takes all the available space
-				-1,
-				LOG_WIDTH
-					- 1
-					- calculateFirstLineLength(info, firstMessageLineLength),
-			);
-		}
-
-		if (info.multiline) {
-			// Break long messages into multiple lines
-			const lines: string[] = [];
-			let isFirstLine = true;
-			for (let message of messageLines) {
-				while (message.length) {
-					const cut = Math.min(
-						message.length,
-						isFirstLine
-							? LOG_WIDTH - calculateFirstLineLength(info, 0) - 1
-							: LOG_WIDTH - CONTROL_CHAR_WIDTH,
-					);
-					isFirstLine = false;
-					lines.push(message.slice(0, cut));
-					message = message.slice(cut);
-				}
-			}
-			info.message = lines.join("\n");
-		}
-		return info;
-	}) as unknown as TransformFunction,
-};
-
-/** The common logger format for built-in transports */
-export function createDefaultTransportFormat(
-	colorize: boolean,
-	shortTimestamps: boolean,
-): Format {
-	const formats: Format[] = [
-		// overwrite the default timestamp format if necessary
-		shortTimestamps
-			? timestamp({ format: timestampFormatShort })
-			: undefined,
-		logMessageFormatter,
-		colorize ? colorizer() : undefined,
-		createLogMessagePrinter(shortTimestamps),
-	].filter((f): f is Format => !!f);
-	return combine(...formats);
+/** Wraps an array of strings in square brackets and joins them with spaces */
+export function tagify(tags: string[]): string {
+	return tags.map((pfx) => `[${pfx}]`).join(" ");
 }
 
 /**
@@ -421,7 +87,7 @@ export function createDefaultTransportFormat(
  * @param info The message and information to log
  * @param firstMessageLineLength The length of the first line of the actual message text, not including pre- and postfixes.
  */
-function calculateFirstLineLength(
+export function calculateFirstLineLength(
 	info: ZWaveLogInfo,
 	firstMessageLineLength: number,
 ): number {
@@ -469,43 +135,36 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 	if (!entries.length) return [];
 
 	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
-	return flatMap(entries, ([key, value]) =>
+	return entries.flatMap(([key, value]) =>
 		`${key}:${
 			" ".repeat(
 				Math.max(maxKeyLength - key.length + 1, 1),
 			)
 		}${value}`
 			.split("\n")
-			.map((line) => line.trimEnd()));
-}
-
-/** Wraps an array of strings in square brackets and joins them with spaces */
-export function tagify(tags: string[]): string {
-	return tags.map((pfx) => `[${pfx}]`).join(" ");
-}
-
-/** Unsilences the console transport of a logger and returns the original value */
-export function unsilence(logger: winston.Logger): boolean {
-	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
+			.map((line) => line.trimEnd())
 	);
-	if (consoleTransport) {
-		const ret = !!consoleTransport.silent;
-		consoleTransport.silent = false;
-		return ret;
-	}
-	return false;
+}
+export interface LogConfig {
+	enabled: boolean;
+	level: string | number;
+	transports: Transport[];
+	logToFile: boolean;
+	maxFiles: number;
+	nodeFilter?: number[];
+	filename: string;
+	forceConsole: boolean;
 }
 
-/** Restores the console transport of a logger to its original silence state */
-export function restoreSilence(
-	logger: winston.Logger,
-	original: boolean,
-): void {
-	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
-	);
-	if (consoleTransport) {
-		consoleTransport.silent = original;
-	}
-}
+/** @internal */
+export const nonUndefinedLogConfigKeys = [
+	"enabled",
+	"level",
+	"transports",
+	"logToFile",
+	"maxFiles",
+	"filename",
+	"forceConsole",
+] as const;
+
+export type LogFactory = (config?: Partial<LogConfig>) => LogContainer;
