@@ -124,6 +124,10 @@ import {
 	MessageHeaders,
 	type MessageParsingContext,
 	MessageType,
+	ProtocolCCEncryptionStatus,
+	RequestProtocolCCEncryptionCallback,
+	RequestProtocolCCEncryptionRequest,
+	RequestProtocolCCEncryptionResponse,
 	type SuccessIndicator,
 	TransferProtocolCCRequest,
 	XModemMessageHeaders,
@@ -5017,6 +5021,84 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	}
 
 	/**
+	 * Is called when the Serial API requests encryption of a protocol-level CC.
+	 */
+	private async handleProtocolCCEncryptionRequest(
+		msg: RequestProtocolCCEncryptionRequest,
+	): Promise<void> {
+		const respond = async (status: ProtocolCCEncryptionStatus) => {
+			const resp = new RequestProtocolCCEncryptionResponse({
+				status,
+				callbackId: msg.callbackId,
+			});
+			await this.sendMessage(resp).catch(noop);
+		};
+
+		try {
+			this.ensureReady(true);
+		} catch {
+			// We are not ready to handle encryption for the Z-Wave module yet
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		const node = this.controller.nodes.get(msg.destinationNodeId);
+		if (!node) {
+			return respond(ProtocolCCEncryptionStatus.NodeNotFound);
+		}
+
+		// TODO: Check if node supports NLS
+
+		await respond(ProtocolCCEncryptionStatus.Started);
+
+		// Send the S2-encrypted frame to the node
+		const protocolCC = await CommandClass.parse(msg.plaintext, {
+			...this.getCCParsingContext(),
+			frameType: "singlecast",
+			sourceNodeId: this.ownNodeId,
+		});
+		const cc = new Security2CCMessageEncapsulation({
+			nodeId: msg.destinationNodeId,
+			encapsulated: protocolCC,
+		});
+		const sendData = this.createSendDataMessage(cc, {
+			// The Z-Wave protocol handles Supervision
+			autoEncapsulate: false,
+			useSupervision: false,
+			// Only try sending once
+			maxSendAttempts: 1,
+			// Use the transmit options the protocol wants
+			transmitOptions: msg.transmitOptions,
+		});
+		let sendResult: Message;
+		try {
+			sendResult = await this.sendMessage(sendData, {
+				// The protocol wants this now
+				priority: MessagePriority.Immediate,
+				// TODO: Figure out if we want protocol level messages to update what we think of the node's status
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch {
+			// SendData messages should not throw, so something must have gone terribly wrong
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		if (!isTransmitReport(sendResult)) {
+			// The message was not sent for some unknown reason
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		// The message was sent and received a callback. Pass it to the Z-Wave module to finish this transaction.
+		const resp = new RequestProtocolCCEncryptionCallback({
+			transmitStatus: sendResult.transmitStatus,
+			txReport: hasTXReport(sendResult)
+				? sendResult.txReport
+				: undefined,
+			callbackId: msg.callbackId,
+		});
+		await this.sendMessage(resp).catch(noop);
+	}
+
+	/**
 	 * Registers a handler for messages that are not handled by the driver as part of a message exchange.
 	 * The handler function needs to return a boolean indicating if the message has been handled.
 	 * Registered handlers are called in sequence until a handler returns `true`.
@@ -5505,6 +5587,9 @@ ${handlers.length} left`,
 			if (await this.handleSerialAPIStartedUnexpectedly(msg)) {
 				return;
 			}
+		} else if (msg instanceof RequestProtocolCCEncryptionRequest) {
+			// The Z-Wave module wants us to send an encrypted protocol-level command
+			return this.handleProtocolCCEncryptionRequest(msg);
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
