@@ -23,7 +23,7 @@ import { Bytes, buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 export interface TransferProtocolCCRequestOptions {
 	sourceNodeId: number;
 	securityClass: SecurityClass;
-	decryptedCC: Uint8Array;
+	plaintext: Uint8Array;
 }
 
 // The enum used in this command has a different value mapping than the SecurityClass enum
@@ -70,12 +70,12 @@ export class TransferProtocolCCRequest extends Message {
 		super(options);
 		this.sourceNodeId = options.sourceNodeId;
 		this.securityClass = options.securityClass;
-		this.decryptedCC = options.decryptedCC;
+		this.plaintext = options.plaintext;
 	}
 
 	public sourceNodeId: number;
 	public securityClass: SecurityClass;
-	public decryptedCC: Uint8Array;
+	public plaintext: Uint8Array;
 
 	public static from(
 		raw: MessageRaw,
@@ -90,16 +90,16 @@ export class TransferProtocolCCRequest extends Message {
 		const securityClass = decryptionKeyToSecurityClass(
 			raw.payload[offset++],
 		);
-		const decryptedCCLength = raw.payload[offset++];
-		const decryptedCC = raw.payload.slice(
+		const plaintextLength = raw.payload[offset++];
+		const plaintext = raw.payload.slice(
 			offset,
-			offset + decryptedCCLength,
+			offset + plaintextLength,
 		);
 
 		return new this({
 			sourceNodeId,
 			securityClass,
-			decryptedCC,
+			plaintext,
 		});
 	}
 
@@ -108,9 +108,9 @@ export class TransferProtocolCCRequest extends Message {
 			encodeNodeID(this.sourceNodeId, ctx.nodeIdType),
 			[
 				securityClassToDecryptionKey(this.securityClass),
-				this.decryptedCC.length,
+				this.plaintext.length,
 			],
-			this.decryptedCC,
+			this.plaintext,
 		]);
 
 		return super.serialize(ctx);
@@ -125,7 +125,7 @@ export class TransferProtocolCCRequest extends Message {
 					SecurityClass,
 					this.securityClass,
 				),
-				payload: buffer2hex(this.decryptedCC),
+				payload: buffer2hex(this.plaintext),
 			},
 		};
 	}
