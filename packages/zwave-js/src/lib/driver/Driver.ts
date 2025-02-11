@@ -124,10 +124,6 @@ import {
 	MessageHeaders,
 	type MessageParsingContext,
 	MessageType,
-	ProtocolCCEncryptionStatus,
-	RequestProtocolCCEncryptionCallback,
-	RequestProtocolCCEncryptionRequest,
-	RequestProtocolCCEncryptionResponse,
 	type SuccessIndicator,
 	TransferProtocolCCRequest,
 	XModemMessageHeaders,
@@ -144,41 +140,35 @@ import {
 	isZWaveSerialPortImplementation,
 	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
-import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
-	SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "@zwave-js/serial/serialapi";
-import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
-import { SoftResetRequest } from "@zwave-js/serial/serialapi";
-import {
-	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
-} from "@zwave-js/serial/serialapi";
-import {
+	ApplicationUpdateRequest,
+	type CommandRequest,
+	type ContainsCC,
+	GetControllerVersionRequest,
 	MAX_SEND_ATTEMPTS,
+	ProtocolCCEncryptionStatus,
+	RequestProtocolCCEncryptionCallback,
+	RequestProtocolCCEncryptionRequest,
+	RequestProtocolCCEncryptionResponse,
 	SendDataAbort,
+	SendDataBridgeRequest,
+	type SendDataMessage,
+	SendDataMulticastBridgeRequest,
 	SendDataMulticastRequest,
 	SendDataRequest,
-} from "@zwave-js/serial/serialapi";
-import {
-	type SendDataMessage,
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+	SoftResetRequest,
+	containsCC,
+	containsSerializedCC,
 	hasTXReport,
+	isCommandRequest,
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
 	isTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	SendTestFrameRequest,
-	SendTestFrameTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	type CommandRequest,
-	type ContainsCC,
-	containsCC,
-	containsSerializedCC,
-	isCommandRequest,
 } from "@zwave-js/serial/serialapi";
 import {
 	AsyncQueue,
