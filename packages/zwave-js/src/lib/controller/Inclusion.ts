@@ -40,6 +40,14 @@ export enum SecurityBootstrapFailure {
 	Unknown,
 }
 
+export type SecurityBootstrapResult = {
+	success: true;
+	enableNLS?: boolean;
+} | {
+	success: false;
+	reason: SecurityBootstrapFailure;
+};
+
 export enum InclusionStrategy {
 	/**
 	 * Always uses Security S2 if supported, otherwise uses Security S0 for certain devices which don't work without encryption and uses no encryption otherwise.
@@ -96,13 +104,25 @@ export interface InclusionGrant {
 	securityClasses: SecurityClass[];
 	/** Whether client side authentication is requested or to be granted */
 	clientSideAuth: boolean;
+	/**
+	 * Whether network-level security is supported or to be used.
+	 */
+	networkLevelSecurity?: boolean;
 }
 
 /** Defines the callbacks that are necessary to trigger user interaction during S2 inclusion */
 export interface InclusionUserCallbacks {
 	/**
-	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
-	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
+	 * Instruct the application to display the user:
+	 * - which security classes the device has requested
+	 * - whether client-side authentication (CSA) is desired
+	 * - whether network-level security (NLS) is supported.
+	 *
+	 * The returned promise MUST resolve to the user selection:
+	 * - which of the requested security classes have been granted
+	 * - whether CSA was allowed
+	 * - whether network-level security should be used.
+	 *
 	 * If the user did not accept the requested security classes, the promise MUST resolve to `false`.
 	 */
 	grantSecurityClasses(
