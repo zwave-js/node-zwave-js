@@ -51,6 +51,7 @@ export * from "./serialapi/nvm/ExtendedNVMOperationsMessages.js";
 export * from "./serialapi/nvm/FirmwareUpdateNVMMessages.js";
 export * from "./serialapi/nvm/GetNVMIdMessages.js";
 export * from "./serialapi/nvm/NVMOperationsMessages.js";
+export * from "./serialapi/transport/RequestProtocolCCEncryptionMessages.js";
 export * from "./serialapi/transport/SendDataBridgeMessages.js";
 export * from "./serialapi/transport/SendDataMessages.js";
 export * from "./serialapi/transport/SendDataShared.js";
