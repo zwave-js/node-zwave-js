@@ -21,47 +21,33 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Power (W) Report Threshold",
+			"label": "Power Wattage Report Value Threshold",
 			"unit": "W",
-			"defaultValue": 5
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
-			"label": "Power (W) Report Interval",
+			"label": "Power Wattage Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
-			"minValue": 5,
+			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 30
+			"defaultValue": 180
 		},
 		{
 			"#": "4",
-			"label": "Energy (kWh) Report Interval",
+			"label": "Energy Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 300
-		},
-		{
-			"#": "35",
-			"$if": "firmwareVersion >= 2.3",
-			"label": "Current (A) Report Interval",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 30
-		},
-		{
-			"#": "36",
-			"$if": "firmwareVersion >= 2.3",
-			"label": "Voltage (V) Report Interval",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 30
 		},
 		{
 			"#": "5",
@@ -70,7 +56,13 @@
 			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1500,
-			"defaultValue": 1500
+			"defaultValue": 1500,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "6",
@@ -226,13 +218,73 @@
 		{
 			"#": "34",
 			"$if": "firmwareVersion >= 2.2",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Power/Energy Monitoring (USB)",
-			"defaultValue": 1
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Disable USB Reports",
+			"defaultValue": 0
+		},
+		{
+			"#": "35",
+			"$if": "firmwareVersion >= 2.3",
+			"label": "Electrical Current (A) Report Frequency",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "36",
+			"$if": "firmwareVersion >= 2.3",
+			"label": "Voltage Report (V) Frequency",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "37",
+			"$if": "firmwareVersion >= 4.10",
+			"label": "Electrical Current (A) Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1A",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		}
 	],
 	"compat": {
 		// Accumulative values are reported on the root endpoint
 		"preserveRootApplicationCCValueIDs": true
+	},
+	"metadata": {
+		"inclusion": "1. Plug the Power Strip into a grounded receptacle you’re planning to use it at (it doesn’t need to be close to the hub) \n2. Initiate inclusion (pairing) in the app (or web interface). \n3. CLICK CH1 BUTTON 3 TIMES QUICKLY. All LED indicators will start flashing \n4. You will see 7 or 8 new on/off devices in your app: 5 channels or on/off control, 2 channels for on/off monitoring (USB ports reporting charging/ charged status, no control), and possibly one master node to access and adjust advanced settings in.",
+		"exclusion": "1. Bring the strip within direct range of your Z-Wave gateway (hub). \n2. Put the Z-Wave hub into exclusion mode. \n3. Press and release the CH1 button 3 times quickly. \n4. Your hub will confirm exclusion and all of the channels (child outlets) and the main device will disappear from your controller's device list.",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset \nthe device to factory settings. To complete the reset process manually, \nclick-click-click’n’hold CH1 button for at least 10 seconds. All LED indicators \nwill flash to confirm successful reset. NOTE: All previously recorded activity \nand custom settings EXCEPT for the kWh record will be erased from the device’s memory.",
+		"manual": [
+			{
+				"$if": "firmwareVersion >= 4.10",
+				"value": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-zen20-800LR-manual.pdf"
+			},
+			"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3158/zooz-s2-z-wave-plus-power-strip-zen20-ver2-online-manual.pdf"
+		]
 	}
 }
