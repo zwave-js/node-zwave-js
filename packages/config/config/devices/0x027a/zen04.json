@@ -142,6 +142,24 @@
 					"value": 0
 				}
 			]
+		},
+		{
+			"#": "14",
+			"$if": "firmwareVersion >= 2.10",
+			"label": "kWh Report Frequency (800 Series Only)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60
+			]
+		},
+		{
+			"#": "15",
+			"$if": "firmwareVersion >= 2.10",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Disable kWh Reports (800 Series Only)",
+			"defaultValue": 0
 		}
 	]
 }
