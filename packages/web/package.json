@@ -28,7 +28,7 @@
     "test": "node .build.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "esbuild-plugins-node-modules-polyfill": "^1.6.8",
     "zwave-js": "workspace:*"
   }
