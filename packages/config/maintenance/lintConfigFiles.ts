@@ -1051,7 +1051,20 @@ Consider converting this parameter to unsigned using ${
 	// Check if there are partial parameters and non-partials with the same number
 	const duplicatedPartials = distinct(
 		partialParams.map(([key]) => key.parameter),
-	).filter((parameter) => paramInformation.has({ parameter }));
+	).filter((parameter) => {
+		// Check if any parameter has the lintSkip flag for duplicatedPartials
+		const param = paramInformation.get({ parameter });
+		if (param?.lintSkip?.includes("duplicatedPartials")) {
+			addWarning(
+				file,
+				`Skipping "duplicatedPartials" lint check for parameter #${parameter} due to "lintSkip" configuration.`,
+				variant,
+			);
+			return false;
+		}
+		return paramInformation.has({ parameter });
+	});
+
 	if (duplicatedPartials.length) {
 		addError(
 			file,
