@@ -69,7 +69,7 @@
     "test:dirty": "tsx ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@serialport/stream": "^12.0.0",
+    "@serialport/stream": "^13.0.0",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
