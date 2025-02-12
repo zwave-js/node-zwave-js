@@ -415,9 +415,7 @@ interface FileSystem {
 		file: string,
 		data: string | Uint8Array,
 		options?:
-			| {
-				encoding: BufferEncoding;
-			}
+			| { encoding: BufferEncoding }
 			| BufferEncoding,
 	): Promise<void>;
 	readFile(file: string, encoding: BufferEncoding): Promise<string>;
@@ -695,7 +693,7 @@ This interface specifies the optional options object that is passed to the `Driv
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
 ````ts
-interface ZWaveOptions extends ZWaveHostOptions {
+interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
@@ -802,9 +800,26 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		disableOnNodeAdded?: boolean;
 	};
 
+	/** Host abstractions allowing Z-Wave JS to run on different platforms */
+	host?: {
+		/**
+		 * Specifies which bindings are used to access the file system when
+		 * reading or writing the cache, or loading device configuration files.
+		 */
+		fs?: FileSystem;
+
+		/**
+		 * Specifies which bindings are used interact with serial ports.
+		 */
+		serial?: Serial;
+
+		/**
+		 * Specifies which bindings are used to interact with the database used to store the cache.
+		 */
+		db?: DatabaseFactory;
+	};
+
 	storage: {
-		/** Allows you to replace the default file system driver used to store and read the cache */
-		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
@@ -1036,12 +1051,11 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
-		serialPortBinding?: typeof SerialPort;
 		/**
 		 * A hook that allows accessing the serial port instance after opening
 		 * and before interacting with it.
 		 */
-		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+		onSerialPortOpen?: (port: ZWaveSerialStream) => Promise<void>;
 
 		/**
 		 * Set this to true to skip the controller identification sequence.
