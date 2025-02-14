@@ -373,6 +373,9 @@ export class ThermostatSetpointCC extends CommandClass {
 			// If the Setpoint Type 0x00 (type N/A) is advertised in the returned Thermostat Setpoint Report
 			// Command, the controlling node MUST conclude that the actual Setpoint Type is not supported.
 
+			// The specs require us to query the list of supported setpoint types anyways, even if the response is ignored
+			await api.getSupportedSetpointTypes();
+
 			// Now scan all endpoints. Each type we received a value for gets marked as supported
 			const supportedSetpointTypes: ThermostatSetpointType[] = [];
 			for (
