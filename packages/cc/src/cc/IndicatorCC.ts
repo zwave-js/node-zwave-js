@@ -1525,12 +1525,6 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 	) {
 		super(options);
 		this.indicatorId = options.indicatorId;
-		if (!isManufacturerDefinedIndicator(this.indicatorId)) {
-			throw new ZWaveError(
-				"The indicator ID must be between 0x80 and 0x9f",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
 	}
 
 	public static from(
