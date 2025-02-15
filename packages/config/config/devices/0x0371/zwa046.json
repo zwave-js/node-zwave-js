@@ -1,0 +1,1396 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA046",
+	"description": "Home Energy Meter 8",
+	"devices": [
+		{ // ZWA046 2-Phase US
+			"productType": "0x0103",
+			"productId": "0x002e",
+			"zwaveAllianceId": 5070
+		},
+		{ // ZWA046 3-Phase EU
+			"productType": "0x0003",
+			"productId": "0x002e",
+			"zwaveAllianceId": 5069
+		},
+		{ // ZWA046 1-Phase EU
+			"productType": "0x0003",
+			"productId": "0x0033",
+			"zwaveAllianceId": 5113
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Turn your gateway/ main controller into adding mode.\n2. Press once the Action Button on the product",
+		"exclusion": "1. Turn your gateway/ main controller into removing mode.\n2. Press once the Action Button on the product",
+		"reset": "Press and hold the Action Button on product for 10s.\n\nNote: Please use this procedure only when the network’s primary controller is missing or otherwise inoperable."
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/0x0086/templates/aeotec_template.json#selective_reporting"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_wholehem_import"
+		},
+		{
+			"#": "5",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp1_import"
+		},
+		{
+			"#": "6",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp2_import"
+		},
+		{
+			"#": "7",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp3_import"
+		},
+		{
+			"#": "8",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_wholehem_export"
+		},
+		{
+			"#": "9",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp1_export"
+		},
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp2_export"
+		},
+		{
+			"#": "11",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold_clamp3_export"
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_wholehem_import"
+		},
+		{
+			"#": "13",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp1_import"
+		},
+		{
+			"#": "14",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp2_import"
+		},
+		{
+			"#": "15",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp3_import"
+		},
+		{
+			"#": "16",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_wholehem_export"
+		},
+		{
+			"#": "17",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp1_export"
+		},
+		{
+			"#": "18",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp2_export"
+		},
+		{
+			"#": "19",
+			"$import": "~/0x0086/templates/aeotec_template.json#percent_threshold_clamp3_export"
+		},
+		// parameter 32: "Enable root device report" is undocumented. default: 0
+		{
+			"#": "100",
+			"$import": "~/0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-106 to Default Values"
+		},
+		{
+			"#": "101[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit0"
+		},
+		{
+			"#": "101[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_wholehem_import"
+		},
+		{
+			"#": "101[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit1"
+		},
+		{
+			"#": "101[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_wholehem_import"
+		},
+		{
+			"#": "101[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit2"
+		},
+		{
+			"#": "101[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_wholehem_import"
+		},
+		{
+			"#": "101[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit3"
+		},
+		{
+			"#": "101[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_wholehem_import"
+		},
+		{
+			"#": "101[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit4"
+		},
+		{
+			"#": "101[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_wholehem_import"
+		},
+		{
+			"#": "101[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit5"
+		},
+		{
+			"#": "101[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_wholehem_import"
+		},
+		{
+			"#": "101[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit6"
+		},
+		{
+			"#": "101[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_wholehem_import"
+		},
+		{
+			"#": "101[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_import_bit7"
+		},
+		{
+			"#": "101[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_wholehem_import"
+		},
+		{
+			"#": "101[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_wholehem_import"
+		},
+		{
+			"#": "101[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp3_import"
+		},
+		{
+			"#": "101[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_wholehem_import"
+		},
+		{
+			"#": "101[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp3_import"
+		},
+		{
+			"#": "101[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_wholehem_import"
+		},
+		{
+			"#": "101[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp3_import"
+		},
+		{
+			"#": "101[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_wholehem_import"
+		},
+		{
+			"#": "101[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp3_import"
+		},
+		{
+			"#": "101[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_wholehem_import"
+		},
+		{
+			"#": "101[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp3_import"
+		},
+		{
+			"#": "101[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_wholehem_import"
+		},
+		{
+			"#": "101[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp3_import"
+		},
+		{
+			"#": "101[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_wholehem_import"
+		},
+		{
+			"#": "101[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp3_import"
+		},
+		{
+			"#": "101[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_wholehem_import"
+		},
+		{
+			"#": "101[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp3_import"
+		},
+		{
+			"#": "101[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp2_import"
+		},
+		{
+			"#": "101[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp2_import"
+		},
+		{
+			"#": "101[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp2_import"
+		},
+		{
+			"#": "101[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp2_import"
+		},
+		{
+			"#": "101[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp2_import"
+		},
+		{
+			"#": "101[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp2_import"
+		},
+		{
+			"#": "101[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp2_import"
+		},
+		{
+			"#": "101[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp2_import"
+		},
+		{
+			"#": "101[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp1_import"
+		},
+		{
+			"#": "101[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp1_import"
+		},
+		{
+			"#": "101[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp1_import"
+		},
+		{
+			"#": "101[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp1_import"
+		},
+		{
+			"#": "101[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp1_import"
+		},
+		{
+			"#": "101[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp1_import"
+		},
+		{
+			"#": "101[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp1_import"
+		},
+		{
+			"#": "101[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp1_import"
+		},
+		{
+			"#": "102[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit0"
+		},
+		{
+			"#": "102[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_wholehem_import"
+		},
+		{
+			"#": "102[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit1"
+		},
+		{
+			"#": "102[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_wholehem_import"
+		},
+		{
+			"#": "102[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit2"
+		},
+		{
+			"#": "102[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_wholehem_import"
+		},
+		{
+			"#": "102[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit3"
+		},
+		{
+			"#": "102[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_wholehem_import"
+		},
+		{
+			"#": "102[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit4"
+		},
+		{
+			"#": "102[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_wholehem_import"
+		},
+		{
+			"#": "102[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit5"
+		},
+		{
+			"#": "102[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_wholehem_import"
+		},
+		{
+			"#": "102[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit6"
+		},
+		{
+			"#": "102[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_wholehem_import"
+		},
+		{
+			"#": "102[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_import_bit7"
+		},
+		{
+			"#": "102[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_wholehem_import"
+		},
+		{
+			"#": "102[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_wholehem_import"
+		},
+		{
+			"#": "102[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp3_import"
+		},
+		{
+			"#": "102[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_wholehem_import"
+		},
+		{
+			"#": "102[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp3_import"
+		},
+		{
+			"#": "102[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_wholehem_import"
+		},
+		{
+			"#": "102[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp3_import"
+		},
+		{
+			"#": "102[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_wholehem_import"
+		},
+		{
+			"#": "102[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp3_import"
+		},
+		{
+			"#": "102[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_wholehem_import"
+		},
+		{
+			"#": "102[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp3_import"
+		},
+		{
+			"#": "102[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_wholehem_import"
+		},
+		{
+			"#": "102[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp3_import"
+		},
+		{
+			"#": "102[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_wholehem_import"
+		},
+		{
+			"#": "102[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp3_import"
+		},
+		{
+			"#": "102[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_wholehem_import"
+		},
+		{
+			"#": "102[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp3_import"
+		},
+		{
+			"#": "102[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp2_import"
+		},
+		{
+			"#": "102[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp2_import"
+		},
+		{
+			"#": "102[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp2_import"
+		},
+		{
+			"#": "102[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp2_import"
+		},
+		{
+			"#": "102[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp2_import"
+		},
+		{
+			"#": "102[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp2_import"
+		},
+		{
+			"#": "102[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp2_import"
+		},
+		{
+			"#": "102[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp2_import"
+		},
+		{
+			"#": "102[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp1_import"
+		},
+		{
+			"#": "102[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp1_import"
+		},
+		{
+			"#": "102[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp1_import"
+		},
+		{
+			"#": "102[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp1_import"
+		},
+		{
+			"#": "102[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp1_import"
+		},
+		{
+			"#": "102[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp1_import"
+		},
+		{
+			"#": "102[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp1_import"
+		},
+		{
+			"#": "102[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp1_import"
+		},
+		{
+			"#": "103[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit0"
+		},
+		{
+			"#": "103[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_wholehem_import"
+		},
+		{
+			"#": "103[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit1"
+		},
+		{
+			"#": "103[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_wholehem_import"
+		},
+		{
+			"#": "103[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit2"
+		},
+		{
+			"#": "103[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_wholehem_import"
+		},
+		{
+			"#": "103[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit3"
+		},
+		{
+			"#": "103[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_wholehem_import"
+		},
+		{
+			"#": "103[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit4"
+		},
+		{
+			"#": "103[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_wholehem_import"
+		},
+		{
+			"#": "103[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit5"
+		},
+		{
+			"#": "103[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_wholehem_import"
+		},
+		{
+			"#": "103[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit6"
+		},
+		{
+			"#": "103[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_wholehem_import"
+		},
+		{
+			"#": "103[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_import_bit7"
+		},
+		{
+			"#": "103[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_wholehem_import"
+		},
+		{
+			"#": "103[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_wholehem_import"
+		},
+		{
+			"#": "103[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp3_import"
+		},
+		{
+			"#": "103[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_wholehem_import"
+		},
+		{
+			"#": "103[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp3_import"
+		},
+		{
+			"#": "103[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_wholehem_import"
+		},
+		{
+			"#": "103[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp3_import"
+		},
+		{
+			"#": "103[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_wholehem_import"
+		},
+		{
+			"#": "103[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp3_import"
+		},
+		{
+			"#": "103[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_wholehem_import"
+		},
+		{
+			"#": "103[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp3_import"
+		},
+		{
+			"#": "103[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_wholehem_import"
+		},
+		{
+			"#": "103[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp3_import"
+		},
+		{
+			"#": "103[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_wholehem_import"
+		},
+		{
+			"#": "103[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp3_import"
+		},
+		{
+			"#": "103[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_wholehem_import"
+		},
+		{
+			"#": "103[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp3_import"
+		},
+		{
+			"#": "103[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp2_import"
+		},
+		{
+			"#": "103[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp2_import"
+		},
+		{
+			"#": "103[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp2_import"
+		},
+		{
+			"#": "103[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp2_import"
+		},
+		{
+			"#": "103[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp2_import"
+		},
+		{
+			"#": "103[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp2_import"
+		},
+		{
+			"#": "103[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp2_import"
+		},
+		{
+			"#": "103[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp2_import"
+		},
+		{
+			"#": "103[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp1_import"
+		},
+		{
+			"#": "103[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp1_import"
+		},
+		{
+			"#": "103[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp1_import"
+		},
+		{
+			"#": "103[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp1_import"
+		},
+		{
+			"#": "103[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp1_import"
+		},
+		{
+			"#": "103[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp1_import"
+		},
+		{
+			"#": "103[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp1_import"
+		},
+		{
+			"#": "103[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp1_import"
+		},
+		{
+			"#": "104[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit0"
+		},
+		{
+			"#": "104[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_wholehem_export"
+		},
+		{
+			"#": "104[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit1"
+		},
+		{
+			"#": "104[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_wholehem_export"
+		},
+		{
+			"#": "104[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit2"
+		},
+		{
+			"#": "104[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_wholehem_export"
+		},
+		{
+			"#": "104[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit3"
+		},
+		{
+			"#": "104[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_wholehem_export"
+		},
+		{
+			"#": "104[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit4"
+		},
+		{
+			"#": "104[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_wholehem_export"
+		},
+		{
+			"#": "104[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit5"
+		},
+		{
+			"#": "104[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_wholehem_export"
+		},
+		{
+			"#": "104[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit6"
+		},
+		{
+			"#": "104[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_wholehem_export"
+		},
+		{
+			"#": "104[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_unused_export_bit7"
+		},
+		{
+			"#": "104[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_wholehem_export"
+		},
+		{
+			"#": "104[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_wholehem_export"
+		},
+		{
+			"#": "104[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp3_export"
+		},
+		{
+			"#": "104[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_wholehem_export"
+		},
+		{
+			"#": "104[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp3_export"
+		},
+		{
+			"#": "104[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_wholehem_export"
+		},
+		{
+			"#": "104[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp3_export"
+		},
+		{
+			"#": "104[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_wholehem_export"
+		},
+		{
+			"#": "104[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp3_export"
+		},
+		{
+			"#": "104[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_wholehem_export"
+		},
+		{
+			"#": "104[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp3_export"
+		},
+		{
+			"#": "104[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_wholehem_export"
+		},
+		{
+			"#": "104[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp3_export"
+		},
+		{
+			"#": "104[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_wholehem_export"
+		},
+		{
+			"#": "104[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp3_export"
+		},
+		{
+			"#": "104[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_wholehem_export"
+		},
+		{
+			"#": "104[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp3_export"
+		},
+		{
+			"#": "104[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp2_export"
+		},
+		{
+			"#": "104[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp2_export"
+		},
+		{
+			"#": "104[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp2_export"
+		},
+		{
+			"#": "104[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp2_export"
+		},
+		{
+			"#": "104[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp2_export"
+		},
+		{
+			"#": "104[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp2_export"
+		},
+		{
+			"#": "104[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp2_export"
+		},
+		{
+			"#": "104[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp2_export"
+		},
+		{
+			"#": "104[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kwh_clamp1_export"
+		},
+		{
+			"#": "104[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_watt_clamp1_export"
+		},
+		{
+			"#": "104[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_v_clamp1_export"
+		},
+		{
+			"#": "104[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_amp_clamp1_export"
+		},
+		{
+			"#": "104[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVarh_clamp1_export"
+		},
+		{
+			"#": "104[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVar_clamp1_export"
+		},
+		{
+			"#": "104[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_kVAh_clamp1_export"
+		},
+		{
+			"#": "104[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group1_pf_clamp1_export"
+		},
+		{
+			"#": "105[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit0"
+		},
+		{
+			"#": "105[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_wholehem_export"
+		},
+		{
+			"#": "105[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit1"
+		},
+		{
+			"#": "105[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_wholehem_export"
+		},
+		{
+			"#": "105[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit2"
+		},
+		{
+			"#": "105[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_wholehem_export"
+		},
+		{
+			"#": "105[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit3"
+		},
+		{
+			"#": "105[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_wholehem_export"
+		},
+		{
+			"#": "105[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit4"
+		},
+		{
+			"#": "105[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_wholehem_export"
+		},
+		{
+			"#": "105[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit5"
+		},
+		{
+			"#": "105[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_wholehem_export"
+		},
+		{
+			"#": "105[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit6"
+		},
+		{
+			"#": "105[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_wholehem_export"
+		},
+		{
+			"#": "105[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_unused_export_bit7"
+		},
+		{
+			"#": "105[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_wholehem_export"
+		},
+		{
+			"#": "105[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_wholehem_export"
+		},
+		{
+			"#": "105[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp3_export"
+		},
+		{
+			"#": "105[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_wholehem_export"
+		},
+		{
+			"#": "105[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp3_export"
+		},
+		{
+			"#": "105[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_wholehem_export"
+		},
+		{
+			"#": "105[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp3_export"
+		},
+		{
+			"#": "105[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_wholehem_export"
+		},
+		{
+			"#": "105[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp3_export"
+		},
+		{
+			"#": "105[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_wholehem_export"
+		},
+		{
+			"#": "105[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp3_export"
+		},
+		{
+			"#": "105[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_wholehem_export"
+		},
+		{
+			"#": "105[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp3_export"
+		},
+		{
+			"#": "105[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_wholehem_export"
+		},
+		{
+			"#": "105[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp3_export"
+		},
+		{
+			"#": "105[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_wholehem_export"
+		},
+		{
+			"#": "105[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp3_export"
+		},
+		{
+			"#": "105[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp2_export"
+		},
+		{
+			"#": "105[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp2_export"
+		},
+		{
+			"#": "105[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp2_export"
+		},
+		{
+			"#": "105[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp2_export"
+		},
+		{
+			"#": "105[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp2_export"
+		},
+		{
+			"#": "105[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp2_export"
+		},
+		{
+			"#": "105[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp2_export"
+		},
+		{
+			"#": "105[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp2_export"
+		},
+		{
+			"#": "105[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kwh_clamp1_export"
+		},
+		{
+			"#": "105[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_watt_clamp1_export"
+		},
+		{
+			"#": "105[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_v_clamp1_export"
+		},
+		{
+			"#": "105[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_amp_clamp1_export"
+		},
+		{
+			"#": "105[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVarh_clamp1_export"
+		},
+		{
+			"#": "105[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVar_clamp1_export"
+		},
+		{
+			"#": "105[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_kVAh_clamp1_export"
+		},
+		{
+			"#": "105[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group2_pf_clamp1_export"
+		},
+		{
+			"#": "106[0x01]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit0"
+		},
+		{
+			"#": "106[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_wholehem_export"
+		},
+		{
+			"#": "106[0x02]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit1"
+		},
+		{
+			"#": "106[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_wholehem_export"
+		},
+		{
+			"#": "106[0x04]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit2"
+		},
+		{
+			"#": "106[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_wholehem_export"
+		},
+		{
+			"#": "106[0x08]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit3"
+		},
+		{
+			"#": "106[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_wholehem_export"
+		},
+		{
+			"#": "106[0x10]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit4"
+		},
+		{
+			"#": "106[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_wholehem_export"
+		},
+		{
+			"#": "106[0x20]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit5"
+		},
+		{
+			"#": "106[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_wholehem_export"
+		},
+		{
+			"#": "106[0x40]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit6"
+		},
+		{
+			"#": "106[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_wholehem_export"
+		},
+		{
+			"#": "106[0x80]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_unused_export_bit7"
+		},
+		{
+			"#": "106[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_wholehem_export"
+		},
+		{
+			"#": "106[0x0100]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_wholehem_export"
+		},
+		{
+			"#": "106[0x0100]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp3_export"
+		},
+		{
+			"#": "106[0x0200]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_wholehem_export"
+		},
+		{
+			"#": "106[0x0200]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp3_export"
+		},
+		{
+			"#": "106[0x0400]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_wholehem_export"
+		},
+		{
+			"#": "106[0x0400]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp3_export"
+		},
+		{
+			"#": "106[0x0800]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_wholehem_export"
+		},
+		{
+			"#": "106[0x0800]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp3_export"
+		},
+		{
+			"#": "106[0x1000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_wholehem_export"
+		},
+		{
+			"#": "106[0x1000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp3_export"
+		},
+		{
+			"#": "106[0x2000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_wholehem_export"
+		},
+		{
+			"#": "106[0x2000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp3_export"
+		},
+		{
+			"#": "106[0x4000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_wholehem_export"
+		},
+		{
+			"#": "106[0x4000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp3_export"
+		},
+		{
+			"#": "106[0x8000]",
+			"$if": "productType === 0x0103 && productId === 0x002e",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_wholehem_export"
+		},
+		{
+			"#": "106[0x8000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp3_export"
+		},
+		{
+			"#": "106[0x010000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp2_export"
+		},
+		{
+			"#": "106[0x020000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp2_export"
+		},
+		{
+			"#": "106[0x040000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp2_export"
+		},
+		{
+			"#": "106[0x080000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp2_export"
+		},
+		{
+			"#": "106[0x100000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp2_export"
+		},
+		{
+			"#": "106[0x200000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp2_export"
+		},
+		{
+			"#": "106[0x400000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp2_export"
+		},
+		{
+			"#": "106[0x800000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp2_export"
+		},
+		{
+			"#": "106[0x01000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kwh_clamp1_export"
+		},
+		{
+			"#": "106[0x02000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_watt_clamp1_export"
+		},
+		{
+			"#": "106[0x04000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_v_clamp1_export"
+		},
+		{
+			"#": "106[0x08000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_amp_clamp1_export"
+		},
+		{
+			"#": "106[0x10000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVarh_clamp1_export"
+		},
+		{
+			"#": "106[0x20000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVar_clamp1_export"
+		},
+		{
+			"#": "106[0x40000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_kVAh_clamp1_export"
+		},
+		{
+			"#": "106[0x80000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_group3_pf_clamp1_export"
+		},
+		{
+			"#": "110",
+			"$import": "~/0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-116 to Default Values"
+		},
+		{
+			"#": "111",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group1_import"
+		},
+		{
+			"#": "112",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group2_import"
+		},
+		{
+			"#": "113",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group3_import"
+		},
+		{
+			"#": "114",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group1_export"
+		},
+		{
+			"#": "115",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group2_export"
+		},
+		{
+			"#": "116",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_group3_export"
+		},
+		{
+			"#": "252",
+			"$import": "~/0x0086/templates/aeotec_template.json#lock_configuration"
+		}
+	]
+}
