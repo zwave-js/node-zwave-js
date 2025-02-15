@@ -5,8 +5,8 @@
 	"description": "Thermostatic Radiator Valve",
 	"devices": [
 		{
-			"productType": "0x0000",
-			"productId": "0x0400"
+			"productType": "0x0400",
+			"productId": "0x0501"
 		}
 	],
 	"firmwareVersion": {
