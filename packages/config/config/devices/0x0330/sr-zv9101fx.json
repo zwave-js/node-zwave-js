@@ -1,0 +1,206 @@
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9101FX",
+	"description": "LED Dimmer",
+	"devices": [
+		{
+			"productType": "0x021a",
+			"productId": "0xd002",
+			"zwaveAllianceId": 2759
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Saving Load State Before Power Failure",
+			"description": "Saving load state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutoff load",
+					"value": 0
+				},
+				{
+					"label": "Turn on load",
+					"value": 1
+				},
+				{
+					"label": "Save load state before power failure",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Enable/Disable to Send The Basic Report",
+			"description": "Enable/disable to send the basic report to the lifeline when the load state changed (when value set as 1, re-power on the dimmer, it will send basic report automatically）",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to send basic report",
+					"value": 0
+				},
+				{
+					"label": "Enable to send basic report",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Select The Type of The Light Band",
+			"description": "Select the type of the light band",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single color light band, 4 channels pwm output to drive 4 channels single color light band",
+					"value": 0
+				},
+				{
+					"label": "Cct light band, 2 channels pwm output, r(b) controls warm white, g(w) controls cool white",
+					"value": 1
+				},
+				{
+					"label": "Rgbw light band, 4 channels pwm output to drive rgbw light band",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Choose a Cool Light Stage Mode",
+			"description": "Receiving command class switch color, or switching light band type, it recovers to normal lighting mode.) remarks: when parameter number 4 is set as single color light band, the valid values of this parameter are 0~2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive of light stage mode",
+					"value": 0
+				},
+				{
+					"label": "Fade in and fade out mode, colors set by parameter 8",
+					"value": 1
+				},
+				{
+					"label": "Flash mode, colors set by parameter 8",
+					"value": 2
+				},
+				{
+					"label": "Rainbow mode, system fixed changing effect",
+					"value": 3
+				},
+				{
+					"label": "Fade in and fade out mode, color changes randomly",
+					"value": 4
+				},
+				{
+					"label": "Flash mode, color changes randomly",
+					"value": 5
+				},
+				{
+					"label": "Rainbow mode, color changes randomly",
+					"value": 6
+				},
+				{
+					"label": "Random mode, the colors switch randomly",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Speed of Stage Mode",
+			"description": "0 is the slowest, 255(0xff) is the fastest",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 243,
+			"defaultValue": 243,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Execution Times of Stage Mode",
+			"description": "Execution times of stage mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Unlimited times",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "The Hue of Stage Mode",
+			"description": "0~0xff value of hue,only valid for fade in and fade out mode, flash mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Enable/Disable External Switch to Be Added to And Removed From a Network",
+			"description": "Enable/disable external switch to be added to and removed from a network (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer to your primary controllers manual on how to turn your controller into inclusion).\n2. Power on the LED dimmer, make sure the LED dimmer does not belong to any Z-Wave network (please refer to the part “How to check whether the LED dimmer included to a network” of this manual).\n1) When the connected LED light flashes quickly for 6 seconds, it means the LED dimmer does not belong to any network. Triple press the “Inclusion/Exclusion” button, it will be set into inclusion mode automatically, and waiting to be included.\n2) When the connected LED light is under solid on status, it means the LED dimmer has already been included into a network. First you have to set the LED dimmer into exclusion mode, once excluded, it will be set into inclusion mode automatically, and waiting to be included.\nThe connected LED light stays solid on 3s to indicate successful inclusion",
+		"exclusion": "There are two exclusion methods:\nMethod 1: Exclusion from the primary controller/gateway as follows:\n1. Set the primary controller/gateway into exclusion mode (Please refer to your primary controllers manual on how to set your controller into exclusion).\n2. Triple press the “inclusion/exclusion” button, the LED dimmer will be set to exclusion mode, the connected LED light will flash quickly for 6 seconds, and waiting to be excluded, then LED light stays solid on 3s to indicate successful exclusion.\nThere are 3 methods for the LED dimmer to quit “exclusion mode”. Once the LED dimmer quits “exclusion mode”, the LED light will stop the fast flash status.\n1. Automatically quits after successful exclusion.\n2. Quits after 10 seconds timeout.\n3. Power off and power on the LED dimmer.\n(Note: When the LED dimmer already included to a network, triple press\n“inclusion/exclusion” button, the LED dimmer will be set into exclusion mode and quit exclusion mode alternatively.)\nMethod 2: Factory reset the LED dimmer will force the LED dimmer to be excluded from a network. (please refer to the part “Factory Reset” of this manual)\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable",
+		"reset": "Press and hold down “inclusion/exclusion” button for over 10 seconds, connected LED light stays solid on 3s to indicate successful factory reset, release “inclusion/exclusion” button, all 4 PWM outputs will restore to 50% brightness",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2759/Z-Wave%20LED%20Dimmer%20SR-ZV9101FX-RU%20User%20Manual.pdf"
+	}
+}
