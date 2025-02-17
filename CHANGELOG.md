@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Always query list of supported thermostat setpoint types (#7617)
+* Do not throw error responding to invalid `Indicator Description Get` (#7616)
+* Expose firmware ID for OTA update to applications (#7599)
+
+### Config file changes
+* Allow setting arbitrary Motion Sensitivity for ZSE70 (#7603)
+
 ## 14.3.8 (2025-01-28)
 ### Bugfixes
 * Fixed an issue with restoring the network cache from disk on some systems (#7560)
