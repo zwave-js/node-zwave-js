@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.9 (2025-02-17)
 ### Bugfixes
 * Always query list of supported thermostat setpoint types (#7617)
 * Do not throw error responding to invalid `Indicator Description Get` (#7616)
