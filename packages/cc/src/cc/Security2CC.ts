@@ -1900,12 +1900,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		if (mustDiscardCommand) {
 			validatePayload.fail("Invalid extension");
 		}
+		// The MPAN and MGRP extensions must not be sent together
+		const mpanExtension = extensions.find((e) =>
+			e instanceof MPANExtension
+		);
+		if (mcctx.groupId != undefined && mpanExtension) {
+			validatePayload.fail("Invalid combination of extensions");
+		}
 
 		// If the MPAN extension was received, store the MPAN
 		if (!mcctx.isMulticast) {
-			const mpanExtension = extensions.find((e) =>
-				e instanceof MPANExtension
-			);
 			if (mpanExtension) {
 				securityManager.storePeerMPAN(
 					ctx.sourceNodeId,
