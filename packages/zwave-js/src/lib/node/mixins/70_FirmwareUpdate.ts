@@ -1,9 +1,12 @@
 import {
+	FirmwareDownloadStatus,
 	type FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	type FirmwareUpdateMetaDataCCMetaDataGet,
+	type FirmwareUpdateMetaDataCCPrepareGet,
 	FirmwareUpdateMetaDataCCReport,
+	type FirmwareUpdateMetaDataCCRequestGet,
 	FirmwareUpdateMetaDataCCRequestReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	type FirmwareUpdateOptions,
@@ -770,6 +773,56 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 			firmwareUpgradable: false,
 			hardwareVersion: this.driver.options.vendor?.hardwareVersion
 				?? 0,
+			// We must advertise Z-Wave JS itself as firmware 1
+			// No firmware is upgradable, so we advertise firmware id 0
+			additionalFirmwareIDs: [0],
+		});
+	}
+
+	protected async handleFirmwareUpdateRequestGet(
+		command: FirmwareUpdateMetaDataCCRequestGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex)
+			?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Firmware Update Meta Data"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We do not support the firmware to be upgraded.
+		await api.respondToUpdateRequest({
+			status: FirmwareUpdateRequestStatus.Error_NotUpgradable,
+		});
+	}
+
+	protected async handleFirmwareUpdatePrepareGet(
+		command: FirmwareUpdateMetaDataCCPrepareGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex)
+			?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Firmware Update Meta Data"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We do not support the firmware to be downloaded
+		await api.respondToDownloadRequest({
+			status: FirmwareDownloadStatus.Error_NotDownloadable,
+			checksum: 0x0000,
 		});
 	}
 

@@ -75,6 +75,8 @@ import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCMetaDataGet,
+	FirmwareUpdateMetaDataCCPrepareGet,
+	FirmwareUpdateMetaDataCCRequestGet,
 	FirmwareUpdateMetaDataCCValues,
 } from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
 import { HailCC } from "@zwave-js/cc/HailCC";
@@ -2442,6 +2444,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleUnexpectedFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCMetaDataGet) {
 			return this.handleFirmwareUpdateMetaDataGet(command);
+		} else if (command instanceof FirmwareUpdateMetaDataCCRequestGet) {
+			return this.handleFirmwareUpdateRequestGet(command);
+		} else if (command instanceof FirmwareUpdateMetaDataCCPrepareGet) {
+			return this.handleFirmwareUpdatePrepareGet(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof TimeCCTimeGet) {
