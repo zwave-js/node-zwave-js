@@ -2517,6 +2517,13 @@ protocol version:      ${this.protocolVersion}`;
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
+				command.step === InclusionControllerStep.ProxyInclusion
+			) {
+				return this.driver.controller
+					.handleInclusionControllerCCInitiateProxyInclusion(
+						command,
+					);
+			} else if (
 				command.step === InclusionControllerStep.ProxyInclusionReplace
 			) {
 				return this.driver.controller
