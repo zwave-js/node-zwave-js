@@ -44,7 +44,7 @@ test("the Notification command should deserialize correctly", async (t) => {
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCNotification;
@@ -65,7 +65,7 @@ test("the ConfigurationGet command should serialize correctly", async (t) => {
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -83,7 +83,7 @@ test("the ConfigurationSet command should serialize correctly", async (t) => {
 			0x2,
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -97,7 +97,7 @@ test("the ConfigurationReport command should be deserialize correctly", async (t
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCConfigurationReport;
@@ -116,7 +116,7 @@ test("the EventSupportedGet command should serialize correctly", async (t) => {
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -139,7 +139,7 @@ test("the EventSupportedReport command should be deserialize correctly", async (
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCEventSupportedReport;
@@ -167,7 +167,7 @@ test("the KeySupportedGet command should serialize correctly", async (t) => {
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -181,7 +181,7 @@ test("the KeySupportedReport command should be deserialize correctly", async (t)
 		]),
 	);
 
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		data,
 		{ sourceNodeId: 1 } as any,
 	) as EntryControlCCKeySupportedReport;

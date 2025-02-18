@@ -586,7 +586,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public value: number;
 	public scale: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// If a config file overwrites how the float should be encoded, use that information
 		const override = ctx.getDeviceConfig?.(this.nodeId as number)
 			?.compat?.overrideFloatEncoding;
@@ -594,7 +594,6 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			Bytes.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -695,12 +694,11 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.type & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -760,9 +758,8 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -852,11 +849,10 @@ export class ThermostatSetpointCCCapabilitiesReport
 	public minValueScale: number;
 	public maxValueScale: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const min = encodeFloatWithScale(this.minValue, this.minValueScale);
 		const max = encodeFloatWithScale(this.maxValue, this.maxValueScale);
 		this.payload = Bytes.concat([Bytes.from([this.type]), min, max]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -907,9 +903,8 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.setpointType & 0b1111]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -975,7 +970,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 
 	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = encodeBitMask(
 			// Encode as interpretation A
 			this.supportedSetpointTypes
@@ -984,7 +979,6 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			undefined,
 			ThermostatSetpointType["N/A"],
 		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

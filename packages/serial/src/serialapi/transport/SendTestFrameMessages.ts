@@ -78,7 +78,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public testNodeId: number;
 	public powerlevel: Powerlevel;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.testNodeId, ctx.nodeIdType);
 		this.payload = Bytes.concat([
@@ -89,7 +89,6 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 			]),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

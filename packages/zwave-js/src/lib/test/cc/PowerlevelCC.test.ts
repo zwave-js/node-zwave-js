@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", async (t) => {
 			PowerlevelCommand.Get, // CC Command
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -44,7 +44,7 @@ test("the Set NormalPower command should serialize correctly", async (t) => {
 			0, // timeout (ignored)
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -62,7 +62,7 @@ test("the Set NormalPower command with timeout should serialize correctly", asyn
 			0x00, // timeout ignored
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -80,7 +80,7 @@ test("the Set Custom power command should serialize correctly", async (t) => {
 			50, // timeout
 		]),
 	);
-	await t.expect(cc.serializeAsync({} as any)).resolves.toStrictEqual(
+	await t.expect(cc.serialize({} as any)).resolves.toStrictEqual(
 		expected,
 	);
 });
@@ -93,7 +93,7 @@ test("the Report command should be deserialized correctly (NormalPower)", async 
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
@@ -111,7 +111,7 @@ test("the Report command should be deserialized correctly (custom power)", async
 			50, // timeout (ignored because NormalPower)
 		]),
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		ccData,
 		{ sourceNodeId: 5 } as any,
 	) as PowerlevelCCReport;
@@ -125,7 +125,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Uint8Array.from([255]), // not a valid command
 	);
-	const cc = await CommandClass.parseAsync(
+	const cc = await CommandClass.parse(
 		serializedCC,
 		{ sourceNodeId: 1 } as any,
 	) as PowerlevelCC;

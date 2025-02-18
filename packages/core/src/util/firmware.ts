@@ -1,7 +1,6 @@
 import { Bytes, getErrorMessage, isUint8Array } from "@zwave-js/shared/safe";
 import { unzipSync } from "fflate";
-import { decryptAES256CBC as decryptAES256CBCAsync } from "../crypto/operations.async.js";
-import { decryptAES256CBC as decryptAES256CBCSync } from "../crypto/operations.sync.js";
+import { decryptAES256CBC } from "../crypto/index.js";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 import type { Firmware, FirmwareFileFormat } from "./_Types.js";
 import { CRC16_CCITT } from "./crc.js";
@@ -104,62 +103,8 @@ export function tryUnzipFirmwareFile(zipData: Uint8Array): {
  * - `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
  *
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
- *
- * @deprecated Use {@link extractFirmwareAsync} instead
  */
-export function extractFirmware(
-	rawData: Uint8Array,
-	format: FirmwareFileFormat,
-): Firmware {
-	switch (format) {
-		case "aeotec":
-			return extractFirmwareAeotec(rawData);
-		case "otz":
-		case "ota":
-			// Per convention, otz and ota files SHOULD be in Intel HEX format,
-			// but some manufacturers use them for binary data. So we attempt parsing
-			// them as HEX and fall back to returning the binary contents.
-			if (rawData.every((b) => b <= 127)) {
-				try {
-					return extractFirmwareHEX(rawData);
-				} catch (e) {
-					if (
-						e instanceof ZWaveError
-						&& e.code === ZWaveErrorCodes.Argument_Invalid
-					) {
-						// Fall back to binary data
-					} else {
-						throw e;
-					}
-				}
-			}
-			return extractFirmwareRAW(rawData);
-		case "hex":
-			return extractFirmwareHEX(rawData);
-		case "hec":
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			return extractFirmwareHECSync(rawData);
-		case "gecko":
-			// There is no description for the file contents, so we
-			// have to assume this is for firmware target 0
-			return extractFirmwareRAW(rawData);
-		case "bin":
-			// There is no description for the file contents, so the user has to make sure to select the correct target
-			return extractFirmwareRAW(rawData);
-	}
-}
-
-/**
- * Extracts the firmware data from a file. The following formats are available:
- * - `"aeotec"` - A Windows executable (.exe or .ex_) that contains Aeotec's upload tool
- * - `"otz"` - A compressed firmware file in Intel HEX format
- * - `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
- * - `"hec"` - An encrypted Intel HEX firmware file
- * - `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
- *
- * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
- */
-export async function extractFirmwareAsync(
+export async function extractFirmware(
 	rawData: Uint8Array,
 	format: FirmwareFileFormat,
 ): Promise<Firmware> {
@@ -189,7 +134,7 @@ export async function extractFirmwareAsync(
 		case "hex":
 			return extractFirmwareHEX(rawData);
 		case "hec":
-			return extractFirmwareHECAsync(rawData);
+			return extractFirmwareHEC(rawData);
 		case "gecko":
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
@@ -328,8 +273,7 @@ function extractFirmwareHEX(dataHEX: Uint8Array | string): Firmware {
 	}
 }
 
-/** @deprecated Use {@link extractFirmwareHECAsync} instead */
-function extractFirmwareHECSync(data: Uint8Array): Firmware {
+async function extractFirmwareHEC(data: Uint8Array): Promise<Firmware> {
 	const key =
 		"d7a68def0f4a1241940f6cb8017121d15f0e2682e258c9f7553e706e834923b7";
 	const iv = "0e6519297530583708612a2823663844";
@@ -339,30 +283,7 @@ function extractFirmwareHECSync(data: Uint8Array): Firmware {
 		"base64",
 	);
 	const plaintext = Bytes.view(
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		decryptAES256CBCSync(
-			ciphertext,
-			Bytes.from(key, "hex"),
-			Bytes.from(iv, "hex"),
-		),
-	)
-		.toString("ascii")
-		.replaceAll(" ", "\n");
-
-	return extractFirmwareHEX(plaintext);
-}
-
-async function extractFirmwareHECAsync(data: Uint8Array): Promise<Firmware> {
-	const key =
-		"d7a68def0f4a1241940f6cb8017121d15f0e2682e258c9f7553e706e834923b7";
-	const iv = "0e6519297530583708612a2823663844";
-
-	const ciphertext = Bytes.from(
-		Bytes.view(data.subarray(6)).toString("ascii"),
-		"base64",
-	);
-	const plaintext = Bytes.view(
-		await decryptAES256CBCAsync(
+		await decryptAES256CBC(
 			ciphertext,
 			Bytes.from(key, "hex"),
 			Bytes.from(iv, "hex"),

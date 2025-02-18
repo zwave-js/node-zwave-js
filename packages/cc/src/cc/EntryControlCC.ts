@@ -793,9 +793,8 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public readonly keyCacheSize: number;
 	public readonly keyCacheTimeout: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.keyCacheSize, this.keyCacheTimeout]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -1,7 +1,7 @@
 import {
+	type LogContainer,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveLogContainer,
 	isZWaveError,
 } from "@zwave-js/core";
 import { getErrorMessage, pathExists } from "@zwave-js/shared";
@@ -34,7 +34,7 @@ import {
 
 export interface ConfigManagerOptions {
 	bindings?: FileSystem;
-	logContainer?: ZWaveLogContainer;
+	logContainer?: LogContainer;
 	deviceConfigPriorityDir?: string;
 	deviceConfigExternalDir?: string;
 }
@@ -42,9 +42,8 @@ export interface ConfigManagerOptions {
 export class ConfigManager {
 	public constructor(options: ConfigManagerOptions = {}) {
 		this._fs = options.bindings;
-		this.logger = new ConfigLogger(
-			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
-		);
+		this._logContainer = options.logContainer;
+
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
 		this.deviceConfigExternalDir = options.deviceConfigExternalDir;
 
@@ -62,7 +61,20 @@ export class ConfigManager {
 		return this._configVersion;
 	}
 
-	private logger: ConfigLogger;
+	private _logContainer: LogContainer | undefined;
+	private _logger: ConfigLogger | undefined;
+	private async getLogger(): Promise<ConfigLogger> {
+		if (!this._logContainer) {
+			this._logContainer =
+				(await import("@zwave-js/core/bindings/log/node")).log({
+					enabled: false,
+				});
+		}
+		if (!this._logger) {
+			this._logger = new ConfigLogger(this._logContainer);
+		}
+		return this._logger;
+	}
 
 	private _manufacturers: ManufacturersMap | undefined;
 	public get manufacturers(): ManufacturersMap {
@@ -91,6 +103,7 @@ export class ConfigManager {
 	}
 
 	public async loadAll(): Promise<void> {
+		const logger = await this.getLogger();
 		// If the environment option for an external config dir is set
 		// try to sync it and then use it
 		let syncResult: SyncExternalConfigDirResult | undefined;
@@ -99,13 +112,13 @@ export class ConfigManager {
 			syncResult = await syncExternalConfigDir(
 				await this.getFS(),
 				externalConfigDir,
-				this.logger,
+				logger,
 			);
 		}
 
 		if (syncResult?.success) {
 			this._useExternalConfig = true;
-			this.logger.print(
+			logger.print(
 				`Using external configuration dir ${externalConfigDir}`,
 			);
 			this._configVersion = syncResult.version;
@@ -113,7 +126,7 @@ export class ConfigManager {
 			this._useExternalConfig = false;
 			this._configVersion = PACKAGE_VERSION;
 		}
-		this.logger.print(`version ${this._configVersion}`, "info");
+		logger.print(`version ${this._configVersion}`, "info");
 
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
@@ -129,7 +142,7 @@ export class ConfigManager {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
+					(await this.getLogger()).print(
 						`Could not load manufacturers config: ${e.message}`,
 						"error",
 					);
@@ -192,11 +205,12 @@ export class ConfigManager {
 
 	public async loadDeviceIndex(): Promise<void> {
 		const fs = await this.getFS();
+		const logger = await this.getLogger();
 		try {
 			// The index of config files included in this package
 			const embeddedIndex = await loadDeviceIndexInternal(
 				fs,
-				this.logger,
+				logger,
 				this._useExternalConfig && this.externalConfigDir || undefined,
 			);
 			// A dynamic index of the user-defined priority device config files
@@ -207,11 +221,11 @@ export class ConfigManager {
 						...(await generatePriorityDeviceIndex(
 							fs,
 							this.deviceConfigPriorityDir,
-							this.logger,
+							logger,
 						)),
 					);
 				} else {
-					this.logger.print(
+					logger.print(
 						`Priority device configuration directory ${this.deviceConfigPriorityDir} not found`,
 						"warn",
 					);
@@ -229,7 +243,7 @@ export class ConfigManager {
 				// Fall back to no index on production systems
 				if (!this.index) this.index = [];
 				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
+					logger.print(
 						`Could not load or regenerate device config index: ${e.message}`,
 						"error",
 					);
@@ -249,7 +263,7 @@ export class ConfigManager {
 	public async loadFulltextDeviceIndex(): Promise<void> {
 		this.fulltextIndex = await loadFulltextDeviceIndexInternal(
 			await this.getFS(),
-			this.logger,
+			await this.getLogger(),
 		);
 	}
 
@@ -320,7 +334,7 @@ export class ConfigManager {
 				);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
+					(await this.getLogger()).print(
 						`Error loading device config ${filePath}: ${
 							getErrorMessage(
 								e,

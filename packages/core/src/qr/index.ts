@@ -9,5 +9,5 @@ export {
 	type QRProvisioningInformation,
 	minQRCodeLength,
 } from "./definitions.js";
-export { parseQRCodeString } from "./parse.node.js";
+export { parseQRCodeString } from "./parse.js";
 export * from "./utils.js";

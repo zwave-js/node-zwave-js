@@ -2269,10 +2269,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node18@npm:^18.2.4":
-  version: 18.2.4
-  resolution: "@tsconfig/node18@npm:18.2.4"
-  checksum: 10/80623cb9c129c78d51fe6c4a256ba986f12f02ff02dc2a1e5b33dd13a7983f767b6792cfcd51b3dd1c8256ea105f1fea31f64a2070564e37787ab3d9a1a1e7e3
+"@tsconfig/node20@npm:^20.1.4":
+  version: 20.1.4
+  resolution: "@tsconfig/node20@npm:20.1.4"
+  checksum: 10/345dba8074647f6c11b8d78afa76d9c16e3436cb56a8e78fe2060014d33a09f3f4fd6ed81dc90e955d3509f926cd7fd61c6ddfd3d5a1d80758d7844f7cc3a99e
   languageName: node
   linkType: hard
 
@@ -2365,12 +2365,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.19.63":
-  version: 18.19.63
-  resolution: "@types/node@npm:18.19.63"
+"@types/node@npm:^20.17.16":
+  version: 20.17.16
+  resolution: "@types/node@npm:20.17.16"
   dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10/0f124e5e59d6d27066a5eedc33bdc25ad24aff306c05d5efd03c4ba8c15404c957668546775df355a4146d28cd55979563e4fd485080d482a3593235df0f4d7b
+    undici-types: "npm:~6.19.2"
+  checksum: 10/2a6f9f3d6e2640a6de5ae88ea690d8064eb421cca2989c84bc23eb1adf5e9f483c52e273722c05afba451054d3ca902df72bb8b6c33d1684404161bb410922f7
   languageName: node
   linkType: hard
 
@@ -2431,6 +2431,20 @@ __metadata:
   version: 1.3.5
   resolution: "@types/triple-beam@npm:1.3.5"
   checksum: 10/519b6a1b30d4571965c9706ad5400a200b94e4050feca3e7856e3ea7ac00ec9903e32e9a10e2762d0f7e472d5d03e5f4b29c16c0bd8c1f77c8876c683b2231f1
+  languageName: node
+  linkType: hard
+
+"@types/w3c-web-serial@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "@types/w3c-web-serial@npm:1.0.7"
+  checksum: 10/3acebdcaeef6249b074d1500cc76c425669b9a14b9ba7b4d0bed0a6d5df887a0b5260fa61f5061625602340732662493da34836546776dcb03647166527190c2
+  languageName: node
+  linkType: hard
+
+"@types/w3c-web-usb@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "@types/w3c-web-usb@npm:1.0.10"
+  checksum: 10/6ac6786a0788f0846a48b103ab06ca5fde5eb95674217b522420a2f6157bee3e181a961c1b7011940f497c55f4f5cc46129657d881fdd8112b48764089679ad6
   languageName: node
   linkType: hard
 
@@ -2712,13 +2726,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zwave-js/bindings-browser@workspace:^, @zwave-js/bindings-browser@workspace:packages/bindings-browser":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/bindings-browser@workspace:packages/bindings-browser"
+  dependencies:
+    "@types/w3c-web-serial": "npm:^1.0.7"
+    "@zwave-js/serial": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
+    del-cli: "npm:^6.0.0"
+    typescript: "npm:5.7.3"
+    zwave-js: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/cc@workspace:*, @zwave-js/cc@workspace:packages/cc":
   version: 0.0.0-use.local
   resolution: "@zwave-js/cc@workspace:packages/cc"
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
@@ -2743,7 +2770,7 @@ __metadata:
     "@microsoft/api-extractor": "npm:^7.48.0"
     "@types/js-levenshtein": "npm:^1.1.3"
     "@types/json-logic-js": "npm:^2.0.8"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/semver": "npm:^7.5.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/xml2js": "npm:^0.4.14"
@@ -2781,7 +2808,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/semver": "npm:^7.5.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/triple-beam": "npm:^1.3.5"
@@ -2826,7 +2853,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/flash@workspace:packages/flash"
   dependencies:
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
     del-cli: "npm:^6.0.0"
@@ -2859,7 +2886,7 @@ __metadata:
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -2879,7 +2906,7 @@ __metadata:
     "@dprint/markdown": "npm:^0.17.8"
     "@dprint/typescript": "npm:^0.93.3"
     "@types/globrex": "npm:^0.1.4"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/fmt": "npm:^1.0.3"
@@ -2907,7 +2934,7 @@ __metadata:
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/semver": "npm:^7.5.8"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
@@ -2944,8 +2971,8 @@ __metadata:
     "@dprint/typescript": "npm:^0.93.3"
     "@microsoft/api-extractor": "npm:^7.48.0"
     "@monorepo-utils/workspaces-to-typescript-project-references": "npm:^2.10.4"
-    "@tsconfig/node18": "npm:^18.2.4"
-    "@types/node": "npm:^18.19.63"
+    "@tsconfig/node20": "npm:^20.1.4"
+    "@types/node": "npm:^20.17.16"
     "@types/semver": "npm:^7.5.8"
     "@types/source-map-support": "npm:^0.5.10"
     "@types/xml2js": "npm:^0.4.14"
@@ -3002,7 +3029,7 @@ __metadata:
     "@serialport/binding-mock": "npm:^10.2.2"
     "@serialport/bindings-interface": "patch:@serialport/bindings-interface@npm%3A1.2.2#~/.yarn/patches/@serialport-bindings-interface-npm-1.2.2-e597dbc676.patch"
     "@serialport/stream": "npm:^12.0.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/sinon": "npm:^17.0.3"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/core": "workspace:*"
@@ -3026,7 +3053,7 @@ __metadata:
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/sinon": "npm:^17.0.3"
     alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
@@ -3044,7 +3071,7 @@ __metadata:
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/triple-beam": "npm:^1.3.5"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/core": "workspace:*"
@@ -3079,6 +3106,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/web@workspace:packages/web"
   dependencies:
+    "@types/w3c-web-serial": "npm:^1.0.7"
+    "@types/w3c-web-usb": "npm:^1.0.10"
+    "@zwave-js/bindings-browser": "workspace:^"
+    "@zwave-js/core": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
     esbuild: "npm:^0.25.0"
     esbuild-plugins-node-modules-polyfill: "npm:^1.6.8"
     zwave-js: "workspace:*"
@@ -9696,10 +9728,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
+"undici-types@npm:~6.19.2":
+  version: 6.19.8
+  resolution: "undici-types@npm:6.19.8"
+  checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
   languageName: node
   linkType: hard
 
@@ -10249,7 +10281,7 @@ __metadata:
     "@andrewbranch/untar.js": "npm:^1.0.3"
     "@homebridge/ciao": "npm:^1.3.1"
     "@microsoft/api-extractor": "npm:^7.48.0"
-    "@types/node": "npm:^18.19.63"
+    "@types/node": "npm:^20.17.16"
     "@types/semver": "npm:^7.5.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/source-map-support": "npm:^0.5.10"

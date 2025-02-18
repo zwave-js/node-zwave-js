@@ -31,10 +31,9 @@ export class HardResetRequestBase extends Message {
 
 @expectedCallback(FunctionType.HardReset)
 export class HardResetRequest extends HardResetRequestBase {
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

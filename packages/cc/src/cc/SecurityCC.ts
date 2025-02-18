@@ -12,17 +12,12 @@ import {
 	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
-	computeMACAsync,
-	computeMACSync,
-	decryptAES128OFBAsync,
-	decryptAES128OFBSync,
+	computeMAC,
+	decryptAES128OFB,
 	encodeCCList,
-	encryptAES128OFBAsync,
-	encryptAES128OFBSync,
-	generateAuthKeyAsync,
-	generateAuthKeySync,
-	generateEncryptionKeyAsync,
-	generateEncryptionKeySync,
+	encryptAES128OFB,
+	generateAuthKey,
+	generateEncryptionKey,
 	getCCName,
 	isTransmissionError,
 	parseCCList,
@@ -586,9 +581,8 @@ export class SecurityCCNonceReport extends SecurityCC {
 
 	public nonce: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.view(this.nonce);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -649,88 +643,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.alternativeNetworkKey = options.alternativeNetworkKey;
 	}
 
-	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
-	): SecurityCCCommandEncapsulation {
-		assertSecurityRX(ctx);
-
-		// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
-		validatePayload(
-			raw.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
-		);
-		const iv = raw.payload.subarray(0, HALF_NONCE_SIZE);
-		const encryptedPayload = raw.payload.subarray(HALF_NONCE_SIZE, -9);
-		const nonceId = raw.payload.at(-9)!;
-		const authCode = raw.payload.subarray(-8);
-
-		// Retrieve the used nonce from the nonce store
-		const nonce = ctx.securityManager.getNonce(nonceId);
-		// Only accept the message if the nonce hasn't expired
-		if (!nonce) {
-			validatePayload.fail(
-				`Nonce ${
-					num2hex(
-						nonceId,
-					)
-				} expired, cannot decode security encapsulated command.`,
-			);
-		}
-		// and mark the nonce as used
-		ctx.securityManager.deleteNonce(nonceId);
-
-		// Validate the encrypted data
-		const authData = getAuthenticationData(
-			iv,
-			nonce,
-			SecurityCommand.CommandEncapsulation,
-			ctx.sourceNodeId,
-			ctx.ownNodeId,
-			encryptedPayload,
-		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const expectedAuthCode = computeMACSync(
-			authData,
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			ctx.securityManager.authKey,
-		);
-		// Only accept messages with a correct auth code
-		validatePayload.withReason(
-			"Invalid auth code, won't accept security encapsulated command.",
-		)(authCode.equals(expectedAuthCode));
-
-		// Decrypt the encapsulated CC
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const frameControlAndDecryptedCC = decryptAES128OFBSync(
-			encryptedPayload,
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			ctx.securityManager.encryptionKey,
-			Bytes.concat([iv, nonce]),
-		);
-		const frameControl = frameControlAndDecryptedCC[0];
-		const sequenceCounter = frameControl & 0b1111;
-		const sequenced = !!(frameControl & 0b1_0000);
-		const secondFrame = !!(frameControl & 0b10_0000);
-		const decryptedCCBytes: Uint8Array | undefined =
-			frameControlAndDecryptedCC
-				.subarray(1);
-
-		const ret = new SecurityCCCommandEncapsulation({
-			nodeId: ctx.sourceNodeId,
-			sequenceCounter,
-			sequenced,
-			secondFrame,
-			decryptedCCBytes,
-		});
-
-		ret.authData = authData;
-		ret.authCode = authCode;
-		ret.iv = iv;
-
-		return ret;
-	}
-
-	public static async fromAsync(
+	public static async from(
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Promise<SecurityCCCommandEncapsulation> {
@@ -769,7 +682,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			ctx.ownNodeId,
 			encryptedPayload,
 		);
-		const expectedAuthCode = await computeMACAsync(
+		const expectedAuthCode = await computeMAC(
 			authData,
 			await ctx.securityManager.getAuthKey(),
 		);
@@ -779,7 +692,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		)(authCode.equals(expectedAuthCode));
 
 		// Decrypt the encapsulated CC
-		const frameControlAndDecryptedCC = await decryptAES128OFBAsync(
+		const frameControlAndDecryptedCC = await decryptAES128OFB(
 			encryptedPayload,
 			await ctx.securityManager.getEncryptionKey(),
 			Bytes.concat([iv, nonce]),
@@ -846,24 +759,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return !!this.sequenced && !this.secondFrame;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
-	public mergePartialCCs(
-		partials: SecurityCCCommandEncapsulation[],
-		ctx: CCParsingContext,
-	): void {
-		// Concat the CC buffers
-		this.decryptedCCBytes = Bytes.concat(
-			[...partials, this].map((cc) => cc.decryptedCCBytes!),
-		);
-		// make sure this contains a complete CC command that's worth splitting
-		validatePayload(this.decryptedCCBytes.length >= 2);
-		// and deserialize the CC
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		this.encapsulated = CommandClass.parse(this.decryptedCCBytes, ctx);
-		this.encapsulated.encapsulatingCC = this as any;
-	}
-
-	public async mergePartialCCsAsync(
+	public async mergePartialCCs(
 		partials: SecurityCCCommandEncapsulation[],
 		ctx: CCParsingContext,
 	): Promise<void> {
@@ -874,15 +770,14 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// make sure this contains a complete CC command that's worth splitting
 		validatePayload(this.decryptedCCBytes.length >= 2);
 		// and deserialize the CC
-		this.encapsulated = await CommandClass.parseAsync(
+		this.encapsulated = await CommandClass.parse(
 			this.decryptedCCBytes,
 			ctx,
 		);
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 
-	/** @deprecated Use {@link serializeAsync} instead */
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public async serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		if (!this.nonce) throwNoNonce();
 		if (this.nonce.length !== HALF_NONCE_SIZE) {
 			throwNoNonce("Invalid nonce size");
@@ -892,70 +787,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		let authKey: Uint8Array;
 		let encryptionKey: Uint8Array;
 		if (this.alternativeNetworkKey) {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			authKey = generateAuthKeySync(this.alternativeNetworkKey);
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			encryptionKey = generateEncryptionKeySync(
-				this.alternativeNetworkKey,
-			);
-		} else {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			authKey = ctx.securityManager.authKey;
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			encryptionKey = ctx.securityManager.encryptionKey;
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const serializedCC = this.encapsulated.serialize(ctx);
-		const plaintext = Bytes.concat([
-			Bytes.from([0]), // TODO: frame control
-			serializedCC,
-		]);
-		// Encrypt the payload
-		const senderNonce = randomBytes(HALF_NONCE_SIZE);
-		const iv = Bytes.concat([senderNonce, this.nonce]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const ciphertext = encryptAES128OFBSync(plaintext, encryptionKey, iv);
-		// And generate the auth code
-		const authData = getAuthenticationData(
-			senderNonce,
-			this.nonce,
-			this.ccCommand,
-			ctx.ownNodeId,
-			this.nodeId,
-			ciphertext,
-		);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		const authCode = computeMACSync(authData, authKey);
-
-		// Remember for debugging purposes
-		this.iv = iv;
-		this.authData = authData;
-		this.authCode = authCode;
-		this.ciphertext = ciphertext;
-
-		this.payload = Bytes.concat([
-			senderNonce,
-			ciphertext,
-			Bytes.from([this.nonceId!]),
-			authCode,
-		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
-		return super.serialize(ctx);
-	}
-
-	public async serializeAsync(ctx: CCEncodingContext): Promise<Bytes> {
-		if (!this.nonce) throwNoNonce();
-		if (this.nonce.length !== HALF_NONCE_SIZE) {
-			throwNoNonce("Invalid nonce size");
-		}
-		assertSecurityTX(ctx);
-
-		let authKey: Uint8Array;
-		let encryptionKey: Uint8Array;
-		if (this.alternativeNetworkKey) {
-			authKey = await generateAuthKeyAsync(this.alternativeNetworkKey);
-			encryptionKey = await generateEncryptionKeyAsync(
+			authKey = await generateAuthKey(this.alternativeNetworkKey);
+			encryptionKey = await generateEncryptionKey(
 				this.alternativeNetworkKey,
 			);
 		} else {
@@ -963,7 +796,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			encryptionKey = await ctx.securityManager.getEncryptionKey();
 		}
 
-		const serializedCC = await this.encapsulated.serializeAsync(ctx);
+		const serializedCC = await this.encapsulated.serialize(ctx);
 		const plaintext = Bytes.concat([
 			Bytes.from([0]), // TODO: frame control
 			serializedCC,
@@ -971,7 +804,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Bytes.concat([senderNonce, this.nonce]);
-		const ciphertext = await encryptAES128OFBAsync(
+		const ciphertext = await encryptAES128OFB(
 			plaintext,
 			encryptionKey,
 			iv,
@@ -985,7 +818,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.nodeId,
 			ciphertext,
 		);
-		const authCode = await computeMACAsync(authData, authKey);
+		const authCode = await computeMAC(authData, authKey);
 
 		// Remember for debugging purposes
 		this.iv = iv;
@@ -999,7 +832,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			Bytes.from([this.nonceId!]),
 			authCode,
 		]);
-		return super.serializeAsync(ctx);
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -1069,10 +902,9 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		});
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1088,10 +920,9 @@ export class SecurityCCSchemeReport extends SecurityCC {
 @CCCommand(SecurityCommand.SchemeGet)
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeGet extends SecurityCC {
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1107,10 +938,9 @@ export class SecurityCCSchemeGet extends SecurityCC {
 @CCCommand(SecurityCommand.SchemeInherit)
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeInherit extends SecurityCC {
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Bytes.from([0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1162,9 +992,8 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 
 	public networkKey: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.view(this.networkKey);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1226,20 +1055,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		return this.reportsToFollow > 0;
 	}
 
-	/** @deprecated Use {@link mergePartialCCsAsync} instead */
 	public mergePartialCCs(
-		partials: SecurityCCCommandsSupportedReport[],
-	): void {
-		// Concat the lists of CCs
-		this.supportedCCs = [...partials, this]
-			.map((report) => report.supportedCCs)
-			.reduce((prev, cur) => prev.concat(...cur), []);
-		this.controlledCCs = [...partials, this]
-			.map((report) => report.controlledCCs)
-			.reduce((prev, cur) => prev.concat(...cur), []);
-	}
-
-	public mergePartialCCsAsync(
 		partials: SecurityCCCommandsSupportedReport[],
 	): Promise<void> {
 		// Concat the lists of CCs
@@ -1252,12 +1068,11 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		return Promise.resolve();
 	}
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.concat([
 			Bytes.from([this.reportsToFollow]),
 			encodeCCList(this.supportedCCs, this.controlledCCs),
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

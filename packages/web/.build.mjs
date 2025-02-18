@@ -20,7 +20,7 @@ let logImportsPlugin = {
 // Create a context for incremental builds
 try {
 	await esbuild.build({
-		entryPoints: ["src/test.ts"],
+		entryPoints: ["src/script.ts"],
 		bundle: true,
 		sourcemap: true,
 		//   analyze: "verbose",
@@ -32,20 +32,24 @@ try {
 			"@zwave-js/serial/bindings/node",
 			"@zwave-js/core/bindings/fs/node",
 			"@zwave-js/core/bindings/db/jsonl",
+			"@zwave-js/core/bindings/log/node",
 			"node:crypto",
 		],
 		// logLevel: "verbose",
 		logLevel: "info",
 		logLimit: 0,
+		keepNames: true,
 		plugins: [
 			logImportsPlugin,
 			nodeModulesPolyfillPlugin({
 				// fallback: "error",
 				modules: {
+					// Required for source-map-support
 					path: true,
-					util: true,
+					// FIXME: Required for zwave-js internally
 					module: true,
-					// NOPE:
+					url: true,
+					// Required for mdns
 					dgram: "empty",
 					os: "empty",
 					buffer: "empty",

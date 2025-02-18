@@ -1,0 +1,59 @@
+{
+  "name": "@zwave-js/bindings-browser",
+  "version": "14.3.7",
+  "description": "zwave-js: Host bindings for the browser",
+  "keywords": [],
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "exports": {
+    "./db": {
+      "@@dev": "./src/db/browser.ts",
+      "default": "./build/db/browser.js"
+    },
+    "./fs": {
+      "@@dev": "./src/fs/browser.ts",
+      "default": "./build/fs/browser.js"
+    },
+    "./serial": {
+      "@@dev": "./src/serial/browser.ts",
+      "default": "./build/serial/browser.js"
+    }
+  },
+  "files": [
+    "build/**/*.{js,cjs,mjs,d.ts,d.cts,d.mts,map}",
+    "build/**/package.json"
+  ],
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "engines": {
+    "node": ">= 20"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json --pretty",
+    "clean": "del-cli build/ \"*.tsbuildinfo\""
+  },
+  "devDependencies": {
+    "@types/w3c-web-serial": "^1.0.7",
+    "@zwave-js/serial": "workspace:*",
+    "@zwave-js/shared": "workspace:*",
+    "del-cli": "^6.0.0",
+    "typescript": "5.7.3",
+    "zwave-js": "workspace:*"
+  }
+}

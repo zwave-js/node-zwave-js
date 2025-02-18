@@ -337,7 +337,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	public targetValue: boolean;
 	public duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.targetValue ? 0xff : 0x00,
 			(this.duration ?? Duration.default()).serializeSet(),
@@ -353,7 +353,6 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -424,7 +423,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	public readonly duration: Duration | undefined;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
@@ -437,7 +436,6 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 				]),
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

@@ -389,7 +389,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 	public dateAndTime: Date;
 	private useLocalTime?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
 			!!this.useLocalTime,
@@ -405,7 +405,6 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			dateSegments.second,
 		]);
 		this.payload.writeUInt16BE(dateSegments.year, 0);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

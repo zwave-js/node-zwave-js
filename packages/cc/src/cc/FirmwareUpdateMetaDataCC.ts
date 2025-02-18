@@ -510,7 +510,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 
 	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.alloc(
 			12 + 2 * this.additionalFirmwareIDs.length,
 		);
@@ -531,7 +531,6 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			| (this.supportsNonSecureTransfer ? 0b100 : 0)
 			| (this.supportsResuming ? 0b1000 : 0);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -761,7 +760,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.alloc(10, 0);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
@@ -781,7 +780,6 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -910,7 +908,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public reportNumber: number;
 	public firmwareData: Uint8Array;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		const commandBuffer = Bytes.concat([
 			new Bytes(2), // placeholder for report number
 			this.firmwareData,
@@ -937,7 +935,6 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			this.payload = commandBuffer;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1172,7 +1169,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public firmwareTarget: number;
 	public hardwareVersion?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(7);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
@@ -1184,7 +1181,6 @@ export class FirmwareUpdateMetaDataCCActivationSet
 				[this.hardwareVersion],
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1314,14 +1310,13 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	public fragmentSize: number;
 	public hardwareVersion: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload[4] = this.firmwareTarget;
 		this.payload.writeUInt16BE(this.fragmentSize, 5);
 		this.payload[7] = this.hardwareVersion;
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

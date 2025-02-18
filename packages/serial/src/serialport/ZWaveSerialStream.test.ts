@@ -1,4 +1,4 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
+import { log as createZWaveLogContainer } from "@zwave-js/core/bindings/log/node";
 import { Bytes } from "@zwave-js/shared";
 import { isUint8Array } from "node:util/types";
 import {
@@ -35,7 +35,7 @@ const test = baseTest.extend<LocalTestContext>({
 			context.port = port;
 			context.factory = new ZWaveSerialStreamFactory(
 				port.factory(),
-				new ZWaveLogContainer({ enabled: false }),
+				createZWaveLogContainer({ enabled: false }),
 			);
 
 			// Run tests

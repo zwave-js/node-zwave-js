@@ -82,12 +82,11 @@ export class AssignSUCReturnRouteRequest
 	public nodeId: number;
 	public readonly disableCallbackFunctionTypeCheck?: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Bytes.concat([nodeId, Bytes.from([this.callbackId])]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -124,9 +123,8 @@ export class AssignSUCReturnRouteResponse extends Message
 
 	public wasExecuted: boolean;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([this.wasExecuted ? 0x01 : 0]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -179,10 +177,9 @@ export class AssignSUCReturnRouteRequestTransmitReport
 
 	public transmitStatus: TransmitStatus;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId, this.transmitStatus]);
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 

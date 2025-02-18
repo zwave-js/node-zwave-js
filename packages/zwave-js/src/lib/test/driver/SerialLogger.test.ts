@@ -1,7 +1,7 @@
 import {
-	ZWaveLogContainer,
 	createDefaultTransportFormat,
-} from "@zwave-js/core";
+	log as createZWaveLogContainer,
+} from "@zwave-js/core/bindings/log/node";
 import { SpyTransport, assertMessage } from "@zwave-js/core/test";
 import { SerialLogger } from "@zwave-js/serial";
 import { Bytes } from "@zwave-js/shared/safe";
@@ -24,7 +24,7 @@ const test = baseTest.extend<LocalTestContext>({
 			const spyTransport = new SpyTransport();
 			spyTransport.format = createDefaultTransportFormat(true, true);
 			const serialLogger = new SerialLogger(
-				new ZWaveLogContainer({
+				createZWaveLogContainer({
 					transports: [spyTransport],
 				}),
 			);

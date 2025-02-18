@@ -11,6 +11,7 @@ import {
 	SoundSwitchCCTonesNumberReport,
 } from "@zwave-js/cc/SoundSwitchCC";
 import { CommandClasses } from "@zwave-js/core/safe";
+import { type Timer, setTimer } from "@zwave-js/shared";
 import {
 	type MockNodeBehavior,
 	type SoundSwitchCCCapabilities,
@@ -26,7 +27,7 @@ const defaultCapabilities: SoundSwitchCCCapabilities = {
 interface SoundSwitchState {
 	toneId: number;
 	volume: number;
-	timeout: NodeJS.Timeout;
+	timeout: Timer;
 }
 
 const STATE_KEY_PREFIX = "SoundSwitch_";
@@ -137,7 +138,7 @@ const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
 
 			if (receivedCC.toneId === 0) {
 				if (currentState) {
-					clearTimeout(currentState.timeout);
+					currentState.timeout.clear();
 					self.state.delete(StateKeys.state);
 				}
 
@@ -161,7 +162,7 @@ const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
 
 				// Stop "playing" the previous tone
 				if (currentState) {
-					clearTimeout(currentState.timeout);
+					currentState.timeout.clear();
 					self.state.delete(StateKeys.state);
 				}
 
@@ -172,7 +173,7 @@ const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
 				const newState: SoundSwitchState = {
 					toneId,
 					volume,
-					timeout: setTimeout(async () => {
+					timeout: setTimer(async () => {
 						self.state.delete(StateKeys.state);
 
 						// Tell the controller that we're done playing

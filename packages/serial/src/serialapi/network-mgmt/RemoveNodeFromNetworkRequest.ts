@@ -132,7 +132,7 @@ export class RemoveNodeFromNetworkRequest
 	/** Whether to exclude network wide */
 	public networkWide: boolean = false;
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
@@ -140,7 +140,6 @@ export class RemoveNodeFromNetworkRequest
 
 		this.payload = Bytes.from([data, this.callbackId]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
@@ -223,7 +222,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 		return this.status !== RemoveNodeStatus.Failed;
 	}
 
-	public serialize(ctx: MessageEncodingContext): Bytes {
+	public serialize(ctx: MessageEncodingContext): Promise<Bytes> {
 		this.assertCallbackId();
 		this.payload = Bytes.from([this.callbackId, this.status]);
 		if (this.statusContext?.nodeId != undefined) {
@@ -233,7 +232,6 @@ export class RemoveNodeFromNetworkRequestStatusReport
 			]);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 }
