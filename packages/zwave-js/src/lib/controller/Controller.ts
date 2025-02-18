@@ -2652,18 +2652,6 @@ export class ZWaveController
 				return;
 			}
 
-			case "failure": {
-				// Clean up
-				this._proxyInclusionMachine = undefined;
-				if (this._proxyInclusionInitiateTimeout) {
-					clearTimeout(this._proxyInclusionInitiateTimeout);
-					this._proxyInclusionInitiateTimeout = undefined;
-				}
-
-				this.setInclusionState(InclusionState.Idle);
-				return;
-			}
-
 			case "bootstrapping": {
 				// Avoid triggering timeouts once we're here
 				if (this._proxyInclusionInitiateTimeout) {
@@ -2671,105 +2659,64 @@ export class ZWaveController
 					this._proxyInclusionInitiateTimeout = undefined;
 				}
 
-				const newNode = newState.newNode;
-				const nodeId = newNode.id;
-				const deviceClass = newNode.deviceClass!;
+				const nodeId = newState.includedNodeId;
+				// We might end up here after only receiving an Initiate command, but no NIF
+				// For this case, just create an empty shell for the node and replace it later
+				let newNode = newState.newNode
+					?? new ZWaveNode(nodeId, this.driver);
+				this._nodes.set(nodeId, newNode);
+
+				const inclCtrlr = this.nodes.getOrThrow(
+					newState.inclusionControllerNodeId,
+				);
+
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Initiate command received from node ${inclCtrlr.id}`,
+				);
+
+				// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
+				newNode.hasSUCReturnRoute = true;
+
+				// SIS, A, MUST request a Node Info Frame from Joining Node, B
+				const nodeInfo = await newNode
+					.requestNodeInfo()
+					.catch(() => undefined);
+				if (nodeInfo) {
+					if (newState.newNode) {
+						// We had a proper instance of the node before, just update the node info
+						newNode.updateNodeInfo(nodeInfo);
+					} else {
+						// We now have all the info we need to create a proper node instance
+						const deviceClass = new DeviceClass(
+							nodeInfo.basicDeviceClass,
+							nodeInfo.genericDeviceClass,
+							nodeInfo.specificDeviceClass,
+						);
+
+						newNode = new ZWaveNode(
+							nodeId,
+							this.driver,
+							deviceClass,
+							nodeInfo.supportedCCs,
+							undefined,
+							// Create an empty value DB and specify that it contains no values
+							// to avoid indexing the existing values
+							this.createValueDBForNode(nodeId, new Set()),
+						);
+						this._nodes.set(nodeId, newNode);
+					}
+				}
 
 				// Assume the device is alive
 				// If it is actually a sleeping device, it will be marked as such later
 				newNode.markAsAlive();
 
-				let inclCtrlr: ZWaveNode | undefined;
-				let bootstrapFailure: SecurityBootstrapFailure | undefined;
-
-				// At this point, there are two options:
-				// a) we were instructed by the inclusion controller to bootstrap the device
-				// b) there was not Initiate command, so we just start bootstrapping ourselves.
-				if (newState.inclusionControllerNodeId) {
-					inclCtrlr = this.nodes.getOrThrow(
-						newState.inclusionControllerNodeId,
-					);
-
-					this.driver.controllerLog.logNode(
-						nodeId,
-						`Initiate command received from node ${inclCtrlr.id}`,
-					);
-
-					// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
-					newNode.hasSUCReturnRoute = true;
-
-					// SIS, A, MUST request a Node Info Frame from Joining Node, B
-					const requestedNodeInfo = await newNode
-						.requestNodeInfo()
-						.catch(() => undefined);
-					if (requestedNodeInfo) {
-						newNode.updateNodeInfo(requestedNodeInfo);
-					}
-
-					// Perform S0/S2 bootstrapping
-					bootstrapFailure = await this.proxyBootstrap(
-						newNode,
-						inclCtrlr,
-					);
-				} else {
-					// No command received, bootstrap node by ourselves
-					this.driver.controllerLog.logNode(
-						nodeId,
-						"no initiate command received, bootstrapping node...",
-					);
-
-					if (newNode.protocol == Protocols.ZWave) {
-						// Assign SUC return route to make sure the node knows where to get its routes from
-						newNode.hasSUCReturnRoute = await this
-							.assignSUCReturnRoutes(newNode.id);
-					}
-
-					// Include using the default inclusion strategy:
-					// * Use S2 if possible,
-					// * only use S0 if necessary,
-					// * use no encryption otherwise
-					if (newNode.supportsCC(CommandClasses["Security 2"])) {
-						bootstrapFailure = await this.secureBootstrapS2(
-							newNode,
-						);
-						if (bootstrapFailure == undefined) {
-							const actualSecurityClass = newNode
-								.getHighestSecurityClass();
-							if (
-								actualSecurityClass == undefined
-								|| actualSecurityClass
-									< SecurityClass.S2_Unauthenticated
-							) {
-								bootstrapFailure =
-									SecurityBootstrapFailure.Unknown;
-							}
-						}
-					} else if (
-						newNode.supportsCC(CommandClasses.Security)
-						&& (deviceClass.specific ?? deviceClass.generic)
-							.requiresSecurity
-					) {
-						bootstrapFailure = await this.secureBootstrapS0(
-							newNode,
-						);
-						if (bootstrapFailure == undefined) {
-							const actualSecurityClass = newNode
-								.getHighestSecurityClass();
-							if (
-								actualSecurityClass == undefined
-								|| actualSecurityClass < SecurityClass.S0_Legacy
-							) {
-								bootstrapFailure =
-									SecurityBootstrapFailure.Unknown;
-							}
-						}
-					} else {
-						// Remember that no security classes were granted
-						for (const secClass of securityClassOrder) {
-							newNode.securityClasses.set(secClass, false);
-						}
-					}
-				}
+				// Perform S0/S2 bootstrapping
+				const bootstrapFailure = await this.proxyBootstrap(
+					newNode,
+					inclCtrlr,
+				);
 
 				// We're done adding this node, notify listeners
 				const result: InclusionResult = bootstrapFailure != undefined
@@ -2784,12 +2731,11 @@ export class ZWaveController
 				this._proxyInclusionMachine = undefined;
 
 				if (inclCtrlr && newState.step != undefined) {
-					const inclCtrlrId = inclCtrlr.id;
 					const step = newState.step;
 					newNode.once("ready", () => {
 						this.driver.controllerLog.logNode(
-							nodeId,
-							`Notifying node ${inclCtrlrId} of finished inclusion`,
+							inclCtrlr.nodeId,
+							`Notifying inclusion controller of finished inclusion`,
 						);
 						// Create API without checking for support
 						const api = inclCtrlr.createAPI(
@@ -2801,6 +2747,27 @@ export class ZWaveController
 							.catch(noop);
 					});
 				}
+
+				return;
+			}
+
+			case "interview": {
+				// We end up here after we received a NIF but no initiate command
+				// Just emit the "node added" event so the interview can start
+				// Clean up
+				this._proxyInclusionMachine = undefined;
+				if (this._proxyInclusionInitiateTimeout) {
+					clearTimeout(this._proxyInclusionInitiateTimeout);
+					this._proxyInclusionInitiateTimeout = undefined;
+				}
+
+				this.setInclusionState(InclusionState.Idle);
+				this.emit("node added", newState.newNode, {
+					lowSecurity: false,
+				});
+				this._proxyInclusionMachine = undefined;
+
+				return;
 			}
 		}
 	}

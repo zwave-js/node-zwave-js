@@ -24,14 +24,16 @@ export type ProxyInclusionState =
 	}
 	| {
 		value: "bootstrapping";
-		inclusionControllerNodeId?: number;
-		step?: InclusionControllerStep;
-		nodeInfo: NodeUpdatePayload;
-		newNode: ZWaveNode;
+		inclusionControllerNodeId: number;
+		includedNodeId: number;
+		step: InclusionControllerStep;
+		nodeInfo?: NodeUpdatePayload;
+		newNode?: ZWaveNode;
 		done: true;
 	}
 	| {
-		value: "failure";
+		value: "interview";
+		newNode: ZWaveNode;
 		done: true;
 	};
 
@@ -97,6 +99,7 @@ export function createProxyInclusionMachine(): ProxyInclusionMachine {
 									value: "bootstrapping",
 									inclusionControllerNodeId:
 										input.inclusionControllerNodeId,
+									includedNodeId: input.includedNodeId,
 									nodeInfo: state.nodeInfo,
 									newNode: state.newNode,
 									step: input.step,
@@ -108,10 +111,10 @@ export function createProxyInclusionMachine(): ProxyInclusionMachine {
 						}
 
 						case "INITIATE_TIMEOUT": {
-							// After a timeout, bootstrap anyways but without the inclusion controller
+							// If no Initiate Command has been received approximately 10 seconds after
+							// a new node has been added to a network, the SIS SHOULD start interviewing
 							return to({
-								value: "bootstrapping",
-								nodeInfo: state.nodeInfo,
+								value: "interview",
 								newNode: state.newNode,
 								done: true,
 							});
@@ -128,6 +131,7 @@ export function createProxyInclusionMachine(): ProxyInclusionMachine {
 									value: "bootstrapping",
 									inclusionControllerNodeId:
 										state.inclusionControllerNodeId,
+									includedNodeId: state.includedNodeId,
 									step: state.step,
 									nodeInfo: input.nodeInfo,
 									newNode: input.newNode,
@@ -139,9 +143,12 @@ export function createProxyInclusionMachine(): ProxyInclusionMachine {
 						}
 
 						case "NIF_TIMEOUT": {
-							// This should not happen, but abort anyways
 							return to({
-								value: "failure",
+								value: "bootstrapping",
+								inclusionControllerNodeId:
+									state.inclusionControllerNodeId,
+								includedNodeId: state.includedNodeId,
+								step: state.step,
 								done: true,
 							});
 						}
