@@ -304,6 +304,13 @@
 			"#": "30",
 			"$if": "firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10",
 			"$import": "templates/zooz_template.json#local_programming"
+		},
+		{
+			"#": "34",
+			"$if": "firmwareVersion >= 4.20",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "LED Indication: Settings Changed",
+			"defaultValue": 0
 		}
 	],
 	"compat": [
