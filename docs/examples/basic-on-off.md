@@ -1,5 +1,7 @@
 # 💡 Blink a light with Basic CC
 
+<!-- POSITION: 0 -->
+
 > **NOTE:** The following example builds on the [Quick Start](getting-started/quickstart.md) guide. Make sure you have followed the steps there before continuing.
 
 ?> Most functionality of Command Classes is available through the [`commandClasses` API](api/CCs/index) of endpoints and nodes. In this example, we'll use the `Basic CC` API to make a light blink.

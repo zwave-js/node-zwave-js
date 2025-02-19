@@ -761,6 +761,13 @@ async function generateExamples(): Promise<boolean> {
 	// Find examples
 	const examples = (await fsp.readdir(examplesDocsDir))
 		.filter((f) => f.endsWith(".md") && f !== "index.md");
+
+	const processedExamples: {
+		position: number;
+		index: string;
+		sidebar: string;
+	}[] = [];
+
 	let generatedIndex = "";
 	let generatedSidebar = "";
 
@@ -771,10 +778,27 @@ async function generateExamples(): Promise<boolean> {
 		);
 		const titleMatch = exampleContent.match(/^#\s+(.*)$/m);
 		if (!titleMatch) continue;
+		const positionMatch = exampleContent.match(
+			/<!--\s+POSITION:\s+(\d+)\s+-->/,
+		);
 		const title = titleMatch[1];
+		const position = positionMatch
+			? parseInt(positionMatch[1], 10)
+			: Number.POSITIVE_INFINITY;
+
 		const filename = file.replace(/\.md$/, "");
-		generatedIndex += `\n\n**[${title}](examples/${filename})**`;
-		generatedSidebar += `\t- [${title}](examples/${filename})\n`;
+		processedExamples.push({
+			position,
+			index: `\n\n**[${title}](examples/${filename})**`,
+			sidebar: `\t- [${title}](examples/${filename})\n`,
+		});
+	}
+
+	processedExamples.sort((a, b) => a.position - b.position);
+
+	for (const example of processedExamples) {
+		generatedIndex += example.index;
+		generatedSidebar += example.sidebar;
 	}
 
 	// Write the generated index file and sidebar
