@@ -9,3 +9,5 @@
 **[🎚️ Check the state of a switch](examples/get-switch-state)**
 
 **[🚦 Change LED Colors](examples/change-led-color)**
+
+**[☁️ Perform an OTA update](examples/ota-update)**
