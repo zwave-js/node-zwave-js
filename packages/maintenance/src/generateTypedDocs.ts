@@ -277,6 +277,7 @@ Context: ${context}`,
 
 const docsDir = path.join(projectRoot, "docs");
 const ccDocsDir = path.join(docsDir, "api/CCs");
+const examplesDocsDir = path.join(docsDir, "examples");
 
 export async function processDocFile(
 	program: Project,
@@ -741,6 +742,74 @@ async function generateCCDocs(
 	return false;
 }
 
+/** Generates the usage examples, returns true if there was an error */
+async function generateExamples(): Promise<boolean> {
+	// Delete old cruft
+
+	// Load the index file before it gets overwritten
+	const indexFilename = path.join(examplesDocsDir, "index.md");
+	let indexFileContent = await fsp.readFile(indexFilename, "utf8");
+	const indexAutoGenToken = "<!-- AUTO-GENERATE: Examples -->";
+	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
+	if (indexAutoGenStart === -1) {
+		console.error(
+			c.red(`Marker for auto-generation in examples/index.md missing!`),
+		);
+		return false;
+	}
+
+	// Find examples
+	const examples = (await fsp.readdir(examplesDocsDir))
+		.filter((f) => f.endsWith(".md") && f !== "index.md");
+	let generatedIndex = "";
+	let generatedSidebar = "";
+
+	for (const file of examples) {
+		const exampleContent = await fsp.readFile(
+			path.join(examplesDocsDir, file),
+			"utf8",
+		);
+		const titleMatch = exampleContent.match(/^#\s+(.*)$/m);
+		if (!titleMatch) continue;
+		const title = titleMatch[1];
+		const filename = file.replace(/\.md$/, "");
+		generatedIndex += `\n\n**[${title}](examples/${filename})**`;
+		generatedSidebar += `\t- [${title}](examples/${filename})\n`;
+	}
+
+	// Write the generated index file and sidebar
+	indexFileContent = indexFileContent.slice(
+		0,
+		indexAutoGenStart + indexAutoGenToken.length,
+	) + generatedIndex;
+	indexFileContent = formatWithDprint("index.md", indexFileContent);
+	await fsp.writeFile(indexFilename, indexFileContent, "utf8");
+
+	const sidebarInputFilename = path.join(docsDir, "_sidebar.md");
+	let sidebarFileContent = await fsp.readFile(sidebarInputFilename, "utf8");
+	const sidebarAutoGenToken = "<!-- AUTO-GENERATE: Examples -->";
+	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
+	if (sidebarAutoGenStart === -1) {
+		console.error(
+			c.red(`Marker for example auto-generation in _sidebar.md missing!`),
+		);
+		return false;
+	}
+	sidebarFileContent = sidebarFileContent.slice(0, sidebarAutoGenStart)
+		+ generatedSidebar
+		+ sidebarFileContent.slice(
+			sidebarAutoGenStart + sidebarAutoGenToken.length,
+		);
+	sidebarFileContent = formatWithDprint("_sidebar.md", sidebarFileContent);
+	await fsp.writeFile(
+		path.join(examplesDocsDir, "_sidebar.md"),
+		sidebarFileContent,
+		"utf8",
+	);
+
+	return false;
+}
+
 async function main(): Promise<void> {
 	const piscina = new Piscina({
 		filename: path.join(__dirname, "generateTypedDocs.ts"),
@@ -758,6 +827,11 @@ async function main(): Promise<void> {
 			const program = new Project({ tsConfigFilePath });
 			hasErrors ||= await generateCCDocs(program, piscina);
 		}
+	}
+
+	if (!process.argv.includes("--no-examples")) {
+		// Regenerate the examples sidebar
+		hasErrors ||= await generateExamples();
 	}
 
 	if (hasErrors) {
