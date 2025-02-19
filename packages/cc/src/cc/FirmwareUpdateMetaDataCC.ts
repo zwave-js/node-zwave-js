@@ -622,13 +622,12 @@ export class FirmwareUpdateMetaDataCCRequestReport
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = Bytes.from([
 			this.status,
 			(this.resume ? 0b100 : 0) | (this.nonSecureTransfer ? 0b10 : 0),
 		]);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -847,12 +846,11 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public readonly numReports: number;
 	public readonly reportNumber: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(3);
 		this.payload[0] = this.numReports;
 		this.payload.writeUInt16BE(this.reportNumber & 0x7fff, 1);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -987,12 +985,11 @@ export class FirmwareUpdateMetaDataCCStatusReport
 	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(3);
 		this.payload[0] = this.status;
 		this.payload.writeUInt16BE(this.waitTime ?? 0, 1);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
@@ -1071,7 +1068,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	public readonly activationStatus: FirmwareUpdateActivationStatus;
 	public readonly hardwareVersion?: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
@@ -1084,7 +1081,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 				[this.hardwareVersion],
 			]);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
+
 		return super.serialize(ctx);
 	}
 
@@ -1235,12 +1232,11 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	public readonly status: FirmwareDownloadStatus;
 	public readonly checksum: number;
 
-	public serialize(ctx: CCEncodingContext): Bytes {
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
 		this.payload = new Bytes(3);
 		this.payload[0] = this.status;
 		this.payload.writeUInt16BE(this.checksum, 1);
 
-		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		return super.serialize(ctx);
 	}
 
