@@ -2,6 +2,8 @@ import { db } from "@zwave-js/bindings-browser/db";
 import { fs } from "@zwave-js/bindings-browser/fs";
 import { createWebSerialPortFactory } from "@zwave-js/bindings-browser/serial";
 import { log as createLogContainer } from "@zwave-js/core/bindings/log/browser";
+import { BootloaderChunkType } from "@zwave-js/serial";
+import { Bytes } from "@zwave-js/shared";
 import {
 	ControllerFirmwareUpdateStatus,
 	Driver,
@@ -21,7 +23,10 @@ async function init() {
 	try {
 		port = await navigator.serial.requestPort({
 			filters: [
+				// CP2102
 				{ usbVendorId: 0x10c4, usbProductId: 0xea60 },
+				// Nabu Casa ESP bridge
+				{ usbVendorId: 0x1234, usbProductId: 0x5678 },
 			],
 		});
 		await port.open({ baudRate: 115200 });
@@ -83,7 +88,6 @@ async function flash() {
 	}
 
 	try {
-		const driver = (globalThis as any).driver as Driver;
 		flashProgress.style.display = "initial";
 
 		const result = await driver.controller.firmwareUpdateOTW(
@@ -105,6 +109,55 @@ async function flash() {
 		console.error("Failed to flash firmware", e);
 	}
 }
+
+async function eraseNVM() {
+	if (!driver) {
+		console.error("Driver not initialized");
+		return;
+	}
+
+	if (!driver.isInBootloader()) {
+		console.error("Driver is not in bootloader mode");
+		return;
+	}
+
+	const option = driver.bootloader.findOption((o) => o === "erase nvm");
+	if (option === undefined) {
+		console.error("Erase NVM option not found");
+		return;
+	}
+
+	const areYouSurePromise = driver.waitForBootloaderChunk(
+		(c) =>
+			c.type === BootloaderChunkType.Message
+			&& c.message.toLowerCase().includes("are you sure"),
+		1000,
+	);
+	await driver.bootloader.selectOption(option);
+	try {
+		await areYouSurePromise;
+	} catch {
+		console.error("Erase NVM confirmation not received");
+		return;
+	}
+
+	const successPromise = driver.waitForBootloaderChunk(
+		(c) =>
+			c.type === BootloaderChunkType.Message
+			&& c.message.toLowerCase().includes("erased"),
+		1000,
+	);
+
+	await driver.bootloader.writeSerial(Bytes.from("y", "ascii"));
+	try {
+		await successPromise;
+		console.log("NVM erased successfully");
+	} catch {
+		console.error("success message not received");
+		return;
+	}
+}
+(globalThis as any).eraseNVM = eraseNVM;
 
 document.getElementById("connect").addEventListener("click", init);
 flashButton.addEventListener("click", flash);

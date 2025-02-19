@@ -416,9 +416,10 @@ export interface ZWaveOptions {
 		skipNodeInterview?: boolean;
 
 		/**
-		 * Set this to true to skip checking if the controller is in bootloader mode
+		 * Set this to true to skip checking if the Z-Wave is in bootloader mode,
+		 * running a Serial API, or an end device CLI.
 		 */
-		skipBootloaderCheck?: boolean;
+		skipFirmwareIdentification?: boolean;
 
 		/**
 		 * Set this to false to skip loading the configuration files. Default: `true`..

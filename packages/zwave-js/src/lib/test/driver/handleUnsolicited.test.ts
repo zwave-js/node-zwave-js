@@ -16,7 +16,7 @@ integrationTest(
 
 		additionalDriverOptions: {
 			testingHooks: {
-				skipBootloaderCheck: true,
+				skipFirmwareIdentification: true,
 				skipNodeInterview: true,
 			},
 		},
@@ -53,7 +53,7 @@ integrationTest(
 
 		additionalDriverOptions: {
 			testingHooks: {
-				skipBootloaderCheck: true,
+				skipFirmwareIdentification: true,
 				skipNodeInterview: true,
 			},
 		},
@@ -104,7 +104,7 @@ integrationTest(
 
 		additionalDriverOptions: {
 			testingHooks: {
-				skipBootloaderCheck: true,
+				skipFirmwareIdentification: true,
 				skipNodeInterview: true,
 			},
 		},
