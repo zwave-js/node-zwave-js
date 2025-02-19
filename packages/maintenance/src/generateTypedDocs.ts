@@ -776,7 +776,9 @@ async function generateExamples(): Promise<boolean> {
 			path.join(examplesDocsDir, file),
 			"utf8",
 		);
-		const titleMatch = exampleContent.match(/^#\s+(.*)$/m);
+		const titleMatch = exampleContent.match(
+			/^#\s+(.*?)(\s*\{docsify-ignore-all\})?$/m,
+		);
 		if (!titleMatch) continue;
 		const positionMatch = exampleContent.match(
 			/<!--\s+POSITION:\s+(\d+)\s+-->/,

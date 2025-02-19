@@ -1,4 +1,4 @@
-# ☁️ Perform an OTA update
+# ☁️ Perform an OTA update {docsify-ignore-all}
 
 > **NOTE:** The following example expects that you have worked through the [Quick Start](getting-started/quickstart.md) guide and the [Blink a light with Basic CC](examples/basic-on-off.md) example. Make sure to do that before continuing.
 
