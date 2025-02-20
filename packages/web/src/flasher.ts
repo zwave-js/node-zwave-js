@@ -3,10 +3,11 @@ import { fs } from "@zwave-js/bindings-browser/fs";
 import { createWebSerialPortFactory } from "@zwave-js/bindings-browser/serial";
 import { log as createLogContainer } from "@zwave-js/core/bindings/log/browser";
 import { BootloaderChunkType } from "@zwave-js/serial";
-import { Bytes } from "@zwave-js/shared";
+import { Bytes, getErrorMessage } from "@zwave-js/shared";
 import {
 	ControllerFirmwareUpdateStatus,
 	Driver,
+	DriverMode,
 	getEnumMemberName,
 } from "zwave-js";
 
@@ -16,6 +17,19 @@ const flashProgress = document.getElementById(
 	"progress",
 ) as HTMLProgressElement;
 let firmwareFileContent: ArrayBuffer | null = null;
+
+const appLabel = document.getElementById("app") as HTMLSpanElement;
+const flashError = document.getElementById("flash_error") as HTMLDivElement;
+const btnRunApp = document.getElementById(
+	"run_application",
+) as HTMLButtonElement;
+const btnBootloader = document.getElementById(
+	"bootloader",
+) as HTMLButtonElement;
+const btnEraseNVM = document.getElementById("erase_nvm") as HTMLButtonElement;
+const btnGetDSK = document.getElementById("get_dsk") as HTMLButtonElement;
+const btnGetRegion = document.getElementById("get_region") as HTMLButtonElement;
+
 let driver!: Driver;
 
 async function init() {
@@ -53,20 +67,44 @@ async function init() {
 		bootloaderMode: "stay",
 	})
 		.once("driver ready", ready)
-		.once("bootloader ready", ready);
+		.once("bootloader ready", ready)
+		.once("cli ready", ready);
 	(globalThis as any).driver = driver;
 
 	await driver.start();
 }
 
 function ready() {
-	driver.controller.on("firmware update progress", (progress) => {
-		flashProgress.value = progress.progress;
-	});
-	driver.controller.on("firmware update finished", (_result) => {
-		flashProgress.style.display = "none";
-	});
-	fileInput.disabled = false;
+	try {
+		driver.controller.on("firmware update progress", (progress) => {
+			flashProgress.value = progress.progress;
+		});
+		driver.controller.on("firmware update finished", (_result) => {
+			flashProgress.style.display = "none";
+		});
+		fileInput.disabled = false;
+	} catch {
+		flashError.innerText =
+			"Firmware update currently not available for devices in CLI mode. Enter bootloader, then reload this page.";
+	}
+	btnEraseNVM.disabled = false;
+
+	checkApp();
+}
+
+function checkApp() {
+	if (driver.mode === DriverMode.Bootloader) {
+		appLabel.innerText = "Bootloader";
+	} else if (driver.mode === DriverMode.CLI) {
+		appLabel.innerText = "End device CLI";
+	} else if (driver.mode === DriverMode.SerialAPI) {
+		appLabel.innerText = "Controller Serial API";
+	}
+
+	btnBootloader.disabled = driver.mode === DriverMode.Bootloader;
+	btnRunApp.disabled = driver.mode !== DriverMode.Bootloader;
+	btnGetDSK.disabled = driver.mode !== DriverMode.CLI;
+	btnGetRegion.disabled = driver.mode !== DriverMode.CLI;
 }
 
 fileInput.addEventListener("change", (event) => {
@@ -83,7 +121,7 @@ fileInput.addEventListener("change", (event) => {
 
 async function flash() {
 	if (!firmwareFileContent) {
-		console.error("No firmware file loaded");
+		alert("No firmware file loaded");
 		return;
 	}
 
@@ -94,7 +132,9 @@ async function flash() {
 			new Uint8Array(firmwareFileContent),
 		);
 		if (result.success) {
-			alert("Firmware flashed successfully");
+			alert(
+				"Firmware flashed successfully. Reload the page to continue interacting.",
+			);
 		} else {
 			alert(
 				`Failed to flash firmware: ${
@@ -106,21 +146,22 @@ async function flash() {
 			);
 		}
 	} catch (e) {
-		console.error("Failed to flash firmware", e);
+		alert(`Failed to flash firmware: ${getErrorMessage(e)}`);
 	}
 }
 
 async function eraseNVM() {
 	if (!driver) {
-		console.error("Driver not initialized");
+		alert("Driver not initialized");
 		return;
 	}
 
 	await driver.enterBootloader();
+	checkApp();
 
 	const option = driver.bootloader.findOption((o) => o === "erase nvm");
 	if (option === undefined) {
-		console.error("Erase NVM option not found");
+		alert("Erase NVM option not found");
 		return;
 	}
 
@@ -134,7 +175,7 @@ async function eraseNVM() {
 	try {
 		await areYouSurePromise;
 	} catch {
-		console.error("Erase NVM confirmation not received");
+		alert("Erase NVM confirmation not received");
 		return;
 	}
 
@@ -148,13 +189,35 @@ async function eraseNVM() {
 	await driver.bootloader.writeSerial(Bytes.from("y", "ascii"));
 	try {
 		await successPromise;
-		console.log("NVM erased successfully");
+		alert("NVM erased successfully");
 	} catch {
-		console.error("success message not received");
+		alert("ERROR: success message not received");
 		return;
 	}
 }
-(globalThis as any).eraseNVM = eraseNVM;
+
+async function runApp() {
+	await (driver as any).leaveBootloader();
+	checkApp();
+}
+
+async function getDSK() {
+	const dsk = await driver.cli.executeCommand("get_dsk");
+	alert(`DSK: ${dsk}`);
+}
+
+async function getRegion() {
+	const region = await driver.cli.executeCommand("get_region");
+	alert(`Region: ${region}`);
+}
 
 document.getElementById("connect").addEventListener("click", init);
 flashButton.addEventListener("click", flash);
+btnEraseNVM.addEventListener("click", eraseNVM);
+btnRunApp.addEventListener("click", runApp);
+btnGetDSK.addEventListener("click", getDSK);
+btnGetRegion.addEventListener("click", getRegion);
+btnBootloader.addEventListener("click", async () => {
+	await driver.enterBootloader();
+	checkApp();
+});

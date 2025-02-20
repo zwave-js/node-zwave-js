@@ -7681,7 +7681,6 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * @internal
 	 * Leaves the bootloader and destroys the driver instance if desired
 	 */
 	public async leaveBootloader(destroy: boolean = false): Promise<void> {
