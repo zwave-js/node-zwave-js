@@ -116,10 +116,7 @@ async function eraseNVM() {
 		return;
 	}
 
-	if (!driver.isInBootloader()) {
-		console.error("Driver is not in bootloader mode");
-		return;
-	}
+	await driver.enterBootloader();
 
 	const option = driver.bootloader.findOption((o) => o === "erase nvm");
 	if (option === undefined) {

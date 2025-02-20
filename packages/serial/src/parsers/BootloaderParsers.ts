@@ -1,4 +1,4 @@
-import { Bytes } from "@zwave-js/shared";
+import { Bytes, type Timer, setTimer } from "@zwave-js/shared";
 import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { XModemMessageHeaders } from "../message/MessageHeaders.js";
@@ -24,16 +24,14 @@ class BootloaderScreenParserTransformer
 	constructor(private logger?: SerialLogger) {}
 
 	private receiveBuffer = "";
-	private flushTimeout: NodeJS.Timeout | undefined;
+	private flushTimeout: Timer | undefined;
 
 	transform(
 		chunk: Uint8Array,
 		controller: TransformStreamDefaultController<number | string>,
 	) {
-		if (this.flushTimeout) {
-			clearTimeout(this.flushTimeout);
-			this.flushTimeout = undefined;
-		}
+		this.flushTimeout?.clear();
+		this.flushTimeout = undefined;
 
 		this.receiveBuffer += Bytes.view(chunk).toString("utf8");
 
@@ -68,7 +66,7 @@ class BootloaderScreenParserTransformer
 
 		// If a partial output is kept for a certain amount of time, emit it aswell
 		if (this.receiveBuffer) {
-			this.flushTimeout = setTimeout(() => {
+			this.flushTimeout = setTimer(() => {
 				this.flushTimeout = undefined;
 				controller.enqueue(this.receiveBuffer);
 				this.receiveBuffer = "";

@@ -377,6 +377,7 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver.js";
+import { DriverMode } from "../driver/DriverMode.js";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache.js";
 import type { StatisticsEventCallbacks } from "../driver/Statistics.js";
 import { type TaskBuilder, TaskPriority } from "../driver/Task.js";
@@ -8519,7 +8520,10 @@ export class ZWaveController
 			throw new ZWaveError(message, ZWaveErrorCodes.OTW_Update_Busy);
 		}
 
-		if (this.driver.isInBootloader() || this.sdkVersionGte("7.0")) {
+		if (
+			this.driver.mode === DriverMode.Bootloader
+			|| this.sdkVersionGte("7.0")
+		) {
 			// If the controller is stuck in bootloader mode, always use the 700 series update method
 			return this.firmwareUpdateOTW700(data);
 		} else if (
@@ -8641,9 +8645,7 @@ export class ZWaveController
 		let destroy = false;
 
 		try {
-			if (!this.driver.isInBootloader()) {
-				await this.driver.enterBootloader();
-			}
+			await this.driver.enterBootloader();
 
 			// Start the update process
 			this.driver.controllerLog.print("Beginning firmware upload");
@@ -9903,5 +9905,11 @@ export class ZWaveController
 
 		// Notify applications that joining the network is complete
 		this.emit("network joined");
+	}
+
+	public destroy(): void {
+		this._nodes.forEach((node) => node.destroy());
+		this._nodes.clear();
+		this.removeAllListeners();
 	}
 }

@@ -102,7 +102,7 @@ export interface CreateAndStartTestingDriverOptions {
 	skipNodeInterview?: boolean;
 
 	/**
-	 * Set this to true to skip checking if the controller is in bootloader mode (default: true)
+	 * Set this to true to skip checking if the controller is in bootloader, serial API, or CLI mode (default: true)
 	 */
 	skipFirmwareIdentification?: boolean;
 

@@ -1,4 +1,4 @@
-import { Bytes } from "@zwave-js/shared";
+import { Bytes, type Timer, setTimer } from "@zwave-js/shared";
 import { type Transformer } from "node:stream/web";
 import type { SerialLogger } from "../log/Logger.js";
 import { XModemMessageHeaders } from "../message/MessageHeaders.js";
@@ -24,7 +24,7 @@ export class CLIParser extends TransformStream<
 > {
 	constructor(private logger?: SerialLogger) {
 		let receiveBuffer = "";
-		let flushTimeout: NodeJS.Timeout | undefined;
+		let flushTimeout: Timer | undefined;
 
 		function wrapChunk(
 			chunk: CLIChunk,
@@ -40,10 +40,8 @@ export class CLIParser extends TransformStream<
 			ZWaveSerialFrame & { type: ZWaveSerialFrameType.CLI }
 		> = {
 			transform(chunk, controller) {
-				if (flushTimeout) {
-					clearTimeout(flushTimeout);
-					flushTimeout = undefined;
-				}
+				flushTimeout?.clear();
+				flushTimeout = undefined;
 
 				receiveBuffer += Bytes.view(chunk).toString("utf8");
 
@@ -97,7 +95,7 @@ export class CLIParser extends TransformStream<
 
 				// If a partial output is kept for a certain amount of time, emit it as a message
 				if (receiveBuffer) {
-					flushTimeout = setTimeout(() => {
+					flushTimeout = setTimer(() => {
 						flushTimeout = undefined;
 						logger?.message(receiveBuffer, "inbound");
 						controller.enqueue(wrapChunk({

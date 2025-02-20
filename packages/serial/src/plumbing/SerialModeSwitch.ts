@@ -51,7 +51,8 @@ export class SerialModeSwitch extends WritableStream<Uint8Array> {
 							this.mode = ZWaveSerialMode.Bootloader;
 						} else if (
 							str.split("\n").some((line) =>
-								line.startsWith("> ")
+								line === ">"
+								|| line.startsWith("> ")
 							)
 						) {
 							// We're sure we're in CLI mode
