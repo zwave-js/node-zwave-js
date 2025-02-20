@@ -123,6 +123,10 @@
 		{
 			"#": "24",
 			"$import": "templates/zooz_template.json#association_reports_binary"
+		},
+		{
+			"#": "27",
+			"$import": "templates/zooz_template.json#zen5x_external_switch_multiple_click"
 		}
 	],
 	"metadata": {
