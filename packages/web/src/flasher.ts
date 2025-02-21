@@ -39,8 +39,10 @@ async function init() {
 			filters: [
 				// CP2102
 				{ usbVendorId: 0x10c4, usbProductId: 0xea60 },
-				// Nabu Casa ESP bridge
+				// Nabu Casa ESP bridge, first EVT revision
 				{ usbVendorId: 0x1234, usbProductId: 0x5678 },
+				// Nabu Casa ESP bridge, uses Espressif VID/PID
+				{ usbVendorId: 0x303a, usbProductId: 0x4001 },
 			],
 		});
 		await port.open({ baudRate: 115200 });
