@@ -2,8 +2,16 @@ import { db } from "@zwave-js/bindings-browser/db";
 import { fs } from "@zwave-js/bindings-browser/fs";
 import { createWebSerialPortFactory } from "@zwave-js/bindings-browser/serial";
 import { log as createLogContainer } from "@zwave-js/core/bindings/log/browser";
-import { BootloaderChunkType } from "@zwave-js/serial";
+import {
+	BootloaderChunkType,
+	type ZWaveSerialBindingFactory,
+} from "@zwave-js/serial";
 import { Bytes, getErrorMessage } from "@zwave-js/shared";
+import { wait } from "alcalzone-shared/async";
+import {
+	type DeferredPromise,
+	createDeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import {
 	ControllerFirmwareUpdateStatus,
 	Driver,
@@ -26,14 +34,21 @@ const btnRunApp = document.getElementById(
 const btnBootloader = document.getElementById(
 	"bootloader",
 ) as HTMLButtonElement;
+const btnBootloaderHw = document.getElementById(
+	"bootloader_hw",
+) as HTMLButtonElement;
 const btnEraseNVM = document.getElementById("erase_nvm") as HTMLButtonElement;
 const btnGetDSK = document.getElementById("get_dsk") as HTMLButtonElement;
 const btnGetRegion = document.getElementById("get_region") as HTMLButtonElement;
 
 let driver!: Driver;
+let port!: SerialPort;
+let serialBinding!: ZWaveSerialBindingFactory;
+let readyPromise: DeferredPromise<void> | undefined;
+
+let recreateWhenInBootloader = false;
 
 async function init() {
-	let port: SerialPort;
 	try {
 		port = await navigator.serial.requestPort({
 			filters: [
@@ -45,13 +60,40 @@ async function init() {
 				{ usbVendorId: 0x303a, usbProductId: 0x4001 },
 			],
 		});
+		(globalThis as any).port = port;
 		await port.open({ baudRate: 115200 });
 	} catch (e) {
 		console.error(e);
 		return;
 	}
 
-	const serialBinding = createWebSerialPortFactory(port);
+	serialBinding = createWebSerialPortFactory(port);
+
+	await createDriver();
+}
+
+function resetUI() {
+	// Disable all buttons except the connect button
+	flashButton.disabled = true;
+	fileInput.disabled = true;
+	btnEraseNVM.disabled = true;
+	btnRunApp.disabled = true;
+	btnGetDSK.disabled = true;
+	btnGetRegion.disabled = true;
+	btnBootloader.disabled = true;
+	btnBootloaderHw.disabled = true;
+
+	flashProgress.style.display = "none";
+	flashError.innerText = "";
+}
+
+async function createDriver() {
+	if (driver) {
+		driver.removeAllListeners();
+		await driver.destroy().catch(() => {});
+	}
+
+	resetUI();
 
 	driver = new Driver(serialBinding, {
 		host: {
@@ -70,10 +112,27 @@ async function init() {
 	})
 		.once("driver ready", ready)
 		.once("bootloader ready", ready)
-		.once("cli ready", ready);
+		.once("cli ready", ready)
+		.once("error", failed);
+
 	(globalThis as any).driver = driver;
 
+	readyPromise = createDeferredPromise();
 	await driver.start();
+	return readyPromise;
+}
+
+function failed() {
+	if (readyPromise) {
+		readyPromise = undefined;
+
+		alert(
+			"Failed to start the driver. Reconnect the device and try again.\nIf the problem persists, you can return to bootloader and flash a new firmware.",
+		);
+
+		// If the driver failed to start, at least enable to option to force a hardware reset into bootloader
+		btnBootloaderHw.disabled = false;
+	}
 }
 
 function ready() {
@@ -85,13 +144,19 @@ function ready() {
 			flashProgress.style.display = "none";
 		});
 		fileInput.disabled = false;
+		recreateWhenInBootloader = false;
 	} catch {
+		recreateWhenInBootloader = true;
 		flashError.innerText =
-			"Firmware update currently not available for devices in CLI mode. Enter bootloader, then reload this page.";
+			"Firmware update currently not available for devices in CLI mode. Enter bootloader first!";
 	}
 	btnEraseNVM.disabled = false;
+	btnBootloaderHw.disabled = false; // This always works
 
 	checkApp();
+
+	readyPromise?.resolve();
+	readyPromise = undefined;
 }
 
 function checkApp() {
@@ -127,6 +192,14 @@ async function flash() {
 		return;
 	}
 
+	flashButton.disabled = true;
+	fileInput.disabled = true;
+
+	if (driver.mode !== DriverMode.Bootloader) {
+		// Force the device into bootloader mode using hardware
+		await resetToBootloader();
+	}
+
 	try {
 		flashProgress.style.display = "initial";
 
@@ -134,22 +207,28 @@ async function flash() {
 			new Uint8Array(firmwareFileContent),
 		);
 		if (result.success) {
+			fileInput.value = "";
+			void createDriver();
 			alert(
-				"Firmware flashed successfully. Reload the page to continue interacting.",
+				"Firmware flashed successfully. Please wait for Z-Wave JS to reconnect.",
 			);
-		} else {
-			alert(
-				`Failed to flash firmware: ${
-					getEnumMemberName(
-						ControllerFirmwareUpdateStatus,
-						result.status,
-					)
-				}`,
-			);
+			return;
 		}
+
+		alert(
+			`Failed to flash firmware: ${
+				getEnumMemberName(
+					ControllerFirmwareUpdateStatus,
+					result.status,
+				)
+			}`,
+		);
 	} catch (e) {
 		alert(`Failed to flash firmware: ${getErrorMessage(e)}`);
 	}
+
+	flashButton.disabled = false;
+	fileInput.disabled = false;
 }
 
 async function eraseNVM() {
@@ -158,8 +237,8 @@ async function eraseNVM() {
 		return;
 	}
 
-	await driver.enterBootloader();
-	checkApp();
+	// Force the device into bootloader mode using hardware
+	await resetToBootloader();
 
 	const option = driver.bootloader.findOption((o) => o === "erase nvm");
 	if (option === undefined) {
@@ -213,13 +292,34 @@ async function getRegion() {
 	alert(`Region: ${region}`);
 }
 
+async function enterBootloader() {
+	await driver.enterBootloader();
+
+	if (recreateWhenInBootloader) {
+		await createDriver();
+	} else {
+		checkApp();
+	}
+}
+
+async function resetToBootloader() {
+	// The driver doesn't know we reset the hardware - recreate it
+	await driver?.destroy();
+
+	await port.setSignals({ dataTerminalReady: false, requestToSend: true });
+	await wait(100);
+	await port.setSignals({ dataTerminalReady: true, requestToSend: false });
+	await wait(500);
+	await port.setSignals({ dataTerminalReady: false, requestToSend: false });
+
+	await createDriver();
+}
+
 document.getElementById("connect").addEventListener("click", init);
 flashButton.addEventListener("click", flash);
 btnEraseNVM.addEventListener("click", eraseNVM);
 btnRunApp.addEventListener("click", runApp);
 btnGetDSK.addEventListener("click", getDSK);
 btnGetRegion.addEventListener("click", getRegion);
-btnBootloader.addEventListener("click", async () => {
-	await driver.enterBootloader();
-	checkApp();
-});
+btnBootloader.addEventListener("click", enterBootloader);
+btnBootloaderHw.addEventListener("click", resetToBootloader);
