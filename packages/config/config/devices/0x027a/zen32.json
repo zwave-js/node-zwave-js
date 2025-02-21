@@ -281,7 +281,7 @@
 			"#": "27",
 			"$if": "firmwareVersion >= 2.40 && firmwareVersion < 10.0",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "LED Indicator Flashing When the Scene Buttons are Pressed",
+			"label": "LED Indicator Flashing When the Scene Buttons Are Pressed",
 			"description": "Choose if you want the LED indicators to flash whenever a button is pressed on the device to confirm scene activation.",
 			"defaultValue": 0
 		}
