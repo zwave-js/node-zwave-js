@@ -5,6 +5,7 @@ export function createWebSerialPortFactory(
 ): ZWaveSerialBindingFactory {
 	const sink: UnderlyingSink<Uint8Array> = {
 		close() {
+			console.log("sink.close()");
 			port.close();
 		},
 		async write(chunk) {
@@ -17,9 +18,11 @@ export function createWebSerialPortFactory(
 		},
 	};
 
+	let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+
 	const source: UnderlyingDefaultSource<Uint8Array> = {
 		async start(controller) {
-			const reader = port.readable!.getReader();
+			reader = port.readable!.getReader();
 			try {
 				while (true) {
 					const { value, done } = await reader.read();
@@ -31,6 +34,9 @@ export function createWebSerialPortFactory(
 			} finally {
 				reader.releaseLock();
 			}
+		},
+		async cancel() {
+			await reader?.cancel();
 		},
 	};
 

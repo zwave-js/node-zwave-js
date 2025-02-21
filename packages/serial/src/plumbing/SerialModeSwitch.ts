@@ -93,7 +93,6 @@ export class SerialModeSwitch extends WritableStream<Uint8Array> {
 						await this.#cliWriter.write(chunk);
 						await this.#cliWriter.ready;
 					} else {
-						console.log("writing to serial api", chunk);
 						await this.#serialAPIWriter.write(chunk);
 						await this.#serialAPIWriter.ready;
 					}
