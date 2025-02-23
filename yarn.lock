@@ -2726,7 +2726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/bindings-browser@workspace:^, @zwave-js/bindings-browser@workspace:packages/bindings-browser":
+"@zwave-js/bindings-browser@workspace:*, @zwave-js/bindings-browser@workspace:^, @zwave-js/bindings-browser@workspace:packages/bindings-browser":
   version: 0.0.0-use.local
   resolution: "@zwave-js/bindings-browser@workspace:packages/bindings-browser"
   dependencies:
@@ -2976,6 +2976,7 @@ __metadata:
     "@types/semver": "npm:^7.5.8"
     "@types/source-map-support": "npm:^0.5.10"
     "@types/xml2js": "npm:^0.4.14"
+    "@zwave-js/bindings-browser": "workspace:*"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"

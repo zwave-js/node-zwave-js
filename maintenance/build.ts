@@ -26,6 +26,8 @@ const dependsOnZwaveJs = [
 	"@zwave-js/flash",
 	// The eslint plugin doesn't actually depend on zwave-js, but it needs to be built too
 	"@zwave-js/eslint-plugin",
+	// The bindings-browser package doesn't actually depend on zwave-js, but it needs to be built too
+	"@zwave-js/bindings-browser",
 	// And CLI in the future
 ];
 
