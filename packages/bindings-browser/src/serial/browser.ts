@@ -34,6 +34,5 @@ export function createWebSerialPortFactory(
 		},
 	};
 
-	// @ts-expect-error Slight mismatch between the web types and Node.js
 	return () => Promise.resolve({ source, sink });
 }
