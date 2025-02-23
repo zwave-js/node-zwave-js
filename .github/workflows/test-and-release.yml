@@ -94,6 +94,8 @@ jobs:
 
         npm init -y
         npm i .tarballs/zwave-js.tgz
+        # bindings-browser is not automatically installed
+        npm i .tarballs/zwave-js-bindings-browser.tgz
 
         echo "Testing ESM entry points..."
         # Now all entrypoints should work
