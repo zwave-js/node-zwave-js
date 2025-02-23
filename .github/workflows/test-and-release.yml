@@ -113,6 +113,7 @@ jobs:
         node -e '(async () => { await import("@zwave-js/nvmedit/safe") })()'
         node -e '(async () => { await import("@zwave-js/serial/safe") })()'
         node -e '(async () => { await import("@zwave-js/shared/safe") })()'
+        node -e '(async () => { await import("@zwave-js/bindings-browser/fs") })()'
 
         echo "Testing CJS entry points..."
         # Now all entrypoints should work

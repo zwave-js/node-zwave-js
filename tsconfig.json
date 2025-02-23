@@ -9,6 +9,9 @@
 	"include": [],
 	"references": [
 		{
+			"path": "./packages/bindings-browser"
+		},
+		{
 			"path": "./packages/eslint-plugin"
 		},
 		{
