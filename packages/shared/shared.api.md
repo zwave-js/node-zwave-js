@@ -4,6 +4,8 @@
 
 ```ts
 
+import { ReadableWritablePair } from 'node:stream/web';
+
 // Warning: (ae-forgotten-export) The symbol "Constructors" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "AllOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -293,10 +295,13 @@ export function compareStrings(a: string, b: string): number;
 // @public (undocumented)
 export type Constructor<T = object> = new (...args: any[]) => T;
 
+// Warning: (ae-forgotten-export) The symbol "ManageDirectory" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "CopyFile" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ReadFileSystemInfo" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "copyFilesRecursive" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function copyFilesRecursive(sourceDir: string, targetDir: string, predicate?: (filename: string) => boolean): Promise<void>;
+export function copyFilesRecursive(fs: ManageDirectory & CopyFile & ReadFileSystemInfo, sourceDir: string, targetDir: string, predicate?: (filename: string) => boolean): Promise<void>;
 
 // Warning: (ae-missing-release-tag) "cpp2js" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -336,7 +341,7 @@ export function discreteLinearSearch(rangeMin: number, rangeMax: number, executo
 // Warning: (ae-missing-release-tag) "enumFilesRecursive" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function enumFilesRecursive(rootDir: string, predicate?: (filename: string) => boolean): Promise<string[]>;
+export function enumFilesRecursive(fs: ReadFileSystemInfo, rootDir: string, predicate?: (filename: string) => boolean): Promise<string[]>;
 
 // Warning: (ae-missing-release-tag) "evalOrStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -348,12 +353,33 @@ export function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStati
 // @public (undocumented)
 export type EventHandler = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
 
+// Warning: (ae-missing-release-tag) "EventListener" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type EventListener = ((arg1: any, arg2: any, arg3: any, arg4: any) => void) | ((arg1: any, arg2: any, arg3: any) => void) | ((arg1: any, arg2: any) => void) | ((arg1: any) => void) | ((...args: any[]) => void);
+
 // Warning: (ae-missing-release-tag) "Expand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export type Expand<T> = T extends object ? T extends infer O ? {
     [K in keyof O]: O[K];
 } : never : T;
+
+// Warning: (ae-forgotten-export) The symbol "FileHandle" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "fileHandleToReadableStream" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function fileHandleToReadableStream(handle: Omit<FileHandle, "readable" | "writable">): ReadableStream<Uint8Array>;
+
+// Warning: (ae-missing-release-tag) "fileHandleToStreams" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function fileHandleToStreams(handle: Omit<FileHandle, "readable" | "writable">): ReadableWritablePair<Uint8Array, Uint8Array>;
+
+// Warning: (ae-missing-release-tag) "fileHandleToWritableStream" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function fileHandleToWritableStream(handle: Omit<FileHandle, "readable" | "writable">): WritableStream<Uint8Array>;
 
 // Warning: (ae-missing-release-tag) "flatMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -397,6 +423,11 @@ export function getErrorMessage(e: unknown, includeStack?: boolean): string;
 // @public
 export function hexToUint8Array(hexString: string): Uint8Array;
 
+// Warning: (ae-missing-release-tag) "isAbortError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isAbortError(e: unknown): boolean;
+
 // Warning: (ae-missing-release-tag) "IsAny" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -404,7 +435,7 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 
 // Warning: (ae-missing-release-tag) "isDocker" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public
+// @public @deprecated
 export function isDocker(): boolean;
 
 // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -510,7 +541,7 @@ export function padVersion(version: string): string;
 // Warning: (ae-missing-release-tag) "pathExists" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function pathExists(filename: string): Promise<boolean>;
+export function pathExists(fs: ReadFileSystemInfo, filename: string): Promise<boolean>;
 
 // Warning: (ae-missing-release-tag) "pick" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -522,10 +553,11 @@ export function pick<T extends Record<any, any>, K extends keyof T>(obj: T, keys
 // @public
 export function pickDeep<T = unknown>(object: Record<string, any>, path: string): T;
 
+// Warning: (ae-forgotten-export) The symbol "ReadFile" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "readJSON" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function readJSON<T = any>(filename: string): Promise<T>;
+export function readJSON<T = any>(fs: ReadFile, filename: string): Promise<T>;
 
 // Warning: (ae-forgotten-export) The symbol "PickSymbolIterator" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "ReadonlyObjectKeyMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -539,6 +571,11 @@ export type ReadonlyObjectKeyMap<TKey extends Record<string | number, any>, TVal
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
     getOrThrow(key: K): V;
 };
+
+// Warning: (ae-missing-release-tag) "readTextFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function readTextFile(fs: ReadFile, filename: string, encoding?: BufferEncoding): Promise<string>;
 
 // Warning: (ae-missing-release-tag) "ReturnTypeOrStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -635,6 +672,24 @@ export interface TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHa
 export class TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandler>> {
 }
 
+// Warning: (ae-missing-release-tag) "TypedEventTarget" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class TypedEventTarget<TEvents extends Record<keyof TEvents, EventListener>> {
+    // (undocumented)
+    emit<TEvent extends keyof TEvents>(event: TEvent, ...args: Parameters<TEvents[TEvent]>): boolean;
+    // (undocumented)
+    off<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    on<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    once<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    removeAllListeners<TEvent extends keyof TEvents>(event?: TEvent): this;
+    // (undocumented)
+    removeListener<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+}
+
 // Warning: (ae-missing-release-tag) "TypedPropertyDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -659,6 +714,12 @@ export function uint8ArrayToStringUTF16BE(arr: Uint8Array): string;
 //
 // @public (undocumented)
 export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;
+
+// Warning: (ae-forgotten-export) The symbol "WriteFile" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "writeTextFile" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function writeTextFile(fs: WriteFile, filename: string, content: string, encoding?: BufferEncoding): Promise<void>;
 
 // (No @packageDocumentation comment for this package)
 

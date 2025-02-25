@@ -4,27 +4,22 @@
 
 ```ts
 
-import type { CCId } from '@zwave-js/core';
-import type { CommandClasses } from '@zwave-js/core';
-import type { ControllerLogger } from '@zwave-js/core';
 import { ControlsCC } from '@zwave-js/core';
-import type { DeviceConfig } from '@zwave-js/config';
 import { EndpointId } from '@zwave-js/core';
-import type { FrameType } from '@zwave-js/core';
+import { GetAllNodes } from '@zwave-js/core';
+import { GetDeviceConfig } from '@zwave-js/config';
 import { GetEndpoint } from '@zwave-js/core';
+import { GetNode } from '@zwave-js/core';
+import { GetSupportedCCVersion } from '@zwave-js/core';
+import { GetValueDB } from '@zwave-js/core';
+import { HostIDs } from '@zwave-js/core';
 import { IsCCSecure } from '@zwave-js/core';
 import { ListenBehavior } from '@zwave-js/core';
-import type { MaybeNotKnown } from '@zwave-js/core';
+import { LogNode } from '@zwave-js/core';
 import { NodeId } from '@zwave-js/core';
 import { QuerySecurityClasses } from '@zwave-js/core';
-import type { SecurityClass } from '@zwave-js/core';
-import type { SecurityManagers } from '@zwave-js/core';
-import type { SendCommandOptions } from '@zwave-js/core';
-import type { SendCommandReturnType } from '@zwave-js/core';
 import { SetSecurityClass } from '@zwave-js/core';
 import { SupportsCC } from '@zwave-js/core';
-import type { ValueDB } from '@zwave-js/core';
-import type { ValueID } from '@zwave-js/core';
 
 // Warning: (ae-missing-release-tag) "BaseTestEndpoint" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -35,35 +30,6 @@ export type BaseTestEndpoint = EndpointId & SupportsCC & ControlsCC & IsCCSecure
 //
 // @public (undocumented)
 export type BaseTestNode = BaseTestEndpoint & NodeId & ListenBehavior & QuerySecurityClasses & SetSecurityClass & SupportsCC & ControlsCC & IsCCSecure & GetEndpoint<BaseTestEndpoint>;
-
-// Warning: (ae-missing-release-tag) "CCEncodingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface CCEncodingContext extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs, GetSupportedCCVersion {
-    // (undocumented)
-    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-    // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
-    // (undocumented)
-    setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
-}
-
-// Warning: (ae-missing-release-tag) "CCParsingContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface CCParsingContext extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs {
-    // (undocumented)
-    __internalIsMockNode?: boolean;
-    frameType: FrameType;
-    // (undocumented)
-    getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-    // (undocumented)
-    hasSecurityClass(nodeId: number, securityClass: SecurityClass): MaybeNotKnown<boolean>;
-    // (undocumented)
-    setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
-    // (undocumented)
-    sourceNodeId: number;
-}
 
 // Warning: (ae-missing-release-tag) "createTestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -76,169 +42,12 @@ export function createTestingHost(options?: Partial<CreateTestingHostOptions>): 
 export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {
 }
 
-// Warning: (ae-missing-release-tag) "FileSystem" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface FileSystem {
-    // (undocumented)
-    ensureDir(path: string): Promise<void>;
-    // (undocumented)
-    pathExists(path: string): Promise<boolean>;
-    // (undocumented)
-    readFile(file: string, encoding: BufferEncoding): Promise<string>;
-    // (undocumented)
-    writeFile(file: string, data: string | Uint8Array, options?: {
-        encoding: BufferEncoding;
-    } | BufferEncoding): Promise<void>;
-}
-
-// Warning: (ae-missing-release-tag) "GetAllNodes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetAllNodes<T extends NodeId> {
-    // (undocumented)
-    getAllNodes(): T[];
-}
-
-// Warning: (ae-missing-release-tag) "GetCommunicationTimeouts" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetCommunicationTimeouts {
-    // (undocumented)
-    getCommunicationTimeouts(): ZWaveHostOptions["timeouts"];
-}
-
-// Warning: (ae-missing-release-tag) "GetDeviceConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetDeviceConfig {
-    // (undocumented)
-    getDeviceConfig(nodeId: number): DeviceConfig | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "GetInterviewOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetInterviewOptions {
-    // (undocumented)
-    getInterviewOptions(): ZWaveHostOptions["interview"];
-}
-
-// Warning: (ae-missing-release-tag) "GetNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetNode<T extends NodeId> {
-    // (undocumented)
-    getNode(nodeId: number): T | undefined;
-    // (undocumented)
-    getNodeOrThrow(nodeId: number): T;
-}
-
-// Warning: (ae-missing-release-tag) "GetSafeCCVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface GetSafeCCVersion {
-    getSafeCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "GetSupportedCCVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface GetSupportedCCVersion {
-    getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
-}
-
-// Warning: (ae-missing-release-tag) "GetUserPreferences" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetUserPreferences {
-    // (undocumented)
-    getUserPreferences(): ZWaveHostOptions["preferences"];
-}
-
-// Warning: (ae-missing-release-tag) "GetValueDB" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface GetValueDB {
-    getValueDB(nodeId: number): ValueDB;
-    tryGetValueDB(nodeId: number): ValueDB | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "HostIDs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface HostIDs {
-    homeId: number;
-    ownNodeId: number;
-}
-
-// Warning: (ae-missing-release-tag) "LogNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type LogNode = Pick<ControllerLogger, "logNode">;
-
-// Warning: (ae-missing-release-tag) "LookupManufacturer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface LookupManufacturer {
-    lookupManufacturer(manufacturerId: number): string | undefined;
-}
-
-// Warning: (ae-missing-release-tag) "NodeSchedulePollOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface NodeSchedulePollOptions {
-    expectedValue?: unknown;
-    timeoutMs?: number;
-}
-
-// Warning: (ae-missing-release-tag) "SchedulePoll" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface SchedulePoll {
-    // (undocumented)
-    schedulePoll(nodeId: number, valueId: ValueID, options: NodeSchedulePollOptions): boolean;
-}
-
-// Warning: (ae-missing-release-tag) "SendCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
-export interface SendCommand {
-    // (undocumented)
-    sendCommand<TResponse extends CCId | undefined = undefined>(command: CCId, options?: SendCommandOptions): Promise<SendCommandReturnType<TResponse>>;
-}
-
 // Warning: (ae-missing-release-tag) "TestingHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export interface TestingHost extends HostIDs, GetValueDB, GetSupportedCCVersion, GetAllNodes<BaseTestNode>, GetNode<BaseTestNode>, GetDeviceConfig, LogNode {
     // (undocumented)
     setNode(nodeId: number, node: BaseTestNode): void;
-}
-
-// Warning: (ae-missing-release-tag) "ZWaveHostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface ZWaveHostOptions {
-    // (undocumented)
-    attempts: {
-        controller: number;
-        sendData: number;
-        nodeInterview: number;
-    };
-    disableOptimisticValueUpdate?: boolean;
-    // (undocumented)
-    interview?: {
-        queryAllUserCodes?: boolean;
-    };
-    // (undocumented)
-    preferences?: {
-        scales: Partial<Record<string | number, string | number>>;
-    };
-    timeouts: {
-        refreshValue: number;
-        refreshValueAfterTransition: number;
-    };
 }
 
 // (No @packageDocumentation comment for this package)
