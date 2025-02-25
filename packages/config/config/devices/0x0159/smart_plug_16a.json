@@ -15,31 +15,6 @@
 	},
 	"paramInformation": [
 		{
-			"#": "10",
-			"label": "Activate / Deactivate Functions ALL ON / ALL OFF",
-			"valueSize": 2,
-			"defaultValue": 255,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "All on disabled, all off disabled",
-					"value": 0
-				},
-				{
-					"label": "All on disabled, al off active",
-					"value": 1
-				},
-				{
-					"label": "All on active, all off disabled",
-					"value": 2
-				},
-				{
-					"label": "All on active, all off active",
-					"value": 255
-				}
-			]
-		},
-		{
 			"#": "11",
 			"label": "Auto-Off Timer",
 			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
@@ -71,23 +46,6 @@
 			]
 		},
 		{
-			"#": "15",
-			"label": "Timer Unit",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Seconds",
-					"value": 0
-				},
-				{
-					"label": "Milliseconds",
-					"value": 1
-				}
-			]
-		},
-		{
 			"#": "30",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
@@ -108,6 +66,140 @@
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0
+		},
+		{
+			"#": "50",
+			"label": "Down Value",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 30
+		},
+		{
+			"#": "51",
+			"label": "Up Value",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 50
+		},
+		{
+			"#": "52",
+			"label": "Action in Case of Exceeding Defined Power Values Parameters",
+			"valueSize": 1,
+			"defaultValue": 6,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function inactive",
+					"value": 0
+				},
+				{
+					"label": "Turn the associated devices on once the power drops below down value",
+					"value": 1
+				},
+				{
+					"label": "Turn the associated devices off once the power drops below down value",
+					"value": 2
+				},
+				{
+					"label": "Turn the associated devices on once the power rises above up value",
+					"value": 3
+				},
+				{
+					"label": "Turn the associated devices off once the power rises above up value",
+					"value": 4
+				},
+				{
+					"label": "1 and 4 combined",
+					"value": 5
+				},
+				{
+					"label": "2 and 3 combined",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "70",
+			"label": "Overload Safety Switch",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Function not active",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "71",
+			"label": "Power Threshold",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Function not active",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "72",
+			"label": "Time Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 125,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Immediate sending of notification when active power drops bellow power threshold",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "73",
+			"label": "Turn Smart Plug Off",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function disabled",
+					"value": 0
+				},
+				{
+					"label": "Turn off relay once the notification program completed is sent",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "74",
+			"label": "Enable Disable LED",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is disabled",
+					"value": 0
+				},
+				{
+					"label": "LED is enabled",
+					"value": 1
+				}
+			]
 		}
 	]
 }
