@@ -590,6 +590,11 @@
 			"label": "Default All LED Strip Brightness When Off"
 		},
 		{
+			"#": "99",
+			"$import": "templates/inovelli_templates.json#bulk_set_led_effect",
+			"label": "Bulk Set LED Strip Effect"
+		},
+		{
 			"#": "99[0xff]",
 			"$import": "templates/inovelli_templates.json#led_effect_duration",
 			"label": "All LED Strip Effect - Duration"
