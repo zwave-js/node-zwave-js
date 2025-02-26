@@ -176,11 +176,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			...options,
 		});
 
-		await this.host.sendCommand(cc, {
-			...this.commandOptions,
-			// Do not wait for Nonce Reports
-			s2VerifyDelivery: false,
-		});
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
