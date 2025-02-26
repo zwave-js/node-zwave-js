@@ -369,7 +369,9 @@
 	"compat": {
 		// This device gets its timezone information from a different source
 		// and correctly expects the time to be set as UTC
-		"useUTCInTimeParametersCC": true
+		"useUTCInTimeParametersCC": true,
+		// Z-Wave JS considers the device's endpoints unnecessary, although both are needed
+		"preserveEndpoints": "*"
 	},
 	"metadata": {
 		"inclusion": "Adding to a Z-Wave Network (Inclusion)\nMethod 1: Select “Add”, then short press button , the device will send out inclusion request, “Status” will show “Inclusion...”. If there is no response from a gateway within 30 seconds, or inclusion failed, “Status” will show “Fail”. If included successfully, “Status” will show “Inclusion OK” and device ID.\nMethod 2: Operate the gateway into inclusion mode, make sure the device is already removed from previous network, reset power of the device, the device will be included to the gateway automatically",
