@@ -1,0 +1,130 @@
+{
+    "manufacturer": "Shelly Europe Ltd.",
+    "manufacturerId": "0x0460",
+    "label": "QPDM-0A1P01",
+    "description": "Shelly Wave PRO Dimmer 1PM",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0081"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": [
+        {
+            "#": "1",
+            "$import": "templates/wave_template.json#switch_type",
+            "label": "SW1 Switch Type",
+            "defaultValue": 0
+        },
+        {
+            "#": "2",
+            "$import": "templates/wave_template.json#switch_type",
+            "label": "SW2 Switch Type",
+            "defaultValue": 0
+        },
+        {
+            "#": "131",
+            "$import": "templates/wave_template.json#dual_button",
+            "label": "Dual Button Mode SW1 & SW2"
+        },
+        {
+            "#": "7",
+            "$import": "templates/wave_template.json#detached_mode",
+            "label": "Detach O1 output"
+        },
+        {
+            "#": "8",
+            "$import": "templates/wave_template.json#detached_mode",
+            "label": "Detach O2 output"
+        },
+        {
+            "#": "17",
+            "$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+            "label": "O1: State After Power Failure"
+        },
+        {
+            "#": "19",
+            "$import": "templates/wave_template.json#auto_off_timer",
+            "label": "O1: Auto-Off Timer"
+        },
+        {
+            "#": "20",
+            "$import": "templates/wave_template.json#auto_on_timer",
+            "label": "O1: Auto-On Timer"
+        },
+        {
+            "#": "25",
+            "$import": "templates/wave_template.json#timer_unit",
+            "label": "O1: Auto-On/Off Timer Unit"
+        },
+        {
+            "#": "36",
+            "$import": "templates/wave_template.json#power_change_report_treshold",
+            "label": "O1: Power Change Report Threshold"
+        },
+        {
+            "#": "39",
+            "$import": "templates/wave_template.json#min_time_between_reports",
+            "label": "O1: Minimum Time Between Power Reports"
+        },
+        {
+            "#": "78",
+            "$import": "templates/wave_template.json#force_calibration",
+            "label": "Calibrate Device"
+        },
+        {
+            "#": "121",
+            "$import": "~/templates/master_template.json#maximum_dim_level_1-99",
+            "label": "Max dimming O1"
+        },
+        {
+            "#": "123",
+            "$import": "templates/wave_template.json#min_dimming_value",
+            "label": "Min dimming O1"
+        },
+        {
+            "#": "125",
+            "$import": "~/templates/master_template.json#base_1-10_nounit",
+            "label": "Dimming time O1",
+            "defaultValue": 3
+        },
+        {
+            "#": "127",
+            "$import": "templates/wave_template.json#fade_rate",
+            "label": "Fade Rate O1"
+        },
+        {
+            "#": "129",
+            "$import": "~/templates/master_template.json#base_1-99_nounit",
+            "label": "Min Brightness Toggle O1",
+            "defaultValue": 15
+        },
+        {
+            "#": "117",
+            "$import": "templates/wave_template.json#remote_reboot",
+            "label": "Remote Reboot"
+        },
+        {
+            "#": "201",
+            "$import": "templates/wave_template.json#serial_number",
+            "label": "Serial Number: Part 1"
+        },
+        {
+            "#": "202",
+            "$import": "templates/wave_template.json#serial_number",
+            "label": "Serial Number: Part 2"
+        },
+        {
+            "#": "203",
+            "$import": "templates/wave_template.json#serial_number",
+            "label": "Serial Number: Part 3"
+        }
+    ],
+    "metadata": {
+        "$import": "templates/wave_template.json#default_metadata"
+    }
+}
