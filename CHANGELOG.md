@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 14.3.10 (2025-02-27)
 ### Bugfixes
 * Discard S2 frames with both the MPAN and MGRP extension (#7619)
 * Fixed an issue where subsequent stages of multi-stage firmware updates would fail to start due to the SPAN not being synchronized correctly (#7640)

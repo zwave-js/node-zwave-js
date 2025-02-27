@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/serial",
-  "version": "14.3.9",
+  "version": "14.3.10",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
     "access": "public"
