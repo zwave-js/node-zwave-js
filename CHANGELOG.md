@@ -10,12 +10,13 @@ Z-Wave JS is now able to run in the browser! This allows for new use-cases like 
 To celebrate this achievement, we've renamed the repository to `zwave-js`, dropping the `node-` prefix. The package names will remain the same.
 
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v15)
+* Require Node.js 20 or higher
 * Remove non-portable sync-versions of methods, require Node 20 (#7580)
+* Support communicating with SoC end device firmwares via their CLI (#7628)
 
 ### Features
 * Browser support (#7586, #7587, #7592, #7631)
 * Support staying in the bootloader instead of recovering (#7444)
-* Support communicating with SoC end device firmwares via their CLI (#7628)
 
 ### Bugfixes
 * Correctly handle being queried with Firmware Update CC correctly (#7620, #7627)
