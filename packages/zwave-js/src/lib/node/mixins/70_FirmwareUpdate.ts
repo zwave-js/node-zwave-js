@@ -674,7 +674,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		});
 
 		// Request the node to start the upgrade
-		await api.requestUpdate({
+		let result = await api.requestUpdate({
 			// TODO: Should manufacturer id be provided externally?
 			manufacturerId,
 			firmwareId,
@@ -685,16 +685,19 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 			resume,
 			nonSecureTransfer,
 		});
-		// Pause the task until the response is received, because that can take
-		// up to a minute
-		const result: FirmwareUpdateMetaDataCCRequestReport = yield () =>
-			this.driver
-				.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
-					(cc) =>
-						cc instanceof FirmwareUpdateMetaDataCCRequestReport
-						&& cc.nodeId === this.id,
-					60000,
-				);
+
+		// On some devices the response can take a minute or so to be received,
+		// probably because of a manual out-of-band activation.
+		if (!result) {
+			result = (yield () =>
+				this.driver
+					.waitForCommand(
+						(cc) =>
+							cc instanceof FirmwareUpdateMetaDataCCRequestReport
+							&& cc.nodeId === this.id,
+						60000,
+					)) as FirmwareUpdateMetaDataCCRequestReport;
+		}
 
 		switch (result.status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
