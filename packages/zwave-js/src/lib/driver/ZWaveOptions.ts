@@ -351,12 +351,6 @@ export interface ZWaveOptions {
 	};
 
 	/**
-	 * @deprecated
-	 * To allow bootloader only mode, set `bootloaderMode` to `allow` instead.
-	 */
-	allowBootloaderOnly?: boolean;
-
-	/**
 	 * Determines how the driver should be have when it encounters a controller that is in bootloader mode
 	 * and when the Serial API is not available (yet).
 	 * This can be useful when a controller may be stuck in bootloader mode, or when the application

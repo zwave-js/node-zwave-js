@@ -69,7 +69,7 @@ const driver_primary = new Driver(port_primary, {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
 	},
-	allowBootloaderOnly: true,
+	bootloaderMode: "allow",
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
@@ -153,7 +153,7 @@ const driver_secondary = new Driver(port_secondary, {
 		cacheDir: path.join(__dirname, "cache2"),
 		lockDir: path.join(__dirname, "cache2/locks"),
 	},
-	allowBootloaderOnly: true,
+	bootloaderMode: "allow",
 	// joinNetworkUserCallbacks: {
 	// 	showDSK(dsk) {
 	// 		pin = dsk.split("-")[0];

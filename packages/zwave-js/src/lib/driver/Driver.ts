@@ -1501,10 +1501,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					// FIXME: Leaving the bootloader may end up in the CLI
 
 					if (this._bootloader) {
-						if (
-							this._options.allowBootloaderOnly
-							|| this._options.bootloaderMode === "allow"
-						) {
+						if (this._options.bootloaderMode === "allow") {
 							this.driverLog.print(
 								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
 								"warn",

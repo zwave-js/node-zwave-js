@@ -415,9 +415,7 @@ interface FileSystem {
 		file: string,
 		data: string | Uint8Array,
 		options?:
-			| {
-				encoding: BufferEncoding;
-			}
+			| { encoding: BufferEncoding }
 			| BufferEncoding,
 	): Promise<void>;
 	readFile(file: string, encoding: BufferEncoding): Promise<string>;
@@ -695,7 +693,7 @@ This interface specifies the optional options object that is passed to the `Driv
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
 ````ts
-interface ZWaveOptions extends ZWaveHostOptions {
+interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
@@ -802,9 +800,31 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		disableOnNodeAdded?: boolean;
 	};
 
+	/** Host abstractions allowing Z-Wave JS to run on different platforms */
+	host?: {
+		/**
+		 * Specifies which bindings are used to access the file system when
+		 * reading or writing the cache, or loading device configuration files.
+		 */
+		fs?: FileSystem;
+
+		/**
+		 * Specifies which bindings are used interact with serial ports.
+		 */
+		serial?: Serial;
+
+		/**
+		 * Specifies which bindings are used to interact with the database used to store the cache.
+		 */
+		db?: DatabaseFactory;
+
+		/**
+		 * Specifies the logging implementation to be used
+		 */
+		log?: LogFactory;
+	};
+
 	storage: {
-		/** Allows you to replace the default file system driver used to store and read the cache */
-		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
@@ -1000,16 +1020,22 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * Normally, the driver expects to start in Serial API mode and enter the bootloader on demand. If in bootloader,
-	 * it will try to exit it and enter Serial API mode again.
+	 * Determines how the driver should be have when it encounters a controller that is in bootloader mode
+	 * and when the Serial API is not available (yet).
+	 * This can be useful when a controller may be stuck in bootloader mode, or when the application
+	 * wants to operate in bootloader mode anyways.
 	 *
-	 * However there are situations where a controller may be stuck in bootloader mode and no Serial API is available.
-	 * In this case, the driver startup will fail, unless this option is set to `true`.
+	 * The following options exist:
+	 * - `recover`: Z-Wave JS will attempt to recover the controller from bootloader mode.
+	 *   If this does not succeed, the driver startup will fail.
+	 * - `allow`: Z-Wave JS will attempt to recover the controller from bootloader mode.
+	 *   If this does not succeed, the driver will continue to operate in bootloader mode,
+	 *   e.g. for flashing a new image. Commands attempting to talk to the serial API will fail.
+	 * - `stay`: Z-Wave JS will NOT attempt to recover the controller from bootlaoder mode.
 	 *
-	 * If it is, the driver instance will only be good for interacting with the bootloader, e.g. for flashing a new image.
-	 * Commands attempting to talk to the serial API will fail.
+	 * Default: `recover`
 	 */
-	allowBootloaderOnly?: boolean;
+	bootloaderMode?: "recover" | "allow" | "stay";
 
 	/**
 	 * An object with application/module/component names and their versions.
@@ -1036,12 +1062,11 @@ interface ZWaveOptions extends ZWaveHostOptions {
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
-		serialPortBinding?: typeof SerialPort;
 		/**
 		 * A hook that allows accessing the serial port instance after opening
 		 * and before interacting with it.
 		 */
-		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+		onSerialPortOpen?: (port: ZWaveSerialStream) => Promise<void>;
 
 		/**
 		 * Set this to true to skip the controller identification sequence.
@@ -1054,9 +1079,10 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		skipNodeInterview?: boolean;
 
 		/**
-		 * Set this to true to skip checking if the controller is in bootloader mode
+		 * Set this to true to skip checking if the Z-Wave is in bootloader mode,
+		 * running a Serial API, or an end device CLI.
 		 */
-		skipBootloaderCheck?: boolean;
+		skipFirmwareIdentification?: boolean;
 
 		/**
 		 * Set this to false to skip loading the configuration files. Default: `true`..

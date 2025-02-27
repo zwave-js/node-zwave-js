@@ -68,7 +68,7 @@ const driver = new Driver(port, {
 		lockDir: path.join(__dirname, "cache/locks"),
 		deviceConfigExternalDir: path.join(__dirname, "config"),
 	},
-	allowBootloaderOnly: true,
+	bootloaderMode: "allow",
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
