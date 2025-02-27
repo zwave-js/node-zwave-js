@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 14.3.10 (2025-02-27)
+### Bugfixes
+* Discard S2 frames with both the MPAN and MGRP extension (#7619)
+* Fixed an issue where subsequent stages of multi-stage firmware updates would fail to start due to the SPAN not being synchronized correctly (#7640)
+
+### Config file changes
+* Preserve endpoints for Namron 16A thermostats (#7637)
+
+## 14.3.9 (2025-02-17)
+### Bugfixes
+* Always query list of supported thermostat setpoint types (#7617)
+* Do not throw error responding to invalid `Indicator Description Get` (#7616)
+* Expose firmware ID for OTA update to applications (#7599)
+
+### Config file changes
+* Allow setting arbitrary Motion Sensitivity for ZSE70 (#7603)
+
 ## 14.3.8 (2025-01-28)
 ### Bugfixes
 * Fixed an issue with restoring the network cache from disk on some systems (#7560)
