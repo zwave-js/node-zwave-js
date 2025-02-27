@@ -28,7 +28,7 @@
         },
         {
             "#": "131",
-            "$import": "templates/wave_template.json#dual_button",
+            "$import": "templates/wave_template.json#inactive_active",
             "label": "Dual Button Mode SW1 & SW2"
         },
         {
