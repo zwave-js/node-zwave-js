@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Discard S2 frames with both the MPAN and MGRP extension (#7619)
+* Fixed an issue where subsequent stages of multi-stage firmware updates would fail to start due to the SPAN not being synchronized correctly (#7640)
+
+### Config file changes
+* Preserve endpoints for Namron 16A thermostats (#7637)
+
 ## 14.3.9 (2025-02-17)
 ### Bugfixes
 * Always query list of supported thermostat setpoint types (#7617)
