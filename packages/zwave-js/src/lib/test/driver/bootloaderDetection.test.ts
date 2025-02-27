@@ -1,6 +1,7 @@
 import { Bytes } from "@zwave-js/shared";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
+import { DriverMode } from "../../driver/DriverMode.js";
 import { integrationTest } from "../integrationTestSuite.js";
 
 integrationTest(
@@ -41,7 +42,7 @@ BL >\0`,
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			t.expect(driver.isInBootloader()).toBe(true);
+			t.expect(driver.mode).toBe(DriverMode.Bootloader);
 		},
 	},
 );
