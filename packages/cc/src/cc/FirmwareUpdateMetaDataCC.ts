@@ -158,13 +158,14 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	}
 
 	/**
-	 * Requests the device to start the firmware update process.
-	 * This does not wait for the reply - that is up to the caller of this method.
+	 * Requests the device to start the firmware update process and waits for a response.
+	 * This response may time out on some devices, in which case the caller of this method
+	 * should wait manually.
 	 */
 	@validateArgs()
-	public async requestUpdate(
+	public requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
-	): Promise<void> {
+	): Promise<FirmwareUpdateMetaDataCCRequestReport | undefined> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.RequestGet,
@@ -176,7 +177,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			...options,
 		});
 
-		await this.host.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -673,8 +674,8 @@ export type FirmwareUpdateMetaDataCCRequestGetOptions =
 	}>;
 
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestGet)
-// This would expect a FirmwareUpdateMetaDataCCRequestReport, but the response may take
-// a while to come. We don't want to block communication, so we don't expect a response here
+// The response may take a while to be received on some devices, so manual waiting might be required
+@expectedCCResponse(FirmwareUpdateMetaDataCCRequestReport)
 export class FirmwareUpdateMetaDataCCRequestGet
 	extends FirmwareUpdateMetaDataCC
 {
