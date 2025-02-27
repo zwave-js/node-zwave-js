@@ -1502,7 +1502,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 					if (this._bootloader) {
 						if (
-							// eslint-disable-next-line @typescript-eslint/no-deprecated
 							this._options.allowBootloaderOnly
 							|| this._options.bootloaderMode === "allow"
 						) {
@@ -2557,6 +2556,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			effectiveComponents.size === 1
 			&& this.statisticsAppInfo
 			&& this.statisticsAppInfo.applicationName !== "node-zwave-js"
+			// node-zwave-js was renamed to just zwave-js in v15
+			&& this.statisticsAppInfo.applicationName !== "zwave-js"
 		) {
 			effectiveComponents.set(
 				this.statisticsAppInfo.applicationName,
@@ -2566,7 +2567,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return userAgentComponentsToString(effectiveComponents);
 	}
 
-	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	private _userAgent: string = `zwave-js/${libVersion}`;
 	/** Returns the user agent string used for service requests */
 	public get userAgent(): string {
 		return this._userAgent;
@@ -5231,7 +5232,7 @@ ${handlers.length} left`,
 		}
 
 		// Do not accept Meter CC and/or Multilevel Sensor CC if the node does not support them
-		// https://github.com/zwave-js/node-zwave-js/issues/5510
+		// https://github.com/zwave-js/zwave-js/issues/5510
 		// TODO: Consider expanding this to all CCs and not only reports
 		if (
 			cc.ccId === CommandClasses.Meter
@@ -5837,7 +5838,7 @@ ${handlers.length} left`,
 		// 1. Pings may be used to determine whether a node is really asleep.
 		// 2. Responses to nonce requests must be sent independent of the node status, because some sleeping nodes may try to send us encrypted messages.
 		//    If we don't send them, they block the send queue
-		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
+		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/zwave-js/discussions/1537
 		//    We need to try and send messages to them even if they are asleep, because we might never hear from them
 
 		// 2. is handled by putting the message into the immediate queue
@@ -5920,7 +5921,7 @@ ${handlers.length} left`,
 					);
 					if (isTransmitReport(prevResult)) {
 						// Figure out if the controller is jammed. If it is, wait a second and try again.
-						// https://github.com/zwave-js/node-zwave-js/issues/6199
+						// https://github.com/zwave-js/zwave-js/issues/6199
 						// In some cases, the transmit status can be Fail, even after transmitting for a couple of seconds.
 						// Not sure what causes this, but it doesn't mean that the controller is jammed.
 						if (

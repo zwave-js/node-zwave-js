@@ -8,7 +8,7 @@ on:
 
 jobs:
   approve-workflows:
-    if: github.repository == 'zwave-js/node-zwave-js' # Don't run in forks
+    if: github.repository == 'zwave-js/zwave-js' # Don't run in forks
     runs-on: [ubuntu-latest]
 
     steps:

@@ -26,7 +26,7 @@ This section is meant to help you figure out why and reduce debugging time for u
                   value:         71 °F
    ```
 
-   If this is not the case, see b). Otherwise, this seems to be okay from the `node-zwave-js` point of view.
+   If this is not the case, see b). Otherwise, this seems to be okay from the `zwave-js` point of view.
 
    b) **No source endpoint**\
    The device sends un-encapsulated reports (no source endpoint information):

@@ -13,7 +13,7 @@ function formatWithDprint(filename, sourceText) {
 
 const urls = {
 	styleGuide:
-		"https://zwave-js.github.io/node-zwave-js/#/config-files/style-guide",
+		"https://zwave-js.github.io/zwave-js/#/config-files/style-guide",
 };
 
 module.exports = {

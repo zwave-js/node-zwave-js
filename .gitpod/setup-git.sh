@@ -18,7 +18,7 @@ while true; do
 	case $fork in
 		[Yy]* ) break;;
 		[Nn]* )
-			echo -e "${BLUE}Please open https://github.com/zwave-js/node-zwave-js/fork in another browser window and select your account as the destination.${NC}"
+			echo -e "${BLUE}Please open https://github.com/zwave-js/zwave-js/fork in another browser window and select your account as the destination.${NC}"
 			read -p "Press ENTER when the fork was created... "
 			break;;
 		* ) echo -e "${RED}Please answer yes (y) or no (n)!${NC}";;
@@ -35,7 +35,7 @@ while true; do
 done
 
 echo -e "${BLUE}Setting up git remotes for you...${NC}"
-git remote set-url origin "https://github.com/$username/node-zwave-js"
+git remote set-url origin "https://github.com/$username/zwave-js"
 git fetch origin
 echo ""
 echo -e "Your fork is now configured as ${BLUE}origin${NC}, the original repo as ${BLUE}upstream${NC}"

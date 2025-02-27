@@ -1,6 +1,6 @@
 # Guide on partial parameters
 
-Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters.
+Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters.
 
 For example,
 

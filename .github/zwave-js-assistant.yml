@@ -87,10 +87,10 @@ automations:
         Help from the community is required, so we can focus our time on improving Z-Wave JS itself. 🙏🏻
 
         This issue has been labeled "Help wanted", meaning we kindly ask anyone who wants to help out for support. Here are a few resources to get you started - don't hesitate to ask if you are having problems:
-        - [Contributing configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files)
-        - [Importing from other sources](https://zwave-js.github.io/node-zwave-js/#/config-files/importing-from-others)
-        - [Configuration file format](https://zwave-js.github.io/node-zwave-js/#/config-files/file-format)
-        - [Style guide](https://zwave-js.github.io/node-zwave-js/#/config-files/style-guide)
+        - [Contributing configuration files](https://zwave-js.github.io/zwave-js/#/config-files/contributing-files)
+        - [Importing from other sources](https://zwave-js.github.io/zwave-js/#/config-files/importing-from-others)
+        - [Configuration file format](https://zwave-js.github.io/zwave-js/#/config-files/file-format)
+        - [Style guide](https://zwave-js.github.io/zwave-js/#/config-files/style-guide)
 
         We may get around to doing it ourselves at some point, but community support will speed up this process immensely.
 
@@ -109,10 +109,10 @@ automations:
         You can do so in your own fork, just copy the files from this PR and reference it in a new PR.
 
         Here are a few resources for reference - don't hesitate to ask if you are having problems:
-        - [Contributing configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files)
-        - [Importing from other sources](https://zwave-js.github.io/node-zwave-js/#/config-files/importing-from-others)
-        - [Configuration file format](https://zwave-js.github.io/node-zwave-js/#/config-files/file-format)
-        - [Style guide](https://zwave-js.github.io/node-zwave-js/#/config-files/style-guide)
+        - [Contributing configuration files](https://zwave-js.github.io/zwave-js/#/config-files/contributing-files)
+        - [Importing from other sources](https://zwave-js.github.io/zwave-js/#/config-files/importing-from-others)
+        - [Configuration file format](https://zwave-js.github.io/zwave-js/#/config-files/file-format)
+        - [Style guide](https://zwave-js.github.io/zwave-js/#/config-files/style-guide)
 
         We may get around to doing it ourselves at some point, but community support will speed up this process immensely.
 

@@ -32,7 +32,7 @@ import {
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite.js";
 
-// Repro for https://github.com/zwave-js/node-zwave-js/issues/6305
+// Repro for https://github.com/zwave-js/zwave-js/issues/6305
 
 integrationTest(
 	"CC Version 0 is ignored for known supported CCs: Security S2",

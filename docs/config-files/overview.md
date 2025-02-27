@@ -1,6 +1,6 @@
 # Device configuration files
 
-Since older versions of the Z-Wave standard don't allow us to request all the information we need from the devices themselves, there is a need for configuration files. These are located under [`packages/config/config/devices/<manufacturerID-as-hex>/<device-name>[_<firmware-range>].json`](https://github.com/zwave-js/node-zwave-js/tree/master/packages/config/config).
+Since older versions of the Z-Wave standard don't allow us to request all the information we need from the devices themselves, there is a need for configuration files. These are located under [`packages/config/config/devices/<manufacturerID-as-hex>/<device-name>[_<firmware-range>].json`](https://github.com/zwave-js/zwave-js/tree/master/packages/config/config).
 
 Device configuration files commonly include the following information:
 

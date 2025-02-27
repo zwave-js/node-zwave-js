@@ -270,7 +270,7 @@
 		}
 	],
 	"compat": {
-		// https://github.com/zwave-js/node-zwave-js/issues/4228
+		// https://github.com/zwave-js/zwave-js/issues/4228
 		// This device doesn't encode the supported sensor scales correctly
 		"disableStrictMeasurementValidation": true
 	}

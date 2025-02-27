@@ -10,7 +10,7 @@ While our standards are more exacting that other Z-Wave driver projects, we're h
 
 While it is possible to edit config files directly on GitHub, we recommend using a proper IDE to edit the files. For the best possible experience, we recommend using VS Code. The repository comes with settings like auto-formatting, code completion and recommended extensions to make your life easier and help you solve common issues. You can either:
 
-- Open VSCode in a fully [preconfigured environment in your browser](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js)
+- Open VSCode in a fully [preconfigured environment in your browser](https://gitpod.io/#/https://github.com/zwave-js/zwave-js)
 - Or use VSCode offline, see [prerequisites](development/intro.md#prerequisites)
 
 ## Importing Device Files from Other Projects

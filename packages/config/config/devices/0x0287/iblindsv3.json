@@ -167,7 +167,7 @@
 		}
 	],
 	"compat": {
-		// https://github.com/zwave-js/node-zwave-js/issues/5686
+		// https://github.com/zwave-js/zwave-js/issues/5686
 		// The device supports Binary Switch CC to control the tilt, but it is not linked
 		// to the Window Covering CC values. Remove the Binary Switch CC to avoid confusion.
 		"commandClasses": {

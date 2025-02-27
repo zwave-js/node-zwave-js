@@ -1,4 +1,4 @@
-![node-zwave-js](_images/logo.svg)
+![zwave-js](_images/logo.svg)
 
 <h2 align="center">Z-Wave driver written entirely in JavaScript/TypeScript</h2>
 
@@ -11,7 +11,7 @@
 
 # Introduction {docsify-ignore-all}
 
-Z-Wave JS (a.k.a. `node-zwave-js`) is a **standards-compliant**, **community-driven** and **Open Source** Z-Wave device driver. It is based on Node.js, but can be used from **any other language** with WebSocket support.
+Z-Wave JS (a.k.a. `zwave-js`) is a **standards-compliant**, **community-driven** and **Open Source** Z-Wave device driver. It is based on Node.js, but can be used from **any other language** with WebSocket support.
 
 Z-Wave JS is the most advanced open source Z-Wave library available, with support for modern Z-Wave features like **Security S2**, **Smart Start** and soon to be **certified**!
 
@@ -43,7 +43,7 @@ When making changes or adding tests, make sure they run with `npm t`.
 
 1. Add tests in `<cc-name>CC.test.ts`
 
-You can check which command classes are missing in https://github.com/AlCalzone/node-zwave-js/issues/6.
+You can check which command classes are missing in https://github.com/AlCalzone/zwave-js/issues/6.
 
 ### Implementing a message class
 

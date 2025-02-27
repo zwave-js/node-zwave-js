@@ -184,7 +184,7 @@ This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
 * Refactor Zniffer exports, add them to `/safe` entrypoint (#6830)
 
 ## 12.6.0 (2024-05-07)
-This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
+This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
 
 ### Features
 * Add Zniffer support (#6651)
@@ -268,7 +268,7 @@ This release enhances the diagnostics in Z-Wave JS by adding support for control
 * Fix/improve route diagnostics for Z-Wave LR devices (#6718)
 
 ## 12.5.0 (2024-04-02)
-This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
+This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/zwave-js/#/getting-started/long-range) to get started.
 
 ### Features
 * Support Z-Wave Long Range (#6401, #6620)
@@ -505,8 +505,8 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **2023.10.0** or higher
 * `zwave-js-server` **1.32.0**
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v12)
-* Removed auto-disabling of soft-reset capability. If Z-Wave JS is no longer able to communicate with the controller after updating, please read [this issue](https://github.com/zwave-js/node-zwave-js/issues/6341) (#6256)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v12)
+* Removed auto-disabling of soft-reset capability. If Z-Wave JS is no longer able to communicate with the controller after updating, please read [this issue](https://github.com/zwave-js/zwave-js/issues/6341) (#6256)
 * Remove support for Node.js 14 and 16 (#6245)
 * Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
 * The `"notification"` event now includes a reference to the endpoint that sent the notification (#6083)
@@ -557,7 +557,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 
 ## 11.14.1 (2023-09-07)
 ### Changes under the hood
-* The `mock-server` now supports loading mocks from outside the `node-zwave-js` repository (#6261)
+* The `mock-server` now supports loading mocks from outside the `zwave-js` repository (#6261)
 
 ## 11.14.0 (2023-09-04)
 ### Features
@@ -878,7 +878,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **2023.6.0** or higher
 * `zwave-js-server` **1.29.0**
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v11)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v11)
 * Hide `Multilevel Switch CC` in favor of `Window Covering CC` (#5812)
 * Improve return type of `firmwareUpdateOTA` and `firmwareUpdateOTW` methods (#5815)
 * Rename some `ZWaveHost` interface methods (#5814)
@@ -1517,7 +1517,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Corrected missing and incorrect dependencies
 
 ## 10.0.0 (2022-08-25) · _„Woo-Hoo!”_
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v10)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
 * Added support to provide an API key for the firmware update service, soon mandatory (#4816)
@@ -1700,7 +1700,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Throw meaningful errors when `invokeCCAPI` gets called with invalid args (#4613)
 * Only enable Smart Start listening mode when there are active provisioning entries (#4598)
 * In the `Meter CC` `reset` API call, the `options` parameter is now optional (#4624)
-* Fixed an issue where Smart Start Provisioning entries would get corrupted during JSONL migration of the network cache. A [manual workaround](https://github.com/zwave-js/node-zwave-js/pull/4635#issue-1241388714) to restore lost entries from the old `.json` cache file is available (#4635)
+* Fixed an issue where Smart Start Provisioning entries would get corrupted during JSONL migration of the network cache. A [manual workaround](https://github.com/zwave-js/zwave-js/pull/4635#issue-1241388714) to restore lost entries from the old `.json` cache file is available (#4635)
 
 ### Config file changes
 * Add a warning about broken firmware to August Smart Lock Pro 3rd Gen (#4597)
@@ -1846,10 +1846,10 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * The auto-generated argument validation now considers `{ prop1: undefined }` and `{}` to be equivalent.
 
 ## 9.0.0 (2022-04-03) · _„You had my curiosity. But now you have my attention.”_
-Roughly nine months after the [last major release](https://github.com/zwave-js/node-zwave-js/releases/tag/v8.0.1), we've reached a new milestone.
+Roughly nine months after the [last major release](https://github.com/zwave-js/zwave-js/releases/tag/v8.0.1), we've reached a new milestone.
 Z-Wave JS is now 4 years old, its usage has more than doubled over the course of the `v8.x` release line and it is still growing steadily. There are many exciting things yet to come, so stay tuned!
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v9)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
 * Renamed  properties and methods of the `Controller` class and related message classes (#3761)
@@ -2503,7 +2503,7 @@ Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in t
 Just one, but it's a big one: We added support for **Security S2** inclusion and singlecast communication 🎉.  
 As it looks like, **Z-Wave JS** is the first open source library to support **Security S2**.
 
-If you plan to add support in your application, see the [documentation](https://zwave-js.github.io/node-zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) for details - this also requires UI changes.
+If you plan to add support in your application, see the [documentation](https://zwave-js.github.io/zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/zwave-js/pull/1136) for details - this also requires UI changes.
 
 ### Bugfixes
 * The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
@@ -2619,13 +2619,13 @@ This wouldn't have been possible without all the support I've gotten so far. I'd
 With this `v8` release, most of the pain points from previous versions and concerning compatibility with legacy Z-Wave devices should finally be resolved. This opens up the opportunity to focus on new and exciting features. On that list are the long-awaited **Security S2**, **SmartStart** and eventually the new **Z-Wave Long Range**.
 
 **Road to certification**  
-As you may already know, if you're planning to market a product or software with the official Z-Wave logos, certification is required for the entire product, from the hardware over the driver to the UI. In its current state, **Z-Wave JS** is not yet ready for certification (neither are the alternatives, for that matter). If your company is relying on Z-Wave JS, please consider paving that road by contributing to the project and/or [sponsoring me](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring). I'd love to be able to work full-time on Z-Wave JS and make it the **first** certified open source Z-Wave driver. While Z-Wave JS is free, your support will allow me to continue to make it better and reach that goal even faster.
+As you may already know, if you're planning to market a product or software with the official Z-Wave logos, certification is required for the entire product, from the hardware over the driver to the UI. In its current state, **Z-Wave JS** is not yet ready for certification (neither are the alternatives, for that matter). If your company is relying on Z-Wave JS, please consider paving that road by contributing to the project and/or [sponsoring me](https://zwave-js.github.io/zwave-js/#/getting-started/sponsoring). I'd love to be able to work full-time on Z-Wave JS and make it the **first** certified open source Z-Wave driver. While Z-Wave JS is free, your support will allow me to continue to make it better and reach that goal even faster.
 
 **TL;DR:** Z-Wave JS rocks! You rock! Now let's take a look at the changelog...
 
 ---
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v8)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v8)
 * User codes are no longer queried during the interview in order to save battery
 * Restructured interview settings in `ZWaveOptions`
 * Reworked how endpoints and lifeline associations are handled
@@ -3120,7 +3120,7 @@ As you may already know, if you're planning to market a product or software with
 * More lock/unlock events are now mapped to the `(Door) Lock CC` status
 * Implemented the Bridge API versions of `SendData[Multicast]` commands and prefer them over the Static API variants if supported
 * Added the node events `interview started` and `interview stage completed` to monitor progress of node interviews.
-* Implemented opt-in telemetry for usage statistics. Dear developers, please strongly consider enabling this feature to help us focus our efforts. Details can be found [here](https://zwave-js.github.io/node-zwave-js/#/api/driver?id=enablestatistics) and [here](https://zwave-js.github.io/node-zwave-js/#/getting-started/telemetry?id=usage-statistics).
+* Implemented opt-in telemetry for usage statistics. Dear developers, please strongly consider enabling this feature to help us focus our efforts. Details can be found [here](https://zwave-js.github.io/zwave-js/#/api/driver?id=enablestatistics) and [here](https://zwave-js.github.io/zwave-js/#/getting-started/telemetry?id=usage-statistics).
 * Added the device compat option `enableBasicSetMapping` to opt-in to mapping `Basic CC::Set` commands to other CCs
 
 ### Bugfixes
@@ -3160,7 +3160,7 @@ As you may already know, if you're planning to market a product or software with
 * Collect telemetry information for identified devices without a config file
 
 ## 7.0.0 (2021-03-23) · _Summer is coming!_
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v7)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v7)
 * Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
 * We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
 * Nodes with a completed interview are no longer queried for all their values when restarting
@@ -3514,7 +3514,7 @@ As you may already know, if you're planning to market a product or software with
 * Parameter options with incompatible values are now detected as an error
 
 ## 6.0.0 (2021-01-19) · _This is the way_
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v6)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
 * The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
@@ -3574,7 +3574,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * Added a `hexColor` property to the `Color Switch CC`
 * Added the properties `ready` and `allNodesReady` to the driver to read the status after the corresponding events were emitted
 * The node neighbor lists now get updated when a node is removed
-* The `refreshValues` method is now exposed on node instances, which allows polling all actuator and sensor values of a node. **Note:** Please read the warnings in the [documentation](https://zwave-js.github.io/node-zwave-js/#/api/node?id=refreshvalues)!
+* The `refreshValues` method is now exposed on node instances, which allows polling all actuator and sensor values of a node. **Note:** Please read the warnings in the [documentation](https://zwave-js.github.io/zwave-js/#/api/node?id=refreshvalues)!
 * The controller event callback types are now exported
 
 ### Bugfixes
@@ -3672,7 +3672,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 
 ### Features
 * Implemented the `replaceFailedNode` API
-* Added a third argument to the `"interview failed"` event handler which includes an object with additional details about the interview attempt (see [docs](https://zwave-js.github.io/node-zwave-js/#/api/node?id=quotinterview-failedquot)).  
+* Added a third argument to the `"interview failed"` event handler which includes an object with additional details about the interview attempt (see [docs](https://zwave-js.github.io/zwave-js/#/api/node?id=quotinterview-failedquot)).  
   **WARNING:** The current signature is deprecated and will be changed in the next major version!
 * Metadata can now be customized by CCs with the `ccSpecific` property. This is used in several CCs to allow applications to identify which value a value ID describes (e.g. sensor type, meter type, etc...)
 
@@ -4214,7 +4214,7 @@ If you're still using it, you need to switch to `beginHealingNetwork`.
 ## 2.16.0 (2020-04-28)
 ### Features
 * Added support for `Color Switch CC`
-* Added exports for all the relevant things needed by consuming applications (https://github.com/AlCalzone/node-zwave-js/pull/762#issuecomment-613614445)
+* Added exports for all the relevant things needed by consuming applications (https://github.com/AlCalzone/zwave-js/pull/762#issuecomment-613614445)
 * Log outputs can now be filtered by nodes using the `LOG_NODES` env variable (#772)
 * Nodes now emit a `"interview failed"` event when the interview fails with some additional info why (#769)
 
@@ -4227,7 +4227,7 @@ If you're still using it, you need to switch to `beginHealingNetwork`.
 * TypeScript 3.8 with all its goodies!
 * Filter out a bunch of user errors before reporting them with Sentry
 * Use `gulp` for better control over some build tasks
-* Check out the new [Documentation](https://alcalzone.github.io/node-zwave-js)!
+* Check out the new [Documentation](https://alcalzone.github.io/zwave-js)!
 
 ## 2.15.7 (2020-03-22)
 ### Bugfixes

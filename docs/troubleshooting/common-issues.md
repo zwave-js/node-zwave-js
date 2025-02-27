@@ -88,7 +88,7 @@ If the device is supposed to be using encryption, also see [below](#a-lock-or-an
 
 ## Configuration parameters are missing or wrong
 
-Check the [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md) if there were any recent updates to the configuration files for your device. If so, **try re-interviewing** the device to pick up the changed parameters.
+Check the [changelog](https://github.com/zwave-js/zwave-js/blob/master/CHANGELOG.md) if there were any recent updates to the configuration files for your device. If so, **try re-interviewing** the device to pick up the changed parameters.
 
 It can also be that there were issues during the first interview. In this case, **try re-interviewing** the device.
 
@@ -156,5 +156,5 @@ See [above](#_700800-series-controller-is-quotjammedquot-or-becomes-unresponsive
 If this happens after a firmware upgrade/downgrade, you may have bricked the controller. While 700/800 series bootloaders should prevent this, we've still seen reports of it happen. Contact the manufacturer for support.
 
 **Incorrect VM settings, e.g. USB passthrough**\
-If using a 500 series controller or older, read [this issue](https://github.com/zwave-js/node-zwave-js/issues/6341) and follow the steps proposed there.
+If using a 500 series controller or older, read [this issue](https://github.com/zwave-js/zwave-js/issues/6341) and follow the steps proposed there.
 If none of that helps: good luck, you're on your own.

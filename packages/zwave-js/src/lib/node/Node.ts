@@ -4633,7 +4633,7 @@ protocol version:      ${this.protocolVersion}`;
 			command.notificationType === 0x06
 			&& doorStatusEvents.includes(command.notificationEvent as number)
 		) {
-			// https://github.com/zwave-js/node-zwave-js/pull/5394 added support for
+			// https://github.com/zwave-js/zwave-js/pull/5394 added support for
 			// notification enums. Unfortunately, there's no way to discover which nodes
 			// actually support them, which makes working with the Door state variable
 			// very cumbersome. Also, this is currently the only notification where the enum values
@@ -6055,7 +6055,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			&& timeAPI.supportsCommand(TimeCommand.DateReport)
 			&& timeAPI.supportsCommand(TimeCommand.TimeReport)
 		) {
-			// According to https://github.com/zwave-js/node-zwave-js/issues/6032#issuecomment-1641945555
+			// According to https://github.com/zwave-js/zwave-js/issues/6032#issuecomment-1641945555
 			// some devices update their date and time when they receive an unsolicited Time CC report.
 			// Even if this isn't intended, we should at least try.
 

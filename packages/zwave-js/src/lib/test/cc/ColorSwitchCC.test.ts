@@ -235,7 +235,7 @@ test("the StopLevelChange command should serialize correctly", async (t) => {
 });
 
 test("the setValue API verifies that targetColor isn't set with non-numeric keys", async (t) => {
-	// Repro for https://github.com/zwave-js/node-zwave-js/issues/4811
+	// Repro for https://github.com/zwave-js/zwave-js/issues/4811
 	const API = CCAPI.create(
 		CommandClasses["Color Switch"],
 		undefined as any,

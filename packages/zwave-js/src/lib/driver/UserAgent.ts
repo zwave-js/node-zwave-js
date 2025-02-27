@@ -11,7 +11,8 @@ export function mergeUserAgent(
 	}
 	for (let [name, version] of Object.entries(additionalComponents)) {
 		name = normalize(name);
-		if (name === "node-zwave-js") continue;
+		// node-zwave-js was renamed to zwave-js in v15
+		if (name === "node-zwave-js" || name === "zwave-js") continue;
 
 		if (!allowOverwrite && ret.has(name)) continue;
 

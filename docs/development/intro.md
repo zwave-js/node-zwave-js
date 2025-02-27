@@ -16,14 +16,14 @@ _Alright, here's a short introduction if you're new to this stuff. If you know t
 
 It is now possible to develop on Gitpod, directly in your browser and skip the lengthy setup process.
 
-Click [here](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js) to start with a preconfigured workspace that contains VSCode and all dependencies, so you can focus on coding.
+Click [here](https://gitpod.io/#/https://github.com/zwave-js/zwave-js) to start with a preconfigured workspace that contains VSCode and all dependencies, so you can focus on coding.
 
 > [!NOTE] We only have a limited amount of hours and parallel workspaces available. Please use them responsibly.
 
 ## Prerequisites
 
 For the best possible offline development experience, you should use [VSCode](https://code.visualstudio.com/).
-The repository comes with settings and recommended extensions to make your life easier when working on `node-zwave-js`. The snippets alone will save you a ton of typing.\
+The repository comes with settings and recommended extensions to make your life easier when working on `zwave-js`. The snippets alone will save you a ton of typing.\
 It is **strongly recommended** to install the recommended extensions when VSCode asks you to.
 
 Since this repo uses `yarn` workspaces, you need to make sure you have `yarn` installed. If not, run `npm i -g yarn`.
@@ -32,7 +32,7 @@ The Z-Wave specifications used to be included in this repository. They have now 
 It is recommended to clone this repo using
 
 ```bash
-git clone --filter=blob:none https://github.com/zwave-js/node-zwave-js
+git clone --filter=blob:none https://github.com/zwave-js/zwave-js
 ```
 
 to avoid downloading all these unnecessary files. The specifications can then (optionally) be downloaded using

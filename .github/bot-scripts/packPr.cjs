@@ -8,7 +8,7 @@ const semver = require("semver");
 
 const options = {
 	owner: "zwave-js",
-	repo: "node-zwave-js",
+	repo: "zwave-js",
 };
 
 /**

@@ -10,7 +10,7 @@ body:
 
         Let's start by finding out if we are able to help you...
 
-        1. If this is about a **device** that is interviewed completely but does not **get identified**, please [use this template](https://github.com/zwave-js/node-zwave-js/issues/new?assignees=&labels=config+%E2%9A%99&projects=&template=device_config.yml&title=Missing+device+configuration%3A+%3Center+manufacturer+and+device+name%3E) instead.
+        1. If this is about a **device** that is interviewed completely but does not **get identified**, please [use this template](https://github.com/zwave-js/zwave-js/issues/new?assignees=&labels=config+%E2%9A%99&projects=&template=device_config.yml&title=Missing+device+configuration%3A+%3Center+manufacturer+and+device+name%3E) instead.
 
         1. Were you using **Z-Wave JS UI** (standalone or as an addon) when you encountered the problem?
         If **yes**: please open your issue at https://github.com/zwave-js/zwave-js-ui/issues instead, **unless** you were told to report it here.
@@ -26,10 +26,10 @@ body:
         - label: I have read and followed the above instructions
           required: true
         - label: |
-            I have checked the [troubleshooting section](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index) and my problem is **not** described there.
+            I have checked the [troubleshooting section](https://zwave-js.github.io/zwave-js/#/troubleshooting/index) and my problem is **not** described there.
           required: true
         - label: |
-            I have read the [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md) and my problem was **not** mentioned there or the fix **did not work**.
+            I have read the [changelog](https://github.com/zwave-js/zwave-js/blob/master/CHANGELOG.md) and my problem was **not** mentioned there or the fix **did not work**.
           required: true
 
   - type: markdown
@@ -64,7 +64,7 @@ body:
       label: Software versions
       description: Please fill in the versions of each software you're using.
       value: |
-        Driver (node-zwave-js): ...
+        Driver (zwave-js): ...
 
         Z-Wave JS UI: ...
 
@@ -134,7 +134,7 @@ body:
       label: Checklist
       options:
         - label: |
-            I [made sure](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index?id=rule-1-use-the-driver-log-luke) to provide a **driver log** on level **debug**.
+            I [made sure](https://zwave-js.github.io/zwave-js/#/troubleshooting/index?id=rule-1-use-the-driver-log-luke) to provide a **driver log** on level **debug**.
           required: true
         - label: |
             The log includes a re-interview of the problematic device _(if applicable)_.

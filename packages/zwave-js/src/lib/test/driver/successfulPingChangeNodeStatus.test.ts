@@ -2,7 +2,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import { NodeStatus } from "../../node/_Types.js";
 import { integrationTest } from "../integrationTestSuite.js";
 
-// https://github.com/zwave-js/node-zwave-js/issues/1364#issuecomment-760006591
+// https://github.com/zwave-js/zwave-js/issues/1364#issuecomment-760006591
 
 for (
 	const initialStatus of [
@@ -57,7 +57,7 @@ for (
 			// async ({ context, expect }) => {
 			// 	const { driver, serialport } = context;
 
-			// 	// https://github.com/zwave-js/node-zwave-js/issues/1364#issuecomment-760006591
+			// 	// https://github.com/zwave-js/zwave-js/issues/1364#issuecomment-760006591
 
 			// 	const node4 = new ZWaveNode(4, driver);
 			// 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(

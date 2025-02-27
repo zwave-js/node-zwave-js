@@ -6,8 +6,8 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
    If not: `npm i -g yarn`
 1. Clone and open this repo, check out the branch:
    ```bash
-   git clone https://github.com/zwave-js/node-zwave-js.git
-   cd node-zwave-js
+   git clone https://github.com/zwave-js/zwave-js.git
+   cd zwave-js
    git checkout branch-you-want-to-test
    ```
 1. Install dependencies, compile the sources
@@ -18,7 +18,7 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
 1. Link the `zwave-js` packages into your repo:
    1. If your repo is using `yarn v2`, execute this in your repo:
       ```bash
-      yarn link /path/to/node-zwave-js --all
+      yarn link /path/to/zwave-js --all
       ```
       If you are getting an error like
       ```txt
@@ -28,7 +28,7 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
       ```bash
       yarn set version 3.0.0-rc.6
       ```
-   1. If your repo is using `yarn v1`, add the following to your `package.json`, where `/path/to/zwave-js` needs to be the actual path of the `node-zwave-js` repo:
+   1. If your repo is using `yarn v1`, add the following to your `package.json`, where `/path/to/zwave-js` needs to be the actual path of the `zwave-js` repo:
       ```json
       "resolutions": {
           "@zwave-js/config": "link:/path/to/zwave-js/packages/config",

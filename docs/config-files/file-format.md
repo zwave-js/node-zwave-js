@@ -228,7 +228,7 @@ where each parameter definition has the following properties:
 
 ### Partial parameters
 
-Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters. For an in-depth explanation, see [the guide on partial parameters](config-files/partial-parameters.md).
+Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters. For an in-depth explanation, see [the guide on partial parameters](config-files/partial-parameters.md).
 
 For example,
 

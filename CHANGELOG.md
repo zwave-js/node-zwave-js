@@ -7,7 +7,9 @@
 ## __WORK IN PROGRESS__
 Z-Wave JS is now able to run in the browser! This allows for new use-cases like interactive usage examples in the documentation, and building web-based Z-Wave tools.
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v15)
+To celebrate this achievement, we've renamed the repository to `zwave-js`, dropping the `node-` prefix. The package names will remain the same.
+
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v15)
 * Remove non-portable sync-versions of methods, require Node 20 (#7580)
 
 ### Features
@@ -138,7 +140,7 @@ Technically this is a breaking change, as `SecurityManager2` now needs to be ins
 ## 14.0.0 (2024-11-05)
 In this release, a lot of the internal API was refactored to decrease interdependencies. Technically this results in a huge list of breaking changes, but most of those should not affect any application, unless very low-level APIs are frequently used. For example, Z-Wave JS UI and Z-Wave JS Server had just two small breaks. In addition, Z-Wave JS is now released as hybrid ESM/CJS packages.
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v14)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v14)
 * `Driver.installConfigUpdates()` now requires the external config directory to be configured (#7365)
 * Replace Node.js Buffer with `Uint8Array` portable replacement class `Bytes` (#7332)
 * `zwave-js` no longer loops up the package version at runtime (#7344)
@@ -346,7 +348,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **TBD** or higher
 * `zwave-js-server` **1.37.0**
 
-### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v13)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/zwave-js/#/getting-started/migrating/v13)
 * Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
 * Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929, #7023)
 * Remove `ZWaveApplicationHost` dependency from `CommandClass.toLogEntry()` (#6927)

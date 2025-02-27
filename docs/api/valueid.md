@@ -187,7 +187,7 @@ type IndicatorMetadata = ValueMetadata & {
 };
 ```
 
-The indicator and property IDs may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/indicators.json).
+The indicator and property IDs may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/zwave-js/blob/master/packages/config/config/indicators.json).
 
 #### Meter CC
 
@@ -203,7 +203,7 @@ type MeterMetadata = ValueMetadata & {
 };
 ```
 
-The meter type and scale keys may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/meters.json).
+The meter type and scale keys may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/zwave-js/blob/master/packages/config/config/meters.json).
 
 #### Multilevel Sensor CC
 
@@ -218,7 +218,7 @@ type MultilevelSensorValueMetadata = ValueMetadata & {
 };
 ```
 
-The multilevel sensor types may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/sensorTypes.json). Named scales which are referenced from the JSON file can be found [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/scales.json).
+The multilevel sensor types may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/zwave-js/blob/master/packages/config/config/sensorTypes.json). Named scales which are referenced from the JSON file can be found [here](https://github.com/zwave-js/zwave-js/blob/master/packages/config/config/scales.json).
 
 #### Multilevel Switch CC
 
@@ -244,7 +244,7 @@ type NotificationMetadata = ValueMetadata & {
 };
 ```
 
-The notification types and variable names may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/notifications.json).
+The notification types and variable names may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/zwave-js/blob/master/packages/config/config/notifications.json).
 The notification variable is not included in this metadata, since there's currently no way to identify them except their name, which is used as the `propertyKey` of the value ID.
 
 #### Thermostat Setpoint CC

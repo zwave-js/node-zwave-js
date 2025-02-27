@@ -632,7 +632,7 @@
 	],
 	"compat": {
 		"overrideQueries": {
-			// The response to the supported scales query is off by one bit: https://github.com/zwave-js/node-zwave-js/issues/6680
+			// The response to the supported scales query is off by one bit: https://github.com/zwave-js/zwave-js/issues/6680
 			"Multilevel Sensor": [
 				{
 					"method": "getSupportedScales",

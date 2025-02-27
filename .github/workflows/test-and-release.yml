@@ -343,7 +343,7 @@ jobs:
     name: Update CC implementation status
     # Only run for master branch and don't run in forks
     if: |
-      github.repository == 'zwave-js/node-zwave-js' &&
+      github.repository == 'zwave-js/zwave-js' &&
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
 
@@ -378,7 +378,7 @@ jobs:
     name: Update toLogEntry overview
     # Only run for master branch and don't run in forks
     if: |
-      github.repository == 'zwave-js/node-zwave-js' &&
+      github.repository == 'zwave-js/zwave-js' &&
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
 

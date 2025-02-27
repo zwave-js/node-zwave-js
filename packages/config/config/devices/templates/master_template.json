@@ -659,7 +659,7 @@
 	},
 	"7xx_firmware_bug_pre_7_17_2": {
 		"level": "warning",
-		"text": "Early 700 series firmware revisions had a bug that could cause the mesh to be flooded on some networks and the controller to become unresponsive. It appears that this bug is largely, if not completely, resolved as of SDK version 7.17.2.\nDirections for upgrading the firmware can be found at https://zwave-js.github.io/node-zwave-js/#/troubleshooting/otw-upgrade"
+		"text": "Early 700 series firmware revisions had a bug that could cause the mesh to be flooded on some networks and the controller to become unresponsive. It appears that this bug is largely, if not completely, resolved as of SDK version 7.17.2.\nDirections for upgrading the firmware can be found at https://zwave-js.github.io/zwave-js/#/troubleshooting/otw-upgrade"
 	},
 	"7xx_firmware_bug_7_19_to_7_21_3": {
 		"level": "warning",

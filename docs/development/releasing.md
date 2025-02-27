@@ -1,6 +1,6 @@
-# Releasing `node-zwave-js` {docsify-ignore-all}
+# Releasing `zwave-js` {docsify-ignore-all}
 
-This section is meant as a guide for maintainers on how to release a new version of `node-zwave-js`. It should not concern anyone else, since releasing requires write access to `master`.
+This section is meant as a guide for maintainers on how to release a new version of `zwave-js`. It should not concern anyone else, since releasing requires write access to `master`.
 
 ## Prerequisites
 

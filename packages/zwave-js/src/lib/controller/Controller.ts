@@ -2934,7 +2934,7 @@ export class ZWaveController
 			const nodeInfo = msg.nodeInformation;
 
 			// It can happen that this is received for a node that is already part of the network:
-			// https://github.com/zwave-js/node-zwave-js/issues/5781
+			// https://github.com/zwave-js/zwave-js/issues/5781
 			// In this case, ignore this message to prevent chaos.
 
 			if (this._nodes.has(nodeId)) {

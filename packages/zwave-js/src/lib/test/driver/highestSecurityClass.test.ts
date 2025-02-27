@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/core";
 import { integrationTest } from "../integrationTestSuite.js";
 
-// Repro for https://github.com/zwave-js/node-zwave-js/issues/6098
+// Repro for https://github.com/zwave-js/zwave-js/issues/6098
 
 integrationTest(`An insecurely-included node has security class None`, {
 	// debug: true,

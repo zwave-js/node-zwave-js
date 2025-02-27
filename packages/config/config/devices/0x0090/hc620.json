@@ -155,7 +155,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				// https://github.com/zwave-js/node-zwave-js/discussions/5566#discussioncomment-6702982
+				// https://github.com/zwave-js/zwave-js/discussions/5566#discussioncomment-6702982
 				// The device gets stuck in a state where it continues spamming Supervision Reports
 				"Supervision": {
 					"endpoints": "*"

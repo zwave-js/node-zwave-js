@@ -235,7 +235,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				// https://github.com/zwave-js/node-zwave-js/issues/5260#issuecomment-1399682117
+				// https://github.com/zwave-js/zwave-js/issues/5260#issuecomment-1399682117
 				// The device does not accept all commands using Supervision
 				"Supervision": {
 					"endpoints": "*"

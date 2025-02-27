@@ -186,7 +186,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				// The device has a bugged Window Covering CC implementation: https://github.com/zwave-js/node-zwave-js/issues/5975
+				// The device has a bugged Window Covering CC implementation: https://github.com/zwave-js/zwave-js/issues/5975
 				"Window Covering": {
 					"endpoints": "*"
 				}

@@ -1,17 +1,17 @@
 blank_issues_enabled: false
 contact_links:
   - name: ⛑️ Troubleshoot
-    url: https://github.com/zwave-js/node-zwave-js/discussions/new?category=request-support-investigate-issue
+    url: https://github.com/zwave-js/zwave-js/discussions/new?category=request-support-investigate-issue
     about: Ask for help with troubleshooting.
 
   - name: 🐛 Report a potential bug
-    url: https://github.com/zwave-js/node-zwave-js/discussions/new?category=request-support-investigate-issue
+    url: https://github.com/zwave-js/zwave-js/discussions/new?category=request-support-investigate-issue
     about: Start an investigation here. We'll create an issue if this is a confirmed bug.
 
   - name: 💡 Suggest a feature
-    url: https://github.com/zwave-js/node-zwave-js/discussions/new?category=feature-requests
+    url: https://github.com/zwave-js/zwave-js/discussions/new?category=feature-requests
     about: Request or suggest a feature you're missing in Z-Wave JS.
 
   - name: ❓ Ask a Question
-    url: https://github.com/zwave-js/node-zwave-js/discussions/new
+    url: https://github.com/zwave-js/zwave-js/discussions/new
     about: If you have any other questions, ask them here.

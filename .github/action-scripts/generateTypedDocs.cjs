@@ -7,7 +7,7 @@ const exec = require("@actions/exec");
 
 const options = {
 	owner: "zwave-js",
-	repo: "node-zwave-js",
+	repo: "zwave-js",
 };
 const branchName = "docs/update-typed-docs";
 const reviewers = ["AlCalzone"];

@@ -1781,7 +1781,7 @@ export function json500To700(
 		applicationData = raw.toString("hex");
 	}
 
-	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// https://github.com/zwave-js/zwave-js/issues/6055
 	// On some controllers this byte can be 0xff (effectively not set)
 	let controllerConfiguration = source.controller.controllerConfiguration;
 	if (source.controller.controllerConfiguration === 0xff) {
@@ -1814,7 +1814,7 @@ export function json500To700(
 		}
 	}
 
-	// https://github.com/zwave-js/node-zwave-js/issues/6055
+	// https://github.com/zwave-js/zwave-js/issues/6055
 	// Some controllers have invalid information for the IDs
 	let maxNodeId = source.controller.maxNodeId;
 	if (maxNodeId === 0xff) maxNodeId = source.controller.lastNodeId;

@@ -276,7 +276,7 @@
 		"commandClasses": {
 			"remove": {
 				// The device does not support Supervision correctly. Starting a level change always fails
-				// https://github.com/zwave-js/node-zwave-js/issues/6049
+				// https://github.com/zwave-js/zwave-js/issues/6049
 				"Supervision": {
 					"endpoints": "*"
 				}

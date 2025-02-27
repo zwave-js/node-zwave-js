@@ -536,7 +536,7 @@
 				}
 			},
 			"overrideQueries": {
-				// The response to the setpoint query is off by one bit: https://github.com/zwave-js/node-zwave-js/issues/5335
+				// The response to the setpoint query is off by one bit: https://github.com/zwave-js/zwave-js/issues/5335
 				"Thermostat Setpoint": [
 					{
 						"method": "getSupportedSetpointTypes",

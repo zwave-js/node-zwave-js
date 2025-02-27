@@ -296,7 +296,7 @@
 			"valueSize": 1,
 			// This parameter is actually writable, but Inovelli asked to have it readonly
 			// to prevent accidental changes that can damage the device:
-			// https://github.com/zwave-js/node-zwave-js/issues/6273#issuecomment-1714585107
+			// https://github.com/zwave-js/zwave-js/issues/6273#issuecomment-1714585107
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [

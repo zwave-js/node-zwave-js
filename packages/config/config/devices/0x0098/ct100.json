@@ -314,8 +314,8 @@
 		}
 	],
 	"compat": {
-		// https://github.com/zwave-js/node-zwave-js/issues/6017#issuecomment-1648532422
-		// https://github.com/zwave-js/node-zwave-js/issues/6184
+		// https://github.com/zwave-js/zwave-js/issues/6017#issuecomment-1648532422
+		// https://github.com/zwave-js/zwave-js/issues/6184
 
 		// The device has a weird endpoint setup. Most thermostat functionality is on endpoint 0, but the two additional
 		// endpoints have a thermostat device class:

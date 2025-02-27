@@ -11,7 +11,7 @@ import { integrationTest } from "../integrationTestSuite.js";
 integrationTest(
 	`targetValue properties are exposed for CCs where the version could not be queried`,
 	{
-		// Repro for https://github.com/zwave-js/node-zwave-js/issues/6048
+		// Repro for https://github.com/zwave-js/zwave-js/issues/6048
 
 		// debug: true,
 
@@ -60,7 +60,7 @@ integrationTest(
 integrationTest(
 	`targetValue properties are exposed for CCs if Version CC is not supported`,
 	{
-		// Repro for https://github.com/zwave-js/node-zwave-js/issues/6119
+		// Repro for https://github.com/zwave-js/zwave-js/issues/6119
 
 		// debug: true,
 
