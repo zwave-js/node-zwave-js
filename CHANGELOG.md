@@ -4,6 +4,34 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+Z-Wave JS is now able to run in the browser! This allows for new use-cases like interactive usage examples in the documentation, and building web-based Z-Wave tools.
+
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating/v15)
+* Remove non-portable sync-versions of methods, require Node 20 (#7580)
+
+### Features
+* Browser support (#7586, #7587, #7592, #7631)
+* Support staying in the bootloader instead of recovering (#7444)
+* Support communicating with SoC end device firmwares via their CLI (#7628)
+
+### Bugfixes
+* Correctly handle being queried with Firmware Update CC correctly (#7620, #7627)
+* Handle proxy inclusion when NIF and Initiate command are switched (#7621)
+
+### Changes under the hood
+* Replace `xstate` with a simple built-in state machine (#7460)
+* Migrate from Node.js streams to Web Streams API (#7457, #7474)
+* Migrate to `ky` as a lightweight, portable replacement of `got` (#7479)
+* Untar config updates in memory, remove `execa` from prod deps (#7485)
+* Add portable bindings for the filesystem (#7428)
+* Allow switching out the DB bindings (#7486)
+* Use `pathe` instead of `node:path` for path manipulation (#7551)
+* Entry points designated for the browser are now checked by ESLint (#7577)
+* Remove dependency on `isDeepStrictEqual` (#7584)
+* Decouple logging from `winston` (#7585)
+* Lots of dependency updates
+
 ## 14.3.10 (2025-02-27)
 ### Bugfixes
 * Discard S2 frames with both the MPAN and MGRP extension (#7619)
