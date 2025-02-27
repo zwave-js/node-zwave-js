@@ -5,7 +5,6 @@ export function createWebSerialPortFactory(
 ): ZWaveSerialBindingFactory {
 	const sink: UnderlyingSink<Uint8Array> = {
 		close() {
-			console.log("sink.close()");
 			port.close();
 		},
 		async write(chunk) {
@@ -40,5 +39,7 @@ export function createWebSerialPortFactory(
 		},
 	};
 
-	return () => Promise.resolve({ source, sink });
+	// Apparently the types flip-flop between being compatible and not being compatible
+	// between the node and browser versions of the Web Streams API
+	return () => Promise.resolve({ source, sink }) as any;
 }
