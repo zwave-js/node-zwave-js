@@ -7,6 +7,7 @@ import {
 export enum ZWaveSerialFrameType {
 	SerialAPI = 0,
 	Bootloader = 1,
+	CLI = 2,
 	Discarded = 0xff,
 }
 
@@ -16,6 +17,9 @@ export type ZWaveSerialFrame = {
 } | {
 	type: ZWaveSerialFrameType.Bootloader;
 	data: BootloaderChunk;
+} | {
+	type: ZWaveSerialFrameType.CLI;
+	data: CLIChunk;
 } | {
 	type: ZWaveSerialFrameType.Discarded;
 	data: Uint8Array;
@@ -53,6 +57,29 @@ export type BootloaderChunk =
 	}
 	| {
 		type: BootloaderChunkType.FlowControl;
+		command:
+			| XModemMessageHeaders.ACK
+			| XModemMessageHeaders.NAK
+			| XModemMessageHeaders.CAN
+			| XModemMessageHeaders.C;
+	};
+
+export enum CLIChunkType {
+	Prompt, // >
+	Message,
+	FlowControl,
+}
+
+export type CLIChunk =
+	| {
+		type: CLIChunkType.Prompt;
+	}
+	| {
+		type: CLIChunkType.Message;
+		message: string;
+	}
+	| {
+		type: CLIChunkType.FlowControl;
 		command:
 			| XModemMessageHeaders.ACK
 			| XModemMessageHeaders.NAK
