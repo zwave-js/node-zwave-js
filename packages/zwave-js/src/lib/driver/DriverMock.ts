@@ -102,9 +102,9 @@ export interface CreateAndStartTestingDriverOptions {
 	skipNodeInterview?: boolean;
 
 	/**
-	 * Set this to true to skip checking if the controller is in bootloader mode (default: true)
+	 * Set this to true to skip checking if the controller is in bootloader, serial API, or CLI mode (default: true)
 	 */
-	skipBootloaderCheck?: boolean;
+	skipFirmwareIdentification?: boolean;
 
 	/**
 	 * Whether configuration files should be loaded (default: true)
@@ -123,7 +123,7 @@ export async function createAndStartTestingDriver(
 	const {
 		beforeStartup,
 		skipControllerIdentification = false,
-		skipBootloaderCheck = true,
+		skipFirmwareIdentification = true,
 		skipNodeInterview = false,
 		loadConfiguration = true,
 		fs = (await import("@zwave-js/core/bindings/fs/node")).fs,
@@ -148,9 +148,9 @@ export async function createAndStartTestingDriver(
 		internalOptions.testingHooks ??= {};
 		internalOptions.testingHooks.loadConfiguration = false;
 	}
-	if (skipBootloaderCheck) {
+	if (skipFirmwareIdentification) {
 		internalOptions.testingHooks ??= {};
-		internalOptions.testingHooks.skipBootloaderCheck = true;
+		internalOptions.testingHooks.skipFirmwareIdentification = true;
 	}
 
 	// TODO: Make sure we delete this from time to time

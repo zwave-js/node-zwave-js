@@ -114,6 +114,8 @@ import {
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
+	type CLIChunk,
+	CLIChunkType,
 	type EnumeratedPort,
 	FunctionType,
 	type HasNodeId,
@@ -177,7 +179,6 @@ import {
 	AsyncQueue,
 	Bytes,
 	type Interval,
-	type ThrowingMap,
 	type Timer,
 	TypedEventTarget,
 	areUint8ArraysEqual,
@@ -233,6 +234,8 @@ import {
 	sendStatistics,
 } from "../telemetry/statistics.js";
 import { Bootloader } from "./Bootloader.js";
+import { DriverMode } from "./DriverMode.js";
+import { EndDeviceCLI } from "./EndDeviceCLI.js";
 import { createMessageGenerator } from "./MessageGenerators.js";
 import {
 	cacheKeys,
@@ -554,6 +557,7 @@ interface AwaitedThing<T> {
 type AwaitedMessageHeader = AwaitedThing<MessageHeaders>;
 type AwaitedMessageEntry = AwaitedThing<Message>;
 type AwaitedCommandEntry = AwaitedThing<CCId>;
+type AwaitedCLIChunkEntry = AwaitedThing<CLIChunk>;
 export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
@@ -650,6 +654,7 @@ function wrapLegacyFSDriverForCacheMigrationOnly(
 export interface DriverEventCallbacks extends PrefixedNodeEvents {
 	"driver ready": () => void;
 	"bootloader ready": () => void;
+	"cli ready": () => void;
 	"all nodes ready": () => void;
 	error: (err: Error) => void;
 }
@@ -864,6 +869,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	private awaitedCommands: AwaitedCommandEntry[] = [];
 	/** A list of awaited chunks from the bootloader */
 	private awaitedBootloaderChunks: AwaitedBootloaderChunkEntry[] = [];
+	/** A list of awaited chunks from the end device CLI */
+	private awaitedCLIChunks: AwaitedCLIChunkEntry[] = [];
 
 	/** A map of Node ID -> ongoing sessions */
 	private nodeSessions = new Map<number, Sessions>();
@@ -968,7 +975,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 	/** While in bootloader mode, this encapsulates information about the bootloader and its state */
 	private _bootloader: Bootloader | undefined;
-	/** @internal */
 	public get bootloader(): Bootloader {
 		if (this._bootloader == undefined) {
 			throw new ZWaveError(
@@ -979,8 +985,24 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return this._bootloader;
 	}
 
-	public isInBootloader(): boolean {
-		return this._bootloader != undefined;
+	private _cli: EndDeviceCLI | undefined;
+	/** While in end device CLI mode, this encapsulates information about the CLI and its state */
+	public get cli(): EndDeviceCLI {
+		if (this._cli == undefined) {
+			throw new ZWaveError(
+				"The Z-Wave module is not in CLI mode!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._cli;
+	}
+
+	/** Determines which kind of Z-Wave application the driver is currently communicating with */
+	public get mode(): DriverMode {
+		if (this._bootloader) return DriverMode.Bootloader;
+		if (this._cli) return DriverMode.CLI;
+		if (this._controller) return DriverMode.SerialAPI;
+		return DriverMode.Unknown;
 	}
 
 	private _recoveryPhase: ControllerRecoveryPhase =
@@ -1440,17 +1462,19 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 			}
 
 			// Perform initialization sequence
-			await this.writeHeader(MessageHeaders.NAK);
-			// Per the specs, this should be followed by a soft-reset but we need to be able
-			// to handle sticks that don't support the soft reset command. Therefore we do it
-			// after opening the value DBs
-
-			if (!this._options.testingHooks?.skipBootloaderCheck) {
-				// After an incomplete firmware upgrade, we might be stuck in the bootloader
-				// Therefore wait a short amount of time to see if the serialport detects bootloader mode.
-				// If we are, the bootloader will reply with its menu.
+			if (this._options.testingHooks?.skipFirmwareIdentification) {
+				// No identification desired, just send a NAK and assume it's a
+				// Serial API controller
+				await this.writeHeader(MessageHeaders.NAK);
 				await wait(1000);
-				if (this._bootloader) {
+			} else {
+				const mode = await this.detectMode();
+				if (mode === DriverMode.CLI) {
+					this.emit("cli ready");
+					return;
+				}
+
+				if (mode === DriverMode.Bootloader) {
 					if (this._options.bootloaderMode === "stay") {
 						this.driverLog.print(
 							"Controller is in bootloader mode. Staying in bootloader as requested.",
@@ -1462,42 +1486,44 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 							true,
 						);
 						this.emit("bootloader ready");
+						return;
+					}
+
+					this.driverLog.print(
+						"Controller is in bootloader, attempting to recover...",
+						"warn",
+					);
+					await this.leaveBootloaderInternal();
+
+					// Wait a short time again. If we're in bootloader mode again, we're stuck
+					await wait(1000);
+
+					// FIXME: Leaving the bootloader may end up in the CLI
+
+					if (this._bootloader) {
+						if (
+							// eslint-disable-next-line @typescript-eslint/no-deprecated
+							this._options.allowBootloaderOnly
+							|| this._options.bootloaderMode === "allow"
+						) {
+							this.driverLog.print(
+								"Failed to recover from bootloader. Staying in bootloader mode as requested.",
+								"warn",
+							);
+							// Needed for the OTW feature to be available
+							this._controller = new ZWaveController(
+								this,
+								true,
+							);
+							this.emit("bootloader ready");
+						} else {
+							// bootloaderMode === "recover"
+							void this.destroyWithMessage(
+								"Failed to recover from bootloader. Please flash a new firmware to continue...",
+							);
+						}
 
 						return;
-					} else {
-						this.driverLog.print(
-							"Controller is in bootloader, attempting to recover...",
-							"warn",
-						);
-						await this.leaveBootloaderInternal();
-
-						// Wait a short time again. If we're in bootloader mode again, we're stuck
-						await wait(1000);
-						if (this._bootloader) {
-							if (
-								// eslint-disable-next-line @typescript-eslint/no-deprecated
-								this._options.allowBootloaderOnly
-								|| this._options.bootloaderMode === "allow"
-							) {
-								this.driverLog.print(
-									"Failed to recover from bootloader. Staying in bootloader mode as requested.",
-									"warn",
-								);
-								// Needed for the OTW feature to be available
-								this._controller = new ZWaveController(
-									this,
-									true,
-								);
-								this.emit("bootloader ready");
-							} else {
-								// bootloaderMode === "recover"
-								void this.destroyWithMessage(
-									"Failed to recover from bootloader. Please flash a new firmware to continue...",
-								);
-							}
-
-							return;
-						}
 					}
 				}
 			}
@@ -1575,6 +1601,40 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		});
 
 		return spOpenPromise;
+	}
+
+	private async detectMode(): Promise<DriverMode> {
+		// We re-use the NAK that should be used to reset the communication on
+		// Serial API startup to detect which kind of application we are talking to
+
+		const incomingNAK = this.waitForMessageHeader(
+			(h) => h === MessageHeaders.NAK,
+			500,
+		)
+			.then(() => true)
+			.catch(() => false);
+		await this.writeHeader(MessageHeaders.NAK);
+
+		// The response to this NAK helps determine whether the Z-Wave module is...
+		// ...stuck in the bootloader,
+		// ...running a SoC end device firmware with CLI
+		// ...or a "normal" Serial API
+
+		if (await incomingNAK) {
+			// This is possibly a CLI. It should respond with a prompt after we
+			// send a newline.
+			await this.writeSerial(Bytes.from("\n", "ascii"));
+			// Wait another 500ms, after which the serial parser should have detected the CLI
+			await wait(500);
+			if (this._cli) return DriverMode.CLI;
+		} else {
+			// This is possibly a bootloader. Wait another 500ms to be sure.
+			await wait(500);
+			// If we are in the bootloader, the serial parser should have detected this by now
+			if (this._bootloader) return DriverMode.Bootloader;
+		}
+
+		return DriverMode.SerialAPI;
 	}
 
 	private _controllerInterviewed: boolean = false;
@@ -3344,6 +3404,43 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		return false;
 	}
 
+	private _ensureCLIReadyPromise: DeferredPromise<boolean> | undefined;
+	private async ensureCLIReady(): Promise<boolean> {
+		// Ensure this is only called once and all subsequent calls block
+		if (this._ensureCLIReadyPromise) return this._ensureCLIReadyPromise;
+		this._ensureCLIReadyPromise = createDeferredPromise();
+
+		// Try to detect the available CLI commands and wait long enough for the communication to succeed
+		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
+		// to bail early
+		this.controllerLog.print("Waiting for the CLI to be ready...");
+
+		// After booting, the CLI can take a while to respond to commands
+		// Try up to 3 times to detect the available commands
+		await wait(250);
+		for (let i = 0;; i++) {
+			try {
+				await this.cli.detectCommands();
+				this.controllerLog.print("CLI started");
+				this._ensureCLIReadyPromise?.resolve(true);
+				this._ensureCLIReadyPromise = undefined;
+				return true;
+			} catch {
+				if (i === 2) {
+					this.controllerLog.print(
+						"CLI did not respond, giving up",
+						"error",
+					);
+					this._ensureCLIReadyPromise?.resolve(false);
+					this._ensureCLIReadyPromise = undefined;
+					return false;
+				}
+				await wait(1000);
+			}
+		}
+	}
+
 	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
 	 *
@@ -3558,6 +3655,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 				...this.awaitedMessages.map((m) => m.timeout),
 				...this.awaitedMessageHeaders.map((h) => h.timeout),
 				...this.awaitedBootloaderChunks.map((b) => b.timeout),
+				...this.awaitedCLIChunks.map((c) => c.timeout),
 			]
 		) {
 			timeout?.clear();
@@ -3565,10 +3663,7 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 
 		// Destroy all nodes and the controller
 		if (this._controller) {
-			this._controller.nodes.forEach((n) => n.destroy());
-			(this._controller.nodes as ThrowingMap<any, any>).clear();
-
-			this._controller.removeAllListeners();
+			this._controller.destroy();
 			this._controller = undefined;
 		}
 
@@ -3588,6 +3683,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 						void this.serialport_onData(frame.data);
 					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
 						void this.serialport_onBootloaderData(frame.data);
+					} else if (frame.type === ZWaveSerialFrameType.CLI) {
+						void this.serialport_onCLIData(frame.data);
 					} else {
 						// Handle discarded data?
 					}
@@ -3634,39 +3731,11 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 					}
 					return;
 				}
-
-					// // single-byte messages - just forward them to the send thread
-					// case MessageHeaders.ACK: {
-					// 	if (
-					// 		this.serialAPIInterpreter?.status
-					// 			=== InterpreterStatus.Running
-					// 	) {
-					// 		this.serialAPIInterpreter.send("ACK");
-					// 	}
-					// 	return;
-					// }
-					// case MessageHeaders.NAK: {
-					// 	if (
-					// 		this.serialAPIInterpreter?.status
-					// 			=== InterpreterStatus.Running
-					// 	) {
-					// 		this.serialAPIInterpreter.send("NAK");
-					// 	}
-					// 	this._controller?.incrementStatistics("NAK");
-					// 	return;
-					// }
-					// case MessageHeaders.CAN: {
-					// 	if (
-					// 		this.serialAPIInterpreter?.status
-					// 			=== InterpreterStatus.Running
-					// 	) {
-					// 		this.serialAPIInterpreter.send("CAN");
-					// 	}
-					// 	this._controller?.incrementStatistics("CAN");
-					// 	return;
-					// }
 			}
 		}
+
+		this._cli = undefined;
+		this._bootloader = undefined;
 
 		let msg: Message | undefined;
 		try {
@@ -7533,40 +7602,17 @@ ${handlers.length} left`,
 	private _enteringBootloader: boolean = false;
 	private _enterBootloaderPromise: DeferredPromise<void> | undefined;
 
-	/** @internal */
 	public async enterBootloader(): Promise<void> {
+		if (this._bootloader) return;
+
 		this.controllerLog.print("Entering bootloader...");
 		this._enteringBootloader = true;
 		try {
-			// await this.controller.toggleRF(false);
-			// Avoid re-transmissions etc. communicating with the bootloader
-			await this.scheduler.removeTasks(
-				() => true,
-				new ZWaveError(
-					"The controller is entering bootloader mode.",
-					ZWaveErrorCodes.Driver_TaskRemoved,
-				),
-			);
-
-			this.rejectTransactions(
-				(_t) => true,
-				"The controller is entering bootloader mode.",
-			);
-
-			await this.trySoftReset();
-			this.pauseSendQueue();
-
-			// Again, just to be very sure
-			this.rejectTransactions(
-				(_t) => true,
-				"The controller is entering bootloader mode.",
-			);
-
-			// It would be nicer to not hardcode the command here, but since we're switching stream parsers
-			// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
-			const promise = this.writeSerial(Bytes.from("01030027db", "hex"));
-			this.serial!.mode = ZWaveSerialMode.Bootloader;
-			await promise;
+			if (this.mode === DriverMode.SerialAPI) {
+				await this.enterBootloaderFromSerialAPI();
+			} else if (this.mode === DriverMode.CLI) {
+				await this.enterBootloaderFromCLI();
+			}
 
 			// Wait if the menu shows up
 			this._enterBootloaderPromise = createDeferredPromise();
@@ -7587,24 +7633,68 @@ ${handlers.length} left`,
 		}
 	}
 
+	private async enterBootloaderFromSerialAPI(): Promise<void> {
+		// Avoid re-transmissions etc. communicating with the bootloader
+		await this.scheduler.removeTasks(
+			() => true,
+			new ZWaveError(
+				"The controller is entering bootloader mode.",
+				ZWaveErrorCodes.Driver_TaskRemoved,
+			),
+		);
+
+		this.rejectTransactions(
+			(_t) => true,
+			"The controller is entering bootloader mode.",
+		);
+
+		await this.trySoftReset();
+		this.pauseSendQueue();
+
+		// Again, just to be very sure
+		this.rejectTransactions(
+			(_t) => true,
+			"The controller is entering bootloader mode.",
+		);
+
+		// It would be nicer to not hardcode the command here, but since we're switching stream parsers
+		// mid-command - thus ignoring the ACK, we can't really use the existing communication machinery
+		const promise = this.writeSerial(Bytes.from("01030027db", "hex"));
+		this.serial!.mode = ZWaveSerialMode.Bootloader;
+		await promise;
+	}
+
+	private async enterBootloaderFromCLI(): Promise<void> {
+		// The CLI first responds with a success message, so we have to reset the
+		await this.cli.executeCommand("bootloader");
+		// serial mode after the command is complete
+		this.serial!.mode = undefined;
+	}
+
 	private leaveBootloaderInternal(): Promise<void> {
 		const promise = this.bootloader.runApplication();
-		// Reset the known serial mode. We might end up in serial or bootloader mode afterwards.
+		// Reset the known serial mode.
+		// We might end up in serial API, CLI or bootloader mode afterwards.
 		this.serial!.mode = undefined;
 		this._bootloader = undefined;
 		return promise;
 	}
 
 	/**
-	 * @internal
 	 * Leaves the bootloader and destroys the driver instance if desired
 	 */
 	public async leaveBootloader(destroy: boolean = false): Promise<void> {
 		this.controllerLog.print("Leaving bootloader...");
 		await this.leaveBootloaderInternal();
 
-		// TODO: do we need to wait here?
+		// Wait a second so we can detect if we end up in a CLI application
+		await wait(1000);
+		if (this.mode === DriverMode.CLI) {
+			await this.ensureCLIReady();
+			return;
+		}
 
+		// We're most likely talking to a Serial API application
 		if (destroy) {
 			const restartReason = "Restarting driver after OTW update...";
 			this.controllerLog.print(restartReason);
@@ -7658,6 +7748,8 @@ ${handlers.length} left`,
 
 		if (!this._bootloader && data.type === BootloaderChunkType.Menu) {
 			// We just entered the bootloader
+			this._cli = undefined;
+
 			this.controllerLog.print(
 				`[BOOTLOADER] version ${data.version}`,
 				"verbose",
@@ -7713,6 +7805,85 @@ ${handlers.length} left`,
 				resolve(chunk as T);
 			});
 		});
+	}
+
+	/**
+	 * Waits until a specific chunk is received from the end device CLI or a timeout has elapsed. Returns the received chunk.
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 * @param predicate A predicate function to test all incoming chunks
+	 */
+	public waitForCLIChunk<T extends CLIChunk>(
+		predicate: (chunk: CLIChunk) => boolean,
+		timeout: number,
+	): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			const promise = createDeferredPromise<CLIChunk>();
+			const entry: AwaitedCLIChunkEntry = {
+				predicate,
+				handler: (chunk) => promise.resolve(chunk),
+				timeout: undefined,
+			};
+			this.awaitedCLIChunks.push(entry);
+			const removeEntry = () => {
+				entry.timeout?.clear();
+				const index = this.awaitedCLIChunks.indexOf(entry);
+				if (index !== -1) this.awaitedCLIChunks.splice(index, 1);
+			};
+			// When the timeout elapses, remove the wait entry and reject the returned Promise
+			entry.timeout = setTimer(() => {
+				removeEntry();
+				reject(
+					new ZWaveError(
+						`Received no matching chunk within the provided timeout!`,
+						ZWaveErrorCodes.Controller_Timeout,
+					),
+				);
+			}, timeout);
+			// When the promise is resolved, remove the wait entry and resolve the returned Promise
+			void promise.then((chunk) => {
+				removeEntry();
+				resolve(chunk as T);
+			});
+		});
+	}
+
+	private async serialport_onCLIData(data: CLIChunk): Promise<void> {
+		// Check if there is a handler waiting for this chunk
+		for (const entry of this.awaitedCLIChunks) {
+			if (entry.predicate(data)) {
+				// there is!
+				entry.handler(data);
+				return;
+			}
+		}
+
+		if (!this._cli && data.type === CLIChunkType.Prompt) {
+			// We just detected the CLI
+			this._controller?.destroy();
+			this._controller = undefined;
+			this._bootloader = undefined;
+
+			this._cli = new EndDeviceCLI(
+				this.writeSerial.bind(this),
+				(timeout) =>
+					this.waitForCLIChunk(
+						(c) => c.type === CLIChunkType.Message,
+						timeout ?? 1000,
+					)
+						.then((c) =>
+							(c as CLIChunk & { type: CLIChunkType.Message })
+								.message
+						)
+						.catch(() => undefined),
+			);
+
+			if (!(await this.ensureCLIReady())) {
+				throw new ZWaveError(
+					"Failed to detect available CLI commands",
+					ZWaveErrorCodes.Driver_Failed,
+				);
+			}
+		}
 	}
 
 	private pollBackgroundRSSITimer: Timer | undefined;

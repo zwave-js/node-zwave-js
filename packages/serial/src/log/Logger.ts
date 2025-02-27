@@ -129,12 +129,12 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	 * Logs a message
 	 * @param message The message to output
 	 */
-	public message(message: string): void {
+	public message(message: string, direction: DataDirection = "none"): void {
 		if (this.isVisible()) {
 			this.logger.log({
 				level: SERIAL_LOGLEVEL,
 				message,
-				direction: getDirectionPrefix("none"),
+				direction: getDirectionPrefix(direction),
 				context: {
 					source: "serial",
 					direction: "none",

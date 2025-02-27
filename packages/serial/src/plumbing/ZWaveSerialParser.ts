@@ -4,6 +4,7 @@ import {
 	BootloaderParser,
 	BootloaderScreenParser,
 } from "../parsers/BootloaderParsers.js";
+import { CLIParser } from "../parsers/CLIParser.js";
 import { SerialAPIParser } from "../parsers/SerialAPIParser.js";
 import { type ZWaveSerialFrame } from "../parsers/ZWaveSerialFrame.js";
 import { type ZWaveSerialMode } from "../serialport/definitions.js";
@@ -16,6 +17,9 @@ export class ZWaveSerialParser {
 		// Prepare parsers for reading from the serial port
 		// -> Serial API mode
 		this.parser = new SerialAPIParser(logger);
+
+		// -> CLI mode (SoC end devices)
+		const cliParser = new CLIParser(logger);
 
 		// -> Bootloader mode
 		// This one looks for NUL chars which terminate each bootloader output screen
@@ -30,11 +34,15 @@ export class ZWaveSerialParser {
 
 		// Now set up the plumbing:
 		//                        ┌>         parser         ┐
-		// writable == modeSwitch ┤                         ├> readable
+		// writable == modeSwitch ┼>       CLI parser       ┼> readable
 		//                        └> BL screen -> BL parser ┘
 
 		this.modeSwitch.toSerialAPI
 			.pipeTo(this.parser.writable, { signal })
+			.catch(noop);
+
+		this.modeSwitch.toCLI
+			.pipeTo(cliParser.writable, { signal })
 			.catch(noop);
 
 		this.modeSwitch.toBootloader
@@ -45,6 +53,7 @@ export class ZWaveSerialParser {
 		// Join the output streams from the parsers and expose it as the public readable stream
 		this.readable = mergeReadableStreams(
 			this.parser.readable,
+			cliParser.readable,
 			bootloaderParser.readable,
 		);
 	}

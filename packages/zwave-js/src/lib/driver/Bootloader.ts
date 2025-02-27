@@ -10,10 +10,14 @@ export enum BootloaderState {
 /** Encapsulates information about the currently active bootloader */
 export class Bootloader {
 	public constructor(
-		private writeSerial: (data: Uint8Array) => Promise<void>,
-		public readonly version: string,
+		writeSerial: (data: Uint8Array) => Promise<void>,
+		version: string,
 		options: { num: number; option: string }[],
 	) {
+		this.writeSerial = writeSerial;
+		this.version = version;
+		this.options = new Map(options.map((o) => [o.num, o.option]));
+
 		const uploadOption = options.find(
 			(o) => o.option === "upload gbl",
 		)?.num;
@@ -35,18 +39,35 @@ export class Bootloader {
 		this.runOption = runOption;
 	}
 
+	public readonly writeSerial: (data: Uint8Array) => Promise<void>;
+	public state: BootloaderState = BootloaderState.Menu;
+	public readonly version: string;
+
+	public readonly options: ReadonlyMap<number, string>;
+
 	public readonly uploadOption: number;
 	public readonly runOption: number;
-	public state: BootloaderState = BootloaderState.Menu;
+
+	public async selectOption(option: number): Promise<boolean> {
+		if (!this.options.has(option)) return false;
+		await this.writeSerial(Bytes.from(option.toString(), "ascii"));
+		return true;
+	}
+
+	public findOption(
+		predicate: (option: string) => boolean,
+	): number | undefined {
+		return [...this.options.entries()].find(
+			([, option]) => predicate(option),
+		)?.[0];
+	}
 
 	public async beginUpload(): Promise<void> {
-		await this.writeSerial(
-			Bytes.from(this.uploadOption.toString(), "ascii"),
-		);
+		await this.selectOption(this.uploadOption);
 	}
 
 	public async runApplication(): Promise<void> {
-		await this.writeSerial(Bytes.from(this.runOption.toString(), "ascii"));
+		await this.selectOption(this.runOption);
 	}
 
 	public async uploadFragment(

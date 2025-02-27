@@ -2,6 +2,7 @@ import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { type Timer, setTimer } from "./Timers.js";
 
 /** Allows waiting for something for a given amount of time, after which the expectation will automatically be rejected. */
 export class TimedExpectation<TResult = void, TPredicate = never>
@@ -14,7 +15,7 @@ export class TimedExpectation<TResult = void, TPredicate = never>
 			"Expectation was not fulfilled within the timeout",
 	) {
 		this.promise = createDeferredPromise<TResult>();
-		this.timeout = setTimeout(() => this.reject(), timeoutMs);
+		this.timeout = setTimer(() => this.reject(), timeoutMs);
 
 		// We need create the stack on a temporary object or the Error
 		// class will try to print the message
@@ -24,7 +25,7 @@ export class TimedExpectation<TResult = void, TPredicate = never>
 	}
 
 	private promise: DeferredPromise<TResult>;
-	private timeout?: NodeJS.Timeout;
+	private timeout?: Timer;
 	private _done: boolean = false;
 
 	/** The stack trace where the timed expectation was created */
@@ -33,18 +34,14 @@ export class TimedExpectation<TResult = void, TPredicate = never>
 	public resolve(result: TResult): void {
 		if (this._done) return;
 
-		if (this.timeout) {
-			clearTimeout(this.timeout);
-		}
+		this.timeout?.clear();
 		this.promise.resolve(result);
 	}
 
 	private reject(): void {
 		if (this._done) return;
 
-		if (this.timeout) {
-			clearTimeout(this.timeout);
-		}
+		this.timeout?.clear();
 		const err = new Error(this.timeoutErrorMessage);
 		err.stack = this.stack;
 		this.promise.reject(err);
