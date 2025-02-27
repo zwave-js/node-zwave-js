@@ -33,12 +33,12 @@
         },
         {
             "#": "7",
-            "$import": "templates/wave_template.json#detached_mode",
+            "$import": "templates/wave_template.json#inactive_active",
             "label": "Detach O1 output"
         },
         {
             "#": "8",
-            "$import": "templates/wave_template.json#detached_mode",
+            "$import": "templates/wave_template.json#inactive_active",
             "label": "Detach O2 output"
         },
         {
