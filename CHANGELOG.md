@@ -1,5 +1,5 @@
 # Changelog
-[Older changelog entries (v1...v10)](CHANGELOG_v10.md)
+[Older changelog entries (v1...v12)](CHANGELOG_v12.md)
 
 <!--
 	Add placeholder for next release with `wip` snippet
