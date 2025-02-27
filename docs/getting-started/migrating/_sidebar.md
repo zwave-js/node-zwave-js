@@ -8,6 +8,7 @@
   - [Security S2](getting-started/security-s2.md)
   - [Z-Wave Long Range](getting-started/long-range.md)
   - [Migrating from previous versions](getting-started/migrating/)
+    - [Migrating to v15](getting-started/migrating/v15.md)
     - [Migrating to v14](getting-started/migrating/v14.md)
     - [Migrating to v13](getting-started/migrating/v13.md)
     - [Migrating to v12](getting-started/migrating/v12.md)
