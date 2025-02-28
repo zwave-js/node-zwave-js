@@ -148,7 +148,7 @@
         {
             "#": "122",
             "$import": "~/templates/master_template.json#maximum_dim_level_1-99",
-            "label": "Max dimming O2"
+            "label": "Max Dimming O2"
         },
         {
             "#": "123",
