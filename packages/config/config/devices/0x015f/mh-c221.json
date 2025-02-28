@@ -34,6 +34,184 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
+		},
+		{
+			"#": "2",
+			"label": "KHW Meter Report Period",
+			"valueSize": 2,
+			"unit": "10min,6*10min=1h",
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6
+		},
+		{
+			"#": "3",
+			"label": "Threshold of Current Load - Caution",
+			"valueSize": 2,
+			"unit": "0.01A 500*0.01A=5A",
+			"minValue": 10,
+			"maxValue": 500,
+			"defaultValue": 500
+		},
+		{
+			"#": "4",
+			"label": "Watt Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000
+		},
+		{
+			"#": "5",
+			"label": "Level Report Mode",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report destination in 5s interval",
+					"value": 1
+				},
+				{
+					"label": "Report every 10% level charge",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Demo Trip",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Activate demo trip and calibration when first touch of the buttony",
+					"value": 1
+				},
+                {
+					"label": "Do nothing",
+                    "value": 0
+                }
+			]
+		},
+		{
+			"#": "9",
+			"label": "Demo Trip and Calibration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Activate demo trip and calibration",
+					"value": 1
+				},
+                {
+					"label": "Do nothing",
+                    "value": 0
+                }
+			]
+		},
+		{
+			"#": "10",
+			"label": "Auto Calibration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Activate calibration only",
+					"value": 1
+				},
+                {
+					"label": "Do nothing",
+                    "value": 0
+                }
+			]
+		},
+		{
+			"#": "11",
+			"label": "Min Level of the Shutter Close",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 0
+		},
+		{
+			"#": "12",
+			"label": "Max Level of Shutter Open",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "13",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button (Momentary buttons)",
+					"value": 0
+				},
+				{
+					"label": "Toggle 2 state switches, on position shutter open, off position shutter close, momentary or toggle key to S1 only",
+					"value": 1
+				},
+				{
+					"label": "Toggle 2 state switches, on position shutter close, off postion shutter open",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "External Switch Input",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Neo external switch",
+					"value": 0
+				},
+				{
+					"label": "Wire 1 ex, momentary or toggle key to S1 only",
+					"value": 1
+				},
+				{
+					"label": "Wire 1 ex, momentary or toggle key to S2 only",
+					"value": 2
+				},
+				{
+					"label": "Wire 2 ex, momentary or toggle keys to S1 and S2, each key can control both directions",
+					"value": 3
+				},
+				{
+					"label": "Wire 2",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "255",
+			"label": "Factory Setting",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore factory settings",
+					"value": 85
+				},
+                {
+					"label": "Do nothing",
+                    "value": 0
+                }
+
+			]
 		}
 	],
 	"compat": {

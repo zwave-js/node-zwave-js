@@ -7,6 +7,10 @@
 		{
 			"productType": "0xd221",
 			"productId": "0x7102"
+		},
+		{
+			"productType": "0xd221",
+			"productId": "0x5102"
 		}
 	],
 	"firmwareVersion": {
