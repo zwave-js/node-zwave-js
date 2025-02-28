@@ -53,22 +53,22 @@
         {
             "#": "7",
             "$import": "templates/wave_template.json#inactive_active",
-            "label": "Detach O1 output"
+            "label": "Detach O1 Output"
         },
         {
             "#": "8",
             "$import": "templates/wave_template.json#inactive_active",
-            "label": "Detach O2 output"
+            "label": "Detach O2 Output"
         },
         {
             "#": "9",
             "$import": "templates/wave_template.json#inactive_active",
-            "label": "Detach O3 output"
+            "label": "Detach O3 Output"
         },
         {
             "#": "10",
             "$import": "templates/wave_template.json#inactive_active",
-            "label": "Detach O4 output"
+            "label": "Detach O4 utput"
         },
         {
             "#": "17",
@@ -143,7 +143,7 @@
         {
             "#": "121",
             "$import": "~/templates/master_template.json#maximum_dim_level_1-99",
-            "label": "Max dimming O1"
+            "label": "Max Dimming O1"
         },
         {
             "#": "122",
@@ -153,23 +153,23 @@
         {
             "#": "123",
             "$import": "templates/wave_template.json#min_dimming_value",
-            "label": "Min dimming O1"
+            "label": "Min Dimming O1"
         },
         {
             "#": "124",
             "$import": "templates/wave_template.json#min_dimming_value",
-            "label": "Min dimming O2"
+            "label": "Min Dimming O2"
         },
         {
             "#": "125",
             "$import": "~/templates/master_template.json#base_1-10_nounit",
-            "label": "Dimming time O1",
+            "label": "Dimming Time O1",
             "defaultValue": 3
         },
         {
             "#": "126",
             "$import": "~/templates/master_template.json#base_1-10_nounit",
-            "label": "Dimming time O2",
+            "label": "Dimming Time O2",
             "defaultValue": 3
         },
         {
