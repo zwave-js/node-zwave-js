@@ -68,7 +68,7 @@
 		{
 			"#": "10",
 			"$import": "templates/wave_template.json#inactive_active",
-			"label": "Detach O4 utput"
+			"label": "Detach O4 Otput"
 		},
 		{
 			"#": "17",
