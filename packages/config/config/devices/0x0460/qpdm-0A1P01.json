@@ -28,17 +28,17 @@
 		},
 		{
 			"#": "131",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Dual Button Mode SW1 & SW2"
 		},
 		{
 			"#": "7",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O1 Output"
 		},
 		{
 			"#": "8",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O2 Output"
 		},
 		{

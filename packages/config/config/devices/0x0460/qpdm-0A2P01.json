@@ -40,34 +40,34 @@
 		},
 		{
 			"#": "131",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Dual Button Mode SW1 & SW2",
 			"description": "Valid only for Momentary switch type"
 		},
 		{
 			"#": "132",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Dual Button Mode SW3 & SW4",
 			"description": "Valid only for Momentary switch type"
 		},
 		{
 			"#": "7",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O1 Output"
 		},
 		{
 			"#": "8",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O2 Output"
 		},
 		{
 			"#": "9",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O3 Output"
 		},
 		{
 			"#": "10",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detach O4 Otput"
 		},
 		{

@@ -16,17 +16,17 @@
 	"paramInformation": [
 		{
 			"#": "155",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Illumination Mesurement"
 		},
 		{
 			"#": "156",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Tilting Measurement"
 		},
 		{
 			"#": "157",
-			"$import": "templates/wave_template.json#inactive_active",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED Detection Indication"
 		},
 		{

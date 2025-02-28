@@ -211,21 +211,6 @@
 			}
 		]
 	},
-	"inactive_active": {
-		"valueSize": 1,
-		"defaultValue": 0,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "inactive",
-				"value": 0
-			},
-			{
-				"label": "active",
-				"value": 1
-			}
-		]
-	},
 	"force_calibration": {
 		"valueSize": 1,
 		"defaultValue": 1,
