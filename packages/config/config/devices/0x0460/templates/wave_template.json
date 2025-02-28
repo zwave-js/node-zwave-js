@@ -227,7 +227,7 @@
 			}
 		]
 	},
-	"forced_calibration": {
+	"force_calibration": {
 		"valueSize": 1,
 		"defaultValue": 1,
 		"allowManualEntry": false,
