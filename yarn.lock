@@ -548,10 +548,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/json@npm:^0.19.4":
-  version: 0.19.4
-  resolution: "@dprint/json@npm:0.19.4"
-  checksum: 10/048ea00fa8bfe0871a0cfb8970ee996372b87fce8622ec35b2c2f2ab2631844d2e7eadd40185851e6a9956a6ccab486768db522c05651979ed1d0a198aebc05f
+"@dprint/json@npm:^0.20.0":
+  version: 0.20.0
+  resolution: "@dprint/json@npm:0.20.0"
+  checksum: 10/0add515edbde62bcfc35939502896ddc24f4c5905ec8d56f8edcb415ecac6b1ece60f592037a3b6188be6c1baa0100546cfcad88734218ef3fe352f880d22ae1
   languageName: node
   linkType: hard
 
@@ -2902,7 +2902,7 @@ __metadata:
   dependencies:
     "@alcalzone/esm2cjs": "npm:^1.4.1"
     "@dprint/formatter": "npm:^0.4.1"
-    "@dprint/json": "npm:^0.19.4"
+    "@dprint/json": "npm:^0.20.0"
     "@dprint/markdown": "npm:^0.18.0"
     "@dprint/typescript": "npm:^0.93.3"
     "@types/globrex": "npm:^0.1.4"
@@ -2966,7 +2966,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.5.0"
     "@commitlint/config-conventional": "npm:^19.6.0"
     "@dprint/formatter": "npm:^0.4.1"
-    "@dprint/json": "npm:^0.19.4"
+    "@dprint/json": "npm:^0.20.0"
     "@dprint/markdown": "npm:^0.18.0"
     "@dprint/typescript": "npm:^0.93.3"
     "@microsoft/api-extractor": "npm:^7.48.0"
