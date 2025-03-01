@@ -40,7 +40,7 @@
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.1",
     "@dprint/formatter": "^0.4.1",
-    "@dprint/json": "^0.19.4",
+    "@dprint/json": "^0.20.0",
     "@dprint/markdown": "^0.18.0",
     "@dprint/typescript": "^0.94.0",
     "@types/globrex": "^0.1.4",

@@ -39,7 +39,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@dprint/formatter": "^0.4.1",
-    "@dprint/json": "^0.19.4",
+    "@dprint/json": "^0.20.0",
     "@dprint/markdown": "^0.18.0",
     "@dprint/typescript": "^0.94.0",
     "@microsoft/api-extractor": "^7.48.0",
