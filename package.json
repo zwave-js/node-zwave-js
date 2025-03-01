@@ -41,7 +41,7 @@
     "@dprint/formatter": "^0.4.1",
     "@dprint/json": "^0.19.4",
     "@dprint/markdown": "^0.18.0",
-    "@dprint/typescript": "^0.93.3",
+    "@dprint/typescript": "^0.94.0",
     "@microsoft/api-extractor": "^7.48.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.10.4",
     "@tsconfig/node20": "^20.1.4",
