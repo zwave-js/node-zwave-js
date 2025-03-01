@@ -725,6 +725,9 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	private sequenceCounter: number | undefined;
 
 	private decryptedCCBytes: Uint8Array | undefined;
+	public get plaintext(): Uint8Array | undefined {
+		return this.decryptedCCBytes;
+	}
 	public encapsulated!: CommandClass;
 
 	private alternativeNetworkKey?: Uint8Array;

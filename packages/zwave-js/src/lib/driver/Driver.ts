@@ -125,6 +125,7 @@ import {
 	type MessageParsingContext,
 	MessageType,
 	type SuccessIndicator,
+	TransferProtocolCCRequest,
 	XModemMessageHeaders,
 	type ZWaveSerialBindingFactory,
 	ZWaveSerialFrameType,
@@ -139,41 +140,35 @@ import {
 	isZWaveSerialPortImplementation,
 	wrapLegacySerialBinding,
 } from "@zwave-js/serial";
-import { ApplicationUpdateRequest } from "@zwave-js/serial/serialapi";
 import {
-	SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "@zwave-js/serial/serialapi";
-import { GetControllerVersionRequest } from "@zwave-js/serial/serialapi";
-import { SoftResetRequest } from "@zwave-js/serial/serialapi";
-import {
-	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
-} from "@zwave-js/serial/serialapi";
-import {
+	ApplicationUpdateRequest,
+	type CommandRequest,
+	type ContainsCC,
+	GetControllerVersionRequest,
 	MAX_SEND_ATTEMPTS,
+	ProtocolCCEncryptionStatus,
+	RequestProtocolCCEncryptionCallback,
+	RequestProtocolCCEncryptionRequest,
+	RequestProtocolCCEncryptionResponse,
 	SendDataAbort,
+	SendDataBridgeRequest,
+	type SendDataMessage,
+	SendDataMulticastBridgeRequest,
 	SendDataMulticastRequest,
 	SendDataRequest,
-} from "@zwave-js/serial/serialapi";
-import {
-	type SendDataMessage,
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+	SoftResetRequest,
+	containsCC,
+	containsSerializedCC,
 	hasTXReport,
+	isCommandRequest,
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
 	isTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	SendTestFrameRequest,
-	SendTestFrameTransmitReport,
-} from "@zwave-js/serial/serialapi";
-import {
-	type CommandRequest,
-	type ContainsCC,
-	containsCC,
-	containsSerializedCC,
-	isCommandRequest,
 } from "@zwave-js/serial/serialapi";
 import {
 	AsyncQueue,
@@ -3850,121 +3845,8 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		// To prevent this problem, we just ignore CCs until the controller is ready
 		if (!this._controller && containsCC(msg)) return;
 
-		// If the message could be decoded, forward it to the send thread
-		if (msg) {
-			let wasMessageLogged = false;
-			if (isCommandRequest(msg) && containsCC(msg)) {
-				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
-				// we're not set up to handle things like this. Reply to the nonce get
-				// and handle the encapsulation part normally
-				if (
-					msg.command
-						instanceof SecurityCCCommandEncapsulationNonceGet
-				) {
-					void this.tryGetNode(msg)?.handleSecurityNonceGet();
-				}
-
-				// Transport Service commands must be handled before assembling partial CCs
-				if (isTransportServiceEncapsulation(msg.command)) {
-					// Log Transport Service commands before doing anything else
-					this.driverLog.logMessage(msg, {
-						secondaryTags: ["partial"],
-						direction: "inbound",
-					});
-					wasMessageLogged = true;
-
-					void this.handleTransportServiceCommand(msg.command).catch(
-						() => {
-							// Don't care about errors in incoming transport service commands
-						},
-					);
-				}
-
-				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
-				if (!(await this.assemblePartialCCs(msg))) {
-					// Check if a message timer needs to be refreshed.
-					for (const entry of this.awaitedMessages) {
-						if (entry.refreshPredicate?.(msg)) {
-							entry.timeout?.refresh();
-							// Since this is a partial message there may be no clear 1:1 match.
-							// Therefore we loop through all awaited messages
-						}
-					}
-					return;
-				}
-
-				// Make sure we are allowed to handle this command
-				if (
-					this.isSecurityLevelTooLow(msg.command)
-					|| this.shouldDiscardCC(msg.command)
-				) {
-					if (!wasMessageLogged) {
-						this.driverLog.logMessage(msg, {
-							direction: "inbound",
-							secondaryTags: ["discarded"],
-						});
-					}
-					return;
-				}
-
-				// When we have a complete CC, save its values
-				try {
-					this.persistCCValues(msg.command);
-				} catch (e) {
-					// Indicate invalid payloads with a special CC type
-					if (
-						isZWaveError(e)
-						&& e.code
-							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
-					) {
-						this.driverLog.print(
-							`dropping CC with invalid values${
-								typeof e.context === "string"
-									? ` (Reason: ${e.context})`
-									: ""
-							}`,
-							"warn",
-						);
-						// TODO: We may need to do the S2 MOS dance here - or we can deal with it when the next valid CC arrives
-						return;
-					} else {
-						throw e;
-					}
-				}
-
-				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
-				if (isTransportServiceEncapsulation(msg.command)) {
-					msg.command = msg.command.encapsulated;
-					// Now we do want to log the command again, so we can see what was inside
-					wasMessageLogged = false;
-				}
-			}
-
-			if (!wasMessageLogged) {
-				try {
-					this.driverLog.logMessage(msg, {
-						direction: "inbound",
-					});
-				} catch (e) {
-					// We shouldn't throw just because logging a message fails
-					this.driverLog.print(
-						`Logging a message failed: ${getErrorMessage(e)}`,
-					);
-				}
-			}
-
-			// // Check if this message is unsolicited by passing it to the Serial API command interpreter if possible
-			// if (
-			// 	this.serialAPIInterpreter?.status === InterpreterStatus.Running
-			// ) {
-			// 	this.serialAPIInterpreter.send({
-			// 		type: "message",
-			// 		message: msg,
-			// 	});
-			// } else {
-			void this.handleUnsolicitedMessage(msg);
-			// }
-		}
+		// If the message could be decoded, continue handing lit
+		if (msg) await this.handleIncomingMessage(msg);
 	}
 
 	/** Handles a decoding error and returns the desired reply to the stick */
@@ -4648,6 +4530,130 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		);
 	}
 
+	private async handleIncomingMessage(msg: Message): Promise<void> {
+		let wasMessageLogged = false;
+		if (isCommandRequest(msg) && containsCC(msg)) {
+			// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
+			// we're not set up to handle things like this. Reply to the nonce get
+			// and handle the encapsulation part normally
+			if (
+				msg.command
+					instanceof SecurityCCCommandEncapsulationNonceGet
+			) {
+				void this.tryGetNode(msg)?.handleSecurityNonceGet();
+			}
+
+			// Transport Service commands must be handled before assembling partial CCs
+			if (isTransportServiceEncapsulation(msg.command)) {
+				// Log Transport Service commands before doing anything else
+				this.driverLog.logMessage(msg, {
+					secondaryTags: ["partial"],
+					direction: "inbound",
+				});
+				wasMessageLogged = true;
+
+				void this.handleTransportServiceCommand(msg.command).catch(
+					() => {
+						// Don't care about errors in incoming transport service commands
+					},
+				);
+			}
+
+			// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
+			if (!(await this.assemblePartialCCs(msg))) {
+				// Check if a message timer needs to be refreshed.
+				for (const entry of this.awaitedMessages) {
+					if (entry.refreshPredicate?.(msg)) {
+						entry.timeout?.refresh();
+						// Since this is a partial message there may be no clear 1:1 match.
+						// Therefore we loop through all awaited messages
+					}
+				}
+				return;
+			}
+
+			// Make sure we are allowed to handle this command
+			if (
+				this.isSecurityLevelTooLow(msg.command)
+				|| this.shouldDiscardCC(msg.command)
+			) {
+				if (!wasMessageLogged) {
+					this.driverLog.logMessage(msg, {
+						direction: "inbound",
+						secondaryTags: ["discarded"],
+					});
+				}
+				return;
+			}
+
+			// When we have a complete CC, save its values
+			try {
+				this.persistCCValues(msg.command);
+			} catch (e) {
+				// Indicate invalid payloads with a special CC type
+				if (
+					isZWaveError(e)
+					&& e.code
+						=== ZWaveErrorCodes.PacketFormat_InvalidPayload
+				) {
+					this.driverLog.print(
+						`dropping CC with invalid values${
+							typeof e.context === "string"
+								? ` (Reason: ${e.context})`
+								: ""
+						}`,
+						"warn",
+					);
+					// TODO: We may need to do the S2 MOS dance here - or we can deal with it when the next valid CC arrives
+					return;
+				} else {
+					throw e;
+				}
+			}
+
+			// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
+			if (isTransportServiceEncapsulation(msg.command)) {
+				msg.command = msg.command.encapsulated;
+				// Now we do want to log the command again, so we can see what was inside
+				wasMessageLogged = false;
+			}
+		}
+
+		if (!wasMessageLogged) {
+			try {
+				this.driverLog.logMessage(msg, {
+					direction: "inbound",
+				});
+			} catch (e) {
+				// We shouldn't throw just because logging a message fails
+				this.driverLog.print(
+					`Logging a message failed: ${getErrorMessage(e)}`,
+				);
+			}
+		}
+
+		// When receiving a message from a dead node, bring it back to life
+		if (hasNodeId(msg) || containsCC(msg)) {
+			const node = this.tryGetNode(msg);
+			if (node) {
+				if (node.status === NodeStatus.Dead) {
+					node.markAsAlive();
+				}
+			}
+		}
+
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// We do
+				entry.handler(msg);
+				return;
+			}
+		}
+
+		void this.handleUnsolicitedMessage(msg);
+	}
+
 	private partialCCSessions = new Map<string, CommandClass[]>();
 	private getPartialCCSession(
 		command: CommandClass,
@@ -4926,8 +4932,6 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 	 * @param msg The decoded message
 	 */
 	private async handleUnsolicitedMessage(msg: Message): Promise<void> {
-		// FIXME: Rename this - msg might not be unsolicited
-		// This is a message we might have registered handlers for
 		try {
 			if (msg.type === MessageType.Request) {
 				await this.handleRequest(msg);
@@ -5004,6 +5008,84 @@ export class Driver extends TypedEventTarget<DriverEventCallbacks>
 		}
 
 		return false; // Not handled
+	}
+
+	/**
+	 * Is called when the Serial API requests encryption of a protocol-level CC.
+	 */
+	private async handleProtocolCCEncryptionRequest(
+		msg: RequestProtocolCCEncryptionRequest,
+	): Promise<void> {
+		const respond = async (status: ProtocolCCEncryptionStatus) => {
+			const resp = new RequestProtocolCCEncryptionResponse({
+				status,
+				callbackId: msg.callbackId,
+			});
+			await this.sendMessage(resp).catch(noop);
+		};
+
+		try {
+			this.ensureReady(true);
+		} catch {
+			// We are not ready to handle encryption for the Z-Wave module yet
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		const node = this.controller.nodes.get(msg.destinationNodeId);
+		if (!node) {
+			return respond(ProtocolCCEncryptionStatus.NodeNotFound);
+		}
+
+		// TODO: Check if node supports NLS
+
+		await respond(ProtocolCCEncryptionStatus.Started);
+
+		// Send the S2-encrypted frame to the node
+		const protocolCC = await CommandClass.parse(msg.plaintext, {
+			...this.getCCParsingContext(),
+			frameType: "singlecast",
+			sourceNodeId: this.ownNodeId,
+		});
+		const cc = new Security2CCMessageEncapsulation({
+			nodeId: msg.destinationNodeId,
+			encapsulated: protocolCC,
+		});
+		const sendData = this.createSendDataMessage(cc, {
+			// The Z-Wave protocol handles Supervision
+			autoEncapsulate: false,
+			useSupervision: false,
+			// Only try sending once
+			maxSendAttempts: 1,
+			// Use the transmit options the protocol wants
+			transmitOptions: msg.transmitOptions,
+		});
+		let sendResult: Message;
+		try {
+			sendResult = await this.sendMessage(sendData, {
+				// The protocol wants this now
+				priority: MessagePriority.Immediate,
+				// TODO: Figure out if we want protocol level messages to update what we think of the node's status
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch {
+			// SendData messages should not throw, so something must have gone terribly wrong
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		if (!isTransmitReport(sendResult)) {
+			// The message was not sent for some unknown reason
+			return respond(ProtocolCCEncryptionStatus.Unknown);
+		}
+
+		// The message was sent and received a callback. Pass it to the Z-Wave module to finish this transaction.
+		const resp = new RequestProtocolCCEncryptionCallback({
+			transmitStatus: sendResult.transmitStatus,
+			txReport: hasTXReport(sendResult)
+				? sendResult.txReport
+				: undefined,
+			callbackId: msg.callbackId,
+		});
+		await this.sendMessage(resp).catch(noop);
 	}
 
 	/**
@@ -5284,25 +5366,6 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		if (hasNodeId(msg) || containsCC(msg)) {
-			const node = this.tryGetNode(msg);
-			if (node) {
-				// We have received an unsolicited message from a dead node, bring it back to life
-				if (node.status === NodeStatus.Dead) {
-					node.markAsAlive();
-				}
-			}
-		}
-
-		// Check if we have a dynamic handler waiting for this message
-		for (const entry of this.awaitedMessages) {
-			if (entry.predicate(msg)) {
-				// We do
-				entry.handler(msg);
-				return;
-			}
-		}
-
 		if (isCommandRequest(msg) && containsCC(msg)) {
 			const nodeId = msg.getNodeId()!;
 
@@ -5435,6 +5498,48 @@ ${handlers.length} left`,
 					}
 				}
 
+				// If we received an encrypted protocol-level command that does not
+				// belong to communication we initiated, pass it back to the Z-Wave
+				// module
+				if (
+					msg.command.ccId === CommandClasses["Z-Wave Protocol"]
+					|| msg.command.ccId === CommandClasses["Z-Wave Long Range"]
+				) {
+					let plaintext: Uint8Array | undefined;
+					let securityClass: SecurityClass | undefined;
+					// When we receive those, we should receive them S0- or S2-
+					// encapsulated, which means we can reuse the plaintext buffer.
+					if (
+						msg.command.encapsulatingCC
+							instanceof SecurityCCCommandEncapsulation
+					) {
+						securityClass = SecurityClass.S0_Legacy;
+						plaintext = msg.command.encapsulatingCC.plaintext;
+					} else if (
+						msg.command.encapsulatingCC
+							instanceof Security2CCMessageEncapsulation
+					) {
+						securityClass =
+							msg.command.encapsulatingCC.securityClass;
+						plaintext = msg.command.encapsulatingCC.plaintext;
+					}
+
+					// If that didn't work, because the command was not encapsulated,
+					// serialize the command to get the plaintext again.
+					// This is not ideal, but the best we can do here
+					plaintext ??= await msg.command.serialize(
+						this.getEncodingContext(),
+					);
+					securityClass ??= SecurityClass.None;
+
+					await this.transferProtocolCC(
+						msg.getNodeId()!,
+						securityClass,
+						plaintext,
+					);
+					return;
+				}
+
 				// No one is waiting, dispatch the command to the node itself
 				try {
 					await node.handleCommand(msg.command);
@@ -5472,6 +5577,9 @@ ${handlers.length} left`,
 			if (await this.handleSerialAPIStartedUnexpectedly(msg)) {
 				return;
 			}
+		} else if (msg instanceof RequestProtocolCCEncryptionRequest) {
+			// The Z-Wave module wants us to send an encrypted protocol-level command
+			return this.handleProtocolCCEncryptionRequest(msg);
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -6742,6 +6850,31 @@ ${handlers.length} left`,
 			maxSendAttempts: options.maxSendAttempts || 1,
 			transmitOptions: TransmitOptions.AutoRoute | TransmitOptions.ACK,
 		});
+	}
+
+	private async transferProtocolCC(
+		sourceNodeId: number,
+		securityClass: SecurityClass,
+		plaintext: Uint8Array,
+	): Promise<void> {
+		// Supervision commands are handled here
+		this.controllerLog.logNode(sourceNodeId, {
+			message: `Forwarding protocol CC to Z-Wave module`,
+			direction: "outbound",
+		});
+
+		const msg = new TransferProtocolCCRequest({
+			sourceNodeId,
+			securityClass,
+			plaintext: plaintext,
+		});
+		try {
+			await this.sendMessage(msg);
+		} catch (e) {
+			this.driverLog.print(
+				`Failed to forward protocol CC: ${getErrorMessage(e, true)}`,
+			);
+		}
 	}
 
 	private async abortSendData(): Promise<void> {
