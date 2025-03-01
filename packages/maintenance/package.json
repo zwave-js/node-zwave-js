@@ -57,7 +57,7 @@
     "execa": "^9.5.2",
     "globrex": "^0.1.2",
     "json5": "^2.2.3",
-    "piscina": "^4.7.0",
+    "piscina": "^4.8.0",
     "reflect-metadata": "^0.2.2",
     "ts-morph": "^25.0.1",
     "tsx": "^4.19.2",
