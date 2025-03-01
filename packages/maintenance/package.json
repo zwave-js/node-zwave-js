@@ -41,7 +41,7 @@
     "@alcalzone/esm2cjs": "^1.4.1",
     "@dprint/formatter": "^0.4.1",
     "@dprint/json": "^0.19.4",
-    "@dprint/markdown": "^0.17.8",
+    "@dprint/markdown": "^0.18.0",
     "@dprint/typescript": "^0.93.3",
     "@types/globrex": "^0.1.4",
     "@types/node": "^20.17.16",
