@@ -3,8 +3,7 @@
  */
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
-import { fs } from "@zwave-js/core/bindings/fs/node";
-import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
+import { num2hex } from "@zwave-js/shared";
 import c from "ansi-colors";
 import esMain from "es-main";
 import fsp from "node:fs/promises";
@@ -30,12 +29,12 @@ import {
 	type TypeLiteralNode,
 	type ts,
 } from "ts-morph";
-import { formatWithDprint } from "./dprint.js";
+import { formatWithDprint } from "../dprint.js";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
 	tsConfigFilePathForDocs as tsConfigFilePath,
-} from "./tsAPITools.js";
+} from "../tsAPITools.js";
 
 // Support directly loading this file in a worker
 import { register } from "tsx/esm/api";
@@ -277,64 +276,6 @@ Context: ${context}`,
 
 const docsDir = path.join(projectRoot, "docs");
 const ccDocsDir = path.join(docsDir, "api/CCs");
-const examplesDocsDir = path.join(docsDir, "examples");
-
-export async function processDocFile(
-	program: Project,
-	docFile: string,
-): Promise<boolean> {
-	console.log(`processing ${docFile}...`);
-	let fileContent = await fsp.readFile(docFile, "utf8");
-	const ranges = findImportRanges(fileContent);
-	let hasErrors = false;
-	// Replace from back to start so we can reuse the indizes
-	for (let i = ranges.length - 1; i >= 0; i--) {
-		const range = ranges[i];
-		console.log(`  processing import ${range.symbol} from ${range.module}`);
-		const sourceNode = findSourceNode(
-			program,
-			`packages/${range.module.replace(/^@zwave-js\//, "")}/src/index.ts`,
-			range.symbol,
-		);
-		if (!sourceNode) {
-			console.error(
-				c.red(
-					`${docFile}: Cannot find symbol ${range.symbol} in module ${range.module}!`,
-				),
-			);
-			hasErrors = true;
-		} else {
-			const source = getTransformedSource(sourceNode, range.options);
-			fileContent = `${fileContent.slice(0, range.index)}${range.import}
-
-\`\`\`ts
-${source}
-\`\`\`${fileContent.slice(range.end)}`;
-		}
-	}
-	console.log(`formatting ${docFile}...`);
-	fileContent = fileContent.replaceAll("\r\n", "\n");
-	fileContent = formatWithDprint(docFile, fileContent);
-	if (!hasErrors) {
-		await fsp.writeFile(docFile, fileContent, "utf8");
-	}
-	return hasErrors;
-}
-
-/** Processes all imports, returns true if there was an error */
-async function processImports(piscina: Piscina): Promise<boolean> {
-	const files = await enumFilesRecursive(
-		fs,
-		path.join(projectRoot, "docs"),
-		(f) =>
-			!f.includes("/CCs/") && !f.includes("\\CCs\\") && f.endsWith(".md"),
-	);
-
-	const tasks = files.map((f) => piscina.run(f, { name: "processImport" }));
-
-	const hasErrors = (await Promise.all(tasks)).some((result) => result);
-	return hasErrors;
-}
 
 function fixPrinterErrors(text: string): string {
 	return (
@@ -742,123 +683,15 @@ async function generateCCDocs(
 	return false;
 }
 
-/** Generates the usage examples, returns true if there was an error */
-async function generateExamples(): Promise<boolean> {
-	// Delete old cruft
-
-	// Load the index file before it gets overwritten
-	const indexFilename = path.join(examplesDocsDir, "index.md");
-	let indexFileContent = await fsp.readFile(indexFilename, "utf8");
-	const indexAutoGenToken = "<!-- AUTO-GENERATE: Examples -->";
-	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
-	if (indexAutoGenStart === -1) {
-		console.error(
-			c.red(`Marker for auto-generation in examples/index.md missing!`),
-		);
-		return false;
-	}
-
-	// Find examples
-	const examples = (await fsp.readdir(examplesDocsDir))
-		.filter((f) => f.endsWith(".md") && f !== "index.md");
-
-	const processedExamples: {
-		position: number;
-		index: string;
-		sidebar: string;
-	}[] = [];
-
-	let generatedIndex = "";
-	let generatedSidebar = "";
-
-	for (const file of examples) {
-		const exampleContent = await fsp.readFile(
-			path.join(examplesDocsDir, file),
-			"utf8",
-		);
-		const titleMatch = exampleContent.match(
-			/^#\s+(.*?)(\s*\{docsify-ignore-all\})?$/m,
-		);
-		if (!titleMatch) continue;
-		const positionMatch = exampleContent.match(
-			/<!--\s+POSITION:\s+(\d+)\s+-->/,
-		);
-		const title = titleMatch[1];
-		const position = positionMatch
-			? parseInt(positionMatch[1], 10)
-			: Number.POSITIVE_INFINITY;
-
-		const filename = file.replace(/\.md$/, "");
-		processedExamples.push({
-			position,
-			index: `\n\n**[${title}](examples/${filename})**`,
-			sidebar: `\t- [${title}](examples/${filename})\n`,
-		});
-	}
-
-	processedExamples.sort((a, b) => a.position - b.position);
-
-	for (const example of processedExamples) {
-		generatedIndex += example.index;
-		generatedSidebar += example.sidebar;
-	}
-
-	// Write the generated index file and sidebar
-	indexFileContent = indexFileContent.slice(
-		0,
-		indexAutoGenStart + indexAutoGenToken.length,
-	) + generatedIndex;
-	indexFileContent = formatWithDprint("index.md", indexFileContent);
-	await fsp.writeFile(indexFilename, indexFileContent, "utf8");
-
-	const sidebarInputFilename = path.join(docsDir, "_sidebar.md");
-	let sidebarFileContent = await fsp.readFile(sidebarInputFilename, "utf8");
-	const sidebarAutoGenToken = "<!-- AUTO-GENERATE: Examples -->";
-	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
-	if (sidebarAutoGenStart === -1) {
-		console.error(
-			c.red(`Marker for example auto-generation in _sidebar.md missing!`),
-		);
-		return false;
-	}
-	sidebarFileContent = sidebarFileContent.slice(0, sidebarAutoGenStart)
-		+ generatedSidebar
-		+ sidebarFileContent.slice(
-			sidebarAutoGenStart + sidebarAutoGenToken.length,
-		);
-	sidebarFileContent = formatWithDprint("_sidebar.md", sidebarFileContent);
-	await fsp.writeFile(
-		path.join(examplesDocsDir, "_sidebar.md"),
-		sidebarFileContent,
-		"utf8",
-	);
-
-	return false;
-}
-
 async function main(): Promise<void> {
 	const piscina = new Piscina({
-		filename: path.join(__dirname, "generateTypedDocs.ts"),
+		filename: path.join(__dirname, "generateCCAPIs.ts"),
 		maxThreads: 4,
 	});
+	const program = new Project({ tsConfigFilePath });
 
-	let hasErrors = false;
-	if (!process.argv.includes("--no-imports")) {
-		// Replace all imports
-		hasErrors ||= await processImports(piscina);
-	}
-	if (!process.argv.includes("--no-cc")) {
-		// Regenerate all CC documentation files
-		if (!hasErrors) {
-			const program = new Project({ tsConfigFilePath });
-			hasErrors ||= await generateCCDocs(program, piscina);
-		}
-	}
-
-	if (!process.argv.includes("--no-examples")) {
-		// Regenerate the examples sidebar
-		hasErrors ||= await generateExamples();
-	}
+	// Regenerate all CC documentation files
+	const hasErrors = await generateCCDocs(program, piscina);
 
 	if (hasErrors) {
 		process.exit(1);
@@ -872,10 +705,6 @@ function getProgram(): Project {
 		_program = new Project({ tsConfigFilePath });
 	}
 	return _program;
-}
-
-export function processImport(filename: string): Promise<boolean> {
-	return processDocFile(getProgram(), filename);
 }
 
 export async function processCC(
