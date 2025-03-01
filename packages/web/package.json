@@ -35,7 +35,7 @@
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "esbuild": "^0.25.0",
-    "esbuild-plugins-node-modules-polyfill": "^1.6.8",
+    "esbuild-plugins-node-modules-polyfill": "^1.7.0",
     "zwave-js": "workspace:*"
   }
 }
