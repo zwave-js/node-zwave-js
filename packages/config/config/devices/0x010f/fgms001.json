@@ -67,18 +67,30 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Motion Sensor Status",
-			"maxNodes": 16
-		},
-		"2": {
-			"label": "Tamper Alarm",
-			"maxNodes": 16,
-			"isLifeline": true
-		},
-		"3": {
-			"label": "Controller Updates",
+			"label": "Lifeline",
+			"description": "Reports the device status and allows for assigning single device only (main controller by default).",
 			"maxNodes": 1,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"description": "Sends motion detection and alarm cancellation frames to the associated devices.",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Tamper",
+			"description": "Sends tamper alarm and alarm cancellation frames to the associated devices.",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Motion BC",
+			"description": "Sends motion detection and alarm cancellation frames to the associated devices. Provides backward compatibility with controllers not supporting Z-Wave+ protocol.",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Tamper BC",
+			"description": "Sends tamper alarm and alarm cancellation frames to the associated devices. Provides backward compatibility with controllers not supporting Z-Wave+ protocol.",
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
