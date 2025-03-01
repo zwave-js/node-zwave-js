@@ -199,6 +199,16 @@
 			"#": "30",
 			"$if": "firmwareVersion >= 2.0 && firmwareVersion < 10.0 || firmwareVersion >= 10.20",
 			"$import": "templates/zooz_template.json#local_dimming_speed_group_3_and_4"
+		},
+		{
+			"#": "33",
+			"$if": "firmwareVersion >= 3.40 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#on_off_switch_mode"
+		},
+		{
+			"#": "34",
+			"$if": "firmwareVersion >= 3.50 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#basic_set_custom_brightness_on"
 		}
 	],
 	"compat": {
