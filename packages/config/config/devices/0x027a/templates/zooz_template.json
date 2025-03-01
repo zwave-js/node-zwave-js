@@ -640,6 +640,21 @@
 			}
 		]
 	},
+	"basic_set_custom_brightness_on": {
+		"label": "Basic Set Custom Brightness On",
+		"description": "Set the custom brightness level (or leave the last brightness level) for for Basic Set ON commands when the ZEN72 is triggered by another device in direct association.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Last brightness level",
+				"value": 0
+			}
+		]
+	},
 	"local_dimming_speed": {
 		"label": "Local Dimming Speed",
 		"description": "The time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
@@ -1130,5 +1145,10 @@
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion. \nSCAN THE QR CODE / ENTER THE 5-DIGIT PIN if using the new SmartStart method. The SmartStart security PIN is located on the back of the relay, next to the Z-Wave Plus logo.\n3. The LED indicator will blink green to signal communication and turn green for 2 seconds if inclusion is successful or turn red for 2 seconds if the pairing attempt fails",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the relay if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Click the Z-Wave button on the relay 3 times quickly (the LED indicator will start blinking green)\n4. Your hub will confirm exclusion, the LED indicator on the relay will turn green for 2 seconds, and the device will disappear from your controller's device list",
 		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the relay, click the Z-Wave button twice and hold it for 15 seconds. The LED indicator will flash during the process and turn red for 3 seconds to confirm successful reset."
+	},
+	"on_off_switch_mode": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "On Off Switch Mode",
+		"description": "Convert the dimmer to an on off switch. When enabled, the dimmer will behave as a switch without the ability to dim. All ramp rates will be set to instant ON/OFF and the brightness level will be locked at 99%."
 	}
 }
