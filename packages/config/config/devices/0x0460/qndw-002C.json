@@ -1,0 +1,60 @@
+{
+	"manufacturer": "Shelly Europe Ltd.",
+	"manufacturerId": "0x0460",
+	"label": "QNDW-002C",
+	"description": "Shelly Wave Door/Window",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0081"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "155",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Illumination Mesurement"
+		},
+		{
+			"#": "156",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Tilting Measurement"
+		},
+		{
+			"#": "157",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Detection Indication"
+		},
+		{
+			"#": "117",
+			"$import": "templates/wave_template.json#remote_reboot",
+			"label": "Remote Reboot"
+		},
+		{
+			"#": "120",
+			"$import": "templates/wave_template.json#factory_reset"
+		},
+		{
+			"#": "201",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
+		},
+		{
+			"#": "202",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
+		},
+		{
+			"#": "203",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}

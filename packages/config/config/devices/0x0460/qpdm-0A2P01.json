@@ -1,0 +1,225 @@
+{
+	"manufacturer": "Shelly Europe Ltd.",
+	"manufacturerId": "0x0460",
+	"label": "QPDM-0A2P01",
+	"description": "Shelly Wave PRO Dimmer 2PM",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW1 Switch Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "3",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW3 Switch Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "4",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW4 Switch Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "131",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Dual Button Mode SW1 & SW2",
+			"description": "Valid only for Momentary switch type"
+		},
+		{
+			"#": "132",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Dual Button Mode SW3 & SW4",
+			"description": "Valid only for Momentary switch type"
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Detach O1 Output"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Detach O2 Output"
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Detach O3 Output"
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Detach O4 Otput"
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O1: State After Power Failure"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O2: State After Power Failure"
+		},
+		{
+			"#": "19",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O1: Auto-Off Timer"
+		},
+		{
+			"#": "20",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O1: Auto-On Timer"
+		},
+		{
+			"#": "25",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O1: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "21",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O2: Auto-Off Timer"
+		},
+		{
+			"#": "22",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O2: Auto-On Timer"
+		},
+		{
+			"#": "26",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O2: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "36",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O1: Power Change Report Threshold"
+		},
+		{
+			"#": "37",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O2: Power Change Report Threshold"
+		},
+		{
+			"#": "39",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O1: Minimum Time Between Power Reports"
+		},
+		{
+			"#": "40",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O2: Minimum Time Between Power Reports"
+		},
+		{
+			"#": "78",
+			"$import": "templates/wave_template.json#force_calibration",
+			"label": "Force Calibration O1"
+		},
+		{
+			"#": "89",
+			"$import": "templates/wave_template.json#force_calibration",
+			"label": "Force Calibration O2"
+		},
+		{
+			"#": "121",
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99",
+			"label": "Max Dimming O1"
+		},
+		{
+			"#": "122",
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99",
+			"label": "Max Dimming O2"
+		},
+		{
+			"#": "123",
+			"$import": "templates/wave_template.json#min_dimming_value",
+			"label": "Min Dimming O1"
+		},
+		{
+			"#": "124",
+			"$import": "templates/wave_template.json#min_dimming_value",
+			"label": "Min Dimming O2"
+		},
+		{
+			"#": "125",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
+			"label": "Dimming Time O1",
+			"defaultValue": 3
+		},
+		{
+			"#": "126",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
+			"label": "Dimming Time O2",
+			"defaultValue": 3
+		},
+		{
+			"#": "127",
+			"$import": "templates/wave_template.json#fade_rate",
+			"label": "Fade Rate O1"
+		},
+		{
+			"#": "128",
+			"$import": "templates/wave_template.json#fade_rate",
+			"label": "Fade Rate O2"
+		},
+		{
+			"#": "129",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
+			"label": "Min Brightness Toggle O1",
+			"defaultValue": 15
+		},
+		{
+			"#": "130",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
+			"label": "Min Brightness Toggle O2",
+			"defaultValue": 15
+		},
+		{
+			"#": "117",
+			"$import": "templates/wave_template.json#remote_reboot",
+			"label": "Remote Reboot"
+		},
+		{
+			"#": "120",
+			"$import": "templates/wave_template.json#factory_reset"
+		},
+		{
+			"#": "201",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
+		},
+		{
+			"#": "202",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
+		},
+		{
+			"#": "203",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}

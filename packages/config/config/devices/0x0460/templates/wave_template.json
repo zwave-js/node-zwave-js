@@ -164,7 +164,7 @@
 			},
 			{
 				"label": "Factory reset",
-				"value": 1431655765
+				"value": 1
 			}
 		]
 	},
@@ -173,6 +173,66 @@
 		"minValue": 0,
 		"maxValue": 2147483647,
 		"readOnly": true
+	},
+	"min_dimming_value": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 98,
+		"defaultValue": 15
+	},
+	"fade_rate": {
+		"valueSize": 1,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Non Dimmable Load",
+				"value": 0
+			},
+			{
+				"label": "5% / sec",
+				"value": 1
+			},
+			{
+				"label": "7% / sec",
+				"value": 2
+			},
+			{
+				"label": "10% / sec",
+				"value": 3
+			},
+			{
+				"label": "15% / sec",
+				"value": 4
+			},
+			{
+				"label": "20% / sec",
+				"value": 5
+			}
+		]
+	},
+	"force_calibration": {
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Start Calibration",
+				"value": 1
+			},
+			{
+				"label": "Device Calibrated (read only)",
+				"value": 2
+			},
+			{
+				"label": "Device not Calibrated (read only)",
+				"value": 3
+			},
+			{
+				"label": "Calibration error (read only)",
+				"value": 4
+			}
+		]
 	},
 	"default_metadata": {
 		"inclusion": "6.1 Adding the Device to a Z-Wave™ network (inclusion)\nNote! All Device outputs (O, O1, O2, etc. - depending on the Device type) will turn the load 1s on/1s off /1s on/1s off if the Device is successfully added to/removed from a Z-Wave™ network.\n\n6.1.1 SmartStart adding (inclusion)\nSmartStart enabled products can be added into a Z-Wave™ network by scanning the Z-Wave™ QR Code present on the Device with a gateway providing SmartStart inclusion. No further action is required, and the SmartStart device will be added automatically within 10 minutes of being switched on in the network vicinity.\n1. With the gateway application scan the QR code on the Device label and add the Security 2 (S2) Device Specific Key (DSK) to the provisioning list in the gateway.\n2. Connect the Device to a power supply.\n3. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n4. Adding will be initiated automatically within a few seconds after connecting the Device to a power supply, and the Device will be added to a Z-Wave™ network automatically.\n5. The blue LED will be blinking in Mode 2 during the adding process.\n6. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\n\n6.1.2 Adding (inclusion) with a switch/push-button\n1. Connect the Device to a power supply.\n2. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. Toggle the switch/push-button connected to any of the SW terminals (SW, SW1, SW2, etc.) 3 times within 3 seconds (this procedure puts the Device in Learn mode*). The Device must receive on/off signal 3 times, which means pressing the momentary switch 3 times, or toggling the switch on and off 3 times.\n5. The blue LED will be blinking in Mode 2 during the adding process.\n6. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\n*Learn mode - a state that allows the Device to receive network information from the gateway.\n\n6.1.3 Adding (inclusion) with the S button\n1. Connect the Device to a power supply.\n2. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. To enter the Setting mode, quickly press and hold the S button on the Device until the LED turns solid blue.\n5. Quickly release and then press and hold (> 2s) the S button on the Device until the blue LED starts blinking in Mode 3. Releasing the S button will start the Learn mode.\n6. The blue LED will be blinking in Mode 2 during the adding process.\n7. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\nNote! In Setting mode, the Device has a timeout of 10s before entering again into Normal mode",
