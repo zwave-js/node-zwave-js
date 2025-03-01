@@ -82,7 +82,7 @@
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.3",
     "source-map-support": "^0.5.21",
-    "ts-morph": "^25.0.0",
+    "ts-morph": "^25.0.1",
     "ts-patch": "3.3.0",
     "tsx": "^4.19.2",
     "turbo": "2.4.0",

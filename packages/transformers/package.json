@@ -48,7 +48,7 @@
     "cpy-cli": "^5.0.0",
     "del-cli": "^6.0.0",
     "execa": "^9.5.2",
-    "ts-morph": "^25.0.0",
+    "ts-morph": "^25.0.1",
     "tsutils": "^3.21.0",
     "typescript": "5.7.3",
     "vitest": "^2.1.9"

@@ -2921,7 +2921,7 @@ __metadata:
     json5: "npm:^2.2.3"
     piscina: "npm:^4.7.0"
     reflect-metadata: "npm:^0.2.2"
-    ts-morph: "npm:^25.0.0"
+    ts-morph: "npm:^25.0.1"
     tsx: "npm:^4.19.2"
     typescript: "npm:5.7.3"
     yargs: "npm:^17.7.2"
@@ -3009,7 +3009,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.6.3"
     source-map-support: "npm:^0.5.21"
-    ts-morph: "npm:^25.0.0"
+    ts-morph: "npm:^25.0.1"
     ts-patch: "npm:3.3.0"
     tsx: "npm:^4.19.2"
     turbo: "npm:2.4.0"
@@ -3096,7 +3096,7 @@ __metadata:
     cpy-cli: "npm:^5.0.0"
     del-cli: "npm:^6.0.0"
     execa: "npm:^9.5.2"
-    ts-morph: "npm:^25.0.0"
+    ts-morph: "npm:^25.0.1"
     tsutils: "npm:^3.21.0"
     typescript: "npm:5.7.3"
     vitest: "npm:^2.1.9"
@@ -9429,13 +9429,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^25.0.0":
-  version: 25.0.0
-  resolution: "ts-morph@npm:25.0.0"
+"ts-morph@npm:^25.0.1":
+  version: 25.0.1
+  resolution: "ts-morph@npm:25.0.1"
   dependencies:
     "@ts-morph/common": "npm:~0.26.0"
     code-block-writer: "npm:^13.0.3"
-  checksum: 10/289302f287a17fe2b33acf1bf8f0454f8ce44578ae462449c1bb5c047a89cfdbc803c767531eb6140396fb7694870f22d6287ab2206470de4f7d0ec20dfa2d1e
+  checksum: 10/caeec1532dfb2d9338a797a7c7f0c52517c65f757538f0931db9f9a95b0e4be173ca62c28efa59f4e018db4458d07af403baf6cccd2c467eadc69144a01c0d19
   languageName: node
   linkType: hard
 
