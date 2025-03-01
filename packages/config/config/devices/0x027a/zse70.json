@@ -1,0 +1,155 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE70",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/zooz_template.json#motion_sensitivity_1_8",
+			"defaultValue": 6
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#motion_clear_delay"
+		},
+		{
+			"#": "3",
+			"label": "Motion Detection: Basic Set Reporting",
+			"valueSize": 1,
+			"defaultValue": 7,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Basic Set reports",
+					"value": 0
+				},
+				{
+					"label": "Basic Set 0xFF for motion / Basic Set 0x00 for no motion",
+					"value": 1
+				},
+				{
+					"label": "Basic Set 0x00 for motion / Basic Set 0xFF for no motion",
+					"value": 2
+				},
+				{
+					"label": "Basic Set 0xFF for motion / No reports for no motion",
+					"value": 3
+				},
+				{
+					"label": "Basic Set 0x00 for motion / No reports for no motion",
+					"value": 4
+				},
+				{
+					"label": "No reports for motion / Basic Set 0x00 for no motion",
+					"value": 5
+				},
+				{
+					"label": "No reports for motion / Basic Set 0xFF for no motion",
+					"value": 6
+				},
+				{
+					"label": "Custom report for motion / Custom report for no motion (Set in parameter 4)",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Custom Basic Set Reports",
+			"description": "High byte is the value sent when motion is detected, low byte is the value sent when motion is cleared. e.g：0x0A00 means: When motion is detected, Send Basic Set(0A) When motion is cleared, send Basic Set(00)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 65280,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Temperature Report Unit",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"label": "LED for Motion",
+			"description": "Decide whether you want the LED indicator to light up when motion is detected or not."
+		},
+		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#low_battery_alarm_threshold",
+			"label": "Low Battery Alert",
+			"defaultValue": 10
+		},
+		{
+			"#": "8",
+			"$import": "templates/zooz_template.json#battery_check_frequency"
+		},
+		{
+			"#": "9",
+			"$import": "templates/zooz_template.json#temperature_check_frequency"
+		},
+		{
+			"#": "10",
+			"$import": "templates/zooz_template.json#lux_check_frequency"
+		},
+		{
+			"#": "11",
+			"$import": "templates/zooz_template.json#battery_report_threshold",
+			"minValue": 0,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"$import": "templates/zooz_template.json#temperature_report_threshold"
+		},
+		{
+			"#": "13",
+			"$import": "templates/zooz_template.json#lux_report_threshold"
+		},
+		{
+			"#": "14",
+			"$import": "templates/zooz_template.json#temperature_offset"
+		},
+		{
+			"#": "15",
+			"$import": "templates/zooz_template.json#lux_offset"
+		},
+		{
+			"#": "16",
+			"$import": "templates/zooz_template.json#lux_level_trigger"
+		},
+		{
+			"#": "17",
+			"$import": "templates/zooz_template.json#temperature_report_frequency"
+		},
+		{
+			"#": "18",
+			"$import": "templates/zooz_template.json#lux_report_frequency"
+		}
+	],
+	"metadata": {
+		"wakeup": "Press the Z-Wave button to wake the device up. The LED will start flashing.",
+		"inclusion": "1. Bring the sensor within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into inclusion mode.\n3. Press and release the Z-Wave button 3 times quickly. The LED indicator will start blinking fast and turn solid for a second to confirm inclusion.",
+		"exclusion": "1. Bring the sensor within direct range of your Z-Wave gateway controller (hub).\n2. Put the Z-Wave hub into exclusion mode.\n3. Press and release the Z-Wave button on the sensor 3 times as quickly as possible.\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list.",
+		"reset": "To complete the reset process manually, press and HOLD the Z-Wave button on the sensor for at least 10 seconds. The LED indicator will start flashing blue and turn solid blue for a couple of seconds to indicate successful reset.",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-zse70-800lr-manual.pdf"
+	}
+}
