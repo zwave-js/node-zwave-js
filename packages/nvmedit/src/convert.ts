@@ -1899,6 +1899,12 @@ export function json500To700(
 		while (start < raw.length && raw[start] === 0) {
 			start++;
 		}
+		// Some 500 series controllers pad the zeroes with unwritten 0xff bytes
+		if (start > 0) {
+			while (start < raw.length && raw[start] === 0xff) {
+				start++;
+			}
+		}
 		let end = raw.length - 1;
 		while (end > start && raw[end] === 0) {
 			end--;

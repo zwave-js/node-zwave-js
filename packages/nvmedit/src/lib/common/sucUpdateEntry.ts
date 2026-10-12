@@ -3,6 +3,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeCCList,
+	isExtendedCCId,
 	parseCCList,
 } from "@zwave-js/core";
 import { Bytes, type BytesView } from "@zwave-js/shared";
@@ -29,14 +30,20 @@ export function parseSUCUpdateEntry(
 	}
 	const nodeId = slice[0];
 	const changeType = slice[1];
+	const ccList = slice.subarray(2, SUC_UPDATE_ENTRY_SIZE);
+	// The CC list ends at the first 0x00 CC. The firmware leaves stale bytes after it.
+	let ccListLength = 0;
+	while (ccListLength < ccList.length && ccList[ccListLength] !== 0x00) {
+		ccListLength += isExtendedCCId(ccList[ccListLength]) ? 2 : 1;
+	}
 	const { supportedCCs, controlledCCs } = parseCCList(
-		slice.subarray(2, SUC_UPDATE_ENTRY_SIZE),
+		ccList.subarray(0, ccListLength),
 	);
 	return {
 		nodeId,
 		changeType,
-		supportedCCs: supportedCCs.filter((cc) => cc > 0),
-		controlledCCs: controlledCCs.filter((cc) => cc > 0),
+		supportedCCs,
+		controlledCCs,
 	};
 }
 
