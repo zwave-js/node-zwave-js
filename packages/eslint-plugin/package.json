@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.2",
-    "@typescript-eslint/utils": "^8.65.0",
+    "@typescript-eslint/utils": "^8.71.1",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "@zwave-js/core": "workspace:*",
     "eslint-plugin-jsonc": "^3.4.2",
