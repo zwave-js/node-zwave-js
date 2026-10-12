@@ -37,7 +37,7 @@ jobs:
       # regenerates all locks, which then land in the same PR. This pin is
       # the reference: gh-aw-renovate-recompile.yml reads it from the PR, and
       # Renovate bumps it together with the one in bot-workflows-update.yml.
-      run: gh extension install github/gh-aw --pin v0.83.2
+      run: gh extension install github/gh-aw --pin v0.89.21
 
     - name: Recompile workflows
       env:
