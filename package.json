@@ -48,7 +48,7 @@
     "@tsconfig/node20": "^20.1.10",
     "@types/js-yaml": "^4",
     "@types/node": "^20.19.35",
-    "@types/semver": "^7.7.1",
+    "@types/semver": "^7.8.0",
     "@types/source-map-support": "^0.5.10",
     "@types/tmp": "^0.2.6",
     "@types/xml2js": "^0.4.14",
