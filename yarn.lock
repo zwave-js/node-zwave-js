@@ -3407,7 +3407,7 @@ __metadata:
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    jsonc-parser: "npm:^3.2.0"
+    jsonc-parser: "npm:^3.3.1"
     nano-spawn: "npm:^2.1.0"
     p-queue: "npm:^9.1.0"
     vscode-json-languageservice: "npm:^5.1.3"
@@ -6609,7 +6609,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-parser@npm:^3.2.0, jsonc-parser@npm:^3.3.1":
+"jsonc-parser@npm:^3.3.1":
   version: 3.3.1
   resolution: "jsonc-parser@npm:3.3.1"
   checksum: 10/9b0dc391f20b47378f843ef1e877e73ec652a5bdc3c5fa1f36af0f119a55091d147a86c1ee86a232296f55c929bba174538c2bf0312610e0817a22de131cc3f4
