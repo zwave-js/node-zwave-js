@@ -68,7 +68,7 @@
     "@alcalzone/esm2cjs": "^1.4.2",
     "@microsoft/api-extractor": "^7.58.7",
     "@types/node": "^20.19.35",
-    "@types/semver": "^7.7.1",
+    "@types/semver": "^7.8.0",
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "del-cli": "^7.0.0",
