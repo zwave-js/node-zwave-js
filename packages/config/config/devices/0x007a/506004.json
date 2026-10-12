@@ -35,8 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "0",
-			"label": "Red Cables",
-			"description": "set switch behavior for red cable pair",
+			"label": "Switch Behavior (Red Cables)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -69,8 +68,7 @@
 		},
 		{
 			"#": "1",
-			"label": "Green Cables",
-			"description": "set switch behavior for green cable pair",
+			"label": "Switch Behavior (Green Cables)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -103,8 +101,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Brown Cables",
-			"description": "set switch behavior for brown cable pair",
+			"label": "Switch Behavior (Brown Cables)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -137,8 +134,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Blue Cables",
-			"description": "set switch behavior for blue cable pair",
+			"label": "Switch Behavior (Blue Cables)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
