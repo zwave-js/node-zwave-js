@@ -2793,10 +2793,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/w3c-web-usb@npm:^1.0.10":
-  version: 1.0.10
-  resolution: "@types/w3c-web-usb@npm:1.0.10"
-  checksum: 10/6ac6786a0788f0846a48b103ab06ca5fde5eb95674217b522420a2f6157bee3e181a961c1b7011940f497c55f4f5cc46129657d881fdd8112b48764089679ad6
+"@types/w3c-web-usb@npm:^1.0.14":
+  version: 1.0.14
+  resolution: "@types/w3c-web-usb@npm:1.0.14"
+  checksum: 10/53f04db6969fd859a3f7cf62b699060e97f39f6da30fe292c9c5e74ed3f3a8acf50c7574dcadfc1a1a6860558905e78f0de11eaf26b1905edf822e44c6dfef26
   languageName: node
   linkType: hard
 
@@ -3617,7 +3617,7 @@ __metadata:
   resolution: "@zwave-js/web@workspace:packages/web"
   dependencies:
     "@types/w3c-web-serial": "npm:^1.0.8"
-    "@types/w3c-web-usb": "npm:^1.0.10"
+    "@types/w3c-web-usb": "npm:^1.0.14"
     "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
     "@zwave-js/bindings-browser": "workspace:^"
     "@zwave-js/core": "workspace:*"
