@@ -2772,7 +2772,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tmp@npm:^0":
+"@types/tmp@npm:^0.2.6":
   version: 0.2.6
   resolution: "@types/tmp@npm:0.2.6"
   checksum: 10/e14a094c10569d3b56805552b21417860ef21060d969000d5d5b53604a78c2bdac216f064b03797d4b07a081e0141dd3ab22bc36923e75300eb1c023f7252cc7
@@ -3466,7 +3466,7 @@ __metadata:
     "@types/node": "npm:^20.19.35"
     "@types/semver": "npm:^7.7.1"
     "@types/source-map-support": "npm:^0.5.10"
-    "@types/tmp": "npm:^0"
+    "@types/tmp": "npm:^0.2.6"
     "@types/xml2js": "npm:^0.4.14"
     "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
     "@zwave-js/bindings-browser": "workspace:*"

@@ -50,7 +50,7 @@
     "@types/node": "^20.19.35",
     "@types/semver": "^7.7.1",
     "@types/source-map-support": "^0.5.10",
-    "@types/tmp": "^0",
+    "@types/tmp": "^0.2.6",
     "@types/xml2js": "^0.4.14",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "@zwave-js/bindings-browser": "workspace:*",
