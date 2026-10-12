@@ -48,7 +48,7 @@
     "vscode-languageserver-textdocument": "^1.0.13"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@types/node": "^20.19.35",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "nano-spawn": "^2.1.0"
