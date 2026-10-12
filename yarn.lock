@@ -3488,7 +3488,7 @@ __metadata:
     husky: "npm:^9.1.7"
     js-yaml: "npm:^4.1.1"
     json5: "npm:^2.2.3"
-    jsonc-eslint-parser: "npm:^3.1.0"
+    jsonc-eslint-parser: "npm:^3.3.0"
     lint-staged: "npm:^16.4.0"
     nano-spawn: "npm:^2.1.0"
     openai: "npm:^5.12.2"
@@ -6598,14 +6598,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-eslint-parser@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "jsonc-eslint-parser@npm:3.1.0"
+"jsonc-eslint-parser@npm:^3.1.0, jsonc-eslint-parser@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "jsonc-eslint-parser@npm:3.3.0"
   dependencies:
     acorn: "npm:^8.5.0"
     eslint-visitor-keys: "npm:^5.0.0"
-    semver: "npm:^7.3.5"
-  checksum: 10/ed7fa186786e042f05e51325df7409c6accc73cc567ccedb2546fd0ccb769dd076ddc3fd9add0c302278cfe6161bdc9880bff5b02a7194c51ec5f53723439544
+    verkit: "npm:^0.3.2"
+  checksum: 10/b77e2d30bf14b31ce16843d210969307553dc06d8fe004b31472ae4a52efeec02f071dd13e3a4e7cc35d9dc133bf69150da4691883f3afdada0dbc8d4ac20f9e
   languageName: node
   linkType: hard
 
@@ -9584,6 +9584,13 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: 10/31389debef15a480849b8331b220782230b9815a8e0dbb7b9a8369559aed2e9a7800cd904d4371ea74f4c3527db456dc8e7ac5befce5f0d289014dbdf47b2242
+  languageName: node
+  linkType: hard
+
+"verkit@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "verkit@npm:0.3.2"
+  checksum: 10/23e57c28094da170e381e27c020cddde0543fbac377b111c325a18440da4502d21c58446ef25794ecc1f2434df1d6297edf760910245ac5b90199a9bb18d8634
   languageName: node
   linkType: hard
 

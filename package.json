@@ -76,7 +76,7 @@
     "husky": "^9.1.7",
     "js-yaml": "^4.1.1",
     "json5": "^2.2.3",
-    "jsonc-eslint-parser": "^3.1.0",
+    "jsonc-eslint-parser": "^3.3.0",
     "lint-staged": "^16.4.0",
     "nano-spawn": "^2.1.0",
     "openai": "^5.12.2",
