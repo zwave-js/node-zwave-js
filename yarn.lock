@@ -884,7 +884,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/core@npm:^1.0.1, @eslint/core@npm:^1.1.1, @eslint/core@npm:^1.2.1":
+"@eslint/core@npm:^1.0.1, @eslint/core@npm:^1.2.1":
   version: 1.2.1
   resolution: "@eslint/core@npm:1.2.1"
   dependencies:
@@ -900,23 +900,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/plugin-kit@npm:^0.6.0":
-  version: 0.6.1
-  resolution: "@eslint/plugin-kit@npm:0.6.1"
-  dependencies:
-    "@eslint/core": "npm:^1.1.1"
-    levn: "npm:^0.4.1"
-  checksum: 10/8af22d94720b2474a992a80c5be7584baf75821386d25c34966b359fbc1e3a319989df721404c48c08b20e115683d6d0b344793dc354f5916c2d867c6c0aa04e
-  languageName: node
-  linkType: hard
-
-"@eslint/plugin-kit@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@eslint/plugin-kit@npm:0.7.1"
+"@eslint/plugin-kit@npm:^0.7.0, @eslint/plugin-kit@npm:^0.7.1":
+  version: 0.7.3
+  resolution: "@eslint/plugin-kit@npm:0.7.3"
   dependencies:
     "@eslint/core": "npm:^1.2.1"
     levn: "npm:^0.4.1"
-  checksum: 10/8f923f4cdadadd215e0c2028e6a53101bb148a7780cdb4dc8cd69b0c77fc88496742e87e0605b12905ff715e2c7ad6cbd2d92c5653cdbf91cca1e229b5022c1f
+  checksum: 10/bd603f0438d6829a5b0c8cbb90383e3b0fda3aac3a87faa22c80124ce4121f5dcfe8ef9b933c3308cbed70a27c4f51036403e3f0cb64ca2743e595dd865ccef6
   languageName: node
   linkType: hard
 
@@ -3329,7 +3319,7 @@ __metadata:
     "@typescript-eslint/utils": "npm:^8.65.0"
     "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
     "@zwave-js/core": "workspace:*"
-    eslint-plugin-jsonc: "npm:^3.1.2"
+    eslint-plugin-jsonc: "npm:^3.4.2"
     typescript: "npm:6.0.3"
   languageName: unknown
   linkType: soft
@@ -5204,13 +5194,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsonc@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "eslint-plugin-jsonc@npm:3.1.2"
+"eslint-plugin-jsonc@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "eslint-plugin-jsonc@npm:3.4.2"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.5.1"
     "@eslint/core": "npm:^1.0.1"
-    "@eslint/plugin-kit": "npm:^0.6.0"
+    "@eslint/plugin-kit": "npm:^0.7.0"
     "@ota-meshi/ast-token-store": "npm:^0.3.0"
     diff-sequences: "npm:^29.6.3"
     eslint-json-compat-utils: "npm:^0.2.3"
@@ -5219,7 +5209,7 @@ __metadata:
     synckit: "npm:^0.11.12"
   peerDependencies:
     eslint: ">=9.38.0"
-  checksum: 10/d7de8884d1a4369cb0e5cf3b424191dad8a65340943356d0ae0d4d10afd6f05db47d905c2500cbe5d517e7d4d394b51367cf32631c39cce7732b9cbf613cf852
+  checksum: 10/2318b0f2de23fd794904da0fa19ab8b2eafaf45ff1a7ff82892b0bc57f6ebbbe638429f23d29507d639b358b21e1608ecd3cb94a99061502336c839a4b414293
   languageName: node
   linkType: hard
 
