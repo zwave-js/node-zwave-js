@@ -40,7 +40,7 @@
     "@typescript-eslint/utils": "^8.65.0",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "@zwave-js/core": "workspace:*",
-    "eslint-plugin-jsonc": "^3.1.2",
+    "eslint-plugin-jsonc": "^3.4.2",
     "typescript": "6.0.3"
   },
   "dependencies": {
