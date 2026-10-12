@@ -10,6 +10,9 @@
 		".github/workflows/agentics-maintenance.yml",
 	],
 	postUpdateOptions: ["yarnDedupeHighest"],
+	// Let GitHub merge once renovate-approve.yml has approved and CI is green,
+	// instead of waiting for the next Renovate run
+	platformAutomerge: true,
 	customManagers: [
 		{
 			// gh-aw is installed by version pin in several workflows. Bumping the pin regenerates

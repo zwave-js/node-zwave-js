@@ -1,0 +1,38 @@
+name: Approve Renovate PRs
+
+# Branch protection requires an approving review, which Renovate cannot give
+# itself. Renovate enables GitHub's auto-merge (platformAutomerge) only on
+# updates its config marks for automerge, so that is the signal to approve on.
+
+on:
+  # WARNING: This runs in the PR base with access to secrets. DO NOT check out
+  # or run PR code here.
+  pull_request_target:
+    # synchronize: Renovate rebases may dismiss a previous approval
+    types: [auto_merge_enabled, synchronize]
+
+permissions: {}
+
+jobs:
+  approve:
+    # Only approve changes made by Renovate itself, not pushes by others to its branches
+    if: |
+      github.event.pull_request.user.login == 'renovate[bot]' &&
+      github.actor == 'renovate[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.auto_merge != null
+
+    runs-on: [ubuntu-latest]
+
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              commit_id: context.payload.pull_request.head.sha,
+              event: "APPROVE",
+            });
