@@ -82,7 +82,7 @@ export function encodeNodeUpdatePayload(
 	]);
 }
 
-function isExtendedCCId(ccId: CommandClasses): boolean {
+export function isExtendedCCId(ccId: CommandClasses): boolean {
 	return ccId >= 0xf1;
 }
 

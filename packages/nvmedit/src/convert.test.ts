@@ -183,9 +183,19 @@ function bufferEquals(
 			// There are some expected normalizations
 			delete expected.meta;
 			if (expected.controller.applicationData) {
-				while (expected.controller.applicationData.startsWith("00")) {
-					expected.controller.applicationData =
-						expected.controller.applicationData.slice(2);
+				if (expected.controller.applicationData.startsWith("00")) {
+					while (
+						expected.controller.applicationData.startsWith("00")
+					) {
+						expected.controller.applicationData =
+							expected.controller.applicationData.slice(2);
+					}
+					while (
+						expected.controller.applicationData.startsWith("ff")
+					) {
+						expected.controller.applicationData =
+							expected.controller.applicationData.slice(2);
+					}
 				}
 				while (expected.controller.applicationData.endsWith("00")) {
 					expected.controller.applicationData =
