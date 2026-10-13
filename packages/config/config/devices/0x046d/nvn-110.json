@@ -1,0 +1,76 @@
+{
+	"manufacturer": "NOVON",
+	"manufacturerId": "0x046d",
+	"label": "NVN-110",
+	"description": "Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x2774",
+			"productId": "0x1a2e"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press the upper or lower paddle once to add the device. The switch also supports SmartStart: scan the QR code on the device or on the packaging box.",
+		"exclusion": "Press the upper or lower paddle once to remove the device.",
+		"reset": "Pull the air gap switch. Press and hold the bottom paddle, push the air gap switch back in and continue holding the bottom paddle for 10 seconds. The LED flashes each of the eight colors once, then stops. Please use this procedure only when the primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/wp-content/uploads/products/80710/2BSVZ-NVN-110UserManual.pdf"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/novon_template.json#three_way_type"
+		},
+		{
+			"#": "16",
+			"$import": "templates/novon_template.json#switch_mode"
+		},
+		{
+			"#": "19",
+			"$import": "templates/novon_template.json#alternate_exclusion"
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99"
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99"
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#default_dim_level_0-99",
+			"label": "Starting Brightness Level",
+			"defaultValue": 0
+		},
+		{
+			"#": "34",
+			"$import": "templates/novon_template.json#led_color"
+		},
+		{
+			"#": "35",
+			"$import": "templates/novon_template.json#intensity_1-7",
+			"label": "LED Intensity"
+		},
+		{
+			"#": "36",
+			"$import": "templates/novon_template.json#intensity_1-7",
+			"label": "Guide Light Intensity"
+		},
+		{
+			"#": "84",
+			"$import": "templates/novon_template.json#factory_reset"
+		}
+	]
+}

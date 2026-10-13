@@ -1,0 +1,63 @@
+{
+	"manufacturer": "NOVON",
+	"manufacturerId": "0x046d",
+	"label": "NVN-220",
+	"description": "Outdoor Dual Plug",
+	"devices": [
+		{
+			"productType": "0x283c",
+			"productId": "0x1a31"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Tap the button three times to add the device. The plug also supports SmartStart: scan the QR code on the side of the housing or on the packaging box.",
+		"exclusion": "Tap the button three times to remove the device.",
+		"reset": "Click the Z-Wave button two times quickly, then hold it for at least 10 seconds. Please use this procedure only when the primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/wp-content/uploads/products/80717/NVN-220UserManual.pdf"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "2",
+			"$import": "templates/novon_template.json#auto_timer",
+			"label": "Outlet 1: Auto-Off Timer"
+		},
+		{
+			"#": "3",
+			"$import": "templates/novon_template.json#auto_timer",
+			"label": "Outlet 2: Auto-Off Timer"
+		},
+		{
+			"#": "4",
+			"$import": "templates/novon_template.json#auto_timer",
+			"label": "Outlet 1: Auto-On Timer"
+		},
+		{
+			"#": "5",
+			"$import": "templates/novon_template.json#auto_timer",
+			"label": "Outlet 2: Auto-On Timer"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "7",
+			"$import": "templates/novon_template.json#indicator_brightness",
+			"defaultValue": 2
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual Control",
+			"defaultValue": 1
+		}
+	]
+}

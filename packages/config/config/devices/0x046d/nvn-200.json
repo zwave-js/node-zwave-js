@@ -1,0 +1,22 @@
+{
+	"manufacturer": "NOVON",
+	"manufacturerId": "0x046d",
+	"label": "NVN-200",
+	"description": "On/Off Plug",
+	"devices": [
+		{
+			"productType": "0x27d8",
+			"productId": "0x1a2f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Tap the button once to add the device. The plug also supports SmartStart: scan the QR code on the side of the case or on the packaging box.",
+		"exclusion": "Tap the button once to remove the device.",
+		"reset": "Unplug the device. Press and hold the manual button, plug the device back in and continue holding the button for 3 seconds. Please use this procedure only when the primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/wp-content/uploads/products/80718/NVN-200-V2UserManual.pdf"
+	}
+}
