@@ -19,5 +19,26 @@
 		"exclusion": "Open the case and remove the battery for 1 second. Replace the battery.",
 		"reset": "Remove the device from the Z-Wave network.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2929/51557%20%20Z-Wave%20FLF%20H214104%20ZWAVE_Ver04.pdf"
+	},
+	"compat": {
+		// When the probe dries, this device does not send an idle notification.
+		// It sends Water Alarm event 0x04 ("Water level dropped"), which the manual
+		// calls "Water No Longer Detected". That event is not a state variable, so
+		// the "Sensor status" value stays stuck on "Water leak detected" forever.
+		// Translate it into an explicit idle for the leak variable.
+		"remapNotifications": [
+			{
+				"from": {
+					"notificationType": 5,
+					"notificationEvent": 4
+				},
+				"idle": [
+					{
+						"notificationType": 5,
+						"notificationEvent": 2
+					}
+				]
+			}
+		]
 	}
 }
