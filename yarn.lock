@@ -1884,44 +1884,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/darwin-arm64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/darwin-arm64@npm:0.23.0"
+"@oxlint-tsgolint/darwin-arm64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/darwin-arm64@npm:0.25.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/darwin-x64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/darwin-x64@npm:0.23.0"
+"@oxlint-tsgolint/darwin-x64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/darwin-x64@npm:0.25.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/linux-arm64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/linux-arm64@npm:0.23.0"
+"@oxlint-tsgolint/linux-arm64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/linux-arm64@npm:0.25.0"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/linux-x64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/linux-x64@npm:0.23.0"
+"@oxlint-tsgolint/linux-x64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/linux-x64@npm:0.25.0"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/win32-arm64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/win32-arm64@npm:0.23.0"
+"@oxlint-tsgolint/win32-arm64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/win32-arm64@npm:0.25.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint-tsgolint/win32-x64@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@oxlint-tsgolint/win32-x64@npm:0.23.0"
+"@oxlint-tsgolint/win32-x64@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@oxlint-tsgolint/win32-x64@npm:0.25.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3186,7 +3186,7 @@ __metadata:
     del-cli: "npm:^7.0.0"
     es-main: "npm:^1.4.0"
     oxlint: "npm:^1.80.0"
-    oxlint-tsgolint: "npm:^0.23.0"
+    oxlint-tsgolint: "npm:^0.25.0"
     reflect-metadata: "npm:^0.2.2"
     tslib: "npm:^2.8.1"
     tsx: "npm:^4.23.1"
@@ -3442,7 +3442,7 @@ __metadata:
     openai: "npm:^5.12.2"
     oxfmt: "npm:^0.66.0"
     oxlint: "npm:^1.80.0"
-    oxlint-tsgolint: "npm:^0.23.0"
+    oxlint-tsgolint: "npm:^0.25.0"
     p-queue: "npm:^9.1.0"
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.8.5"
@@ -7556,16 +7556,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxlint-tsgolint@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "oxlint-tsgolint@npm:0.23.0"
+"oxlint-tsgolint@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "oxlint-tsgolint@npm:0.25.0"
   dependencies:
-    "@oxlint-tsgolint/darwin-arm64": "npm:0.23.0"
-    "@oxlint-tsgolint/darwin-x64": "npm:0.23.0"
-    "@oxlint-tsgolint/linux-arm64": "npm:0.23.0"
-    "@oxlint-tsgolint/linux-x64": "npm:0.23.0"
-    "@oxlint-tsgolint/win32-arm64": "npm:0.23.0"
-    "@oxlint-tsgolint/win32-x64": "npm:0.23.0"
+    "@oxlint-tsgolint/darwin-arm64": "npm:0.25.0"
+    "@oxlint-tsgolint/darwin-x64": "npm:0.25.0"
+    "@oxlint-tsgolint/linux-arm64": "npm:0.25.0"
+    "@oxlint-tsgolint/linux-x64": "npm:0.25.0"
+    "@oxlint-tsgolint/win32-arm64": "npm:0.25.0"
+    "@oxlint-tsgolint/win32-x64": "npm:0.25.0"
   dependenciesMeta:
     "@oxlint-tsgolint/darwin-arm64":
       optional: true
@@ -7581,7 +7581,7 @@ __metadata:
       optional: true
   bin:
     tsgolint: bin/tsgolint.js
-  checksum: 10/7f4d61fbdedbce703ac61278f060f4717e061afe5a5fadece5253fd50c333a676366bdd35895b2f464c5d5640bf2cd6b017b259fd1b5d777d154cd307aa3ba22
+  checksum: 10/96e258c1ba968a46193effaadfee31d0732658dcaef86dc35506a9b7dafb352cee479a1d86351acc40f283aa1bddd66ddab3cf0efbf9a50116e8daade827ae9b
   languageName: node
   linkType: hard
 
