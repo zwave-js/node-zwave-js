@@ -584,10 +584,7 @@ export class ControllerProprietary_NabuCasa implements ControllerProprietaryComm
 
 		return {
 			version: `${result[1]}.${result[2]}.${result[3]}`,
-			capabilities: parseBitMask(
-				capabilities,
-				0,
-			) as NabuCasaBootloaderCapability[],
+			capabilities: parseBitMask(capabilities, 0),
 		};
 	}
 
@@ -634,7 +631,7 @@ export class ControllerProprietary_NabuCasa implements ControllerProprietaryComm
 					return undefined;
 			}
 
-			const value = await this.getConfig(valueId.property as number);
+			const value = await this.getConfig(valueId.property);
 			if (value != undefined) {
 				this.controller.valueDB.setValue(valueId, value);
 				return value;

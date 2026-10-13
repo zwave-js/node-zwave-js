@@ -39,7 +39,7 @@ describe("createFindSimilarParametersTool", () => {
 		const service = fakeService();
 		const tool = createFindSimilarParametersTool(service);
 
-		let result = await tool.handler({ filename: "/a/b.json" } as any);
+		let result = await tool.handler({ filename: "/a/b.json" });
 		expect(result.isError).toBe(true);
 		expect(service.findSimilar).not.toHaveBeenCalled();
 
@@ -55,7 +55,7 @@ describe("createFindSimilarParametersTool", () => {
 		const service = fakeService();
 		const tool = createFindSimilarParametersTool(service);
 
-		await tool.handler({ filename: "/a/b.json", parameter: 5 } as any);
+		await tool.handler({ filename: "/a/b.json", parameter: 5 });
 		expect(service.findSimilar).toHaveBeenLastCalledWith(
 			"/a/b.json",
 			5,
@@ -68,7 +68,7 @@ describe("createFindSimilarParametersTool", () => {
 			filename: "/a/b.json",
 			parameter: 5,
 			limit: 500,
-		} as any);
+		});
 		expect(service.findSimilar).toHaveBeenLastCalledWith(
 			"/a/b.json",
 			5,
@@ -86,7 +86,7 @@ describe("createFindSimilarParametersTool", () => {
 			parameter: 5,
 			valueBitMask: 0xff,
 			firmwareVersion: "1.5",
-		} as any);
+		});
 		expect(service.findSimilar).toHaveBeenCalledWith(
 			"/a/b.json",
 			5,
@@ -104,12 +104,12 @@ describe("createFindSimilarParametersTool", () => {
 				templateImportSuggestions: [],
 				purposeSuggestions: [],
 			}),
-		} as any);
+		});
 		const tool = createFindSimilarParametersTool(service);
 		const result = await tool.handler({
 			filename: "/a/b.json",
 			parameter: 5,
-		} as any);
+		});
 		expect(result.isError).toBeFalsy();
 		expect(JSON.stringify(result.content)).toContain("p1");
 	});
@@ -124,12 +124,12 @@ describe("createFindSimilarParametersTool", () => {
 						"ambiguous_parameter",
 					),
 				),
-		} as any);
+		});
 		const tool = createFindSimilarParametersTool(service);
 		const result = await tool.handler({
 			filename: "/a/b.json",
 			parameter: 5,
-		} as any);
+		});
 		expect(result.isError).toBe(true);
 		expect(JSON.stringify(result.content)).toContain("ambiguous_parameter");
 	});

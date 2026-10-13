@@ -38,7 +38,7 @@ describe("createSuggestParameterPurposeTool", () => {
 	it("uses free text and clamps the result limit", async () => {
 		const service = fakeService();
 		const tool = createSuggestParameterPurposeTool(service);
-		await tool.handler({ query: "automatic shutoff", limit: 100 } as any);
+		await tool.handler({ query: "automatic shutoff", limit: 100 });
 		expect(service.suggestPurposesForText).toHaveBeenCalledWith(
 			"automatic shutoff",
 			20,
@@ -53,7 +53,7 @@ describe("createSuggestParameterPurposeTool", () => {
 			parameter: 7,
 			valueBitMask: 255,
 			firmwareVersion: "1.2",
-		} as any);
+		});
 		expect(service.suggestPurposesForParameter).toHaveBeenCalledWith(
 			"/device.json",
 			7,

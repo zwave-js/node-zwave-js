@@ -196,7 +196,7 @@ export function znifferRegionToRFRegion(region: ZnifferRegion): RFRegion {
 		case ZnifferRegion["USA (Long Range, end device)"]:
 			return RFRegion["USA (Long Range)"];
 		default:
-			return region as number as RFRegion;
+			return region as unknown as RFRegion;
 	}
 }
 

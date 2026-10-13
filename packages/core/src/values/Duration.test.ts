@@ -11,7 +11,7 @@ test("constructor() -> should remember the given value and unit", (t) => {
 		{ unit: "seconds", value: 8 },
 	] as const;
 	for (const { unit, value } of tests) {
-		const duration = new Duration(value, unit as any);
+		const duration = new Duration(value, unit);
 		t.expect(duration.unit).toBe(unit);
 		t.expect(duration.value).toBe(value);
 	}
@@ -23,7 +23,7 @@ test("constructor() -> should set the duration to zero for unknown and default",
 		{ unit: "default", value: 8 },
 	] as const;
 	for (const { unit, value } of tests) {
-		const duration = new Duration(value, unit as any);
+		const duration = new Duration(value, unit);
 		t.expect(duration.unit).toBe(unit);
 		t.expect(duration.value).toBe(0);
 	}

@@ -92,7 +92,7 @@ export function tryUnzipFirmwareFile(zipData: BytesView):
 	if (Object.keys(unzipped).length === 1) {
 		// Exactly one file was extracted, inspect that
 		const filename = Object.keys(unzipped)[0];
-		const rawData = unzipped[filename] as BytesView;
+		const rawData = unzipped[filename];
 		try {
 			const format = guessFirmwareFileFormat(filename, rawData);
 			return { filename, format, rawData };

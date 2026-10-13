@@ -36,7 +36,7 @@ describe("createSearchParameterDefinitionsTool", () => {
 	it("rejects an empty/whitespace-only query", async () => {
 		const service = fakeService();
 		const tool = createSearchParameterDefinitionsTool(service);
-		const result = await tool.handler({ query: "   " } as any);
+		const result = await tool.handler({ query: "   " });
 		expect(result.isError).toBe(true);
 		expect(service.search).not.toHaveBeenCalled();
 	});
@@ -57,21 +57,21 @@ describe("createSearchParameterDefinitionsTool", () => {
 		const service = fakeService();
 		const tool = createSearchParameterDefinitionsTool(service);
 
-		await tool.handler({ query: "ramp rate" } as any);
+		await tool.handler({ query: "ramp rate" });
 		expect(service.search).toHaveBeenLastCalledWith(
 			"ramp rate",
 			expect.anything(),
 			10,
 		);
 
-		await tool.handler({ query: "ramp rate", limit: 999 } as any);
+		await tool.handler({ query: "ramp rate", limit: 999 });
 		expect(service.search).toHaveBeenLastCalledWith(
 			"ramp rate",
 			expect.anything(),
 			50,
 		);
 
-		await tool.handler({ query: "ramp rate", limit: 0 } as any);
+		await tool.handler({ query: "ramp rate", limit: 0 });
 		expect(service.search).toHaveBeenLastCalledWith(
 			"ramp rate",
 			expect.anything(),
@@ -105,9 +105,9 @@ describe("createSearchParameterDefinitionsTool", () => {
 				parameters: [{ id: "p1" }],
 				templates: [],
 			}),
-		} as any);
+		});
 		const tool = createSearchParameterDefinitionsTool(service);
-		const result = await tool.handler({ query: "ramp rate" } as any);
+		const result = await tool.handler({ query: "ramp rate" });
 		expect(result.isError).toBeFalsy();
 		expect(JSON.stringify(result.content)).toContain("p1");
 	});
@@ -122,9 +122,9 @@ describe("createSearchParameterDefinitionsTool", () => {
 						"/cache/consent.json",
 					),
 				),
-		} as any);
+		});
 		const tool = createSearchParameterDefinitionsTool(service);
-		const result = await tool.handler({ query: "ramp rate" } as any);
+		const result = await tool.handler({ query: "ramp rate" });
 		expect(result.isError).toBe(true);
 		expect(JSON.stringify(result.content)).toContain(
 			"model_download_consent_required",

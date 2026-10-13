@@ -8,7 +8,7 @@ import {
 } from "fflate";
 
 export function deflateSync(data: BytesView, opts?: DeflateOptions): BytesView {
-	return defflateSync(data, opts) as BytesView;
+	return defflateSync(data, opts);
 }
 
 export function inflateSync(data: BytesView, opts?: InflateOptions): BytesView {
@@ -16,5 +16,5 @@ export function inflateSync(data: BytesView, opts?: InflateOptions): BytesView {
 }
 
 export function gunzipSync(data: BytesView): BytesView {
-	return fgunzipSync(data) as BytesView;
+	return fgunzipSync(data);
 }

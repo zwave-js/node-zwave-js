@@ -107,7 +107,7 @@ const respondToS2KEXSet: MockNodeBehavior = {
 			self.state.set(StateKeys.bootstrapState, {
 				stage: BootstrapStage.Handshake,
 				grantedKeys: receivedCC.grantedKeys,
-			} as Security2BootstrapState);
+			});
 
 			// We're supposed to respond with our public key now
 			const cc = new Security2CCPublicKeyReport({
@@ -141,7 +141,7 @@ const respondToS2KEXReport: MockNodeBehavior = {
 				stage: BootstrapStage.RequestingKeys,
 				grantedKeys: currentState.grantedKeys,
 				keys: new Map(),
-			} as Security2BootstrapState);
+			});
 
 			// Kick off the key request process using the first key
 			const firstKey = currentState.grantedKeys[0];
@@ -373,7 +373,7 @@ const respondToS2NonceGet: MockNodeBehavior = {
 					stage: BootstrapStage.RequestingKeys,
 					grantedKeys: bootstrapState.grantedKeys,
 					keys: bootstrapState.keys,
-				} as Security2BootstrapState);
+				});
 			} else if (bootstrapState?.stage === BootstrapStage.Finalizing) {
 				// Bootstrapping is now actually done. Restore all keys
 				// and security manager settings, so the communication uses

@@ -1888,9 +1888,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		]);
 
 		// Generate the authentication data for CCM encryption
-		const destinationTag = getDestinationIDTX.call(
-			this as Security2CCMessageEncapsulation,
-		);
+		const self = this as Security2CCMessageEncapsulation;
+		const destinationTag = getDestinationIDTX.call(self);
 		const messageLength =
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(

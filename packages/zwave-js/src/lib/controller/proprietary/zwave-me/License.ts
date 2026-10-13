@@ -56,7 +56,7 @@ export function parseLicenseBlob(blob: BytesView): ZWaveMeLicense {
 	return {
 		vendorId: raw.readUInt16BE(0),
 		maxNodes: raw[2],
-		flags: parseBitMask(raw.subarray(3, 11), 0) as ZWaveMeLicenseFlag[],
+		flags: parseBitMask(raw.subarray(3, 11), 0),
 		countSupport: raw.readUInt16LE(11),
 		raw,
 	};

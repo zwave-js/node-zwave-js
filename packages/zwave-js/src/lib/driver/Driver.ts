@@ -1692,7 +1692,7 @@ export class Driver
 			try {
 				await this.openSerialport();
 			} catch (e) {
-				spOpenPromise.reject(e as Error);
+				spOpenPromise.reject(e);
 				void this.destroy();
 				return;
 			}
@@ -7082,7 +7082,7 @@ ${handlers.length} left`,
 					}
 
 					// In all other cases, reject the transaction
-					result.reject(e as Error);
+					result.reject(e);
 				} finally {
 					this._currentSerialAPICommandPromise = undefined;
 				}
@@ -9969,11 +9969,7 @@ ${handlers.length} left`,
 						(c) => c.type === CLIChunkType.Message,
 						timeout ?? 1000,
 					)
-						.then(
-							(c) =>
-								(c as CLIChunk & { type: CLIChunkType.Message })
-									.message,
-						)
+						.then((c) => c.message)
 						.catch(() => undefined),
 			);
 

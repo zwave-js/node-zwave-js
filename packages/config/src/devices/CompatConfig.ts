@@ -554,7 +554,7 @@ Invalid Command Class "${key}" specified in compat option commandClasses.remove!
 									(i) => typeof i === "number",
 								))
 						) {
-							removeCCs.set(cc, info.endpoints as any);
+							removeCCs.set(cc, info.endpoints);
 						} else {
 							throwInvalidConfig(
 								"devices",
@@ -699,7 +699,7 @@ compat option overrideQueries must be an object!`,
 			"useUTCInTimeParametersCC",
 			"queryOnWakeup",
 		]);
-		return stripUndefined(ret) as CompatConfig;
+		return stripUndefined(ret);
 	}
 }
 
