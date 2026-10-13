@@ -40,7 +40,7 @@
     "@alcalzone/esm2cjs": "^1.4.2",
     "@alcalzone/jsonl-db": "^4.0.2",
     "@alcalzone/monopack": "^2.0.0",
-    "@alcalzone/release-script": "~5.1.1",
+    "@alcalzone/release-script": "~5.2.1",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@microsoft/api-extractor": "^7.58.7",
