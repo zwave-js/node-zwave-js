@@ -910,9 +910,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@homebridge/ciao@npm:^1.3.8":
-  version: 1.3.8
-  resolution: "@homebridge/ciao@npm:1.3.8"
+"@homebridge/ciao@npm:^1.3.12":
+  version: 1.3.12
+  resolution: "@homebridge/ciao@npm:1.3.12"
   dependencies:
     debug: "npm:^4.4.3"
     fast-deep-equal: "npm:^3.1.3"
@@ -920,7 +920,7 @@ __metadata:
     tslib: "npm:^2.8.1"
   bin:
     ciao-bcs: lib/bonjour-conformance-testing.js
-  checksum: 10/b45121c97538b1a7b51a845745f4b47cb7d8fb32b9ff6b10f94d55b98f073edced2ffc1eefc84b3d917785552a7c82030119bd2510f4a42c956fd884c4913735
+  checksum: 10/67803eb50b3d65cc49131bf310349fa7dfaf34d2a43bd78d366c93438c6af88ba45494edbd93589d91ebbcc00b9cf40400bcee7990fe73497be63f0d36ce6361
   languageName: node
   linkType: hard
 
@@ -9944,7 +9944,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.2"
     "@alcalzone/jsonl-db": "npm:^4.0.2"
     "@andrewbranch/untar.js": "npm:^1.0.4"
-    "@homebridge/ciao": "npm:^1.3.8"
+    "@homebridge/ciao": "npm:^1.3.12"
     "@microsoft/api-extractor": "npm:^7.58.7"
     "@types/node": "npm:^20.19.35"
     "@types/semver": "npm:^7.8.0"
