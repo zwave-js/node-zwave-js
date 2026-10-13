@@ -128,7 +128,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: 22 # This should be LTS
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn run build
@@ -290,7 +289,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
@@ -398,7 +396,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
@@ -518,7 +515,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
