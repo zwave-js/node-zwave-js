@@ -80,7 +80,7 @@
     "lint-staged": "^16.4.0",
     "nano-spawn": "^2.1.0",
     "openai": "^5.12.2",
-    "oxfmt": "^0.66.0",
+    "oxfmt": "^0.72.0",
     "oxlint": "^1.80.0",
     "oxlint-tsgolint": "^0.23.0",
     "p-queue": "^9.1.0",

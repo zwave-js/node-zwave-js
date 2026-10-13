@@ -54,7 +54,7 @@
     "globrex": "^0.1.2",
     "json5": "^2.2.3",
     "nano-spawn": "^2.1.0",
-    "oxfmt": "^0.66.0",
+    "oxfmt": "^0.72.0",
     "piscina": "^5.1.4",
     "reflect-metadata": "^0.2.2",
     "ts-morph": "^28.0.0",
