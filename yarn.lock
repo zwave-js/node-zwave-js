@@ -132,78 +132,78 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-core@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-core@npm:5.1.1"
+"@alcalzone/release-script-core@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@alcalzone/release-script-core@npm:5.2.0"
   dependencies:
     execa: "npm:^5.1.1"
-  checksum: 10/f65f0940ebd95ecd6fd6c9a77636057a5afc04711268cf1df946cc7a7d6343a01a7d5cb940a9469e68716c05ec2b11705f62c2ddfce7a9a5704de4d5137d021e
+  checksum: 10/f71e931fdb299b106d6c771cbbd63f9e2add95977ee3f057bda481e114385e1dfb7b7c9e962afa6e97e5a03c6d416c16469bc9bcf117e10c36b025ba625cc8bc
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-changelog@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-plugin-changelog@npm:5.1.1"
+"@alcalzone/release-script-plugin-changelog@npm:5.2.1":
+  version: 5.2.1
+  resolution: "@alcalzone/release-script-plugin-changelog@npm:5.2.1"
   dependencies:
-    "@alcalzone/release-script-core": "npm:5.1.1"
+    "@alcalzone/release-script-core": "npm:5.2.0"
     alcalzone-shared: "npm:^5.0.0"
-  checksum: 10/a05d441d271dec9ff079fdc31af1b7736f9abc2b6e6e11c7e08fb0014086b4b068d71f64f204ac527e3fca7a77a78448b2cf41126c4c24b5eb60fe2f2aa45219
+  checksum: 10/08aeacaf6da5d6d98d88759dd11681d01b0b95e5a74e0d357416111ea09d9cf2598b98c81e31b6ba1ee19abef9dd7af441e4bff3522032b664e68e9bc58d5b6d
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-exec@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-plugin-exec@npm:5.1.1"
+"@alcalzone/release-script-plugin-exec@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@alcalzone/release-script-plugin-exec@npm:5.2.0"
   dependencies:
-    "@alcalzone/release-script-core": "npm:5.1.1"
+    "@alcalzone/release-script-core": "npm:5.2.0"
     alcalzone-shared: "npm:^5.0.0"
-  checksum: 10/6ac1fd3122708664642df424e58d26dc3205c0f967ef768b63f564c21ad7a6a57fc0dfa61924c32721a0c6f98e2cabc87280f4ec13cf8d2e29c9af0ff28fb491
+  checksum: 10/f6485f56a92f8d7de74a3bc59a1518b4f2b823d577ea6ee396bd168731005a7d4e5ac217f1e9c824659e670d2fc0c44d98848e311473658acc3261c964e45382
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-git@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-plugin-git@npm:5.1.1"
+"@alcalzone/release-script-plugin-git@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@alcalzone/release-script-plugin-git@npm:5.2.0"
   dependencies:
-    "@alcalzone/release-script-core": "npm:5.1.1"
-  checksum: 10/ca6ee7f2683f244bc965aa7342f4f61a4e7cdb821aea5c705db5e1c32e8f5b2e8a122a1a837371f5b3ef6245eaa0d77d7a1b0ef544947510c3b33df4a1948a16
+    "@alcalzone/release-script-core": "npm:5.2.0"
+  checksum: 10/36c4498899c585afc6a0c4ba6cc59537838b4252299707b07afc4ce2b764df95f0b74909361c31b6fa37924dc3edba448105a15db5188d868d779267414fc037
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-package@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-plugin-package@npm:5.1.1"
+"@alcalzone/release-script-plugin-package@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@alcalzone/release-script-plugin-package@npm:5.2.0"
   dependencies:
     "@alcalzone/pak": "npm:^0.12.0"
-    "@alcalzone/release-script-core": "npm:5.1.1"
+    "@alcalzone/release-script-core": "npm:5.2.0"
     alcalzone-shared: "npm:^5.0.0"
     semver: "npm:^7.7.2"
-  checksum: 10/a41f568b5fbbb7b466b67d60b4e2acfe5a257f20ae3c027c3994cc0078e2ac1413d8544a0e6b212ce66bddb6e3a8ef3f341208b27bc62de92a70d994690399ec
+  checksum: 10/beaf68fdf9b1ef0d6fbcd022cb373767074674eec410c6b9ef426dec488fe57a3b04b97cad141bb31f1fcdadcb3cd1013549369a4ad573a3a0918f078c6cd1eb
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-version@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script-plugin-version@npm:5.1.1"
+"@alcalzone/release-script-plugin-version@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@alcalzone/release-script-plugin-version@npm:5.2.0"
   dependencies:
-    "@alcalzone/release-script-core": "npm:5.1.1"
+    "@alcalzone/release-script-core": "npm:5.2.0"
     alcalzone-shared: "npm:^5.0.0"
     semver: "npm:^7.7.2"
     tiny-glob: "npm:^0.2.9"
-  checksum: 10/15ca2d58f7df4476d3044b9f0caea556882c45af4af6810ceca17492fc458c3d9868a8f3e385f47c3dab39920decb5da8275a07784450f683c21cfcf6666a1c5
+  checksum: 10/587cc9ec2af87c5ec2b27f7c048d835dd900acd3cbebe1419416c34d46e1450998647cde0034c1900feb991e9efcc4c4d49d5e8addb0f2aede6b7e09234d6881
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:~5.1.1":
-  version: 5.1.1
-  resolution: "@alcalzone/release-script@npm:5.1.1"
+"@alcalzone/release-script@npm:~5.2.1":
+  version: 5.2.1
+  resolution: "@alcalzone/release-script@npm:5.2.1"
   dependencies:
-    "@alcalzone/release-script-core": "npm:5.1.1"
-    "@alcalzone/release-script-plugin-changelog": "npm:5.1.1"
-    "@alcalzone/release-script-plugin-exec": "npm:5.1.1"
-    "@alcalzone/release-script-plugin-git": "npm:5.1.1"
-    "@alcalzone/release-script-plugin-package": "npm:5.1.1"
-    "@alcalzone/release-script-plugin-version": "npm:5.1.1"
+    "@alcalzone/release-script-core": "npm:5.2.0"
+    "@alcalzone/release-script-plugin-changelog": "npm:5.2.1"
+    "@alcalzone/release-script-plugin-exec": "npm:5.2.0"
+    "@alcalzone/release-script-plugin-git": "npm:5.2.0"
+    "@alcalzone/release-script-plugin-package": "npm:5.2.0"
+    "@alcalzone/release-script-plugin-version": "npm:5.2.0"
     alcalzone-shared: "npm:^5.0.0"
     enquirer: "npm:^2.3.6"
     picocolors: "npm:1.0.0"
@@ -212,7 +212,7 @@ __metadata:
     yargs: "npm:^17.4.1"
   bin:
     release-script: bin/release.js
-  checksum: 10/b3861976ba2f0fa0837275d19eb9f6f3e013aa415d0363f769fca913d733c5b065de456105a5c26089001601be6aaa59ef3ee568db1605c617dc8f39d107cec1
+  checksum: 10/f8269fd65d7dc7b31a4e0db843ce807b00317d458a9815adf42f32862044137511a295d45aab0ef4f495deeaf35788e511c962ae69541fe134e40d0dad7b0d25
   languageName: node
   linkType: hard
 
@@ -3359,7 +3359,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.2"
     "@alcalzone/jsonl-db": "npm:^4.0.2"
     "@alcalzone/monopack": "npm:^2.0.0"
-    "@alcalzone/release-script": "npm:~5.1.1"
+    "@alcalzone/release-script": "npm:~5.2.1"
     "@commitlint/cli": "npm:^20.5.3"
     "@commitlint/config-conventional": "npm:^20.5.3"
     "@microsoft/api-extractor": "npm:^7.58.7"
