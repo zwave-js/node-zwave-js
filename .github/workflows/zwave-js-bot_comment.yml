@@ -33,11 +33,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Check PR information
       id: pr-info
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -116,7 +116,7 @@ jobs:
 
     steps:
     - name: Checkout merged code
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0 # We need the history for versioning with yarn
         ref: ${{ needs.check-pr.outputs.merge_commit_sha }}
@@ -160,7 +160,7 @@ jobs:
           | grep '\.tgz$' > "$RUNNER_TEMP/tarballs/order.txt"
 
     - name: Upload the tarballs
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: pr-tarballs
         path: ${{ runner.temp }}/tarballs
@@ -180,7 +180,7 @@ jobs:
     steps:
     - name: Download the tarballs
       if: needs.pack-pr.result == 'success'
-      uses: actions/download-artifact@v8
+      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
       with:
         name: pr-tarballs
         path: tarballs
@@ -188,7 +188,7 @@ jobs:
     # This also creates the .npmrc that npm publish needs to authenticate
     - name: Set up Node.js
       if: needs.pack-pr.result == 'success'
-      uses: actions/setup-node@v7
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
         node-version: 22 # This should be LTS
         registry-url: 'https://registry.npmjs.org'
@@ -233,7 +233,7 @@ jobs:
 
     - name: Give feedback
       if: always()
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         VERSION: ${{ needs.pack-pr.outputs.version }}
         SUCCESS: ${{ steps.publish.outcome == 'success' }}
@@ -271,11 +271,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -298,7 +298,7 @@ jobs:
     - name: Get config file ID
       if: steps.check-permissions.outputs.result == 'true'
       id: config-id
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -343,7 +343,7 @@ jobs:
 
     - name: Create PR
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         RESULT: ${{ steps.import.outputs.result }}
         branchname: ${{ steps.import.outputs.branchname }}
@@ -378,11 +378,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -405,7 +405,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -422,7 +422,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
         flag: ${{ fromJSON(steps.parse-command.outputs.result).flag }}
@@ -465,7 +465,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
@@ -497,11 +497,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -524,7 +524,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -541,7 +541,7 @@ jobs:
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
       id: add-fingerprint
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
@@ -586,7 +586,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
@@ -617,11 +617,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -632,7 +632,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Escalate discussion to issue
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |

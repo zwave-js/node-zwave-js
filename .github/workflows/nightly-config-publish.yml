@@ -5,6 +5,9 @@ on:
     - cron: 0 2 * * * # Every day at 02:00
   workflow_dispatch: # Manually on demand
 
+permissions:
+  contents: read
+
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
@@ -18,7 +21,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0 # Fetch the history, or this action won't work
 
@@ -27,7 +30,7 @@ jobs:
       run: corepack enable
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v7
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -131,6 +134,11 @@ jobs:
   publish-config:
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
+    # A called workflow cannot hold more than its caller grants, and GitHub
+    # validates every job in it, so this must cover what test-and-release.yml requests
+    permissions:
+      contents: write
+      id-token: write
     uses: ./.github/workflows/test-and-release.yml
     with:
       action: publish-config

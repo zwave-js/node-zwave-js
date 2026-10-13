@@ -27,4 +27,4 @@ jobs:
       actions: read
       contents: read
       issues: write
-    uses: zwave-js/bot-workflows/.github/workflows/bot-index-selfcheck.yml@v1
+    uses: zwave-js/bot-workflows/.github/workflows/bot-index-selfcheck.yml@34a23a27c19b765f304318e730221e400bbd2848 # v1

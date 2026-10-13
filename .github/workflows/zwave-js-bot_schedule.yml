@@ -5,6 +5,8 @@ on:
     # every 12 hours
     - cron:  '0 */12 * * *'
 
+permissions: {}
+
 jobs:
   stale:
     runs-on: [ubuntu-latest]

@@ -25,6 +25,6 @@ jobs:
       contents: read
       issues: write
       discussions: read
-    uses: zwave-js/bot-workflows/.github/workflows/docs-embeddings.yml@v1
+    uses: zwave-js/bot-workflows/.github/workflows/docs-embeddings.yml@34a23a27c19b765f304318e730221e400bbd2848 # v1
     with:
       docs-path: docs
