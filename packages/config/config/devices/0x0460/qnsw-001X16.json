@@ -96,7 +96,6 @@
 			"label": "Factory Reset",
 			"description": "Reset to factory default settings and remove from the Z-Wave network.",
 			"valueSize": 4,
-			"unsigned": true,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
