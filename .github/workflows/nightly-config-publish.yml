@@ -134,8 +134,9 @@ jobs:
   publish-config:
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
-    # GitHub checks every job of a called workflow against this grant,
-    # including the deploy job, which never runs here
+    # Publishing only needs id-token. contents: write is for the deploy job in
+    # test-and-release.yml: GitHub refuses to start a called workflow if any of
+    # its jobs requests more than the caller grants, even jobs that are skipped
     permissions:
       contents: write
       id-token: write
