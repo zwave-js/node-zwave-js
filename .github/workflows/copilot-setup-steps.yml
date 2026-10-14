@@ -32,7 +32,7 @@ jobs:
     # If you do not check out your code, Copilot will do this for you.
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -41,7 +41,7 @@ jobs:
         run: corepack enable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22 # This should be LTS
           cache: 'yarn'
@@ -66,7 +66,7 @@ jobs:
 
       - name: Restore semantic model
         id: semantic-model-cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/zwave-js-bot/models
           key: ${{ steps.semantic-caches.outputs.model-key }}
@@ -78,7 +78,7 @@ jobs:
         run: yarn workspace @zwave-js/mcp-server-dev prefetch-semantic-model
 
       - name: Restore semantic index
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/zwave-js-bot/semantic-index
           key: ${{ steps.semantic-caches.outputs.index-key }}-${{ hashFiles('packages/config/config/devices/**/*.json') }}

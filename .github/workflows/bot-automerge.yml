@@ -6,6 +6,9 @@ on:
   pull_request:
     types: [synchronize, reopened]
 
+# All jobs act through BOT_TOKEN, so the workflow token needs no access
+permissions: {}
+
 jobs:
   # #########################################################################
   # Approves and enables automerge on a PR when authorized person comments
@@ -20,7 +23,7 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - uses: actions/github-script@v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           script: |
@@ -55,7 +58,7 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - uses: actions/github-script@v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           script: |
@@ -80,7 +83,7 @@ jobs:
     steps:
       - name: Check if auto-merging should be enabled
         id: should-automerge
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           result-encoding: string
@@ -102,7 +105,7 @@ jobs:
 
       - name: Approve PR
         if: ${{ steps.should-automerge.outputs.result == 'true' }}
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |

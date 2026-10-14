@@ -10,6 +10,10 @@ concurrency:
   group: zwave-js-bot-post-${{ github.event_name }}-${{ github.event.issue.number || github.event.discussion.number }}
   cancel-in-progress: false
 
+# Comments are posted with BOT_TOKEN
+permissions:
+  contents: read
+
 jobs:
   # Notify issue author when they post the wrong log
   ensure-logfile:
@@ -18,14 +22,14 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     # Installs the shared bot-scripts dependencies and exports BOT_SCRIPTS_DIR
     - name: Setup bot scripts
       uses: zwave-js/bot-workflows/actions/setup-bot@v1
 
     - name: Extract log file from issue body
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       id: extract
       with:
         github-token: ${{secrets.BOT_TOKEN}}
@@ -51,7 +55,7 @@ jobs:
 
 
     - name: Classify logfile and give feedback
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       if: steps.extract.outputs.shouldContinue == 'true'
       id: feedback
       env:
@@ -75,10 +79,10 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Hide inherited bot comments
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -99,7 +103,7 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     # Restoring from the artifact and re-saving the cache below is also how an
     # evicted cache entry heals itself between two nightly rebuilds
@@ -124,7 +128,7 @@ jobs:
     - name: Add post to index
       id: update
       if: steps.posts-index.outputs.found == 'true'
-      uses: actions/github-script@v9
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
         POSTS_INDEX_PATH: .posts-index/index.json
       with:
@@ -135,7 +139,7 @@ jobs:
     # Save under the same version-derived prefix the producers use
     - name: Save posts index
       if: steps.update.outputs.result == 'true'
-      uses: actions/cache/save@v6
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .posts-index
         key: ${{ steps.posts-index.outputs.prefix }}${{ github.run_id }}

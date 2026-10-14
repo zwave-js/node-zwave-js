@@ -32,7 +32,7 @@ jobs:
 
     steps:
     - name: Checkout PR head
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         # Pin to the SHA the event fired for, so a push to the branch cannot
         # swap the code out between the event and the checkout
