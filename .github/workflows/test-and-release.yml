@@ -29,8 +29,7 @@ on:
         type: string
 
 permissions:
-  id-token: write # Required for publishing with OICD
-  contents: write # Required for creating releases
+  contents: read
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
@@ -52,6 +51,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -76,6 +77,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -173,6 +176,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -194,6 +199,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -219,6 +226,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -251,6 +260,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -398,6 +409,10 @@ jobs:
       - test-transformers
       - test-packages
 
+    permissions:
+      contents: write # Required for creating releases
+      id-token: write # Required for publishing with OIDC
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -419,7 +434,7 @@ jobs:
       id: extract_release
       # The body may be multiline, therefore we need to escape some characters
       run: |
-        VERSION="${{ github.ref }}"
+        VERSION="$GITHUB_REF"
         VERSION=${VERSION##*/v}
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         EOF=$(od -An -N6 -x /dev/urandom | tr -d ' ')
@@ -471,6 +486,10 @@ jobs:
     # Only run when called from another workflow with action=publish-config
     if: github.event_name == 'workflow_call' && inputs.action == 'publish-config'
 
+    permissions:
+      contents: read
+      id-token: write # Required for publishing with OIDC
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -489,8 +508,10 @@ jobs:
       run: yarn build
 
     - name: Apply version to @zwave-js/config
+      env:
+        VERSION: ${{ inputs.version }}
       run: |
-        yarn workspace "@zwave-js/config" version "${{ inputs.version }}" --deferred
+        yarn workspace "@zwave-js/config" version "$VERSION" --deferred
         yarn version apply --all
 
     - name: Publish @zwave-js/config to npm
