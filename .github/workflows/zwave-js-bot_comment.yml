@@ -14,7 +14,7 @@ jobs:
   # runs in a job that has access to secrets:
   #   check-pr   - inspects the PR, no PR code is executed
   #   pack-pr    - builds and packs the PR code, has no secrets
-  #   publish-pr - publishes the packed tarballs, no PR code is executed
+  #   publish-pr - dispatches publishing in test-and-release.yml, no PR code is executed
 
   # Check whether a PR build may be published when AlCalzone comments "@zwave-js-bot pack this"
   check-pr:
@@ -111,9 +111,6 @@ jobs:
     permissions:
       contents: read
 
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-
     steps:
     - name: Checkout merged code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -167,112 +164,49 @@ jobs:
         retention-days: 1
 
   # #########################################################################
-  # Publish the packed tarballs. No PR code is executed here, so it is safe to
-  # use the npm token.
+  # Hand the packed tarballs to test-and-release.yml for publishing. npm only accepts
+  # OIDC tokens from that workflow when it is the top-level workflow of a run.
   publish-pr:
     needs: [check-pr, pack-pr]
     # Also run when packing failed, so we can report back
     if: always() && needs.check-pr.result == 'success'
 
     runs-on: [ubuntu-latest]
-    permissions: {}
+    permissions:
+      actions: write # Required for dispatching test-and-release.yml
 
     steps:
-    - name: Download the tarballs
+    - name: Start publishing
       if: needs.pack-pr.result == 'success'
-      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-      with:
-        name: pr-tarballs
-        path: tarballs
-
-    # This also creates the .npmrc that npm publish needs to authenticate
-    - name: Set up Node.js
-      if: needs.pack-pr.result == 'success'
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-      with:
-        node-version: 22 # This should be LTS
-        registry-url: 'https://registry.npmjs.org'
-
-    # The tarballs and order.txt were produced by PR code, so a modified build must
-    # not be able to publish anything else with the npm token. The name check limits
-    # publishing to our own packages, and the version suffix, which is derived from
-    # trusted inputs, prevents publishing a regular release.
-    - name: Validate the tarballs
-      if: needs.pack-pr.result == 'success'
-      env:
-        PR: ${{ github.event.issue.number }}
-        MERGE_COMMIT_SHA: ${{ needs.check-pr.outputs.merge_commit_sha }}
-      working-directory: tarballs
-      run: |
-        suffix="-pr-${PR}-${MERGE_COMMIT_SHA:0:7}"
-        while read -r tarball ; do
-          if ! [[ "$tarball" =~ ^[a-z0-9-]+\.tgz$ ]] || [ ! -f "$tarball" ] ; then
-            echo "Invalid entry in order.txt: $tarball"
-            exit 1
-          fi
-          # publishConfig is checked too, because npm lets it override the registry and dist-tag
-          if ! tar -xOf "$tarball" package/package.json | jq -e --arg suffix "$suffix" '
-              (.name == "zwave-js" or (.name | startswith("@zwave-js/")))
-              and (.version | endswith($suffix))
-              and ((.publishConfig // {}) | keys - ["access"] | length == 0)
-            ' > /dev/null ; then
-            echo "$tarball does not contain an expected PR build:"
-            tar -xOf "$tarball" package/package.json | jq '{ name, version, publishConfig }'
-            exit 1
-          fi
-        done < order.txt
-
-    - name: Publish the tarballs to npm
-      id: publish
-      if: needs.pack-pr.result == 'success'
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # npm is used instead of yarn, because yarn can only publish a workspace it
-      # packs itself, which would require the PR code in this job again
-      working-directory: tarballs
-      run: |
-        while read -r tarball ; do
-          delay=5
-          while true ; do
-            if output=$(npm publish "$tarball" --tag next 2>&1) ; then
-              echo "$output"
-              break
-            fi
-            echo "$output"
-
-            # Tolerate a version that already exists, e.g. when the command gets
-            # repeated or when a retry follows a publish that did go through
-            if echo "$output" | grep -q "cannot publish over" ; then
-              break
-            fi
-            if [ "$delay" -gt 20 ] ; then
-              exit 1
-            fi
-
-            echo "Retrying $tarball in ${delay}s"
-            sleep "$delay"
-            delay=$((delay * 2))
-          done
-        done < order.txt
-
-    - name: Give feedback
-      if: always()
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       env:
-        VERSION: ${{ needs.pack-pr.outputs.version }}
-        SUCCESS: ${{ steps.publish.outcome == 'success' }}
+        MERGE_COMMIT_SHA: ${{ needs.check-pr.outputs.merge_commit_sha }}
+      with:
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'test-and-release.yml',
+            ref: context.ref,
+            inputs: {
+              action: 'publish-pr',
+              pr: String(context.issue.number),
+              'merge-commit-sha': process.env.MERGE_COMMIT_SHA,
+              'pack-run-id': String(context.runId),
+            },
+          });
+
+    - name: Report the failure
+      if: needs.pack-pr.result != 'success'
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const body = process.env.SUCCESS === 'true'
-            ? `🎉 The packages have been published.\nYou can now install the test version with\n\`\`\`\nyarn add zwave-js@${process.env.VERSION}\n\`\`\``
-            : `😥 Unfortunately I could not publish the new packages. Check out the logs to see what went wrong.`;
-
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: context.issue.number,
-            body,
+            body: `😥 Unfortunately I could not build the new packages. Check out the logs to see what went wrong.`,
           });
 
 

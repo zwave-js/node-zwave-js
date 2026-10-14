@@ -16,16 +16,28 @@ on:
   merge_group:
     types: [checks_requested]
 
-  # Allows other workflows to publish packages with OICD
-  workflow_call:
+  # Lets other workflows publish packages with OIDC. npm only trusts this workflow
+  # as the top-level workflow of a run, so they must dispatch it instead of calling it.
+  workflow_dispatch:
     inputs:
       action:
-        description: 'Action to perform (e.g. publish-config)'
+        description: 'Action to perform'
         required: true
-        type: string
+        type: choice
+        options:
+          - publish-config
+          - publish-pr
       version:
-        description: 'Version to publish the packages with'
-        required: true
+        description: 'publish-config: Version to publish @zwave-js/config with'
+        type: string
+      pr:
+        description: 'publish-pr: Number of the PR to publish'
+        type: string
+      merge-commit-sha:
+        description: 'publish-pr: Merge commit SHA the PR build was packed from'
+        type: string
+      pack-run-id:
+        description: 'publish-pr: ID of the workflow run that packed the PR build'
         type: string
 
 permissions:
@@ -33,7 +45,8 @@ permissions:
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
-  group: 'test-and-release-${{ github.ref }}'
+  # Publishing runs are dispatched on master, so they must not cancel or be cancelled by pushes
+  group: 'test-and-release-${{ github.event_name }}-${{ github.ref }}-${{ inputs.action }}-${{ inputs.pr }}'
   cancel-in-progress: true
 
 env:
@@ -42,7 +55,7 @@ env:
 
 jobs:
   build:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -66,7 +79,7 @@ jobs:
 
   # Makes sure that the published packages can be require'd without issues in a production environment
   test-packages:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     needs: [build]
 
     runs-on: ubuntu-latest
@@ -167,7 +180,7 @@ jobs:
   # ===================
 
   lint:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -190,7 +203,7 @@ jobs:
   # ===================
 
   lint-zwave:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -214,7 +227,7 @@ jobs:
   # ===================
   # Runs unit tests on all supported node versions and OSes
   unit-tests:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     name: "Unit tests: ${{ matrix.os }}, Node.js ${{ matrix.node-version }} (part ${{ matrix.shard }})"
     runs-on: ${{ matrix.os }}
     strategy:
@@ -250,7 +263,7 @@ jobs:
   # ===================
   # Test if the transformers are working
   test-transformers:
-    if: github.event_name != 'workflow_call'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -326,7 +339,6 @@ jobs:
     name: Update CC implementation status
     # Only run for master branch and don't run in forks
     if: |
-      github.event_name != 'workflow_call' &&
       github.repository == 'zwave-js/zwave-js' &&
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
@@ -361,7 +373,6 @@ jobs:
     name: Update toLogEntry overview
     # Only run for master branch and don't run in forks
     if: |
-      github.event_name != 'workflow_call' &&
       github.repository == 'zwave-js/zwave-js' &&
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
@@ -396,7 +407,6 @@ jobs:
   deploy:
     # Trigger this step only when a commit on any branch is tagged with a version number
     if: |
-      github.event_name != 'workflow_call' &&
       github.actor == 'AlCalzone' &&
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
@@ -412,6 +422,7 @@ jobs:
     permissions:
       contents: write # Required for creating releases
       id-token: write # Required for publishing with OIDC
+    environment: npm
 
     runs-on: ubuntu-latest
     strategy:
@@ -481,14 +492,14 @@ jobs:
 
   # ===================
 
-  # Publishes nightly config updates triggered by the nightly-config-publish workflow
+  # Publishes nightly config updates dispatched by the nightly-config-publish workflow
   publish-config:
-    # Only run when called from another workflow with action=publish-config
-    if: github.event_name == 'workflow_call' && inputs.action == 'publish-config'
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'publish-config'
 
     permissions:
       contents: read
       id-token: write # Required for publishing with OIDC
+    environment: npm
 
     runs-on: ubuntu-latest
     strategy:
@@ -516,3 +527,141 @@ jobs:
 
     - name: Publish @zwave-js/config to npm
       run: yarn workspace "@zwave-js/config" -vi npm publish --tag nightly
+
+  # ===================
+
+  # Publishes a PR build packed by the zwave-js-bot_comment workflow. The tarballs
+  # were produced by PR code, so this job must not check out or execute any code.
+  publish-pr:
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'publish-pr'
+
+    permissions:
+      actions: read # Required for downloading the tarballs from the pack run
+      id-token: write # Required for publishing with OIDC
+    environment: npm
+
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+
+    steps:
+    # The tarballs must come from a pack run of the bot, not from a workflow a PR can modify
+    - name: Verify the pack run
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PACK_RUN_ID: ${{ inputs.pack-run-id }}
+      run: |
+        run=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PACK_RUN_ID" --jq '.path + " " + .event + " " + .head_branch')
+        if [ "$run" != ".github/workflows/zwave-js-bot_comment.yml issue_comment $GITHUB_REF_NAME" ] ; then
+          echo "Run $PACK_RUN_ID is not a pack run of the bot: $run"
+          exit 1
+        fi
+
+    - name: Download the tarballs
+      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+      with:
+        name: pr-tarballs
+        path: tarballs
+        run-id: ${{ inputs.pack-run-id }}
+        github-token: ${{ github.token }}
+
+    # This also creates the .npmrc that npm publish needs
+    - name: Set up Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: 24 # Ships an npm version that supports OIDC
+        registry-url: 'https://registry.npmjs.org'
+
+    # The tarballs and order.txt were produced by PR code, so a modified build must
+    # not be able to publish anything else. The name check limits publishing to our
+    # own packages, and the version suffix, which is derived from the dispatch inputs,
+    # prevents publishing a regular release.
+    - name: Validate the tarballs
+      id: validate
+      env:
+        PR: ${{ inputs.pr }}
+        MERGE_COMMIT_SHA: ${{ inputs.merge-commit-sha }}
+      working-directory: tarballs
+      run: |
+        if ! [[ "$PR" =~ ^[0-9]+$ && "$MERGE_COMMIT_SHA" =~ ^[0-9a-f]{40}$ ]] ; then
+          echo "Invalid PR number or merge commit SHA"
+          exit 1
+        fi
+        suffix="-pr-${PR}-${MERGE_COMMIT_SHA:0:7}"
+        while read -r tarball ; do
+          if ! [[ "$tarball" =~ ^[a-z0-9-]+\.tgz$ ]] || [ ! -f "$tarball" ] ; then
+            echo "Invalid entry in order.txt: $tarball"
+            exit 1
+          fi
+          # publishConfig is checked too, because npm lets it override the registry and dist-tag
+          if ! tar -xOf "$tarball" package/package.json | jq -e --arg suffix "$suffix" '
+              (.name == "zwave-js" or (.name | startswith("@zwave-js/")))
+              and (.version | test("^[0-9a-z.-]+$") and endswith($suffix))
+              and ((.publishConfig // {}) | keys - ["access"] | length == 0)
+            ' > /dev/null ; then
+            echo "$tarball does not contain an expected PR build:"
+            tar -xOf "$tarball" package/package.json | jq '{ name, version, publishConfig }'
+            exit 1
+          fi
+        done < order.txt
+        echo "version=$(tar -xOf zwave-js.tgz package/package.json | jq -r .version)" >> "$GITHUB_OUTPUT"
+
+    # npm is used instead of yarn, because yarn can only publish a workspace it
+    # packs itself, which would require the PR code in this job
+    - name: Publish the tarballs to npm
+      working-directory: tarballs
+      run: |
+        while read -r tarball ; do
+          delay=5
+          while true ; do
+            if output=$(npm publish "$tarball" --tag next 2>&1) ; then
+              echo "$output"
+              break
+            fi
+            echo "$output"
+
+            # Tolerate a version that already exists, e.g. when the command gets
+            # repeated or when a retry follows a publish that did go through
+            if echo "$output" | grep -q "cannot publish over" ; then
+              break
+            fi
+            if [ "$delay" -gt 20 ] ; then
+              exit 1
+            fi
+
+            echo "Retrying $tarball in ${delay}s"
+            sleep "$delay"
+            delay=$((delay * 2))
+          done
+        done < order.txt
+
+  # Reports the result of publish-pr on the PR. This is a separate job, so the bot
+  # token is never available in a job that can publish.
+  report-pr:
+    needs: publish-pr
+    if: always() && github.event_name == 'workflow_dispatch' && inputs.action == 'publish-pr'
+
+    permissions: {}
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Give feedback
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      env:
+        PR: ${{ inputs.pr }}
+        VERSION: ${{ needs.publish-pr.outputs.version }}
+        SUCCESS: ${{ needs.publish-pr.result == 'success' }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const body = process.env.SUCCESS === 'true'
+            ? `🎉 The packages have been published.\nYou can now install the test version with\n\`\`\`\nyarn add zwave-js@${process.env.VERSION}\n\`\`\``
+            : `😥 Unfortunately I could not publish the new packages. Check out the logs [here](${context.payload.repository.html_url}/actions/runs/${context.runId}).`;
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: Number(process.env.PR),
+            body,
+          });

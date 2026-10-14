@@ -130,17 +130,29 @@ jobs:
         echo "Next version is $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-  # Call the test-and-release workflow to publish the config package
+  # Dispatch the test-and-release workflow to publish the config package. npm only accepts
+  # OIDC tokens from that workflow when it is the top-level workflow of a run.
   publish-config:
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
-    # Publishing only needs id-token. contents: write is for the deploy job in
-    # test-and-release.yml: GitHub refuses to start a called workflow if any of
-    # its jobs requests more than the caller grants, even jobs that are skipped
     permissions:
-      contents: write
-      id-token: write
-    uses: ./.github/workflows/test-and-release.yml
-    with:
-      action: publish-config
-      version: ${{ needs.detect-changes.outputs.version }}
+      actions: write # Required for dispatching test-and-release.yml
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Start publishing
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      env:
+        VERSION: ${{ needs.detect-changes.outputs.version }}
+      with:
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'test-and-release.yml',
+            ref: context.ref,
+            inputs: {
+              action: 'publish-config',
+              version: process.env.VERSION,
+            },
+          });
