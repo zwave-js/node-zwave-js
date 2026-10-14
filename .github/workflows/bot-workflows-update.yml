@@ -65,8 +65,10 @@ jobs:
           }
           fs.writeFileSync(path, JSON.stringify(lock, null, 2) + "\n");
         ' "$sha"
-        # The hand-written workflows pin the same SHA. Renovate leaves these
-        # references alone, so a v1 release reaches them on the same schedule
+        # Hand-written workflows reference bot-workflows as `@<sha> # v1`.
+        # Renovate is told to ignore these (see renovate.json5), so move them
+        # to the new v1 SHA here as well. Compiled lock files are skipped
+        # because the next step regenerates them from actions-lock.json.
         for f in .github/workflows/*.yml; do
           case "$f" in *.lock.yml|*/agentics-maintenance.yml) continue ;; esac
           sed -i -E "s#(zwave-js/bot-workflows/[^@ ]+)@[0-9a-f]{40} \# v1\$#\1@$sha \# v1#" "$f"
