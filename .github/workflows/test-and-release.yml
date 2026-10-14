@@ -28,8 +28,6 @@ on:
         required: true
         type: string
 
-# Jobs that publish request elevated permissions individually, so builds of PR code
-# never hold a write token or can mint an OIDC token for npm trusted publishing
 permissions:
   contents: read
 
