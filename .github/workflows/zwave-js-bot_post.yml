@@ -26,7 +26,7 @@ jobs:
 
     # Installs the shared bot-scripts dependencies and exports BOT_SCRIPTS_DIR
     - name: Setup bot scripts
-      uses: zwave-js/bot-workflows/actions/setup-bot@34a23a27c19b765f304318e730221e400bbd2848 # v1
+      uses: zwave-js/bot-workflows/actions/setup-bot@v1
 
     - name: Extract log file from issue body
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -109,7 +109,7 @@ jobs:
     # evicted cache entry heals itself between two nightly rebuilds
     - name: Restore posts index
       id: posts-index
-      uses: zwave-js/bot-workflows/actions/restore-bot-index@34a23a27c19b765f304318e730221e400bbd2848 # v1
+      uses: zwave-js/bot-workflows/actions/restore-bot-index@v1
       with:
         index: posts
         github-token: ${{ github.token }}
@@ -123,7 +123,7 @@ jobs:
     # embedding model cache) and exports BOT_SCRIPTS_DIR
     - name: Setup bot scripts
       if: steps.posts-index.outputs.found == 'true'
-      uses: zwave-js/bot-workflows/actions/setup-bot@34a23a27c19b765f304318e730221e400bbd2848 # v1
+      uses: zwave-js/bot-workflows/actions/setup-bot@v1
 
     - name: Add post to index
       id: update

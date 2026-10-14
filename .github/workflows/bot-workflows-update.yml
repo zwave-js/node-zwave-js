@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7
       with:
         # The push below authenticates explicitly with BOT_TOKEN; leave no
         # ambient credential in .git/config
@@ -65,14 +65,6 @@ jobs:
           }
           fs.writeFileSync(path, JSON.stringify(lock, null, 2) + "\n");
         ' "$sha"
-        # Hand-written workflows reference bot-workflows as `@<sha> # v1`.
-        # Renovate is told to ignore these (see renovate.json5), so move them
-        # to the new v1 SHA here as well. Compiled lock files are skipped
-        # because the next step regenerates them from actions-lock.json.
-        for f in .github/workflows/*.yml; do
-          case "$f" in *.lock.yml|*/agentics-maintenance.yml) continue ;; esac
-          sed -i -E "s#(zwave-js/bot-workflows/[^@ ]+)@[0-9a-f]{40} \# v1\$#\1@$sha \# v1#" "$f"
-        done
 
     - name: Recompile
       env:

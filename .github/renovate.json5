@@ -28,12 +28,6 @@
 	],
 	packageRules: [
 		{
-			// bot-workflows-update.yml repins these to the current v1 together with the gh-aw lock
-			matchManagers: ["github-actions"],
-			matchPackageNames: ["zwave-js/bot-workflows"],
-			enabled: false,
-		},
-		{
 			// Raise together with the minimum supported Node.js version
 			matchPackageNames: ["@types/node"],
 			allowedVersions: "<21",
