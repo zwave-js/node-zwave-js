@@ -5,9 +5,6 @@ inputs:
   node-version:
     description: 'Node.js version'
     required: true
-  githubToken:
-    description: 'The github token to use for authentication'
-    required: true
 
 runs:
   using: 'composite'
@@ -30,8 +27,3 @@ runs:
       run: |
         yarn install --immutable
         yarn bootstrap
-
-    - name: TurboRepo local server
-      uses: felixmosh/turborepo-gh-artifacts@v4.1.1
-      with:
-        repo-token: ${{ inputs.githubToken }}

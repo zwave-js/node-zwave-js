@@ -36,7 +36,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     # FIXME: Check if this build step is still needed
     - name: Compile TypeScript code

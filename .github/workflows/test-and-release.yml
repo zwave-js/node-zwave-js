@@ -38,10 +38,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_API: "http://127.0.0.1:9080"
-  # The token and team are required by the TurboRepo server, just set them to anything
-  TURBO_TOKEN: foo
-  TURBO_TEAM: me
   # Additional CLI flags for turbo commands
   TURBO_FLAGS: "" # "--concurrency=2"
 
@@ -61,13 +57,9 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
-
-    - name: Save Turbo Cache between jobs
-      uses: ./.github/actions/build-cache-upload
 
   # ===================
 
@@ -85,14 +77,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v7
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -190,7 +178,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
@@ -212,7 +199,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Lint config files and Z-Wave specifics
       # Disable log prefix, so GitHub recognizes annotations in the output
@@ -238,7 +224,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     # # For pull requests, only run tests for changed files
     # - name: Run component tests (changes)
@@ -271,7 +256,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     # Transformer tests need their dependencies to be compiled
     - name: Compile test dependencies
@@ -301,14 +285,10 @@ jobs:
   #   - name: Checkout code
   #     uses: actions/checkout@v7
 
-  #   - name: Restore Turbo Cache from previous jobs
-  #     uses: ./.github/actions/build-cache-download
-
   #   - name: Prepare testing environment
   #     uses: ./.github/actions/prepare-env
   #     with:
   #       node-version: ${{ matrix.node-version }}
-  #       githubToken: ${{ secrets.GITHUB_TOKEN }}
 
   #   - name: Generate API report
   #     run: yarn run extract-api $TURBO_FLAGS
@@ -354,7 +334,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update CC table # (maybe)
       uses: actions/github-script@v9
@@ -390,7 +369,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update overview
       uses: actions/github-script@v9
@@ -429,14 +407,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v7
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -510,7 +484,6 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run a fresh build
       run: yarn build
