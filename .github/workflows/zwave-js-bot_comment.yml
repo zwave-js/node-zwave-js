@@ -193,6 +193,34 @@ jobs:
         node-version: 22 # This should be LTS
         registry-url: 'https://registry.npmjs.org'
 
+    # The tarballs and order.txt were produced by PR code. Only the version suffix
+    # is derived from trusted inputs, so it is what prevents a modified build from
+    # publishing a regular release or a foreign package with the npm token.
+    - name: Validate the tarballs
+      if: needs.pack-pr.result == 'success'
+      env:
+        PR: ${{ github.event.issue.number }}
+        MERGE_COMMIT_SHA: ${{ needs.check-pr.outputs.merge_commit_sha }}
+      working-directory: tarballs
+      run: |
+        suffix="-pr-${PR}-${MERGE_COMMIT_SHA:0:7}"
+        while read -r tarball ; do
+          if ! [[ "$tarball" =~ ^[a-z0-9-]+\.tgz$ ]] || [ ! -f "$tarball" ] ; then
+            echo "Invalid entry in order.txt: $tarball"
+            exit 1
+          fi
+          # publishConfig is checked too, because npm lets it override the registry and dist-tag
+          if ! tar -xOf "$tarball" package/package.json | jq -e --arg suffix "$suffix" '
+              (.name == "zwave-js" or (.name | startswith("@zwave-js/")))
+              and (.version | endswith($suffix))
+              and ((.publishConfig // {}) | keys - ["access"] | length == 0)
+            ' > /dev/null ; then
+            echo "$tarball does not contain an expected PR build:"
+            tar -xOf "$tarball" package/package.json | jq '{ name, version, publishConfig }'
+            exit 1
+          fi
+        done < order.txt
+
     - name: Publish the tarballs to npm
       id: publish
       if: needs.pack-pr.result == 'success'
@@ -203,11 +231,6 @@ jobs:
       working-directory: tarballs
       run: |
         while read -r tarball ; do
-          if [ ! -f "$tarball" ] ; then
-            echo "$tarball is missing from the artifact"
-            exit 1
-          fi
-
           delay=5
           while true ; do
             if output=$(npm publish "$tarball" --tag next 2>&1) ; then
