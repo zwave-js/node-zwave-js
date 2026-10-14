@@ -607,14 +607,16 @@ jobs:
         echo "version=$(tar -xOf zwave-js.tgz package/package.json | jq -r .version)" >> "$GITHUB_OUTPUT"
 
     # npm is used instead of yarn, because yarn can only publish a workspace it
-    # packs itself, which would require the PR code in this job
+    # packs itself, which would require the PR code in this job.
+    # Provenance is disabled, because it would attest that the PR code was built
+    # from the master commit this run is dispatched on.
     - name: Publish the tarballs to npm
       working-directory: tarballs
       run: |
         while read -r tarball ; do
           delay=5
           while true ; do
-            if output=$(npm publish "$tarball" --tag next 2>&1) ; then
+            if output=$(npm publish "$tarball" --tag next --provenance=false 2>&1) ; then
               echo "$output"
               break
             fi
