@@ -193,9 +193,10 @@ jobs:
         node-version: 22 # This should be LTS
         registry-url: 'https://registry.npmjs.org'
 
-    # The tarballs and order.txt were produced by PR code. Only the version suffix
-    # is derived from trusted inputs, so it is what prevents a modified build from
-    # publishing a regular release or a foreign package with the npm token.
+    # The tarballs and order.txt were produced by PR code, so a modified build must
+    # not be able to publish anything else with the npm token. The name check limits
+    # publishing to our own packages, and the version suffix, which is derived from
+    # trusted inputs, prevents publishing a regular release.
     - name: Validate the tarballs
       if: needs.pack-pr.result == 'success'
       env:
