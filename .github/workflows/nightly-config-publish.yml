@@ -134,8 +134,8 @@ jobs:
   publish-config:
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
-    # A called workflow cannot hold more than its caller grants, and GitHub
-    # validates every job in it, so this must cover what test-and-release.yml requests
+    # GitHub checks every job of a called workflow against this grant,
+    # including the deploy job, which never runs here
     permissions:
       contents: write
       id-token: write
