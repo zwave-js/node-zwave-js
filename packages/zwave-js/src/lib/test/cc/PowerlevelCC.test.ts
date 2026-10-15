@@ -1,11 +1,14 @@
 import {
 	CommandClass,
+	InvalidCC,
 	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
 	PowerlevelCCReport,
 	PowerlevelCCSet,
+	PowerlevelCCTestNodeReport,
 	PowerlevelCommand,
+	PowerlevelTestStatus,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
@@ -109,6 +112,41 @@ test("the Report command should be deserialized correctly (custom power)", async
 
 	t.expect(cc.powerlevel).toBe(Powerlevel["-3 dBm"]);
 	t.expect(cc.timeout).toBe(50); // timeout does not apply to NormalPower
+});
+
+test("the TestNodeReport command should be deserialized correctly", async (t) => {
+	const ccData = buildCCBuffer(
+		Uint8Array.from([
+			PowerlevelCommand.TestNodeReport, // CC Command
+			12, // test node id
+			PowerlevelTestStatus.Success, // status
+			0x01, // acknowledged frames (MSB)
+			0x2c, // acknowledged frames (LSB)
+		]),
+	);
+	const cc = (await CommandClass.parse(ccData, {
+		sourceNodeId: 5,
+	} as any)) as PowerlevelCCTestNodeReport;
+	t.expect(cc.constructor).toBe(PowerlevelCCTestNodeReport);
+
+	t.expect(cc.testNodeId).toBe(12);
+	t.expect(cc.status).toBe(PowerlevelTestStatus.Success);
+	t.expect(cc.acknowledgedFrames).toBe(300);
+});
+
+test("the TestNodeReport command should reject invalid statuses during parsing", async (t) => {
+	const ccData = buildCCBuffer(
+		Uint8Array.from([
+			PowerlevelCommand.TestNodeReport, // CC Command
+			12, // test node id
+			190, // invalid status
+			0x00, // acknowledged frames (MSB)
+			0x00, // acknowledged frames (LSB)
+		]),
+	);
+
+	const cc = await CommandClass.parse(ccData, { sourceNodeId: 5 } as any);
+	t.expect(cc).toBeInstanceOf(InvalidCC);
 });
 
 test("deserializing an unsupported command should return an unspecified version of PowerlevelCC", async (t) => {
