@@ -15,7 +15,7 @@ permissions:
   issues: read
 network: defaults
 imports:
-- zwave-js/bot-workflows/workflows/shared/hardening.md@75148e07b701ca92e052212a9b7710864068ef6e
+- zwave-js/bot-workflows/workflows/shared/hardening.md@6cc2957100d8ebbcf1c21d9233165642f2868d4d
 - zwave-js/bot-workflows/workflows/shared/zwave-log-analysis.md@0fedb405bbe6acb4060d6e31f547994b28892866
 safe-outputs:
   add-comment:
@@ -26,7 +26,7 @@ steps:
     COMMENT_BODY: ${{ github.event.comment.body }}
   id: parse_command
   name: Parse command
-  uses: actions/github-script@v9.0.0
+  uses: actions/github-script@v9
   with:
     script: |
       const body = process.env.COMMENT_BODY ?? "";
@@ -66,7 +66,7 @@ steps:
 description: Analyze a Z-Wave JS logfile on demand via /analyze-logfile <url>
 engine: copilot
 model: claude-opus-4.8
-source: zwave-js/bot-workflows/workflows/analyze-logfile-command.md@34a23a27c19b765f304318e730221e400bbd2848
+source: zwave-js/bot-workflows/workflows/analyze-logfile-command.md@124f3a48e884febf74a2abbe457ad76b3c7e901d
 timeout-minutes: 30
 ---
 # Z-Wave JS Logfile Analysis

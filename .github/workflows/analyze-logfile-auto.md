@@ -11,14 +11,14 @@ on:
   roles: all
   steps:
   - name: Checkout repository
-    uses: actions/checkout@v7.0.1
+    uses: actions/checkout@v6
     with:
       persist-credentials: false
   - name: Setup bot scripts
     uses: zwave-js/bot-workflows/actions/setup-bot@v1
   - id: extract
     name: Extract log file from discussion body
-    uses: actions/github-script@v9.0.0
+    uses: actions/github-script@v9
     with:
       github-token: ${{ secrets.BOT_TOKEN }}
       result-encoding: string
@@ -45,7 +45,7 @@ on:
       SHOULD_CONTINUE: ${{ steps.extract.outputs.shouldContinue }}
     id: feedback
     name: Classify logfile and give feedback
-    uses: actions/github-script@v9.0.0
+    uses: actions/github-script@v9
     with:
       github-token: ${{ secrets.BOT_TOKEN }}
       result-encoding: string
@@ -60,8 +60,19 @@ on:
         await bot.ensureLogfileFeedbackInDiscussion({github, context}, feedback);
         
         return feedback;
-  - id: gate
+  - id: changed
     if: steps.feedback.outputs.result == 'OK'
+    name: Check whether the logfile changed
+    uses: actions/github-script@v9
+    with:
+      result-encoding: string
+      script: |
+        const bot = require(`${process.env.BOT_SCRIPTS_DIR}/index.cjs`);
+        const changed = bot.logfileChangedByEdit({context});
+        if (!changed) console.log("Skipping analysis: the edit did not change the logfile");
+        return changed ? "true" : "false";
+  - id: gate
+    if: steps.feedback.outputs.result == 'OK' && steps.changed.outputs.result == 'true'
     name: Gate agentic analysis
     run: "true"
 permissions:
@@ -70,7 +81,7 @@ permissions:
 if: needs.pre_activation.outputs.gate_result == 'success'
 network: defaults
 imports:
-- zwave-js/bot-workflows/workflows/shared/hardening.md@75148e07b701ca92e052212a9b7710864068ef6e
+- zwave-js/bot-workflows/workflows/shared/hardening.md@6cc2957100d8ebbcf1c21d9233165642f2868d4d
 - zwave-js/bot-workflows/workflows/shared/zwave-log-analysis.md@0fedb405bbe6acb4060d6e31f547994b28892866
 safe-outputs:
   add-comment:
@@ -81,7 +92,7 @@ steps:
   uses: zwave-js/bot-workflows/actions/setup-bot@v1
 - id: get_logfile_url
   name: Get logfile URL from discussion
-  uses: actions/github-script@v9.0.0
+  uses: actions/github-script@v9
   with:
     github-token: ${{ secrets.BOT_TOKEN }}
     result-encoding: string
@@ -96,7 +107,7 @@ description: Automatically analyze Z-Wave JS logfiles posted in new discussions
 engine: copilot
 model: claude-opus-4.8
 runs-on-slim: ubuntu-latest
-source: zwave-js/bot-workflows/workflows/analyze-logfile-auto.md@34a23a27c19b765f304318e730221e400bbd2848
+source: zwave-js/bot-workflows/workflows/analyze-logfile-auto.md@124f3a48e884febf74a2abbe457ad76b3c7e901d
 timeout-minutes: 30
 ---
 # Z-Wave JS Logfile Analysis
