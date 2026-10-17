@@ -194,6 +194,7 @@ import {
 	buffer2hex,
 	cloneDeep,
 	createWrappingCounter,
+	getEnumMemberName,
 	getErrorMessage,
 	getenv,
 	isAbortError,
@@ -6965,8 +6966,16 @@ ${handlers.length} left`,
 						}
 
 						if (!prevResult.isOK()) {
+							// Only a TX status of NoAck means the node did not answer.
+							// For anything else, name the status instead of guessing.
 							throw new ZWaveError(
-								"The node did not acknowledge the command",
+								prevResult.transmitStatus
+									=== TransmitStatus.NoAck
+									? "The node did not acknowledge the command"
+									: `Failed to send the command (Status ${getEnumMemberName(
+											TransmitStatus,
+											prevResult.transmitStatus,
+										)})`,
 								ZWaveErrorCodes.Controller_CallbackNOK,
 								prevResult,
 								transaction.stack,
