@@ -1,0 +1,140 @@
+{
+	"manufacturer": "Boundary",
+	"manufacturerId": "0x044a",
+	"label": "Outdoor Siren",
+	"description": "Outdoor Siren",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/boundary_template.json#indicator",
+			"label": "Blue LED",
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "Heartbeat Interval",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 20
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Remote Self-Test",
+			"valueSize": 4,
+			"options": [
+				{
+					"label": "Stop",
+					"value": 0
+				},
+				{
+					"label": "Start",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Remote Self-Test Fault",
+			"valueSize": 4,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No fault",
+					"value": 0
+				},
+				{
+					"label": "Fault",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$import": "templates/boundary_template.json#led_time",
+			"label": "LED Fade-On Time",
+			"defaultValue": 8
+		},
+		{
+			"#": "12",
+			"$import": "templates/boundary_template.json#led_time",
+			"label": "LED On Time"
+		},
+		{
+			"#": "13",
+			"$import": "templates/boundary_template.json#led_time",
+			"label": "LED Fade-Off Time",
+			"defaultValue": 8
+		},
+		{
+			"#": "14",
+			"$import": "templates/boundary_template.json#led_time",
+			"label": "LED First Off Time",
+			"defaultValue": 11
+		},
+		{
+			"#": "15",
+			"$import": "templates/boundary_template.json#led_time",
+			"label": "LED Second Off Time",
+			"defaultValue": 11
+		},
+		{
+			"#": "16",
+			"label": "LED Maximum Intensity",
+			"description": "PWM duty cycle is value / 15. Apply using parameter 19, then reset parameter 19 to 0.",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 1
+		},
+		{
+			"#": "19",
+			"$import": "templates/boundary_template.json#apply",
+			"label": "Apply LED Pattern Configuration",
+			"description": "Write 1 to apply LED pattern parameters 11-16, then write 0 after they have been applied."
+		},
+		{
+			"#": "20",
+			"label": "Interference Level",
+			"valueSize": 4,
+			"unit": "dBm",
+			"minValue": -130,
+			"maxValue": 130,
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"label": "Siren Duration",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 5,
+			"maxValue": 120,
+			"defaultValue": 15
+		}
+	],
+	"metadata": {
+		"comments": [
+			{
+				"level": "info",
+				"text": "Temperature may require periodic polling; an hourly temperature-only refresh was verified on firmware 1.8.0."
+			},
+			{
+				"level": "info",
+				"text": "The LED timing options use the TCA6507 nominal timing codes. The first and second off times alternate between pulses."
+			}
+		]
+	}
+}

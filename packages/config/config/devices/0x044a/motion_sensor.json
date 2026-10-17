@@ -1,0 +1,128 @@
+{
+	"manufacturer": "Boundary",
+	"manufacturerId": "0x044a",
+	"label": "Motion Sensor",
+	"description": "PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/boundary_template.json#indicator"
+		},
+		{
+			"#": "2",
+			"label": "Motion Retrigger Delay",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 20,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$purpose": "motion_sensitivity.inverted",
+			"label": "Motion Detection Threshold",
+			"description": "Lower thresholds increase sensitivity. Apply using parameter 19, then reset parameter 19 to 0.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 24
+		},
+		{
+			"#": "12",
+			"label": "Blind Time",
+			"valueSize": 4,
+			"unit": "0.1 seconds",
+			"allowed": [
+				{
+					"range": [5, 80],
+					"step": 5
+				}
+			],
+			"defaultValue": 5
+		},
+		{
+			"#": "13",
+			"label": "Pulse Count",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2
+		},
+		{
+			"#": "14",
+			"label": "Pulse Counting Window",
+			"valueSize": 4,
+			"allowed": [
+				{
+					"range": [2, 8],
+					"step": 2
+				}
+			],
+			"defaultValue": 6
+		},
+		{
+			"#": "15",
+			"label": "Operation Mode",
+			"description": "Numeric modes are not explained in the available manufacturer documentation.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2
+		},
+		{
+			"#": "16",
+			"label": "Signal Source",
+			"description": "Numeric source selections are not explained in the available manufacturer documentation.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		{
+			"#": "17",
+			"label": "High-Pass Filter Frequency",
+			"description": "Numeric frequency selections are not explained in the available manufacturer documentation.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		{
+			"#": "18",
+			"label": "Pulse Detection Mode",
+			"description": "Numeric modes are not explained in the available manufacturer documentation.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"$import": "templates/boundary_template.json#apply"
+		}
+	],
+	"metadata": {
+		"comments": [
+			{
+				"level": "info",
+				"text": "After changing PIR sensor configuration, write parameter 19 to 1 and then reset it to 0. Settings are delivered when the battery-powered device wakes up."
+			}
+		]
+	}
+}
