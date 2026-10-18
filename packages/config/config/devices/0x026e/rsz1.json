@@ -20,5 +20,18 @@
 			"maxNodes": 1,
 			"isLifeline": true
 		}
+	},
+	"compat": {
+		// The shade acknowledges Multilevel Switch Set commands that carry a duration field but
+		// discards them, so it is driven with the v1 form of the command instead
+		"encodeCCsUsingTargetVersion": true,
+		"commandClasses": {
+			"add": {
+				"Multilevel Switch": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }
