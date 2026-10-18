@@ -16,6 +16,10 @@
 		{
 			"productType": "0x8002",
 			"productId": "0x4600"
+		},
+		{
+			"productType": "0x8109",
+			"productId": "0x0dc2"
 		}
 	],
 	"firmwareVersion": {
