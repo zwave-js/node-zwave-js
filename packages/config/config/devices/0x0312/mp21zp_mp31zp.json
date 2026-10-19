@@ -5,6 +5,11 @@
 	"description": "Mini Plug with Power Meter",
 	"devices": [
 		{
+			"productType": "0xfe00",
+			"productId": "0xfe0e",
+			"zwaveAllianceId": 4247
+		},
+		{
 			"productType": "0xff00",
 			"productId": "0xff0e",
 			"zwaveAllianceId": 4247
