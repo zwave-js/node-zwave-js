@@ -22,8 +22,8 @@
 		}
 	},
 	"compat": {
-		// The shade acknowledges Multilevel Switch Set commands that carry a duration field but
-		// discards them, so it is driven with the v1 form of the command instead
+		// The device reports support for Multilevel Switch v2 but ignores commands unless they
+		// are encoded as v1
 		"encodeCCsUsingTargetVersion": true,
 		"commandClasses": {
 			"add": {
