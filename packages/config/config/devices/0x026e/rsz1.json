@@ -20,5 +20,18 @@
 			"maxNodes": 1,
 			"isLifeline": true
 		}
+	},
+	"compat": {
+		// The device reports support for Multilevel Switch v2 but ignores commands unless they
+		// are encoded as v1
+		"encodeCCsUsingTargetVersion": true,
+		"commandClasses": {
+			"add": {
+				"Multilevel Switch": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }
