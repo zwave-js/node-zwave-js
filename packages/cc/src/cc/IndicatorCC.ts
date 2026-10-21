@@ -18,7 +18,12 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import {
+	Bytes,
+	escapeControlCharacters,
+	getEnumMemberName,
+	num2hex,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -1558,9 +1563,9 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		const indicatorId = raw.payload[0];
 		const descrptionLength = raw.payload[1];
 		validatePayload(raw.payload.length >= 2 + descrptionLength);
-		const description: string = raw.payload
-			.subarray(2, 2 + descrptionLength)
-			.toString("utf8");
+		const description: string = escapeControlCharacters(
+			raw.payload.subarray(2, 2 + descrptionLength).toString("utf8"),
+		);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

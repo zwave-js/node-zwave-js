@@ -20,6 +20,7 @@ import {
 	pick,
 	stringToUint8ArrayUTF16BE,
 	uint8ArrayToStringUTF16BE,
+	escapeControlCharacters,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
@@ -2048,6 +2049,7 @@ export class UserCredentialCCUserSet extends UserCredentialCC {
 				.subarray(10, 10 + nameLength)
 				.toString("ascii");
 		}
+		userName = escapeControlCharacters(userName);
 
 		if (userType === UserCredentialUserType.Expiring) {
 			return new this({
@@ -2254,6 +2256,7 @@ export class UserCredentialCCUserReport extends UserCredentialCC {
 				.subarray(15, 15 + nameLength)
 				.toString("ascii");
 		}
+		userName = escapeControlCharacters(userName);
 
 		const common = {
 			nodeId: ctx.sourceNodeId,

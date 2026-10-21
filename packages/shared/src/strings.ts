@@ -9,6 +9,18 @@ export function cpp2js(str: string): string {
 }
 
 /**
+ * Escapes C0 and C1 control characters (e.g. `"\x1b"`) in strings received from other devices,
+ * so they cannot manipulate logs or applications that display them. Trailing NUL padding is removed.
+ */
+export function escapeControlCharacters(str: string): string {
+	return str.replace(/\0+$/, "").replaceAll(
+		// oxlint-disable-next-line no-control-regex
+		/[\u0000-\u001f\u007f-\u009f]/g,
+		(c) => `\\x${c.charCodeAt(0).toString(16).padStart(2, "0")}`,
+	);
+}
+
+/**
  * Formats a number as a hexadecimal string, while making sure that the length is a multiple of two digits.
  * `undefined` and `null` get converted to `"undefined"`.
  *

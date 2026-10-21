@@ -14,6 +14,7 @@ import {
 	type BytesView,
 	stringToUint8ArrayUTF16BE,
 	uint8ArrayToStringUTF16BE,
+	escapeControlCharacters,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
@@ -82,10 +83,10 @@ function decodeNodeTextPayload(raw: CCRaw): string {
 
 	if (encoding === "utf16le") {
 		validatePayload(textBuffer.length % 2 === 0);
-		return uint8ArrayToStringUTF16BE(textBuffer);
+		return escapeControlCharacters(uint8ArrayToStringUTF16BE(textBuffer));
 	}
 
-	return textBuffer.toString("ascii");
+	return escapeControlCharacters(textBuffer.toString("ascii"));
 }
 
 function encodeNodeTextPayload(text: string): Bytes {

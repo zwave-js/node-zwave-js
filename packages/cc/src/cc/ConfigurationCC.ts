@@ -41,7 +41,13 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import {
+	Bytes,
+	escapeControlCharacters,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 
@@ -2693,7 +2699,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 			// If more reports follow, the info must at least be one byte
 			validatePayload(raw.payload.length >= 4);
 		}
-		const name: string = raw.payload.subarray(3).toString("utf8");
+		const name: string = escapeControlCharacters(
+			raw.payload.subarray(3).toString("utf8"),
+		);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -2850,7 +2858,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 			// If more reports follow, the info must at least be one byte
 			validatePayload(raw.payload.length >= 4);
 		}
-		const info: string = raw.payload.subarray(3).toString("utf8");
+		const info: string = escapeControlCharacters(
+			raw.payload.subarray(3).toString("utf8"),
+		);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
