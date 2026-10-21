@@ -14,8 +14,9 @@ import {
 	type BytesView,
 	buffer2hex,
 	getEnumMemberName,
-	getenv,
 } from "@zwave-js/shared";
+
+import { shouldLogSecurityDetails } from "../securityLogging.js";
 
 enum S2ExtensionType {
 	SPAN = 0x01,
@@ -334,11 +335,9 @@ export class MPANExtension extends Security2Extension {
 	}
 
 	protected toLogEntryDict(): MessageRecord {
-		const mpanState =
-			getenv("NODE_ENV") === "test"
-			|| getenv("NODE_ENV") === "development"
-				? buffer2hex(this.innerMPANState)
-				: "(hidden)";
+		const mpanState = shouldLogSecurityDetails()
+			? buffer2hex(this.innerMPANState)
+			: "(hidden)";
 		return {
 			"group ID": this.groupId,
 			"MPAN state": mpanState,
