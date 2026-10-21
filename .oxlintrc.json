@@ -291,6 +291,26 @@
 			}
 		},
 		{
+			// Code that parses untrusted data must not throw anything but a ZWaveError
+			"files": [
+				"packages/cc/src/**/*.ts",
+				"packages/core/src/**/*.ts",
+				"packages/serial/src/**/*.ts",
+				"packages/zwave-js/src/lib/zniffer/**/*.ts"
+			],
+			"rules": {
+				"@zwave-js/no-unchecked-bytes-reads": "warn",
+				"@zwave-js/no-unexpected-parse-errors": "warn"
+			}
+		},
+		{
+			"files": ["**/*.test.ts"],
+			"rules": {
+				"@zwave-js/no-unchecked-bytes-reads": "off",
+				"@zwave-js/no-unexpected-parse-errors": "off"
+			}
+		},
+		{
 			"files": ["packages/cc/src/**/*.ts"],
 			"rules": {
 				"@zwave-js/consistent-cc-classes": "error",
