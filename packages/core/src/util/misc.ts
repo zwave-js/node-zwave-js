@@ -1,3 +1,5 @@
+import { isEnumMember } from "@zwave-js/shared";
+
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
 
 /** Ensures that the values array is consecutive */
@@ -56,6 +58,21 @@ validatePayload.withReason = (reason: string | ZWaveErrorCodes) =>
 	validatePayloadInternal.bind(undefined, reason);
 validatePayload.fail = (reason: string | ZWaveErrorCodes) =>
 	validatePayload.withReason(reason)(false) as unknown as never;
+
+/**
+ * Interprets the given value as a member of the given numeric enum.
+ * Throws an invalid payload error if the value is not a member of the enum.
+ *
+ * @param enumeration The enumeration object the value should belong to
+ * @param value The raw value to interpret
+ */
+export function parseEnumValue<T extends Record<string, string | number>>(
+	enumeration: T,
+	value: number,
+): Extract<T[keyof T], number> {
+	validatePayload(isEnumMember(enumeration, value));
+	return value as Extract<T[keyof T], number>;
+}
 
 /**
  * Determines how many bits a value must be shifted to be right-aligned with a given bit mask

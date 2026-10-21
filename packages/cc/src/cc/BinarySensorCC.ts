@@ -12,6 +12,7 @@ import {
 	logList,
 	logText,
 	parseBitMask,
+	parseEnumValue,
 	validatePayload,
 } from "@zwave-js/core";
 import { Bytes, getEnumMemberName, isEnumMember } from "@zwave-js/shared";
@@ -382,9 +383,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		let type: BinarySensorType = BinarySensorType.Any;
 
 		if (raw.payload.length >= 2) {
-			type = raw.payload[1];
+			type = parseEnumValue(BinarySensorType, raw.payload[1]);
 		}
-		validatePayload(isEnumMember(BinarySensorType, type));
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

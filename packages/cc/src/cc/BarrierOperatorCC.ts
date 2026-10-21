@@ -20,6 +20,7 @@ import {
 	maybeUnknownToString,
 	parseBitMask,
 	encodeBitMask,
+	parseEnumValue,
 	validatePayload,
 } from "@zwave-js/core";
 import {
@@ -775,12 +776,8 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingSet {
 		validatePayload(raw.payload.length >= 2);
-		const subsystemType = raw.payload[0];
-		const subsystemState = raw.payload[1];
-		validatePayload(
-			isEnumMember(SubsystemType, subsystemType),
-			isEnumMember(SubsystemState, subsystemState),
-		);
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
+		const subsystemState = parseEnumValue(SubsystemState, raw.payload[1]);
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			subsystemType,
@@ -836,12 +833,8 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingReport {
 		validatePayload(raw.payload.length >= 2);
-		const subsystemType: SubsystemType = raw.payload[0];
-		const subsystemState: SubsystemState = raw.payload[1];
-		validatePayload(
-			isEnumMember(SubsystemType, subsystemType),
-			isEnumMember(SubsystemState, subsystemState),
-		);
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
+		const subsystemState = parseEnumValue(SubsystemState, raw.payload[1]);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -908,8 +901,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingGet {
 		validatePayload(raw.payload.length >= 1);
-		const subsystemType = raw.payload[0];
-		validatePayload(isEnumMember(SubsystemType, subsystemType));
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
 		return new this({ nodeId: ctx.sourceNodeId, subsystemType });
 	}
 
