@@ -1018,6 +1018,12 @@ export class Driver
 		reason: string,
 		errorCode?: ZWaveErrorCodes,
 	): Promise<void> {
+		// Rejection callbacks must not add or start transactions on these queues
+		for (const queue of this.queues) {
+			queue?.pause();
+			queue?.end();
+		}
+
 		this.clearDeferredTransactions(
 			undefined,
 			reason,
@@ -3904,18 +3910,22 @@ export class Driver
 
 		this.driverLog.print("destroying driver instance...");
 
-		// First stop the scheduler, all queues and close the serial port, so nothing happens anymore
-		await this._scheduler.stop();
+		// Reject transactions before awaiting scheduler shutdown.
+		// A task may be directly awaiting one of these transactions.
+		const stopScheduler = this._scheduler.stop();
 
-		await this.destroyTransactionQueues(
-			"driver instance destroyed",
-			ZWaveErrorCodes.Driver_Destroyed,
-		);
-
+		// Rejection callbacks must see a closed Serial API queue
 		this.destroySerialAPIQueue(
 			"driver instance destroyed",
 			ZWaveErrorCodes.Driver_Destroyed,
 		);
+
+		const stopQueues = this.destroyTransactionQueues(
+			"driver instance destroyed",
+			ZWaveErrorCodes.Driver_Destroyed,
+		);
+
+		await Promise.all([stopScheduler, stopQueues]);
 
 		if (this.serial != undefined) {
 			// Avoid spewing errors if the port was in the middle of receiving something
@@ -8412,6 +8422,12 @@ ${handlers.length} left`,
 		transaction: Transaction,
 		error: ZWaveError,
 	): void {
+		// Transaction generators can finish after the controller has been destroyed
+		if (this.wasDestroyed) {
+			this.rejectTransaction(transaction, error);
+			return;
+		}
+
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;

@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import {
 	type DeferredPromise,
@@ -28,7 +29,21 @@ export class TransactionQueue implements AsyncIterable<Transaction> {
 	public readonly transactions = new SortedList<Transaction>();
 	public currentTransaction: Transaction | undefined;
 
+	/** Adds transactions to the queue. Rejects them after the queue has ended. */
 	public add(...items: Transaction[]): void {
+		if (this.ended) {
+			for (const transaction of items) {
+				transaction.abort(
+					new ZWaveError(
+						"The message has been removed from the queue",
+						ZWaveErrorCodes.Driver_TaskRemoved,
+						undefined,
+						transaction.stack,
+					),
+				);
+			}
+			return;
+		}
 		this.transactions.add(...items);
 		this.trigger();
 	}

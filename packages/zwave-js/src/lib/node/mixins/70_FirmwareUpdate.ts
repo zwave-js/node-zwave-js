@@ -317,11 +317,12 @@ export abstract class FirmwareUpdateMixin
 				let hardwareVersion: number | undefined;
 				let meta: FirmwareUpdateMetaData;
 				try {
-					const prepareResult =
-						await self.prepareFirmwareUpdateInternal(
+					const prepareResult = yield* waitFor(
+						self.prepareFirmwareUpdateInternal(
 							updates.map((u) => u.firmwareTarget ?? 0),
 							abortContext,
-						);
+						),
+					);
 
 					// Handle early aborts
 					if (abortContext.abort) {
@@ -749,17 +750,19 @@ export abstract class FirmwareUpdateMixin
 		});
 
 		// Request the node to start the upgrade
-		let result = await api.requestUpdate({
-			// TODO: Should manufacturer id be provided externally?
-			manufacturerId,
-			firmwareId,
-			firmwareTarget: target,
-			fragmentSize,
-			checksum,
-			hardwareVersion,
-			resume,
-			nonSecureTransfer,
-		});
+		let result = yield* waitFor(
+			api.requestUpdate({
+				// TODO: Should manufacturer id be provided externally?
+				manufacturerId,
+				firmwareId,
+				firmwareTarget: target,
+				fragmentSize,
+				checksum,
+				hardwareVersion,
+				resume,
+				nonSecureTransfer,
+			}),
+		);
 
 		// On some devices the response can take a minute or so to be received,
 		// probably because of a manual out-of-band activation.
@@ -986,10 +989,12 @@ export abstract class FirmwareUpdateMixin
 					message: `Received Firmware Update Get for an out-of-bounds fragment. Forcing the node to abort...`,
 					direction: "inbound",
 				});
-				await this.sendCorruptedFirmwareUpdateReport(
-					fragmentRequest.reportNumber,
-					randomBytes(fragmentSize),
-					nonSecureTransfer,
+				yield* waitFor(
+					this.sendCorruptedFirmwareUpdateReport(
+						fragmentRequest.reportNumber,
+						randomBytes(fragmentSize),
+						nonSecureTransfer,
+					),
 				);
 				// This will cause the node to abort the process, wait for that
 				break update;
@@ -1013,10 +1018,12 @@ export abstract class FirmwareUpdateMixin
 				);
 
 				if (abortContext.abort) {
-					await this.sendCorruptedFirmwareUpdateReport(
-						fragmentRequest.reportNumber,
-						randomBytes(fragment.length),
-						nonSecureTransfer,
+					yield* waitFor(
+						this.sendCorruptedFirmwareUpdateReport(
+							fragmentRequest.reportNumber,
+							randomBytes(fragment.length),
+							nonSecureTransfer,
+						),
 					);
 					// This will cause the node to abort the process, wait for that
 					break update;
@@ -1037,12 +1044,14 @@ export abstract class FirmwareUpdateMixin
 					const isLast = num === numFragments;
 
 					try {
-						await this.commandClasses["Firmware Update Meta Data"]
-							.withOptions({
-								// Only encapsulate if the transfer is secure
-								autoEncapsulate: !nonSecureTransfer,
-							})
-							.sendFirmwareFragment(num, isLast, fragment);
+						yield* waitFor(
+							this.commandClasses["Firmware Update Meta Data"]
+								.withOptions({
+									// Only encapsulate if the transfer is secure
+									autoEncapsulate: !nonSecureTransfer,
+								})
+								.sendFirmwareFragment(num, isLast, fragment),
+						);
 
 						onProgress(num, numFragments);
 

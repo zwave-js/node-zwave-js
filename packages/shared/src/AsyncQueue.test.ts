@@ -1,7 +1,39 @@
 import { wait } from "alcalzone-shared/async";
-import { test } from "vitest";
+import { test, vi } from "vitest";
 
 import { AsyncQueue } from "./AsyncQueue.js";
+
+test("items added after ending are disposed without discarding the backlog", async (t) => {
+	const queue = new AsyncQueue<Disposable>();
+	const disposeQueued = vi.fn();
+	const queued = { [Symbol.dispose]: disposeQueued };
+	const disposeLate = vi.fn();
+	queue.add(queued);
+	queue.end();
+	queue.add({ [Symbol.dispose]: disposeLate });
+
+	t.expect(disposeLate).toHaveBeenCalledOnce();
+	t.expect(disposeQueued).not.toHaveBeenCalled();
+	t.expect(await queue[Symbol.asyncIterator]().next()).toEqual({
+		done: false,
+		value: queued,
+	});
+});
+
+test("items added from an abort callback are disposed", (t) => {
+	const queue = new AsyncQueue<Disposable>();
+	const disposeLate = vi.fn();
+	queue.add({
+		[Symbol.dispose]() {
+			queue.add({ [Symbol.dispose]: disposeLate });
+		},
+	});
+
+	queue.abort();
+
+	t.expect(disposeLate).toHaveBeenCalledOnce();
+	t.expect(queue.length).toBe(0);
+});
 
 test("can be iterated over after adding items", async (t) => {
 	const queue = new AsyncQueue<number>();

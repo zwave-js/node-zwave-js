@@ -3,10 +3,21 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 
+function disposeItem(item: unknown): void {
+	if (typeof item === "object" && item !== null && Symbol.dispose in item) {
+		const dispose = item[Symbol.dispose];
+		if (typeof dispose === "function") dispose.call(item);
+	}
+}
+
 export class AsyncQueue<T> implements AsyncIterable<T> {
-	/** Adds one or more items onto the queue */
+	/** Adds items to the queue. Disposes new items after the queue has ended. */
 	public add(...items: T[]): void {
-		if (items.length === 0 || this.ended) return;
+		if (this.ended) {
+			for (const item of items) disposeItem(item);
+			return;
+		}
+		if (items.length === 0) return;
 
 		// Resolve any pending promises first
 		while (items.length > 0 && this.listeners.length > 0) {
@@ -58,15 +69,7 @@ export class AsyncQueue<T> implements AsyncIterable<T> {
 		this.ended = true;
 
 		while (this.backlog.length > 0) {
-			const removed = this.backlog.pop();
-			if (
-				typeof removed === "object"
-				&& removed !== null
-				&& Symbol.dispose in removed
-				&& typeof removed[Symbol.dispose] === "function"
-			) {
-				(removed as any)[Symbol.dispose]();
-			}
+			disposeItem(this.backlog.pop());
 		}
 
 		for (const p of this.listeners) {
