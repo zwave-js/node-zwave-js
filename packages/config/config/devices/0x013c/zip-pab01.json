@@ -18,6 +18,9 @@
 		"2": { "label": "CT1" },
 		"3": { "label": "CT2" }
 	},
+	"endpointGroups": {
+		"1": { "label": "Total", "endpoints": [1], "isMainDevice": true }
+	},
 	"paramInformation": [
 		{
 			"#": "1",
