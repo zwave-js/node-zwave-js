@@ -2422,10 +2422,6 @@ export interface ConfigurationCCBulkReportOptions {
 	values: Record<number, ConfigValue>;
 }
 
-function isValidValueSize(valueSize: number): valueSize is 1 | 2 | 4 {
-	return valueSize === 1 || valueSize === 2 || valueSize === 4;
-}
-
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(options: WithAddress<ConfigurationCCBulkReportOptions>) {
@@ -2453,8 +2449,9 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		const defaultValues = !!(raw.payload[4] & 0b1000_0000);
 		const isHandshakeResponse = !!(raw.payload[4] & 0b0100_0000);
 		const valueSize = raw.payload[4] & 0b111;
+		// The value size is irrelevant if no parameters are reported
 		validatePayload.withReason(`Invalid value size ${valueSize}`)(
-			isValidValueSize(valueSize),
+			numParams === 0 || isValidValueSize(valueSize),
 		);
 		// Ensure the payload is long enough for all reported values
 		validatePayload(raw.payload.length >= 5 + numParams * valueSize);
@@ -3415,6 +3412,10 @@ function parseValue(
 		case ConfigValueFormat.BitField:
 			return raw.readUIntBE(0, size);
 	}
+}
+
+function isValidValueSize(valueSize: number): valueSize is 1 | 2 | 4 {
+	return valueSize === 1 || valueSize === 2 || valueSize === 4;
 }
 
 function throwInvalidValueError(
