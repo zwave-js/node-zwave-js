@@ -220,29 +220,27 @@ type ParsedNVM =
 			type: "unknown";
 	  };
 
-const GENERIC_TYPE_STATIC_CONTROLLER = 0x02;
-const SPECIFIC_TYPE_PC_CONTROLLER = 0x01;
-
 /**
  * Ensures that the controller node is marked as listening and uses the Static Controller generic device class.
  * Failure to do so causes the radio to stop after one RX event on SDK 8.0.0+.
  */
 function normalizeControllerNodeInfo(json: NVMJSON): void {
 	json.controller.isListening = true;
-	// SDK 8.1.2+ only forces the listening flag on for Static Controllers
-	if (json.controller.genericDeviceClass !== GENERIC_TYPE_STATIC_CONTROLLER) {
-		json.controller.genericDeviceClass = GENERIC_TYPE_STATIC_CONTROLLER;
-		json.controller.specificDeviceClass = SPECIFIC_TYPE_PC_CONTROLLER;
+	// SDK 8.1.2+ corrects the listening flag automatically, but only for Static Controllers.
+	// This is the role Z-Wave JS takes, so we should reflect it in the NVM too.
+	if (json.controller.genericDeviceClass !== 0x02) {
+		// Static PC Controller
+		json.controller.genericDeviceClass = 0x02;
+		json.controller.specificDeviceClass = 0x01;
 	}
 
 	const controllerNode = json.nodes[json.controller.nodeId || 1];
 	if (controllerNode && nodeHasInfo(controllerNode)) {
 		controllerNode.isListening = true;
-		if (
-			controllerNode.genericDeviceClass !== GENERIC_TYPE_STATIC_CONTROLLER
-		) {
-			controllerNode.genericDeviceClass = GENERIC_TYPE_STATIC_CONTROLLER;
-			controllerNode.specificDeviceClass = SPECIFIC_TYPE_PC_CONTROLLER;
+		if (controllerNode.genericDeviceClass !== 0x02) {
+			// Static PC Controller
+			controllerNode.genericDeviceClass = 0x02;
+			controllerNode.specificDeviceClass = 0x01;
 		}
 	}
 }
@@ -2178,8 +2176,7 @@ export async function migrateNVM(
 		&& preserveAll
 		// ...and the application node is correctly configured as an always listening Static Controller
 		&& source.json.controller.isListening
-		&& source.json.controller.genericDeviceClass
-			=== GENERIC_TYPE_STATIC_CONTROLLER
+		&& source.json.controller.genericDeviceClass === 0x02
 	) {
 		// ... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
