@@ -7,6 +7,7 @@ import {
 	ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
+import { DEVICES_DIR, resolveDeviceConfigPath } from "./configEnv.js";
 import { McpToolRegistry } from "./registry.js";
 import type { ConsentPrompt, ElicitConsentFn } from "./semantic/embedding.js";
 import { SemanticSearchService } from "./semantic/service.js";
@@ -22,6 +23,7 @@ import {
 	resolveImportTool,
 	resolveParamTool,
 } from "./tools/index.js";
+import { errorResult } from "./tools/results.js";
 
 class DevMCPServer {
 	private server: Server;
@@ -139,7 +141,21 @@ class DevMCPServer {
 					throw new Error(`Unknown tool: ${name}`);
 				}
 
-				return await tool.handler(args);
+				// Tools must only read and write device config files
+				const pathArgs = { ...args };
+				for (const key of ["filename", "templateFile"]) {
+					const value = pathArgs[key];
+					if (typeof value !== "string") continue;
+					const resolved = resolveDeviceConfigPath(value);
+					if (!resolved) {
+						return errorResult(
+							`Error: ${key} must be located inside ${DEVICES_DIR}`,
+						);
+					}
+					pathArgs[key] = resolved;
+				}
+
+				return await tool.handler(pathArgs);
 			},
 		);
 	}

@@ -74,6 +74,7 @@ async function applyEslintFixes(filename: string): Promise<string[]> {
 				"-f",
 				"json",
 				"--fix",
+				"--",
 				filename,
 			],
 			{
