@@ -1451,15 +1451,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		// we still need to increment the SPAN or MPAN state, if one exists
 		if (mustDiscardCommand) {
 			if (mcctx.isMulticast) {
-				if (
-					securityManager.getPeerMPAN(ctx.sourceNodeId, mcctx.groupId)
-						.type === MPANState.MPAN
-				) {
-					await securityManager.nextPeerMPAN(
-						ctx.sourceNodeId,
-						mcctx.groupId,
-					);
-				}
+				// An existing MPAN does not imply that the keys for this node are set up,
+				// so advance the counter without deriving the actual MPAN
+				securityManager.tryIncrementPeerMPAN(
+					ctx.sourceNodeId,
+					mcctx.groupId,
+				);
 			} else if (
 				securityManager.getSPANState(ctx.sourceNodeId).type
 				=== SPANState.SPAN

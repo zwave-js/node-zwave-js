@@ -3,6 +3,7 @@ import {
 	AssociationCC,
 	type AssociationCheckResult,
 	type AssociationGroup,
+	type CommandClass,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
 	type FirmwareUpdateOptions,
@@ -20,6 +21,7 @@ import {
 	Security2CCKEXGet,
 	type Security2CCKEXReport,
 	Security2CCKEXSet,
+	type Security2CCMessageEncapsulation,
 	Security2CCNetworkKeyGet,
 	Security2CCNetworkKeyReport,
 	Security2CCNetworkKeyVerify,
@@ -4177,6 +4179,23 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		});
 	}
 
+	/**
+	 * Returns the security class the given command was decrypted with,
+	 * or `undefined` if it was not received S2-encapsulated.
+	 */
+	private getS2DecryptionSecurityClass(
+		cc: CommandClass,
+	): SecurityClass | undefined {
+		// Unlike the node's SPAN state, which may be changed by concurrently received
+		// commands, this reflects the key that was actually used for this command
+		return (
+			cc.getEncapsulatingCC(
+				CommandClasses["Security 2"],
+				Security2Command.MessageEncapsulation,
+			) as Security2CCMessageEncapsulation | undefined
+		)?.securityClass;
+	}
+
 	private async secureBootstrapS2(
 		node: ZWaveNode,
 		// inclusionOptions is passed during normal inclusion, and undefined
@@ -4753,7 +4772,17 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				)
 				.catch(() => "timeout" as const);
 			if (transferEnd === "timeout") return abortTimeout();
-			if (!transferEnd.keyRequestComplete) {
+			if (
+				this.getS2DecryptionSecurityClass(transferEnd)
+				!== SecurityClass.Temporary
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			} else if (!transferEnd.keyRequestComplete) {
 				// S2 bootstrapping failed
 				this.driver.controllerLog.logNode(node.id, {
 					message: `Security S2 bootstrapping failed: Node did not confirm completion of the key exchange`,
@@ -9947,12 +9976,18 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
-			const matchingKeys = kexSet.grantedKeys.filter(
-				(k) =>
-					securityClassOrder.includes(k as any)
-					&& requested.securityClasses.includes(k),
-			);
-			if (!matchingKeys.length) {
+			if (
+				kexSet.grantedKeys.some(
+					(k) => !requested.securityClasses.includes(k),
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message: `Security S2 bootstrapping failed: Security classes were granted that were not requested.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoKeyMatch);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (!kexSet.grantedKeys.length) {
 				this.driver.controllerLog.logNode(bootstrappingNode.id, {
 					message: `Security S2 bootstrapping failed: None of the requested security classes are granted.`,
 					level: "warn",
@@ -9961,7 +9996,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
-			const highestGranted = getHighestSecurityClass(matchingKeys);
+			const highestGranted = getHighestSecurityClass(kexSet.grantedKeys);
 			const requiresAuthentication =
 				highestGranted === SecurityClass.S2_AccessControl
 				|| highestGranted === SecurityClass.S2_Authenticated;
@@ -10002,6 +10037,14 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			if (pubKeyReport === "timeout") return abortTimeout();
 			if (pubKeyReport instanceof Security2CCKEXFail) {
 				return abortCanceled();
+			} else if (!pubKeyReport.includingNode) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message: `Security S2 bootstrapping failed: Public key was not sent by the including node.`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
 			const includingNodePubKey = pubKeyReport.publicKey;
@@ -10120,7 +10163,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			}
 
-			for (const key of matchingKeys) {
+			for (const key of kexSet.grantedKeys) {
 				// Request network key and wait for including node to respond
 				const keyReportPromise = this.driver
 					.waitForCommand<
@@ -10242,10 +10285,8 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					await abort(KEXFailType.WrongSecurityLevel);
 					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				} else if (
-					!securityManager.hasUsedSecurityClass(
-						bootstrappingNode.id,
-						SecurityClass.Temporary,
-					)
+					this.getS2DecryptionSecurityClass(transferEnd)
+					!== SecurityClass.Temporary
 				) {
 					this.driver.controllerLog.logNode(bootstrappingNode.id, {
 						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
