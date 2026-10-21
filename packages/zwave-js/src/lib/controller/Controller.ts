@@ -213,6 +213,17 @@ import {
 	NVMOperationsReadRequest,
 	type NVMOperationsResponse,
 	NVMOperationsWriteRequest,
+	type NetworkRestoreCallback,
+	NetworkRestoreDeviceRequest,
+	type NetworkRestoreDeviceRequestOptions,
+	NetworkRestoreFinalizeRequest,
+	NetworkRestoreHomeIDRequest,
+	type NetworkRestoreHomeIDRequestOptions,
+	NetworkRestoreNeighborsRequest,
+	type NetworkRestoreNeighborsRequestOptions,
+	NetworkRestorePrepareRequest,
+	NetworkRestoreRoutesRequest,
+	type NetworkRestoreRoutesRequestOptions,
 	NodeNeighborUpdateStatus,
 	RemoveFailedNodeRequest,
 	type RemoveFailedNodeRequestStatusReport,
@@ -7937,6 +7948,56 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		}
 
 		return this._nvm;
+	}
+
+	/** Prepares the controller for restoring network data. */
+	public async networkRestorePrepare(): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestorePrepareRequest(),
+		);
+	}
+
+	/** Restores the Home ID and controller node ID. */
+	public async networkRestoreSetController(
+		options: NetworkRestoreHomeIDRequestOptions,
+	): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestoreHomeIDRequest(options),
+		);
+	}
+
+	/** Restores the protocol data for a node. */
+	public async networkRestoreNode(
+		options: NetworkRestoreDeviceRequestOptions,
+	): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestoreDeviceRequest(options),
+		);
+	}
+
+	/** Restores the neighbor table for a node. */
+	public async networkRestoreNeighbors(
+		options: NetworkRestoreNeighborsRequestOptions,
+	): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestoreNeighborsRequest(options),
+		);
+	}
+
+	/** Restores the application and last working routes for a node. */
+	public async networkRestoreRoutes(
+		options: NetworkRestoreRoutesRequestOptions,
+	): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestoreRoutesRequest(options),
+		);
+	}
+
+	/** Finalizes the network data restore. */
+	public async networkRestoreFinalize(): Promise<void> {
+		await this.driver.sendMessage<NetworkRestoreCallback>(
+			new NetworkRestoreFinalizeRequest(),
+		);
 	}
 
 	/**

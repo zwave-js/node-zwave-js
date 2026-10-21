@@ -121,6 +121,10 @@ import { MPDU } from '@zwave-js/core';
 import { MPDUHeaderType } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core';
 import { MultilevelSwitchCommand } from '@zwave-js/cc';
+import { NetworkRestoreDeviceRequestOptions } from '@zwave-js/serial/serialapi';
+import { NetworkRestoreHomeIDRequestOptions } from '@zwave-js/serial/serialapi';
+import { NetworkRestoreNeighborsRequestOptions } from '@zwave-js/serial/serialapi';
+import { NetworkRestoreRoutesRequestOptions } from '@zwave-js/serial/serialapi';
 import { NODE_ID_BROADCAST } from '@zwave-js/core';
 import { NODE_ID_BROADCAST_LR } from '@zwave-js/core';
 import { NODE_ID_MAX } from '@zwave-js/core';
@@ -2589,6 +2593,12 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
     get maxLongRangePowerlevel(): MaybeNotKnown<number>;
     get maxPayloadSize(): MaybeNotKnown<number>;
     get maxPayloadSizeLR(): MaybeNotKnown<number>;
+    networkRestoreFinalize(): Promise<void>;
+    networkRestoreNeighbors(options: NetworkRestoreNeighborsRequestOptions): Promise<void>;
+    networkRestoreNode(options: NetworkRestoreDeviceRequestOptions): Promise<void>;
+    networkRestorePrepare(): Promise<void>;
+    networkRestoreRoutes(options: NetworkRestoreRoutesRequestOptions): Promise<void>;
+    networkRestoreSetController(options: NetworkRestoreHomeIDRequestOptions): Promise<void>;
     get nodeIdType(): NodeIDType;
     get nodes(): ReadonlyThrowingMap<number, ZWaveNode>;
     // (undocumented)
