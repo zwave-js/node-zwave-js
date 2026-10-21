@@ -3819,6 +3819,42 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 	}
 
 	/**
+	 * Checks whether an Inclusion Controller Initiate command may be acted upon.
+	 * Acting on it removes or replaces node instances and re-runs security bootstrapping,
+	 * so it must only be accepted from actual controllers.
+	 */
+	private isValidInclusionControllerInitiate(
+		initiate: InclusionControllerCCInitiate,
+	): boolean {
+		const sender = this._nodes.get(initiate.nodeId as number);
+		if (sender?.nodeType !== NodeType.Controller) {
+			this.driver.controllerLog.logNode(
+				initiate.nodeId as number,
+				`Ignoring inclusion controller request from a node that is not a controller`,
+				"warn",
+			);
+			return false;
+		}
+
+		const targetNodeId = initiate.includedNodeId;
+		if (
+			targetNodeId === this._ownNodeId
+			|| targetNodeId === sender.id
+			|| targetNodeId < 1
+			|| targetNodeId > MAX_NODES
+		) {
+			this.driver.controllerLog.logNode(
+				sender.id,
+				`Ignoring inclusion controller request for invalid node ${targetNodeId}`,
+				"warn",
+			);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * @internal
 	 * Handles proxy inclusion requests from an inclusion controller
 	 */
@@ -3830,6 +3866,32 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				"Expected an inclusion controller proxy inclusion request, but got a different step",
 				ZWaveErrorCodes.Argument_Invalid,
 			);
+		}
+
+		if (!this.isValidInclusionControllerInitiate(initiate)) return;
+
+		// A node that was just included by the inclusion controller is already known
+		// if its NIF arrived first. Any other known node must not be replaced.
+		const proxyState = this._proxyInclusionMachine?.state;
+		const isPendingNode =
+			proxyState?.value === "hasNIF"
+			&& proxyState.newNode.id === initiate.includedNodeId;
+		if (!isPendingNode) {
+			if (this._inclusionState !== InclusionState.Idle) {
+				this.driver.controllerLog.logNode(
+					initiate.nodeId as number,
+					`Ignoring proxy inclusion request because the controller is busy`,
+					"warn",
+				);
+				return;
+			} else if (this._nodes.has(initiate.includedNodeId)) {
+				this.driver.controllerLog.logNode(
+					initiate.nodeId as number,
+					`Ignoring proxy inclusion request for node ${initiate.includedNodeId}, which is already part of the network`,
+					"warn",
+				);
+				return;
+			}
 		}
 
 		void this.updateProxyInclusionMachine({
@@ -3853,6 +3915,17 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
+
+		if (!this.isValidInclusionControllerInitiate(initiate)) return;
+		if (this._inclusionState !== InclusionState.Idle) {
+			this.driver.controllerLog.logNode(
+				initiate.nodeId as number,
+				`Ignoring replace request because the controller is busy`,
+				"warn",
+			);
+			return;
+		}
+
 		this.setInclusionState(InclusionState.Busy);
 
 		const inclCtrlr = this.nodes.getOrThrow(initiate.nodeId as number);
