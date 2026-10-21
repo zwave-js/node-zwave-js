@@ -38,7 +38,15 @@ export async function handleAGINameGet(
 				command.encapsulationFlags & ~EncapsulationFlags.Supervision,
 		});
 
-	await api.reportGroupName(1, "Lifeline");
+	try {
+		await api.reportGroupName(1, "Lifeline");
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export async function handleAGIInfoGet(
@@ -64,18 +72,26 @@ export async function handleAGIInfoGet(
 				command.encapsulationFlags & ~EncapsulationFlags.Supervision,
 		});
 
-	await api.reportGroupInfo({
-		isListMode: command.listMode ?? false,
-		hasDynamicInfo: false,
-		groups: [
-			{
-				groupId: 1,
-				eventCode: 0, // ignored anyways
-				profile: AssociationGroupInfoProfile["General: Lifeline"],
-				mode: 0, // ignored anyways
-			},
-		],
-	});
+	try {
+		await api.reportGroupInfo({
+			isListMode: command.listMode ?? false,
+			hasDynamicInfo: false,
+			groups: [
+				{
+					groupId: 1,
+					eventCode: 0, // ignored anyways
+					profile: AssociationGroupInfoProfile["General: Lifeline"],
+					mode: 0, // ignored anyways
+				},
+			],
+		});
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export async function handleAGICommandListGet(
@@ -101,15 +117,23 @@ export async function handleAGICommandListGet(
 				command.encapsulationFlags & ~EncapsulationFlags.Supervision,
 		});
 
-	await api.reportCommands(
-		command.groupId,
-		new Map([
-			[
-				CommandClasses["Device Reset Locally"],
-				[DeviceResetLocallyCommand.Notification],
-			],
-		]),
-	);
+	try {
+		await api.reportCommands(
+			command.groupId,
+			new Map([
+				[
+					CommandClasses["Device Reset Locally"],
+					[DeviceResetLocallyCommand.Notification],
+				],
+			]),
+		);
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export async function handleAssociationSupportedGroupingsGet(
@@ -131,5 +155,13 @@ export async function handleAssociationSupportedGroupingsGet(
 		});
 
 	// We only "support" the lifeline group
-	await api.reportGroupCount(1);
+	try {
+		await api.reportGroupCount(1);
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }

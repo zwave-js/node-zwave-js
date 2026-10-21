@@ -37,7 +37,15 @@ export async function handleMultiChannelAssociationSupportedGroupingsGet(
 		});
 
 	// We only "support" the lifeline group
-	await api.reportGroupCount(1);
+	try {
+		await api.reportGroupCount(1);
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export async function handleMultiChannelAssociationGet(
@@ -74,13 +82,21 @@ export async function handleMultiChannelAssociationGet(
 				endpoint: endpoint!,
 			})) ?? [];
 
-	await api.sendReport({
-		groupId,
-		maxNodes: MAX_ASSOCIATIONS,
-		nodeIds,
-		endpoints,
-		reportsToFollow: 0,
-	});
+	try {
+		await api.sendReport({
+			groupId,
+			maxNodes: MAX_ASSOCIATIONS,
+			nodeIds,
+			endpoints,
+			reportsToFollow: 0,
+		});
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export function handleMultiChannelAssociationSet(

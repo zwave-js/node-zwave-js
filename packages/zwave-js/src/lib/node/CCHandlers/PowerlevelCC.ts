@@ -64,25 +64,36 @@ export async function handlePowerlevelGet(
 
 	const { powerlevel, until } = driver.controller.powerlevel;
 
-	if (
-		// Setting elapsed
-		until.getTime() < Date.now()
-		// or it is already set to normal power
-		|| powerlevel === Powerlevel["Normal Power"]
-	) {
-		await api.reportPowerlevel({
-			powerlevel: Powerlevel["Normal Power"],
-		});
-	} else {
-		const timeoutSeconds = Math.max(
-			0,
-			Math.min(Math.round((until.getTime() - Date.now()) / 1000), 255),
-		);
+	try {
+		if (
+			// Setting elapsed
+			until.getTime() < Date.now()
+			// or it is already set to normal power
+			|| powerlevel === Powerlevel["Normal Power"]
+		) {
+			await api.reportPowerlevel({
+				powerlevel: Powerlevel["Normal Power"],
+			});
+		} else {
+			const timeoutSeconds = Math.max(
+				0,
+				Math.min(
+					Math.round((until.getTime() - Date.now()) / 1000),
+					255,
+				),
+			);
 
-		await api.reportPowerlevel({
-			powerlevel,
-			timeout: timeoutSeconds,
+			await api.reportPowerlevel({
+				powerlevel,
+				timeout: timeoutSeconds,
+			});
+		}
+	} catch (e: any) {
+		driver.logNode(node.id, {
+			message: e.message,
+			level: "error",
 		});
+		// ignore
 	}
 }
 
@@ -166,22 +177,30 @@ export async function handlePowerlevelTestNodeGet(
 
 	const status = driver.getNOPPowerTestStatus();
 
-	if (status) {
-		await api.sendNodeTestReport({
-			status: status.inProgress
-				? PowerlevelTestStatus["In Progress"]
-				: status.acknowledgedFrames > 0
-					? PowerlevelTestStatus.Success
-					: PowerlevelTestStatus.Failed,
-			...status,
+	try {
+		if (status) {
+			await api.sendNodeTestReport({
+				status: status.inProgress
+					? PowerlevelTestStatus["In Progress"]
+					: status.acknowledgedFrames > 0
+						? PowerlevelTestStatus.Success
+						: PowerlevelTestStatus.Failed,
+				...status,
+			});
+		} else {
+			// No test was done
+			await api.sendNodeTestReport({
+				status: PowerlevelTestStatus.Success,
+				testNodeId: 0,
+				acknowledgedFrames: 0,
+			});
+		}
+	} catch (e: any) {
+		driver.logNode(node.id, {
+			message: e.message,
+			level: "error",
 		});
-	} else {
-		// No test was done
-		await api.sendNodeTestReport({
-			status: PowerlevelTestStatus.Success,
-			testNodeId: 0,
-			acknowledgedFrames: 0,
-		});
+		// ignore
 	}
 }
 
