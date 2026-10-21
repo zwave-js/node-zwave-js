@@ -4,16 +4,16 @@
 
 import * as path from "node:path";
 
-import { loadTSConfig, projectRoot } from "@zwave-js/maintenance";
+import {
+	isClassDeclaration,
+	isMethodDeclaration,
+	SyntaxKind,
+} from "@typescript/native/ast";
+import { openTSProgram, projectRoot } from "@zwave-js/maintenance";
 import esMain from "es-main";
-import ts from "typescript";
 
 export function checkCCToLogEntry(): void {
-	// Create a Program to represent the project, then pull out the
-	// source file to parse its AST.
-
-	const tsConfig = loadTSConfig("cc", "");
-	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
+	const { api, program } = openTSProgram("cc", "");
 
 	const results = new Map<
 		string,
@@ -21,9 +21,9 @@ export function checkCCToLogEntry(): void {
 	>();
 
 	// Scan all source files
-	for (const sourceFile of program.getSourceFiles()) {
+	for (const fileName of program.getSourceFileNames()) {
 		const relativePath = path
-			.relative(projectRoot, sourceFile.fileName)
+			.relative(projectRoot, fileName)
 			.replaceAll("\\", "/");
 
 		// Only look at files in this package
@@ -41,11 +41,14 @@ export function checkCCToLogEntry(): void {
 			continue;
 		}
 
+		const sourceFile = program.getSourceFile(fileName);
+		if (!sourceFile) continue;
+
 		// Visit each CC class and see if it overwrites determineRequiredCCInterviews
-		ts.forEachChild(sourceFile, (node) => {
+		sourceFile.forEachChild((node) => {
 			// Only look at class declarations that have "CC" in the name, don't end with "CC" or "API"
 			if (
-				ts.isClassDeclaration(node)
+				isClassDeclaration(node)
 				&& node.name
 				&& node.name.text.includes("CC")
 				&& !node.name.text.endsWith("CC")
@@ -58,7 +61,7 @@ export function checkCCToLogEntry(): void {
 					results.set(node.name.text, "empty");
 				} else if (
 					node.members.length === 1
-					&& node.members[0].kind === ts.SyntaxKind.Constructor
+					&& node.members[0].kind === SyntaxKind.Constructor
 				) {
 					// TODO: move this check into lintCCConstructor
 					// highlight constructor only
@@ -71,7 +74,7 @@ export function checkCCToLogEntry(): void {
 				} else {
 					const hasToLogEntry = node.members.some(
 						(member) =>
-							ts.isMethodDeclaration(member)
+							isMethodDeclaration(member)
 							&& member.name.getText(sourceFile) === "toLogEntry",
 					);
 					results.set(node.name.text, hasToLogEntry);
@@ -79,6 +82,8 @@ export function checkCCToLogEntry(): void {
 			}
 		});
 	}
+
+	api.close();
 
 	const sortedCCs = [...results.keys()].toSorted();
 	for (const cc of sortedCCs) {

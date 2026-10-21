@@ -7,49 +7,65 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
+import {
+	type Expression,
+	isExportDeclaration,
+	isExternalModuleReference,
+	isImportDeclaration,
+	isImportEqualsDeclaration,
+	isNamedExports,
+	isNamedImports,
+	isNamespaceExport,
+	isNamespaceImport,
+	isStringLiteral,
+	type Node,
+	type SourceFile,
+	type StringLiteral,
+	SyntaxKind,
+} from "@typescript/native/ast";
+import type { API, Program } from "@typescript/native/sync";
 import esMain from "es-main";
 import spawn from "nano-spawn";
-import ts from "typescript";
 
-import { loadTSConfig, projectRoot, repoRoot } from "./tsAPITools.js";
+import { openTSProgram, projectRoot, repoRoot } from "./tsAPITools.js";
 
 const reportFile = path.join(repoRoot, ".tmp", "dirty-tests.json");
 
-function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
+function getExternalModuleName(node: Node): Expression | undefined {
 	if (
-		ts.isImportEqualsDeclaration(node)
-		&& ts.isExternalModuleReference(node.moduleReference)
+		isImportEqualsDeclaration(node)
+		&& isExternalModuleReference(node.moduleReference)
 	) {
 		return node.moduleReference.expression;
-	} else if (ts.isImportDeclaration(node)) {
+	} else if (isImportDeclaration(node)) {
 		// Only return import declarations where there is at least one non-typeonly import specifier
 		if (!node.importClause) {
 			// import "bar"
 			return node.moduleSpecifier;
 		} else if (
-			node.importClause.phaseModifier !== ts.SyntaxKind.TypeKeyword
+			node.importClause.phaseModifier !== SyntaxKind.TypeKeyword
 			// import foo from "bar"
 			&& (!node.importClause.namedBindings
 				// import * as foo from "bar"
-				|| ts.isNamespaceImport(node.importClause.namedBindings)
+				|| isNamespaceImport(node.importClause.namedBindings)
 				// import {foo, type baz} from "bar"
-				|| (ts.isNamedImports(node.importClause.namedBindings)
+				|| (isNamedImports(node.importClause.namedBindings)
 					&& node.importClause.namedBindings.elements.some(
 						(e) => !e.isTypeOnly,
 					)))
 		) {
 			return node.moduleSpecifier;
 		}
-	} else if (ts.isExportDeclaration(node)) {
+	} else if (isExportDeclaration(node)) {
 		// Only return export declarations where there is at least one non-typeonly export specifier
 		if (
 			!node.isTypeOnly
 			// export * from "bar"
 			&& (!node.exportClause
 				// export * as foo from "bar"
-				|| ts.isNamespaceExport(node.exportClause)
+				|| isNamespaceExport(node.exportClause)
 				// export {foo, type baz} from "bar"
-				|| (ts.isNamedExports(node.exportClause)
+				|| (isNamedExports(node.exportClause)
 					&& node.exportClause.elements.some((e) => !e.isTypeOnly)))
 		) {
 			return node.moduleSpecifier;
@@ -57,72 +73,78 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	}
 }
 
-interface ResolvedImport {
-	name: string;
-	line: number;
-	sourceFile: ts.SourceFile;
+interface LinterContext {
+	api: API;
+	program: Program;
+	sourceFiles: Map<string, SourceFile | undefined>;
+	imports: Map<string, string[]>;
+	resolvedSourceFiles: Map<string, string>;
 }
 
-function getImports(
-	sourceFile: ts.SourceFile,
-	checker: ts.TypeChecker,
-): ResolvedImport[] {
-	const output: ResolvedImport[] = [];
-	ts.forEachChild(sourceFile, (node) => {
-		// Vist top-level import nodes
+function getSourceFile(
+	context: LinterContext,
+	fileName: string,
+): SourceFile | undefined {
+	if (!context.sourceFiles.has(fileName)) {
+		context.sourceFiles.set(
+			fileName,
+			context.program.getSourceFile(fileName),
+		);
+	}
+	return context.sourceFiles.get(fileName);
+}
+
+/** Returns the file names of all modules that are imported with at least one runtime binding */
+function getImports(context: LinterContext, sourceFile: SourceFile): string[] {
+	const cached = context.imports.get(sourceFile.fileName);
+	if (cached) return cached;
+
+	const moduleSpecifiers: StringLiteral[] = [];
+	sourceFile.forEachChild((node) => {
 		const moduleNameExpr = getExternalModuleName(node);
-		// if they have a name, that is a string, i.e. not alias definition `import x = y`
-		if (
-			moduleNameExpr
-			&& moduleNameExpr.kind === ts.SyntaxKind.StringLiteral
-		) {
-			// Ask the checker about the "symbol: for this module name
-			// it would be undefined if the module was not found (i.e. error)
-			const moduleSymbol = checker.getSymbolAtLocation(moduleNameExpr);
-			const file = moduleSymbol?.getDeclarations()?.[0]?.getSourceFile();
-			if (file) {
-				output.push({
-					name: moduleNameExpr.getText(sourceFile),
-					line:
-						ts.getLineAndCharacterOfPosition(
-							sourceFile,
-							moduleNameExpr.getStart(),
-						).line + 1,
-					sourceFile: file,
-				});
-			}
+		// Ignore alias definitions like `import x = y`
+		if (moduleNameExpr && isStringLiteral(moduleNameExpr)) {
+			moduleSpecifiers.push(moduleNameExpr);
 		}
 	});
-	return output;
-}
 
-interface LinterContext {
-	program: ts.Program;
-	resolvedSourceFiles: Map<string, string>;
+	// Each resolution is a round trip to the compiler process, so resolve all imports of a file at once
+	const resolved = moduleSpecifiers.length
+		? context.api.batch(
+				...moduleSpecifiers.map((specifier) =>
+					context.program.getResolvedModuleFromModuleSpecifier.gen(
+						specifier,
+						sourceFile.fileName,
+					),
+				),
+			)
+		: [];
+	const output = resolved
+		.map((module) => module?.resolvedFileName)
+		.filter((fileName) => fileName != undefined);
+
+	context.imports.set(sourceFile.fileName, output);
+	return output;
 }
 
 /** Given a definition file, this tries to resolve the original source file */
 function resolveSourceFileFromDefinition(
 	context: LinterContext,
-	file: ts.SourceFile,
-): ts.SourceFile {
+	file: SourceFile,
+): string {
 	if (context.resolvedSourceFiles.has(file.fileName)) {
-		return (
-			context.program.getSourceFile(
-				context.resolvedSourceFiles.get(file.fileName)!,
-			) ?? file
-		);
+		return context.resolvedSourceFiles.get(file.fileName)!;
 	}
 
 	function bail() {
 		context.resolvedSourceFiles.set(file.fileName, file.fileName);
-		return file;
+		return file.fileName;
 	}
 
 	const sourceMappingURL = /^\/\/# sourceMappingURL=(.*)$/gm.exec(
 		file.text,
 	)?.[1];
-	if (!sourceMappingURL) return file;
+	if (!sourceMappingURL) return file.fileName;
 
 	const mapPath = path.resolve(path.dirname(file.fileName), sourceMappingURL);
 	let map: any;
@@ -141,10 +163,10 @@ function resolveSourceFileFromDefinition(
 		path.dirname(file.fileName),
 		originalFileName,
 	);
-	const originalFile = context.program.getSourceFile(originalFileName);
+	const originalFile = getSourceFile(context, originalFileName);
 	if (originalFile) {
 		context.resolvedSourceFiles.set(file.fileName, originalFile.fileName);
-		return originalFile;
+		return originalFile.fileName;
 	}
 
 	return bail();
@@ -152,10 +174,6 @@ function resolveSourceFileFromDefinition(
 
 function relativeToProject(filename: string): string {
 	return path.relative(projectRoot, filename).replaceAll("\\", "/");
-}
-
-function isExternalModule(imp: ResolvedImport): boolean {
-	return imp.sourceFile.fileName.includes("node_modules");
 }
 
 function report(
@@ -207,34 +225,32 @@ export async function resolveDirtyTests(
 		return;
 	}
 
-	// Create a Program to represent the project, then pull out the
-	// source file to parse its AST.
-
-	const tsConfig = loadTSConfig(undefined, "all");
-	const program = ts.createProgram(tsConfig.fileNames, {
-		...tsConfig.options,
-		preserveSymlinks: false,
-	});
-	const checker = program.getTypeChecker();
+	const { api, program } = openTSProgram(undefined, "all");
 
 	const context: LinterContext = {
+		api,
 		program,
+		sourceFiles: new Map(),
+		imports: new Map(),
 		resolvedSourceFiles: new Map(),
 	};
 
 	const dirtySourceFiles = new Set<string>(changedFiles);
 
 	// Scan all source files
-	for (const sourceFile of program.getSourceFiles()) {
-		const relativePath = relativeToProject(sourceFile.fileName);
+	for (const fileName of program.getSourceFileNames()) {
+		const relativePath = relativeToProject(fileName);
 
 		// Only look at files inside the packages directory
 		if (!relativePath.startsWith("packages/")) continue;
 		if (!relativePath.endsWith(".test.ts")) continue;
 
+		const sourceFile = getSourceFile(context, fileName);
+		if (!sourceFile) continue;
+
 		// Resolve the import tree
 		const visitedSourceFiles = new Set<string>();
-		const todo: { file: ts.SourceFile; importStack: string[] }[] = [
+		const todo: { file: SourceFile; importStack: string[] }[] = [
 			{ file: sourceFile, importStack: [] },
 		];
 		while (todo.length > 0) {
@@ -246,23 +262,31 @@ export async function resolveDirtyTests(
 			];
 
 			// TODO: Try to eliminate barrel files from the dependency tree
-			const imports = getImports(current.file, checker);
-			for (const imp of imports) {
-				if (isExternalModule(imp)) continue;
+			for (const importedFileName of getImports(context, current.file)) {
+				if (importedFileName.includes("node_modules")) continue;
 
 				// try to resolve the original source file for declaration files
-				const next: ts.SourceFile = imp.sourceFile.isDeclarationFile
-					? resolveSourceFileFromDefinition(context, imp.sourceFile)
-					: imp.sourceFile;
+				let nextFileName = importedFileName;
+				if (/\.d\.[cm]?ts$/.test(importedFileName)) {
+					const definition = getSourceFile(context, importedFileName);
+					if (definition) {
+						nextFileName = resolveSourceFileFromDefinition(
+							context,
+							definition,
+						);
+					}
+				}
 
-				const nextRelativeToProject = relativeToProject(next.fileName);
+				const nextRelativeToProject = relativeToProject(nextFileName);
 				if (dirtySourceFiles.has(nextRelativeToProject)) {
 					// The file references a changed file, so the entire import stack
 					// has to be considered dirty
 					for (const file of importStack) {
 						dirtySourceFiles.add(file);
 					}
-				} else if (!visitedSourceFiles.has(next.fileName)) {
+				} else if (!visitedSourceFiles.has(nextFileName)) {
+					const next = getSourceFile(context, nextFileName);
+					if (!next) continue;
 					todo.push({
 						file: next,
 						importStack,
@@ -271,6 +295,8 @@ export async function resolveDirtyTests(
 			}
 		}
 	}
+
+	api.close();
 
 	const dirtyTests = [...dirtySourceFiles].filter((file) =>
 		file.endsWith(".test.ts"),

@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { API, type Program } from "@typescript/native/sync";
 import { CommandClasses } from "@zwave-js/core";
 import ts from "typescript";
 
@@ -18,36 +19,29 @@ export const tsConfigFilePathForDocs = path.join(
 	"tsconfig.docs.json",
 );
 
-export function loadTSConfig(
+/**
+ * Opens a tsconfig with the native TypeScript API.
+ * The returned API must be closed when done, so its compiler process exits.
+ */
+export function openTSProgram(
 	packageName: string = "",
 	variant: string = "build",
-): {
-	options: ts.CompilerOptions;
-	fileNames: string[];
-} {
-	const configFileName = ts.findConfigFile(
+): { api: API; program: Program } {
+	const configFileName = path.join(
 		packageName ? path.join(repoRoot, `packages/${packageName}`) : repoRoot,
-		ts.sys.fileExists,
 		variant ? `tsconfig.${variant}.json` : "tsconfig.json",
 	);
-	if (!configFileName) throw new Error("tsconfig.json not found");
 
-	const configFileText = ts.sys.readFile(configFileName);
-	if (!configFileText) throw new Error("could not read tsconfig.json");
+	const api = new API({ cwd: repoRoot });
+	const project = api
+		.createSnapshot({ openProjects: [configFileName] })
+		.getConfiguredProject(configFileName);
+	if (!project) {
+		api.close();
+		throw new Error(`could not load ${configFileName}`);
+	}
 
-	const parsedCommandLine = ts.getParsedCommandLineOfConfigFile(
-		configFileName,
-		{},
-		ts.sys as any,
-	);
-	if (!parsedCommandLine) throw new Error("could not parse tsconfig.json");
-
-	// FIXME: If parsedCommandLine contains project references, but no fileNames, we need to resolve the references
-
-	return {
-		options: parsedCommandLine.options,
-		fileNames: parsedCommandLine.fileNames,
-	};
+	return { api, program: project.program };
 }
 
 export function expressionToCommandClass(

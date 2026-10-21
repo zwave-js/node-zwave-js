@@ -4,15 +4,28 @@
 
 import path from "node:path";
 
+import {
+	isArrowFunction,
+	isCallExpression,
+	isClassDeclaration,
+	isClassExpression,
+	isConstructorDeclaration,
+	isFunctionDeclaration,
+	isFunctionExpression,
+	isIdentifier,
+	isMethodDeclaration,
+	isVariableDeclaration,
+	type Node,
+	type SourceFile,
+} from "@typescript/native/ast";
 import c from "ansi-colors";
 import { fromJson as themeFromJson, highlight } from "cli-highlight";
 import esMain from "es-main";
 import globrex from "globrex";
-import ts from "typescript";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { loadTSConfig, projectRoot } from "./tsAPITools.js";
+import { openTSProgram, projectRoot } from "./tsAPITools.js";
 
 const { blueBright, bold, gray, greenBright, redBright, yellow } = c;
 
@@ -52,7 +65,7 @@ const highlightTheme = themeFromJson({
 });
 
 function formatResult(
-	sourceFile: ts.SourceFile,
+	sourceFile: SourceFile,
 	result: Omit<Result, "formatted">,
 	additionalLines: number = 3,
 ): Result {
@@ -111,55 +124,52 @@ function formatResult(
 	return ret;
 }
 
-function getNodeName(
-	sourceFile: ts.SourceFile,
-	node: ts.Node,
-): string | undefined {
+function getNodeName(sourceFile: SourceFile, node: Node): string | undefined {
 	if (
-		ts.isVariableDeclaration(node)
-		&& ts.isIdentifier(node.name)
+		isVariableDeclaration(node)
+		&& isIdentifier(node.name)
 		&& node.initializer
-		&& (ts.isArrowFunction(node.initializer)
-			|| ts.isFunctionExpression(node.initializer)
-			|| ts.isClassExpression(node.initializer))
-		&& !node.initializer.name
+		&& (isArrowFunction(node.initializer)
+			|| ((isFunctionExpression(node.initializer)
+				|| isClassExpression(node.initializer))
+				&& !node.initializer.name))
 	) {
 		// const foo = function() { ... }
 		// const foo = () => { ... }
 		// const foo = class { ... }
 		return node.name?.getText(sourceFile);
 	} else if (
-		(ts.isFunctionDeclaration(node)
-			|| ts.isFunctionExpression(node)
-			|| ts.isMethodDeclaration(node)
-			|| ts.isClassDeclaration(node))
+		(isFunctionDeclaration(node)
+			|| isFunctionExpression(node)
+			|| isMethodDeclaration(node)
+			|| isClassDeclaration(node))
 		&& node.name
 	) {
 		// function foo() { ... }
 		// class foo { ... } (or its methods)
 		return node.name.getText(sourceFile);
 	} else if (
-		ts.isCallExpression(node)
-		&& ts.isIdentifier(node.expression)
+		isCallExpression(node)
+		&& isIdentifier(node.expression)
 		&& node.arguments.some(
-			(arg) => ts.isArrowFunction(arg) || ts.isFunctionExpression(arg),
+			(arg) => isArrowFunction(arg) || isFunctionExpression(arg),
 		)
 	) {
 		// Call expressions where at least one of the arguments is a function
 		// beforeAll(() => { ... })
 		return node.expression.text;
-	} else if (ts.isConstructorDeclaration(node)) {
+	} else if (isConstructorDeclaration(node)) {
 		// class Foo { constructor() { ... } }
 		return "constructor";
 	}
 }
 
 function getCodePathAtPosition(
-	sourceFile: ts.SourceFile,
+	sourceFile: SourceFile,
 	position: number,
 	separator: string = "/",
 ): string {
-	function visit(node: ts.Node, path: string[]) {
+	function visit(node: Node, path: string[]) {
 		const start = node.getStart(sourceFile);
 		if (start > position) return;
 		const end = node.getEnd();
@@ -168,27 +178,22 @@ function getCodePathAtPosition(
 		// The position is somewhere inside this node, recurse!
 		const nodeName = getNodeName(sourceFile, node);
 		if (nodeName) path.push(nodeName);
-		ts.forEachChild(node, (member) => visit(member, path));
+		node.forEachChild((member) => visit(member, path));
 	}
 
 	const path: string[] = [];
-	ts.forEachChild(sourceFile, (node) => visit(node, path));
+	sourceFile.forEachChild((node) => visit(node, path));
 	return path.join(separator);
 }
 
 export function codefind(query: CodeFindQuery): Result[] {
-	const tsConfig = loadTSConfig(undefined, "all");
-	const program = ts.createProgram(tsConfig.fileNames, {
-		...tsConfig.options,
-		preserveSymlinks: false,
-	});
-	// const checker = program.getTypeChecker();
+	const { api, program } = openTSProgram(undefined, "all");
 
 	const results: Result[] = [];
 
 	// Scan all source files
-	for (const sourceFile of program.getSourceFiles()) {
-		const relativePath = relativeToProject(sourceFile.fileName);
+	for (const fileName of program.getSourceFileNames()) {
+		const relativePath = relativeToProject(fileName);
 
 		const relativePathMatchesPattern = (pattern: string) => {
 			const { regex } = globrex(pattern, { extended: true });
@@ -214,6 +219,9 @@ export function codefind(query: CodeFindQuery): Result[] {
 			continue;
 		}
 
+		const sourceFile = program.getSourceFile(fileName);
+		if (!sourceFile) continue;
+
 		let codePatterns: RegExp[] | undefined;
 		if (query.codePatterns) {
 			codePatterns = query.codePatterns.map(
@@ -233,7 +241,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 			);
 		}
 
-		const searchNodes: [path: string, node: ts.Node][] = [];
+		const searchNodes: [path: string, node: Node][] = [];
 		if (codePatterns || excludeCodePatterns) {
 			const pathMatches = (path: string[]): boolean | "unknown" => {
 				const fullPath = path.join("/");
@@ -254,7 +262,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 				}
 			};
 
-			function visit(node: ts.Node, path: string[]) {
+			const visit = (node: Node, path: string[]): void => {
 				const nodeName = getNodeName(sourceFile, node);
 				if (nodeName) {
 					// This node has a name, check if it is a match
@@ -269,17 +277,15 @@ export function codefind(query: CodeFindQuery): Result[] {
 					} else {
 						// no match, but new path segment to remember
 						// Iterate through children
-						ts.forEachChild(node, (member) =>
-							visit(member, newPath),
-						);
+						node.forEachChild((member) => visit(member, newPath));
 					}
 				} else {
 					// No name, iterate through children with the same name
-					ts.forEachChild(node, (member) => visit(member, path));
+					node.forEachChild((member) => visit(member, path));
 				}
-			}
+			};
 
-			ts.forEachChild(sourceFile, (node) => visit(node, []));
+			sourceFile.forEachChild((node) => visit(node, []));
 		} else {
 			// Simply look at the entire source file
 			searchNodes.push(["/", sourceFile]);
@@ -297,10 +303,8 @@ export function codefind(query: CodeFindQuery): Result[] {
 				) {
 					const matchPosition =
 						node.getStart(sourceFile) + foundIndex;
-					const location = ts.getLineAndCharacterOfPosition(
-						sourceFile,
-						matchPosition,
-					);
+					const location =
+						sourceFile.getLineAndCharacterOfPosition(matchPosition);
 					const pathAtPosition = getCodePathAtPosition(
 						sourceFile,
 						matchPosition,
@@ -327,10 +331,8 @@ export function codefind(query: CodeFindQuery): Result[] {
 				for (const match of matches) {
 					const matchPosition =
 						node.getStart(sourceFile) + match.index;
-					const location = ts.getLineAndCharacterOfPosition(
-						sourceFile,
-						matchPosition,
-					);
+					const location =
+						sourceFile.getLineAndCharacterOfPosition(matchPosition);
 					const pathAtPosition = getCodePathAtPosition(
 						sourceFile,
 						matchPosition,
@@ -353,6 +355,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 			}
 		}
 	}
+	api.close();
 	return results;
 }
 
