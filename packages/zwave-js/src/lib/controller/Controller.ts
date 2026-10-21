@@ -4153,6 +4153,30 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		}
 	}
 
+	/**
+	 * Derives the ECDH shared secret for S2 bootstrapping.
+	 * Returns `undefined` if the peer's public key is invalid, e.g. a low-order point that results in an all-zero secret.
+	 */
+	private async deriveS2SharedSecret(
+		peerNodeId: number,
+		publicKey: BytesView,
+		privateKey: BytesView,
+	): Promise<BytesView | undefined> {
+		try {
+			const sharedSecret = await deriveSharedECDHSecret({
+				publicKey,
+				privateKey,
+			});
+			if (sharedSecret.some((b) => b !== 0)) return sharedSecret;
+		} catch {
+			// The public key could not be used
+		}
+		this.driver.controllerLog.logNode(peerNodeId, {
+			message: `Security S2 bootstrapping failed: the public key is invalid`,
+			level: "warn",
+		});
+	}
+
 	private async secureBootstrapS2(
 		node: ZWaveNode,
 		// inclusionOptions is passed during normal inclusion, and undefined
@@ -4409,8 +4433,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					Security2CCPublicKeyReport | Security2CCKEXFail
 				>(
 					(cc) =>
-						cc instanceof Security2CCPublicKeyReport
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === node.id
+						&& (cc instanceof Security2CCPublicKeyReport
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TA2,
 				)
 				.catch(() => "timeout" as const);
@@ -4486,10 +4511,15 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			}
 
 			// After the user has verified the DSK, we can derive the shared secret
-			const sharedSecret = await deriveSharedECDHSecret({
-				publicKey: nodePublicKey,
-				privateKey: keyPair.privateKey,
-			});
+			const sharedSecret = await this.deriveS2SharedSecret(
+				node.id,
+				nodePublicKey,
+				keyPair.privateKey,
+			);
+			if (!sharedSecret) {
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.Unknown;
+			}
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = await deriveTempKeys(
@@ -4520,8 +4550,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				this.driver
 					.waitForCommand<Security2CCKEXSet | Security2CCKEXFail>(
 						(cc) =>
-							cc instanceof Security2CCKEXSet
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCKEXSet
+								|| cc instanceof Security2CCKEXFail),
 						tai2RemainingMs,
 					)
 					.catch(() => "timeout" as const),
@@ -4599,8 +4630,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCNetworkKeyGet | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyGet
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCNetworkKeyGet
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TA3,
 					)
 					.catch(() => "timeout" as const);
@@ -4670,8 +4702,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCNetworkKeyVerify | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyVerify
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCNetworkKeyVerify
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TA4,
 					)
 					.catch(() => "timeout" as const);
@@ -4713,7 +4746,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			// After all keys were sent and verified, we need to wait for the node to confirm that it is done
 			const transferEnd = await this.driver
 				.waitForCommand<Security2CCTransferEnd>(
-					(cc) => cc instanceof Security2CCTransferEnd,
+					(cc) =>
+						cc.nodeId === node.id
+						&& cc instanceof Security2CCTransferEnd,
 					inclusionTimeouts.TA5,
 				)
 				.catch(() => "timeout" as const);
@@ -9867,8 +9902,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			const kexSet = await this.driver
 				.waitForCommand<Security2CCKEXSet | Security2CCKEXFail>(
 					(cc) =>
-						cc instanceof Security2CCKEXSet
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === bootstrappingNode.id
+						&& (cc instanceof Security2CCKEXSet
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TB2,
 				)
 				.catch(() => "timeout" as const);
@@ -9956,8 +9992,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					Security2CCPublicKeyReport | Security2CCKEXFail
 				>(
 					(cc) =>
-						cc instanceof Security2CCPublicKeyReport
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === bootstrappingNode.id
+						&& (cc instanceof Security2CCPublicKeyReport
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TB3,
 				)
 				.catch(() => "timeout" as const);
@@ -9968,10 +10005,15 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			}
 
 			const includingNodePubKey = pubKeyReport.publicKey;
-			const sharedSecret = await deriveSharedECDHSecret({
-				publicKey: includingNodePubKey,
-				privateKey: keyPair.privateKey,
-			});
+			const sharedSecret = await this.deriveS2SharedSecret(
+				bootstrappingNode.id,
+				includingNodePubKey,
+				keyPair.privateKey,
+			);
+			if (!sharedSecret) {
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.Unknown;
+			}
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = await deriveTempKeys(
@@ -10078,15 +10120,16 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			}
 
-			for (const key of kexSet.grantedKeys) {
+			for (const key of matchingKeys) {
 				// Request network key and wait for including node to respond
 				const keyReportPromise = this.driver
 					.waitForCommand<
 						Security2CCNetworkKeyReport | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyReport
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === bootstrappingNode.id
+							&& (cc instanceof Security2CCNetworkKeyReport
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TB4,
 					)
 					.catch(() => "timeout" as const);
@@ -10173,8 +10216,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCTransferEnd | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCTransferEnd
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === bootstrappingNode.id
+							&& (cc instanceof Security2CCTransferEnd
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TB5,
 					)
 					.catch(() => "timeout" as const);
@@ -10185,7 +10229,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				}
 
 				if (
-					!keyReport.isEncapsulatedWith(
+					!transferEnd.isEncapsulatedWith(
 						CommandClasses["Security 2"],
 						Security2Command.MessageEncapsulation,
 					)
@@ -10193,6 +10237,18 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					this.driver.controllerLog.logNode(bootstrappingNode.id, {
 						message: `Security S2 bootstrapping failed: Command received without encryption`,
 						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				} else if (
+					!securityManager.hasUsedSecurityClass(
+						bootstrappingNode.id,
+						SecurityClass.Temporary,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
 						level: "warn",
 					});
 					await abort(KEXFailType.WrongSecurityLevel);
