@@ -7,6 +7,12 @@
 		{
 			"productType": "0x8104",
 			"productId": "0x45d2"
+		},
+		{
+			
+			"productType": "0x8107",
+			"productId": "0x49d2"
+		
 		}
 	],
 	"firmwareVersion": {
