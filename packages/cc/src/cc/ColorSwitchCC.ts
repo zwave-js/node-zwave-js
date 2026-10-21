@@ -976,16 +976,13 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		const populatedColorCount = raw.payload[0] & 0b11111;
 
 		validatePayload(raw.payload.length >= 1 + populatedColorCount * 2);
-		const colorTable: ColorTable = {};
+		const colorTable: Partial<Record<ColorKey, number>> = {};
 		let offset = 1;
 		for (let color = 0; color < populatedColorCount; color++) {
 			const component = raw.payload[offset];
 			const value = raw.payload[offset + 1];
 			const key = colorComponentToTableKey(component);
-			if (key) {
-				// @ts-expect-error
-				this.colorTable[key] = value;
-			}
+			if (key) colorTable[key] = value;
 			offset += 2;
 		}
 
