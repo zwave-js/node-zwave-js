@@ -221,15 +221,27 @@ type ParsedNVM =
 	  };
 
 /**
- * Ensures that the controller node is marked as listening.
+ * Ensures that the controller node is marked as listening and uses the Static Controller generic device class.
  * Failure to do so causes the radio to stop after one RX event on SDK 8.0.0+.
  */
-function setControllerIsListening(json: NVMJSON): void {
+function normalizeControllerNodeInfo(json: NVMJSON): void {
 	json.controller.isListening = true;
+	// SDK 8.1.2+ corrects the listening flag automatically, but only for Static Controllers.
+	// This is the role Z-Wave JS takes, so we should reflect it in the NVM too.
+	if (json.controller.genericDeviceClass !== 0x02) {
+		// Static PC Controller
+		json.controller.genericDeviceClass = 0x02;
+		json.controller.specificDeviceClass = 0x01;
+	}
 
 	const controllerNode = json.nodes[json.controller.nodeId || 1];
-	if (controllerNode && "isListening" in controllerNode) {
+	if (controllerNode && nodeHasInfo(controllerNode)) {
 		controllerNode.isListening = true;
+		if (controllerNode.genericDeviceClass !== 0x02) {
+			// Static PC Controller
+			controllerNode.genericDeviceClass = 0x02;
+			controllerNode.specificDeviceClass = 0x01;
+		}
 	}
 }
 
@@ -2168,8 +2180,9 @@ export async function migrateNVM(
 			=== target.json.meta.sharedFileSystem
 		// ...everything should be preserved,...
 		&& preserveAll
-		// ...and the application node is correctly configured as always listening
+		// ...and the application node is correctly configured as an always listening Static Controller
 		&& source.json.controller.isListening
+		&& source.json.controller.genericDeviceClass === 0x02
 	) {
 		// ... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
@@ -2281,7 +2294,7 @@ export async function migrateNVM(
 		};
 		// The target is a different series, try to preserve the RF config of the target stick
 		json.controller.rfConfig = target.json.controller.rfConfig;
-		setControllerIsListening(json);
+		normalizeControllerNodeInfo(json);
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
 	} else if (source.type === 700 && target.type === 500) {
@@ -2299,7 +2312,7 @@ export async function migrateNVM(
 			...(source.json as NVMJSONWithMeta),
 			meta: (target.json as NVMJSONWithMeta).meta,
 		};
-		setControllerIsListening(json);
+		normalizeControllerNodeInfo(json);
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
 	}
