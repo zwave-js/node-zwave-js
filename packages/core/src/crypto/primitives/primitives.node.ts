@@ -188,7 +188,11 @@ function decryptAES128CCM(
 	} catch {
 		/* nothing to do */
 	}
-	return Promise.resolve({ plaintext, authOK });
+	// Like the browser implementation, don't return unauthenticated plaintext
+	return Promise.resolve({
+		plaintext: authOK ? plaintext : new Uint8Array(),
+		authOK,
+	});
 }
 
 function digest(

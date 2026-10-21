@@ -39,19 +39,20 @@ async function encryptAES128CBC(
 		true,
 		["encrypt"],
 	);
+	// Like the Node.js implementation, zero-pad the plaintext to a multiple of the block size
+	const { output: paddedPlaintext } = zeroPad(plaintext, BLOCK_SIZE);
 	const ciphertext = await crypto.subtle.encrypt(
 		{
 			name: "AES-CBC",
 			iv,
 		},
 		cryptoKey,
-		plaintext,
+		paddedPlaintext,
 	);
 
-	// The WebCrypto API adds 16 bytes PKCS#7 padding, but we're only interested
+	// The WebCrypto API adds PKCS#7 padding, but we're only interested
 	// in the blocks which correspond to the plaintext
-	const paddedLength = Math.ceil(plaintext.length / BLOCK_SIZE) * BLOCK_SIZE;
-	return new Uint8Array(ciphertext, 0, paddedLength);
+	return new Uint8Array(ciphertext, 0, paddedPlaintext.length);
 }
 
 /** Decrypts a payload using AES-256-CBC */
@@ -111,7 +112,7 @@ async function encryptAESOFB(
 	const ret = new Uint8Array(plaintext.length);
 	let counter = zeroPad(iv, BLOCK_SIZE).output;
 
-	for (let offset = 0; offset < plaintext.length - 1; offset += BLOCK_SIZE) {
+	for (let offset = 0; offset < plaintext.length; offset += BLOCK_SIZE) {
 		const input = plaintext.slice(offset, offset + BLOCK_SIZE);
 		const ciphertextBuffer = await crypto.subtle.encrypt(
 			{
@@ -154,7 +155,7 @@ async function decryptAESOFB(
 	const ret = new Uint8Array(ciphertext.length);
 	let counter = zeroPad(iv, BLOCK_SIZE).output;
 
-	for (let offset = 0; offset < ciphertext.length - 1; offset += BLOCK_SIZE) {
+	for (let offset = 0; offset < ciphertext.length; offset += BLOCK_SIZE) {
 		const input = ciphertext.slice(offset, offset + BLOCK_SIZE);
 		const plaintextBuffer = await crypto.subtle.decrypt(
 			{
