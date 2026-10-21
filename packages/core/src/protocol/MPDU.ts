@@ -234,6 +234,8 @@ export class ZWaveMPDURaw {
 				speedModified = false;
 				headerType = frameControl[0] & 0b0000_1111;
 				beamingInfo = (frameControl[1] & 0b0111_0000) >>> 4;
+				// The 3-channel header has an additional sequence number byte
+				validatePayload(data.length >= 9);
 				sequenceNumber = data[payloadOffset++];
 				break;
 			}

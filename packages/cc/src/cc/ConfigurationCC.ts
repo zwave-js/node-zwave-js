@@ -3084,6 +3084,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		let defaultValue: MaybeNotKnown<number>;
 
 		if (valueSize > 0) {
+			// The constructor requires min, max and default values, which cannot be parsed for reserved formats
+			validatePayload(valueFormat <= ConfigValueFormat.BitField);
 			if (valueFormat === ConfigValueFormat.BitField) {
 				minValue = 0;
 			} else {
@@ -3405,6 +3407,8 @@ function parseValue(
 	validatePayload(size >= 1, size <= 6, raw.length >= size);
 	switch (format) {
 		case ConfigValueFormat.SignedInteger:
+			// Signed reads are not implemented for 5 and 6 byte values
+			validatePayload(size <= 4);
 			return raw.readIntBE(0, size);
 		case ConfigValueFormat.UnsignedInteger:
 		case ConfigValueFormat.Enumerated:

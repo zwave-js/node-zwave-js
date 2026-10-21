@@ -520,8 +520,9 @@ export class AssociationCCSet extends AssociationCC {
 		const groupId = raw.payload[0];
 		validatePayload(groupId >= 1);
 		const nodeIds = [...raw.payload.subarray(1)];
+		validatePayload(nodeIds.every((n) => n >= 1 && n <= MAX_NODES));
 
-		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- group ID is validated above
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- group ID and node IDs are validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,

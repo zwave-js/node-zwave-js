@@ -1,6 +1,7 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 import type { OxlintCompatibleRule } from "../utils.js";
+import { findBinding, getScopeBindings } from "../utils/bindings.js";
 
 // Bytes/Buffer read methods throw a RangeError when reading past the end of the buffer.
 // The value is the number of bytes read, or undefined if it is passed as the 2nd argument.
@@ -25,7 +26,10 @@ const READ_METHODS: Record<string, number | undefined> = {
 	readIntBE: undefined,
 };
 
-const MAX_VARIABLE_BYTE_LENGTH = 6;
+// Bytes only implements signed reads up to 4 bytes and throws a RangeError for 5 and 6 bytes
+function getMaxByteLength(method: string): number {
+	return method.startsWith("readInt") ? 4 : 6;
+}
 
 /**
  * A linear combination of opaque terms (keyed by their source text) plus a constant.
@@ -59,41 +63,85 @@ function isConstant(a: Linear): boolean {
 	return a.terms.size === 0;
 }
 
-interface Helpers {
-	getText(node: TSESTree.Node): string;
-	resolveConst(node: TSESTree.Identifier): TSESTree.Expression | undefined;
+/** An assignment to a variable or property */
+interface Write {
+	node: TSESTree.Node;
+	/** The location after which the written value is visible */
+	position: number;
+	/** The `for` loop whose update clause contains this write */
+	loopUpdate?: TSESTree.ForStatement;
 }
 
-/** Finds the initializer of a `const` variable that is visible at the location of `node` */
+/** Variables and properties that are written somewhere in the function containing a read */
+interface Writes {
+	names: Map<string, Write[]>;
+	paths: Map<string, Write[]>;
+}
+
+interface Helpers {
+	getText(node: TSESTree.Node): string;
+	writes: Writes;
+	/** The read that is currently being checked */
+	read?: TSESTree.Node;
+}
+
+const ROOT_IDENTIFIER = /(?<![\w$.])[A-Za-z_$][\w$]*/g;
+
+/** Returns the identifiers in a normalized expression text that are not property names */
+function getRootIdentifiers(text: string): string[] {
+	return [...text.matchAll(ROOT_IDENTIFIER)].map(([id]) => id);
+}
+
+function mentionsPath(text: string, path: string): boolean {
+	let index = text.indexOf(path);
+	while (index !== -1) {
+		const before = text[index - 1];
+		const after = text[index + path.length];
+		if (
+			(before == undefined || !/[\w$.]/.test(before))
+			&& (after == undefined || !/[\w$]/.test(after))
+		) {
+			return true;
+		}
+		index = text.indexOf(path, index + 1);
+	}
+	return false;
+}
+
+/** Returns the writes to variables or properties that the normalized expression text refers to */
+function getWritesTo(text: string, writes: Writes): Write[] {
+	const ret: Write[] = [];
+	for (const id of getRootIdentifiers(text)) {
+		ret.push(...(writes.names.get(id) ?? []));
+	}
+	for (const [path, pathWrites] of writes.paths) {
+		if (mentionsPath(text, path)) ret.push(...pathWrites);
+	}
+	return ret;
+}
+
+/**
+ * Finds the initializer of the `const` variable that `node` refers to.
+ * Initializers that depend on variables which may be written before the read are not inlined,
+ * because their current value may differ from the one the constant was computed from.
+ */
 function resolveConst(
 	node: TSESTree.Identifier,
+	h: Helpers,
 ): TSESTree.Expression | undefined {
-	let parent: TSESTree.Node | undefined = node.parent;
-	while (parent) {
-		if (
-			parent.type === AST_NODE_TYPES.BlockStatement
-			|| parent.type === AST_NODE_TYPES.Program
-		) {
-			for (const stmt of parent.body) {
-				if (
-					stmt.type !== AST_NODE_TYPES.VariableDeclaration
-					|| stmt.kind !== "const"
-				) {
-					continue;
-				}
-				for (const decl of stmt.declarations) {
-					if (
-						decl.id.type === AST_NODE_TYPES.Identifier
-						&& decl.id.name === node.name
-						&& decl.init
-					) {
-						return decl.init;
-					}
-				}
-			}
-		}
-		parent = parent.parent;
+	const binding = findBinding(node);
+	if (binding?.kind !== "const" || !binding.init) return;
+	const { init } = binding;
+	const read = h.read;
+	if (
+		!read
+		|| getWritesTo(normalizeText(h.getText(init)), h.writes).some((w) =>
+			invalidates(w, init, read),
+		)
+	) {
+		return;
 	}
+	return init;
 }
 
 function normalizeText(text: string): string {
@@ -121,7 +169,7 @@ function bufferKey(node: TSESTree.Node, h: Helpers, depth: number = 0): string {
 		return bufferKey(node.arguments[0], h, depth);
 	}
 	if (node.type === AST_NODE_TYPES.Identifier && depth < 5) {
-		const init = h.resolveConst(node);
+		const init = resolveConst(node, h);
 		if (
 			init?.type === AST_NODE_TYPES.Identifier
 			|| init?.type === AST_NODE_TYPES.CallExpression
@@ -154,7 +202,7 @@ function toLinear(node: TSESTree.Node, h: Helpers, depth: number = 0): Linear {
 			break;
 		case AST_NODE_TYPES.Identifier: {
 			// Inline constants, so offsets computed from other offsets can be compared
-			const init = depth < 5 ? h.resolveConst(node) : undefined;
+			const init = depth < 5 ? resolveConst(node, h) : undefined;
 			if (init) return toLinear(init, h, depth + 1);
 			break;
 		}
@@ -366,6 +414,34 @@ interface LoopBound {
 	min?: Linear;
 }
 
+function isIncreasingUpdate(
+	update: TSESTree.Expression | null,
+	variable: string,
+): boolean {
+	if (!update) return true;
+	if (update.type === AST_NODE_TYPES.SequenceExpression) {
+		return update.expressions.every((e) => isIncreasingUpdate(e, variable));
+	}
+	if (update.type === AST_NODE_TYPES.UpdateExpression) {
+		return (
+			update.argument.type !== AST_NODE_TYPES.Identifier
+			|| update.argument.name !== variable
+			|| update.operator === "++"
+		);
+	}
+	if (update.type === AST_NODE_TYPES.AssignmentExpression) {
+		return (
+			update.left.type !== AST_NODE_TYPES.Identifier
+			|| update.left.name !== variable
+			|| (update.operator === "+="
+				&& update.right.type === AST_NODE_TYPES.Literal
+				&& typeof update.right.value === "number"
+				&& update.right.value >= 0)
+		);
+	}
+	return false;
+}
+
 /** Recognizes `for (let i = <min>; i < <max>; ...)` loops */
 function getLoopBound(
 	node: TSESTree.ForStatement,
@@ -398,8 +474,11 @@ function getLoopBound(
 		}
 	}
 
-	// With constant bounds and step, the variable may not reach the bound, e.g. for (i = 0; i < 16; i += 2)
+	// The initial value is only a lower bound if the update never decreases the variable
 	const update = node.update;
+	if (min && !isIncreasingUpdate(update, variable)) min = undefined;
+
+	// With constant bounds and step, the variable may not reach the bound, e.g. for (i = 0; i < 16; i += 2)
 	if (
 		min
 		&& isConstant(min)
@@ -428,7 +507,7 @@ function constantRange(
 	h: Helpers,
 ): [min: number, max: number] | undefined {
 	if (node.type === AST_NODE_TYPES.Identifier) {
-		const init = h.resolveConst(node);
+		const init = resolveConst(node, h);
 		return init && constantRange(init, h);
 	}
 	if (node.type === AST_NODE_TYPES.ConditionalExpression) {
@@ -455,7 +534,7 @@ function resolveSubarray(
 	h: Helpers,
 ): Subarray | undefined {
 	if (node.type === AST_NODE_TYPES.Identifier) {
-		const init = h.resolveConst(node);
+		const init = resolveConst(node, h);
 		if (!init) return;
 		node = init;
 	}
@@ -502,6 +581,60 @@ function isFunctionNode(node: TSESTree.Node): boolean {
 	);
 }
 
+function contains(outer: TSESTree.Node, inner: TSESTree.Node): boolean {
+	return outer.range[0] <= inner.range[0] && inner.range[1] <= outer.range[1];
+}
+
+function getEnclosingFunction(node: TSESTree.Node): TSESTree.Node | undefined {
+	for (let current = node.parent; current; current = current.parent) {
+		if (isFunctionNode(current)) return current;
+	}
+}
+
+function isLoop(node: TSESTree.Node): boolean {
+	return (
+		node.type === AST_NODE_TYPES.ForStatement
+		|| node.type === AST_NODE_TYPES.ForInStatement
+		|| node.type === AST_NODE_TYPES.ForOfStatement
+		|| node.type === AST_NODE_TYPES.WhileStatement
+		|| node.type === AST_NODE_TYPES.DoWhileStatement
+	);
+}
+
+/** Whether a write may change a value between the point where a fact about it was established and the read */
+function invalidates(
+	write: Write,
+	anchor: TSESTree.Node,
+	read: TSESTree.Node,
+): boolean {
+	const readFunction = getEnclosingFunction(read);
+	// A callback may be called after any write
+	if (readFunction && !contains(readFunction, anchor)) return true;
+	// A write in a callback may happen at any time
+	const writeFunction = getEnclosingFunction(write.node);
+	if (writeFunction && !contains(writeFunction, read)) return true;
+
+	if (anchor.range[1] <= write.position && write.position <= read.range[0]) {
+		return true;
+	}
+
+	// A write in a loop affects reads in the next iteration, unless the fact is re-established in each iteration
+	for (
+		let current = read.parent;
+		current && current !== readFunction;
+		current = current.parent
+	) {
+		if (
+			isLoop(current)
+			&& contains(current, write.node)
+			&& !contains(current, anchor)
+		) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /** Collects everything that is known to be true at the location of `node` */
 function collectContext(
 	node: TSESTree.Node,
@@ -510,6 +643,22 @@ function collectContext(
 	const facts: Linear[] = [];
 	const loops: LoopBound[] = [];
 
+	// Names that are declared in a scope between the read and the current ancestor.
+	// Facts about the same name in an outer scope refer to a different variable.
+	const shadowed = new Set<string>();
+	// Whether a fact that was established at the anchor still holds at the location of the read
+	const isValid = (value: Linear, anchor: TSESTree.Node): boolean =>
+		[...value.terms.keys()].every(
+			(key) =>
+				!getRootIdentifiers(key).some((id) => shadowed.has(id))
+				&& !getWritesTo(key, h.writes).some((w) =>
+					invalidates(w, anchor, node),
+				),
+		);
+	const addFacts = (newFacts: Linear[], anchor: TSESTree.Node): void => {
+		facts.push(...newFacts.filter((f) => isValid(f, anchor)));
+	};
+
 	let child: TSESTree.Node = node;
 	let parent = node.parent;
 	while (parent) {
@@ -517,30 +666,64 @@ function collectContext(
 			case AST_NODE_TYPES.IfStatement:
 			case AST_NODE_TYPES.ConditionalExpression:
 				if (child === parent.consequent) {
-					facts.push(...conditionToFacts(parent.test, false, h));
+					addFacts(
+						conditionToFacts(parent.test, false, h),
+						parent.test,
+					);
 				} else if (child === parent.alternate) {
-					facts.push(...conditionToFacts(parent.test, true, h));
+					addFacts(
+						conditionToFacts(parent.test, true, h),
+						parent.test,
+					);
 				}
 				break;
 			case AST_NODE_TYPES.LogicalExpression:
 				if (child === parent.right) {
 					if (parent.operator === "&&") {
-						facts.push(...conditionToFacts(parent.left, false, h));
+						addFacts(
+							conditionToFacts(parent.left, false, h),
+							parent.left,
+						);
 					} else if (parent.operator === "||") {
-						facts.push(...conditionToFacts(parent.left, true, h));
+						addFacts(
+							conditionToFacts(parent.left, true, h),
+							parent.left,
+						);
 					}
 				}
 				break;
 			case AST_NODE_TYPES.WhileStatement:
 				if (child === parent.body) {
-					facts.push(...conditionToFacts(parent.test, false, h));
+					addFacts(
+						conditionToFacts(parent.test, false, h),
+						parent.test,
+					);
 				}
 				break;
 			case AST_NODE_TYPES.ForStatement:
 				if (child === parent.body && parent.test) {
-					facts.push(...conditionToFacts(parent.test, false, h));
+					addFacts(
+						conditionToFacts(parent.test, false, h),
+						parent.test,
+					);
 					const bound = getLoopBound(parent, h);
-					if (bound) loops.push(bound);
+					const variable = linConst(0);
+					if (bound) variable.terms.set(bound.variable, 1);
+					if (
+						bound
+						&& !shadowed.has(bound.variable)
+						&& isValid(linAdd(bound.max, variable), parent.test)
+					) {
+						if (
+							bound.min
+							&& (!parent.init
+								|| !isValid(bound.min, parent.init)
+								|| hasOtherWrites(parent, bound.variable, h))
+						) {
+							bound.min = undefined;
+						}
+						loops.push(bound);
+					}
 				}
 				break;
 			case AST_NODE_TYPES.BlockStatement:
@@ -553,10 +736,14 @@ function collectContext(
 						: parent.body;
 				const index = body.indexOf(child);
 				for (let i = 0; i < index; i++) {
-					facts.push(...factsFromPrecedingStatement(body[i], h));
+					addFacts(factsFromPrecedingStatement(body[i], h), body[i]);
 				}
 				break;
 			}
+		}
+
+		for (const name of getScopeBindings(parent).keys()) {
+			shadowed.add(name);
 		}
 
 		// Checks in an outer function only apply to inline callbacks, not to separate functions
@@ -577,13 +764,183 @@ function collectContext(
 	return { facts, loops };
 }
 
+/**
+ * Whether the loop variable is written outside of the loop's update clause while the loop runs,
+ * which means that its initial value is not a lower bound.
+ */
+function hasOtherWrites(
+	loop: TSESTree.ForStatement,
+	variable: string,
+	h: Helpers,
+): boolean {
+	const declaresVariable = getScopeBindings(loop).has(variable);
+	return (h.writes.names.get(variable) ?? []).some(
+		(w) =>
+			w.loopUpdate !== loop
+			&& (!declaresVariable || contains(loop, w.node))
+			&& !(loop.init && contains(loop.init, w.node)),
+	);
+}
+
+/** Returns the outermost function that contains the node, or the program if there is none */
+function getRoot(node: TSESTree.Node): TSESTree.Node {
+	let root: TSESTree.Node = node;
+	let fn: TSESTree.Node | undefined;
+	for (
+		let current: TSESTree.Node | undefined = node;
+		current;
+		current = current.parent
+	) {
+		if (isFunctionNode(current)) fn = current;
+		root = current;
+	}
+	return fn ?? root;
+}
+
+/** Returns the text of a non-computed member chain like `this.payload`, which is used to detect writes to it */
+function getMemberPath(
+	node: TSESTree.MemberExpression,
+	h: Helpers,
+): string | undefined {
+	let current: TSESTree.Node = node;
+	while (current.type === AST_NODE_TYPES.MemberExpression) {
+		if (current.computed) return;
+		current = current.object;
+	}
+	if (
+		current.type !== AST_NODE_TYPES.Identifier
+		&& current.type !== AST_NODE_TYPES.ThisExpression
+	) {
+		return;
+	}
+	return normalizeText(h.getText(node));
+}
+
+/** Returns the `for` loop whose update clause contains the write, if any */
+function getUpdatedLoop(
+	write: TSESTree.Node,
+): TSESTree.ForStatement | undefined {
+	let current: TSESTree.Node = write;
+	while (current.parent?.type === AST_NODE_TYPES.SequenceExpression) {
+		current = current.parent;
+	}
+	const loop = current.parent;
+	if (loop?.type === AST_NODE_TYPES.ForStatement && loop.update === current) {
+		return loop;
+	}
+}
+
+function collectWrites(root: TSESTree.Node, h: Helpers): Writes {
+	const writes: Writes = { names: new Map(), paths: new Map() };
+	const add = (
+		map: Map<string, Write[]>,
+		key: string,
+		node: TSESTree.Node,
+	): void => {
+		const loopUpdate = getUpdatedLoop(node);
+		const write: Write = {
+			node,
+			// The update clause of a for loop runs after the loop body
+			position: loopUpdate ? loopUpdate.body.range[1] : node.range[1],
+			loopUpdate,
+		};
+		let list = map.get(key);
+		if (!list) {
+			list = [];
+			map.set(key, list);
+		}
+		list.push(write);
+	};
+
+	const addTarget = (
+		target: TSESTree.Node | null | undefined,
+		write: TSESTree.Node,
+	): void => {
+		if (!target) return;
+		switch (target.type) {
+			case AST_NODE_TYPES.Identifier:
+				add(writes.names, target.name, write);
+				break;
+			case AST_NODE_TYPES.MemberExpression: {
+				const path = getMemberPath(target, h);
+				if (path) add(writes.paths, path, write);
+				break;
+			}
+			case AST_NODE_TYPES.TSNonNullExpression:
+			case AST_NODE_TYPES.TSAsExpression:
+				addTarget(target.expression, write);
+				break;
+			case AST_NODE_TYPES.ArrayPattern:
+				for (const element of target.elements) {
+					addTarget(element, write);
+				}
+				break;
+			case AST_NODE_TYPES.ObjectPattern:
+				for (const prop of target.properties) {
+					addTarget(
+						prop.type === AST_NODE_TYPES.Property
+							? prop.value
+							: prop,
+						write,
+					);
+				}
+				break;
+			case AST_NODE_TYPES.AssignmentPattern:
+				addTarget(target.left, write);
+				break;
+			case AST_NODE_TYPES.RestElement:
+				addTarget(target.argument, write);
+				break;
+		}
+	};
+
+	const visit = (node: TSESTree.Node): void => {
+		switch (node.type) {
+			case AST_NODE_TYPES.AssignmentExpression:
+				addTarget(node.left, node);
+				break;
+			case AST_NODE_TYPES.UpdateExpression:
+				addTarget(node.argument, node);
+				break;
+			case AST_NODE_TYPES.ForInStatement:
+			case AST_NODE_TYPES.ForOfStatement:
+				if (node.left.type !== AST_NODE_TYPES.VariableDeclaration) {
+					addTarget(node.left, node);
+				}
+				break;
+		}
+		for (const [key, value] of Object.entries(node)) {
+			if (key === "parent") continue;
+			const children: unknown[] = Array.isArray(value) ? value : [value];
+			for (const child of children) {
+				if (
+					child
+					&& typeof child === "object"
+					&& typeof (child as TSESTree.Node).type === "string"
+				) {
+					visit(child as TSESTree.Node);
+				}
+			}
+		}
+	};
+	visit(root);
+	return writes;
+}
+
 export const noUncheckedBytesReads: OxlintCompatibleRule = {
 	createOnce(context) {
 		const getText = (node: TSESTree.Node): string =>
 			context.sourceCode.getText(node);
-		const h: Helpers = { getText, resolveConst };
+		const h: Helpers = {
+			getText,
+			writes: { names: new Map(), paths: new Map() },
+		};
+		let writesCache = new WeakMap<TSESTree.Node, Writes>();
 
 		return {
+			before() {
+				writesCache = new WeakMap();
+			},
 			CallExpression(node) {
 				if (
 					node.callee.type !== AST_NODE_TYPES.MemberExpression
@@ -598,6 +955,15 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 				// Avoid reporting the implementation of the Bytes class itself
 				if (buffer.type === AST_NODE_TYPES.ThisExpression) return;
 
+				const root = getRoot(node);
+				let writes = writesCache.get(root);
+				if (!writes) {
+					writes = collectWrites(root, h);
+					writesCache.set(root, writes);
+				}
+				h.writes = writes;
+				h.read = node;
+
 				const [offsetArg, sizeArg] = node.arguments;
 				const offset = offsetArg ? toLinear(offsetArg, h) : linConst(0);
 				let size: Linear;
@@ -611,24 +977,30 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 				}
 
 				const { facts, loops } = collectContext(node, h);
+				const isProvablyNonNegative = (value: Linear): boolean => {
+					const goal = applyLoopBounds(value, loops);
+					return (
+						isNonNegative(goal)
+						|| facts.some((f) => implies(f, goal))
+					);
+				};
 
-				// readUIntBE etc. throw for byte lengths that are not in 1..6
+				// readUIntBE etc. throw for byte lengths that are not supported
+				const maxByteLength = getMaxByteLength(method);
 				const sizeRange = sizeArg && constantRange(sizeArg, h);
 				if (
 					fixedSize == undefined
 					&& !(
 						sizeRange
 						&& sizeRange[0] >= 1
-						&& sizeRange[1] <= MAX_VARIABLE_BYTE_LENGTH
+						&& sizeRange[1] <= maxByteLength
 					)
 				) {
-					const bounded = (goal: Linear): boolean =>
-						isConstant(goal)
-							? goal.constant >= 0
-							: facts.some((f) => implies(f, goal));
-					const lowerOk = bounded(linAdd(size, linConst(-1)));
-					const upperOk = bounded(
-						linAdd(linConst(MAX_VARIABLE_BYTE_LENGTH), size, -1),
+					const lowerOk = isProvablyNonNegative(
+						linAdd(size, linConst(-1)),
+					);
+					const upperOk = isProvablyNonNegative(
+						linAdd(linConst(maxByteLength), size, -1),
 					);
 					if (!lowerOk || !upperOk) {
 						context.report({
@@ -637,7 +1009,7 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 							data: {
 								method,
 								size: getText(sizeArg),
-								max: MAX_VARIABLE_BYTE_LENGTH,
+								max: maxByteLength,
 							},
 						});
 						return;
@@ -651,13 +1023,8 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 				): boolean => {
 					const lengthTerm = linConst(0);
 					lengthTerm.terms.set(`${bufferKey(target, h)}.length`, 1);
-					const goal = applyLoopBounds(
+					return isProvablyNonNegative(
 						linAdd(lengthTerm, linAdd(targetOffset, size), -1),
-						loops,
-					);
-					return (
-						isNonNegative(goal)
-						|| facts.some((f) => implies(f, goal))
 					);
 				};
 				let lengthOk = isLengthOk(buffer, offset);
@@ -668,30 +1035,28 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 					const start = sub.start
 						? toLinear(sub.start, h)
 						: linConst(0);
+					const end = sub.end && toLinear(sub.end, h);
+					// Negative arguments are relative to the end of the original buffer
+					const boundsOk =
+						isProvablyNonNegative(start)
+						&& (!end || isProvablyNonNegative(end));
 					const withinSub =
-						!sub.end
-						|| isNonNegative(
-							applyLoopBounds(
-								linAdd(
-									linAdd(toLinear(sub.end, h), start, -1),
-									linAdd(offset, size),
-									-1,
-								),
-								loops,
+						!end
+						|| isProvablyNonNegative(
+							linAdd(
+								linAdd(end, start, -1),
+								linAdd(offset, size),
+								-1,
 							),
 						);
 					lengthOk =
-						withinSub
+						boundsOk
+						&& withinSub
 						&& isLengthOk(sub.parent, linAdd(start, offset));
 				}
 
 				// Negative offsets throw too, e.g. when reading a checksum at the end of a short buffer
-				const offsetOk = isConstant(offset)
-					? offset.constant >= 0
-					: ![...offset.terms].some(
-							([key, coeff]) =>
-								coeff < 0 && key.endsWith(".length"),
-						) || facts.some((f) => implies(f, offset));
+				const offsetOk = isProvablyNonNegative(offset);
 				if (offsetOk && lengthOk) return;
 
 				context.report({
@@ -717,7 +1082,7 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 		schema: [],
 		messages: {
 			"unchecked-read":
-				"{{method}}() throws a RangeError if {{buffer}} is too short. Ensure that {{buffer}}.length >= {{required}} first, e.g. using validatePayload().",
+				"{{method}}() throws a RangeError if the offset is negative or {{buffer}} is too short. Ensure that the offset is non-negative and {{buffer}}.length >= {{required}} first, e.g. using validatePayload().",
 			"unchecked-byte-length":
 				"{{method}}() throws a RangeError unless 1 <= {{size}} <= {{max}}. Validate the byte length first, e.g. using validatePayload().",
 		},

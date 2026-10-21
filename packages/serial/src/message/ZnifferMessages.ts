@@ -310,6 +310,8 @@ export class ZnifferDataMessage
 			)(raw.payload[7] === 0x03);
 
 			const remainingLength = raw.payload[8];
+			// The MPDU length includes the checksum
+			validatePayload(remainingLength >= checksumLength);
 			const mpduOffset = 9;
 			if (raw.payload.length < mpduOffset + remainingLength) {
 				throw new ZWaveError(

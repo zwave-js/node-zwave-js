@@ -291,7 +291,8 @@
 			}
 		},
 		{
-			// Code that parses untrusted data must not throw anything but a ZWaveError
+			// Code that parses untrusted data must not read out of bounds and must only throw
+			// ZWaveErrors with codes that Driver.handleDecodeError handles by dropping the message
 			"files": [
 				"packages/cc/src/**/*.ts",
 				"packages/core/src/**/*.ts",

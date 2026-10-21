@@ -542,6 +542,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 		validatePayload(raw.payload.length >= 5);
 		const offset = raw.payload.readUIntBE(0, 3);
 		const bufferLength = raw.payload.readUInt16BE(3);
+		validatePayload(raw.payload.length >= 5 + bufferLength);
 		const buffer = raw.payload.subarray(5, 5 + bufferLength);
 
 		return new this({

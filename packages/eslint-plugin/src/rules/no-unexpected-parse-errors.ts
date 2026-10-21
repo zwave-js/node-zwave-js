@@ -1,6 +1,7 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 import type { OxlintCompatibleRule } from "../utils.js";
+import { findBinding } from "../utils/bindings.js";
 
 // Parameter types that indicate a function parses untrusted data
 const RAW_PARAM_TYPE = /(?:Raw|^Bytes|^BytesView|^Uint8Array)$/;
@@ -73,9 +74,20 @@ function getEnclosingParseFunction(
 	}
 }
 
-// The receive path handles these error codes by dropping the offending message
-const EXPECTED_ERROR_CODE =
-	/^(?:PacketFormat_.+|Deserialization_NotImplemented|CC_NotImplemented)$/;
+// Driver.handleDecodeError drops messages that fail to parse with one of these error codes.
+// Other errors, including other PacketFormat_* codes, are re-thrown.
+const EXPECTED_ERROR_CODES = new Set([
+	"PacketFormat_Invalid",
+	"PacketFormat_Checksum",
+	"PacketFormat_Truncated",
+	"PacketFormat_InvalidPayload",
+	"Deserialization_NotImplemented",
+	"CC_NotImplemented",
+	"Driver_NotReady",
+	"Driver_NoSecurity",
+	"Security2CC_NotInitialized",
+	"Controller_NodeNotFound",
+]);
 
 /** ZWaveErrors with one of the expected codes are the correct way to reject invalid payloads */
 function isExpectedError(node: TSESTree.Expression): boolean {
@@ -92,16 +104,17 @@ function isExpectedError(node: TSESTree.Expression): boolean {
 		&& code.object.type === AST_NODE_TYPES.Identifier
 		&& code.object.name === "ZWaveErrorCodes"
 		&& code.property.type === AST_NODE_TYPES.Identifier
-		&& EXPECTED_ERROR_CODE.test(code.property.name)
+		&& EXPECTED_ERROR_CODES.has(code.property.name)
 	);
 }
 
-/** Whether a throw statement creates a new, unexpected error. Re-throwing caught errors is fine */
+/** Whether a throw statement throws an unexpected error. Re-throwing caught errors is fine */
 function isUnexpectedThrow(node: TSESTree.ThrowStatement): boolean {
-	return (
-		node.argument.type === AST_NODE_TYPES.NewExpression
-		&& !isExpectedError(node.argument)
-	);
+	const arg = node.argument;
+	if (arg.type === AST_NODE_TYPES.Identifier) {
+		return findBinding(arg)?.kind !== "catch";
+	}
+	return !isExpectedError(arg);
 }
 
 /** Finds throw statements in a function body, excluding nested functions */
@@ -223,7 +236,7 @@ export const noUnexpectedParseErrors: OxlintCompatibleRule = {
 		schema: [],
 		messages: {
 			"unexpected-throw":
-				"Parse functions should only throw ZWaveErrors with a PacketFormat_* code or another code the receive path handles. Use validatePayload() to reject invalid payloads instead.",
+				"Parse functions should only throw ZWaveErrors with a code that Driver.handleDecodeError handles, e.g. PacketFormat_InvalidPayload. Use validatePayload() to reject invalid payloads instead.",
 			"throwing-constructor":
 				"The constructor of {{className}} can throw an unexpected error (line {{line}}). Validate the payload before calling it, so it cannot throw while parsing.",
 		},
