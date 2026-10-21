@@ -34,7 +34,6 @@ import {
 	getNotificationName,
 	getNotificationValue,
 	getNotificationValueName,
-	isZWaveError,
 	logList,
 	logText,
 	parseBitMask,
@@ -46,6 +45,7 @@ import {
 	type BytesView,
 	buffer2hex,
 	isUint8Array,
+	noop,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -1531,6 +1531,8 @@ export class NotificationCCReport extends NotificationCC {
 						securityManagerLR: undefined,
 					});
 					if (cc instanceof Promise) {
+						// The discarded parse attempt may still reject later
+						cc.catch(noop);
 						validatePayload.fail(
 							"Cannot asynchronously parse CC from event parameters",
 						);
@@ -1553,41 +1555,36 @@ export class NotificationCCReport extends NotificationCC {
 						}
 						this.eventParameters = json;
 					}
-				} catch (e) {
-					if (
-						isZWaveError(e)
-						&& e.code
-							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
-						&& isUint8Array(this.eventParameters)
-					) {
-						// Parsing may fail before the CC id and command are known.
-						// In that case they cannot be used for the fallback below.
-						let raw: CCRaw | undefined;
+				} catch {
+					// The nested CC is arbitrary node-supplied data. Whatever went wrong while parsing it
+					// must not prevent handling the notification itself.
+					// Parsing may fail before the CC id and command are known.
+					// In that case they cannot be used for the fallback below.
+					let raw: CCRaw | undefined;
+					if (isUint8Array(this.eventParameters)) {
 						try {
 							raw = CCRaw.parse(this.eventParameters);
 						} catch {
 							// ignore
 						}
-						if (
-							raw?.ccId === CommandClasses["User Code"]
-							&& raw.ccCommand === UserCodeCommand.Report
-							&& this.eventParameters.length >= 3
-						) {
-							// Access control -> Keypad Lock/Unlock operation
-							// Some devices report the user code with truncated UserCode reports
-							this.eventParameters = {
-								userId: this.eventParameters[2],
-							};
-						} else {
-							ctx.logNode(
-								this.nodeId as number,
-								`Failed to parse Notification CC event parameters, ignoring them...`,
-								"error",
-							);
-						}
+					}
+					if (
+						isUint8Array(this.eventParameters)
+						&& raw?.ccId === CommandClasses["User Code"]
+						&& raw.ccCommand === UserCodeCommand.Report
+						&& this.eventParameters.length >= 3
+					) {
+						// Access control -> Keypad Lock/Unlock operation
+						// Some devices report the user code with truncated UserCode reports
+						this.eventParameters = {
+							userId: this.eventParameters[2],
+						};
 					} else {
-						// unexpected error
-						throw e;
+						ctx.logNode(
+							this.nodeId as number,
+							`Failed to parse Notification CC event parameters, ignoring them...`,
+							"error",
+						);
 					}
 				}
 			}
