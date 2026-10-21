@@ -281,9 +281,9 @@ test("parse, weird, but valid expression", () => {
 });
 
 test("parse() handles deeply nested groups in linear time", () => {
-	const depth = 50;
+	// At this depth, a parser with exponential backtracking would not finish
+	// before the test timeout
+	const depth = 500;
 	const input = "(".repeat(depth) + "a > 1 && b < 2" + ")".repeat(depth);
-	const start = Date.now();
 	expect(parse(input)).toMatchObject({ kind: SyntaxKind.And });
-	expect(Date.now() - start).toBeLessThan(1000);
 });
