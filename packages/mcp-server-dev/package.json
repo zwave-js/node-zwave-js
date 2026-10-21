@@ -50,11 +50,11 @@
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@types/node": "^20.19.35",
-    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "nano-spawn": "^2.1.0"
   },
   "scripts": {
-    "build": "tsgo -b",
+    "build": "tsc -b",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ *.tsbuildinfo",
     "prefetch-semantic-model": "node build/semantic/prefetchModel.js",

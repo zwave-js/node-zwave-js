@@ -12,7 +12,7 @@
 
 		"build": {
 			"dependsOn": ["codegen", "^build"],
-			"cache": false // tsgo is fast enough
+			"cache": false // tsc is fast enough
 		},
 
 		"codegen": {

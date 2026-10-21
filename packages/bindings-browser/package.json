@@ -46,12 +46,12 @@
     "node": ">= 20"
   },
   "scripts": {
-    "build": "tsgo -b tsconfig.json --pretty",
+    "build": "tsc -b tsconfig.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\""
   },
   "devDependencies": {
     "@types/w3c-web-serial": "^1.0.8",
-    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "del-cli": "^7.0.0",

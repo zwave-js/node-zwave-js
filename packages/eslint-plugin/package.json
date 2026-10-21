@@ -31,17 +31,17 @@
     "node": ">= 20"
   },
   "scripts": {
-    "build": "tsgo -b tsconfig.build.json --pretty",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\""
   },
   "devDependencies": {
     "@alcalzone/esm2cjs": "^1.4.2",
     "@typescript-eslint/utils": "^8.71.1",
-    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "@zwave-js/core": "workspace:*",
     "eslint-plugin-jsonc": "^3.4.2",
-    "typescript": "6.0.3"
+    "typescript": "npm:@typescript/typescript6@6.0.2"
   },
   "dependencies": {
     "@oxlint/plugins": "^1.80.0"
