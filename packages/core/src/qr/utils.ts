@@ -14,7 +14,11 @@ import {
 } from "./definitions.js";
 
 function readNumber(qr: string, offset: number, length: number): number {
-	return parseInt(qr.slice(offset, offset + length), 10);
+	const digits = qr.slice(offset, offset + length);
+	if (digits.length !== length || !/^\d+$/.test(digits)) {
+		fail("invalid data");
+	}
+	return parseInt(digits, 10);
 }
 
 export function fail(reason: string): never {
