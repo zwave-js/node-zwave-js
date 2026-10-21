@@ -411,6 +411,15 @@ interface ControllerEventCallbacks extends StatisticsEventCallbacks<ControllerSt
 	"status changed": (status: ControllerStatus) => void;
 }
 
+const FALLBACK_NVM_CHUNK_SIZE = 48;
+
+function throwEmptyNVMChunk(offset: number): never {
+	throw new ZWaveError(
+		`Cannot back up the NVM: The controller returned no data at offset ${offset}`,
+		ZWaveErrorCodes.Controller_CommandError,
+	);
+}
+
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
 export interface ZWaveController extends ControllerStatisticsHost {}
@@ -8488,12 +8497,19 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			if (chunk.length === 0) {
 				// Some SDK versions return an empty buffer when trying to read a buffer that is too long
 				// Fallback to a sane (but maybe slow) size
-				chunkSize = 48;
-				continue;
+				if (chunkSize > FALLBACK_NVM_CHUNK_SIZE) {
+					chunkSize = FALLBACK_NVM_CHUNK_SIZE;
+					continue;
+				}
+				throwEmptyNVMChunk(offset);
 			}
-			ret.set(chunk, offset);
-			offset += chunk.length;
-			if (chunkSize > chunk.length) chunkSize = chunk.length;
+			// Don't trust the controller to return at most the requested amount of data
+			const usableChunk = chunk.subarray(0, ret.length - offset);
+			ret.set(usableChunk, offset);
+			offset += usableChunk.length;
+			if (chunkSize > usableChunk.length) {
+				chunkSize = usableChunk.length;
+			}
 
 			// Report progress for listeners
 			if (onProgress) setImmediate(() => onProgress(offset, size));
@@ -8544,15 +8560,22 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					offset,
 					Math.min(chunkSize, ret.length - offset),
 				);
-				if (chunkSize === 0xff && chunk.length === 0) {
+				if (chunk.length === 0) {
 					// Some SDK versions return an empty buffer when trying to read a buffer that is too long
 					// Fallback to a sane (but maybe slow) size
-					chunkSize = 48;
-					continue;
+					if (chunkSize > FALLBACK_NVM_CHUNK_SIZE) {
+						chunkSize = FALLBACK_NVM_CHUNK_SIZE;
+						continue;
+					}
+					throwEmptyNVMChunk(offset);
 				}
-				ret.set(chunk, offset);
-				offset += chunk.length;
-				if (chunkSize > chunk.length) chunkSize = chunk.length;
+				// Don't trust the controller to return at most the requested amount of data
+				const usableChunk = chunk.subarray(0, ret.length - offset);
+				ret.set(usableChunk, offset);
+				offset += usableChunk.length;
+				if (chunkSize > usableChunk.length) {
+					chunkSize = usableChunk.length;
+				}
 
 				// Report progress for listeners
 				if (onProgress) setImmediate(() => onProgress(offset, size));
@@ -8864,6 +8887,12 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		// The write requests need 5 bytes more than the read response, so subtract 5 from the returned length
 		const chunkSize =
 			(await this.externalNVMReadBuffer(0, initialChunkSize)).length - 5;
+		if (chunkSize <= 0) {
+			throw new ZWaveError(
+				`Cannot restore the NVM: The controller did not return a usable chunk size`,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
 
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
 			await this.externalNVMWriteBuffer(
