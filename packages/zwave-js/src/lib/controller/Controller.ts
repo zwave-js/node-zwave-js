@@ -8567,6 +8567,8 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						chunkSize = FALLBACK_NVM_CHUNK_SIZE;
 						continue;
 					}
+					// A read may legitimately end exactly at the end of the NVM
+					if (endOfFile) break;
 					throwEmptyNVMChunk(offset);
 				}
 				// Don't trust the controller to return at most the requested amount of data
@@ -8885,8 +8887,14 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			this._productId,
 		);
 		// The write requests need 5 bytes more than the read response, so subtract 5 from the returned length
-		const chunkSize =
+		let chunkSize =
 			(await this.externalNVMReadBuffer(0, initialChunkSize)).length - 5;
+		if (chunkSize <= 0 && initialChunkSize > FALLBACK_NVM_CHUNK_SIZE) {
+			// Some SDK versions return an empty buffer when trying to read a buffer that is too long
+			chunkSize =
+				(await this.externalNVMReadBuffer(0, FALLBACK_NVM_CHUNK_SIZE))
+					.length - 5;
+		}
 		if (chunkSize <= 0) {
 			throw new ZWaveError(
 				`Cannot restore the NVM: The controller did not return a usable chunk size`,
