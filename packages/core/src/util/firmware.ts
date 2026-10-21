@@ -16,6 +16,9 @@ import { CRC16_CCITT } from "./crc.js";
 const MemoryMap =
 	MemoryMap_ as unknown as typeof import("nrf-intel-hex").default;
 
+/** The maximum size of an extracted firmware image. 10 MB should be enough for any conceivable Z-Wave chip. */
+export const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024;
+
 const firmwareIndicators = {
 	// All aeotec updater exes contain this text
 	aeotec: Bytes.from("Zensys.ZWave", "utf8"),
@@ -86,7 +89,11 @@ export function tryUnzipFirmwareFile(zipData: BytesView):
 	// Extract files we can work with
 	const unzipped = unzipSync(zipData, {
 		filter: (file) => {
-			return /\.(hex|exe|ex_|ota|otz|hec|gbl|bin)$/.test(file.name);
+			return (
+				/\.(hex|exe|ex_|ota|otz|hec|gbl|bin)$/.test(file.name)
+				// Avoid inflating huge files, which could exhaust the memory
+				&& file.originalSize <= MAX_FIRMWARE_SIZE
+			);
 		},
 	});
 	if (Object.keys(unzipped).length === 1) {
@@ -258,14 +265,22 @@ function extractFirmwareHEX(dataHEX: BytesView | string): Firmware {
 			dataHEX = Bytes.view(dataHEX).toString("ascii");
 		}
 		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(dataHEX);
-		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
-		let data: Bytes = new Bytes();
+		// The addresses come from the file and may be arbitrarily large,
+		// so check the resulting size before allocating anything
+		let size = 0;
 		for (const [offset, chunk] of memMap.entries()) {
-			data = Bytes.concat([
-				data,
-				Bytes.alloc(offset - data.length, 0xff),
-				chunk,
-			]);
+			size = Math.max(size, offset + chunk.length);
+		}
+		if (size > MAX_FIRMWARE_SIZE) {
+			throw new ZWaveError(
+				`The firmware image would be ${size} bytes large, which exceeds the maximum of ${MAX_FIRMWARE_SIZE} bytes!`,
+				ZWaveErrorCodes.Invalid_Firmware_File,
+			);
+		}
+		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
+		const data = Bytes.alloc(size, 0xff);
+		for (const [offset, chunk] of memMap.entries()) {
+			data.set(chunk, offset);
 		}
 		return { data };
 	} catch (e) {
