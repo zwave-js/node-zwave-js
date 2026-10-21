@@ -63,6 +63,7 @@ export enum FunctionType {
 	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
 
 	NVMOperations = 0x2e, // Read and write from/to the external NVM (700+ series)
+	NetworkRestore = 0x2f, // Restore network data independent of the NVM layout
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
