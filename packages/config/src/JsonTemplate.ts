@@ -332,6 +332,8 @@ async function resolveJsonImports(
 	const ret: Record<string, unknown> = {};
 	// Loop through all properties and copy them to the resulting object
 	for (const [prop, val] of Object.entries(json)) {
+		// Assigning `__proto__` would change the prototype of the result
+		if (prop === "__proto__") continue;
 		if (prop === IMPORT_KEY) {
 			// This is an import statement. Make sure we're working with a string
 			assertImportSpecifier(val, visited.join(" -> "));

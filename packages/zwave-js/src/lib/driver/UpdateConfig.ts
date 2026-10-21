@@ -19,6 +19,9 @@ import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
 import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
 
+/** The config package is a few MB in size when extracted, so this leaves a lot of headroom */
+const MAX_CONFIG_PACKAGE_SIZE = 100 * 1024 * 1024;
+
 /**
  * Checks whether there is a compatible update for the currently installed config package.
  * Returns the new version if there is an update, `undefined` otherwise.
@@ -115,7 +118,9 @@ export async function installConfigUpdate(
 	try {
 		// Extract json files from the tarball's config directory
 		// and overwrite the external config directory with them
-		const tarFiles = untar(gunzipSync(tarballData).buffer);
+		const tarFiles = untar(
+			gunzipSync(tarballData, MAX_CONFIG_PACKAGE_SIZE).buffer,
+		);
 		await fs.deleteDir(external.configDir);
 		await fs.ensureDir(external.configDir);
 
@@ -129,6 +134,18 @@ export async function installConfigUpdate(
 			}
 			const filename = file.filename.slice(prefix.length);
 			const targetFileName = path.join(external.configDir, filename);
+			// Don't let crafted file names escape the config directory
+			const relativePath = path.relative(
+				external.configDir,
+				targetFileName,
+			);
+			if (
+				relativePath === ".."
+				|| relativePath.startsWith("../")
+				|| path.isAbsolute(relativePath)
+			) {
+				continue;
+			}
 			const targetDirName = path.dirname(targetFileName);
 
 			await fs.ensureDir(targetDirName);

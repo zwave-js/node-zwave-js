@@ -125,6 +125,25 @@ export async function syncExternalConfigDir(
 	// Nothing to wipe, the external dir is good to go
 	if (!wipe) return { success: true, version: externalVersion! };
 
+	// The directory is configured by the user and might point to the wrong location.
+	// Only wipe it if it is empty or was created by us, which is indicated by the version file.
+	try {
+		const entries = await fs.readDir(extConfigDir);
+		if (entries.length > 0 && !entries.includes("version")) {
+			logger.print(
+				`External config dir ${extConfigDir} is not empty and does not look like a Z-Wave JS config directory, refusing to overwrite it - using embedded config`,
+				"error",
+			);
+			return { success: false };
+		}
+	} catch {
+		logger.print(
+			`Synchronizing external config dir failed - using embedded config`,
+			"error",
+		);
+		return { success: false };
+	}
+
 	// Wipe and override the external dir
 	try {
 		logger.print(`Synchronizing external config dir ${extConfigDir}...`);

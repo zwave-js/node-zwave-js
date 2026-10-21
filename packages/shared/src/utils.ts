@@ -145,6 +145,8 @@ export function cloneDeep<T>(source: T): T {
 	} else if (isObject(source)) {
 		const target: any = {};
 		for (const [key, value] of Object.entries(source)) {
+			// Assigning `__proto__` would change the prototype of the clone
+			if (key === "__proto__") continue;
 			target[key] = cloneDeep(value);
 		}
 		return target;
