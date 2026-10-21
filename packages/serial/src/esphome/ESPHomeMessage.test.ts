@@ -1,8 +1,13 @@
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
 import { expect, test } from "vitest";
 
 import { DeviceInfoRequest, DeviceInfoResponse } from "./DeviceInfoMessages.js";
-import { ESPHomeMessage, ESPHomeMessageType } from "./ESPHomeMessage.js";
+import {
+	ESPHomeMessage,
+	ESPHomeMessageRaw,
+	ESPHomeMessageType,
+} from "./ESPHomeMessage.js";
 import { HelloRequest, HelloResponse } from "./HelloMessages.js";
 import { PingRequest, PingResponse } from "./PingMessages.js";
 import { ZWaveProxyFrame } from "./ZWaveProxyMessages.js";
@@ -195,4 +200,62 @@ test("DeviceInfoResponse with all boolean flags", () => {
 	expect(parsed.hasDeepSleep).toBe(true);
 	expect(parsed.apiEncryptionSupported).toBe(true);
 	expect(parsed.hasZWaveProxySupport).toBe(true);
+});
+
+test("Frames with an oversized payload size are rejected", () => {
+	assertZWaveError(
+		expect,
+		() =>
+			ESPHomeMessageRaw.parse(
+				Bytes.from([0x00, 0xf9, 0xff, 0xff, 0xff, 0x0f, 0x02]),
+			),
+		{ errorCode: ZWaveErrorCodes.PacketFormat_Invalid },
+	);
+});
+
+test("Frames with a payload size of 65535 bytes are accepted", () => {
+	const frame = new ESPHomeMessage({
+		messageType: ESPHomeMessageType.PingRequest,
+		payload: new Bytes(65535),
+	}).serialize();
+	const { message, bytesRead } = ESPHomeMessageRaw.parse(frame);
+	expect(message.payload.length).toBe(65535);
+	expect(bytesRead).toBe(frame.length);
+});
+
+test("Frames with a payload size of 65536 bytes are rejected", () => {
+	const frame = new ESPHomeMessage({
+		messageType: ESPHomeMessageType.PingRequest,
+		payload: new Bytes(65536),
+	}).serialize();
+	assertZWaveError(expect, () => ESPHomeMessageRaw.parse(frame), {
+		errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
+	});
+});
+
+test("Frames with incomplete size or type VarInts are reported as truncated", () => {
+	// Incomplete payload size
+	assertZWaveError(
+		expect,
+		() => ESPHomeMessageRaw.parse(Bytes.from([0x00, 0x80, 0x80])),
+		{ errorCode: ZWaveErrorCodes.PacketFormat_Truncated },
+	);
+	// Incomplete message type
+	assertZWaveError(
+		expect,
+		() => ESPHomeMessageRaw.parse(Bytes.from([0x00, 0x01, 0x80])),
+		{ errorCode: ZWaveErrorCodes.PacketFormat_Truncated },
+	);
+});
+
+test("Noise messages whose length exceeds the decrypted frame are rejected", () => {
+	// Type 7, length 5, but only 2 payload bytes
+	assertZWaveError(
+		expect,
+		() =>
+			ESPHomeMessageRaw.parseFromNoise(
+				Bytes.from([0x00, 0x07, 0x00, 0x05, 0x01, 0x02]),
+			),
+		{ errorCode: ZWaveErrorCodes.PacketFormat_Invalid },
+	);
 });

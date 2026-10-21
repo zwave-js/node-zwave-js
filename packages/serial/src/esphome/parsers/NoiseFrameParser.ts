@@ -49,9 +49,9 @@ class NoiseFrameParserTransformer implements Transformer<BytesView, Bytes> {
 				) {
 					break;
 				}
-				// For other errors, reset the buffer and continue
-				this.receiveBuffer = new Bytes();
-				break;
+				// Without valid framing, the start of the next frame cannot be located
+				controller.error(error);
+				return;
 			}
 		}
 	}

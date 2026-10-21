@@ -3,7 +3,7 @@ import type { Transformer } from "node:stream/web";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { Bytes, type BytesView } from "@zwave-js/shared";
 
-import { ESPHomeMessage } from "../ESPHomeMessage.js";
+import { ESPHomeMessage, ESPHomeMessageRaw } from "../ESPHomeMessage.js";
 
 export interface ESPHomeMessageParserOptions {
 	/**
@@ -31,49 +31,35 @@ class ESPHomeMessageParserTransformer implements Transformer<
 		this.receiveBuffer = Bytes.concat([this.receiveBuffer, chunk]);
 
 		while (this.receiveBuffer.length > 0) {
+			let raw: ESPHomeMessageRaw;
+			let bytesRead: number;
 			try {
-				if (this.noiseMode) {
-					this.parseNoiseMessage(controller);
-				} else {
-					this.parsePlaintextMessage(controller);
-				}
+				({ message: raw, bytesRead } = this.noiseMode
+					? ESPHomeMessageRaw.parseFromNoise(this.receiveBuffer)
+					: ESPHomeMessageRaw.parse(this.receiveBuffer));
 			} catch (error) {
 				// If we can't decode a complete frame yet, wait for more data
 				if (
 					error instanceof ZWaveError
 					&& error.code === ZWaveErrorCodes.PacketFormat_Truncated
 				) {
-					break;
+					return;
 				}
-				// For other errors, reset the buffer and continue
-				this.receiveBuffer = new Bytes();
-				break;
+				// Without valid framing, the start of the next frame cannot be located
+				controller.error(error);
+				return;
 			}
+			this.receiveBuffer = this.receiveBuffer.subarray(bytesRead);
+
+			let message: ESPHomeMessage;
+			try {
+				message = ESPHomeMessage.fromRaw(raw);
+			} catch {
+				// The frame boundaries are known, so only this message is lost
+				continue;
+			}
+			controller.enqueue(message);
 		}
-	}
-
-	/**
-	 * Parse plaintext ESPHome message format: [0x00][VarInt size][VarInt type][payload]
-	 */
-	private parsePlaintextMessage(
-		controller: TransformStreamDefaultController<ESPHomeMessage>,
-	): void {
-		const { message, bytesRead } = ESPHomeMessage.parse(this.receiveBuffer);
-		this.receiveBuffer = this.receiveBuffer.subarray(bytesRead);
-		controller.enqueue(message);
-	}
-
-	/**
-	 * Parse Noise-decrypted message format: [2-byte BE type][2-byte BE len][payload]
-	 */
-	private parseNoiseMessage(
-		controller: TransformStreamDefaultController<ESPHomeMessage>,
-	): void {
-		const { message, bytesRead } = ESPHomeMessage.parseFromNoise(
-			this.receiveBuffer,
-		);
-		this.receiveBuffer = this.receiveBuffer.subarray(bytesRead);
-		controller.enqueue(message);
 	}
 }
 
