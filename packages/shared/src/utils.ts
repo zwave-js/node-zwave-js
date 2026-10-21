@@ -69,6 +69,22 @@ export function isEnumMember(enumeration: unknown, value: number): boolean {
 }
 
 /**
+ * Interprets the given value as a member of the given numeric enum.
+ * Returns `undefined` if the value is not a member of the enum.
+ *
+ * @param enumeration The enumeration object the value should belong to
+ * @param value The raw value to interpret
+ */
+export function tryParseEnumValue<T extends Record<string, string | number>>(
+	enumeration: T,
+	value: number,
+): Extract<T[keyof T], number> | undefined {
+	if (isEnumMember(enumeration, value)) {
+		return value as Extract<T[keyof T], number>;
+	}
+}
+
+/**
  * Returns a throttled version of the given function. No matter how often the throttled version is called,
  * the underlying function is only called at maximum every `intervalMs` milliseconds.
  */

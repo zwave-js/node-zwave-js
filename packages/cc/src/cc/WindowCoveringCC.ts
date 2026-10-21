@@ -15,7 +15,12 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared";
+import {
+	Bytes,
+	getEnumMemberName,
+	pick,
+	tryParseEnumValue,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import {
@@ -752,8 +757,13 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 		ctx: CCParsingContext,
 	): WindowCoveringCCReport {
 		validatePayload(raw.payload.length >= 4);
-		const parameter: WindowCoveringParameter = raw.payload[0];
-		validatePayload(isEnumMember(WindowCoveringParameter, parameter));
+		const parameter = tryParseEnumValue(
+			WindowCoveringParameter,
+			raw.payload[0],
+		);
+		if (parameter == undefined) {
+			validatePayload.fail("Invalid window covering parameter");
+		}
 		validatePayload(raw.payload[1] <= 99, raw.payload[2] <= 99);
 		const currentValue = raw.payload[1];
 		const targetValue = raw.payload[2];
