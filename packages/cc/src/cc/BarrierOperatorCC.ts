@@ -20,6 +20,7 @@ import {
 	maybeUnknownToString,
 	parseBitMask,
 	encodeBitMask,
+	parseEnumValue,
 	validatePayload,
 } from "@zwave-js/core";
 import {
@@ -28,7 +29,6 @@ import {
 	isEnumMember,
 	noop,
 	pick,
-	tryParseEnumValue,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
@@ -776,17 +776,8 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingSet {
 		validatePayload(raw.payload.length >= 2);
-		const subsystemType = tryParseEnumValue(SubsystemType, raw.payload[0]);
-		const subsystemState = tryParseEnumValue(
-			SubsystemState,
-			raw.payload[1],
-		);
-		if (subsystemType == undefined) {
-			validatePayload.fail("Invalid subsystem type");
-		}
-		if (subsystemState == undefined) {
-			validatePayload.fail("Invalid subsystem state");
-		}
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
+		const subsystemState = parseEnumValue(SubsystemState, raw.payload[1]);
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			subsystemType,
@@ -842,17 +833,8 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingReport {
 		validatePayload(raw.payload.length >= 2);
-		const subsystemType = tryParseEnumValue(SubsystemType, raw.payload[0]);
-		const subsystemState = tryParseEnumValue(
-			SubsystemState,
-			raw.payload[1],
-		);
-		if (subsystemType == undefined) {
-			validatePayload.fail("Invalid subsystem type");
-		}
-		if (subsystemState == undefined) {
-			validatePayload.fail("Invalid subsystem state");
-		}
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
+		const subsystemState = parseEnumValue(SubsystemState, raw.payload[1]);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -919,10 +901,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingGet {
 		validatePayload(raw.payload.length >= 1);
-		const subsystemType = tryParseEnumValue(SubsystemType, raw.payload[0]);
-		if (subsystemType == undefined) {
-			validatePayload.fail("Invalid subsystem type");
-		}
+		const subsystemType = parseEnumValue(SubsystemType, raw.payload[0]);
 		return new this({ nodeId: ctx.sourceNodeId, subsystemType });
 	}
 

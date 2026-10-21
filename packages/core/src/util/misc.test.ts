@@ -8,6 +8,7 @@ import {
 	getMinimumShiftForBitMask,
 	isConsecutiveArray,
 	stripUndefined,
+	parseEnumValue,
 	validatePayload,
 } from "./misc.js";
 
@@ -134,5 +135,25 @@ test("getLegalRangeForBitMask returns the correct ranges otherwise", (t) => {
 			expUnsigned,
 		);
 		t.expect(getLegalRangeForBitMask(mask, false)).toStrictEqual(expSigned);
+	}
+});
+
+enum TestEnum {
+	Zero = 0x00,
+	One = 0x01,
+	Large = 0xff,
+}
+
+test("parseEnumValue() -> returns enum members unchanged", (t) => {
+	t.expect(parseEnumValue(TestEnum, 0x00)).toBe(TestEnum.Zero);
+	t.expect(parseEnumValue(TestEnum, 0x01)).toBe(TestEnum.One);
+	t.expect(parseEnumValue(TestEnum, 0xff)).toBe(TestEnum.Large);
+});
+
+test("parseEnumValue() -> throws a ZWaveError with PacketFormat_InvalidPayload for non-members", (t) => {
+	for (const value of [0x02, 190]) {
+		assertZWaveError(t.expect, () => parseEnumValue(TestEnum, value), {
+			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+		});
 	}
 });

@@ -19,6 +19,7 @@ import {
 	logText,
 	parseBitMask,
 	supervisedCommandSucceeded,
+	parseEnumValue,
 	validatePayload,
 } from "@zwave-js/core";
 import {
@@ -27,7 +28,6 @@ import {
 	isEnumMember,
 	keysOf,
 	pick,
-	tryParseEnumValue,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
@@ -758,13 +758,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): ColorSwitchCCReport {
 		validatePayload(raw.payload.length >= 2);
-		const colorComponent = tryParseEnumValue(
-			ColorComponent,
-			raw.payload[0],
-		);
-		if (colorComponent == undefined) {
-			validatePayload.fail("Invalid color component");
-		}
+		const colorComponent = parseEnumValue(ColorComponent, raw.payload[0]);
 		const currentValue = raw.payload[1];
 		let targetValue: number | undefined;
 		let duration: Duration | undefined;

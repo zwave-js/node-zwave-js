@@ -5,7 +5,6 @@ import {
 	discreteBinarySearch,
 	discreteLinearSearch,
 	mergeDeep,
-	tryParseEnumValue,
 } from "./utils.js";
 
 test("discreteBinarySearch -> test case 1", async (t) => {
@@ -254,21 +253,4 @@ test("mergeDeep -> replaces arrays instead of merging them", (t) => {
 	t.expect(mergeDeep({ a: [1, 2, 3] }, { a: [4] }).a).toStrictEqual([
 		1, 2, 3,
 	]);
-});
-
-enum TestEnum {
-	Zero = 0x00,
-	One = 0x01,
-	Large = 0xff,
-}
-
-test("tryParseEnumValue -> returns enum members unchanged", (t) => {
-	t.expect(tryParseEnumValue(TestEnum, 0x00)).toBe(TestEnum.Zero);
-	t.expect(tryParseEnumValue(TestEnum, 0x01)).toBe(TestEnum.One);
-	t.expect(tryParseEnumValue(TestEnum, 0xff)).toBe(TestEnum.Large);
-});
-
-test("tryParseEnumValue -> returns undefined for non-members", (t) => {
-	t.expect(tryParseEnumValue(TestEnum, 0x02)).toBeUndefined();
-	t.expect(tryParseEnumValue(TestEnum, 190)).toBeUndefined();
 });
