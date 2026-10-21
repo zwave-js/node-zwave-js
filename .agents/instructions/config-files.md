@@ -259,17 +259,19 @@ If an `endpoints` block is added to a config that already has root-level `associ
 
 Use `endpointGroups` when the device documentation explicitly identifies multiple endpoints as belonging to the same physical part. Grouping is metadata and leaves endpoint behavior unchanged.
 
-- **Evidence:** Establish membership from the device manual or manufacturer's product page. Never infer membership from device classes, matching labels, or adjacent indices.
+- **Evidence:** Establish membership from the device's **product manual** — fetch and read the manual PDF, not only the OpenSmartHouse or Z-Wave Alliance product listing. Those listings usually omit the endpoint-architecture explanation (e.g. whether endpoints are virtual resources of one device) that determines grouping. Never infer membership from device classes, matching labels, or adjacent indices.
 - **Property order:** Place `endpointGroups` directly after `endpoints`, in slot 9.
 - **IDs:** Use numeric string keys starting at `"1"` without gaps in the authored file. Conditional filtering preserves the IDs.
 - **Labels:** Require a nonempty physical-part label. Follow the endpoint-label style rules.
 - **Members:** Require a nonempty array of unique integer endpoint indices from 1 to 127. Root endpoint 0 cannot be a member.
 - **Conditions:** Support `$if` per group. An endpoint may occur in at most one active group after evaluation. Mutually exclusive groups may share endpoint indices.
-- **Singletons:** Use a single configured member only in edge cases, like conditional endpoints. It causes a lint warning. Missing runtime endpoints may reduce a group to one member without a singleton warning.
-- **Main device (optional):** Most groups omit `isMainDevice`. Set `"isMainDevice": true` only when the documentation describes the group as the device as a whole, e.g. the total consumption of a multi-clamp meter or the entire power strip. At most one active group may have it.
+- **Singletons:** Use a single configured member only in edge cases, like conditional endpoints or a single-endpoint whole-device total. A singleton `isMainDevice` group is allowed and is not warned about; other singletons cause a lint warning. Missing runtime endpoints may reduce a group to one member without a singleton warning.
+- **Main device:** Ordinary part groups omit `isMainDevice`. A device that exposes a whole-device total must put that total in exactly one group with `"isMainDevice": true` (e.g. the total consumption of a multi-clamp meter, the entire power strip, or the whole of a device whose endpoints are virtual resources). At most one active group may have it.
 - **Independence:** Group membership requires no endpoint label or entry in `endpoints`. Adding only `endpointGroups` requires no root-association migration.
 
-Leave endpoints ungrouped when their physical relationship is undocumented. Whole-device totals may remain ungrouped. Applications decide how to present ungrouped endpoints.
+**Single physical device with virtual endpoints:** When the manual describes a device's endpoints as virtual or logical application resources of one physical device — for example a siren with a single speaker and indicator light that exposes multiple sound/notification endpoints — treat the device as a single physical part: group **all** of its endpoints into one group and set `"isMainDevice": true`. Here grouping is recommended, not optional; left ungrouped, the virtual endpoints are presented as separate devices. This is different from a device with several real physical parts (relays, outlets, clamps), where you group each part separately and the whole-device total gets its own `isMainDevice` group.
+
+Leave endpoints ungrouped when their physical relationship is undocumented. Always put a whole-device total in its own group with `"isMainDevice": true` — even when the total is a single endpoint — so applications can distinguish the device-level aggregate from the individual endpoints. Applications decide how to present ungrouped endpoints.
 
 ## Central Scene Labels
 

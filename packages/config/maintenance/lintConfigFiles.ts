@@ -890,7 +890,9 @@ async function lintDevices(): Promise<void> {
 
 		if (conditionalConfig.endpointGroups) {
 			for (const [id, group] of conditionalConfig.endpointGroups) {
-				if (group.endpoints.length === 1) {
+				// A main-device group may legitimately wrap a single whole-device
+				// total endpoint, so it is exempt from the singleton warning.
+				if (group.endpoints.length === 1 && !group.isMainDevice) {
 					addWarning(
 						file,
 						`Endpoint group ${id} contains only one endpoint. Consider using an endpoint label.`,
