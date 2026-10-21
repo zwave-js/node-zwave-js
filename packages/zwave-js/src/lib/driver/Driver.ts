@@ -4071,13 +4071,17 @@ export class Driver
 				void this.handleSerialPortClosedUnexpectedly();
 				return;
 			}
-			throw e;
+			if (this.wasDestroyed) return;
+			// Nothing can be received after the stream failed, so the driver cannot continue
+			void this.destroyWithMessage(
+				`Failed to read from the serial port: ${getErrorMessage(e)}`,
+			);
 		}
 	}
 
 	/**
 	 * Last line of defense for errors while handling received data.
-	 * These are bugs, but they must not take down the host application.
+	 * These are unexpected errors, but they must not take down the host application.
 	 */
 	private handleReceiveError(e: unknown): void {
 		this.driverLog.print(
@@ -10002,6 +10006,7 @@ ${handlers.length} left`,
 			);
 
 			if (!(await this.ensureCLIReady())) {
+				if (this.wasDestroyed) return;
 				await this.destroyWithMessage(
 					"Failed to detect available CLI commands",
 				);
