@@ -58,15 +58,22 @@ test("generateNonce() should return a random Buffer of the given length", (t) =>
 });
 
 test("generateNonce() -> should ensure that no collisions happen", async (t) => {
-	// No collisions means that it is possible to generate 256 nonces without reusing the first byte
 	const man = new SecurityManager(options);
 	const generatedNonceIds = new Set<number>();
-	for (let i = 0; i <= 255; i++) {
+	for (let i = 0; i < 128; i++) {
 		const nonce = man.generateNonce(2, 8);
 		const nonceId = nonce[0];
 		t.expect(generatedNonceIds.has(nonceId)).toBe(false);
 		generatedNonceIds.add(nonceId);
 	}
+});
+
+test("generateNonce() -> should refuse to generate more than 128 outstanding nonces", (t) => {
+	const man = new SecurityManager(options);
+	for (let i = 0; i < 128; i++) {
+		man.generateNonce(2, 8);
+	}
+	t.expect(() => man.generateNonce(2, 8)).toThrow();
 });
 
 test("generateNonce() should store nonces for the current node id", (t) => {
