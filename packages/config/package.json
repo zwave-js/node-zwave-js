@@ -66,7 +66,7 @@
   "scripts": {
     "ts": "tsx --conditions=@@dev",
     "codegen": "yarn ts maintenance/codegen.ts",
-    "build": "tsgo -b tsconfig.build.json --pretty && yarn postbuild",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
     "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node20",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
@@ -101,7 +101,7 @@
     "@types/sinon": "^21.0.0",
     "@types/xml2js": "^0.4.14",
     "@types/yargs": "^17.0.35",
-    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "@zwave-js/maintenance": "workspace:*",
     "comment-json": "^4.6.2",
     "del-cli": "^7.0.0",

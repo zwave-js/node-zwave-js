@@ -39,7 +39,7 @@
     "node": ">= 20"
   },
   "scripts": {
-    "build": "tsgo -b tsconfig.build.json --pretty && yarn postbuild",
+    "build": "tsc -b tsconfig.build.json --pretty && yarn postbuild",
     "postbuild": "yarn esm2cjs --in build/esm --out build/cjs -l error -t node20",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run"
@@ -58,7 +58,7 @@
     "@microsoft/api-extractor": "^7.58.7",
     "@types/node": "^20.19.35",
     "@types/triple-beam": "^1.3.5",
-    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "@zwave-js/cc": "workspace:*",
     "del-cli": "^7.0.0",
     "triple-beam": "*",

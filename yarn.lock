@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 10
   cacheKey: 10
 
 "@aashutoshrathi/word-wrap@npm:^1.2.3":
@@ -2987,84 +2987,224 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260423.1"
+"@typescript/native@npm:typescript@7.0.2":
+  version: 7.0.2
+  resolution: "typescript@npm:7.0.2"
+  dependencies:
+    "@typescript/typescript-aix-ppc64": "npm:7.0.2"
+    "@typescript/typescript-darwin-arm64": "npm:7.0.2"
+    "@typescript/typescript-darwin-x64": "npm:7.0.2"
+    "@typescript/typescript-freebsd-arm64": "npm:7.0.2"
+    "@typescript/typescript-freebsd-x64": "npm:7.0.2"
+    "@typescript/typescript-linux-arm": "npm:7.0.2"
+    "@typescript/typescript-linux-arm64": "npm:7.0.2"
+    "@typescript/typescript-linux-loong64": "npm:7.0.2"
+    "@typescript/typescript-linux-mips64el": "npm:7.0.2"
+    "@typescript/typescript-linux-ppc64": "npm:7.0.2"
+    "@typescript/typescript-linux-riscv64": "npm:7.0.2"
+    "@typescript/typescript-linux-s390x": "npm:7.0.2"
+    "@typescript/typescript-linux-x64": "npm:7.0.2"
+    "@typescript/typescript-netbsd-arm64": "npm:7.0.2"
+    "@typescript/typescript-netbsd-x64": "npm:7.0.2"
+    "@typescript/typescript-openbsd-arm64": "npm:7.0.2"
+    "@typescript/typescript-openbsd-x64": "npm:7.0.2"
+    "@typescript/typescript-sunos-x64": "npm:7.0.2"
+    "@typescript/typescript-win32-arm64": "npm:7.0.2"
+    "@typescript/typescript-win32-x64": "npm:7.0.2"
+  dependenciesMeta:
+    "@typescript/typescript-aix-ppc64":
+      optional: true
+    "@typescript/typescript-darwin-arm64":
+      optional: true
+    "@typescript/typescript-darwin-x64":
+      optional: true
+    "@typescript/typescript-freebsd-arm64":
+      optional: true
+    "@typescript/typescript-freebsd-x64":
+      optional: true
+    "@typescript/typescript-linux-arm":
+      optional: true
+    "@typescript/typescript-linux-arm64":
+      optional: true
+    "@typescript/typescript-linux-loong64":
+      optional: true
+    "@typescript/typescript-linux-mips64el":
+      optional: true
+    "@typescript/typescript-linux-ppc64":
+      optional: true
+    "@typescript/typescript-linux-riscv64":
+      optional: true
+    "@typescript/typescript-linux-s390x":
+      optional: true
+    "@typescript/typescript-linux-x64":
+      optional: true
+    "@typescript/typescript-netbsd-arm64":
+      optional: true
+    "@typescript/typescript-netbsd-x64":
+      optional: true
+    "@typescript/typescript-openbsd-arm64":
+      optional: true
+    "@typescript/typescript-openbsd-x64":
+      optional: true
+    "@typescript/typescript-sunos-x64":
+      optional: true
+    "@typescript/typescript-win32-arm64":
+      optional: true
+    "@typescript/typescript-win32-x64":
+      optional: true
+  bin:
+    tsc: bin/tsc
+  checksum: 10/b0179005349b43dc1febb35c4e79162cdf89b84eae60f6deac142429109041e07582e69a6aacf5a897e085869686d4512ea444a10acf5b5aa2b60910f82a19ca
+  languageName: node
+  linkType: hard
+
+"@typescript/old@npm:typescript@^6":
+  version: 6.0.3
+  resolution: "typescript@npm:6.0.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/0ef2357a4cffd916b52b683a021cdab0f81eea4e9aa35f2d254581c9a5106da02224e3392e1b0ed42b7a48f80c966e5f52b8e1a27941fa0523c1705a9c2e0330
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-aix-ppc64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-aix-ppc64@npm:7.0.2"
+  conditions: os=aix & cpu=ppc64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-darwin-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-darwin-arm64@npm:7.0.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-darwin-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-darwin-x64@npm:7.0.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-freebsd-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-freebsd-arm64@npm:7.0.2"
+  conditions: os=freebsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-freebsd-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-freebsd-x64@npm:7.0.2"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-arm64@npm:7.0.2"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-linux-arm@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-arm@npm:7.0.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-linux-loong64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-loong64@npm:7.0.2"
+  conditions: os=linux & cpu=loong64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-mips64el@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-mips64el@npm:7.0.2"
+  conditions: os=linux & cpu=mips64el
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-ppc64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-ppc64@npm:7.0.2"
+  conditions: os=linux & cpu=ppc64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-riscv64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-riscv64@npm:7.0.2"
+  conditions: os=linux & cpu=riscv64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-s390x@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-s390x@npm:7.0.2"
+  conditions: os=linux & cpu=s390x
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-linux-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-linux-x64@npm:7.0.2"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-netbsd-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-netbsd-arm64@npm:7.0.2"
+  conditions: os=netbsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-netbsd-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-netbsd-x64@npm:7.0.2"
+  conditions: os=netbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-openbsd-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-openbsd-arm64@npm:7.0.2"
+  conditions: os=openbsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-openbsd-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-openbsd-x64@npm:7.0.2"
+  conditions: os=openbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-sunos-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-sunos-x64@npm:7.0.2"
+  conditions: os=sunos & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/typescript-win32-arm64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-win32-arm64@npm:7.0.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260423.1"
+"@typescript/typescript-win32-x64@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@typescript/typescript-win32-x64@npm:7.0.2"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@typescript/native-preview@npm:7.0.0-dev.20260423.1":
-  version: 7.0.0-dev.20260423.1
-  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260423.1"
-  dependencies:
-    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260423.1"
-    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260423.1"
-  dependenciesMeta:
-    "@typescript/native-preview-darwin-arm64":
-      optional: true
-    "@typescript/native-preview-darwin-x64":
-      optional: true
-    "@typescript/native-preview-linux-arm":
-      optional: true
-    "@typescript/native-preview-linux-arm64":
-      optional: true
-    "@typescript/native-preview-linux-x64":
-      optional: true
-    "@typescript/native-preview-win32-arm64":
-      optional: true
-    "@typescript/native-preview-win32-x64":
-      optional: true
-  bin:
-    tsgo: bin/tsgo.js
-  checksum: 10/c7891bf1f39c5b91f6452849b68483902a729be3f6024a27fe77ad14e6d9ee172448ade95c59084ba2113ee70236b6f3fd2e9d8f634aca4adab0d31763938dc1
   languageName: node
   linkType: hard
 
@@ -3160,7 +3300,7 @@ __metadata:
   resolution: "@zwave-js/bindings-browser@workspace:packages/bindings-browser"
   dependencies:
     "@types/w3c-web-serial": "npm:^1.0.8"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     del-cli: "npm:^7.0.0"
@@ -3175,7 +3315,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.2"
     "@microsoft/api-extractor": "npm:^7.58.7"
     "@types/node": "npm:^20.19.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
@@ -3190,7 +3330,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     tslib: "npm:^2.8.1"
     tsx: "npm:^4.23.1"
-    typescript: "npm:5.9.3"
+    typescript: "npm:@typescript/typescript6@6.0.2"
     vitest: "npm:~4.0.18"
   languageName: unknown
   linkType: soft
@@ -3208,7 +3348,7 @@ __metadata:
     "@types/sinon": "npm:^21.0.0"
     "@types/xml2js": "npm:^0.4.14"
     "@types/yargs": "npm:^17.0.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -3245,7 +3385,7 @@ __metadata:
     "@types/semver": "npm:^7.8.0"
     "@types/sinon": "npm:^21.0.0"
     "@types/triple-beam": "npm:^1.3.5"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^5.0.0"
     ansi-colors: "npm:^4.1.3"
@@ -3275,10 +3415,10 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.2"
     "@oxlint/plugins": "npm:^1.80.0"
     "@typescript-eslint/utils": "npm:^8.71.1"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     eslint-plugin-jsonc: "npm:^3.4.2"
-    typescript: "npm:6.0.3"
+    typescript: "npm:@typescript/typescript6@6.0.2"
   languageName: unknown
   linkType: soft
 
@@ -3288,7 +3428,7 @@ __metadata:
   dependencies:
     "@types/node": "npm:^20.19.35"
     "@types/yargs": "npm:^17.0.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     del-cli: "npm:^7.0.0"
     pathe: "npm:^2.0.3"
@@ -3306,7 +3446,7 @@ __metadata:
     "@alcalzone/esm2cjs": "npm:^1.4.2"
     "@microsoft/api-extractor": "npm:^7.58.7"
     "@types/node": "npm:^20.19.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -3324,7 +3464,7 @@ __metadata:
     "@types/globrex": "npm:^0.1.4"
     "@types/node": "npm:^20.19.35"
     "@types/yargs": "npm:^17.0.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     ansi-colors: "npm:^4.1.3"
@@ -3339,7 +3479,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     ts-morph: "npm:^28.0.0"
     tsx: "npm:^4.23.1"
-    typescript: "npm:6.0.3"
+    typescript: "npm:@typescript/typescript6@6.0.2"
     yargs: "npm:^18.0.0"
   languageName: unknown
   linkType: soft
@@ -3351,7 +3491,7 @@ __metadata:
     "@huggingface/transformers": "npm:^4.2.0"
     "@modelcontextprotocol/sdk": "npm:^1.32.1"
     "@types/node": "npm:^20.19.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -3374,7 +3514,7 @@ __metadata:
     "@types/node": "npm:^20.19.35"
     "@types/semver": "npm:^7.8.0"
     "@types/yargs": "npm:^17.0.35"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^5.0.0"
@@ -3412,7 +3552,7 @@ __metadata:
     "@types/source-map-support": "npm:^0.5.10"
     "@types/tmp": "npm:^0.2.6"
     "@types/xml2js": "npm:^0.4.14"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/bindings-browser": "workspace:*"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
@@ -3451,7 +3591,7 @@ __metadata:
     ts-morph: "npm:^28.0.0"
     tsx: "npm:^4.23.1"
     turbo: "npm:2.10.7"
-    typescript: "npm:6.0.3"
+    typescript: "npm:@typescript/typescript6@6.0.2"
     typescript-eslint: "npm:^8.71.1"
     vitest: "npm:~4.0.18"
     xml2js: "npm:^0.6.2"
@@ -3473,7 +3613,7 @@ __metadata:
     "@serialport/stream": "npm:^13.0.0"
     "@types/node": "npm:^20.19.35"
     "@types/sinon": "npm:^21.0.0"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -3498,7 +3638,7 @@ __metadata:
     "@microsoft/api-extractor": "npm:^7.58.7"
     "@types/node": "npm:^20.19.35"
     "@types/sinon": "npm:^21.0.0"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     alcalzone-shared: "npm:^5.0.0"
     del-cli: "npm:^7.0.0"
     pathe: "npm:^2.0.3"
@@ -3517,7 +3657,7 @@ __metadata:
     "@microsoft/api-extractor": "npm:^7.58.7"
     "@types/node": "npm:^20.19.35"
     "@types/triple-beam": "npm:^1.3.5"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -3537,12 +3677,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     del-cli: "npm:^7.0.0"
     nano-spawn: "npm:^2.1.0"
     ts-morph: "npm:^28.0.0"
     tsx: "npm:^4.23.1"
-    typescript: "npm:6.0.3"
+    typescript: "npm:@typescript/typescript6@6.0.2"
     vitest: "npm:~4.0.18"
   languageName: unknown
   linkType: soft
@@ -3562,7 +3702,7 @@ __metadata:
   dependencies:
     "@types/w3c-web-serial": "npm:^1.0.8"
     "@types/w3c-web-usb": "npm:^1.0.14"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/bindings-browser": "workspace:^"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -8234,14 +8374,14 @@ __metadata:
 
 "resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A~1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A~1.22.2#optional!builtin<compat/resolve>":
   version: 1.22.8
-  resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+  resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=9bd1a5"
   dependencies:
     is-core-module: "npm:^2.13.0"
     path-parse: "npm:^1.0.7"
     supports-preserve-symlinks-flag: "npm:^1.0.0"
   bin:
     resolve: bin/resolve
-  checksum: 10/f345cd37f56a2c0275e3fe062517c650bb673815d885e7507566df589375d165bbbf4bdb6aa95600a9bc55f4744b81f452b5a63f95b9f10a72787dba3c90890a
+  checksum: 10/b14c82cbce48701a1e963c60f196b91a289186e8b596334e09c881df8069cefcfb0ac9ce85ea768742b361a58005494bf2428a95dc5056d2ba441aa993731b1f
   languageName: node
   linkType: hard
 
@@ -9430,13 +9570,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:6.0.3":
-  version: 6.0.3
-  resolution: "typescript@npm:6.0.3"
+"typescript@npm:@typescript/typescript6@6.0.2":
+  version: 6.0.2
+  resolution: "@typescript/typescript6@npm:6.0.2"
+  dependencies:
+    "@typescript/old": "npm:typescript@^6"
   bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/0ef2357a4cffd916b52b683a021cdab0f81eea4e9aa35f2d254581c9a5106da02224e3392e1b0ed42b7a48f80c966e5f52b8e1a27941fa0523c1705a9c2e0330
+    tsc6: bin/tsc6
+  checksum: 10/e214aa9b2783ac924498ebbb42a4419e1d8681acc10d26daa145e938d6da0ecde46ad36690fc4e9083a4b47cf73cdc83f2c2054f32e07f10920768956c2b00a1
   languageName: node
   linkType: hard
 
@@ -9450,13 +9591,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>":
-  version: 6.0.3
-  resolution: "typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A@typescript/typescript6@6.0.2#optional!builtin<compat/typescript>":
+  version: 6.0.2
+  resolution: "typescript@patch:@typescript/typescript6@npm%3A6.0.2#optional!builtin<compat/typescript>::version=6.0.2&hash=5786d5"
+  dependencies:
+    "@typescript/old": "npm:typescript@^6"
   bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/22b67a18dafedf9b1468b64ca20d9aa02ea61d449b65413d8aa6552aeb63f52ef369e86beb25b6b4c91a803d9726ee5c196f391a9b64201263263410a4223ee6
+    tsc6: bin/tsc6
+  checksum: 10/b190ec6b713b0fa95c059ff8019b740c17591ea83a3b60e6fe592d51d56d73c360b86abce48f616d25c39697cc5f4bb9efe8e2a231096f493758457cb175e11c
   languageName: node
   linkType: hard
 
@@ -10030,7 +10172,7 @@ __metadata:
     "@types/semver": "npm:^7.8.0"
     "@types/sinon": "npm:^21.0.0"
     "@types/source-map-support": "npm:^0.5.10"
-    "@typescript/native-preview": "npm:7.0.0-dev.20260423.1"
+    "@typescript/native": "npm:typescript@7.0.2"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
