@@ -10,10 +10,10 @@ import {
 	type WithAddress,
 	encodeCCId,
 	getCCName,
+	isExtendedCCId,
 	logDict,
 	logList,
 	logText,
-	isExtendedCCId,
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core";

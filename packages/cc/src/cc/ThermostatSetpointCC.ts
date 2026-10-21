@@ -981,6 +981,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			.map((i) => thermostatSetpointTypeMap[i])
 			// Reserved bits have no mapping and must be ignored
 			.filter((t) => t != undefined);
+		validatePayload(supportedSetpointTypes.length > 0);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

@@ -4,7 +4,6 @@ import {
 	NUM_LR_NODEMASK_SEGMENT_BYTES,
 	NUM_LR_NODES_PER_SEGMENT,
 	encodeLongRangeNodeBitMask,
-	isLongRangeNodeId,
 	parseLongRangeNodeBitMask,
 } from "@zwave-js/core";
 import {
@@ -96,7 +95,7 @@ export class GetLongRangeNodesResponse extends Message {
 				getFirstNodeId(segmentNumber),
 			)
 				// The controller may report bits outside the valid range for LR node IDs
-				.filter((id) => isLongRangeNodeId(id) && id <= MAX_NODES_LR);
+				.filter((id) => id <= MAX_NODES_LR);
 		} else {
 			nodeIds = [];
 		}
