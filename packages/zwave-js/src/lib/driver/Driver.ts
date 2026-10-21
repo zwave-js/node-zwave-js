@@ -5260,6 +5260,15 @@ export class Driver
 			| TransportServiceCCFirstSegment
 			| TransportServiceCCSubsequentSegment,
 	): Promise<CommandClass | undefined> {
+		// Don't let unknown nodes allocate sessions
+		if (!this._controller?.nodes.has(command.nodeId)) {
+			this.controllerLog.logNode(command.nodeId, {
+				message: `Ignoring Transport Service segment from unknown node`,
+				level: "warn",
+				direction: "inbound",
+			});
+			return;
+		}
 		const nodeSessions = this.ensureNodeSessions(command.nodeId);
 
 		// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
@@ -5367,6 +5376,9 @@ export class Driver
 			// We don't delete finished sessions when the last message is received in order to be able to
 			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
 			// we do know that the previous one is finished.
+			for (const oldSession of nodeSessions.transportService.values()) {
+				if (oldSession.timeout) clearTimeout(oldSession.timeout);
+			}
 			nodeSessions.transportService.clear();
 
 			this.controllerLog.logNode(command.nodeId, {
@@ -5427,12 +5439,14 @@ export class Driver
 
 		// The datagram is complete, reassemble the command it contains
 		try {
-			return await CommandClass.parse(session.datagram, {
+			const reassembled = await CommandClass.parse(session.datagram, {
 				...this.getCCParsingContext(),
 				sourceNodeId: command.nodeId,
 				// Transport Service is only used for singlecast commands
 				frameType: command.frameType ?? "singlecast",
 			});
+			assertValidCCs({ command: reassembled } as ContainsCC);
+			return reassembled;
 		} catch (e) {
 			this.driverLog.print(
 				`Dropping Transport Service datagram because the contained command could not be deserialized: ${getErrorMessage(
