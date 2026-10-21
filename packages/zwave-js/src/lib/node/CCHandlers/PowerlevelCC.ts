@@ -20,6 +20,9 @@ import { noop, pick } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver.js";
 import type { ZWaveNode } from "../Node.js";
 
+// CTT uses 260 frames, so this leaves plenty of headroom while limiting how long the radio can be kept busy
+const MAX_TEST_FRAME_COUNT = 1000;
+
 export function handlePowerlevelSet(
 	driver: Driver,
 	node: ZWaveNode,
@@ -102,6 +105,28 @@ export async function handlePowerlevelTestNodeSet(
 			"testFrameCount must be at least 1",
 			ZWaveErrorCodes.CC_OperationFailed,
 		);
+	} else if (command.testFrameCount > MAX_TEST_FRAME_COUNT) {
+		// Each test frame occupies the radio, so huge counts would block our own communication for a long time
+		throw new ZWaveError(
+			`testFrameCount must be at most ${MAX_TEST_FRAME_COUNT}`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (
+		command.testNodeId === driver.controller.ownNodeId
+		|| !driver.controller.nodes.has(command.testNodeId)
+	) {
+		throw new ZWaveError(
+			`Cannot test the connection to unknown node ${command.testNodeId}`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (driver.getNOPPowerTestStatus()?.inProgress) {
+		// Don't let other nodes cancel and restart a running test indefinitely
+		driver.logNode(node.id, {
+			message:
+				"Ignoring Powerlevel Test Node Set because a test is already in progress",
+			level: "warn",
+		});
+		return;
 	}
 
 	const endpoint = node.getEndpoint(command.endpointIndex) ?? node;
