@@ -116,17 +116,15 @@ export async function handlePowerlevelTestNodeSet(
 		|| !driver.controller.nodes.has(command.testNodeId)
 	) {
 		throw new ZWaveError(
-			`Cannot test the connection to unknown node ${command.testNodeId}`,
+			`Cannot test the connection to node ${command.testNodeId}, because it is the controller or unknown`,
 			ZWaveErrorCodes.CC_OperationFailed,
 		);
 	} else if (driver.getNOPPowerTestStatus()?.inProgress) {
 		// Don't let other nodes cancel and restart a running test indefinitely
-		driver.logNode(node.id, {
-			message:
-				"Ignoring Powerlevel Test Node Set because a test is already in progress",
-			level: "warn",
-		});
-		return;
+		throw new ZWaveError(
+			"A powerlevel test is already in progress",
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
 	}
 
 	const endpoint = node.getEndpoint(command.endpointIndex) ?? node;
@@ -160,7 +158,7 @@ export async function handlePowerlevelTestNodeSet(
 			})
 			.catch(noop);
 	} catch {
-		// Test failed for some reason (e.g. invalid node)
+		// Test failed for some reason (e.g. the controller rejected the test frame)
 		void api
 			.sendNodeTestReport({
 				status: PowerlevelTestStatus.Failed,
