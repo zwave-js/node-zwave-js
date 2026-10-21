@@ -175,6 +175,7 @@ export class ESPHomeMessage {
 	 * Creates an instance of the message from a raw message.
 	 */
 	public static from(raw: ESPHomeMessageRaw): ESPHomeMessage {
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- message type is always set
 		return new this({
 			messageType: raw.messageType,
 			payload: raw.payload,

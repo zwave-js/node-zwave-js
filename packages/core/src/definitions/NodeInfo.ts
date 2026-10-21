@@ -94,12 +94,12 @@ export function parseCCId(
 	payload: BytesView,
 	offset: number = 0,
 ): { ccId: CommandClasses; bytesRead: number } {
-	const isExtended = isExtendedCCId(payload[offset]);
-	validatePayload(payload.length >= offset + (isExtended ? 2 : 1));
 	const view = Bytes.view(payload);
-	if (isExtended) {
+	if (isExtendedCCId(payload[offset])) {
+		validatePayload(payload.length >= offset + 2);
 		return { ccId: view.readUInt16BE(offset), bytesRead: 2 };
 	} else {
+		validatePayload(payload.length >= offset + 1);
 		return { ccId: view.readUInt8(offset), bytesRead: 1 };
 	}
 }
@@ -432,6 +432,7 @@ export function parseNodeID(
 	bytesRead: number;
 } {
 	validatePayload(buffer.length >= offset + type);
+	// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- NodeIDType is either 1 or 2
 	const nodeId = Bytes.view(buffer).readUIntBE(offset, type);
 	return { nodeId, bytesRead: type };
 }

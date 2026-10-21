@@ -699,6 +699,7 @@ export class VersionCCReport extends VersionCC {
 			}
 		}
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- version strings are always formatted correctly
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			libraryType,

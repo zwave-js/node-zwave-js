@@ -299,8 +299,8 @@
 				"packages/zwave-js/src/lib/zniffer/**/*.ts"
 			],
 			"rules": {
-				"@zwave-js/no-unchecked-bytes-reads": "warn",
-				"@zwave-js/no-unexpected-parse-errors": "warn"
+				"@zwave-js/no-unchecked-bytes-reads": "error",
+				"@zwave-js/no-unexpected-parse-errors": "error"
 			}
 		},
 		{

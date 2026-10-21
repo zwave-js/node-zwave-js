@@ -237,6 +237,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		const powerlevel: Powerlevel = raw.payload[0];
 
 		if (powerlevel === Powerlevel["Normal Power"]) {
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- the timeout is only checked for other power levels
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,
@@ -244,6 +245,8 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		} else {
 			validatePayload(raw.payload.length >= 2);
 			const timeout = raw.payload[1];
+			validatePayload(timeout >= 1);
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- timeout is validated above
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				powerlevel,

@@ -197,6 +197,8 @@ export class ZWaveMPDURaw {
 	public static parse(data: Bytes, ctx: MPDUParsingContext): ZWaveMPDURaw {
 		// FIXME: Parse Beams
 
+		// Home ID, source node ID, frame control and length
+		validatePayload(data.length >= 8);
 		const homeId = data.readUInt32BE(0);
 		const sourceNodeId = data[4];
 		const frameControl = data.subarray(5, 7);
@@ -1037,6 +1039,7 @@ export class InclusionRequestExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 		raw: ExplorerZWaveMPDURaw,
 		_ctx: MPDUParsingContext,
 	): InclusionRequestExplorerZWaveMPDU {
+		validatePayload(raw.payload.length >= 4);
 		const networkHomeId = raw.payload.readUInt32BE(0);
 		const payload = raw.payload.subarray(4);
 
@@ -1195,6 +1198,8 @@ export class LongRangeMPDURaw {
 	): LongRangeMPDURaw {
 		// FIXME: Parse Beams
 
+		// Home ID, node IDs, length, frame control, sequence number, noise floor and TX power
+		validatePayload(data.length >= 12);
 		const homeId = data.readUInt32BE(0);
 
 		const nodeIds = data.readUIntBE(4, 3);

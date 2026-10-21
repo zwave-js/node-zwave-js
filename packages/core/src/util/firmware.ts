@@ -49,6 +49,7 @@ export function guessFirmwareFileFormat(
 		return filename.slice(-3) as FirmwareFileFormat;
 	} else if (
 		filename.endsWith(".gbl")
+		&& rawBuffer.length >= 4
 		&& rawBuffer.readUInt32BE(0) === firmwareIndicators.gecko
 	) {
 		return "gecko";
@@ -160,7 +161,7 @@ function extractFirmwareRAW(data: BytesView): Firmware {
 function extractFirmwareAeotec(data: BytesView): Firmware {
 	const buffer = Bytes.view(data);
 	// Check if this is an EXE file
-	if (buffer.readUInt16BE(0) !== 0x4d5a) {
+	if (buffer.length < 2 || buffer.readUInt16BE(0) !== 0x4d5a) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (not an executable)!",
 			ZWaveErrorCodes.Argument_Invalid,

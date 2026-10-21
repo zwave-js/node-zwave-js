@@ -1,4 +1,9 @@
-import { MessagePriority, encodeBitMask, parseBitMask } from "@zwave-js/core";
+import {
+	MessagePriority,
+	encodeBitMask,
+	parseBitMask,
+	validatePayload,
+} from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
@@ -48,6 +53,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		_ctx: MessageParsingContext,
 	): GetSerialApiCapabilitiesResponse {
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
+		validatePayload(raw.payload.length >= 8);
 		const firmwareVersion = `${raw.payload[0]}.${raw.payload[1]}`;
 		const manufacturerId = raw.payload.readUInt16BE(2);
 		const productType = raw.payload.readUInt16BE(4);

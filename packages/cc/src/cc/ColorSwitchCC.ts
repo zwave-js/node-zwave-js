@@ -994,6 +994,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			duration = Duration.parseSet(raw.payload[offset]);
 		}
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for hexColor, which is not passed here
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			...colorTable,

@@ -1473,6 +1473,7 @@ export class UserCodeCCSet extends UserCodeCC {
 		}
 
 		if (userIdStatus === UserIDStatus.Available) {
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- available user IDs only require a non-negative user ID
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				userId,
@@ -1480,8 +1481,12 @@ export class UserCodeCCSet extends UserCodeCC {
 			});
 		}
 
+		// User ID 0 may only be used to clear all user codes
+		validatePayload(userId >= 1);
 		const userCode = raw.payload.subarray(2);
+		validatePayload(userCode.length >= 4, userCode.length <= 10);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- user ID and code are validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			userId,

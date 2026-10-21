@@ -980,7 +980,9 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		const supportedSetpointTypes: ThermostatSetpointType[] = supported.map(
 			(i) => thermostatSetpointTypeMap[i],
 		);
+		validatePayload(supportedSetpointTypes.length > 0);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- supported setpoint types are validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportedSetpointTypes,

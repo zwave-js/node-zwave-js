@@ -1,4 +1,8 @@
-import type { MessageOrCCLogEntry, RSSI } from "@zwave-js/core";
+import {
+	type MessageOrCCLogEntry,
+	type RSSI,
+	validatePayload,
+} from "@zwave-js/core";
 import type { BytesView } from "@zwave-js/shared";
 
 import { RCPFunctionType, RCPMessageType } from "../../message/Constants.js";
@@ -33,13 +37,16 @@ export class ReceiveCallback extends RCPMessage {
 		raw: RCPMessageRaw,
 		_ctx: RCPMessageParsingContext,
 	): ReceiveCallback {
+		validatePayload(raw.payload.length >= 1);
 		const dataLength = raw.payload[0];
+		// The data is followed by RSSI, LQI and channel
+		validatePayload(raw.payload.length >= 1 + dataLength + 3);
 		const data = raw.payload.slice(1, 1 + dataLength);
-		let offset = 1 + dataLength;
-		const rssi = raw.payload.readInt8(offset++);
+		const offset = 1 + dataLength;
+		const rssi = raw.payload.readInt8(offset);
 		// FIXME: LQI is useless in Z-Wave, it's always 0xff
-		const lqi = raw.payload[offset++];
-		const channel = raw.payload[offset++];
+		const lqi = raw.payload[offset + 1];
+		const channel = raw.payload[offset + 2];
 
 		return new this({
 			data,

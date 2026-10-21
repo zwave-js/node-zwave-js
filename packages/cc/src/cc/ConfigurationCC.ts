@@ -2298,6 +2298,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			(_, i) => firstParameter + i,
 		);
 		if (resetToDefault) {
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- parameters are validated to be non-empty and consecutive
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				parameters,
@@ -2306,8 +2307,10 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			});
 		}
 		const values = parameters.map((_, i) =>
+			// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- the payload length is validated for all parameters above
 			raw.payload.readIntBE(4 + i * valueSize, valueSize),
 		);
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- parameters are validated to be non-empty and consecutive
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameters,
@@ -2634,6 +2637,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		const firstParameter = raw.payload.readUInt16BE(0);
 		const numParams = raw.payload[2];
 		validatePayload(numParams > 0, firstParameter + numParams <= 0x10000);
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- parameters are validated to be non-empty and consecutive
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameters: Array.from(
@@ -3061,6 +3065,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 		if (valueSize === 0 && raw.payload.length < 5) {
 			nextParameter = 0;
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- min, max and default values are not needed for a value size of 0
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				parameter,
@@ -3117,6 +3122,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			noBulkSupport = !!(options2 & 0b10);
 		}
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- min, max and default values are always parsed for non-zero value sizes
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			parameter,
@@ -3396,6 +3402,7 @@ function parseValue(
 	size: number,
 	format: ConfigValueFormat,
 ): ConfigValue {
+	validatePayload(size >= 1, size <= 6, raw.length >= size);
 	switch (format) {
 		case ConfigValueFormat.SignedInteger:
 			return raw.readIntBE(0, size);

@@ -41,6 +41,7 @@ export function decodeSetbackState(
 	data: BytesView,
 	offset: number = 0,
 ): SetbackState | undefined {
+	validatePayload(data.length >= offset + 1);
 	const val = Bytes.view(data).readInt8(offset);
 	if (val > 120) {
 		// Special state, try to look it up

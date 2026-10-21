@@ -190,6 +190,7 @@ export class LongRangeBeamStart {
 			);
 		}
 
+		validatePayload(data.length >= 4);
 		const txPower = longRangeBeamPowerIndexToDBm(data[1] >>> 4);
 		const destinationNodeId = data.readUInt16BE(1) & 0x0fff;
 		// Unlike classic beams, LR beams always include the home ID hash

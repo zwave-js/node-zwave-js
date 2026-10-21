@@ -656,7 +656,7 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 						loops,
 					);
 					return (
-						(isConstant(goal) && goal.constant >= 0)
+						isNonNegative(goal)
 						|| facts.some((f) => implies(f, goal))
 					);
 				};

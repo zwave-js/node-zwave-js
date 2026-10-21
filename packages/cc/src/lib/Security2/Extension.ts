@@ -162,6 +162,7 @@ export class Security2Extension {
 
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(raw: Security2ExtensionRaw): Security2Extension {
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- type is always set
 		return new this({
 			type: raw.type,
 			critical: raw.critical,
@@ -263,6 +264,7 @@ export class SPANExtension extends Security2Extension {
 		validatePayload(raw.payload.length === 16);
 		const senderEI = raw.payload;
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- sender EI length is validated above
 		return new SPANExtension({
 			critical: raw.critical,
 			moreToFollow: raw.moreToFollow,
@@ -311,6 +313,7 @@ export class MPANExtension extends Security2Extension {
 		const groupId = raw.payload[0];
 		const innerMPANState = raw.payload.subarray(1);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- MPAN state length is validated above
 		return new MPANExtension({
 			critical: raw.critical,
 			moreToFollow: raw.moreToFollow,

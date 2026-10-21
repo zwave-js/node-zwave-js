@@ -381,6 +381,7 @@ export class FirmwareUpdateNVM_UpdateCRC16Request extends FirmwareUpdateNVMReque
 		raw: MessageRaw,
 		_ctx: MessageParsingContext,
 	): FirmwareUpdateNVM_UpdateCRC16Request {
+		validatePayload(raw.payload.length >= 7);
 		const offset = raw.payload.readUIntBE(0, 3);
 		const blockLength = raw.payload.readUInt16BE(3);
 		const crcSeed = raw.payload.readUInt16BE(5);
@@ -538,6 +539,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 		raw: MessageRaw,
 		_ctx: MessageParsingContext,
 	): FirmwareUpdateNVM_WriteRequest {
+		validatePayload(raw.payload.length >= 5);
 		const offset = raw.payload.readUIntBE(0, 3);
 		const bufferLength = raw.payload.readUInt16BE(3);
 		const buffer = raw.payload.subarray(5, 5 + bufferLength);
