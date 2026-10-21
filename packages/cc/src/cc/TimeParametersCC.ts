@@ -250,6 +250,7 @@ export class TimeParametersCC extends CommandClass {
 // @publicAPI
 export interface TimeParametersCCReportOptions {
 	dateAndTime: Date;
+	useLocalTime?: boolean;
 }
 
 @CCCommand(TimeParametersCommand.Report)
@@ -258,8 +259,8 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(options: WithAddress<TimeParametersCCReportOptions>) {
 		super(options);
 
-		// TODO: Check implementation:
 		this.dateAndTime = options.dateAndTime;
+		this.useLocalTime = options.useLocalTime;
 	}
 
 	public static from(
@@ -307,6 +308,22 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	}
 
 	public dateAndTime: Date;
+	private useLocalTime?: boolean;
+
+	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		const segments = dateToSegments(this.dateAndTime, !!this.useLocalTime);
+		this.payload = Bytes.from([
+			0,
+			0,
+			segments.month,
+			segments.day,
+			segments.hour,
+			segments.minute,
+			segments.second,
+		]);
+		this.payload.writeUInt16BE(segments.year, 0);
+		return super.serialize(ctx);
+	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
