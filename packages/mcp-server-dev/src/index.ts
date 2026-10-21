@@ -145,8 +145,8 @@ class DevMCPServer {
 				const pathArgs = { ...args };
 				for (const key of ["filename", "templateFile"]) {
 					const value = pathArgs[key];
-					if (typeof value !== "string") continue;
-					const resolved = resolveDeviceConfigPath(value);
+					if (typeof value !== "string" || !value) continue;
+					const resolved = await resolveDeviceConfigPath(value);
 					if (!resolved) {
 						return errorResult(
 							`Error: ${key} must be located inside ${DEVICES_DIR}`,

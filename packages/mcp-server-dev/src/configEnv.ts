@@ -1,4 +1,13 @@
-import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
+import { realpath } from "node:fs/promises";
+import {
+	basename,
+	dirname,
+	isAbsolute,
+	join,
+	relative,
+	resolve,
+	sep,
+} from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,12 +22,37 @@ export const REPO_ROOT = resolve(__dirname, "../../..");
 export const DEVICES_DIR = resolve(REPO_ROOT, "packages/config/config/devices");
 
 /**
- * Resolves a file path passed to a tool and returns it as an absolute path,
- * or `undefined` if it points outside the device config directory.
+ * Canonicalizes a path, following symlinks. For paths that do not exist yet,
+ * the nearest existing ancestor is canonicalized instead.
  */
-export function resolveDeviceConfigPath(file: string): string | undefined {
-	const ret = resolve(file);
-	const rel = relative(DEVICES_DIR, ret);
+async function realpathAllowMissing(file: string): Promise<string> {
+	try {
+		return await realpath(file);
+	} catch (e: any) {
+		const parent = dirname(file);
+		if (e?.code !== "ENOENT" || parent === file) throw e;
+		return join(await realpathAllowMissing(parent), basename(file));
+	}
+}
+
+/**
+ * Resolves a file path passed to a tool (relative paths against the repository root)
+ * and returns its canonical absolute path, or `undefined` if it points outside the
+ * device config directory.
+ */
+export async function resolveDeviceConfigPath(
+	file: string,
+): Promise<string | undefined> {
+	let ret: string;
+	let devicesDir: string;
+	try {
+		// Compare canonical paths, so symlinks cannot escape the device config directory
+		ret = await realpathAllowMissing(resolve(REPO_ROOT, file));
+		devicesDir = await realpath(DEVICES_DIR);
+	} catch {
+		return undefined;
+	}
+	const rel = relative(devicesDir, ret);
 	if (rel === ".." || rel.startsWith(`..${sep}`) || isAbsolute(rel)) {
 		return undefined;
 	}
