@@ -220,16 +220,30 @@ type ParsedNVM =
 			type: "unknown";
 	  };
 
+const GENERIC_TYPE_STATIC_CONTROLLER = 0x02;
+const SPECIFIC_TYPE_PC_CONTROLLER = 0x01;
+
 /**
- * Ensures that the controller node is marked as listening.
+ * Ensures that the controller node is marked as listening and uses the Static Controller generic device class.
  * Failure to do so causes the radio to stop after one RX event on SDK 8.0.0+.
  */
-function setControllerIsListening(json: NVMJSON): void {
+function normalizeControllerNodeInfo(json: NVMJSON): void {
 	json.controller.isListening = true;
+	// SDK 8.1.2+ only forces the listening flag on for Static Controllers
+	if (json.controller.genericDeviceClass !== GENERIC_TYPE_STATIC_CONTROLLER) {
+		json.controller.genericDeviceClass = GENERIC_TYPE_STATIC_CONTROLLER;
+		json.controller.specificDeviceClass = SPECIFIC_TYPE_PC_CONTROLLER;
+	}
 
 	const controllerNode = json.nodes[json.controller.nodeId || 1];
-	if (controllerNode && "isListening" in controllerNode) {
+	if (controllerNode && nodeHasInfo(controllerNode)) {
 		controllerNode.isListening = true;
+		if (
+			controllerNode.genericDeviceClass !== GENERIC_TYPE_STATIC_CONTROLLER
+		) {
+			controllerNode.genericDeviceClass = GENERIC_TYPE_STATIC_CONTROLLER;
+			controllerNode.specificDeviceClass = SPECIFIC_TYPE_PC_CONTROLLER;
+		}
 	}
 }
 
@@ -2162,8 +2176,10 @@ export async function migrateNVM(
 			=== target.json.meta.sharedFileSystem
 		// ...everything should be preserved,...
 		&& preserveAll
-		// ...and the application node is correctly configured as always listening
+		// ...and the application node is correctly configured as an always listening Static Controller
 		&& source.json.controller.isListening
+		&& source.json.controller.genericDeviceClass
+			=== GENERIC_TYPE_STATIC_CONTROLLER
 	) {
 		// ... the source and target protocol versions are compatible without conversion
 		const sourceProtocolVersion = source.json.controller.protocolVersion;
@@ -2275,7 +2291,7 @@ export async function migrateNVM(
 		};
 		// The target is a different series, try to preserve the RF config of the target stick
 		json.controller.rfConfig = target.json.controller.rfConfig;
-		setControllerIsListening(json);
+		normalizeControllerNodeInfo(json);
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
 	} else if (source.type === 700 && target.type === 500) {
@@ -2293,7 +2309,7 @@ export async function migrateNVM(
 			...(source.json as NVMJSONWithMeta),
 			meta: (target.json as NVMJSONWithMeta).meta,
 		};
-		setControllerIsListening(json);
+		normalizeControllerNodeInfo(json);
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
 	}

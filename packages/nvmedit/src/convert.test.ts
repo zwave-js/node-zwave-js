@@ -274,6 +274,135 @@ test("500 to 700 migration repairs the application node listening flag", async (
 	).toBe(true);
 });
 
+test("700 to 700 migration sets the Static Controller device class", async (t) => {
+	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
+
+	const nvmSource = await fsp.readFile(
+		path.join(fixturesDir, "ctrlr_backup_700_7.12.bin"),
+	);
+	const sourceJSON = await nvmToJSON(nvmSource);
+	const controllerNodeId = sourceJSON.controller.nodeId;
+	sourceJSON.controller.genericDeviceClass = 0x01;
+	sourceJSON.controller.specificDeviceClass = 0x00;
+	Object.assign(sourceJSON.nodes[controllerNodeId], {
+		genericDeviceClass: 0x01,
+		specificDeviceClass: 0x00,
+	});
+	const sourceWithInvalidNodeInfo = await jsonToNVM(
+		sourceJSON,
+		sourceJSON.controller.applicationVersion,
+	);
+	const nvmTarget = await fsp.readFile(
+		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
+	);
+
+	const converted = await migrateNVM(sourceWithInvalidNodeInfo, nvmTarget);
+	const convertedJSON = await nvmToJSON(converted);
+
+	t.expect(convertedJSON.controller.genericDeviceClass).toBe(0x02);
+	t.expect(convertedJSON.controller.specificDeviceClass).toBe(0x01);
+	t.expect(convertedJSON.nodes[controllerNodeId]).toMatchObject({
+		genericDeviceClass: 0x02,
+		specificDeviceClass: 0x01,
+	});
+});
+
+test("700 to 700 migration does not take the shortcut for a wrong device class", async (t) => {
+	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
+
+	const nvmSource = await fsp.readFile(
+		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
+	);
+	const sourceJSON = await nvmToJSON(nvmSource);
+	sourceJSON.controller.genericDeviceClass = 0x01;
+	const sourceWithInvalidNodeInfo = await jsonToNVM(
+		sourceJSON,
+		sourceJSON.controller.applicationVersion,
+	);
+
+	const converted = await migrateNVM(sourceWithInvalidNodeInfo, nvmSource);
+	const convertedJSON = await nvmToJSON(converted);
+
+	t.expect(convertedJSON.controller.genericDeviceClass).toBe(0x02);
+	t.expect(convertedJSON.controller.specificDeviceClass).toBe(0x01);
+});
+
+test("500 to 700 migration sets the Static Controller device class", async (t) => {
+	const fixturesDir500 = path.join(
+		__dirname,
+		"../test/fixtures/nvm_500_binary",
+	);
+	const fixturesDir700 = path.join(
+		__dirname,
+		"../test/fixtures/nvm_700_binary",
+	);
+
+	const nvmSource = await fsp.readFile(
+		path.join(fixturesDir500, "ctrlr_backup_500_static_6.8x.bin"),
+	);
+	const sourceJSON = await nvm500ToJSON(nvmSource);
+	const controllerNodeId = sourceJSON.controller.nodeId || 1;
+	Object.assign(sourceJSON.nodes[controllerNodeId], {
+		genericDeviceClass: 0xff,
+		specificDeviceClass: 0xff,
+	});
+	const sourceWithInvalidNodeInfo = await jsonToNVM500(
+		sourceJSON,
+		sourceJSON.controller.protocolVersion,
+	);
+	const nvmTarget = await fsp.readFile(
+		path.join(fixturesDir700, "ctrlr_backup_700_7.16_1.bin"),
+	);
+
+	const converted = await migrateNVM(sourceWithInvalidNodeInfo, nvmTarget);
+	const convertedJSON = await nvmToJSON(converted);
+
+	t.expect(convertedJSON.controller.genericDeviceClass).toBe(0x02);
+	t.expect(convertedJSON.controller.specificDeviceClass).toBe(0x01);
+	t.expect(
+		convertedJSON.nodes[convertedJSON.controller.nodeId],
+	).toMatchObject({
+		genericDeviceClass: 0x02,
+		specificDeviceClass: 0x01,
+	});
+});
+
+test("migration keeps the specific device class of a Static Controller", async (t) => {
+	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
+
+	const nvmSource = await fsp.readFile(
+		path.join(fixturesDir, "ctrlr_backup_700_7.12.bin"),
+	);
+	const sourceJSON = await nvmToJSON(nvmSource);
+	const controllerNodeId = sourceJSON.controller.nodeId;
+	// Clear the listening flag to force a full conversion
+	sourceJSON.controller.isListening = false;
+	sourceJSON.controller.genericDeviceClass = 0x02;
+	sourceJSON.controller.specificDeviceClass = 0x07;
+	Object.assign(sourceJSON.nodes[controllerNodeId], {
+		genericDeviceClass: 0x02,
+		specificDeviceClass: 0x07,
+	});
+	const source = await jsonToNVM(
+		sourceJSON,
+		sourceJSON.controller.applicationVersion,
+	);
+	const nvmTarget = await fsp.readFile(
+		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
+	);
+
+	const converted = await migrateNVM(source, nvmTarget);
+	const convertedJSON = await nvmToJSON(converted);
+
+	t.expect(convertedJSON.controller.isListening).toBe(true);
+	t.expect(convertedJSON.controller.genericDeviceClass).toBe(0x02);
+	t.expect(convertedJSON.controller.specificDeviceClass).toBe(0x07);
+	t.expect(convertedJSON.nodes[controllerNodeId]).toMatchObject({
+		genericDeviceClass: 0x02,
+		specificDeviceClass: 0x07,
+	});
+});
+
 test("strip application data during migration", async (t) => {
 	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
 
