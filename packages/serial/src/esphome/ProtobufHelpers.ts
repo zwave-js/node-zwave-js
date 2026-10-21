@@ -55,7 +55,7 @@ export function encodeVarInt(value: number): BytesView {
 }
 
 /**
- * Decodes a VarInt according to the Protocol Buffers specification
+ * Decodes an unsigned 32-bit VarInt according to the Protocol Buffers specification
  * Returns the decoded value and the number of bytes consumed
  */
 export function decodeVarInt(
@@ -63,28 +63,68 @@ export function decodeVarInt(
 	offset: number = 0,
 ): { value: number; bytesRead: number } {
 	let value = 0;
-	let shift = 0;
 	let bytesRead = 0;
 
 	while (offset + bytesRead < data.length) {
 		const byte = data[offset + bytesRead];
+		// Multiplication instead of bit shifts keeps the value unsigned
+		value += (byte & 0x7f) * 2 ** (7 * bytesRead);
 		bytesRead++;
 
-		value |= (byte & 0x7f) << shift;
 		if ((byte & 0x80) === 0) {
+			if (value > 0xffff_ffff) {
+				throw new ZWaveError(
+					"VarInt exceeds 32 bits",
+					ZWaveErrorCodes.PacketFormat_Invalid,
+				);
+			}
 			return { value, bytesRead };
 		}
 
-		shift += 7;
-		if (shift >= 35) {
+		if (bytesRead >= 5) {
 			throw new ZWaveError(
 				"VarInt too long",
-				ZWaveErrorCodes.Argument_Invalid,
+				ZWaveErrorCodes.PacketFormat_Invalid,
 			);
 		}
 	}
 
-	throw new ZWaveError("Incomplete VarInt", ZWaveErrorCodes.Argument_Invalid);
+	throw new ZWaveError(
+		"Incomplete VarInt",
+		ZWaveErrorCodes.PacketFormat_Truncated,
+	);
+}
+
+/**
+ * Returns the number of bytes occupied by a VarInt of up to 64 bits, without decoding it
+ */
+function skipVarInt(data: BytesView, offset: number): number {
+	// 64-bit VarInts occupy at most 10 bytes
+	for (let i = 0; i < 10; i++) {
+		if (offset + i >= data.length) {
+			throw new ZWaveError(
+				"Incomplete VarInt",
+				ZWaveErrorCodes.PacketFormat_Truncated,
+			);
+		}
+		if ((data[offset + i] & 0x80) === 0) return i + 1;
+	}
+	throw new ZWaveError(
+		"VarInt too long",
+		ZWaveErrorCodes.PacketFormat_Invalid,
+	);
+}
+
+/**
+ * Ensures that `length` bytes starting at `offset` are contained in `data`
+ */
+function assertInBounds(data: BytesView, offset: number, length: number): void {
+	if (offset + length > data.length) {
+		throw new ZWaveError(
+			"Field exceeds the message length",
+			ZWaveErrorCodes.PacketFormat_Invalid,
+		);
+	}
 }
 
 /**
@@ -109,6 +149,7 @@ export function decodeStringField(
 	offset: number,
 ): { value: string; bytesRead: number } {
 	const length = decodeVarInt(data, offset);
+	assertInBounds(data, offset + length.bytesRead, length.value);
 	const stringBytes = data.slice(
 		offset + length.bytesRead,
 		offset + length.bytesRead + length.value,
@@ -164,6 +205,7 @@ export function decodeFixed32Field(
 	data: BytesView,
 	offset: number,
 ): { value: number; bytesRead: number } {
+	assertInBounds(data, offset, 4);
 	const value = Bytes.view(data).readUInt32LE(offset);
 	return { value, bytesRead: 4 };
 }
@@ -188,6 +230,7 @@ export function decodeLengthDelimitedField(
 	offset: number,
 ): { value: BytesView; bytesRead: number } {
 	const length = decodeVarInt(data, offset);
+	assertInBounds(data, offset + length.bytesRead, length.value);
 	const valueBytes = data.slice(
 		offset + length.bytesRead,
 		offset + length.bytesRead + length.value,
@@ -240,14 +283,17 @@ export function skipField(
 ): number {
 	switch (wireType) {
 		case WireType.Varint:
-			const varint = decodeVarInt(data, offset);
-			return offset + varint.bytesRead;
+			// Unknown fields may contain 64-bit values, which we don't need to decode
+			return offset + skipVarInt(data, offset);
 		case WireType.Fixed64:
+			assertInBounds(data, offset, 8);
 			return offset + 8;
 		case WireType.LengthDelimited:
 			const length = decodeVarInt(data, offset);
+			assertInBounds(data, offset + length.bytesRead, length.value);
 			return offset + length.bytesRead + length.value;
 		case WireType.Fixed32:
+			assertInBounds(data, offset, 4);
 			return offset + 4;
 		default:
 			throw new ZWaveError(
@@ -271,9 +317,36 @@ export function parseProtobufMessage(
 ): void {
 	let pos = 0;
 
-	while (pos < data.length) {
-		const tag = decodeTag(data, pos);
-		pos += tag.bytesRead;
-		pos = fieldHandler(tag.fieldNumber, tag.wireType, data, pos);
+	try {
+		while (pos < data.length) {
+			const tag = decodeTag(data, pos);
+			pos += tag.bytesRead;
+			const nextPos = fieldHandler(
+				tag.fieldNumber,
+				tag.wireType,
+				data,
+				pos,
+			);
+			// Guard against field handlers that would make the loop run forever
+			if (nextPos < pos || nextPos > data.length) {
+				throw new ZWaveError(
+					"Invalid protobuf field length",
+					ZWaveErrorCodes.PacketFormat_Invalid,
+				);
+			}
+			pos = nextPos;
+		}
+	} catch (e) {
+		// The message payload is complete, so waiting for more data cannot fix a truncated field
+		if (
+			e instanceof ZWaveError
+			&& e.code === ZWaveErrorCodes.PacketFormat_Truncated
+		) {
+			throw new ZWaveError(
+				`Invalid protobuf message: ${e.message}`,
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
+		}
+		throw e;
 	}
 }

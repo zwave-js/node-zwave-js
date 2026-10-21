@@ -22,6 +22,8 @@ export enum ESPHomeMessageType {
 	ZWaveProxyRequest = 129,
 }
 
+const MAX_PAYLOAD_SIZE = 0xffff;
+
 /**
  * Represents a raw ESPHome message with minimal parsing
  */
@@ -62,6 +64,13 @@ export class ESPHomeMessageRaw {
 		// Decode payload size
 		const payloadSize = decodeVarInt(data, offset);
 		offset += payloadSize.bytesRead;
+		// Match the limit of Noise frames, which use a 16-bit length field
+		if (payloadSize.value > MAX_PAYLOAD_SIZE) {
+			throw new ZWaveError(
+				`Frame payload size ${payloadSize.value} exceeds the maximum of ${MAX_PAYLOAD_SIZE} bytes`,
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
+		}
 
 		// Decode message type
 		const messageType = decodeVarInt(data, offset);
