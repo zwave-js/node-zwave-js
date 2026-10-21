@@ -3,6 +3,7 @@ import {
 	AssociationCC,
 	type AssociationCheckResult,
 	type AssociationGroup,
+	type CommandClass,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
 	type FirmwareUpdateOptions,
@@ -298,6 +299,7 @@ import {
 	noop,
 	num2hex,
 	pick,
+	setTimer,
 } from "@zwave-js/shared";
 import { waitFor } from "@zwave-js/waddle";
 import { distinct } from "alcalzone-shared/arrays";
@@ -9601,14 +9603,16 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		) {
 			if (wasJoining) {
 				this._currentLearnMode = undefined;
-				this.driver["_securityManager"] = undefined;
-				this.driver["_securityManager2"] =
-					await SecurityManager2.create();
-				this.driver["_securityManagerLR"] =
-					await SecurityManager2.create();
 				this._nodes.clear();
 
-				process.nextTick(() => this.afterJoiningNetwork().catch(noop));
+				void this.afterJoiningNetwork().catch((e: unknown) => {
+					this._joinNetworkOptions = undefined;
+					this.driver.controllerLog.print(
+						`Joining network failed: ${getErrorMessage(e)}`,
+						"error",
+					);
+					this.emit("joining network failed");
+				});
 				return true;
 			} else if (wasLeaving) {
 				this._currentLearnMode = undefined;
@@ -10275,6 +10279,19 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		}
 	}
 
+	private _securityBootstrapInitiation:
+		| {
+				handleCommand: (command: CommandClass) => boolean;
+				cancel: () => void;
+		  }
+		| undefined;
+
+	private handleSecurityBootstrapCommand(command: CommandClass): boolean {
+		return (
+			this._securityBootstrapInitiation?.handleCommand(command) ?? false
+		);
+	}
+
 	private async afterJoiningNetwork(): Promise<void> {
 		this.driver.driverLog.print("waiting for security bootstrapping...");
 
@@ -10308,34 +10325,104 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			initPredicate = () => false;
 		}
 
-		const bootstrapInitPromise = this.driver
-			.waitForCommand<Security2CCKEXGet | SecurityCCSchemeGet>(
-				initPredicate,
-				initTimeout,
-			)
-			.catch(() => "timeout" as const);
+		const bootstrapInitPromise = createDeferredPromise<
+			Security2CCKEXGet | SecurityCCSchemeGet | "timeout"
+		>();
+		let bootstrapInitReceivedAt: number | undefined;
+		let accepting = true;
+		let canceled = false;
+		const timeout = setTimer(() => {
+			accepting = false;
+			bootstrapInitPromise.resolve("timeout");
+		}, initTimeout);
+		this._securityBootstrapInitiation = {
+			handleCommand: (command) => {
+				if (
+					!accepting
+					|| command.frameType !== "singlecast"
+					|| !(
+						command instanceof Security2CCKEXGet
+						|| command instanceof SecurityCCSchemeGet
+					)
+					|| !initPredicate(command)
+				) {
+					return false;
+				}
+				bootstrapInitReceivedAt = Date.now();
+				timeout.clear();
+				accepting = false;
+				bootstrapInitPromise.resolve(command);
+				return true;
+			},
+			cancel: () => {
+				canceled = true;
+				accepting = false;
+				timeout.clear();
+				bootstrapInitPromise.resolve("timeout");
+			},
+		};
+
+		const assertInitializationCanContinue = () => {
+			if (canceled) {
+				throw new ZWaveError(
+					"Controller destroyed during network joining",
+					ZWaveErrorCodes.Driver_Destroyed,
+				);
+			}
+			// The including controller's response deadline starts when it sends bootstrap initiation
+			if (
+				bootstrapInitReceivedAt !== undefined
+				&& Date.now() - bootstrapInitReceivedAt >= 10000
+			) {
+				throw new ZWaveError(
+					"Network initialization exceeded the security bootstrap response deadline",
+					ZWaveErrorCodes.Controller_NodeTimeout,
+				);
+			}
+		};
 
 		const identifySelf = async () => {
+			// Bootstrap reception must be armed before asynchronous crypto initialization
+			this.driver["_securityManager"] = undefined;
+			const [securityManager2, securityManagerLR] = await Promise.all([
+				SecurityManager2.create(),
+				SecurityManager2.create(),
+			]);
+			assertInitializationCanContinue();
+			this.driver["_securityManager2"] = securityManager2;
+			this.driver["_securityManagerLR"] = securityManagerLR;
+
 			// Update own node ID and other controller flags.
-			await this.identify().catch(noop);
+			await this.identify();
+			assertInitializationCanContinue();
 
 			// Notify applications that we're now part of a new network
-			// The driver will point the databases to the new home ID
 			this.emit("network found", this._homeId!, this._ownNodeId!);
 
-			// Figure out the controller's network role
-			await this.getControllerCapabilities().catch(noop);
-
-			// Create new node instances
-			const { nodeIds } = await this.getSerialApiInitData();
+			const [, { nodeIds }] = await Promise.all([
+				this.driver["prepareForJoinedNetwork"](this._homeId!),
+				(async () => {
+					await this.getControllerCapabilities();
+					return this.getSerialApiInitData();
+				})(),
+			]);
+			assertInitializationCanContinue();
+			// Nodes must capture the new databases after all three stores have opened
 			await this.initNodes(nodeIds, [], () => Promise.resolve());
 		};
 
 		// Do the self-identification while waiting for the bootstrap init command
-		const [bootstrapInit] = await Promise.all([
-			bootstrapInitPromise,
-			identifySelf(),
-		]);
+		let bootstrapInit: Awaited<typeof bootstrapInitPromise>;
+		try {
+			[bootstrapInit] = await Promise.all([
+				bootstrapInitPromise,
+				identifySelf(),
+			]);
+			assertInitializationCanContinue();
+		} finally {
+			timeout.clear();
+			this._securityBootstrapInitiation = undefined;
+		}
 
 		if (bootstrapInit === "timeout") {
 			this.driver.controllerLog.print(
@@ -10350,7 +10437,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						"Received S2 bootstrap initiation from unknown node, ignoring...",
 					level: "warn",
 				});
-			} else if (Date.now() - bootstrapInitStart > 10000) {
+			} else if (bootstrapInitReceivedAt! - bootstrapInitStart > 10000) {
 				// Received too late, S0 bootstrapping must not continue
 				this.driver.controllerLog.print(
 					"Security S0 bootstrapping command received too late, continuing without encryption...",
@@ -10469,6 +10556,8 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 	}
 
 	public destroy(): void {
+		this._securityBootstrapInitiation?.cancel();
+		this._securityBootstrapInitiation = undefined;
 		this._nodes.forEach((node) => node.destroy());
 		this._nodes.clear();
 		this.removeAllListeners();

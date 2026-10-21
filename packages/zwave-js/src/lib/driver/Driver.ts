@@ -2072,7 +2072,6 @@ export class Driver
 			.on("node added", this.onNodeAdded.bind(this))
 			.on("node removed", this.onNodeRemoved.bind(this))
 			.on("status changed", this.onControllerStatusChanged.bind(this))
-			.on("network found", this.onNetworkFound.bind(this))
 			.on("network joined", this.onNetworkJoined.bind(this))
 			.on("network left", this.onNetworkLeft.bind(this))
 			// Re-evaluate the send queues, which hold back interview traffic
@@ -3087,25 +3086,13 @@ export class Driver
 		this.triggerQueues();
 	}
 
-	private async onNetworkFound(
-		homeId: number,
-		_ownNodeId: number,
-	): Promise<void> {
-		try {
-			this.driverLog.print(
-				`Joined network with home ID ${num2hex(
-					homeId,
-				)}, switching to new network cache...`,
-			);
-			await this.recreateNetworkCacheAndValueDBs();
-		} catch (e) {
-			this.driverLog.print(
-				`Recreating the network cache and value DBs failed: ${getErrorMessage(
-					e,
-				)}`,
-				"error",
-			);
-		}
+	private async prepareForJoinedNetwork(homeId: number): Promise<void> {
+		this.driverLog.print(
+			`Joined network with home ID ${num2hex(
+				homeId,
+			)}, switching to new network cache...`,
+		);
+		await this.recreateNetworkCacheAndValueDBs();
 	}
 
 	private onNetworkJoined(): void {
@@ -4203,6 +4190,16 @@ export class Driver
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			if (isCommandRequest(msg) && containsCC(msg)) {
+				// Bootstrap initiation can arrive before the joining controller has created its nodes
+				if (
+					this._controller?.["handleSecurityBootstrapCommand"](
+						msg.command,
+					)
+				) {
+					this.driverLog.logMessage(msg, { direction: "inbound" });
+					return;
+				}
+
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
 				// we're not set up to handle things like this. Reply to the nonce get
 				// and handle the encapsulation part normally

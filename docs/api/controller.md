@@ -1832,7 +1832,7 @@ This is emitted after joining another network, once security bootstrapping is do
 
 ### `"joining network failed"`
 
-This is emitted if joining another network failed. In this case, the `"network found"` and `"network joined"` events will not be emitted.
+This is emitted if joining another network failed. The `"network found"` event may already have been emitted before initialization failed. In that case, the controller already belongs to the new network. The `"network joined"` event will not be emitted for the failed attempt.
 
 ### `"network left"`
 
