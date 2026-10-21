@@ -50,6 +50,13 @@
 			"label": "Emergency"
 		}
 	},
+	"endpointGroups": {
+		"1": {
+			"label": "Siren",
+			"endpoints": [1, 2, 3, 4, 5, 6, 7, 8],
+			"isMainDevice": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1[0xff000000]",
