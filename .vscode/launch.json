@@ -11,7 +11,8 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": ["test", "--async-stack-traces", "${file}"],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+				"ZWAVEJS_LOG_SECURITY_DETAILS": "true"
 				// "NO_CACHE": "true"
 				// "LOGLEVEL": "info"
 			},
@@ -31,7 +32,8 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+				"ZWAVEJS_LOG_SECURITY_DETAILS": "true"
 				// "NO_CACHE": "true"
 				// "LOGLEVEL": "info"
 			},
@@ -52,7 +54,8 @@
 				"${workspaceFolder}/test/run_duplex.ts"
 			],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+				"ZWAVEJS_LOG_SECURITY_DETAILS": "true"
 				// "NO_CACHE": "true"
 				// "LOGLEVEL": "info"
 			},
@@ -123,7 +126,8 @@
 				"${workspaceFolder}/test/run_zniffer.ts"
 			],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+				"ZWAVEJS_LOG_SECURITY_DETAILS": "true"
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
@@ -142,7 +146,8 @@
 				"${workspaceFolder}/test/run_rcp.ts"
 			],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+				"ZWAVEJS_LOG_SECURITY_DETAILS": "true"
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
