@@ -232,6 +232,13 @@ export function encodeFloatWithScale(
 			`Cannot encode the value ${value} because its too large or too small to fit into 4 bytes`,
 			ZWaveErrorCodes.Arithmetic,
 		);
+	} else if (
+		override.size === 3
+		&& value >= IntegerLimits.Int24.min
+		&& value <= IntegerLimits.Int24.max
+	) {
+		// getMinIntegerSize skips three-byte integers
+		size = 3;
 	} else if (override.size != undefined && override.size > size) {
 		size = override.size;
 	}

@@ -575,6 +575,7 @@ export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 			};
 
 			const hooks = api.setValueHooks?.(valueIdProps, value, options);
+			if (hooks?.normalizeValue) value = hooks.normalizeValue(value);
 
 			if (hooks?.supervisionDelayedUpdates) {
 				api = api.withOptions({

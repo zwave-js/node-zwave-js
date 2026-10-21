@@ -9010,6 +9010,36 @@ export const ThermostatOperatingStateCCValues = Object.freeze({
 });
 
 export const ThermostatSetpointCCValues = Object.freeze({
+	observedFloatEncodings: {
+		id: {
+			commandClass: CommandClasses["Thermostat Setpoint"],
+			property: "observedFloatEncodings",
+		} as const,
+		endpoint: (_endpoint?: number) =>
+			({
+				commandClass: CommandClasses["Thermostat Setpoint"],
+				endpoint: 0, // no endpoint support!
+				property: "observedFloatEncodings",
+			}) as const,
+		is: (valueId: ValueID): boolean => {
+			return (
+				valueId.commandClass === CommandClasses["Thermostat Setpoint"]
+				&& valueId.property === "observedFloatEncodings"
+				&& valueId.propertyKey == undefined
+			);
+		},
+		get meta() {
+			return ValueMetadata.Any;
+		},
+		options: {
+			internal: true,
+			minVersion: 1,
+			secret: false,
+			stateful: true,
+			supportsEndpoints: false,
+			autoCreate: true,
+		} as const satisfies CCValueOptions,
+	},
 	supportedSetpointTypes: {
 		id: {
 			commandClass: CommandClasses["Thermostat Setpoint"],

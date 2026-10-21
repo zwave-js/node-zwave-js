@@ -30,7 +30,9 @@ import {
 	POLL_VALUE,
 	type PollValueImplementation,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API.js";
@@ -73,9 +75,75 @@ function getSetpointUnit(scale: number): string {
 	return getScale(scale).unit ?? "";
 }
 
+interface SetpointFloatEncoding {
+	precision: number;
+	scale: number;
+	size: number;
+}
+
+function parseSetpointFloat(payload: Bytes) {
+	const parsed = parseFloatWithScale(payload);
+	const encoding: SetpointFloatEncoding = {
+		precision: payload[0] >>> 5,
+		scale: parsed.scale,
+		size: parsed.bytesRead - 1,
+	};
+	return { ...parsed, encoding };
+}
+
+function findSetpointFloatEncoding(
+	value: number,
+	scale: number,
+	encodings: readonly SetpointFloatEncoding[],
+): SetpointFloatEncoding | undefined {
+	const candidates = encodings.filter((encoding) => encoding.scale === scale);
+	if (!candidates.length) return;
+
+	// Reuse an observed combination with the least rounding error that fits the value
+	const fitting = candidates
+		.map((encoding) => {
+			const factor = 10 ** encoding.precision;
+			const integer = Math.round(value * factor);
+			const limit = 2 ** (8 * encoding.size - 1);
+			return {
+				...encoding,
+				integer,
+				error: Math.abs(value - integer / factor),
+				fits:
+					Number.isFinite(integer)
+					&& integer >= -limit
+					&& integer < limit,
+			};
+		})
+		.filter((candidate) => candidate.fits)
+		.toSorted(
+			(a, b) =>
+				a.error - b.error
+				|| a.precision - b.precision
+				|| a.size - b.size,
+		);
+	const selected = fitting[0];
+	if (!selected) {
+		throw new ZWaveError(
+			`Cannot encode setpoint ${value} with any observed float encoding for scale ${scale}`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
+
+	return {
+		precision: selected.precision,
+		scale: selected.scale,
+		size: selected.size,
+	};
+}
+
 export const ThermostatSetpointCCValues = V.defineCCValues(
 	CommandClasses["Thermostat Setpoint"],
 	{
+		...V.staticProperty("observedFloatEncodings", undefined, {
+			internal: true,
+			supportsEndpoints: false,
+		}),
 		...V.staticProperty("supportedSetpointTypes", undefined, {
 			internal: true,
 		}),
@@ -108,6 +176,36 @@ export const ThermostatSetpointCCValues = V.defineCCValues(
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
+	private getPreferredScale(setpointType: ThermostatSetpointType): number {
+		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
+		// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
+		return (
+			this.tryGetValueDB()?.getValue<number>(
+				ThermostatSetpointCCValues.setpointScale(setpointType).endpoint(
+					this.endpoint.index,
+				),
+			) ?? 0
+		);
+	}
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = ({
+		property,
+		propertyKey,
+	}) => {
+		if (property === "setpoint" && typeof propertyKey === "number") {
+			return {
+				normalizeValue: (value) =>
+					typeof value === "number"
+						? this.createSetpointSet(
+								propertyKey,
+								value,
+								this.getPreferredScale(propertyKey),
+							).value
+						: value,
+			};
+		}
+	};
+
 	public supportsCommand(
 		cmd: ThermostatSetpointCommand,
 	): MaybeNotKnown<boolean> {
@@ -149,24 +247,18 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				);
 			}
 
-			// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
-			// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
-			const preferredScale = this.tryGetValueDB()?.getValue<number>(
-				ThermostatSetpointCCValues.setpointScale(propertyKey).endpoint(
-					this.endpoint.index,
-				),
-			);
-			const result = await this.set(
+			const cc = this.createSetpointSet(
 				propertyKey,
 				value,
-				preferredScale ?? 0,
+				this.getPreferredScale(propertyKey),
 			);
+			const result = await this.host.sendCommand(cc, this.commandOptions);
 
 			// Verify the current value after a delay, unless the command was supervised and successful
 			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 				// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
 				// aren't able to handle the GET this quickly.
-				this.schedulePoll({ property, propertyKey }, value);
+				this.schedulePoll({ property, propertyKey }, cc.value);
 			}
 
 			return result;
@@ -226,12 +318,28 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		}
 	}
 
+	/**
+	 * Sets a temperature using float encodings observed anywhere on the device.
+	 * Values are rounded to the closest representable value for the requested scale.
+	 * Explicit `compat.overrideFloatEncoding` settings take precedence.
+	 * Automatic encoding is used until the device reports an encoding for that scale.
+	 * @throws When no observed encoding for the requested scale can hold the value.
+	 */
 	@validateArgs()
 	public async set(
 		setpointType: ThermostatSetpointType,
 		value: number,
 		scale: number,
 	): Promise<SupervisionResult | undefined> {
+		const cc = this.createSetpointSet(setpointType, value, scale);
+		return this.host.sendCommand(cc, this.commandOptions);
+	}
+
+	private createSetpointSet(
+		setpointType: ThermostatSetpointType,
+		value: number,
+		scale: number,
+	): ThermostatSetpointCCSet {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Set,
@@ -244,7 +352,8 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			value,
 			scale,
 		});
-		return this.host.sendCommand(cc, this.commandOptions);
+		cc.normalizeValue(this.host);
+		return cc;
 	}
 
 	@validateArgs()
@@ -306,6 +415,33 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 @ccValues(ThermostatSetpointCCValues)
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
+
+	protected persistFloatEncodings(
+		ctx: GetValueDB,
+		encodings: readonly SetpointFloatEncoding[],
+	): void {
+		if (!encodings.length) return;
+		const valueDB = this.getValueDB(ctx);
+		const valueId = ThermostatSetpointCCValues.observedFloatEncodings.id;
+		const observed =
+			valueDB.getValue<SetpointFloatEncoding[]>(valueId) ?? [];
+		const updated = [...observed];
+		for (const encoding of encodings) {
+			if (
+				!updated.some(
+					(entry) =>
+						entry.precision === encoding.precision
+						&& entry.scale === encoding.scale
+						&& entry.size === encoding.size,
+				)
+			) {
+				updated.push(encoding);
+			}
+		}
+		if (updated.length !== observed.length) {
+			valueDB.setValue(valueId, updated);
+		}
+	}
 
 	public translatePropertyKey(
 		ctx: GetValueDB,
@@ -550,6 +686,8 @@ export interface ThermostatSetpointCCSetOptions {
 @CCCommand(ThermostatSetpointCommand.Set)
 @useSupervision()
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
+	private encodedValue: Bytes | undefined;
+
 	public constructor(options: WithAddress<ThermostatSetpointCCSetOptions>) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -591,13 +729,53 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return CommandRelation.Unrelated;
 	}
 
+	/** Normalizes the value and fixes its encoding for this command. */
+	public normalizeValue(
+		ctx: Pick<CCEncodingContext, "getDeviceConfig" | "tryGetValueDB">,
+	): number {
+		this.getEncodedValue(ctx);
+		return this.value;
+	}
+
+	private getEncodedValue(
+		ctx: Pick<CCEncodingContext, "getDeviceConfig" | "tryGetValueDB">,
+	): Bytes {
+		// Retries and S2 singlecast followups must reuse the original float encoding
+		if (!this.encodedValue) {
+			// If a config file overwrites how the float should be encoded, use that information
+			const override = ctx.getDeviceConfig?.(this.nodeId as number)
+				?.compat?.overrideFloatEncoding;
+			const observed = this.isSinglecast()
+				? ctx
+						.tryGetValueDB?.(this.nodeId)
+						?.getValue<SetpointFloatEncoding[]>(
+							ThermostatSetpointCCValues.observedFloatEncodings
+								.id,
+						)
+				: undefined;
+			const encoding =
+				override
+				?? findSetpointFloatEncoding(
+					this.value,
+					this.scale,
+					observed ?? [],
+				);
+			const encodedValue = encodeFloatWithScale(
+				this.value,
+				this.scale,
+				encoding,
+			);
+			this.value = parseFloatWithScale(encodedValue).value;
+			this.encodedValue = encodedValue;
+		}
+		return this.encodedValue;
+	}
+
 	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
-		// If a config file overwrites how the float should be encoded, use that information
-		const override = ctx.getDeviceConfig?.(this.nodeId as number)?.compat
-			?.overrideFloatEncoding;
+		const encodedValue = this.getEncodedValue(ctx);
 		this.payload = Bytes.concat([
 			[this.setpointType & 0b1111],
-			encodeFloatWithScale(this.value, this.scale, override),
+			encodedValue,
 		]);
 		return super.serialize(ctx);
 	}
@@ -626,6 +804,8 @@ export interface ThermostatSetpointCCReportOptions {
 
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
+	private floatEncoding: SetpointFloatEncoding | undefined;
+
 	public constructor(
 		options: WithAddress<ThermostatSetpointCCReportOptions>,
 	) {
@@ -654,18 +834,26 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		}
 
 		// parseFloatWithScale does its own validation
-		const { value, scale } = parseFloatWithScale(raw.payload.subarray(1));
+		const { value, scale, encoding } = parseSetpointFloat(
+			raw.payload.subarray(1),
+		);
 
-		return new this({
+		const ret = new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			value,
 			scale,
 		});
+		ret.floatEncoding = encoding;
+		return ret;
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
 		if (!super.persistValues(ctx)) return false;
+		if (this.type === ThermostatSetpointType["N/A"]) return true;
+		if (this.floatEncoding) {
+			this.persistFloatEncodings(ctx, [this.floatEncoding]);
+		}
 
 		const scale = getScale(this.scale);
 
@@ -810,6 +998,8 @@ export interface ThermostatSetpointCCCapabilitiesReportOptions {
 
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
+	private floatEncodings: SetpointFloatEncoding[] = [];
+
 	public constructor(
 		options: WithAddress<ThermostatSetpointCCCapabilitiesReportOptions>,
 	) {
@@ -828,17 +1018,30 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	): ThermostatSetpointCCCapabilitiesReport {
 		validatePayload(raw.payload.length >= 1);
 		const type: ThermostatSetpointType = raw.payload[0];
+		if (type === ThermostatSetpointType["N/A"]) {
+			return new this({
+				nodeId: ctx.sourceNodeId,
+				type,
+				minValue: 0,
+				minValueScale: 0,
+				maxValue: 0,
+				maxValueScale: 0,
+			});
+		}
 		// parseFloatWithScale does its own validation
 		const {
 			value: minValue,
 			scale: minValueScale,
 			bytesRead,
-		} = parseFloatWithScale(raw.payload.subarray(1));
-		const { value: maxValue, scale: maxValueScale } = parseFloatWithScale(
-			raw.payload.subarray(1 + bytesRead),
-		);
+			encoding: minEncoding,
+		} = parseSetpointFloat(raw.payload.subarray(1));
+		const {
+			value: maxValue,
+			scale: maxValueScale,
+			encoding: maxEncoding,
+		} = parseSetpointFloat(raw.payload.subarray(1 + bytesRead));
 
-		return new this({
+		const ret = new this({
 			nodeId: ctx.sourceNodeId,
 			type,
 			minValue,
@@ -846,10 +1049,14 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			maxValue,
 			maxValueScale,
 		});
+		ret.floatEncodings = [minEncoding, maxEncoding];
+		return ret;
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
 		if (!super.persistValues(ctx)) return false;
+		if (this.type === ThermostatSetpointType["N/A"]) return true;
+		this.persistFloatEncodings(ctx, this.floatEncodings);
 
 		// Predefine the metadata
 		const setpointValue = ThermostatSetpointCCValues.setpoint(this.type);

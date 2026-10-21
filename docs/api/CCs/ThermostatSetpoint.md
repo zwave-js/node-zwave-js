@@ -22,6 +22,15 @@ async set(
 ): Promise<SupervisionResult | undefined>;
 ```
 
+Sets a temperature using float encodings observed anywhere on the device.
+Values are rounded to the closest representable value for the requested scale.
+Explicit `compat.overrideFloatEncoding` settings take precedence.
+The command fails when no observed encoding for the requested scale can hold the value.
+Automatic encoding is used when no encodings are known for that scale or the command is multicast.
+New reports update the observed encodings without a reinterview.
+Each command keeps its chosen encoding while queued and during retries.
+Optimistic updates and verification polls use the transmitted value.
+
 ### `getCapabilities`
 
 ```ts

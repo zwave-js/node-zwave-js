@@ -1,5 +1,5 @@
 import { Bytes } from "@zwave-js/shared";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 
 import { ZWaveErrorCodes } from "../error/ZWaveError.js";
 import { assertZWaveError } from "../test/assertZWaveError.js";
@@ -218,6 +218,22 @@ test("encodeFloatWithScale() -> should fall back to sane options when the overri
 		);
 	}
 });
+
+test.each([
+	[40000, [3, 0, 0x9c, 0x40]],
+	[-40000, [3, 0xff, 0x63, 0xc0]],
+	[0x7fffff, [3, 0x7f, 0xff, 0xff]],
+	[-0x800000, [3, 0x80, 0, 0]],
+	[0x800000, [4, 0, 0x80, 0, 0]],
+	[-0x800001, [4, 0xff, 0x7f, 0xff, 0xff]],
+])(
+	"encodeFloatWithScale() -> uses three bytes for %i when it fits",
+	(value, expected) => {
+		expect(encodeFloatWithScale(value, 0, { size: 3 })).toEqual(
+			Bytes.from(expected),
+		);
+	},
+);
 
 test("encodeFloatWithScale() -> should throw when the value cannot be represented in 4 bytes", (t) => {
 	assertZWaveError(t.expect, () => encodeFloatWithScale(0xffffffff, 0), {

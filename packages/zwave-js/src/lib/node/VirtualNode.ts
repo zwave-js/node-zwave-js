@@ -162,6 +162,7 @@ export class VirtualNode extends VirtualEndpoint {
 			};
 
 			const hooks = api.setValueHooks?.(valueIdProps, value, options);
+			if (hooks?.normalizeValue) value = hooks.normalizeValue(value);
 
 			if (hooks?.supervisionDelayedUpdates) {
 				api = api.withOptions({

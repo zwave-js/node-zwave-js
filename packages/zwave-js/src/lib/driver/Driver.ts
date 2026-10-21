@@ -921,6 +921,7 @@ export class Driver
 	private getEncodingContext(): MessageEncodingContext & CCEncodingContext {
 		return {
 			...this.messageEncodingContext,
+			tryGetValueDB: (nodeId) => this.tryGetValueDB(nodeId),
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
 			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,

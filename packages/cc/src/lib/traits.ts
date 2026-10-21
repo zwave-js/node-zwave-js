@@ -4,6 +4,7 @@ import type {
 	CommandClasses,
 	FrameType,
 	GetSupportedCCVersion,
+	GetValueDB,
 	HostIDs,
 	MaybeNotKnown,
 	SecurityClass,
@@ -160,7 +161,8 @@ export interface CCEncodingContext
 		Readonly<SecurityManagers>,
 		GetDeviceConfig,
 		HostIDs,
-		GetSupportedCCVersion {
+		GetSupportedCCVersion,
+		Partial<Pick<GetValueDB, "tryGetValueDB">> {
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
