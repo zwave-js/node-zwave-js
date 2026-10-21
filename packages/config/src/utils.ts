@@ -129,9 +129,25 @@ export async function syncExternalConfigDir(
 	// Only wipe it if it is empty or was created by us, which is indicated by the version file.
 	try {
 		const entries = await fs.readDir(extConfigDir);
-		if (entries.length > 0 && !entries.includes("version")) {
+		if (!entries.includes("version")) {
+			// Ignore files that are commonly created by the OS or file system
+			const unexpectedEntries = entries.filter(
+				(e) => !e.startsWith(".") && e !== "lost+found",
+			);
+			if (unexpectedEntries.length > 0) {
+				logger.print(
+					`External config dir ${extConfigDir} is not empty and does not look like a Z-Wave JS config directory (unexpected entries: ${unexpectedEntries
+						.slice(0, 5)
+						.join(", ")}${
+						unexpectedEntries.length > 5 ? ", ..." : ""
+					}), refusing to overwrite it - using embedded config`,
+					"error",
+				);
+				return { success: false };
+			}
+		} else if (!(await fs.stat(externalVersionFilename)).isFile()) {
 			logger.print(
-				`External config dir ${extConfigDir} is not empty and does not look like a Z-Wave JS config directory, refusing to overwrite it - using embedded config`,
+				`External config dir ${extConfigDir} does not look like a Z-Wave JS config directory (version is not a file), refusing to overwrite it - using embedded config`,
 				"error",
 			);
 			return { success: false };
@@ -149,6 +165,9 @@ export async function syncExternalConfigDir(
 		logger.print(`Synchronizing external config dir ${extConfigDir}...`);
 		await fs.deleteDir(extConfigDir);
 		await fs.ensureDir(extConfigDir);
+		// Mark the directory as ours before copying, so an interrupted sync can be wiped
+		// on the next start. The empty version is invalid, which forces that wipe.
+		await writeTextFile(fs, externalVersionFilename, "", "utf8");
 		await copyFilesRecursive(fs, configDir, extConfigDir, (src) =>
 			src.endsWith(".json"),
 		);

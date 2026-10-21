@@ -121,17 +121,28 @@ export async function installConfigUpdate(
 		const tarFiles = untar(
 			gunzipSync(tarballData, MAX_CONFIG_PACKAGE_SIZE).buffer,
 		);
+		const prefix = "package/config/";
+		const configFiles = tarFiles.filter(
+			(file) =>
+				file.filename.startsWith(prefix)
+				&& file.filename.endsWith(".json"),
+		);
+		// Don't wipe the existing config with the contents of a broken package
+		if (configFiles.length === 0) {
+			throw new Error("The tarball contains no config files");
+		}
+
+		const externalVersionFilename = path.join(
+			external.configDir,
+			"version",
+		);
 		await fs.deleteDir(external.configDir);
 		await fs.ensureDir(external.configDir);
+		// Mark the directory as ours before extracting, so an interrupted update can be wiped
+		// on the next start. The empty version is invalid, which forces that wipe.
+		await writeTextFile(fs, externalVersionFilename, "");
 
-		const prefix = "package/config/";
-		for (const file of tarFiles) {
-			if (
-				!file.filename.startsWith(prefix)
-				|| !file.filename.endsWith(".json")
-			) {
-				continue;
-			}
+		for (const file of configFiles) {
 			const filename = file.filename.slice(prefix.length);
 			const targetFileName = path.join(external.configDir, filename);
 			// Don't let crafted file names escape the config directory
@@ -152,10 +163,6 @@ export async function installConfigUpdate(
 			await fs.writeFile(targetFileName, new Uint8Array(file.fileData));
 		}
 
-		const externalVersionFilename = path.join(
-			external.configDir,
-			"version",
-		);
 		await writeTextFile(fs, externalVersionFilename, newVersion);
 	} catch {
 		throw new ZWaveError(

@@ -26,6 +26,12 @@ export function gunzipSync(
 ): BytesView {
 	if (maxOutputLength == undefined) return fgunzipSync(data) as BytesView;
 
+	// The streaming decompressor silently accepts empty or truncated input,
+	// so check what fflate's gunzipSync would check: the minimum size (header + trailer)...
+	if (data.length < 18) {
+		throw new Error("Invalid gzip data");
+	}
+
 	const chunks: Uint8Array[] = [];
 	let outputLength = 0;
 	const gunzip = new Gunzip((chunk) => {
@@ -46,6 +52,12 @@ export function gunzipSync(
 		gunzip.push(data.subarray(offset, end), end >= data.length);
 		offset = end;
 	} while (offset < data.length);
+
+	// ...and that the output size matches the one stored in the trailer (modulo 2^32)
+	const expectedLength = Bytes.view(data).readUInt32LE(data.length - 4);
+	if (outputLength % 0x1_0000_0000 !== expectedLength) {
+		throw new Error("Invalid or truncated gzip data");
+	}
 
 	return Bytes.concat(chunks);
 }
