@@ -1563,8 +1563,12 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		const indicatorId = raw.payload[0];
 		const descrptionLength = raw.payload[1];
 		validatePayload(raw.payload.length >= 2 + descrptionLength);
+		// Descriptions legitimately span multiple lines, which would otherwise be escaped
 		const description: string = escapeControlCharacters(
-			raw.payload.subarray(2, 2 + descrptionLength).toString("utf8"),
+			raw.payload
+				.subarray(2, 2 + descrptionLength)
+				.toString("utf8")
+				.replaceAll(/\r\n|\r|\n/g, " "),
 		);
 
 		return new this({

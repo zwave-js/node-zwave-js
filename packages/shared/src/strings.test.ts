@@ -81,9 +81,16 @@ test("escapeControlCharacters() -> should escape C0 and C1 control characters", 
 	);
 });
 
+test("escapeControlCharacters() -> should escape bidi controls and line/paragraph separators", (t) => {
+	t.expect(
+		escapeControlCharacters("a\u202eb\u2066c\u2069d\u2028e\u2029"),
+	).toBe("a\\u202eb\\u2066c\\u2069d\\u2028e\\u2029");
+});
+
 test("escapeControlCharacters() -> should remove trailing NUL padding", (t) => {
 	t.expect(escapeControlCharacters("name\0\0\0")).toBe("name");
 	t.expect(escapeControlCharacters("na\0me")).toBe("na\\x00me");
+	t.expect(escapeControlCharacters("\0".repeat(100_000))).toBe("");
 });
 
 test("escapeControlCharacters() -> should keep printable characters", (t) => {

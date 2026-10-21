@@ -9,15 +9,26 @@ export function cpp2js(str: string): string {
 }
 
 /**
- * Escapes C0 and C1 control characters (e.g. `"\x1b"`) in strings received from other devices,
- * so they cannot manipulate logs or applications that display them. Trailing NUL padding is removed.
+ * Makes strings received from other devices safe to display, so they cannot manipulate logs or
+ * applications that show them. Trailing NUL padding is removed, C0 and C1 control characters
+ * (e.g. `"\x1b"`) are replaced with `\xHH` and Unicode bidi controls as well as line/paragraph
+ * separators with `\uHHHH`. This is lossy: the result cannot be converted back to the original string.
  */
 export function escapeControlCharacters(str: string): string {
-	return str.replace(/\0+$/, "").replaceAll(
-		// oxlint-disable-next-line no-control-regex
-		/[\u0000-\u001f\u007f-\u009f]/g,
-		(c) => `\\x${c.charCodeAt(0).toString(16).padStart(2, "0")}`,
-	);
+	// A linear scan avoids the polynomial runtime of a regex on long runs of NUL characters
+	let end = str.length;
+	while (end > 0 && str.charCodeAt(end - 1) === 0) end--;
+	return str
+		.slice(0, end)
+		.replaceAll(
+			/[\u0000-\u001f\u007f-\u009f\u2028\u2029\u202a-\u202e\u2066-\u2069]/g,
+			(c) => {
+				const code = c.charCodeAt(0);
+				return code <= 0xff
+					? `\\x${code.toString(16).padStart(2, "0")}`
+					: `\\u${code.toString(16).padStart(4, "0")}`;
+			},
+		);
 }
 
 /**

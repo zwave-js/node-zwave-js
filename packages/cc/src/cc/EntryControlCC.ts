@@ -16,7 +16,13 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, type BytesView, buffer2hex, pick } from "@zwave-js/shared";
+import {
+	Bytes,
+	type BytesView,
+	buffer2hex,
+	escapeControlCharacters,
+	pick,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import {
@@ -445,9 +451,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 					) {
 						paddingStart--;
 					}
-					eventData = eventData
-						.subarray(0, paddingStart)
-						.toString("ascii");
+					eventData = escapeControlCharacters(
+						eventData.subarray(0, paddingStart).toString("ascii"),
+					);
 
 					if (!noStrictValidation) {
 						validatePayload(/^[\u0000-\u007f]+$/.test(eventData));

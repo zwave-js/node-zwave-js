@@ -16,11 +16,11 @@ import {
 } from "@zwave-js/core";
 import {
 	Bytes,
+	escapeControlCharacters,
 	getEnumMemberName,
 	pick,
 	stringToUint8ArrayUTF16BE,
 	uint8ArrayToStringUTF16BE,
-	escapeControlCharacters,
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
