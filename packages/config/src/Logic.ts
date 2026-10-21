@@ -48,12 +48,20 @@ add_operation(
 	tryOr((a, b) => !semverEq(padVersion(a), padVersion(b)), false),
 );
 
+// Conditions come from a finite set of config files and are evaluated repeatedly, so parsing each only once pays off
+const parsedLogicCache = new Map<string, RulesLogic>();
+
 export function parseLogic(input: string): RulesLogic {
-	const expr = parse(input);
-	if (!expr) {
-		throw new Error(`Failed to parse expression: ${input}`);
+	let ret = parsedLogicCache.get(input);
+	if (!ret) {
+		const expr = parse(input);
+		if (!expr) {
+			throw new Error(`Failed to parse expression: ${input}`);
+		}
+		ret = toRulesLogic(expr);
+		parsedLogicCache.set(input, ret);
 	}
-	return toRulesLogic(expr);
+	return ret;
 }
 
 export function evaluate(

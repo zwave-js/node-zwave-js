@@ -279,3 +279,11 @@ test("parse, weird, but valid expression", () => {
 	};
 	expect(actual).toEqual(expected);
 });
+
+test("parse() handles deeply nested groups in linear time", () => {
+	const depth = 50;
+	const input = "(".repeat(depth) + "a > 1 && b < 2" + ")".repeat(depth);
+	const start = Date.now();
+	expect(parse(input)).toMatchObject({ kind: SyntaxKind.And });
+	expect(Date.now() - start).toBeLessThan(1000);
+});

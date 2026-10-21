@@ -245,103 +245,66 @@ export function parse(input: string): Expression | undefined {
 	return ret;
 }
 
+// The grammar is parsed with a single token of lookahead, so parsing time is linear in the input length:
+// expression := and ("||" and)*
+// and        := primary ("&&" primary)*
+// primary    := comparison | "(" expression ")"
+
 function parseExpression(s: ParserState): Expression | undefined {
-	return parseOr(s) || parseAnd(s) || parseComparison(s) || parseGroup(s);
+	return parseOr(s);
 }
 
-function parseAnd(s: ParserState): And | undefined {
-	// <comparison|group> && <comparison|group> && ...
-	let startPos = s.pos;
-	const first = parseComparison(s) || parseGroup(s);
-	if (!first) {
-		s.pos = startPos;
-		return;
-	}
-	// Expect a "&&" operator
-	if (s.tokens[s.pos]?.kind !== TokenKind.AmpAmp) {
-		s.pos = startPos;
-		return;
-	}
-	s.pos++; // consume "&&"
-	const second = parseComparison(s) || parseGroup(s);
-	if (!second) {
-		s.pos = startPos;
-		return;
-	}
+function parseOr(s: ParserState): Expression | undefined {
+	const first = parseAnd(s);
+	if (!first) return;
 
-	// Parsing succeeded so far, update the parser start position,
-	// so we don't rewind too much on failure
-	startPos = s.pos;
-
-	// Now optionally parse further sequences of "&&" <comparison|group>
-	const operands: Expression[] = [first, second];
-	while (s.tokens[s.pos]?.kind === TokenKind.AmpAmp) {
-		s.pos++; // consume "&&"
-		const next = parseComparison(s) || parseGroup(s);
-		if (!next) {
-			s.pos = startPos;
-			break;
-		}
-		operands.push(next);
-		// update the parser start position,
-		// so we don't rewind too much on failure
-		startPos = s.pos;
-	}
-
-	return {
-		kind: SyntaxKind.And,
-		operands,
-	};
-}
-
-function parseOr(s: ParserState): Or | undefined {
-	// <and|comparison|group> || <and|comparison|group> || ...
-	let startPos = s.pos;
-	const first = parseAnd(s) || parseComparison(s) || parseGroup(s);
-	if (!first) {
-		s.pos = startPos;
-		return;
-	}
-	// Expect a "||" operator
-	if (s.tokens[s.pos]?.kind !== TokenKind.BarBar) {
-		s.pos = startPos;
-		return;
-	}
-	s.pos++; // consume "||"
-	const second = parseAnd(s) || parseComparison(s) || parseGroup(s);
-	if (!second) {
-		s.pos = startPos;
-		return;
-	}
-
-	// Parsing succeeded so far, update the parser start position,
-	// so we don't rewind too much on failure
-	startPos = s.pos;
-
-	// Now optionally parse further sequences of "||" <and|comparison|group>
-	const operands: Expression[] = [first, second];
+	const operands: Expression[] = [first];
 	while (s.tokens[s.pos]?.kind === TokenKind.BarBar) {
+		const startPos = s.pos;
 		s.pos++; // consume "||"
-		const next = parseAnd(s) || parseComparison(s) || parseGroup(s);
+		const next = parseAnd(s);
 		if (!next) {
 			s.pos = startPos;
 			break;
 		}
 		operands.push(next);
-		// update the parser start position,
-		// so we don't rewind too much on failure
-		startPos = s.pos;
 	}
 
+	if (operands.length === 1) return first;
 	return {
 		kind: SyntaxKind.Or,
 		operands,
 	};
 }
 
+function parseAnd(s: ParserState): Expression | undefined {
+	const first = parsePrimary(s);
+	if (!first) return;
+
+	const operands: Expression[] = [first];
+	while (s.tokens[s.pos]?.kind === TokenKind.AmpAmp) {
+		const startPos = s.pos;
+		s.pos++; // consume "&&"
+		const next = parsePrimary(s);
+		if (!next) {
+			s.pos = startPos;
+			break;
+		}
+		operands.push(next);
+	}
+
+	if (operands.length === 1) return first;
+	return {
+		kind: SyntaxKind.And,
+		operands,
+	};
+}
+
+function parsePrimary(s: ParserState): Expression | undefined {
+	return parseComparison(s) || parseGroup(s);
+}
+
 function parseGroup(s: ParserState): Expression | undefined {
-	// A group is technically only needed for operator precedence of OR expressions,
-	// but we parse any expression within parentheses for simplicity
 	// "(" <expression> ")"
 	const startPos = s.pos;
 	if (s.tokens[s.pos]?.kind !== TokenKind.LeftParen) {
