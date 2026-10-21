@@ -5353,15 +5353,22 @@ export class Driver
 			}
 		};
 
+		// A new First Segment replaces the session, but a pending SegmentRequest of the
+		// replaced session may still finish later. Its timer must not touch the new session.
+		const isCurrentSession = (session: TransportServiceSession) =>
+			nodeSessions.transportService.get(command.sessionId) === session;
+
 		function startMissingSegmentTimeout(
 			session: TransportServiceSession,
 		): void {
 			if (session.timeout) {
 				clearTimeout(session.timeout);
 			}
+			if (!isCurrentSession(session)) return;
 
 			session.timeout = setTimeout(() => {
 				session.timeout = undefined;
+				if (!isCurrentSession(session)) return;
 				advanceTransportServiceSession(session, {
 					value: "timeout",
 				});
