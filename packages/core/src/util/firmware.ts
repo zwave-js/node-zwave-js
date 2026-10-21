@@ -86,17 +86,23 @@ export function tryUnzipFirmwareFile(zipData: BytesView):
 			rawData: BytesView;
 	  }
 	| undefined {
-	// Extract files we can work with
+	// Extract files we can work with. Avoid inflating huge files or many files, which could
+	// exhaust the memory. The result is only usable if exactly one file matches anyways,
+	// so only the first match is inflated.
+	let numMatches = 0;
 	const unzipped = unzipSync(zipData, {
 		filter: (file) => {
-			return (
-				/\.(hex|exe|ex_|ota|otz|hec|gbl|bin)$/.test(file.name)
-				// Avoid inflating huge files, which could exhaust the memory
-				&& file.originalSize <= MAX_FIRMWARE_SIZE
-			);
+			if (
+				!/\.(hex|exe|ex_|ota|otz|hec|gbl|bin)$/.test(file.name)
+				|| file.originalSize > MAX_FIRMWARE_SIZE
+			) {
+				return false;
+			}
+			numMatches++;
+			return numMatches === 1;
 		},
 	});
-	if (Object.keys(unzipped).length === 1) {
+	if (numMatches === 1 && Object.keys(unzipped).length === 1) {
 		// Exactly one file was extracted, inspect that
 		const filename = Object.keys(unzipped)[0];
 		const rawData = unzipped[filename] as BytesView;
