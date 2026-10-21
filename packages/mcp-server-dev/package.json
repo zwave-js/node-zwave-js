@@ -50,7 +50,7 @@
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@types/node": "^20.19.35",
-    "@typescript/native": "npm:typescript@7.0.2",
+    "@typescript/native": "npm:typescript@7.1.0-beta",
     "nano-spawn": "^2.1.0"
   },
   "scripts": {

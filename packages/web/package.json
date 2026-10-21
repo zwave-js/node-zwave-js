@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/w3c-web-serial": "^1.0.8",
     "@types/w3c-web-usb": "^1.0.14",
-    "@typescript/native": "npm:typescript@7.0.2",
+    "@typescript/native": "npm:typescript@7.1.0-beta",
     "@zwave-js/bindings-browser": "workspace:^",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",

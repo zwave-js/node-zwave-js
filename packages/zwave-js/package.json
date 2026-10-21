@@ -158,7 +158,7 @@
     "@types/semver": "^7.8.0",
     "@types/sinon": "^21.0.0",
     "@types/source-map-support": "^0.5.10",
-    "@typescript/native": "npm:typescript@7.0.2",
+    "@typescript/native": "npm:typescript@7.1.0-beta",
     "@zwave-js/maintenance": "workspace:*",
     "del-cli": "^7.0.0",
     "mockdate": "^3.0.5",

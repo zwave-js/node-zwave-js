@@ -68,7 +68,7 @@
     "@microsoft/api-extractor": "^7.58.7",
     "@types/node": "^20.19.35",
     "@types/sinon": "^21.0.0",
-    "@typescript/native": "npm:typescript@7.0.2",
+    "@typescript/native": "npm:typescript@7.1.0-beta",
     "del-cli": "^7.0.0",
     "sinon": "^22.0.0",
     "tsx": "^4.23.1",

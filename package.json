@@ -52,7 +52,7 @@
     "@types/source-map-support": "^0.5.10",
     "@types/tmp": "^0.2.6",
     "@types/xml2js": "^0.4.14",
-    "@typescript/native": "npm:typescript@7.0.2",
+    "@typescript/native": "npm:typescript@7.1.0-beta",
     "@zwave-js/bindings-browser": "workspace:*",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
