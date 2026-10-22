@@ -2339,6 +2339,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 			offset += bytesRead;
 		}
 		validatePayload(raw.payload.length >= offset + 2);
+		// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- offset only grows by the number of bytes read, so it is positive
 		const nextUserId = raw.payload.readUInt16BE(offset);
 
 		return new this({

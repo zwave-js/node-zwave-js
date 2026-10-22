@@ -6,6 +6,11 @@ export type Binding =
 			init: TSESTree.Expression | undefined;
 	  }
 	| {
+			kind: "let";
+			/** The declaration, which also covers `var` */
+			declarator: TSESTree.VariableDeclarator;
+	  }
+	| {
 			kind: "catch";
 	  }
 	| {
@@ -62,14 +67,18 @@ function addDeclarationNames(
 			break;
 		case AST_NODE_TYPES.VariableDeclaration:
 			for (const decl of stmt.declarations) {
-				addPatternNames(
-					decl.id,
-					stmt.kind === "const"
-						&& decl.id.type === AST_NODE_TYPES.Identifier
-						? { kind: "const", init: decl.init ?? undefined }
-						: OTHER,
-					ret,
-				);
+				let binding: Binding = OTHER;
+				if (decl.id.type === AST_NODE_TYPES.Identifier) {
+					if (stmt.kind === "const") {
+						binding = {
+							kind: "const",
+							init: decl.init ?? undefined,
+						};
+					} else if (stmt.kind === "let" || stmt.kind === "var") {
+						binding = { kind: "let", declarator: decl };
+					}
+				}
+				addPatternNames(decl.id, binding, ret);
 			}
 			break;
 		case AST_NODE_TYPES.FunctionDeclaration:

@@ -14,7 +14,7 @@ export enum RssiError {
 // const RSSI_RESERVED_START = 11;
 
 export function parseRSSI(payload: BytesView, offset: number = 0): RSSI {
-	validatePayload(payload.length >= offset + 1);
+	validatePayload(offset >= 0, payload.length >= offset + 1);
 	const ret = Bytes.view(payload).readInt8(offset);
 	// Filter out reserved values
 	// TODO: Figure out for which controllers this is relevant

@@ -161,7 +161,7 @@ export function decodeFixed32Field(
 	data: BytesView,
 	offset: number,
 ): { value: number; bytesRead: number } {
-	validatePayload(data.length >= offset + 4);
+	validatePayload(offset >= 0, data.length >= offset + 4);
 	const value = Bytes.view(data).readUInt32LE(offset);
 	return { value, bytesRead: 4 };
 }

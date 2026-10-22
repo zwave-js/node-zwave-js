@@ -94,6 +94,7 @@ export function parseCCId(
 	payload: BytesView,
 	offset: number = 0,
 ): { ccId: CommandClasses; bytesRead: number } {
+	validatePayload(offset >= 0);
 	const view = Bytes.view(payload);
 	if (isExtendedCCId(payload[offset])) {
 		validatePayload(payload.length >= offset + 2);

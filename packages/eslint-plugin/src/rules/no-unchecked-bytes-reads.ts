@@ -83,6 +83,10 @@ interface Helpers {
 	writes: Writes;
 	/** The read that is currently being checked */
 	read?: TSESTree.Node;
+	/** The function containing the read, in which the writes were collected */
+	root?: TSESTree.Node;
+	/** Whether the opaque terms that were created for the current read are known to be non-negative */
+	signs: Map<string, boolean>;
 }
 
 const ROOT_IDENTIFIER = /(?<![\w$.])[A-Za-z_$][\w$]*/g;
@@ -148,6 +152,233 @@ function normalizeText(text: string): string {
 	return text.replaceAll(/\s+/g, "").replaceAll("?.", ".");
 }
 
+// Calls of these methods do not have side effects and return the same value when called again
+const PURE_METHODS = new Set([
+	...Object.keys(READ_METHODS),
+	"subarray",
+	"slice",
+	"view",
+	"from",
+]);
+
+/** Whether evaluating the expression again yields the same value, so its text can identify it */
+function isPure(node: TSESTree.Node): boolean {
+	switch (node.type) {
+		case AST_NODE_TYPES.CallExpression: {
+			const callee = node.callee;
+			if (
+				callee.type !== AST_NODE_TYPES.MemberExpression
+				|| callee.computed
+				|| callee.property.type !== AST_NODE_TYPES.Identifier
+				|| !(
+					PURE_METHODS.has(callee.property.name)
+					|| (callee.object.type === AST_NODE_TYPES.Identifier
+						&& callee.object.name === "Math")
+				)
+			) {
+				return false;
+			}
+			break;
+		}
+		case AST_NODE_TYPES.NewExpression:
+		case AST_NODE_TYPES.AssignmentExpression:
+		case AST_NODE_TYPES.UpdateExpression:
+		case AST_NODE_TYPES.AwaitExpression:
+		case AST_NODE_TYPES.YieldExpression:
+		case AST_NODE_TYPES.TaggedTemplateExpression:
+		case AST_NODE_TYPES.ImportExpression:
+			return false;
+		case AST_NODE_TYPES.FunctionExpression:
+		case AST_NODE_TYPES.ArrowFunctionExpression:
+			return true;
+	}
+	for (const [key, value] of Object.entries(node)) {
+		if (key === "parent") continue;
+		const children: unknown[] = Array.isArray(value) ? value : [value];
+		for (const child of children) {
+			if (
+				child
+				&& typeof child === "object"
+				&& typeof (child as TSESTree.Node).type === "string"
+				&& !isPure(child as TSESTree.Node)
+			) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/** Returns a key for an expression. Expressions with side effects are unique, so separate evaluations do not share facts */
+function getKey(node: TSESTree.Node, h: Helpers): string {
+	const text = normalizeText(h.getText(node));
+	return isPure(node) ? text : `${text}@${node.range[0]}`;
+}
+
+function opaque(key: string, nonNegative: boolean, h: Helpers): Linear {
+	h.signs.set(key, (h.signs.get(key) ?? true) && nonNegative);
+	return { constant: 0, terms: new Map([[key, 1]]) };
+}
+
+const UNSIGNED_READ_METHOD = /^read(?:UInt|BigUInt)/;
+const MAX_INT32 = 0x7fff_ffff;
+
+/** Whether a variable or property write keeps a non-negative value non-negative */
+function isNonNegativeWrite(
+	write: TSESTree.Node,
+	h: Helpers,
+	visiting: Set<TSESTree.Node>,
+): boolean {
+	if (write.type === AST_NODE_TYPES.UpdateExpression) {
+		return write.operator === "++";
+	}
+	if (
+		write.type !== AST_NODE_TYPES.AssignmentExpression
+		|| write.left.type !== AST_NODE_TYPES.Identifier
+	) {
+		return false;
+	}
+	switch (write.operator) {
+		case "=":
+		case "+=":
+		case "*=":
+		case "/=":
+			return isNonNegativeExpression(write.right, h, visiting);
+		case ">>>=":
+			return true;
+	}
+	return false;
+}
+
+/**
+ * Whether an expression is known to be non-negative, e.g. lengths, unsigned reads,
+ * or variables that are only ever assigned non-negative values.
+ * Indexed access is assumed to read from a byte array.
+ */
+function isNonNegativeExpression(
+	node: TSESTree.Node,
+	h: Helpers,
+	visiting: Set<TSESTree.Node> = new Set(),
+): boolean {
+	switch (node.type) {
+		case AST_NODE_TYPES.Literal:
+			return typeof node.value === "number" && node.value >= 0;
+		case AST_NODE_TYPES.MemberExpression:
+			return (
+				node.computed
+				|| (node.property.type === AST_NODE_TYPES.Identifier
+					&& (node.property.name === "length"
+						|| node.property.name === "byteLength"))
+			);
+		case AST_NODE_TYPES.Identifier: {
+			const binding = findBinding(node);
+			if (binding?.kind === "const") {
+				if (!binding.init || visiting.has(binding.init)) return false;
+				visiting.add(binding.init);
+				return isNonNegativeExpression(binding.init, h, visiting);
+			}
+			if (binding?.kind !== "let") return false;
+			const decl = binding.declarator;
+			// Assume the variable is non-negative while checking whether its writes preserve that
+			if (visiting.has(decl)) return true;
+			// Writes are only known within the function that contains the read
+			if (!h.root || !contains(h.root, decl)) return false;
+			visiting.add(decl);
+			return (
+				(!decl.init || isNonNegativeExpression(decl.init, h, visiting))
+				&& (h.writes.names.get(node.name) ?? []).every((w) =>
+					isNonNegativeWrite(w.node, h, visiting),
+				)
+			);
+		}
+		case AST_NODE_TYPES.CallExpression: {
+			const callee = node.callee;
+			if (
+				callee.type !== AST_NODE_TYPES.MemberExpression
+				|| callee.computed
+				|| callee.property.type !== AST_NODE_TYPES.Identifier
+			) {
+				return false;
+			}
+			const method = callee.property.name;
+			if (UNSIGNED_READ_METHOD.test(method)) return true;
+			if (
+				callee.object.type !== AST_NODE_TYPES.Identifier
+				|| callee.object.name !== "Math"
+			) {
+				return false;
+			}
+			const args = node.arguments.map((arg) =>
+				isNonNegativeExpression(arg, h, visiting),
+			);
+			switch (method) {
+				case "abs":
+					return true;
+				case "max":
+					return args.some(Boolean);
+				case "min":
+				case "floor":
+				case "ceil":
+				case "round":
+				case "trunc":
+					return args.length > 0 && args.every(Boolean);
+			}
+			return false;
+		}
+		case AST_NODE_TYPES.BinaryExpression: {
+			if (node.left.type === AST_NODE_TYPES.PrivateIdentifier) {
+				return false;
+			}
+			const left = (): boolean =>
+				isNonNegativeExpression(node.left, h, visiting);
+			const right = (): boolean =>
+				isNonNegativeExpression(node.right, h, visiting);
+			switch (node.operator) {
+				case "+":
+				case "*":
+				case "/":
+					return left() && right();
+				case "%":
+				case ">>":
+				case "**":
+					return left();
+				case ">>>":
+					return true;
+				case "&": {
+					// Masks with the sign bit cleared always produce non-negative results
+					const isMask = (n: TSESTree.Node): boolean =>
+						n.type === AST_NODE_TYPES.Literal
+						&& typeof n.value === "number"
+						&& n.value >= 0
+						&& n.value <= MAX_INT32;
+					return isMask(node.left) || isMask(node.right);
+				}
+			}
+			return false;
+		}
+		case AST_NODE_TYPES.ConditionalExpression:
+			return (
+				isNonNegativeExpression(node.consequent, h, visiting)
+				&& isNonNegativeExpression(node.alternate, h, visiting)
+			);
+		case AST_NODE_TYPES.LogicalExpression:
+			return (
+				isNonNegativeExpression(node.left, h, visiting)
+				&& isNonNegativeExpression(node.right, h, visiting)
+			);
+		case AST_NODE_TYPES.UnaryExpression:
+			return (
+				node.operator === "+"
+				&& isNonNegativeExpression(node.argument, h, visiting)
+			);
+		case AST_NODE_TYPES.TSNonNullExpression:
+		case AST_NODE_TYPES.TSAsExpression:
+		case AST_NODE_TYPES.ChainExpression:
+			return isNonNegativeExpression(node.expression, h, visiting);
+	}
+	return false;
+}
+
 /** Returns a key that identifies a buffer, so that views of the same buffer share their length */
 function bufferKey(node: TSESTree.Node, h: Helpers, depth: number = 0): string {
 	if (
@@ -180,7 +411,7 @@ function bufferKey(node: TSESTree.Node, h: Helpers, depth: number = 0): string {
 			if (init.type === AST_NODE_TYPES.Identifier) return key;
 		}
 	}
-	return normalizeText(h.getText(node));
+	return getKey(node, h);
 }
 
 function toLinear(node: TSESTree.Node, h: Helpers, depth: number = 0): Linear {
@@ -192,12 +423,7 @@ function toLinear(node: TSESTree.Node, h: Helpers, depth: number = 0): Linear {
 				&& (node.property.name === "length"
 					|| node.property.name === "byteLength")
 			) {
-				return {
-					constant: 0,
-					terms: new Map([
-						[`${bufferKey(node.object, h)}.length`, 1],
-					]),
-				};
+				return opaque(`${bufferKey(node.object, h)}.length`, true, h);
 			}
 			break;
 		case AST_NODE_TYPES.Identifier: {
@@ -232,24 +458,22 @@ function toLinear(node: TSESTree.Node, h: Helpers, depth: number = 0): Linear {
 			break;
 		}
 	}
-	return {
-		constant: 0,
-		terms: new Map([[normalizeText(h.getText(node)), 1]]),
-	};
+	return opaque(getKey(node, h), isNonNegativeExpression(node, h), h);
 }
 
-/**
- * Returns `true` if `fact >= 0` implies `goal >= 0`.
- * Opaque terms are assumed to be non-negative, which holds for the byte values,
- * counts and lengths that offsets are typically computed from.
- */
-function implies(fact: Linear, goal: Linear): boolean {
+/** Returns `true` if `fact >= 0` implies `goal >= 0` */
+function implies(fact: Linear, goal: Linear, h: Helpers): boolean {
 	const diff = linAdd(goal, fact, -1);
-	return isNonNegative(diff);
+	return isNonNegative(diff, h);
 }
 
-function isNonNegative(a: Linear): boolean {
-	return a.constant >= 0 && [...a.terms.values()].every((c) => c > 0);
+function isNonNegative(a: Linear, h: Helpers): boolean {
+	return (
+		a.constant >= 0
+		&& [...a.terms].every(
+			([key, coeff]) => coeff > 0 && h.signs.get(key) === true,
+		)
+	);
 }
 
 const NEGATED_OPERATOR: Record<string, string> = {
@@ -475,8 +699,15 @@ function getLoopBound(
 	}
 
 	// The initial value is only a lower bound if the update never decreases the variable
+	// Writes in the loop body also invalidate the step-based bound below
 	const update = node.update;
-	if (min && !isIncreasingUpdate(update, variable)) min = undefined;
+	if (
+		min
+		&& (!isIncreasingUpdate(update, variable)
+			|| hasOtherWrites(node, variable, h))
+	) {
+		min = undefined;
+	}
 
 	// With constant bounds and step, the variable may not reach the bound, e.g. for (i = 0; i < 16; i += 2)
 	if (
@@ -717,8 +948,7 @@ function collectContext(
 						if (
 							bound.min
 							&& (!parent.init
-								|| !isValid(bound.min, parent.init)
-								|| hasOtherWrites(parent, bound.variable, h))
+								|| !isValid(bound.min, parent.init))
 						) {
 							bound.min = undefined;
 						}
@@ -934,6 +1164,7 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 		const h: Helpers = {
 			getText,
 			writes: { names: new Map(), paths: new Map() },
+			signs: new Map(),
 		};
 		let writesCache = new WeakMap<TSESTree.Node, Writes>();
 
@@ -963,6 +1194,8 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 				}
 				h.writes = writes;
 				h.read = node;
+				h.root = root;
+				h.signs = new Map();
 
 				const [offsetArg, sizeArg] = node.arguments;
 				const offset = offsetArg ? toLinear(offsetArg, h) : linConst(0);
@@ -980,8 +1213,8 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 				const isProvablyNonNegative = (value: Linear): boolean => {
 					const goal = applyLoopBounds(value, loops);
 					return (
-						isNonNegative(goal)
-						|| facts.some((f) => implies(f, goal))
+						isNonNegative(goal, h)
+						|| facts.some((f) => implies(f, goal, h))
 					);
 				};
 
@@ -1021,8 +1254,11 @@ export const noUncheckedBytesReads: OxlintCompatibleRule = {
 					target: TSESTree.Node,
 					targetOffset: Linear,
 				): boolean => {
-					const lengthTerm = linConst(0);
-					lengthTerm.terms.set(`${bufferKey(target, h)}.length`, 1);
+					const lengthTerm = opaque(
+						`${bufferKey(target, h)}.length`,
+						true,
+						h,
+					);
 					return isProvablyNonNegative(
 						linAdd(lengthTerm, linAdd(targetOffset, size), -1),
 					);
