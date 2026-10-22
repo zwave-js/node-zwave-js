@@ -4,6 +4,29 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Reject invalid statuses in Powerlevel Test Node Report (#9357)
+* The `nvmedit` utility now ignores stale SUC update entry bytes and `0xff` app data padding (#9327)
+* When migrating controllers to 700/800 series, the device class is now set to Static Controller (#9363)
+* Fixed an issue where Z-Wave JS could override values in driver preset objects owned by the application (#9306)
+
+### Config file changes
+* Group whole-device control aggregate on Zipato/Philio PAN04 (#9393)
+* Group whole-device control aggregate on Vemmio DS100 (#9392)
+* Group whole-device total on Zipato/Philio PAB01 energy meter (#9391)
+* Group whole-device total on Qubino 3-Phase Smart Meter (ZMNHXD) (#9390)
+* Group all endpoints on Aeotec Indoor Siren 6 (ZW164) (#9389)
+* Group variable-speed pump endpoints for Intermatic PE653 (#9303)
+* Group shutter endpoints for Shelly Wave Shutter (QNSH-001P10) (#9305)
+* Group shutter endpoints for Qubino Flush Shutter DC (ZMNHCD) (#9304)
+* Correct Merten 506004 device config (#9310)
+* Send Multilevel Switch v1 frames to the Springs RSZ1 (#9360)
+
+### Changes under the hood
+* Dependency updates (#9325, #9329, #9330, #9331, #9333)
+* Z-Wave JS is now compiled using TypeScript 7.0.2 (#9366)
+
 ## 15.31.1 (2026-10-07)
 ### Bugfixes
 * Prevent `restoreNVM()` and 500-series OTW update from self-aborting during soft-reset (#9277)
