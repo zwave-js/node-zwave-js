@@ -347,6 +347,12 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public static from(raw: CCRaw, ctx: CCParsingContext): AlarmSensorCCReport {
 		validatePayload(raw.payload.length >= 5, raw.payload[1] !== 0xff);
 		const sourceNodeId = raw.payload[0];
+		// Alarm Sensor reports may be forwarded by a different node, in which case the payload
+		// contains the original node ID. We cannot verify that the forwarding node is allowed
+		// to report on behalf of another node, so such reports are ignored.
+		validatePayload.withReason(
+			`Ignoring Alarm Sensor Report forwarded on behalf of node ${sourceNodeId}`,
+		)(sourceNodeId === 0 || sourceNodeId === ctx.sourceNodeId);
 
 		const sensorType: AlarmSensorType = raw.payload[1];
 		// Any positive value gets interpreted as alarm
@@ -361,9 +367,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		const duration = raw.payload.readUInt16BE(3) || undefined;
 
 		return new this({
-			// Alarm Sensor reports may be forwarded by a different node, in this case
-			// (and only then!) the payload contains the original node ID
-			nodeId: sourceNodeId || ctx.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sensorType,
 			state,
 			severity,
