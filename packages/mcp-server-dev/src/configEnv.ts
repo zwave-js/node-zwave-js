@@ -10,6 +10,10 @@ import {
 } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { fs as nodeFS } from "@zwave-js/core/bindings/fs/node";
+import type { BytesView } from "@zwave-js/shared";
+import type { FileSystem } from "@zwave-js/shared/bindings";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -59,5 +63,20 @@ export async function resolveDeviceConfigPath(
 	return ret;
 }
 
-// Node.js filesystem binding used by the @zwave-js/config loaders
-export { fs } from "@zwave-js/core/bindings/fs/node";
+/**
+ * Node.js filesystem binding used by the @zwave-js/config loaders. Nested `$import`s
+ * are resolved by the loaders themselves, so every file read must be checked here
+ * to keep symlinks from pulling in content from outside the device config directory.
+ */
+export const fs: FileSystem = {
+	...nodeFS,
+	async readFile(file: string): Promise<BytesView> {
+		const resolved = await resolveDeviceConfigPath(file);
+		if (!resolved) {
+			throw new Error(
+				`Refusing to read ${file}, which is located outside ${DEVICES_DIR}`,
+			);
+		}
+		return nodeFS.readFile(resolved);
+	},
+};

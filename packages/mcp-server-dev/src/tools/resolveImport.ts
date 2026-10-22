@@ -1,11 +1,7 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import {
-	clearTemplateCache,
-	resolveImportPath,
-	resolveTemplateImport,
-} from "@zwave-js/config";
+import { clearTemplateCache, resolveTemplateImport } from "@zwave-js/config";
 
-import { DEVICES_DIR, fs, resolveDeviceConfigPath } from "../configEnv.js";
+import { DEVICES_DIR, fs } from "../configEnv.js";
 import type { ToolHandler } from "../types.js";
 
 import { errorResult, jsonResult } from "./results.js";
@@ -29,19 +25,6 @@ async function handleResolveConfigImport(
 	clearTemplateCache();
 
 	try {
-		// The specifier may point anywhere, so the import target must be checked too
-		const targetFile = await resolveImportPath(
-			fs,
-			filename,
-			specifier,
-			DEVICES_DIR,
-		);
-		if (targetFile && !(await resolveDeviceConfigPath(targetFile))) {
-			return errorResult(
-				`Error: the import target must be located inside ${DEVICES_DIR}`,
-			);
-		}
-
 		const resolved = await resolveTemplateImport(
 			fs,
 			filename,
