@@ -40,7 +40,7 @@ export interface SetNonceOptions {
 	free?: boolean;
 }
 
-const MAX_OWN_NONCES = 128;
+export const MAX_OWN_NONCES = 128;
 
 export class SecurityManager {
 	public constructor(options: SecurityManagerOptions) {
