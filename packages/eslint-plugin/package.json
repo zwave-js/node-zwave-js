@@ -44,6 +44,6 @@
     "typescript": "npm:@typescript/typescript6@6.0.2"
   },
   "dependencies": {
-    "@oxlint/plugins": "^1.80.0"
+    "@oxlint/plugins": "^1.88.0"
   }
 }
