@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/eslint-plugin",
-  "version": "15.29.0",
+  "version": "15.31.2",
   "description": "zwave-js: custom lint rules",
   "private": true,
   "keywords": [],

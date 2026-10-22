@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 15.31.2 (2026-10-22)
 ### Bugfixes
 * Reject invalid statuses in Powerlevel Test Node Report (#9357)
 * The `nvmedit` utility now ignores stale SUC update entry bytes and `0xff` app data padding (#9327)

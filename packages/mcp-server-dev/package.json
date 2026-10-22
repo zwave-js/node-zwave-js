@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/mcp-server-dev",
-  "version": "15.31.1",
+  "version": "15.31.2",
   "private": true,
   "description": "MCP development server for Z-Wave JS tooling",
   "keywords": [
