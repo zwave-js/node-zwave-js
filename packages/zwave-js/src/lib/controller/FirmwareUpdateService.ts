@@ -383,21 +383,35 @@ async function readResponseWithLimit(
 	}
 	if (!response.body) return new Uint8Array(await response.arrayBuffer());
 
-	// The content-length header may be missing or wrong, so count while reading
-	const chunks: Uint8Array<ArrayBuffer>[] = [];
+	// The content-length header may be missing or wrong, so count while reading.
+	// Chunks are copied into a single growing buffer, because retaining many tiny
+	// chunks would use far more memory than the limit due to per-object overhead.
+	let buffer = new Uint8Array(
+		Math.min(contentLength > 0 ? contentLength : 64 * 1024, maxSize),
+	);
 	let size = 0;
 	const reader = response.body.getReader();
 	while (true) {
 		const { done, value } = await reader.read();
 		if (done) break;
-		size += value.length;
-		if (size > maxSize) {
+		if (size + value.length > maxSize) {
 			await reader.cancel().catch(noop);
 			throw tooLarge();
 		}
-		chunks.push(value);
+		if (size + value.length > buffer.length) {
+			const grown = new Uint8Array(
+				Math.min(
+					Math.max(buffer.length * 2, size + value.length),
+					maxSize,
+				),
+			);
+			grown.set(buffer.subarray(0, size));
+			buffer = grown;
+		}
+		buffer.set(value, size);
+		size += value.length;
 	}
-	return Bytes.concat(chunks);
+	return buffer.slice(0, size);
 }
 
 export async function downloadFirmwareUpdate(
