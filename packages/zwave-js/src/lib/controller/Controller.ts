@@ -3842,13 +3842,21 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				initiate.nodeId as number,
 				`Ignoring inclusion controller request from a node that is not a controller`,
 			);
+		} else if (sender.id === this._ownNodeId) {
+			this.rejectInclusionControllerInitiate(
+				sender.id,
+				`Ignoring inclusion controller request that claims to originate from this controller`,
+			);
 		}
 
 		// The source node ID of a frame can be spoofed unless it is authenticated
 		// by the encapsulation, so require the sender's highest security class.
+		// An unknown security class must not be treated as permission to accept plaintext.
 		const secClass = sender.getHighestSecurityClass();
-		let receivedSecurely = true;
-		if (secClass != undefined && securityClassIsS2(secClass)) {
+		let receivedSecurely = false;
+		if (secClass === SecurityClass.None) {
+			receivedSecurely = true;
+		} else if (secClass != undefined && securityClassIsS2(secClass)) {
 			const encapS2 = initiate.getEncapsulatingCC(
 				CommandClasses["Security 2"],
 				Security2Command.MessageEncapsulation,
