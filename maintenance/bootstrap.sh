@@ -5,7 +5,6 @@ set -e
 echo "🏗️  Preparing repository..."
 echo ""
 yarn
-yarn node maintenance/patch-typescript.js
 # Run bootstrap tasks serially because they depend on building shared references,
 # which would unnecessarily be rebuilt in parallel.
 yarn turbo run bootstrap --concurrency=1
