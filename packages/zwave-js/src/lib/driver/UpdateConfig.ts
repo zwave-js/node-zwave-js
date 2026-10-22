@@ -122,11 +122,31 @@ export async function installConfigUpdate(
 			gunzipSync(tarballData, MAX_CONFIG_PACKAGE_SIZE).buffer,
 		);
 		const prefix = "package/config/";
-		const configFiles = tarFiles.filter(
-			(file) =>
-				file.filename.startsWith(prefix)
-				&& file.filename.endsWith(".json"),
-		);
+		const configFiles = tarFiles
+			.filter(
+				(file) =>
+					file.filename.startsWith(prefix)
+					&& file.filename.endsWith(".json"),
+			)
+			.map((file) => ({
+				targetFileName: path.join(
+					external.configDir,
+					file.filename.slice(prefix.length),
+				),
+				fileData: file.fileData,
+			}))
+			// Don't let crafted file names escape the config directory
+			.filter(({ targetFileName }) => {
+				const relativePath = path.relative(
+					external.configDir,
+					targetFileName,
+				);
+				return !(
+					relativePath === ".."
+					|| relativePath.startsWith("../")
+					|| path.isAbsolute(relativePath)
+				);
+			});
 		// Don't wipe the existing config with the contents of a broken package
 		if (configFiles.length === 0) {
 			throw new Error("The tarball contains no config files");
@@ -142,25 +162,9 @@ export async function installConfigUpdate(
 		// on the next start. The empty version is invalid, which forces that wipe.
 		await writeTextFile(fs, externalVersionFilename, "");
 
-		for (const file of configFiles) {
-			const filename = file.filename.slice(prefix.length);
-			const targetFileName = path.join(external.configDir, filename);
-			// Don't let crafted file names escape the config directory
-			const relativePath = path.relative(
-				external.configDir,
-				targetFileName,
-			);
-			if (
-				relativePath === ".."
-				|| relativePath.startsWith("../")
-				|| path.isAbsolute(relativePath)
-			) {
-				continue;
-			}
-			const targetDirName = path.dirname(targetFileName);
-
-			await fs.ensureDir(targetDirName);
-			await fs.writeFile(targetFileName, new Uint8Array(file.fileData));
+		for (const { targetFileName, fileData } of configFiles) {
+			await fs.ensureDir(path.dirname(targetFileName));
+			await fs.writeFile(targetFileName, new Uint8Array(fileData));
 		}
 
 		await writeTextFile(fs, externalVersionFilename, newVersion);
