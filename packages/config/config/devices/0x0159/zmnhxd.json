@@ -21,6 +21,9 @@
 		"5": { "label": "External Relay" },
 		"6": { "label": "External IR Relay" }
 	},
+	"endpointGroups": {
+		"1": { "label": "Total", "endpoints": [1], "isMainDevice": true }
+	},
 	"paramInformation": [
 		{
 			"#": "7",
