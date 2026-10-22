@@ -27,7 +27,11 @@
 	},
 	"endpoints": {
 		"1": { "label": "Relay 1" },
-		"2": { "label": "Relay 2" }
+		"2": { "label": "Relay 2" },
+		"3": { "label": "Both Relays" }
+	},
+	"endpointGroups": {
+		"1": { "label": "Both Relays", "endpoints": [3], "isMainDevice": true }
 	},
 	"paramInformation": [
 		{
