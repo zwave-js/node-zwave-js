@@ -142,12 +142,19 @@ export function parseTLV(qr: string): {
 	offset += length;
 
 	// Try to parse the raw data and fail if a critical block is not understood.
-	// Malformed non-critical blocks are kept as raw data instead.
+	// Malformed non-critical blocks are kept as raw data instead, except for
+	// ProductType and ProductId, which are mandatory and must be valid.
 	let parsed: ReturnType<typeof parseTLVData>;
 	try {
 		parsed = parseTLVData(type, data);
 	} catch (e) {
-		if (critical) throw e;
+		if (
+			critical
+			|| type === ProvisioningInformationType.ProductType
+			|| type === ProvisioningInformationType.ProductId
+		) {
+			throw e;
+		}
 	}
 	if (!parsed && critical) fail("Unsupported critical TLV block");
 
