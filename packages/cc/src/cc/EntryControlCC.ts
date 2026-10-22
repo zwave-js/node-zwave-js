@@ -451,13 +451,14 @@ export class EntryControlCCNotification extends EntryControlCC {
 					) {
 						paddingStart--;
 					}
-					eventData = escapeControlCharacters(
-						eventData.subarray(0, paddingStart).toString("ascii"),
-					);
+					const asciiData = eventData
+						.subarray(0, paddingStart)
+						.toString("ascii");
 
 					if (!noStrictValidation) {
-						validatePayload(/^[\u0000-\u007f]+$/.test(eventData));
+						validatePayload(/^[\u0000-\u007f]+$/.test(asciiData));
 					}
+					eventData = escapeControlCharacters(asciiData);
 					break;
 				case EntryControlDataTypes.MD5:
 					// MD5 16 byte binary data encoded as a MD5 hash value.

@@ -83,8 +83,10 @@ test("escapeControlCharacters() -> should escape C0 and C1 control characters", 
 
 test("escapeControlCharacters() -> should escape bidi controls and line/paragraph separators", (t) => {
 	t.expect(
-		escapeControlCharacters("a\u202eb\u2066c\u2069d\u2028e\u2029"),
-	).toBe("a\\u202eb\\u2066c\\u2069d\\u2028e\\u2029");
+		escapeControlCharacters(
+			"a\u202eb\u2066c\u2069d\u2028e\u2029f\u061cg\u200eh\u200f",
+		),
+	).toBe("a\\u202eb\\u2066c\\u2069d\\u2028e\\u2029f\\u061cg\\u200eh\\u200f");
 });
 
 test("escapeControlCharacters() -> should remove trailing NUL padding", (t) => {
