@@ -111,12 +111,14 @@ export async function handlePowerlevelTestNodeSet(
 			`testFrameCount must be at most ${MAX_TEST_FRAME_COUNT}`,
 			ZWaveErrorCodes.CC_OperationFailed,
 		);
-	} else if (
-		command.testNodeId === driver.controller.ownNodeId
-		|| !driver.controller.nodes.has(command.testNodeId)
-	) {
+	} else if (command.testNodeId === driver.controller.ownNodeId) {
 		throw new ZWaveError(
-			`Cannot test the connection to node ${command.testNodeId}, because it is the controller or unknown`,
+			`Cannot test the connection to node ${command.testNodeId}, because it is the controller itself`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (!driver.controller.nodes.has(command.testNodeId)) {
+		throw new ZWaveError(
+			`Cannot test the connection to node ${command.testNodeId}, because it is unknown`,
 			ZWaveErrorCodes.CC_OperationFailed,
 		);
 	} else if (driver.getNOPPowerTestStatus()?.inProgress) {
