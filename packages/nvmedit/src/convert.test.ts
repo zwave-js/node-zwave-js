@@ -551,3 +551,103 @@ test("strip everything optional during migration", async (t) => {
 		t.expect(node.appRouteLock).toBe(false);
 	}
 });
+
+test("700 series, JSON to NVM to JSON round-trip preserves virtual nodes without node info", async (t) => {
+	const jsonInput: NVMJSON = await readJSON(
+		fs,
+		path.join(
+			__dirname,
+			"../test/fixtures/nvm_700_json/ctrlr_backup_700_7.19.0.json",
+		),
+	);
+	jsonInput.nodes[50] = { isVirtual: true };
+
+	const expected = cloneDeep(jsonInput.nodes);
+	const nvm = await jsonToNVM(
+		jsonInput,
+		jsonInput.controller.applicationVersion,
+	);
+	const jsonOutput = await nvmToJSON(nvm);
+
+	t.expect(jsonOutput.nodes).toStrictEqual(expected);
+});
+
+test("700 series, JSON to NVM to JSON round-trip preserves the shape of LR nodes", async (t) => {
+	const jsonInput: NVMJSON = await readJSON(
+		fs,
+		path.join(
+			__dirname,
+			"../test/fixtures/nvm_700_json/ctrlr_backup_700_7.19.0.json",
+		),
+	);
+	jsonInput.lrNodes = {
+		256: {
+			isListening: false,
+			isFrequentListening: "1000ms",
+			isRouting: false,
+			supportedDataRates: [100000],
+			protocolVersion: 3,
+			optionalFunctionality: true,
+			nodeType: 1,
+			supportsSecurity: true,
+			supportsBeaming: false,
+			genericDeviceClass: 0x40,
+			specificDeviceClass: 0x03,
+		},
+	};
+
+	const expected = cloneDeep(jsonInput.lrNodes);
+	const nvm = await jsonToNVM(
+		jsonInput,
+		jsonInput.controller.applicationVersion,
+	);
+	const jsonOutput = await nvmToJSON(nvm);
+
+	t.expect(jsonOutput.lrNodes).toStrictEqual(expected);
+});
+
+test("500 series (bridge), JSON to NVM to JSON round-trip preserves virtual nodes", async (t) => {
+	const jsonInput: Required<NVM500JSON> = await readJSON(
+		fs,
+		path.join(
+			__dirname,
+			"../test/fixtures/nvm_500_json/ctrlr_backup_500_static_6.8x.json",
+		),
+	);
+	// Only the bridge library has a virtual node pool
+	jsonInput.meta.library = "bridge";
+	jsonInput.nodes[50] = { isVirtual: true };
+	jsonInput.nodes[51] = { ...cloneDeep(jsonInput.nodes[3]), isVirtual: true };
+
+	const expected = cloneDeep(jsonInput.nodes);
+	const nvm = await jsonToNVM500(
+		jsonInput,
+		jsonInput.controller.protocolVersion,
+	);
+	const jsonOutput = await nvm500ToJSON(nvm);
+
+	t.expect(jsonOutput.nodes).toStrictEqual(expected);
+});
+
+test("500 series, JSON to NVM to JSON round-trip preserves a specific device class of 0", async (t) => {
+	const jsonInput: Required<NVM500JSON> = await readJSON(
+		fs,
+		path.join(
+			__dirname,
+			"../test/fixtures/nvm_500_json/ctrlr_backup_500_static_6.8x.json",
+		),
+	);
+	const node = jsonInput.nodes[3];
+	if (!("genericDeviceClass" in node)) throw new Error("Unexpected fixture");
+	node.genericDeviceClass = 0;
+	node.specificDeviceClass = 0;
+
+	const expected = cloneDeep(jsonInput.nodes);
+	const nvm = await jsonToNVM500(
+		jsonInput,
+		jsonInput.controller.protocolVersion,
+	);
+	const jsonOutput = await nvm500ToJSON(nvm);
+
+	t.expect(jsonOutput.nodes).toStrictEqual(expected);
+});
