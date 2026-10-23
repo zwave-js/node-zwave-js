@@ -20,12 +20,15 @@ import {
 	UNKNOWN_STATE,
 	ValueMetadata,
 	type WithAddress,
+	ZWaveError,
+	ZWaveErrorCodes,
 	encodeBitMask,
 	encodeFloatWithScale,
 	getFloatParameters,
 	getMeter,
 	getMeterName,
 	getMeterScale,
+	getMinIntegerSize,
 	getUnknownMeterScale,
 	logDict,
 	logList,
@@ -219,6 +222,7 @@ function encodeMeterValueAndInfo(
 	rateType: RateType,
 	scale: number,
 	value: number,
+	floatParams: FloatParameters = getFloatParameters(value),
 ): { data: Bytes; floatParams: FloatParameters; scale2: number | undefined } {
 	// We need at least 2 bytes
 
@@ -230,7 +234,6 @@ function encodeMeterValueAndInfo(
 	const typeByte =
 		(type & 0b0_00_11111) | ((rateType & 0b11) << 5) | (scale1Bit2 << 7);
 
-	const floatParams = getFloatParameters(value);
 	const valueBytes = encodeFloatWithScale(value, scale1Bits10, floatParams);
 
 	return {
@@ -238,6 +241,43 @@ function encodeMeterValueAndInfo(
 		floatParams: pick(floatParams, ["precision", "size"]),
 		scale2,
 	};
+}
+
+/**
+ * Determines a precision and size that can be used to encode both the current and the previous value.
+ * The previous value may lose precision, but the current value never does.
+ */
+function getSharedFloatParameters(
+	value: number,
+	previousValue: number,
+): FloatParameters {
+	const valuePrecision = getFloatParameters(value).precision;
+	const maxPrecision = Math.max(
+		valuePrecision,
+		getFloatParameters(previousValue).precision,
+	);
+	// A higher precision may make the scaled values too large to fit into 4 bytes
+	for (
+		let precision = maxPrecision;
+		precision >= valuePrecision;
+		precision--
+	) {
+		const valueSize = getMinIntegerSize(
+			Math.round(value * 10 ** precision),
+			true,
+		);
+		const previousValueSize = getMinIntegerSize(
+			Math.round(previousValue * 10 ** precision),
+			true,
+		);
+		if (valueSize != undefined && previousValueSize != undefined) {
+			return { precision, size: Math.max(valueSize, previousValueSize) };
+		}
+	}
+	throw new ZWaveError(
+		`Cannot encode the previous value ${previousValue} with the precision of the current value ${value}`,
+		ZWaveErrorCodes.Arithmetic,
+	);
 }
 
 function parseScale(
@@ -1033,6 +1073,8 @@ export class MeterCCReport extends MeterCC {
 	public deltaTime: MaybeUnknown<number>;
 
 	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		const includePreviousValue =
+			this.deltaTime !== 0 && this.previousValue != undefined;
 		const {
 			data: typeAndValue,
 			floatParams,
@@ -1042,6 +1084,11 @@ export class MeterCCReport extends MeterCC {
 			this.rateType,
 			this.scale,
 			this.value,
+			// The previous value is encoded with the precision and size of the current value,
+			// so they must be chosen to fit both
+			includePreviousValue
+				? getSharedFloatParameters(this.value, this.previousValue!)
+				: undefined,
 		);
 
 		const deltaTime = this.deltaTime ?? 0xffff;
@@ -1050,10 +1097,10 @@ export class MeterCCReport extends MeterCC {
 
 		this.payload = Bytes.concat([typeAndValue, deltaTimeBytes]);
 
-		if (this.deltaTime !== 0 && this.previousValue != undefined) {
+		if (includePreviousValue) {
 			// Encode the float, but only keep the value bytes
 			const prevValueBytes = encodeFloatWithScale(
-				this.previousValue,
+				this.previousValue!,
 				0, // we discard the scale anyways
 				floatParams,
 			).subarray(1);

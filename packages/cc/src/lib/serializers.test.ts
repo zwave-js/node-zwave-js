@@ -7,6 +7,7 @@ import {
 	decodeSwitchpoint,
 	encodeSetbackState,
 	encodeSwitchpoint,
+	encodeTimezone,
 	setbackSpecialStateValues,
 } from "./serializers.js";
 
@@ -85,4 +86,20 @@ test("decodeSwitchpoint() should work correctly", (t) => {
 		minute: 37,
 		state: 0,
 	});
+});
+
+test("encodeTimezone() should throw when the DST offset differs from the standard offset by more than 127 minutes", (t) => {
+	assertZWaveError(
+		t.expect,
+		() => encodeTimezone({ standardOffset: 0, dstOffset: 128 }),
+		{ errorCode: ZWaveErrorCodes.CC_Invalid },
+	);
+	assertZWaveError(
+		t.expect,
+		() => encodeTimezone({ standardOffset: 60, dstOffset: -68 }),
+		{ errorCode: ZWaveErrorCodes.CC_Invalid },
+	);
+	t.expect(
+		encodeTimezone({ standardOffset: 60, dstOffset: 187 }),
+	).toStrictEqual(Bytes.from([0x01, 0x00, 0x7f]));
 });

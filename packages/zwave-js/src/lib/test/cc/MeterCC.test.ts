@@ -212,6 +212,56 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 	t.expect(cc.previousValue).toBe(5.4);
 });
 
+test("the Report command should serialize the previous value with the same precision and size as the value", async (t) => {
+	const cc = new MeterCCReport({
+		nodeId: 1,
+		type: 3,
+		scale: 2,
+		rateType: RateType.Produced,
+		value: 5,
+		deltaTime: 5,
+		previousValue: 1234.5,
+	});
+	const expected = buildCCBuffer(
+		Uint8Array.from([
+			MeterCommand.Report, // CC Command
+			0b0_10_00011, // Rate type, Meter type
+			0b001_10_010, // precision, scale, size
+			0,
+			50, // value
+			0, // delta time
+			5,
+			0x30,
+			0x39, // previous value
+		]),
+	);
+	const serialized = await cc.serialize({} as any);
+	t.expect(serialized).toStrictEqual(expected);
+
+	const parsed = (await CommandClass.parse(serialized, {
+		sourceNodeId: 1,
+	} as any)) as MeterCCReport;
+	t.expect(parsed.value).toBe(5);
+	t.expect(parsed.previousValue).toBe(1234.5);
+});
+
+test("the Report command should round the previous value if the shared precision would not fit the value", async (t) => {
+	const cc = new MeterCCReport({
+		nodeId: 1,
+		type: 3,
+		scale: 2,
+		rateType: RateType.Produced,
+		value: 21474836.5,
+		deltaTime: 5,
+		previousValue: 0.01,
+	});
+	const parsed = (await CommandClass.parse(await cc.serialize({} as any), {
+		sourceNodeId: 1,
+	} as any)) as MeterCCReport;
+	t.expect(parsed.value).toBe(21474836.5);
+	t.expect(parsed.previousValue).toBe(0);
+});
+
 test("the Report command (V3) should be deserialized correctly", async (t) => {
 	const ccData = buildCCBuffer(
 		Uint8Array.from([

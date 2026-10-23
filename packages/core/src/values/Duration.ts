@@ -20,16 +20,7 @@ export class Duration {
 		value: number,
 		public unit: DurationUnit,
 	) {
-		switch (unit) {
-			case "minutes":
-				// Don't allow 0 minutes as a duration
-				if (value === 0) this.unit = "seconds";
-				break;
-			case "unknown":
-			case "default":
-				value = 0;
-				break;
-		}
+		if (unit === "unknown" || unit === "default") value = 0;
 		this.value = value;
 	}
 
@@ -38,7 +29,11 @@ export class Duration {
 		return this._value;
 	}
 	public set value(v: number) {
-		this._value = clamp(v, 0, 127);
+		// Only whole seconds or minutes can be encoded
+		this._value = clamp(Math.round(v), 0, 127);
+		// 0 minutes cannot be encoded, the minutes range starts at 1.
+		// This must be checked after clamping, so negative values are covered too.
+		if (this.unit === "minutes" && this._value === 0) this.unit = "seconds";
 	}
 
 	public static unknown(): Duration {
@@ -102,15 +97,15 @@ export class Duration {
 		const minutes = minutesStr ? parseInt(minutesStr) : 0;
 		const seconds = secondsStr ? parseInt(secondsStr) : 0;
 
-		if (hours) {
-			// Up to 2h7m can be represented as a duration
-			if (hours * 60 + minutes <= 127) {
-				return new Duration(60 * hours + minutes, "minutes");
-			}
-		} else if (minutes * 60 + seconds > 127) {
-			// Up to 2m7s can be represented with seconds
+		if (hours || minutes * 60 + seconds > 127) {
+			// Up to 2m7s can be represented with seconds,
 			// anything higher has to be minutes - we round to the nearest minute
-			return new Duration(minutes + Math.round(seconds / 60), "minutes");
+			const totalMinutes =
+				60 * hours + minutes + Math.round(seconds / 60);
+			// Up to 2h7m can be represented as a duration
+			if (totalMinutes <= 127) {
+				return new Duration(totalMinutes, "minutes");
+			}
 		} else {
 			return new Duration(minutes * 60 + seconds, "seconds");
 		}
