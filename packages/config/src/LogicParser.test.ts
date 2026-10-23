@@ -86,6 +86,27 @@ test("tokenize, with illegal characters", () => {
 	);
 });
 
+test("tokenize, with incomplete operators", () => {
+	for (const [input, error] of [
+		["productId => 5", /Unexpected character '=' at index 10/],
+		["a | b", /Unexpected character '\|' at index 2/],
+		["a & b", /Unexpected character '&' at index 2/],
+		["!a", /Unexpected character '!' at index 0/],
+		["a =", /Unexpected character '=' at index 2/],
+	] as const) {
+		expect(() => Array.from(tokenize(input))).toThrowError(error);
+	}
+});
+
+test("tokenize, with hex literals without digits", () => {
+	expect(() => Array.from(tokenize("a !== 0x"))).toThrowError(
+		/Unexpected end of input/,
+	);
+	expect(() => Array.from(tokenize("a === 0x || b"))).toThrowError(
+		/Unexpected character ' ' at index 8/,
+	);
+});
+
 test("parse, simple comparison", () => {
 	const input = "abc == 5";
 	const actual = parse(input);
