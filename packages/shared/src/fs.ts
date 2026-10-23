@@ -62,7 +62,10 @@ export async function readTextFile(
 	encoding: BufferEncoding = "utf8",
 ): Promise<string> {
 	const buffer = await fs.readFile(filename);
-	return Bytes.view(buffer).toString(encoding);
+	// Text files may start with a byte order mark, which is not part of the content
+	return Bytes.view(buffer)
+		.toString(encoding)
+		.replace(/^\ufeff/, "");
 }
 
 export async function writeTextFile(

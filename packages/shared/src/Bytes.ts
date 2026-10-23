@@ -175,6 +175,9 @@ export class Bytes extends Uint8Array {
 	includes(value: number | Bytes, byteOffset: number = 0): boolean {
 		if (typeof value === "number") {
 			return super.includes(value, byteOffset);
+		} else if (value.length === 0) {
+			// Like Buffer, an empty sequence is contained in any buffer
+			return true;
 		} else if (byteOffset) {
 			return includes(this.subarray(byteOffset), value);
 		} else {
@@ -969,12 +972,12 @@ export class Bytes extends Uint8Array {
 
 			// Numbers > 32 bit need to be converted to BigInt for the bitwise operations to work
 			case 5: {
-				let ret = BigInt(this.readUInt32BE(offset)) << 32n;
+				let ret = BigInt(this.readUInt32BE(offset)) << 8n;
 				ret |= BigInt(this.readUInt8(offset + 4));
 				return Number(ret);
 			}
 			case 6: {
-				let ret = BigInt(this.readUInt32BE(offset)) << 32n;
+				let ret = BigInt(this.readUInt32BE(offset)) << 16n;
 				ret |= BigInt(this.readUInt16BE(offset + 4));
 				return Number(ret);
 			}

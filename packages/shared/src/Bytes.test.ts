@@ -45,6 +45,13 @@ test("readUIntBE works as expected", (t) => {
 	t.expect(v4).toBe(0xdeadbeef);
 });
 
+test("readUIntBE works for 5 and 6 bytes", (t) => {
+	const b = Bytes.from("1234567890ab", "hex");
+	t.expect(b.readUIntBE(0, 6)).toBe(0x1234567890ab);
+	t.expect(b.readUIntBE(0, 5)).toBe(0x1234567890);
+	t.expect(b.readUIntBE(1, 5)).toBe(0x34567890ab);
+});
+
 test("writeIntLE works as expected", (t) => {
 	const b = new Bytes(10);
 	b.writeIntLE(-127, 0, 1);
@@ -112,4 +119,16 @@ test("subarray works multiple times in a row", (t) => {
 	t.expect(uint8ArrayToHex(b2)).toBe("03");
 
 	t.expect(b2.readInt8(0)).toBe(3);
+});
+
+test("includes() returns true for an empty sequence like Buffer", (t) => {
+	const b = Bytes.from([1, 2, 3]);
+	t.expect(b.includes(new Bytes())).toBe(true);
+	t.expect(b.includes(new Bytes(), 2)).toBe(true);
+	t.expect(new Bytes().includes(new Bytes())).toBe(true);
+});
+
+test("toString() keeps a leading byte order mark like Buffer", (t) => {
+	t.expect(Bytes.from("efbbbf41", "hex").toString("utf8")).toBe("\ufeffA");
+	t.expect(Bytes.from("fffe4100", "hex").toString("utf16le")).toBe("\ufeffA");
 });

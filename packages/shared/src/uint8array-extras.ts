@@ -283,8 +283,11 @@ export function compareUint8Arrays(a: Uint8Array, b: Uint8Array): 0 | 1 | -1 {
 	return Math.sign(a.length - b.length) as 1 | 0 | -1;
 }
 
+// Unlike Buffer#toString(), TextDecoder strips a leading byte order mark by default
+const decoderOptions = { ignoreBOM: true };
+
 const cachedDecoders: Record<string, import("node:util").TextDecoder> = {
-	utf8: new globalThis.TextDecoder("utf8"),
+	utf8: new globalThis.TextDecoder("utf8", decoderOptions),
 };
 
 /**
@@ -316,7 +319,10 @@ export function uint8ArrayToString(
 	encoding: string = "utf8",
 ): string {
 	assertUint8ArrayOrArrayBuffer(array);
-	cachedDecoders[encoding] ??= new globalThis.TextDecoder(encoding);
+	cachedDecoders[encoding] ??= new globalThis.TextDecoder(
+		encoding,
+		decoderOptions,
+	);
 	return cachedDecoders[encoding].decode(array);
 }
 
