@@ -25,9 +25,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	allCCs,
-	applicationCCs,
 	getCCName,
 	getNotification,
+	isApplicationCC,
 } from "@zwave-js/core";
 
 import type {
@@ -278,30 +278,43 @@ export function translateValueID<T extends ValueID>(
 export function filterRootApplicationCCValueIDs<T extends ValueID>(
 	allValueIds: T[],
 ): T[] {
-	const shouldHideRootValueID = (
-		valueId: ValueID,
-		allValueIds: ValueID[],
-	): boolean => {
-		// Non-root endpoint values don't need to be filtered
-		if (!!valueId.endpoint) return false;
-		// Non-application CCs don't need to be filtered
-		if (!applicationCCs.includes(valueId.commandClass)) return false;
-		// Filter out root values if an identical value ID exists for another endpoint
-		const valueExistsOnAnotherEndpoint = allValueIds.some(
-			(other) =>
-				// same CC
-				other.commandClass === valueId.commandClass
-				// non-root endpoint
-				&& !!other.endpoint
-				// same property and key
-				&& other.property === valueId.property
-				&& other.propertyKey === valueId.propertyKey,
-		);
-		return valueExistsOnAnotherEndpoint;
-	};
+	// Index the candidates by CC, property and property key first. Scanning the
+	// entire list once per root value ID is quadratic, which gets expensive for
+	// nodes that expose thousands of value IDs. Map/Set lookups keep the numeric
+	// and string spellings of a property apart, same as the === comparison did.
+	const nonRootValueIds = new Map<
+		CommandClasses,
+		Map<string | number, Set<string | number | undefined>>
+	>();
+	for (const valueId of allValueIds) {
+		if (!valueId.endpoint || !isApplicationCC(valueId.commandClass))
+			continue;
+		let byProperty = nonRootValueIds.get(valueId.commandClass);
+		if (!byProperty) {
+			byProperty = new Map();
+			nonRootValueIds.set(valueId.commandClass, byProperty);
+		}
+		let propertyKeys = byProperty.get(valueId.property);
+		if (!propertyKeys) {
+			propertyKeys = new Set();
+			byProperty.set(valueId.property, propertyKeys);
+		}
+		propertyKeys.add(valueId.propertyKey);
+	}
+	// Nodes with a single endpoint have nothing that could hide a root value
+	if (nonRootValueIds.size === 0) return [...allValueIds];
 
 	return allValueIds.filter(
-		(vid) => !shouldHideRootValueID(vid, allValueIds),
+		(valueId) =>
+			// Non-root endpoint values don't need to be filtered
+			!!valueId.endpoint
+			// Non-application CCs don't need to be filtered
+			|| !isApplicationCC(valueId.commandClass)
+			// Filter out root values if an identical value ID exists for another endpoint
+			|| !nonRootValueIds
+				.get(valueId.commandClass)
+				?.get(valueId.property)
+				?.has(valueId.propertyKey),
 	);
 }
 
