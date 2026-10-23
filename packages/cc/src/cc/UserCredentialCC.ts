@@ -1973,6 +1973,27 @@ function testResponseForUserCredentialUserSet(
 	);
 }
 
+// Extended ASCII user names use a single byte per character, so they are
+// interpreted as ISO-8859-1, whose code points match the byte values
+function decodeExtendedASCII(data: Uint8Array): string {
+	return String.fromCharCode(...data);
+}
+
+function encodeExtendedASCII(name: string): Bytes {
+	const ret = new Bytes(name.length);
+	for (let i = 0; i < name.length; i++) {
+		const code = name.charCodeAt(i);
+		if (code > 0xff) {
+			throw new ZWaveError(
+				`The user name "${name}" cannot be encoded as Extended ASCII`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		ret[i] = code;
+	}
+	return ret;
+}
+
 @CCCommand(UserCredentialCommand.UserSet)
 // The response class is forward-declared here, so use a dynamic CC response
 // that resolves the class lazily.
@@ -2041,6 +2062,10 @@ export class UserCredentialCCUserSet extends UserCredentialCC {
 		let userName: string;
 		if (nameEncoding === UserCredentialNameEncoding.UTF16BE) {
 			userName = uint8ArrayToStringUTF16BE(
+				raw.payload.subarray(10, 10 + nameLength),
+			);
+		} else if (nameEncoding === UserCredentialNameEncoding.ExtendedASCII) {
+			userName = decodeExtendedASCII(
 				raw.payload.subarray(10, 10 + nameLength),
 			);
 		} else {
@@ -2121,6 +2146,8 @@ export class UserCredentialCCUserSet extends UserCredentialCC {
 		let nameBuffer: Uint8Array;
 		if (nameEncoding === UserCredentialNameEncoding.UTF16BE) {
 			nameBuffer = stringToUint8ArrayUTF16BE(userName);
+		} else if (nameEncoding === UserCredentialNameEncoding.ExtendedASCII) {
+			nameBuffer = encodeExtendedASCII(userName);
 		} else {
 			nameBuffer = Bytes.from(userName, "ascii");
 		}
@@ -2249,6 +2276,10 @@ export class UserCredentialCCUserReport extends UserCredentialCC {
 			userName = uint8ArrayToStringUTF16BE(
 				raw.payload.subarray(15, 15 + nameLength),
 			);
+		} else if (nameEncoding === UserCredentialNameEncoding.ExtendedASCII) {
+			userName = decodeExtendedASCII(
+				raw.payload.subarray(15, 15 + nameLength),
+			);
 		} else {
 			userName = raw.payload
 				.subarray(15, 15 + nameLength)
@@ -2290,6 +2321,10 @@ export class UserCredentialCCUserReport extends UserCredentialCC {
 		let nameBuffer: Uint8Array;
 		if (this.nameEncoding === UserCredentialNameEncoding.UTF16BE) {
 			nameBuffer = stringToUint8ArrayUTF16BE(this.userName);
+		} else if (
+			this.nameEncoding === UserCredentialNameEncoding.ExtendedASCII
+		) {
+			nameBuffer = encodeExtendedASCII(this.userName);
 		} else {
 			nameBuffer = Bytes.from(this.userName, "ascii");
 		}
