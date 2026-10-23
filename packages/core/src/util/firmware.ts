@@ -9,7 +9,11 @@ import { unzipSync } from "fflate";
 import MemoryMap_ from "nrf-intel-hex";
 
 import { decryptAES256CBC } from "../crypto/index.js";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError.js";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	isZWaveError,
+} from "../error/ZWaveError.js";
 
 import type { Firmware, FirmwareFileFormat } from "./_Types.js";
 import { CRC16_CCITT } from "./crc.js";
@@ -269,14 +273,11 @@ function extractFirmwareHEX(dataHEX: BytesView | string): Firmware {
 		}
 		return { data };
 	} catch (e) {
-		if (/Malformed/.test(getErrorMessage(e))) {
-			throw new ZWaveError(
-				"Could not parse HEX firmware file!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		} else {
-			throw e;
-		}
+		if (isZWaveError(e)) throw e;
+		throw new ZWaveError(
+			`Could not parse HEX firmware file: ${getErrorMessage(e)}`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
 	}
 }
 
