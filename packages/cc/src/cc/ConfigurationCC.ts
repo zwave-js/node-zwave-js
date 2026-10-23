@@ -2449,6 +2449,10 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		const defaultValues = !!(raw.payload[4] & 0b1000_0000);
 		const isHandshakeResponse = !!(raw.payload[4] & 0b0100_0000);
 		const valueSize = raw.payload[4] & 0b111;
+		// The value size is irrelevant if no parameters are reported
+		if (numParams !== 0 && !isValidValueSize(valueSize)) {
+			validatePayload.fail(`Invalid value size ${valueSize}`);
+		}
 		// Ensure the payload is long enough for all reported values
 		validatePayload(raw.payload.length >= 5 + numParams * valueSize);
 		const values: Record<number, ConfigValue> = {};
@@ -3054,6 +3058,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		const valueFormat: ConfigValueFormat =
 			(raw.payload[2] & 0b111000) >>> 3;
 		const valueSize = raw.payload[2] & 0b111;
+		// A value size of 0 is used to indicate unassigned parameters
+		if (valueSize !== 0 && !isValidValueSize(valueSize)) {
+			validatePayload.fail(`Invalid value size ${valueSize}`);
+		}
 
 		// GH#1309 Some devices don't tell us the first parameter if we query #0
 		// Instead, they contain 0x000000
@@ -3404,6 +3412,10 @@ function parseValue(
 		case ConfigValueFormat.BitField:
 			return raw.readUIntBE(0, size);
 	}
+}
+
+function isValidValueSize(valueSize: number): valueSize is 1 | 2 | 4 {
+	return valueSize === 1 || valueSize === 2 || valueSize === 4;
 }
 
 function throwInvalidValueError(
