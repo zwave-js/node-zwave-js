@@ -29,7 +29,8 @@ export class Duration {
 		return this._value;
 	}
 	public set value(v: number) {
-		this._value = clamp(v, 0, 127);
+		// Only whole seconds or minutes can be encoded
+		this._value = clamp(Math.round(v), 0, 127);
 		// 0 minutes cannot be encoded, the minutes range starts at 1.
 		// This must be checked after clamping, so negative values are covered too.
 		if (this.unit === "minutes" && this._value === 0) this.unit = "seconds";

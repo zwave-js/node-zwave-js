@@ -125,6 +125,13 @@ test("serializeSet() -> should not encode negative or zero minutes as the defaul
 	t.expect(duration.unit).toBe("seconds");
 });
 
+test("the value is rounded to whole seconds or minutes", (t) => {
+	t.expect(new Duration(1.5, "seconds").serializeSet()).toBe(0x02);
+	t.expect(new Duration(0.4, "minutes")).toStrictEqual(
+		new Duration(0, "seconds"),
+	);
+});
+
 test(`toJSON() -> should return a string for "unknown" and "default"`, (t) => {
 	t.expect(new Duration(1, "default").toJSON()).toBe("default");
 	t.expect(new Duration(1, "unknown").toJSON()).toBe("unknown");
