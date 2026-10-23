@@ -100,43 +100,39 @@ export function* tokenize(input: string): Generator<Token> {
 				break;
 			}
 			case "|": {
-				if (input[i + 1] === "|") {
-					yield { kind: TokenKind.BarBar, start: i };
-					i++;
-				}
+				if (input[i + 1] !== "|") throwUnexpectedCharacter(input, i);
+				yield { kind: TokenKind.BarBar, start: i };
+				i++;
 				break;
 			}
 			case "&": {
-				if (input[i + 1] === "&") {
-					yield { kind: TokenKind.AmpAmp, start: i };
-					i++;
-				}
+				if (input[i + 1] !== "&") throwUnexpectedCharacter(input, i);
+				yield { kind: TokenKind.AmpAmp, start: i };
+				i++;
 				break;
 			}
 			case "=": {
-				if (input[i + 1] === "=") {
-					if (input[i + 2] === "=") {
-						yield { kind: TokenKind.EqualsEqualsEquals, start: i };
-						i += 2;
-					} else {
-						yield { kind: TokenKind.EqualsEquals, start: i };
-						i++;
-					}
+				if (input[i + 1] !== "=") throwUnexpectedCharacter(input, i);
+				if (input[i + 2] === "=") {
+					yield { kind: TokenKind.EqualsEqualsEquals, start: i };
+					i += 2;
+				} else {
+					yield { kind: TokenKind.EqualsEquals, start: i };
+					i++;
 				}
 				break;
 			}
 			case "!": {
-				if (input[i + 1] === "=") {
-					if (input[i + 2] === "=") {
-						yield {
-							kind: TokenKind.ExclamationEqualsEquals,
-							start: i,
-						};
-						i += 2;
-					} else {
-						yield { kind: TokenKind.ExclamationEquals, start: i };
-						i++;
-					}
+				if (input[i + 1] !== "=") throwUnexpectedCharacter(input, i);
+				if (input[i + 2] === "=") {
+					yield {
+						kind: TokenKind.ExclamationEqualsEquals,
+						start: i,
+					};
+					i += 2;
+				} else {
+					yield { kind: TokenKind.ExclamationEquals, start: i };
+					i++;
 				}
 				break;
 			}
@@ -173,6 +169,7 @@ export function* tokenize(input: string): Generator<Token> {
 						hex += input[i];
 						i++;
 					}
+					if (hex.length === 2) throwUnexpectedCharacter(input, i);
 					yield {
 						kind: TokenKind.NumberLiteral,
 						value: hex,
@@ -212,12 +209,18 @@ export function* tokenize(input: string): Generator<Token> {
 					continue;
 				}
 
-				throw new Error(
-					`Unexpected character '${input[i]}' at index ${i}`,
-				);
+				throwUnexpectedCharacter(input, i);
 			}
 		}
 	}
+}
+
+function throwUnexpectedCharacter(input: string, index: number): never {
+	throw new Error(
+		index < input.length
+			? `Unexpected character '${input[index]}' at index ${index}`
+			: "Unexpected end of input",
+	);
 }
 
 interface ParserState {
