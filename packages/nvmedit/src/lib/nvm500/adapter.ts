@@ -541,6 +541,7 @@ export class NVM500Adapter implements NVMAdapter {
 					nodeId - 1,
 					node?.neighbors,
 				);
+				break;
 			}
 
 			case "routes": {
