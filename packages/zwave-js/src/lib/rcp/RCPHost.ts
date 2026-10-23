@@ -591,7 +591,7 @@ export class RCPHost
 				);
 				transaction.promise.resolve(ret);
 			} catch (e) {
-				transaction.promise.reject(e as Error);
+				transaction.promise.reject(e);
 			}
 		}
 	}

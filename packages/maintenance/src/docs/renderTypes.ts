@@ -582,11 +582,7 @@ function addEmbed(
 			}
 		}
 	} else {
-		collectReferencesFromNode(
-			sourceNode as ExportedDeclarations,
-			ctx,
-			depth + 1,
-		);
+		collectReferencesFromNode(sourceNode, ctx, depth + 1);
 	}
 }
 

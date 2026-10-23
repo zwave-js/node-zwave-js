@@ -8,9 +8,7 @@ function canonicalize(value: unknown): unknown {
 		return value.map(canonicalize);
 	}
 	if (value != null && typeof value === "object") {
-		const sortedKeys = Object.keys(
-			value as Record<string, unknown>,
-		).toSorted();
+		const sortedKeys = Object.keys(value).toSorted();
 		const ret: Record<string, unknown> = {};
 		for (const key of sortedKeys) {
 			ret[key] = canonicalize((value as Record<string, unknown>)[key]);

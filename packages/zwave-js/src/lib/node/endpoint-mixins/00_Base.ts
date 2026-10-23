@@ -370,7 +370,7 @@ export class EndpointBase
 		requireSupport: boolean = true,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		// Trust me on this, TypeScript :)
-		return CCAPI.create(ccId, this.driver, this, requireSupport) as any;
+		return CCAPI.create(ccId, this.driver, this, requireSupport);
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

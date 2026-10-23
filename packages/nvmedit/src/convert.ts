@@ -2227,9 +2227,10 @@ export async function migrateNVM(
 		return sourceNVM;
 	}
 
-	// TypeScript doesn't understand multi-variable narrowings (yet)
-	source = source as Exclude<ParsedNVM, { type: "unknown" }>;
-	target = target as Exclude<ParsedNVM, { type: "unknown" }>;
+	// // TypeScript doesn't understand multi-variable narrowings (yet)
+	if (source.type === "unknown" || target.type === "unknown") {
+		throw new Error("This must not happen");
+	}
 
 	// Some 700 series NVMs have a strange 255.x application version - fix that first
 	if (

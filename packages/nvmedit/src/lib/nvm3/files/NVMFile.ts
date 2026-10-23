@@ -125,7 +125,7 @@ export function nvmFileID<Class extends typeof NVMFile>(
 		// also store a map in the NVMFile metadata for lookup.
 		const map: NVMFileIDMap =
 			Reflect.getMetadata(METADATA_nvmFileIDMap, NVMFile) || new Map();
-		map.set(id, messageClass as unknown as NVMFileConstructor<NVMFile>);
+		map.set(id, messageClass);
 		Reflect.defineMetadata(METADATA_nvmFileIDMap, map, NVMFile);
 	};
 }

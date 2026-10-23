@@ -40,7 +40,7 @@ export class ZLFAttachmentRaw {
 			);
 		}
 
-		const type = buffer[0] as AttachmentTypes;
+		const type: AttachmentTypes = buffer[0];
 		const version = buffer[1];
 
 		// The remaining bytes are the data

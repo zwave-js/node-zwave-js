@@ -222,9 +222,9 @@ export class NVM3Adapter implements NVMAdapter {
 		required?: boolean,
 	): Promise<unknown> {
 		if (required) {
-			return this._expectFile<T>(fileId) as any;
+			return this._expectFile<T>(fileId);
 		} else {
-			return this._getFile<T>(fileId) as any;
+			return this._getFile<T>(fileId);
 		}
 	}
 

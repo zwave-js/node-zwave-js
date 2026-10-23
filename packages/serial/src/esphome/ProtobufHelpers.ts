@@ -36,7 +36,7 @@ export function decodeTag(
 	const wireType = tag.value & 0x7;
 	return {
 		fieldNumber,
-		wireType: wireType as WireType,
+		wireType,
 		bytesRead: tag.bytesRead,
 	};
 }

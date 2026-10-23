@@ -449,7 +449,7 @@ test.sequential("ControllerLogger.interviewStage() -> logs the name of the inter
 	controllerLogger.interviewStage({
 		id: 1,
 		interviewStage: InterviewStage.CommandClasses,
-	} as any);
+	});
 	assertMessage(expect, spyTransport, {
 		predicate: (msg) =>
 			msg.includes("Interview stage completed: CommandClasses"),
@@ -465,7 +465,7 @@ test.sequential("ControllerLogger.interviewStage() -> prints a custom message wh
 	controllerLogger.interviewStage({
 		id: 5,
 		interviewStage: InterviewStage.Complete,
-	} as any);
+	});
 	assertMessage(expect, spyTransport, {
 		message: "  [Node 005] Interview completed",
 	});
@@ -492,7 +492,7 @@ test.sequential("ControllerLogger.interviewStart() -> logs the name of the last 
 	controllerLogger.interviewStart({
 		id: 5,
 		interviewStage: InterviewStage.CommandClasses,
-	} as any);
+	});
 	assertMessage(expect, spyTransport, {
 		message:
 			"  [Node 005] Beginning interview - last completed stage: CommandClasses",

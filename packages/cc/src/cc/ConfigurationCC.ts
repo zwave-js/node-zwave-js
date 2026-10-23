@@ -254,7 +254,7 @@ function bulkMergePartialParamValues(
 			});
 		}
 	}
-	return allParams as any;
+	return allParams;
 }
 
 /** Determines whether a partial parameter needs to be interpreted as signed */
@@ -725,7 +725,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				valueBitMask,
 			);
 			return parsePartial(
-				response.value as any,
+				response.value,
 				valueBitMask,
 				isSignedPartial(valueBitMask, paramInfo.format),
 			);
@@ -1989,7 +1989,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 							param.propertyKey,
 						),
 						parsePartial(
-							this.value as any,
+							this.value,
 							param.propertyKey,
 							isSignedPartial(
 								param.propertyKey,

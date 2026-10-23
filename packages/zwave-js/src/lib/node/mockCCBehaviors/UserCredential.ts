@@ -2384,12 +2384,13 @@ const respondToKeyLockerEntrySet: MockNodeBehavior = {
 
 		// --- Delete operations ---
 		if (operationType === UserCredentialOperationType.Delete) {
-			if ((entryType as number) === 0 && entrySlot > 0) {
+			// 0 is not a valid entry type and not part of the enum
+			if ((entryType as unknown) === 0 && entrySlot > 0) {
 				// CC:0083.02.1F.11.008: entryType=0, entrySlot>0 MUST be ignored
 				return { action: "fail" };
 			}
 
-			if ((entryType as number) === 0 && entrySlot === 0) {
+			if ((entryType as unknown) === 0 && entrySlot === 0) {
 				// Delete all entries in the entire Key Locker
 				for (const [
 					type,
@@ -2403,7 +2404,10 @@ const respondToKeyLockerEntrySet: MockNodeBehavior = {
 						self.state.delete(StateKeys.keyLockerEntry(type, slot));
 					}
 				}
-			} else if ((entryType as number) !== 0 && entrySlot === 0) {
+			} else if (
+				(entryType as UserCredentialKeyLockerEntryType | 0) !== 0
+				&& entrySlot === 0
+			) {
 				// Delete all entries of the given type
 				const typeCaps =
 					capabilities.supportedKeyLockerEntryTypes.get(entryType);

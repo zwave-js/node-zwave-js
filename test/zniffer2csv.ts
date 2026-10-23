@@ -160,7 +160,7 @@ function convertFrameToCSVRow(capturedFrame: {
 		return row.join(";");
 	}
 
-	const validFrame = frame as Frame;
+	const validFrame: Frame = frame;
 
 	// Column 2: Region (use enum name)
 	const region = "region" in validFrame ? validFrame.region : undefined;

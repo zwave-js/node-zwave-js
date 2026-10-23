@@ -199,7 +199,7 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 	const tList = createTransactionForNode(2);
 	const tFreq = createTransactionForNode(3);
 	const tListFreq = createTransactionForNode(4);
-	const tNoId = createTransactionForNode(undefined as any);
+	const tNoId = createTransactionForNode(undefined);
 	const tNoNode = createTransactionForNode(5);
 	const tListNormalPrio = createTransactionForNode(2, MessagePriority.Normal);
 	const tListLowPrio = createTransactionForNode(2, MessagePriority.Poll);
@@ -290,7 +290,7 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 	} as unknown as Driver;
 
 	function createTransaction(nodeId: number, priority: MessagePriority) {
-		const driver = driverMock as any as Driver;
+		const driver = driverMock;
 		const msg = new SendDataRequest({
 			command: new NoOperationCC({ nodeId }),
 		});
@@ -442,7 +442,7 @@ describe("attachments", () => {
 	function createAttachedTransaction(
 		options: Partial<TransactionOptions> = {},
 	) {
-		return createDummyTransaction({} as Driver, options);
+		return createDummyTransaction({}, options);
 	}
 
 	test("fans out the physical result and progress", async () => {

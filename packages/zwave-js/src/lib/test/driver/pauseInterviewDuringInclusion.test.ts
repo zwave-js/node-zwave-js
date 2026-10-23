@@ -74,7 +74,7 @@ integrationTest("an ongoing interview is paused while an inclusion is active", {
 					);
 					resolve();
 				} catch (e) {
-					reject(e as Error);
+					reject(e);
 				}
 			});
 		});
@@ -190,7 +190,7 @@ integrationTestMulti(
 						);
 						resolve(node);
 					} catch (e) {
-						reject(e as Error);
+						reject(e);
 					}
 				});
 			});
@@ -351,7 +351,7 @@ integrationTestMulti.skip(
 						);
 						resolve(node);
 					} catch (e) {
-						reject(e as Error);
+						reject(e);
 					}
 				});
 			});

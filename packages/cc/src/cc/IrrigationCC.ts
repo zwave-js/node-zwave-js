@@ -803,7 +803,7 @@ export class IrrigationCCAPI extends CCAPI {
 					const valueId: ValueID = {
 						commandClass: this.ccId,
 						endpoint: this.endpoint.index,
-						property: prop as any,
+						property: prop,
 					};
 					const cachedVal = valueDB.getValue<any>(valueId);
 					if (cachedVal == undefined) {
@@ -840,7 +840,7 @@ export class IrrigationCCAPI extends CCAPI {
 							commandClass: this.ccId,
 							endpoint: this.endpoint.index,
 							property,
-							propertyKey: prop as any,
+							propertyKey: prop,
 						};
 						const cachedVal = valueDB.getValue<any>(valueId);
 						if (cachedVal == undefined) {

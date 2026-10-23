@@ -54,7 +54,7 @@ export function AllOf<T extends any[]>(
 	for (const base of Others) {
 		applyMixin(ret, base);
 	}
-	return ret as any;
+	return ret;
 }
 
 /** Tests if base is in the super chain of `constructor` */

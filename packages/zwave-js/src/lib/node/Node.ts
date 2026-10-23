@@ -3367,7 +3367,7 @@ protocol version:      ${this.protocolVersion}`;
 
 				const start = Date.now();
 				// Reset TX report before each ping
-				txReport = undefined as any;
+				txReport = undefined as TXReport | undefined;
 				const pingResult = await pingAPI.send().then(
 					() => true,
 					() => false,
@@ -4003,7 +4003,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 			lastStart = Date.now();
 			// Reset TX report before each command
-			txReport = undefined as any;
+			txReport = undefined as TXReport | undefined;
 
 			try {
 				await basicSetAPI.set(round % 2 === 1 ? 0xff : 0x00);
