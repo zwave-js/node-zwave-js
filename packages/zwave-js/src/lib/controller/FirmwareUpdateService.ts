@@ -1,5 +1,6 @@
 import {
 	type Firmware,
+	MAX_FIRMWARE_SIZE,
 	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -13,6 +14,7 @@ import {
 	type Timer,
 	formatId,
 	getenv,
+	noop,
 	padVersion,
 	setTimer,
 } from "@zwave-js/shared";
@@ -43,9 +45,9 @@ function serviceURL(): string {
 }
 const DOWNLOAD_TIMEOUT = 60000;
 const CHECK_TIMEOUT = 30000; // The initial check after releasing new updates can be pretty slow. Give it some time.
-// const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 
 const MAX_CACHE_SECONDS = 60 * 60 * 24; // Cache for a day at max
+const MAX_DOWNLOAD_REDIRECTS = 5;
 const CLEAN_CACHE_INTERVAL_MS = 60 * 60 * 1000; // Remove stale entries from the cache every hour
 
 // Cache for individual device firmware updates
@@ -347,6 +349,71 @@ export async function getAvailableFirmwareUpdates(
 	return bulkResult.get(deviceId) || [];
 }
 
+// The integrity hash is only checked after the downloaded file was parsed and possibly decrypted,
+// so a download over plain HTTP would expose that code to unauthenticated input.
+// Plain HTTP is only allowed when the service itself was explicitly configured to use it.
+function assertAllowedDownloadProtocol(url: string): void {
+	const protocol = new URL(url).protocol;
+	const allowedProtocols =
+		new URL(serviceURL()).protocol === "http:"
+			? ["http:", "https:"]
+			: ["https:"];
+	if (!allowedProtocols.includes(protocol)) {
+		throw new ZWaveError(
+			`Refusing to download firmware from ${url}: unsupported protocol ${protocol}`,
+			ZWaveErrorCodes.FWUpdateService_RequestError,
+		);
+	}
+}
+
+async function readResponseWithLimit(
+	response: Response,
+	maxSize: number,
+): Promise<Uint8Array<ArrayBuffer>> {
+	const tooLarge = () =>
+		new ZWaveError(
+			`The firmware file exceeds the maximum size of ${maxSize} bytes`,
+			ZWaveErrorCodes.Invalid_Firmware_File,
+		);
+
+	const contentLength = Number(response.headers.get("content-length"));
+	if (contentLength > maxSize) {
+		await response.body?.cancel().catch(noop);
+		throw tooLarge();
+	}
+	if (!response.body) return new Uint8Array(await response.arrayBuffer());
+
+	// The content-length header may be missing or wrong, so count while reading.
+	// Chunks are copied into a single growing buffer, because retaining many tiny
+	// chunks would use far more memory than the limit due to per-object overhead.
+	let buffer = new Uint8Array(
+		Math.min(contentLength > 0 ? contentLength : 64 * 1024, maxSize),
+	);
+	let size = 0;
+	const reader = response.body.getReader();
+	while (true) {
+		const { done, value } = await reader.read();
+		if (done) break;
+		if (size + value.length > maxSize) {
+			await reader.cancel().catch(noop);
+			throw tooLarge();
+		}
+		if (size + value.length > buffer.length) {
+			const grown = new Uint8Array(
+				Math.min(
+					Math.max(buffer.length * 2, size + value.length),
+					maxSize,
+				),
+			);
+			grown.set(buffer.subarray(0, size));
+			buffer = grown;
+		}
+		buffer.set(value, size);
+		size += value.length;
+	}
+	return buffer.slice(0, size);
+}
+
 export async function downloadFirmwareUpdate(
 	file: FirmwareUpdateFileInfo,
 ): Promise<Firmware> {
@@ -358,23 +425,52 @@ export async function downloadFirmwareUpdate(
 			ZWaveErrorCodes.Argument_Invalid,
 		);
 	}
+
 	// TODO: Make request abort-able (requires AbortController, Node 14.17+ / Node 16)
 
-	// Download the firmware file
+	// Download the firmware file. Redirects are followed manually, so every hop
+	// can be checked before it is requested.
 	const { default: ky } = await import("ky");
-	const downloadResponse = await ky.get(file.url, {
-		timeout: DOWNLOAD_TIMEOUT,
-		// TODO: figure out how to do maxContentLength: MAX_FIRMWARE_SIZE,
-	});
+	let downloadURL = file.url;
+	let downloadResponse: Response;
+	for (let redirects = 0; ; redirects++) {
+		assertAllowedDownloadProtocol(downloadURL);
+		downloadResponse = await ky.get(downloadURL, {
+			timeout: DOWNLOAD_TIMEOUT,
+			redirect: "manual",
+			throwHttpErrors: (status) => status < 300 || status >= 400,
+		});
+		if (downloadResponse.ok) break;
 
-	const rawData = new Uint8Array(await downloadResponse.arrayBuffer());
+		// Only 3xx responses get here
+		await downloadResponse.body?.cancel().catch(noop);
+		const location = downloadResponse.headers.get("location");
+		if (!location) {
+			throw new ZWaveError(
+				`Firmware download failed with status ${downloadResponse.status}`,
+				ZWaveErrorCodes.FWUpdateService_RequestError,
+			);
+		}
+		if (redirects >= MAX_DOWNLOAD_REDIRECTS) {
+			throw new ZWaveError(
+				`Refusing to download firmware from ${file.url}: too many redirects`,
+				ZWaveErrorCodes.FWUpdateService_RequestError,
+			);
+		}
+		downloadURL = new URL(location, downloadURL).href;
+	}
+
+	const rawData = await readResponseWithLimit(
+		downloadResponse,
+		MAX_FIRMWARE_SIZE,
+	);
 
 	const requestedPathname = new URL(file.url).pathname;
 	// The response may be redirected, so the filename information may be different
 	// from the requested URL
 	let actualPathname: string | undefined;
 	try {
-		actualPathname = new URL(downloadResponse.url).pathname;
+		actualPathname = new URL(downloadURL).pathname;
 	} catch {
 		// ignore
 	}
