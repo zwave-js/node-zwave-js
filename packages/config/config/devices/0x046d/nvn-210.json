@@ -1,0 +1,61 @@
+{
+	"manufacturer": "NOVON",
+	"manufacturerId": "0x046d",
+	"label": "NVN-210",
+	"description": "Dimmer Plug",
+	"devices": [
+		{
+			"productType": "0x27d8",
+			"productId": "0x1a30"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Tap the button once to add the device. The plug also supports SmartStart: scan the QR code on the side of the case or on the packaging box.",
+		"exclusion": "Tap the button once to remove the device.",
+		"reset": "Unplug the device. Press and hold the manual button, plug the device back in and continue holding the button for 3 seconds. Please use this procedure only when the primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/wp-content/uploads/products/80719/NVN-210UserManual.pdf"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"defaultValue": 1
+		},
+		{
+			"#": "16",
+			"$import": "templates/novon_template.json#switch_mode"
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99"
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99"
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#default_dim_level_0-99",
+			"label": "Starting Brightness Level",
+			"defaultValue": 0
+		},
+		{
+			"#": "39",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 0
+		},
+		{
+			"#": "41",
+			"$import": "templates/novon_template.json#indicator_brightness",
+			"label": "LED Brightness"
+		},
+		{
+			"#": "84",
+			"$import": "templates/novon_template.json#factory_reset"
+		}
+	]
+}

@@ -1,0 +1,139 @@
+{
+	"auto_timer": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"description": "Setting this to 0 disables the timer.",
+		"unit": "minutes"
+	},
+	"three_way_type": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "3-Way Switch Type",
+		"options": [
+			{
+				"label": "Add-on switch",
+				"value": 0
+			},
+			{
+				"label": "Standard 3-way switch",
+				"value": 1
+			}
+		]
+	},
+	"alternate_exclusion": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Alternate Exclusion",
+		"description": "Selects which button press starts exclusion.",
+		"options": [
+			{
+				"label": "Press a paddle once",
+				"value": 0
+			},
+			{
+				"label": "Press the menu button once",
+				"value": 1
+			}
+		]
+	},
+	"switch_mode": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Switch Mode",
+		"options": [
+			{
+				"label": "Dimmer",
+				"value": 0
+			},
+			{
+				"label": "On/off switch",
+				"value": 1
+			}
+		]
+	},
+	"led_color": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "LED Color",
+		"defaultValue": 5,
+		"options": [
+			{
+				"label": "Red",
+				"value": 1
+			},
+			{
+				"label": "Orange",
+				"value": 2
+			},
+			{
+				"label": "Yellow",
+				"value": 3
+			},
+			{
+				"label": "Green",
+				"value": 4
+			},
+			{
+				"label": "Blue",
+				"value": 5
+			},
+			{
+				"label": "Pink",
+				"value": 6
+			},
+			{
+				"label": "Purple",
+				"value": 7
+			},
+			{
+				"label": "White",
+				"value": 8
+			}
+		]
+	},
+	"intensity_1-7": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 7,
+		"defaultValue": 4,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Lowest",
+				"value": 1
+			},
+			{
+				"label": "Highest",
+				"value": 7
+			}
+		]
+	},
+	"indicator_brightness": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Indicator Brightness",
+		"options": [
+			{
+				"label": "Low",
+				"value": 0
+			},
+			{
+				"label": "Medium",
+				"value": 1
+			},
+			{
+				"label": "High",
+				"value": 2
+			}
+		]
+	},
+	"factory_reset": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Factory Reset",
+		"description": "Resets the device to factory defaults and removes it from the Z-Wave network.",
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Factory reset",
+				"value": 1
+			}
+		]
+	}
+}
