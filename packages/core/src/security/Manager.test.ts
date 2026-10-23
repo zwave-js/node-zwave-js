@@ -4,7 +4,7 @@ import { isUint8Array } from "@zwave-js/shared";
 import sinon from "sinon";
 import { test, vi } from "vitest";
 
-import { SecurityManager } from "./Manager.js";
+import { MAX_OWN_NONCES, SecurityManager } from "./Manager.js";
 
 const networkKey = Uint8Array.from([
 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
@@ -58,15 +58,22 @@ test("generateNonce() should return a random Buffer of the given length", (t) =>
 });
 
 test("generateNonce() -> should ensure that no collisions happen", async (t) => {
-	// No collisions means that it is possible to generate 256 nonces without reusing the first byte
 	const man = new SecurityManager(options);
 	const generatedNonceIds = new Set<number>();
-	for (let i = 0; i <= 255; i++) {
+	for (let i = 0; i < MAX_OWN_NONCES; i++) {
 		const nonce = man.generateNonce(2, 8);
 		const nonceId = nonce[0];
 		t.expect(generatedNonceIds.has(nonceId)).toBe(false);
 		generatedNonceIds.add(nonceId);
 	}
+});
+
+test("generateNonce() -> should refuse to generate more than MAX_OWN_NONCES outstanding nonces", (t) => {
+	const man = new SecurityManager(options);
+	for (let i = 0; i < MAX_OWN_NONCES; i++) {
+		man.generateNonce(2, 8);
+	}
+	t.expect(() => man.generateNonce(2, 8)).toThrow();
 });
 
 test("generateNonce() should store nonces for the current node id", (t) => {

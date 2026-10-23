@@ -40,6 +40,8 @@ export interface SetNonceOptions {
 	free?: boolean;
 }
 
+export const MAX_OWN_NONCES = 128;
+
 export class SecurityManager {
 	public constructor(options: SecurityManagerOptions) {
 		this.networkKey = options.networkKey;
@@ -104,6 +106,21 @@ export class SecurityManager {
 
 	/** Generates a nonce for the current node */
 	public generateNonce(receiver: number, length: number): BytesView {
+		// SDS10865 requires throwing away new nonces when the nonce table is full.
+		// This also prevents an endless loop when all nonce IDs are in use.
+		let ownNonces = 0;
+		for (const key of this._nonceStore.keys()) {
+			if ((JSON.parse(key) as NonceKey).issuer === this.ownNodeId) {
+				ownNonces++;
+			}
+		}
+		if (ownNonces >= MAX_OWN_NONCES) {
+			throw new ZWaveError(
+				`Cannot generate a new nonce, the maximum of ${MAX_OWN_NONCES} outstanding nonces has been reached`,
+				ZWaveErrorCodes.SecurityCC_NoNonce,
+			);
+		}
+
 		let nonce: BytesView;
 		let nonceId: number;
 		do {
