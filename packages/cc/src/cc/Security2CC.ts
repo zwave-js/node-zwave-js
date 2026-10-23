@@ -1448,17 +1448,31 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		})();
 
 		// If a command is to be discarded before decryption,
-		// we still need to increment the SPAN or MPAN state
+		// we still need to increment the SPAN or MPAN state, if one exists
 		if (mustDiscardCommand) {
 			if (mcctx.isMulticast) {
-				await securityManager.nextPeerMPAN(
+				// An existing MPAN does not imply that the keys for this node are set up,
+				// so advance the counter without deriving the actual MPAN
+				securityManager.tryIncrementPeerMPAN(
 					ctx.sourceNodeId,
 					mcctx.groupId,
 				);
-			} else {
+			} else if (
+				securityManager.getSPANState(ctx.sourceNodeId).type
+				=== SPANState.SPAN
+			) {
 				await securityManager.nextNonce(ctx.sourceNodeId);
 			}
 			validatePayload.fail("Invalid S2 extension");
+		}
+
+		// A frame that is too short to contain the auth tag cannot be decrypted
+		if (raw.payload.length < offset + SECURITY_S2_AUTH_TAG_LENGTH) {
+			validatePayload.fail(
+				mcctx.isMulticast
+					? ZWaveErrorCodes.Security2CC_CannotDecodeMulticast
+					: ZWaveErrorCodes.Security2CC_CannotDecode,
+			);
 		}
 
 		let prevSequenceNumber: number | undefined;
@@ -2511,9 +2525,10 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		raw: CCRaw,
 		ctx: CCParsingContext,
 	): Security2CCPublicKeyReport {
-		validatePayload(raw.payload.length >= 17);
+		// Curve25519 public keys are always 32 bytes long
+		validatePayload(raw.payload.length >= 33);
 		const includingNode = !!(raw.payload[0] & 0b1);
-		const publicKey: BytesView = raw.payload.subarray(1);
+		const publicKey: BytesView = raw.payload.subarray(1, 33);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

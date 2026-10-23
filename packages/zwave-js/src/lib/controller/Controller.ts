@@ -3,6 +3,7 @@ import {
 	AssociationCC,
 	type AssociationCheckResult,
 	type AssociationGroup,
+	type CommandClass,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
 	type FirmwareUpdateOptions,
@@ -20,6 +21,7 @@ import {
 	Security2CCKEXGet,
 	type Security2CCKEXReport,
 	Security2CCKEXSet,
+	type Security2CCMessageEncapsulation,
 	Security2CCNetworkKeyGet,
 	Security2CCNetworkKeyReport,
 	Security2CCNetworkKeyVerify,
@@ -4153,6 +4155,47 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 		}
 	}
 
+	/**
+	 * Derives the ECDH shared secret for S2 bootstrapping.
+	 * Returns `undefined` if the peer's public key is invalid, e.g. a low-order point that results in an all-zero secret.
+	 */
+	private async deriveS2SharedSecret(
+		peerNodeId: number,
+		publicKey: BytesView,
+		privateKey: BytesView,
+	): Promise<BytesView | undefined> {
+		try {
+			const sharedSecret = await deriveSharedECDHSecret({
+				publicKey,
+				privateKey,
+			});
+			if (sharedSecret.some((b) => b !== 0)) return sharedSecret;
+		} catch {
+			// The public key could not be used
+		}
+		this.driver.controllerLog.logNode(peerNodeId, {
+			message: `Security S2 bootstrapping failed: the public key is invalid`,
+			level: "warn",
+		});
+	}
+
+	/**
+	 * Returns the security class the given command was decrypted with,
+	 * or `undefined` if it was not received S2-encapsulated.
+	 */
+	private getS2DecryptionSecurityClass(
+		cc: CommandClass,
+	): SecurityClass | undefined {
+		// Unlike the node's SPAN state, which may be changed by concurrently received
+		// commands, this reflects the key that was actually used for this command
+		return (
+			cc.getEncapsulatingCC(
+				CommandClasses["Security 2"],
+				Security2Command.MessageEncapsulation,
+			) as Security2CCMessageEncapsulation | undefined
+		)?.securityClass;
+	}
+
 	private async secureBootstrapS2(
 		node: ZWaveNode,
 		// inclusionOptions is passed during normal inclusion, and undefined
@@ -4409,8 +4452,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					Security2CCPublicKeyReport | Security2CCKEXFail
 				>(
 					(cc) =>
-						cc instanceof Security2CCPublicKeyReport
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === node.id
+						&& (cc instanceof Security2CCPublicKeyReport
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TA2,
 				)
 				.catch(() => "timeout" as const);
@@ -4486,10 +4530,15 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			}
 
 			// After the user has verified the DSK, we can derive the shared secret
-			const sharedSecret = await deriveSharedECDHSecret({
-				publicKey: nodePublicKey,
-				privateKey: keyPair.privateKey,
-			});
+			const sharedSecret = await this.deriveS2SharedSecret(
+				node.id,
+				nodePublicKey,
+				keyPair.privateKey,
+			);
+			if (!sharedSecret) {
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.Unknown;
+			}
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = await deriveTempKeys(
@@ -4520,8 +4569,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				this.driver
 					.waitForCommand<Security2CCKEXSet | Security2CCKEXFail>(
 						(cc) =>
-							cc instanceof Security2CCKEXSet
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCKEXSet
+								|| cc instanceof Security2CCKEXFail),
 						tai2RemainingMs,
 					)
 					.catch(() => "timeout" as const),
@@ -4599,8 +4649,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCNetworkKeyGet | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyGet
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCNetworkKeyGet
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TA3,
 					)
 					.catch(() => "timeout" as const);
@@ -4670,8 +4721,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCNetworkKeyVerify | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyVerify
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === node.id
+							&& (cc instanceof Security2CCNetworkKeyVerify
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TA4,
 					)
 					.catch(() => "timeout" as const);
@@ -4713,12 +4765,24 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			// After all keys were sent and verified, we need to wait for the node to confirm that it is done
 			const transferEnd = await this.driver
 				.waitForCommand<Security2CCTransferEnd>(
-					(cc) => cc instanceof Security2CCTransferEnd,
+					(cc) =>
+						cc.nodeId === node.id
+						&& cc instanceof Security2CCTransferEnd,
 					inclusionTimeouts.TA5,
 				)
 				.catch(() => "timeout" as const);
 			if (transferEnd === "timeout") return abortTimeout();
-			if (!transferEnd.keyRequestComplete) {
+			if (
+				this.getS2DecryptionSecurityClass(transferEnd)
+				!== SecurityClass.Temporary
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			} else if (!transferEnd.keyRequestComplete) {
 				// S2 bootstrapping failed
 				this.driver.controllerLog.logNode(node.id, {
 					message: `Security S2 bootstrapping failed: Node did not confirm completion of the key exchange`,
@@ -9867,8 +9931,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			const kexSet = await this.driver
 				.waitForCommand<Security2CCKEXSet | Security2CCKEXFail>(
 					(cc) =>
-						cc instanceof Security2CCKEXSet
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === bootstrappingNode.id
+						&& (cc instanceof Security2CCKEXSet
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TB2,
 				)
 				.catch(() => "timeout" as const);
@@ -9911,12 +9976,18 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
-			const matchingKeys = kexSet.grantedKeys.filter(
-				(k) =>
-					securityClassOrder.includes(k as any)
-					&& requested.securityClasses.includes(k),
-			);
-			if (!matchingKeys.length) {
+			if (
+				kexSet.grantedKeys.some(
+					(k) => !requested.securityClasses.includes(k),
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message: `Security S2 bootstrapping failed: Security classes were granted that were not requested.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoKeyMatch);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (!kexSet.grantedKeys.length) {
 				this.driver.controllerLog.logNode(bootstrappingNode.id, {
 					message: `Security S2 bootstrapping failed: None of the requested security classes are granted.`,
 					level: "warn",
@@ -9925,7 +9996,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
-			const highestGranted = getHighestSecurityClass(matchingKeys);
+			const highestGranted = getHighestSecurityClass(kexSet.grantedKeys);
 			const requiresAuthentication =
 				highestGranted === SecurityClass.S2_AccessControl
 				|| highestGranted === SecurityClass.S2_Authenticated;
@@ -9956,8 +10027,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					Security2CCPublicKeyReport | Security2CCKEXFail
 				>(
 					(cc) =>
-						cc instanceof Security2CCPublicKeyReport
-						|| cc instanceof Security2CCKEXFail,
+						cc.nodeId === bootstrappingNode.id
+						&& (cc instanceof Security2CCPublicKeyReport
+							|| cc instanceof Security2CCKEXFail),
 					inclusionTimeouts.TB3,
 				)
 				.catch(() => "timeout" as const);
@@ -9965,13 +10037,26 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 			if (pubKeyReport === "timeout") return abortTimeout();
 			if (pubKeyReport instanceof Security2CCKEXFail) {
 				return abortCanceled();
+			} else if (!pubKeyReport.includingNode) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message: `Security S2 bootstrapping failed: Public key was not sent by the including node.`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
 			const includingNodePubKey = pubKeyReport.publicKey;
-			const sharedSecret = await deriveSharedECDHSecret({
-				publicKey: includingNodePubKey,
-				privateKey: keyPair.privateKey,
-			});
+			const sharedSecret = await this.deriveS2SharedSecret(
+				bootstrappingNode.id,
+				includingNodePubKey,
+				keyPair.privateKey,
+			);
+			if (!sharedSecret) {
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.Unknown;
+			}
 
 			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = await deriveTempKeys(
@@ -10085,8 +10170,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCNetworkKeyReport | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCNetworkKeyReport
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === bootstrappingNode.id
+							&& (cc instanceof Security2CCNetworkKeyReport
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TB4,
 					)
 					.catch(() => "timeout" as const);
@@ -10173,8 +10259,9 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 						Security2CCTransferEnd | Security2CCKEXFail
 					>(
 						(cc) =>
-							cc instanceof Security2CCTransferEnd
-							|| cc instanceof Security2CCKEXFail,
+							cc.nodeId === bootstrappingNode.id
+							&& (cc instanceof Security2CCTransferEnd
+								|| cc instanceof Security2CCKEXFail),
 						inclusionTimeouts.TB5,
 					)
 					.catch(() => "timeout" as const);
@@ -10185,7 +10272,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				}
 
 				if (
-					!keyReport.isEncapsulatedWith(
+					!transferEnd.isEncapsulatedWith(
 						CommandClasses["Security 2"],
 						Security2Command.MessageEncapsulation,
 					)
@@ -10193,6 +10280,16 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					this.driver.controllerLog.logNode(bootstrappingNode.id, {
 						message: `Security S2 bootstrapping failed: Command received without encryption`,
 						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				} else if (
+					this.getS2DecryptionSecurityClass(transferEnd)
+					!== SecurityClass.Temporary
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
 						level: "warn",
 					});
 					await abort(KEXFailType.WrongSecurityLevel);
