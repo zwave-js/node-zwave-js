@@ -579,6 +579,9 @@ By default, Z-Wave JS has two internal transports, a file transport and a consol
 > [!NOTE]
 > The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
 
+> [!WARNING]
+> Setting the `ZWAVEJS_LOG_SECURITY_DETAILS` environment variable to exactly `"true"` causes the logs to include key material, nonces and the decrypted plaintext of S0 and S2 encapsulated commands. Only use this for debugging, and never share such logs publicly.
+
 The **file transport** can be configured with the following properties:
 
 - `logToFile`: Enables the file transport and disables the console transport. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.

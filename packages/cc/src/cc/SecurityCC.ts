@@ -34,7 +34,6 @@ import {
 	Bytes,
 	type BytesView,
 	buffer2hex,
-	getenv,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -55,6 +54,7 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators.js";
 import { SecurityCommand } from "../lib/_Types.js";
+import { shouldLogSecurityDetails } from "../lib/securityLogging.js";
 import type { CCEncodingContext, CCParsingContext } from "../lib/traits.js";
 
 import { CRC16CC } from "./CRC16CC.js";
@@ -864,11 +864,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				}
 			}
 		}
-		// Log the plaintext in integration tests and development mode
-		if (
-			getenv("NODE_ENV") === "test"
-			|| getenv("NODE_ENV") === "development"
-		) {
+		// Only log the plaintext when explicitly allowed
+		if (shouldLogSecurityDetails()) {
 			if (this.iv) {
 				message.IV = buffer2hex(this.iv);
 			}
