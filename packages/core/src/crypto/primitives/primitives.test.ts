@@ -489,3 +489,35 @@ test("decryptAES128CCM returns no plaintext when authentication fails in all imp
 		t.expect(result.plaintext.length).toBe(0);
 	}
 });
+
+test("decryptAES256CBC removes the PKCS#7 padding in all implementations", async (t) => {
+	const crypto = await import("node:crypto");
+	const key = Bytes.from(
+		"603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4",
+		"hex",
+	);
+	const iv = Bytes.from("000102030405060708090a0b0c0d0e0f", "hex");
+
+	for (const length of [1, 15, 16, 17]) {
+		const plaintext = crypto.randomBytes(length);
+		const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+		const ciphertext = Bytes.concat([
+			cipher.update(plaintext),
+			cipher.final(),
+		]);
+
+		for (const primitives of [
+			"./primitives.browser.js",
+			"./primitives.node.js",
+		] as const) {
+			const { decryptAES256CBC }: CryptoPrimitives = (
+				await import(primitives)
+			).primitives;
+			assertBufferEquals(
+				t.expect,
+				await decryptAES256CBC(ciphertext, key, iv),
+				plaintext,
+			);
+		}
+	}
+});
