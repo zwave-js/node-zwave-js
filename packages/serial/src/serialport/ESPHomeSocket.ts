@@ -305,6 +305,9 @@ export function createESPHomeFactory(
 				} catch {
 					// Stream closed or error - handled by socket events
 				}
+				// The receive pipeline also stops when a frame cannot be decrypted or its framing is invalid.
+				// The connection is unusable then, so close it to surface the error to the driver.
+				if (isOpen) socket.destroy();
 			})();
 		}
 

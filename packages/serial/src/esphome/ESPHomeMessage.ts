@@ -22,6 +22,8 @@ export enum ESPHomeMessageType {
 	ZWaveProxyRequest = 129,
 }
 
+const MAX_PAYLOAD_SIZE = 0xffff;
+
 /**
  * Represents a raw ESPHome message with minimal parsing
  */
@@ -62,6 +64,13 @@ export class ESPHomeMessageRaw {
 		// Decode payload size
 		const payloadSize = decodeVarInt(data, offset);
 		offset += payloadSize.bytesRead;
+		// Match the limit of Noise frames, which use a 16-bit length field
+		if (payloadSize.value > MAX_PAYLOAD_SIZE) {
+			throw new ZWaveError(
+				`Frame payload size ${payloadSize.value} exceeds the maximum of ${MAX_PAYLOAD_SIZE} bytes`,
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
+		}
 
 		// Decode message type
 		const messageType = decodeVarInt(data, offset);
@@ -93,10 +102,11 @@ export class ESPHomeMessageRaw {
 		message: ESPHomeMessageRaw;
 		bytesRead: number;
 	} {
+		// A decrypted Noise frame contains exactly one message, so more data cannot complete it
 		if (data.length < 4) {
 			throw new ZWaveError(
 				"Noise message too short",
-				ZWaveErrorCodes.PacketFormat_Truncated,
+				ZWaveErrorCodes.PacketFormat_Invalid,
 			);
 		}
 
@@ -105,8 +115,8 @@ export class ESPHomeMessageRaw {
 
 		if (4 + dataLen > data.length) {
 			throw new ZWaveError(
-				"Noise message was truncated",
-				ZWaveErrorCodes.PacketFormat_Truncated,
+				"Noise message length exceeds the decrypted frame",
+				ZWaveErrorCodes.PacketFormat_Invalid,
 			);
 		}
 
@@ -166,9 +176,16 @@ export class ESPHomeMessage {
 		bytesRead: number;
 	} {
 		const { message: raw, bytesRead } = ESPHomeMessageRaw.parse(data);
+		return { message: ESPHomeMessage.fromRaw(raw), bytesRead };
+	}
+
+	/**
+	 * Decodes a raw message into an instance of the class registered for its message type
+	 */
+	public static fromRaw(raw: ESPHomeMessageRaw): ESPHomeMessage {
 		const Constructor =
 			getESPHomeMessageConstructor(raw.messageType) ?? ESPHomeMessage;
-		return { message: Constructor.from(raw), bytesRead };
+		return Constructor.from(raw);
 	}
 
 	/**
@@ -202,21 +219,6 @@ export class ESPHomeMessage {
 		header.writeUInt16BE(this.messageType, 0);
 		header.writeUInt16BE(this.payload.length, 2);
 		return Bytes.concat([header, this.payload]);
-	}
-
-	/**
-	 * Parses a message from Noise-decrypted data.
-	 * Format: [2-byte BE type][2-byte BE len][payload]
-	 */
-	public static parseFromNoise(data: Bytes): {
-		message: ESPHomeMessage;
-		bytesRead: number;
-	} {
-		const { message: raw, bytesRead } =
-			ESPHomeMessageRaw.parseFromNoise(data);
-		const Constructor =
-			getESPHomeMessageConstructor(raw.messageType) ?? ESPHomeMessage;
-		return { message: Constructor.from(raw), bytesRead };
 	}
 }
 
