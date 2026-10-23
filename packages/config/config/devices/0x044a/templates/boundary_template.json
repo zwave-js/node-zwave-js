@@ -1,0 +1,96 @@
+{
+	"indicator": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Detection LED",
+		"valueSize": 4,
+		"unsigned": false,
+		"defaultValue": 1
+	},
+	"apply": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Apply Sensor Configuration",
+		"description": "Write 1 after changing sensor configuration, then write 0 after it has been applied.",
+		"valueSize": 4,
+		"options": [
+			{
+				"label": "Reset apply flag",
+				"value": 0
+			},
+			{
+				"label": "Apply configuration",
+				"value": 1
+			}
+		]
+	},
+	"led_time": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"valueSize": 4,
+		"description": "Write parameter 19 to 1 to apply LED pattern changes, then reset it to 0.",
+		"options": [
+			{
+				"label": "0 seconds",
+				"value": 0
+			},
+			{
+				"label": "0.064 seconds",
+				"value": 1
+			},
+			{
+				"label": "0.128 seconds",
+				"value": 2
+			},
+			{
+				"label": "0.192 seconds",
+				"value": 3
+			},
+			{
+				"label": "0.256 seconds",
+				"value": 4
+			},
+			{
+				"label": "0.384 seconds",
+				"value": 5
+			},
+			{
+				"label": "0.512 seconds",
+				"value": 6
+			},
+			{
+				"label": "0.768 seconds",
+				"value": 7
+			},
+			{
+				"label": "1.024 seconds",
+				"value": 8
+			},
+			{
+				"label": "1.536 seconds",
+				"value": 9
+			},
+			{
+				"label": "2.048 seconds",
+				"value": 10
+			},
+			{
+				"label": "3.072 seconds",
+				"value": 11
+			},
+			{
+				"label": "4.096 seconds",
+				"value": 12
+			},
+			{
+				"label": "5.76 seconds",
+				"value": 13
+			},
+			{
+				"label": "8.128 seconds",
+				"value": 14
+			},
+			{
+				"label": "16.32 seconds",
+				"value": 15
+			}
+		]
+	}
+}
