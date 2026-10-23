@@ -6,7 +6,7 @@ import { tryParseParamNumber } from "@zwave-js/core";
 import { parse as parseJsonC } from "jsonc-parser";
 
 import { parseSymbols } from "../configDoc/configDocument.js";
-import { DEVICES_DIR, fs } from "../configEnv.js";
+import { DEVICES_DIR, fs, resolveDeviceConfigPath } from "../configEnv.js";
 import type { ToolHandler } from "../types.js";
 
 import { errorResult, textResult } from "./results.js";
@@ -65,15 +65,22 @@ async function handleFindTemplateDefinition(
 			);
 		}
 
-		const targetFile = await resolveImportPath(
+		const importPath = await resolveImportPath(
 			fs,
 			filename,
 			specifier,
 			DEVICES_DIR,
 		);
-		if (!targetFile) {
+		if (!importPath) {
 			return errorResult(
 				`Could not locate the file referenced by "${specifier}".`,
+			);
+		}
+		// The specifier may point anywhere, so the import target must be checked too
+		const targetFile = await resolveDeviceConfigPath(importPath);
+		if (!targetFile) {
+			return errorResult(
+				`Error: the import target must be located inside ${DEVICES_DIR}`,
 			);
 		}
 

@@ -63,6 +63,7 @@ async function handleLintConfig(args: LintConfigArgs): Promise<CallToolResult> {
 				"lint:config:eslint",
 				"-f",
 				"json",
+				"--",
 				filename,
 			],
 			{
