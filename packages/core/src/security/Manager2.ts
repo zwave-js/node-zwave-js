@@ -101,15 +101,16 @@ export class SecurityManager2 {
 	}
 
 	/**
-	 * Creates (or re-uses) a multicast group for the given node IDs and remembers the security class.
+	 * Creates (or re-uses) a multicast group for the given node IDs and security class.
 	 * The returned value is the group ID to be used in multicast commands
 	 */
 	public createMulticastGroup(
 		nodeIDs: number[],
 		s2SecurityClass: S2SecurityClass,
 	): number {
-		// Check if we already have a group for these nodes
-		const newHash = hashNodeIds(nodeIDs);
+		// Check if we already have a group for these nodes. Each group uses the key of its
+		// security class, so the same nodes need a separate group for each security class.
+		const newHash = hashMulticastGroup(nodeIDs, s2SecurityClass);
 		if (this.multicastGroupLookup.has(newHash)) {
 			return this.multicastGroupLookup.get(newHash)!;
 		}
@@ -121,7 +122,10 @@ export class SecurityManager2 {
 		if (this.multicastGroups.has(groupId)) {
 			const oldGroup = this.multicastGroups.get(groupId)!;
 			this.multicastGroups.delete(groupId);
-			const oldHash = hashNodeIds(oldGroup.nodeIDs);
+			const oldHash = hashMulticastGroup(
+				oldGroup.nodeIDs,
+				oldGroup.securityClass,
+			);
 			this.multicastGroupLookup.delete(oldHash);
 		}
 
@@ -527,10 +531,13 @@ export class SecurityManager2 {
 }
 
 /** Creates a unique string that can be used to look up existing node ID arrays */
-function hashNodeIds(nodeIds: readonly number[]): string {
+function hashMulticastGroup(
+	nodeIds: readonly number[],
+	securityClass: S2SecurityClass,
+): string {
 	const raw = encodeBitMask(nodeIds, MAX_NODES_LR);
 	// Compress the bitmask to avoid 1000 character strings as keys.
 	// This compresses considerably well, usually in the 12-20 byte range
 	const compressed = deflateSync(raw);
-	return Bytes.view(compressed).toString("hex");
+	return `${securityClass}:${Bytes.view(compressed).toString("hex")}`;
 }

@@ -204,6 +204,31 @@ test("createMulticastGroup() -> should return a different group ID for a differe
 	t.expect(group1).not.toBe(group2);
 });
 
+test("createMulticastGroup() -> should return a different group for the same node set with a different security class", async (t) => {
+	const man = await SecurityManager2.create();
+	await dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[2, 3, 4],
+		SecurityClass.S2_Unauthenticated,
+	);
+
+	t.expect(group1).not.toBe(group2);
+	t.expect(man.getMulticastGroup(group1)?.securityClass).toBe(
+		SecurityClass.S2_Authenticated,
+	);
+	t.expect(man.getMulticastGroup(group2)?.securityClass).toBe(
+		SecurityClass.S2_Unauthenticated,
+	);
+	// Existing groups are still reused
+	t.expect(
+		man.createMulticastGroup([2, 3, 4], SecurityClass.S2_Authenticated),
+	).toBe(group1);
+});
+
 test("createMulticastGroup() -> should return a different group ID for a different node set for LR nodes", async (t) => {
 	const man = await SecurityManager2.create();
 	await dummyInit(man);
