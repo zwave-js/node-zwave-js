@@ -31,12 +31,20 @@ export async function handleManufacturerSpecificGet(
 				command.encapsulationFlags & ~EncapsulationFlags.Supervision,
 		});
 
-	await api.sendReport({
-		// Reserved manufacturer ID, definitely invalid!
-		manufacturerId: vendorInfo?.manufacturerId ?? 0xffff,
-		productType: vendorInfo?.productType ?? 0xffff,
-		productId: vendorInfo?.productId ?? 0xffff,
-	});
+	try {
+		await api.sendReport({
+			// Reserved manufacturer ID, definitely invalid!
+			manufacturerId: vendorInfo?.manufacturerId ?? 0xffff,
+			productType: vendorInfo?.productType ?? 0xffff,
+			productId: vendorInfo?.productId ?? 0xffff,
+		});
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export async function handleManufacturerSpecificDeviceSpecificGet(
@@ -52,10 +60,18 @@ export async function handleManufacturerSpecificDeviceSpecificGet(
 				command.encapsulationFlags & ~EncapsulationFlags.Supervision,
 		});
 
-	await api.sendDeviceSpecificReport({
-		type: vendorInfo?.deviceId
-			? DeviceIdType.SerialNumber
-			: DeviceIdType.PseudoRandom,
-		deviceId: vendorInfo?.deviceId ?? randomBytes(16),
-	});
+	try {
+		await api.sendDeviceSpecificReport({
+			type: vendorInfo?.deviceId
+				? DeviceIdType.SerialNumber
+				: DeviceIdType.PseudoRandom,
+			deviceId: vendorInfo?.deviceId ?? randomBytes(16),
+		});
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }

@@ -4039,11 +4039,19 @@ export class Driver
 					if (this.wasDestroyed) return;
 
 					if (frame.type === ZWaveSerialFrameType.SerialAPI) {
-						void this.serialport_onData(frame.data);
+						this.serialport_onData(frame.data).catch((e) =>
+							this.handleReceiveError(e),
+						);
 					} else if (frame.type === ZWaveSerialFrameType.Bootloader) {
-						void this.serialport_onBootloaderData(frame.data);
+						try {
+							this.serialport_onBootloaderData(frame.data);
+						} catch (e) {
+							this.handleReceiveError(e);
+						}
 					} else if (frame.type === ZWaveSerialFrameType.CLI) {
-						void this.serialport_onCLIData(frame.data);
+						this.serialport_onCLIData(frame.data).catch((e) =>
+							this.handleReceiveError(e),
+						);
 					} else {
 						// Handle discarded data?
 					}
@@ -4063,8 +4071,26 @@ export class Driver
 				void this.handleSerialPortClosedUnexpectedly();
 				return;
 			}
-			throw e;
+			if (this.wasDestroyed) return;
+			// Nothing can be received after the stream failed, so the driver cannot continue
+			void this.destroyWithMessage(
+				`Failed to read from the serial port: ${getErrorMessage(e)}`,
+			);
 		}
+	}
+
+	/**
+	 * Last line of defense for errors while handling received data.
+	 * These are unexpected errors, but they must not take down the host application.
+	 */
+	private handleReceiveError(e: unknown): void {
+		this.driverLog.print(
+			`Unexpected error while handling received data: ${getErrorMessage(
+				e,
+				true,
+			)}`,
+			"error",
+		);
 	}
 
 	private async handleSerialPortClosedUnexpectedly(): Promise<void> {
@@ -4336,7 +4362,9 @@ export class Driver
 			// 		message: msg,
 			// 	});
 			// } else {
-			void this.handleUnsolicitedMessage(msg);
+			this.handleUnsolicitedMessage(msg).catch((e) =>
+				this.handleReceiveError(e),
+			);
 			// }
 		}
 	}
@@ -9978,9 +10006,9 @@ ${handlers.length} left`,
 			);
 
 			if (!(await this.ensureCLIReady())) {
-				throw new ZWaveError(
+				if (this.wasDestroyed) return;
+				await this.destroyWithMessage(
 					"Failed to detect available CLI commands",
-					ZWaveErrorCodes.Driver_Failed,
 				);
 			}
 		}

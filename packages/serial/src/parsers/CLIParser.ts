@@ -126,12 +126,16 @@ export class CLIParser extends TransformStream<
 					flushTimeout = setTimer(() => {
 						flushTimeout = undefined;
 						logger?.message(receiveBuffer, "inbound");
-						controller.enqueue(
-							wrapChunk({
-								type: CLIChunkType.Message,
-								message: receiveBuffer,
-							}),
-						);
+						try {
+							controller.enqueue(
+								wrapChunk({
+									type: CLIChunkType.Message,
+									message: receiveBuffer,
+								}),
+							);
+						} catch {
+							// This can fail after tearing down the plumbing
+						}
 						receiveBuffer = "";
 					}, 500);
 				}

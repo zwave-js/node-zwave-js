@@ -45,12 +45,20 @@ export async function handleAssociationGet(
 			.filter((a) => a.endpoint == undefined)
 			.map((a) => a.nodeId) ?? [];
 
-	await api.sendReport({
-		groupId,
-		maxNodes: MAX_ASSOCIATIONS,
-		nodeIds,
-		reportsToFollow: 0,
-	});
+	try {
+		await api.sendReport({
+			groupId,
+			maxNodes: MAX_ASSOCIATIONS,
+			nodeIds,
+			reportsToFollow: 0,
+		});
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
 
 export function handleAssociationSet(
@@ -134,5 +142,13 @@ export async function handleAssociationSpecificGroupGet(
 
 	// We don't support this feature.
 	// It is RECOMMENDED that the value 0 is returned by non-supporting devices.
-	await api.reportSpecificGroup(0);
+	try {
+		await api.reportSpecificGroup(0);
+	} catch (e: any) {
+		ctx.logNode(node.id, {
+			message: e.message,
+			level: "error",
+		});
+		// ignore
+	}
 }
