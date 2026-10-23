@@ -14,7 +14,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, pick } from "@zwave-js/shared";
+import { Bytes, escapeControlCharacters, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 
@@ -574,7 +574,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		const nameLength = raw.payload[3];
 
 		validatePayload(raw.payload.length >= 4 + nameLength);
-		const name = raw.payload.subarray(4, 4 + nameLength).toString("utf8");
+		const name = escapeControlCharacters(
+			raw.payload.subarray(4, 4 + nameLength).toString("utf8"),
+		);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

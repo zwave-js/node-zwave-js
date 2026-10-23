@@ -16,7 +16,13 @@ import {
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import {
+	Bytes,
+	cpp2js,
+	escapeControlCharacters,
+	getEnumMemberName,
+	num2hex,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
@@ -495,8 +501,8 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		validatePayload(raw.payload.length >= 2 + nameLength);
 		// The specs don't allow 0-terminated string, but some devices use them
 		// So we need to cut them off
-		const name = cpp2js(
-			raw.payload.subarray(2, 2 + nameLength).toString("utf8"),
+		const name = escapeControlCharacters(
+			cpp2js(raw.payload.subarray(2, 2 + nameLength).toString("utf8")),
 		);
 
 		return new this({

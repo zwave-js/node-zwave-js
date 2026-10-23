@@ -12,7 +12,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, pick } from "@zwave-js/shared";
+import { Bytes, escapeControlCharacters, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import { CCAPI } from "../lib/API.js";
@@ -168,13 +168,16 @@ export class LanguageCCSet extends LanguageCC {
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCSet {
 		validatePayload(raw.payload.length >= 3);
-		const language = raw.payload.subarray(0, 3).toString("ascii");
+		let language = raw.payload.subarray(0, 3).toString("ascii");
 		validatePayload(language.toLowerCase() === language);
 		let country: string | undefined;
 		if (raw.payload.length >= 5) {
 			country = raw.payload.subarray(3, 5).toString("ascii");
 			validatePayload(country.toUpperCase() === country);
 		}
+		// Escape only after validating, so the checks apply to the original codes
+		language = escapeControlCharacters(language);
+		country &&= escapeControlCharacters(country);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,
@@ -255,7 +258,7 @@ export class LanguageCCReport extends LanguageCC {
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCReport {
 		validatePayload(raw.payload.length >= 3);
-		const language = raw.payload.subarray(0, 3).toString("ascii");
+		let language = raw.payload.subarray(0, 3).toString("ascii");
 		// Enforce the same locale format the Set side requires, so a node
 		// cannot push codes that violate ISO 639-2 / ISO 3166-1
 		validatePayload(
@@ -270,6 +273,8 @@ export class LanguageCCReport extends LanguageCC {
 				country.toUpperCase() === country,
 			);
 		}
+		language = escapeControlCharacters(language);
+		country &&= escapeControlCharacters(country);
 
 		return new this({
 			nodeId: ctx.sourceNodeId,

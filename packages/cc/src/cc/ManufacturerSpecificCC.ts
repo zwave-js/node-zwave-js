@@ -9,7 +9,13 @@ import {
 	logBuffer,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import {
+	Bytes,
+	escapeControlCharacters,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import { CCAPI, PhysicalCCAPI } from "../lib/API.js";
@@ -347,7 +353,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		const deviceIdData = raw.payload.subarray(2, 2 + dataLength);
 		const deviceId: string | Bytes =
 			dataFormat === DeviceIdDataFormat.UTF8
-				? deviceIdData.toString("utf8")
+				? escapeControlCharacters(deviceIdData.toString("utf8"))
 				: deviceIdData;
 
 		return new this({

@@ -3,6 +3,7 @@ import { test } from "vitest";
 import { Bytes } from "./Bytes.js";
 import {
 	cpp2js,
+	escapeControlCharacters,
 	isPrintableASCIIWithWhitespace,
 	num2hex,
 	stringToUint8ArrayUTF16BE,
@@ -72,4 +73,28 @@ test("stringToUint8ArrayUTF16BE / uint8ArrayToStringUTF16BE", (t) => {
 		// And back
 		t.expect(uint8ArrayToStringUTF16BE(Bytes.from(out))).toBe(inp);
 	}
+});
+
+test("escapeControlCharacters() -> should escape C0 and C1 control characters", (t) => {
+	t.expect(escapeControlCharacters("a\x1b[31mb\nc\x9b")).toBe(
+		"a\\x1b[31mb\\x0ac\\x9b",
+	);
+});
+
+test("escapeControlCharacters() -> should escape bidi controls and line/paragraph separators", (t) => {
+	t.expect(
+		escapeControlCharacters(
+			"a\u202eb\u2066c\u2069d\u2028e\u2029f\u061cg\u200eh\u200f",
+		),
+	).toBe("a\\u202eb\\u2066c\\u2069d\\u2028e\\u2029f\\u061cg\\u200eh\\u200f");
+});
+
+test("escapeControlCharacters() -> should remove trailing NUL padding", (t) => {
+	t.expect(escapeControlCharacters("name\0\0\0")).toBe("name");
+	t.expect(escapeControlCharacters("na\0me")).toBe("na\\x00me");
+	t.expect(escapeControlCharacters("\0".repeat(100_000))).toBe("");
+});
+
+test("escapeControlCharacters() -> should keep printable characters", (t) => {
+	t.expect(escapeControlCharacters("Küche 🔥")).toBe("Küche 🔥");
 });

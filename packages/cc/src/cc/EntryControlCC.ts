@@ -16,7 +16,13 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { Bytes, type BytesView, buffer2hex, pick } from "@zwave-js/shared";
+import {
+	Bytes,
+	type BytesView,
+	buffer2hex,
+	escapeControlCharacters,
+	pick,
+} from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 
 import {
@@ -445,13 +451,14 @@ export class EntryControlCCNotification extends EntryControlCC {
 					) {
 						paddingStart--;
 					}
-					eventData = eventData
+					const asciiData = eventData
 						.subarray(0, paddingStart)
 						.toString("ascii");
 
 					if (!noStrictValidation) {
-						validatePayload(/^[\u0000-\u007f]+$/.test(eventData));
+						validatePayload(/^[\u0000-\u007f]+$/.test(asciiData));
 					}
+					eventData = escapeControlCharacters(asciiData);
 					break;
 				case EntryControlDataTypes.MD5:
 					// MD5 16 byte binary data encoded as a MD5 hash value.
