@@ -77,13 +77,35 @@ export function normalizeCredentialData(
 	credentialType: UserCredentialType,
 	credentialData: Bytes,
 ): string | Bytes {
-	if (
-		credentialType === UserCredentialType.PINCode
-		|| credentialType === UserCredentialType.Password
-	) {
+	if (credentialType === UserCredentialType.PINCode) {
 		return credentialData.toString("utf8");
 	}
+	if (credentialType === UserCredentialType.Password) {
+		// Passwords are UTF-16BE on the wire (CC:0083.01.0A.11.021). Data of odd
+		// length cannot be UTF-16, so it is reported as raw bytes instead of
+		// being decoded into a password the node does not actually hold.
+		return credentialData.length % 2 === 0
+			? uint8ArrayToStringUTF16BE(credentialData)
+			: credentialData;
+	}
 	return credentialData;
+}
+
+/**
+ * Converts a credential to the bytes transmitted to the node. Strings are
+ * encoded according to the credential type, the inverse of
+ * {@link normalizeCredentialData}.
+ */
+export function encodeCredentialData(
+	credentialType: UserCredentialType,
+	credentialData: string | Uint8Array,
+): Bytes {
+	if (typeof credentialData !== "string") return Bytes.from(credentialData);
+	if (credentialType === UserCredentialType.Password) {
+		// CC:0083.01.0A.11.021
+		return Bytes.from(stringToUint8ArrayUTF16BE(credentialData));
+	}
+	return Bytes.from(credentialData, "utf-8");
 }
 
 // All of these values are internal, and not meant to be used by applications directly.

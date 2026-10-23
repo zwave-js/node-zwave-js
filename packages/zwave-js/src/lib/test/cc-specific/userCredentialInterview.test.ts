@@ -21,7 +21,7 @@ import {
 	UserCredentialCCValues,
 } from "@zwave-js/cc/UserCredentialCC";
 import { CommandClasses } from "@zwave-js/core";
-import { Bytes } from "@zwave-js/shared";
+import { Bytes, stringToUint8ArrayUTF16BE } from "@zwave-js/shared";
 import { MockZWaveFrameType, ccCaps } from "@zwave-js/testing";
 
 import { integrationTest } from "../integrationTestSuite.js";
@@ -703,7 +703,9 @@ integrationTest(
 			// Password credential
 			mockNode.state.set("UserCredential_cred_2_1", {
 				userId: 1,
-				credentialData: Bytes.from("password", "ascii"),
+				credentialData: Bytes.from(
+					stringToUint8ArrayUTF16BE("password"),
+				),
 				modifierType: UserCredentialModifierType.Locally,
 				modifierNodeId: 0,
 			});
@@ -720,7 +722,7 @@ integrationTest(
 				),
 			).toBeDefined();
 
-			// Password credential should be discovered
+			// Password credential should be discovered and decoded from UTF-16BE
 			t.expect(
 				node.getValue(
 					UserCredentialCCValues.credential(
@@ -728,7 +730,7 @@ integrationTest(
 						1,
 					).endpoint(0),
 				),
-			).toBeDefined();
+			).toBe("password");
 		},
 	},
 );

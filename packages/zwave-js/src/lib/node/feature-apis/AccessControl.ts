@@ -16,6 +16,7 @@ import {
 	type UserCredentialCCCredentialReport,
 	type UserCredentialCCUserReport,
 	UserCredentialCCValues,
+	encodeCredentialData,
 	normalizeCredentialData,
 } from "@zwave-js/cc/UserCredentialCC";
 import {
@@ -1140,10 +1141,7 @@ export class AccessControlAPI extends FeatureAPI {
 				type,
 				slot,
 			);
-			const credentialData =
-				typeof data === "string"
-					? Bytes.from(data, "utf-8")
-					: Bytes.from(data);
+			const credentialData = encodeCredentialData(type, data);
 			const raw = await api.setCredential({
 				operationType: existing
 					? UserCredentialOperationType.Modify
