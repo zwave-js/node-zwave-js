@@ -39,6 +39,25 @@ test("should serialize correctly when the payload is null", async (t) => {
 		.resolves.toStrictEqual(expected);
 });
 
+test("should throw when serializing a payload that does not fit into the length byte", async (t) => {
+	const message = new Message({
+		type: MessageType.Request,
+		functionType: 0xff as any,
+		payload: new Bytes(253),
+	});
+	await assertZWaveError(t.expect, () => message.serialize({} as any), {
+		errorCode: ZWaveErrorCodes.Argument_Invalid,
+	});
+
+	const maxMessage = new Message({
+		type: MessageType.Request,
+		functionType: 0xff as any,
+		payload: new Bytes(252),
+	});
+	const serialized = await maxMessage.serialize({} as any);
+	t.expect(serialized[1]).toBe(0xff);
+});
+
 test("should throw the correct error when parsing a faulty message", async (t) => {
 	// fake messages to produce certain errors
 	const brokenMessages: [Bytes, string, ZWaveErrorCodes][] = [

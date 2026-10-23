@@ -125,6 +125,13 @@ export function encodeTimezone(tz: Timezone): Bytes {
 	const delta = tz.dstOffset - tz.standardOffset;
 	const deltaMinutes = Math.abs(delta);
 	const deltaSign = delta < 0 ? 1 : 0;
+	// The DST offset is encoded relative to the standard offset in 7 bits
+	if (deltaMinutes > 0b0111_1111) {
+		throw new ZWaveError(
+			"The given timezone is not valid!",
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
 
 	return Bytes.from([
 		(hourSign << 7) | (hour & 0b0111_1111),

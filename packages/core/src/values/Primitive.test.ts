@@ -156,6 +156,14 @@ test("encodeFloatWithScale() -> should correctly determine the minimum necessary
 	}
 });
 
+test("encodeFloatWithScale() -> should terminate for values too small to be represented", (t) => {
+	for (const value of [1e-310, -5e-324, Number.MIN_VALUE]) {
+		t.expect(encodeFloatWithScale(value, 0)).toStrictEqual(
+			Bytes.from([0b111_00_001, 0x00]),
+		);
+	}
+});
+
 test("encodeFloatWithScale() -> should correctly detect the necessary precision and serialize the given values", (t) => {
 	const tests = [
 		{

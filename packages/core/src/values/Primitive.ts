@@ -127,11 +127,15 @@ export function parseFloatWithScale(
 	}
 }
 
+/** The maximum precision that can be encoded in the 3-bit precision field */
+const MAX_PRECISION = 7;
+
 function getPrecision(num: number): number {
 	if (!Number.isFinite(num)) return 0;
 	let e = 1;
 	let p = 0;
-	while (Math.round(num * e) / e !== num) {
+	// Without an upper bound, this loops forever for tiny numbers, where e overflows to Infinity
+	while (p < MAX_PRECISION && Math.round(num * e) / e !== num) {
 		e *= 10;
 		p++;
 	}
@@ -196,7 +200,7 @@ export interface FloatParametersWithValue extends FloatParameters {
 }
 
 export function getFloatParameters(value: number): FloatParametersWithValue {
-	const precision = Math.min(getPrecision(value), 7);
+	const precision = getPrecision(value);
 	value = Math.round(value * Math.pow(10, precision));
 	const size: number | undefined = getMinIntegerSize(value, true);
 	if (size == undefined) {
@@ -224,7 +228,7 @@ export function encodeFloatWithScale(
 		precision?: number;
 	} = {},
 ): Bytes {
-	const precision = override.precision ?? Math.min(getPrecision(value), 7);
+	const precision = override.precision ?? getPrecision(value);
 	value = Math.round(value * Math.pow(10, precision));
 	let size: number | undefined = getMinIntegerSize(value, true);
 	if (size == undefined) {

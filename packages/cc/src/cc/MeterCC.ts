@@ -219,6 +219,7 @@ function encodeMeterValueAndInfo(
 	rateType: RateType,
 	scale: number,
 	value: number,
+	floatParams: FloatParameters = getFloatParameters(value),
 ): { data: Bytes; floatParams: FloatParameters; scale2: number | undefined } {
 	// We need at least 2 bytes
 
@@ -230,7 +231,6 @@ function encodeMeterValueAndInfo(
 	const typeByte =
 		(type & 0b0_00_11111) | ((rateType & 0b11) << 5) | (scale1Bit2 << 7);
 
-	const floatParams = getFloatParameters(value);
 	const valueBytes = encodeFloatWithScale(value, scale1Bits10, floatParams);
 
 	return {
@@ -238,6 +238,19 @@ function encodeMeterValueAndInfo(
 		floatParams: pick(floatParams, ["precision", "size"]),
 		scale2,
 	};
+}
+
+/** Determines a precision and size that can be used to encode all of the given values */
+function getSharedFloatParameters(...values: number[]): FloatParameters {
+	const precision = Math.max(
+		...values.map((v) => getFloatParameters(v).precision),
+	);
+	const size = Math.max(
+		...values.map(
+			(v) => encodeFloatWithScale(v, 0, { precision }).length - 1,
+		),
+	);
+	return { precision, size };
 }
 
 function parseScale(
@@ -1033,6 +1046,8 @@ export class MeterCCReport extends MeterCC {
 	public deltaTime: MaybeUnknown<number>;
 
 	public serialize(ctx: CCEncodingContext): Promise<Bytes> {
+		const includePreviousValue =
+			this.deltaTime !== 0 && this.previousValue != undefined;
 		const {
 			data: typeAndValue,
 			floatParams,
@@ -1042,6 +1057,11 @@ export class MeterCCReport extends MeterCC {
 			this.rateType,
 			this.scale,
 			this.value,
+			// The previous value is encoded with the precision and size of the current value,
+			// so they must be chosen to fit both
+			includePreviousValue
+				? getSharedFloatParameters(this.value, this.previousValue!)
+				: undefined,
 		);
 
 		const deltaTime = this.deltaTime ?? 0xffff;
@@ -1050,10 +1070,10 @@ export class MeterCCReport extends MeterCC {
 
 		this.payload = Bytes.concat([typeAndValue, deltaTimeBytes]);
 
-		if (this.deltaTime !== 0 && this.previousValue != undefined) {
+		if (includePreviousValue) {
 			// Encode the float, but only keep the value bytes
 			const prevValueBytes = encodeFloatWithScale(
-				this.previousValue,
+				this.previousValue!,
 				0, // we discard the scale anyways
 				floatParams,
 			).subarray(1);
