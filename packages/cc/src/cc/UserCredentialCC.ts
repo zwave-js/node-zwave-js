@@ -81,12 +81,9 @@ export function normalizeCredentialData(
 		return credentialData.toString("utf8");
 	}
 	if (credentialType === UserCredentialType.Password) {
-		// Passwords are UTF-16BE on the wire (CC:0083.01.0A.11.021). Data of odd
-		// length cannot be UTF-16, so it is reported as raw bytes instead of
-		// being decoded into a password the node does not actually hold.
-		return credentialData.length % 2 === 0
-			? uint8ArrayToStringUTF16BE(credentialData)
-			: credentialData;
+		// Passwords are UTF-16BE on the wire (CC:0083.01.0A.11.021). Received
+		// commands with an odd length are rejected when they are parsed.
+		return uint8ArrayToStringUTF16BE(credentialData);
 	}
 	return credentialData;
 }
@@ -2062,6 +2059,7 @@ export class UserCredentialCCUserSet extends UserCredentialCC {
 		validatePayload(raw.payload.length >= 10 + nameLength);
 		let userName: string;
 		if (nameEncoding === UserCredentialNameEncoding.UTF16BE) {
+			validatePayload(nameLength % 2 === 0);
 			userName = uint8ArrayToStringUTF16BE(
 				raw.payload.subarray(10, 10 + nameLength),
 			);
@@ -2268,6 +2266,7 @@ export class UserCredentialCCUserReport extends UserCredentialCC {
 		validatePayload(raw.payload.length >= 15 + nameLength);
 		let userName: string;
 		if (nameEncoding === UserCredentialNameEncoding.UTF16BE) {
+			validatePayload(nameLength % 2 === 0);
 			userName = uint8ArrayToStringUTF16BE(
 				raw.payload.subarray(15, 15 + nameLength),
 			);
@@ -2686,6 +2685,11 @@ export class UserCredentialCCCredentialSet extends UserCredentialCC {
 		if (raw.payload.length >= 7) {
 			const credentialLength = raw.payload[6];
 			validatePayload(raw.payload.length >= 7 + credentialLength);
+			// Passwords are UTF-16BE (CC:0083.01.0A.11.021)
+			validatePayload(
+				credentialType !== UserCredentialType.Password
+					|| credentialLength % 2 === 0,
+			);
 			credentialData = Bytes.from(
 				raw.payload.subarray(7, 7 + credentialLength),
 			);
@@ -2823,6 +2827,12 @@ export class UserCredentialCCCredentialReport extends UserCredentialCC {
 		const credentialReadBack = !!(raw.payload[6] & 0b1000_0000);
 		const credentialLength = raw.payload[7];
 		validatePayload(raw.payload.length >= 8 + credentialLength + 6);
+		// Passwords are UTF-16BE (CC:0083.01.0A.11.021)
+		validatePayload(
+			!credentialReadBack
+				|| credentialType !== UserCredentialType.Password
+				|| credentialLength % 2 === 0,
+		);
 
 		const offset = 8 + credentialLength;
 		const modifierType: UserCredentialModifierType = raw.payload[offset];

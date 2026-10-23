@@ -46,13 +46,6 @@ describe("normalizeCredentialData", () => {
 		).toBe("abc");
 	});
 
-	test("reports odd-length password data as raw bytes", () => {
-		const data = Bytes.from([0x61, 0x62, 0x63]);
-		expect(
-			normalizeCredentialData(UserCredentialType.Password, data),
-		).toStrictEqual(data);
-	});
-
 	test("round-trips passwords through encode and normalize", () => {
 		const password = "Front door 42!";
 		expect(
