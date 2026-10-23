@@ -20,12 +20,15 @@ import {
 	UNKNOWN_STATE,
 	ValueMetadata,
 	type WithAddress,
+	ZWaveError,
+	ZWaveErrorCodes,
 	encodeBitMask,
 	encodeFloatWithScale,
 	getFloatParameters,
 	getMeter,
 	getMeterName,
 	getMeterScale,
+	getMinIntegerSize,
 	getUnknownMeterScale,
 	logDict,
 	logList,
@@ -240,17 +243,41 @@ function encodeMeterValueAndInfo(
 	};
 }
 
-/** Determines a precision and size that can be used to encode all of the given values */
-function getSharedFloatParameters(...values: number[]): FloatParameters {
-	const precision = Math.max(
-		...values.map((v) => getFloatParameters(v).precision),
+/**
+ * Determines a precision and size that can be used to encode both the current and the previous value.
+ * The previous value may lose precision, but the current value never does.
+ */
+function getSharedFloatParameters(
+	value: number,
+	previousValue: number,
+): FloatParameters {
+	const valuePrecision = getFloatParameters(value).precision;
+	const maxPrecision = Math.max(
+		valuePrecision,
+		getFloatParameters(previousValue).precision,
 	);
-	const size = Math.max(
-		...values.map(
-			(v) => encodeFloatWithScale(v, 0, { precision }).length - 1,
-		),
+	// A higher precision may make the scaled values too large to fit into 4 bytes
+	for (
+		let precision = maxPrecision;
+		precision >= valuePrecision;
+		precision--
+	) {
+		const valueSize = getMinIntegerSize(
+			Math.round(value * 10 ** precision),
+			true,
+		);
+		const previousValueSize = getMinIntegerSize(
+			Math.round(previousValue * 10 ** precision),
+			true,
+		);
+		if (valueSize != undefined && previousValueSize != undefined) {
+			return { precision, size: Math.max(valueSize, previousValueSize) };
+		}
+	}
+	throw new ZWaveError(
+		`Cannot encode the previous value ${previousValue} with the precision of the current value ${value}`,
+		ZWaveErrorCodes.Arithmetic,
 	);
-	return { precision, size };
 }
 
 function parseScale(
