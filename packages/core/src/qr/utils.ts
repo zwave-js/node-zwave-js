@@ -14,7 +14,11 @@ import {
 } from "./definitions.js";
 
 function readNumber(qr: string, offset: number, length: number): number {
-	return parseInt(qr.slice(offset, offset + length), 10);
+	const digits = qr.slice(offset, offset + length);
+	if (digits.length !== length || !/^\d+$/.test(digits)) {
+		fail("invalid data");
+	}
+	return parseInt(digits, 10);
 }
 
 export function fail(reason: string): never {
@@ -137,8 +141,21 @@ export function parseTLV(qr: string): {
 	const data = qr.slice(offset, offset + length);
 	offset += length;
 
-	// Try to parse the raw data and fail if a critical block is not understood
-	const parsed = parseTLVData(type, data);
+	// Try to parse the raw data and fail if a critical block is not understood.
+	// Malformed non-critical blocks are kept as raw data instead, except for
+	// ProductType and ProductId, which are mandatory and must be valid.
+	let parsed: ReturnType<typeof parseTLVData>;
+	try {
+		parsed = parseTLVData(type, data);
+	} catch (e) {
+		if (
+			critical
+			|| type === ProvisioningInformationType.ProductType
+			|| type === ProvisioningInformationType.ProductId
+		) {
+			throw e;
+		}
+	}
 	if (!parsed && critical) fail("Unsupported critical TLV block");
 
 	let entry: any;

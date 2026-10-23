@@ -473,19 +473,23 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.securityKeys != undefined) {
-		const keys = Object.entries(options.securityKeys);
+	for (const [securityKeys, which] of [
+		[options.securityKeys, ""],
+		[options.securityKeysLongRange, "Long Range "],
+	] as const) {
+		if (securityKeys == undefined) continue;
+		const keys = Object.entries(securityKeys);
 		for (let i = 0; i < keys.length; i++) {
 			const [secClass, key] = keys[i];
 			if (key.length !== 16) {
 				throw new ZWaveError(
-					`The security key for class ${secClass} must be a buffer with length 16!`,
+					`The ${which}security key for class ${secClass} must be a buffer with length 16!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
 			if (keys.findIndex(([, k]) => areUint8ArraysEqual(k, key)) !== i) {
 				throw new ZWaveError(
-					`The security key for class ${secClass} was used multiple times!`,
+					`The ${which}security key for class ${secClass} was used multiple times!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}

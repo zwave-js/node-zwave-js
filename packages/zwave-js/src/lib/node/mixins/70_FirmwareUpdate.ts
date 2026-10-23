@@ -666,14 +666,17 @@ export abstract class FirmwareUpdateMixin
 			- 2 // report number
 			- (ccVersion >= 2 ? 2 : 0); // checksum
 
-		// Use the smallest allowed payload
+		// Use the smallest allowed payload. A max. fragment size of 0 makes no sense
+		// and would stall the update, so fall back to the computed maximum in that case.
+		const maxFragmentSize =
+			meta.maxFragmentSize || Number.POSITIVE_INFINITY;
 		const fragmentSizeSecure = Math.min(
 			maxNetPayloadSizeSecure,
-			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+			maxFragmentSize,
 		);
 		const fragmentSizeNonSecure = Math.min(
 			maxNetPayloadSizeNonSecure,
-			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+			maxFragmentSize,
 		);
 
 		if (abortContext.abort) {

@@ -498,7 +498,10 @@ export function deserializeNetworkCacheValue(
 		value = tryParseAssociationAddress(value);
 		if (value) return value;
 		fail();
-	} else if (key.startsWith("controller.securityKeys.")) {
+	} else if (
+		key.startsWith("controller.securityKeys.")
+		|| key.startsWith("controller.securityKeyLongRange.")
+	) {
 		value = tryParseBuffer(value);
 		if (value) return value;
 		fail();
@@ -580,7 +583,10 @@ export function serializeNetworkCacheValue(
 	}
 
 	// Other dynamic properties
-	if (key.startsWith("controller.securityKeys.")) {
+	if (
+		key.startsWith("controller.securityKeys.")
+		|| key.startsWith("controller.securityKeyLongRange.")
+	) {
 		return Bytes.view(value as BytesView).toString("hex");
 	}
 
