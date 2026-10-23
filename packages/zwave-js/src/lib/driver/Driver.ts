@@ -702,7 +702,7 @@ interface TransportServiceSession {
 	machine: TransportServiceRXMachine;
 	/** The reassembled datagram. Segments are copied here as they are received. */
 	datagram: Bytes;
-	timeout?: NodeJS.Timeout;
+	timeout?: Timer;
 }
 
 interface Sessions {
@@ -4023,6 +4023,9 @@ export class Driver
 				[...batches].map((batch) => batch.timer),
 			),
 			this._pollDelayTimer,
+			...[...this.nodeSessions.values()].flatMap((sessions) =>
+				[...sessions.transportService.values()].map((s) => s.timeout),
+			),
 		]) {
 			timeout?.clear();
 		}
@@ -5329,18 +5332,14 @@ export class Driver
 					});
 					// TODO: Update statistics
 					nodeSessions.transportService.delete(command.sessionId);
-					if (session.timeout) {
-						clearTimeout(session.timeout);
-					}
+					session.timeout?.clear();
 				} else if (machine.state.value === "success") {
 					this.controllerLog.logNode(command.nodeId, {
 						message: `Transport Service RX session #${command.sessionId} complete`,
 						level: "debug",
 						direction: "inbound",
 					});
-					if (session.timeout) {
-						clearTimeout(session.timeout);
-					}
+					session.timeout?.clear();
 
 					sendSegmentComplete();
 					return "completed";
@@ -5361,12 +5360,10 @@ export class Driver
 		function startMissingSegmentTimeout(
 			session: TransportServiceSession,
 		): void {
-			if (session.timeout) {
-				clearTimeout(session.timeout);
-			}
+			session.timeout?.clear();
 			if (!isCurrentSession(session)) return;
 
-			session.timeout = setTimeout(() => {
+			session.timeout = setTimer(() => {
 				session.timeout = undefined;
 				if (!isCurrentSession(session)) return;
 				advanceTransportServiceSession(session, {
@@ -5384,7 +5381,7 @@ export class Driver
 			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
 			// we do know that the previous one is finished.
 			for (const oldSession of nodeSessions.transportService.values()) {
-				if (oldSession.timeout) clearTimeout(oldSession.timeout);
+				oldSession.timeout?.clear();
 			}
 			nodeSessions.transportService.clear();
 
