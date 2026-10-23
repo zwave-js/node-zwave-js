@@ -92,6 +92,25 @@
 		},
 		{
 			"#": "120",
+			"$if": "firmwareVersion < 13.0",
+			"label": "Factory Reset",
+			"description": "Reset to factory default settings and remove from the Z-Wave network.",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 1431655765
+				}
+			]
+		},
+		{
+			"#": "120",
 			"$import": "templates/wave_template.json#factory_reset"
 		},
 		{
