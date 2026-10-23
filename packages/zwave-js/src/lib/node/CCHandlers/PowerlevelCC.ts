@@ -20,6 +20,9 @@ import { noop, pick } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver.js";
 import type { ZWaveNode } from "../Node.js";
 
+// CTT uses 260 frames, so this leaves plenty of headroom while limiting how long the radio can be kept busy
+const MAX_TEST_FRAME_COUNT = 1000;
+
 export function handlePowerlevelSet(
 	driver: Driver,
 	node: ZWaveNode,
@@ -102,6 +105,28 @@ export async function handlePowerlevelTestNodeSet(
 			"testFrameCount must be at least 1",
 			ZWaveErrorCodes.CC_OperationFailed,
 		);
+	} else if (command.testFrameCount > MAX_TEST_FRAME_COUNT) {
+		// Each test frame occupies the radio, so huge counts would block our own communication for a long time
+		throw new ZWaveError(
+			`testFrameCount must be at most ${MAX_TEST_FRAME_COUNT}`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (command.testNodeId === driver.controller.ownNodeId) {
+		throw new ZWaveError(
+			`Cannot test the connection to node ${command.testNodeId}, because it is the controller itself`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (!driver.controller.nodes.has(command.testNodeId)) {
+		throw new ZWaveError(
+			`Cannot test the connection to node ${command.testNodeId}, because it is unknown`,
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
+	} else if (driver.getNOPPowerTestStatus()?.inProgress) {
+		// Don't let other nodes cancel and restart a running test indefinitely
+		throw new ZWaveError(
+			"A powerlevel test is already in progress",
+			ZWaveErrorCodes.CC_OperationFailed,
+		);
 	}
 
 	const endpoint = node.getEndpoint(command.endpointIndex) ?? node;
@@ -135,7 +160,7 @@ export async function handlePowerlevelTestNodeSet(
 			})
 			.catch(noop);
 	} catch {
-		// Test failed for some reason (e.g. invalid node)
+		// Test failed for some reason (e.g. the controller rejected the test frame)
 		void api
 			.sendNodeTestReport({
 				status: PowerlevelTestStatus.Failed,

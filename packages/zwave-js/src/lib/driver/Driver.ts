@@ -10115,7 +10115,15 @@ ${handlers.length} left`,
 		const interval = 50;
 
 		const sendFrame = async () => {
-			const result = await this.sendTestFrame(testNodeId, powerlevel);
+			let result: TransmitStatus | undefined;
+			try {
+				result = await this.sendTestFrame(testNodeId, powerlevel);
+			} catch (e) {
+				// Mark the test as finished, so it doesn't block future tests
+				context.timeout = undefined;
+				ret.reject(e);
+				return;
+			}
 			if (result === TransmitStatus.OK) {
 				context.acknowledgedFrames++;
 			}
