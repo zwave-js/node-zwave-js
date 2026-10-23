@@ -8503,7 +8503,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 				}
 				throwEmptyNVMChunk(offset);
 			}
-			// Don't trust the controller to return at most the requested amount of data
+			// Avoid overflowing the result buffer if the controller returns too much data
 			const usableChunk = chunk.subarray(0, ret.length - offset);
 			ret.set(usableChunk, offset);
 			offset += usableChunk.length;
@@ -8571,7 +8571,7 @@ export class ZWaveController extends TypedEventTarget<ControllerEventCallbacks> 
 					if (endOfFile) break;
 					throwEmptyNVMChunk(offset);
 				}
-				// Don't trust the controller to return at most the requested amount of data
+				// Avoid overflowing the result buffer if the controller returns too much data
 				const usableChunk = chunk.subarray(0, ret.length - offset);
 				ret.set(usableChunk, offset);
 				offset += usableChunk.length;
