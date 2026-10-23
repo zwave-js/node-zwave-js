@@ -702,7 +702,7 @@ interface TransportServiceSession {
 	machine: TransportServiceRXMachine;
 	/** The reassembled datagram. Segments are copied here as they are received. */
 	datagram: Bytes;
-	timeout?: NodeJS.Timeout;
+	timeout?: Timer;
 }
 
 interface Sessions {
@@ -4023,6 +4023,9 @@ export class Driver
 				[...batches].map((batch) => batch.timer),
 			),
 			this._pollDelayTimer,
+			...[...this.nodeSessions.values()].flatMap((sessions) =>
+				[...sessions.transportService.values()].map((s) => s.timeout),
+			),
 		]) {
 			timeout?.clear();
 		}
@@ -5260,6 +5263,15 @@ export class Driver
 			| TransportServiceCCFirstSegment
 			| TransportServiceCCSubsequentSegment,
 	): Promise<CommandClass | undefined> {
+		// Don't let unknown nodes allocate sessions
+		if (!this._controller?.nodes.has(command.nodeId)) {
+			this.controllerLog.logNode(command.nodeId, {
+				message: `Ignoring Transport Service segment from unknown node`,
+				level: "warn",
+				direction: "inbound",
+			});
+			return;
+		}
 		const nodeSessions = this.ensureNodeSessions(command.nodeId);
 
 		// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
@@ -5320,18 +5332,14 @@ export class Driver
 					});
 					// TODO: Update statistics
 					nodeSessions.transportService.delete(command.sessionId);
-					if (session.timeout) {
-						clearTimeout(session.timeout);
-					}
+					session.timeout?.clear();
 				} else if (machine.state.value === "success") {
 					this.controllerLog.logNode(command.nodeId, {
 						message: `Transport Service RX session #${command.sessionId} complete`,
 						level: "debug",
 						direction: "inbound",
 					});
-					if (session.timeout) {
-						clearTimeout(session.timeout);
-					}
+					session.timeout?.clear();
 
 					sendSegmentComplete();
 					return "completed";
@@ -5344,15 +5352,20 @@ export class Driver
 			}
 		};
 
+		// A new First Segment replaces the session, but a pending SegmentRequest of the
+		// replaced session may still finish later. Its timer must not touch the new session.
+		const isCurrentSession = (session: TransportServiceSession) =>
+			nodeSessions.transportService.get(command.sessionId) === session;
+
 		function startMissingSegmentTimeout(
 			session: TransportServiceSession,
 		): void {
-			if (session.timeout) {
-				clearTimeout(session.timeout);
-			}
+			session.timeout?.clear();
+			if (!isCurrentSession(session)) return;
 
-			session.timeout = setTimeout(() => {
+			session.timeout = setTimer(() => {
 				session.timeout = undefined;
+				if (!isCurrentSession(session)) return;
 				advanceTransportServiceSession(session, {
 					value: "timeout",
 				});
@@ -5367,6 +5380,9 @@ export class Driver
 			// We don't delete finished sessions when the last message is received in order to be able to
 			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
 			// we do know that the previous one is finished.
+			for (const oldSession of nodeSessions.transportService.values()) {
+				oldSession.timeout?.clear();
+			}
 			nodeSessions.transportService.clear();
 
 			this.controllerLog.logNode(command.nodeId, {
@@ -5427,12 +5443,14 @@ export class Driver
 
 		// The datagram is complete, reassemble the command it contains
 		try {
-			return await CommandClass.parse(session.datagram, {
+			const reassembled = await CommandClass.parse(session.datagram, {
 				...this.getCCParsingContext(),
 				sourceNodeId: command.nodeId,
 				// Transport Service is only used for singlecast commands
 				frameType: command.frameType ?? "singlecast",
 			});
+			assertValidCCs({ command: reassembled } as ContainsCC);
+			return reassembled;
 		} catch (e) {
 			this.driverLog.print(
 				`Dropping Transport Service datagram because the contained command could not be deserialized: ${getErrorMessage(
