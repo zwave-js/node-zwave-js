@@ -212,6 +212,21 @@
 			}
 		]
 	},
+	// Early firmware versions used a 4-byte parameter that only accepts 0x55555555 to trigger the reset
+	"factory_reset_4_bytes": {
+		"$import": "#factory_reset",
+		"valueSize": 4,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Factory reset",
+				"value": 1431655765
+			}
+		]
+	},
 	"serial_number": {
 		"valueSize": 4,
 		"minValue": 0,
