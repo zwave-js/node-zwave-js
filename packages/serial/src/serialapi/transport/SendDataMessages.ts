@@ -136,6 +136,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			offset + serializedCCLength,
 		);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for the command option, which is not passed here
 		return new this({
 			transmitOptions,
 			callbackId,
@@ -461,6 +462,7 @@ export class SendDataMulticastRequest<
 		offset++;
 		const callbackId: any = raw.payload[offset];
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for the command option, which is not passed here
 		return new this({
 			transmitOptions,
 			callbackId,

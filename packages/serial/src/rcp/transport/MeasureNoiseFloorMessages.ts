@@ -4,6 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	rssiToString,
+	validatePayload,
 } from "@zwave-js/core";
 import { Bytes } from "@zwave-js/shared";
 
@@ -77,6 +78,7 @@ export class MeasureNoiseFloorResponse extends RCPMessage {
 		raw: RCPMessageRaw,
 		_ctx: RCPMessageParsingContext,
 	): MeasureNoiseFloorResponse {
+		validatePayload(raw.payload.length >= 1);
 		const noiseFloor: RSSI = raw.payload.readInt8(0);
 
 		return new this({

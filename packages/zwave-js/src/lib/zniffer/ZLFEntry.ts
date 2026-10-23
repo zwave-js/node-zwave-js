@@ -46,6 +46,7 @@ export function parseZLFHeader(buffer: BytesView): {
 	bytesRead: number;
 } {
 	if (buffer.length < 2048) {
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- capture files are provided by the user, so this is an invalid argument
 		throw new ZWaveError(
 			"Invalid ZLF file: header too small",
 			ZWaveErrorCodes.Argument_Invalid,
@@ -347,12 +348,13 @@ function parsePTIFrame(
 
 	const radioFrame = pti.subarray(1, pti.length - appendedLength - 1);
 
-	let offset = pti.length - appendedLength;
+	const appendedOffset = pti.length - appendedLength;
+	let offset = appendedOffset;
 	let rssiRaw = 0;
 	let rssi: number | undefined;
 	if (hasRssi) {
-		rssiRaw = pti[offset];
-		rssi = pti.readInt8(offset);
+		rssiRaw = pti[appendedOffset];
+		rssi = pti.readInt8(appendedOffset);
 		// Version 1 of the appended info offsets the RSSI by 0x32
 		if (infoVersion === 1) rssi -= 0x32;
 		offset++;

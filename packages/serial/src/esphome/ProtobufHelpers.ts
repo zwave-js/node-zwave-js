@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { validatePayload } from "@zwave-js/core";
 import { Bytes, type BytesView } from "@zwave-js/shared";
 
 /**
@@ -77,14 +77,11 @@ export function decodeVarInt(
 
 		shift += 7;
 		if (shift >= 35) {
-			throw new ZWaveError(
-				"VarInt too long",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			validatePayload.fail("VarInt too long");
 		}
 	}
 
-	throw new ZWaveError("Incomplete VarInt", ZWaveErrorCodes.Argument_Invalid);
+	validatePayload.fail("Incomplete VarInt");
 }
 
 /**
@@ -164,6 +161,7 @@ export function decodeFixed32Field(
 	data: BytesView,
 	offset: number,
 ): { value: number; bytesRead: number } {
+	validatePayload(offset >= 0, data.length >= offset + 4);
 	const value = Bytes.view(data).readUInt32LE(offset);
 	return { value, bytesRead: 4 };
 }
@@ -250,10 +248,7 @@ export function skipField(
 		case WireType.Fixed32:
 			return offset + 4;
 		default:
-			throw new ZWaveError(
-				`Unsupported wire type: ${wireType}`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			validatePayload.fail(`Unsupported wire type: ${wireType}`);
 	}
 }
 

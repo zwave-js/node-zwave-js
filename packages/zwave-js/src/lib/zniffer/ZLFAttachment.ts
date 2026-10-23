@@ -144,11 +144,10 @@ export class ZLFNetworkKeysAttachment extends ZLFAttachment {
 			);
 		}
 
-		let offset = 0;
 		// Home ID seems to not be populated by the Zniffer software,
 		// but we'll parse it anyways
-		const homeId = raw.data.readUInt32BE(offset);
-		offset += 4;
+		const homeId = raw.data.readUInt32BE(0);
+		let offset = 4;
 
 		const tempKeys: Bytes[] = [];
 		const keys: Bytes[] = [];

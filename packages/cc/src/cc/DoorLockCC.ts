@@ -943,7 +943,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 	): DoorLockCCOperationSet {
 		validatePayload(raw.payload.length >= 1);
 		const mode: DoorLockMode = raw.payload[0];
+		validatePayload(mode !== DoorLockMode.Unknown);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- mode is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			mode,

@@ -27,6 +27,7 @@ async function computeChecksum(
 ): Promise<number> {
 	const checksumInput = new TextEncoder().encode(qr.slice(9, endOffset));
 	const hashResult = await digest("sha-1", checksumInput);
+	// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- SHA-1 hashes are always 20 bytes long
 	return Bytes.view(hashResult).readUInt16BE(0);
 }
 

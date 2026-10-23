@@ -518,8 +518,11 @@ export class AssociationCCSet extends AssociationCC {
 	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCSet {
 		validatePayload(raw.payload.length >= 2);
 		const groupId = raw.payload[0];
+		validatePayload(groupId >= 1);
 		const nodeIds = [...raw.payload.subarray(1)];
+		validatePayload(nodeIds.every((n) => n >= 1 && n <= MAX_NODES));
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- group ID and node IDs are validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,
@@ -721,7 +724,9 @@ export class AssociationCCGet extends AssociationCC {
 	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCGet {
 		validatePayload(raw.payload.length >= 1);
 		const groupId = raw.payload[0];
+		validatePayload(groupId >= 1);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- group ID is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			groupId,

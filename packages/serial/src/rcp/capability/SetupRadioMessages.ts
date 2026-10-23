@@ -10,6 +10,7 @@ import {
 	mergeLogDict,
 	parseBitMask,
 	protocolDataRateToString,
+	validatePayload,
 	znifferProtocolDataRateToProtocolDataRate,
 } from "@zwave-js/core";
 import { Bytes, getEnumMemberName } from "@zwave-js/shared";
@@ -214,17 +215,19 @@ export class SetupRadio_GetRegionResponse extends SetupRadioResponse {
 		raw: RCPMessageRaw,
 		_ctx: RCPMessageParsingContext,
 	): SetupRadio_GetRegionResponse {
+		validatePayload(raw.payload.length >= 3);
 		const region: RFRegion = raw.payload[0];
 		const channelConfig: ChannelConfiguration = raw.payload[1];
 		const numChannels = raw.payload[2];
+		// Each channel consists of a 4 byte frequency and a 1 byte data rate
+		validatePayload(raw.payload.length >= 3 + numChannels * 5);
 		const channels: ChannelInfo[] = [];
-		let offset = 3;
 		for (let ch = 0; ch < numChannels; ch++) {
+			const offset = 3 + ch * 5;
 			const frequency = raw.payload.readUInt32BE(offset);
-			offset += 4;
 			// The firmware uses the RAIL enum internally, which is equivalent to ZnifferProtocolDataRate
 			const dataRate = znifferProtocolDataRateToProtocolDataRate(
-				raw.payload[offset++],
+				raw.payload[offset + 4],
 			);
 			channels.push({ channel: ch, frequency, dataRate });
 		}
@@ -347,15 +350,17 @@ export class SetupRadio_SetRegionResponse
 			});
 		}
 
+		validatePayload(raw.payload.length >= 2);
 		const numChannels = raw.payload[1];
+		// Each channel consists of a 4 byte frequency and a 1 byte data rate
+		validatePayload(raw.payload.length >= 2 + numChannels * 5);
 		const channels: ChannelInfo[] = [];
-		let offset = 2;
 		for (let ch = 0; ch < numChannels; ch++) {
+			const offset = 2 + ch * 5;
 			const frequency = raw.payload.readUInt32BE(offset);
-			offset += 4;
 			// The firmware uses the RAIL enum internally, which is equivalent to ZnifferProtocolDataRate
 			const dataRate = znifferProtocolDataRateToProtocolDataRate(
-				raw.payload[offset++],
+				raw.payload[offset + 4],
 			);
 			channels.push({ channel: ch, frequency, dataRate });
 		}
@@ -414,6 +419,7 @@ export class SetupRadio_GetTxPowerRangeResponse extends SetupRadioResponse {
 		raw: RCPMessageRaw,
 		_ctx: RCPMessageParsingContext,
 	): SetupRadio_GetTxPowerRangeResponse {
+		validatePayload(raw.payload.length >= 4);
 		// The firmware reports the range in deci-dBm
 		const minTxPower = raw.payload.readInt16BE(0) / 10;
 		const maxTxPower = raw.payload.readInt16BE(2) / 10;

@@ -70,7 +70,7 @@ function parseTXPower(
 	payload: BytesView,
 	offset: number = 0,
 ): number | undefined {
-	if (payload.length <= offset) return;
+	if (offset < 0 || payload.length <= offset) return;
 	const ret = Bytes.view(payload).readInt8(offset);
 	if (ret >= -127 && ret <= 126) return ret;
 }

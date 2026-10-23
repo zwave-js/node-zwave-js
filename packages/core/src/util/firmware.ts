@@ -49,6 +49,7 @@ export function guessFirmwareFileFormat(
 		return filename.slice(-3) as FirmwareFileFormat;
 	} else if (
 		filename.endsWith(".gbl")
+		&& rawBuffer.length >= 4
 		&& rawBuffer.readUInt32BE(0) === firmwareIndicators.gecko
 	) {
 		return "gecko";
@@ -160,7 +161,8 @@ function extractFirmwareRAW(data: BytesView): Firmware {
 function extractFirmwareAeotec(data: BytesView): Firmware {
 	const buffer = Bytes.view(data);
 	// Check if this is an EXE file
-	if (buffer.readUInt16BE(0) !== 0x4d5a) {
+	// Besides the EXE header, the file must contain the 8 control bytes at the end
+	if (buffer.length < 8 || buffer.readUInt16BE(0) !== 0x4d5a) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (not an executable)!",
 			ZWaveErrorCodes.Argument_Invalid,
@@ -204,6 +206,7 @@ function extractFirmwareAeotec(data: BytesView): Firmware {
 
 	// Some exe files contain a CRC-16 checksum, extract that too and check it
 	if (numControlBytes === 10) {
+		// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- numControlBytes is only 10 if the buffer contains 256 + 10 bytes after the firmware data
 		const checksum = buffer.readUInt16BE(buffer.length - 10);
 		const actualChecksum = CRC16_CCITT(
 			Bytes.concat([firmwareData, firmwareNameBytes]),

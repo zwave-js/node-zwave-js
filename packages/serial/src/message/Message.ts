@@ -205,6 +205,7 @@ export class Message {
 		// oxlint-disable-next-line no-unused-vars
 		ctx: MessageParsingContext,
 	): Message {
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- type is always set
 		return new this({
 			type: raw.type,
 			functionType: raw.functionType,

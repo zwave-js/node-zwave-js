@@ -139,6 +139,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 
 		const callbackId = raw.payload[offset++];
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for the command option, which is not passed here
 		return new this({
 			sourceNodeId,
 			nodeId: destinationNodeId,
@@ -479,6 +480,7 @@ export class SendDataMulticastBridgeRequest<
 		const transmitOptions = raw.payload[offset++];
 		const callbackId = raw.payload[offset++];
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for the command option, which is not passed here
 		return new this({
 			sourceNodeId,
 			nodeIds: nodeIds as MulticastDestination,

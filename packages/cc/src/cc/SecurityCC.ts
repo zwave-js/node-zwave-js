@@ -573,6 +573,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 			raw.payload.length === HALF_NONCE_SIZE,
 		);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- nonce length is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			nonce: raw.payload,
@@ -1007,6 +1008,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		validatePayload(raw.payload.length >= 16);
 		const networkKey: BytesView = raw.payload.subarray(0, 16);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- key length is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			networkKey,

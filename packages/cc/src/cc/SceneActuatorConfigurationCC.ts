@@ -369,6 +369,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 		if (raw.payload[2] & 0b1000_0000) {
 			level = raw.payload[3];
 		}
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- scene ID is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			sceneId,

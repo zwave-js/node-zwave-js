@@ -3,6 +3,7 @@ import {
 	MessagePriority,
 	encodeNodeID,
 	parseNodeID,
+	validatePayload,
 } from "@zwave-js/core";
 import {
 	FunctionType,
@@ -43,6 +44,7 @@ export class GetControllerIdResponse extends Message {
 		ctx: MessageParsingContext,
 	): GetControllerIdResponse {
 		// The payload is 4 bytes home id, followed by the controller node id
+		validatePayload(raw.payload.length >= 4);
 		const homeId = raw.payload.readUInt32BE(0);
 		const { nodeId: ownNodeId } = parseNodeID(
 			raw.payload,

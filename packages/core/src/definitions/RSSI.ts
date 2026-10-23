@@ -1,5 +1,7 @@
 import { Bytes, type BytesView } from "@zwave-js/shared";
 
+import { validatePayload } from "../util/misc.js";
+
 /** A number between -128 and +124 dBm or one of the special values in {@link RssiError} indicating an error */
 export type RSSI = number | RssiError;
 
@@ -12,6 +14,7 @@ export enum RssiError {
 // const RSSI_RESERVED_START = 11;
 
 export function parseRSSI(payload: BytesView, offset: number = 0): RSSI {
+	validatePayload(offset >= 0, payload.length >= offset + 1);
 	const ret = Bytes.view(payload).readInt8(offset);
 	// Filter out reserved values
 	// TODO: Figure out for which controllers this is relevant

@@ -46,7 +46,7 @@ export class HelloRequest extends ESPHomeMessage {
 						if (wireType !== WireType.LengthDelimited) {
 							throw new ZWaveError(
 								"Invalid wire type for clientInfo",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const clientInfoResult = decodeStringField(
@@ -60,7 +60,7 @@ export class HelloRequest extends ESPHomeMessage {
 						if (wireType !== WireType.Varint) {
 							throw new ZWaveError(
 								"Invalid wire type for apiVersionMajor",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const majorResult = decodeVarInt(data, offset);
@@ -71,7 +71,7 @@ export class HelloRequest extends ESPHomeMessage {
 						if (wireType !== WireType.Varint) {
 							throw new ZWaveError(
 								"Invalid wire type for apiVersionMinor",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const minorResult = decodeVarInt(data, offset);
@@ -145,7 +145,7 @@ export class HelloResponse extends ESPHomeMessage {
 						if (wireType !== WireType.Varint) {
 							throw new ZWaveError(
 								"Invalid wire type for apiVersionMajor",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const majorResult = decodeVarInt(data, offset);
@@ -156,7 +156,7 @@ export class HelloResponse extends ESPHomeMessage {
 						if (wireType !== WireType.Varint) {
 							throw new ZWaveError(
 								"Invalid wire type for apiVersionMinor",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const minorResult = decodeVarInt(data, offset);
@@ -167,7 +167,7 @@ export class HelloResponse extends ESPHomeMessage {
 						if (wireType !== WireType.LengthDelimited) {
 							throw new ZWaveError(
 								"Invalid wire type for serverInfo",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const serverInfoResult = decodeStringField(
@@ -181,7 +181,7 @@ export class HelloResponse extends ESPHomeMessage {
 						if (wireType !== WireType.LengthDelimited) {
 							throw new ZWaveError(
 								"Invalid wire type for name",
-								ZWaveErrorCodes.Argument_Invalid,
+								ZWaveErrorCodes.PacketFormat_InvalidPayload,
 							);
 						}
 						const nameResult = decodeStringField(data, offset);

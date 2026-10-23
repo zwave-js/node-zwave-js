@@ -902,6 +902,7 @@ export class MeterCCReport extends MeterCC {
 		let previousValue: MaybeNotKnown<number>;
 
 		if (raw.payload.length >= offset + 2) {
+			// oxlint-disable-next-line @zwave-js/no-unchecked-bytes-reads -- offset is the number of bytes read, so it is positive
 			deltaTime = raw.payload.readUInt16BE(offset);
 			offset += 2;
 			if (deltaTime === 0xffff) {

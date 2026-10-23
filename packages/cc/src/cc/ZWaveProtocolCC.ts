@@ -375,7 +375,9 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 		const supportsNWI = !!(option & 0b0001);
 		const excludeNode = !!(option & 0b0010);
 		const includeNode = !!(option & 0b0100);
+		validatePayload(!(excludeNode && includeNode));
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- options are validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			supportsNWI,
@@ -601,6 +603,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 		const destinationNodeId = raw.payload[0];
 		const routeIndex = raw.payload[1] >>> 4;
 		const numRepeaters = raw.payload[1] & 0b1111;
+		validatePayload(numRepeaters <= MAX_REPEATERS);
 		const repeaters = [...raw.payload.subarray(2, 2 + numRepeaters)];
 		const speedAndWakeup = raw.payload[2 + numRepeaters];
 		const destinationSpeed = bitmask2DataRate(
@@ -608,6 +611,7 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 		);
 		const destinationWakeUp: WakeUpTime = (speedAndWakeup >>> 1) & 0b11;
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- repeater count is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			destinationNodeId,
@@ -942,6 +946,7 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 			(id) => id > 0 && id <= MAX_NODES,
 		);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- invalid node IDs are filtered out above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			nodeIds,
@@ -1059,7 +1064,9 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 		} else {
 			validatePayload.fail("Invalid payload length!");
 		}
+		validatePayload(powerDampening >= 0, powerDampening <= 14);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- power dampening is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			powerDampening,
@@ -1363,6 +1370,7 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation extends ZWaveProto
 		validatePayload(raw.payload.length >= 4);
 		const nwiHomeId = raw.payload.subarray(0, 4);
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- home ID length is validated above
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			nwiHomeId,

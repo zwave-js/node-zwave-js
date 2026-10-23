@@ -1120,6 +1120,7 @@ export class IndicatorCCReport extends IndicatorCC {
 
 		if (objCount === 0) {
 			const indicator0Value = raw.payload[0];
+			// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- only throws for too many indicator objects
 			return new this({
 				nodeId: ctx.sourceNodeId,
 				value: indicator0Value,
@@ -1139,6 +1140,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			values.push(value);
 		}
 
+		// oxlint-disable-next-line @zwave-js/no-unexpected-parse-errors -- the payload can contain at most 31 indicator objects
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			values,
