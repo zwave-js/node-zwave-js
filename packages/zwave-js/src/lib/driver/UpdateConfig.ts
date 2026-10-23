@@ -19,6 +19,9 @@ import semverInc from "semver/functions/inc.js";
 import semverValid from "semver/functions/valid.js";
 import semverMaxSatisfying from "semver/ranges/max-satisfying.js";
 
+/** The config package is a few MB in size when extracted, so this leaves a lot of headroom */
+const MAX_CONFIG_PACKAGE_SIZE = 100 * 1024 * 1024;
+
 /**
  * Checks whether there is a compatible update for the currently installed config package.
  * Returns the new version if there is an update, `undefined` otherwise.
@@ -115,30 +118,55 @@ export async function installConfigUpdate(
 	try {
 		// Extract json files from the tarball's config directory
 		// and overwrite the external config directory with them
-		const tarFiles = untar(gunzipSync(tarballData).buffer);
-		await fs.deleteDir(external.configDir);
-		await fs.ensureDir(external.configDir);
-
+		const tarFiles = untar(
+			gunzipSync(tarballData, MAX_CONFIG_PACKAGE_SIZE).buffer,
+		);
 		const prefix = "package/config/";
-		for (const file of tarFiles) {
-			if (
-				!file.filename.startsWith(prefix)
-				|| !file.filename.endsWith(".json")
-			) {
-				continue;
-			}
-			const filename = file.filename.slice(prefix.length);
-			const targetFileName = path.join(external.configDir, filename);
-			const targetDirName = path.dirname(targetFileName);
-
-			await fs.ensureDir(targetDirName);
-			await fs.writeFile(targetFileName, new Uint8Array(file.fileData));
+		const configFiles = tarFiles
+			.filter(
+				(file) =>
+					file.filename.startsWith(prefix)
+					&& file.filename.endsWith(".json"),
+			)
+			.map((file) => ({
+				targetFileName: path.join(
+					external.configDir,
+					file.filename.slice(prefix.length),
+				),
+				fileData: file.fileData,
+			}))
+			// Don't let crafted file names escape the config directory
+			.filter(({ targetFileName }) => {
+				const relativePath = path.relative(
+					external.configDir,
+					targetFileName,
+				);
+				return !(
+					relativePath === ".."
+					|| relativePath.startsWith("../")
+					|| path.isAbsolute(relativePath)
+				);
+			});
+		// Don't wipe the existing config with the contents of a broken package
+		if (configFiles.length === 0) {
+			throw new Error("The tarball contains no config files");
 		}
 
 		const externalVersionFilename = path.join(
 			external.configDir,
 			"version",
 		);
+		await fs.deleteDir(external.configDir);
+		await fs.ensureDir(external.configDir);
+		// Mark the directory as ours before extracting, so an interrupted update can be wiped
+		// on the next start. The empty version is invalid, which forces that wipe.
+		await writeTextFile(fs, externalVersionFilename, "");
+
+		for (const { targetFileName, fileData } of configFiles) {
+			await fs.ensureDir(path.dirname(targetFileName));
+			await fs.writeFile(targetFileName, new Uint8Array(fileData));
+		}
+
 		await writeTextFile(fs, externalVersionFilename, newVersion);
 	} catch {
 		throw new ZWaveError(

@@ -67,6 +67,13 @@ export type SyncExternalConfigDirResult =
 			version: string;
 	  };
 
+const osManagedEntries = new Set([
+	".DS_Store",
+	"Thumbs.db",
+	"desktop.ini",
+	"lost+found",
+]);
+
 /**
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
@@ -125,11 +132,55 @@ export async function syncExternalConfigDir(
 	// Nothing to wipe, the external dir is good to go
 	if (!wipe) return { success: true, version: externalVersion! };
 
-	// Wipe and override the external dir
+	// The directory is configured by the user and might point to the wrong location.
+	// Only wipe it if it was created by us, which is indicated by the version file.
+	// Otherwise only populate it if it is empty.
+	let isOwnedByUs: boolean;
+	try {
+		const entries = await fs.readDir(extConfigDir);
+		isOwnedByUs = entries.includes("version");
+		if (!isOwnedByUs) {
+			// Tolerate entries the OS or file system creates on its own. They are left in place,
+			// because without the version file, we cannot be sure the directory is ours to delete.
+			const unexpectedEntries = entries.filter(
+				(e) => !osManagedEntries.has(e),
+			);
+			if (unexpectedEntries.length > 0) {
+				logger.print(
+					`External config dir ${extConfigDir} is not empty and does not look like a Z-Wave JS config directory (unexpected entries: ${unexpectedEntries
+						.slice(0, 5)
+						.join(", ")}${
+						unexpectedEntries.length > 5 ? ", ..." : ""
+					}), refusing to overwrite it - using embedded config`,
+					"error",
+				);
+				return { success: false };
+			}
+		} else if (!(await fs.stat(externalVersionFilename)).isFile()) {
+			logger.print(
+				`External config dir ${extConfigDir} does not look like a Z-Wave JS config directory (version is not a file), refusing to overwrite it - using embedded config`,
+				"error",
+			);
+			return { success: false };
+		}
+	} catch {
+		logger.print(
+			`Synchronizing external config dir failed - using embedded config`,
+			"error",
+		);
+		return { success: false };
+	}
+
+	// Wipe (if ours) and populate the external dir
 	try {
 		logger.print(`Synchronizing external config dir ${extConfigDir}...`);
-		await fs.deleteDir(extConfigDir);
-		await fs.ensureDir(extConfigDir);
+		if (isOwnedByUs) {
+			await fs.deleteDir(extConfigDir);
+			await fs.ensureDir(extConfigDir);
+		}
+		// Mark the directory as ours before copying, so an interrupted sync can be wiped
+		// on the next start. The empty version is invalid, which forces that wipe.
+		await writeTextFile(fs, externalVersionFilename, "", "utf8");
 		await copyFilesRecursive(fs, configDir, extConfigDir, (src) =>
 			src.endsWith(".json"),
 		);

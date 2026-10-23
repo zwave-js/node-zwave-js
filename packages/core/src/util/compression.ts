@@ -1,6 +1,7 @@
-import type { BytesView } from "@zwave-js/shared";
+import { Bytes, type BytesView } from "@zwave-js/shared";
 import {
 	type DeflateOptions,
+	Gunzip,
 	type InflateOptions,
 	deflateSync as defflateSync,
 	gunzipSync as fgunzipSync,
@@ -15,6 +16,48 @@ export function inflateSync(data: BytesView, opts?: InflateOptions): BytesView {
 	return infflateSync(data, opts) as BytesView;
 }
 
-export function gunzipSync(data: BytesView): BytesView {
-	return fgunzipSync(data) as BytesView;
+/**
+ * Decompresses gzipped data. If `maxOutputLength` is given, decompression is aborted
+ * with an error as soon as the output exceeds that length.
+ */
+export function gunzipSync(
+	data: BytesView,
+	maxOutputLength?: number,
+): BytesView {
+	if (maxOutputLength == undefined) return fgunzipSync(data) as BytesView;
+
+	// The streaming decompressor silently accepts empty or truncated input,
+	// so check what fflate's gunzipSync would check: the minimum size (header + trailer)...
+	if (data.length < 18) {
+		throw new Error("Invalid gzip data");
+	}
+
+	const chunks: Uint8Array[] = [];
+	let outputLength = 0;
+	const gunzip = new Gunzip((chunk) => {
+		outputLength += chunk.length;
+		if (outputLength > maxOutputLength) {
+			throw new Error(
+				`Decompressed data exceeds the maximum length of ${maxOutputLength} bytes`,
+			);
+		}
+		chunks.push(chunk);
+	});
+	// Each push is fully decompressed before the callback is called, so feeding small
+	// input chunks limits how much memory a highly compressed input can allocate at once
+	const inputChunkSize = 16 * 1024;
+	let offset = 0;
+	do {
+		const end = offset + inputChunkSize;
+		gunzip.push(data.subarray(offset, end), end >= data.length);
+		offset = end;
+	} while (offset < data.length);
+
+	// ...and that the output size matches the one stored in the trailer (modulo 2^32)
+	const expectedLength = Bytes.view(data).readUInt32LE(data.length - 4);
+	if (outputLength % 0x1_0000_0000 !== expectedLength) {
+		throw new Error("Invalid or truncated gzip data");
+	}
+
+	return Bytes.concat(chunks);
 }
