@@ -38,12 +38,17 @@
 	},
 	"paramInformation": [
 		{
-			"#": "3[0x04]",
+			"#": "3[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_water_leak"
+		},
+		{
+			"#": "3[0x02]",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
 		},
 		{
-			"#": "3[0x10]",
-			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
+			"#": "3[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
